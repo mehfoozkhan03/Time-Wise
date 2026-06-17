@@ -1,0 +1,376 @@
+@import url('https://fonts.googleapis.com/css2?family=Playwrite+DK+Loopet:wght@100..400&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+/* ============================
+   THEME COLOR VARIABLES
+============================= */
+:root {
+  --bg: #F9FBFC;
+  --surface: #EEF3F7;
+  --primary: #29A3E0;
+  --primary-hover: #218FC4;
+  --secondary: #D4EBF7;
+  --text-primary: #2C2F3A;
+  --text-secondary: #6E7A88;
+  --border: #D6DDE3;
+  --success: #A9D6C2;
+  --error: #F2A3A3;
+}
+
+body.dark-mode {
+  --bg: #1F242D;
+  --surface: #2A2F3A;
+  --primary: #3EB5E8;
+  --primary-hover: #53C1F0;
+  --secondary: #8AD5F2;
+  --text-primary: #E4E8ED;
+  --text-secondary: #A2ACB8;
+  --border: #3B4251;
+  --success: #81E6C3;
+  --error: #F17C7C;
+}
+
+/* ============================
+   GLOBAL STYLES
+============================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  color: var(--text-primary);
+  color: var(--text-secondary);
+  background: var(--bg);
+  min-height: 100vh;
+  line-height: 1.5;
+  transition: background-color 0.3s, color 0.3s;
+  /* display: grid; */
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: 'Poppins', sans-serif;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.user {
+  font-weight: bold;
+}
+
+main {
+  /* padding: 20px; */
+  width: 80%;
+  margin: auto
+  ;
+}
+
+.welcome {
+  background: var(--secondary-bg-color);
+  padding: 20px;
+  margin-bottom: 20px;
+  border-left: 4px solid #007bff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  margin-top: 15px;
+  border-radius: 12px;
+  text-align: center;
+  position: relative;
+
+}
+
+.welcome h2{
+  font-size: 32px;
+  color: var(--text-primary);
+}
+
+.welcome img{
+  position: absolute;
+  width: 60px;
+  top: 13%;
+  left: 66%;
+}
+
+.date-time {
+  color: #666;
+  font-size: 17px;
+}
+
+blockquote {
+  font-style: italic;
+  color: var(--primary);
+  /* margin: 0 auto; */
+  background: var(--bg);
+  border-radius: 12px;
+  text-align: center;
+  padding: 20px;
+  font-size: 17px;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-left: 4px solid #28a745;
+}
+
+.overview {
+  display: flex;
+  gap: 35px;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.card_check_in {
+ border-left: 4px solid #28a745;
+ width: 100%;
+ padding: 16px;
+ box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+ border-radius: 12px;
+ transition: transform 0.3s ease-in-out;
+}
+
+.card_check_in:hover {
+  transform: translateY(-5px);
+}
+
+.check_in_header {
+  display: flex;
+  /* flex-direction: row; */
+  align-items: center;
+  gap: 35px;
+}
+
+.fa-alarm-clock {
+  color: var(--success);
+  font-size: 24px;
+}
+
+.overview-head{
+  text-align: center;
+  color: var(--text-primary);
+}
+
+.card_check_in {
+  gap: 12px;
+}
+
+.card_hours {
+  width: 100%;
+  padding: 16px;
+  border-left: 4px solid #28a745;
+  background: var(--bg);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.card_hours:hover {
+  transform: translateY(-5px);
+}
+
+.check_out_header {
+  display: flex;
+  gap: 35px;
+  align-items: center;
+
+}
+
+.card {
+  flex: 1;
+  background: #fff;
+  padding: 15px;
+  border-left: 4px solid #28a745;
+  position: relative;
+}
+
+.card i {
+  position: absolute;
+  top: 21%;
+  left: 30%;
+  font-size: 25px;
+}
+
+
+.top-thought {
+  background: #fff;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.thought-box {
+  border: 1px solid #ddd;
+  padding: 15px;
+  margin-top: 10px;
+}
+
+.author {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.avatar {
+  background: #007bff;
+  color: white;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  font-weight: bold;
+}
+
+.thought-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.featured, .view-all {
+  text-decoration: none;
+  color: #007bff;
+}
+
+
+.container {
+  /* max-width: 1200px; */
+  margin: 0 auto;
+  margin-bottom: 20px;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #111827;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 1.5rem;
+}
+
+.cards {
+  background-color: #fff;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s ease;
+}
+
+.cards:hover {
+  transform: translateY(-5px);
+}
+
+.icon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.cards h2 {
+  font-size: 22 px;
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+}
+
+.cards p {
+  color: #4b5563;
+  font-size: 0.95rem;
+}
+
+ .view{
+
+    color: #007bff;
+    text-decoration: none;
+}
+
+.view i{
+  font-size: 20px;
+  transition: 1s;
+}
+
+.view i:hover{
+  translate: 20px;
+}
+
+/* Pop Up of Break Button */
+
+/* Break Timer Card */
+.card.break-timer {
+  background-color: var(--secondary-bg-color);
+  color: var(--text-color);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
+}
+
+.card.break-timer:hover {
+  transform: translateY(-5px);
+}
+
+.card.break-timer h3 {
+  margin-bottom: 10px;
+  font-size: 1.2rem;
+}
+
+.card.break-timer i {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  color: var(--accent-color);
+}
+
+#break-button {
+  background-color: var(--primary-color);
+  color: var(--button-text-color);
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+#break-button:hover {
+  background-color: var(--hover-color);
+}
+
+/* Popup Styles */
+#break-popup {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: var(--popup-bg-color);
+  padding: 30px;
+  border-radius: 10px;
+  z-index: 999;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+#break-popup.active {
+  display: block;
+}
+
+#break-popup h3 {
+  margin-bottom: 15px;
+}
+
+#break-popup span {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+#break-popup button {
+  background-color: var(--primary-color);
+  color: var(--button-text-color);
+  padding: 8px 15px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
