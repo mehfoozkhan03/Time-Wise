@@ -44,16 +44,10 @@ body.dark-mode {
 
 body {
   font-family: 'Inter', sans-serif;
-  color: var(--text-primary);
-  color: var(--text-secondary);
   background: var(--bg);
   min-height: 100vh;
   line-height: 1.5;
   transition: background-color 0.3s, color 0.3s;
-  display: grid;
-  height: 100vh;
-  align-items: center;
-  justify-content: center;
 }
 
 h1, h2, h3, h4, h5 {
@@ -69,7 +63,10 @@ h1, h2, h3, h4, h5 {
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
   position: relative;
   overflow: hidden;
+  margin-top: 60px !important;
+ margin-bottom: 60px !important;
   width: 767px;
+  margin: auto;
   max-width: 100%;
   min-height: 480px;
 }
@@ -93,24 +90,7 @@ h1, h2, h3, h4, h5 {
   text-decoration: none;
   margin: 15px 0 10px;
 }
-/*.container button {
-  /* background-color: #a82d2d; 
-background-color: #5487ed;
-  color: #fff;
-  padding: 10px 45px;
-  border: 1px solid transparent;
-  border-radius: 8px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  margin-top: 10px;
-  cursor: pointer;
-}
 
-.container button.hidden {
-  background-color: transparent;
-  border-color: #fff;
-}*/
 
 .container form {
   background-color: #fff;
@@ -122,16 +102,7 @@ background-color: #5487ed;
   height: 100%;
 }
 
-/*.container input {
-  background-color: #eee;
-  border: none;
-  margin: 10px 0;
-  padding: 10px 15px;
-  font-size: 13px;
-  border-radius: 8px;
-  width: 100%;
-  outline: none;
-}*/
+
 
 .sign-up {
   position: absolute;
@@ -181,21 +152,7 @@ background-color: #5487ed;
     z-index: 5;
   }
 }
-/*.icons {
-  margin: 20px 0;
-}
 
-.icons a {
-  border: 1px solid #ccc;
-  border-radius: 20%;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0 3px;
-  width: 40px;
-  height: 40px;
-}
-*/
 .toogle-container {
   position: absolute;
   top: 0;
@@ -204,7 +161,7 @@ background-color: #5487ed;
   height: 100%;
   overflow: hidden;
   border-radius: 150px;
-  z-index: 1000;
+   z-index: 10;
   transition: all 0.6s ease-in-out;
 }
 

@@ -9,11 +9,19 @@
     <script src="./js/AdminThought.js" defer></script>
     <!-- Bootstrap Icons CDN -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
 </head>
 
 <body>
+
+     <header class="header">
+
+  </header>
+
     <section class="admin-thought-section">
+           <h1 class="admin-thoughtheading">admin-thought</h1>
         <div class="admin-thought-content">
 
             <!-- thought header -->
@@ -44,6 +52,57 @@
         <div class="admin-thought-card">
         </div>
     </section>
+
+     <footer class="footer">
+  
+  </footer>
 </body>
+
+<script type="module">
+  // RAHMAT CODE
+  import { navbar, style, footer } from "./js/nav_footer.js";
+  document.querySelector(".header").innerHTML = navbar();
+
+
+  let styleTag = document.createElement("style");
+  styleTag.textContent = style();
+  document.head.append(styleTag);
+
+  document.querySelector(".footer").innerHTML = footer();
+
+  const navBar = document.querySelector(".navbar-container");
+  const header = document.querySelector(".header");
+
+  // when we scroll the webpage a little bit then both classes fixed & fixed-header will be added & when we go on the top of the webpage these classes will be removed
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 0) {
+      navBar.classList.add("fixed");
+      header.classList.add("fixed-header");
+    } else {
+      navBar.classList.remove("fixed");
+      header.classList.remove("fixed-header");
+    }
+  });
+
+  // scroll button
+  const scrollBtn = document.querySelector(".fa-angle-up");
+
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 100) {
+      scrollBtn.classList.add("showScrollBtn");
+    } else {
+      scrollBtn.classList.remove("showScrollBtn");
+    }
+  });
+
+  window.scrollUp = function () {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
+
+</script>
 
 </html>
