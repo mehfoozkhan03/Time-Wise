@@ -12,6 +12,9 @@
 
 <body>
 
+    <header class="header">
+
+  </header>
     <div class="setting-container">
 
         <div class="setting-content">
@@ -680,6 +683,55 @@
         <!-- Help & Support start -->
 
     </div>
+     <footer class="footer">
+  
+  </footer>
 </body>
 
+<script type="module">
+  // RAHMAT CODE
+  import { navbar, style, footer } from "./js/nav_footer.js";
+  document.querySelector(".header").innerHTML = navbar();
+
+
+  let styleTag = document.createElement("style");
+  styleTag.textContent = style();
+  document.head.append(styleTag);
+
+  document.querySelector(".footer").innerHTML = footer();
+
+  const navBar = document.querySelector(".navbar-container");
+  const header = document.querySelector(".header");
+
+  // when we scroll the webpage a little bit then both classes fixed & fixed-header will be added & when we go on the top of the webpage these classes will be removed
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 0) {
+      navBar.classList.add("fixed");
+      header.classList.add("fixed-header");
+    } else {
+      navBar.classList.remove("fixed");
+      header.classList.remove("fixed-header");
+    }
+  });
+
+  // scroll button
+  const scrollBtn = document.querySelector(".fa-angle-up");
+
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 100) {
+      scrollBtn.classList.add("showScrollBtn");
+    } else {
+      scrollBtn.classList.remove("showScrollBtn");
+    }
+  });
+
+  window.scrollUp = function () {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
+
+</script>
 </html>

@@ -56,15 +56,20 @@ h1, h2, h3, h4, h5 {
   font-family: 'Poppins', sans-serif;
   color: var(--text-primary);
   font-weight: 600;
+  margin-bottom: 6px;
+  text-transform: capitalize;
 }
-
+.meet{
+  font-size:19px;
+  word-spacing: 1px;
+}
 /* About Section Header */
 
 .about_header_section {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 20px;
+  margin-top:50px;
   flex-direction: column;
 }
 
@@ -77,11 +82,11 @@ flex-direction: column;
 }
 
 .black_header {
-  font-size: 53px;
+  font-size: 50px;
 }
 
 .blue_header {
-  font-size: 50px;
+  font-size: 46px;
   color: var(--primary-hover);
 }
 
@@ -196,10 +201,13 @@ flex-direction: column;
 }
 
 .mission_card > h1 {
-  font-size: 40px;
+  font-size:35px;
   text-align: center;
 }
-
+.TimeWise1{
+  margin:10px 0px;
+  word-spacing: 1px;
+}
 .mission_card > p {
   text-align: center;
 }
@@ -221,7 +229,7 @@ flex-direction: column;
   justify-content: center;
   gap: 30px;
   margin: 0 auto;
-  margin-top: 30px;
+  margin-top:50px;
   line-height: 1.75em;
   flex-wrap: wrap;
 }
@@ -274,7 +282,7 @@ flex-direction: column;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 30px;
+   margin:20px 50px;
 }
 
 .content {
@@ -328,6 +336,7 @@ flex-direction: column;
 
 .what_users_say > h1 {
   text-align: center;
+  margin-top: 10px;
 }
 
 .what_users_say > p {
@@ -338,13 +347,15 @@ flex-direction: column;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 20px;
+  margin: 0px 50px;
 }
 
 .bi-star-fill {
   color: gold;
 }
-
+.Our{
+  margin-top: 10px;
+}
 .review {
   border-left: 5px solid var(--primary);
   border-radius: 20px;
@@ -356,7 +367,11 @@ flex-direction: column;
 .review > hr {
   margin: 25px 0px 15px 0;
 }
-
+.TimeWise{
+  word-spacing:3px;
+  letter-spacing:0.5px;
+  text-transform: capitalize;
+}
 .review p {
   font-size: 18px;
   margin-top: 10px;
@@ -366,11 +381,11 @@ flex-direction: column;
 
 .core_values {
   text-align: center;
-  margin-bottom: 200px;
+  margin-bottom:80px;
 }
 
 .core_values_wrapper {
-  margin-top: 30px;
+  margin: 30px 50px;
   display: flex;
   justify-content: center;
   text-align: center;
@@ -385,7 +400,7 @@ flex-direction: column;
 .cards {
   background: var(--surface);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) ;
-  line-height: 30px;
+  line-height:27px;
   padding: 20px;
   margin: 0 15px;
 }
@@ -441,14 +456,15 @@ flex-direction: column;
 .transform {
   background: var(--primary);
   color: white;
-  width: 70%;
+  height:315px;
+  width: 55%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 15px;
-  padding: 12px;
-  margin: 12px auto;
+  padding: 16px;
+  margin:0px auto;
   border-radius: 12px;
   margin-bottom: 80px;
 }

@@ -12,6 +12,10 @@
 
 <body>
 
+  <header class="header">
+
+  </header>
+
   <section class="about_header_section">
     <div class="about_header">
       <h1 class="black_header">Designed for Balance,</h1>
@@ -19,7 +23,7 @@
     </div>
 
     <div class="about_header_body">
-      <p>TimeWise helps employees manage work hours efficiently while preventing <br> burnout and improving transperancy
+      <p class="TimeWise">TimeWise helps employees manage work hours efficiently while preventing <br> burnout and improving transperancy
         between employees and management. <br> Track time thoughtfully, work smarter and maintain the balance you
         deserve</p>
     </div>
@@ -37,7 +41,7 @@
 
   <div class="mission_card">
     <h1>Our Mission & Philosophy</h1>
-    <p>TimeWise was created to solve a fundamental problem: time tracking tools often feel <br> intrusive. We set out to
+    <p class="TimeWise1">TimeWise was created to solve a fundamental problem: time tracking tools often feel <br> intrusive. We set out to
       build something different.</p>
   </div>
 
@@ -67,7 +71,7 @@
   <section class="meet_the_team">
     <div class="header_mtm">
       <h1>Meet the Team</h1>
-      <p>The people behind TimeWise, dedicated to building productivity tools that put humans first.</p>
+      <p class="meet">The people behind TimeWise, dedicated to building productivity tools that put humans first.</p>
     </div>
 
     <div class="mtm_cards">
@@ -109,7 +113,7 @@
 
   <section class="what_users_say">
     <h1>What Our Users Say</h1>
-    <p>Real feedback from teams using TimeWise every day.</p>
+    <p class="meet">Real feedback from teams using TimeWise every day.</p>
 
     <div class="user_say_content">
       <div class="user_say_1 review">
@@ -157,8 +161,8 @@
   </section>
 
   <section class="core_values">
-    <h1>Our Core Values</h1>
-    <p>The principle that guide everything we build and every decision we make.</p>
+    <h1 class="Our">Our Core Values</h1>
+    <p class="meet">The principle that guide everything we build and every decision we make.</p>
 
 
     <div class="core_values_wrapper">
@@ -197,11 +201,66 @@
   <section class="transform">
     <i class="fa-solid fa-award"></i>
     <h2>Ready to Transform Your Teams's Productivity</h2>
-    <p>Join thousands of teams using TimeWise to work smarter, not harder. Track time thoughtfully and maintain the balance you deserve.</p>
+    <p>Join thousands of teams using TimeWise to work smarter, not harder. Track time thoughtfully and maintain the
+      balance you deserve.</p>
     <button type="button" class="start_today_btn">Get Started Today</button>
   </section>
+  
+  
+  <footer class="footer">
+  
+  </footer>
 
 </body>
+
+
 <script src="js/About.js"></script>
+
+<script type="module">
+  // RAHMAT CODE
+  import { navbar, style, footer } from "./js/nav_footer.js";
+  document.querySelector(".header").innerHTML = navbar();
+
+
+  let styleTag = document.createElement("style");
+  styleTag.textContent = style();
+  document.head.append(styleTag);
+
+  document.querySelector(".footer").innerHTML = footer();
+
+  const navBar = document.querySelector(".navbar-container");
+  const header = document.querySelector(".header");
+
+  // when we scroll the webpage a little bit then both classes fixed & fixed-header will be added & when we go on the top of the webpage these classes will be removed
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 0) {
+      navBar.classList.add("fixed");
+      header.classList.add("fixed-header");
+    } else {
+      navBar.classList.remove("fixed");
+      header.classList.remove("fixed-header");
+    }
+  });
+
+  // scroll button
+  const scrollBtn = document.querySelector(".fa-angle-up");
+
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 100) {
+      scrollBtn.classList.add("showScrollBtn");
+    } else {
+      scrollBtn.classList.remove("showScrollBtn");
+    }
+  });
+
+  window.scrollUp = function () {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
+
+</script>
 
 </html>

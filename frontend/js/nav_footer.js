@@ -14,6 +14,7 @@ export const navbar = () => {
                 </ul>
             </div>
             <div class="profile">
+            
                 <p>Profile</p>
             </div>
         </nav>
@@ -27,7 +28,7 @@ export const navbar = () => {
 export const footer = () => {
   return `
       <div class="footer-container">
-            <h1>TIME WISE</h1>
+            <h1 class="WISE">TIME WISE</h1>
             <p>“At TimeWise, we blend productivity with peace. Helping you manage time, share thoughts, and stay in
                 tune—every day."</p>
             <div class="footer-icons">
@@ -48,7 +49,7 @@ export const footer = () => {
                 </ul>
     
             </div>
-            <p>Copyright &copy;2025 Time Wise</p>
+            <p class="text-bottum">Copyright &copy;2025 Time Wise</p>
         </div>
   `;
 };
@@ -70,7 +71,7 @@ export const style = () => {
         }
         header {
           width: 100%;
-          height: 110px;
+          height:100px;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -84,7 +85,7 @@ export const style = () => {
           left: 0;
           right: 0;
           z-index: 999;
-          height: 70px;
+          height: 75px;
         }
         .navbar-container {
           width: 85%;
@@ -111,8 +112,8 @@ export const style = () => {
           align-items: center;
         }
         .navbar-container .logo img {
-          width: 60%;
-          height: 65px;
+          width: 40%;
+          height:46px;
           object-fit:contain;
         }
         .nav-list {
@@ -127,7 +128,7 @@ export const style = () => {
           list-style-type: none;
           text-transform: uppercase;
           font-weight: 480;
-          
+          font-size:16px;        
         }
         .nav-list ul li a {
           position: relative;
@@ -163,7 +164,7 @@ export const style = () => {
             left: 96%;
             padding: 6px 7px;
             font-size: 32px;
-            background-color: #a24388;
+            background-color: #218FC4;
             color: white;
             border-radius: 50%;
             cursor: pointer;
@@ -177,21 +178,31 @@ export const style = () => {
             transition: background-color 0.4s ease;
         }
         .showScrollBtn:hover{
-            background-color: #ffcc25;
+            background-color: #218FC4;
         }
 
+        /*Custom scrollbar*/
+::-webkit-scrollbar {
+  width: 12px;
+}
+::-webkit-scrollbar-track {
+  background-color: #3EB5E8;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #1F242D;
+  border-radius: 10px;
+}
         /* scroll button end */
 
         /* footer part start */
 
         .footer-container{
           width: 100%;
-          height: 300px;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          gap: 20px;
+          height:320px;
+          display:grid;
+          justify-items:center;
+          align-content:center;
+          // gap: 20px;
           background-color: #1F242D;
           color: #E4E8ED;
         }
@@ -199,11 +210,20 @@ export const style = () => {
           color: #E4E8ED;
         }
         .footer-container p{
-          width: 400px;
+          width:450px;
+          word-wrap: 4px;
+          margin-bottom:32px;
           text-align: center;
         }
+          .text-bottum{
+          margin:0px;
+          word-spacing:2px;
+          padding:0px;
+          
+          }
         .footer-container ul {
           display: flex;
+           margin-bottom:27px;
         }
 
         .footer-container ul li {
@@ -234,7 +254,10 @@ export const style = () => {
         .footer-container ul li a .icon {
           position: relative;
           color: #262626;
-          transition: .5s;
+              text-align: center;
+               font-size: 24px;
+                margin:20px 0px;
+          transition: 0.5s;
           z-index: 3;
         }
         
@@ -274,7 +297,14 @@ export const style = () => {
         .footer-container ul li:nth-child(4) a:before {
           background: #dd4b39;
         }
+          .WISE{
+          margin:0px;
+           padding-bottom:14px;
+           letter-spacing:0.4px;
+           padding-top:25px;
 
+          }
+        
         /* footer part end */
     `;
 };
