@@ -57,10 +57,11 @@ body {
   position: relative;
   width: 100%;
   min-height: 100vh;
-  padding: 20px 150px;
+  padding:50px 150px;
   z-index: 1;
   display: flex;
-  gap: 30px;
+  justify-content: center;
+  gap: 70px;
   background-color: #f9fbfc;
 }
 .setting-container ul li a {
@@ -71,6 +72,7 @@ body {
 /* setting icon & heading start */
 .setting-icon {
   font-size: 22px;
+  /* margin-bottom: 10px; */
 }
 .setting-icon i {
   margin-right: 5px;
@@ -79,7 +81,6 @@ body {
 
 .setting-content {
   position: sticky;
-  top: 20px;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -231,7 +232,7 @@ body {
 .account-setting-child {
   width: 100%;
   padding: 20px 30px;
-  margin-top: 25px;
+  /* margin-top: 25px; */
   display: flex;
   flex-direction: column;
   gap: 10px;
