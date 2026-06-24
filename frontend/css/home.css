@@ -41,7 +41,7 @@ body.dark-mode {
 body {
   font-family: 'Inter', sans-serif;
   color: var(--text-primary);
-  color: var(--text-secondary);
+  /* color: var(--text-secondary); */
   background: var(--bg);
   min-height: 100vh;
   line-height: 1.5;
@@ -70,7 +70,8 @@ main {
 }
 
 .welcome {
-  background: var(--secondary-bg-color);
+  /* background: var(--secondary-bg-color); */
+  background: var(--surface-);
   padding: 20px;
   margin-bottom: 20px;
   border-left: 4px solid #007bff;
@@ -299,15 +300,17 @@ h1 {
 
 /* Pop Up of Break Button */
 
-/* Break Timer Card */
+/* Break timer card */
+
 .card.break-timer {
-  background-color: var(--secondary-bg-color);
-  color: var(--text-color);
+  background-color: var(--surface);
+  color: var(--text-primary);
   border-radius: 12px;
   padding: 20px;
   text-align: center;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease-in-out;
+  position: relative;
 }
 
 .card.break-timer:hover {
@@ -320,57 +323,70 @@ h1 {
 }
 
 .card.break-timer i {
+  position: static;
+  display: block;
   font-size: 2rem;
   margin-bottom: 10px;
-  color: var(--accent-color);
+  color: var(--primary);
 }
 
+/* Break button */
+
 #break-button {
-  background-color: var(--primary-color);
-  color: var(--button-text-color);
+  background-color: var(--primary);
+  color: white;
   padding: 10px 20px;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: 0.3s;
 }
 
 #break-button:hover {
-  background-color: var(--hover-color);
+  background-color: var(--primary-hover);
 }
 
+#break-button:disabled {
+  background-color: #bdbdbd;
+  cursor: not-allowed;
+  opacity: 0.8;
+}
 /* Popup Styles */
-#break-popup {
-  display: none;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: var(--popup-bg-color);
-  padding: 30px;
-  border-radius: 10px;
-  z-index: 999;
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-}
+/* /* Attendance cards can be clicked */
 
-#break-popup.active {
-  display: block;
-}
-
-#break-popup h3 {
-  margin-bottom: 15px;
-}
-
-#break-popup span {
-  font-size: 1.5rem;
-  margin-bottom: 20px;
-}
-
-#break-popup button {
-  background-color: var(--primary-color);
-  color: var(--button-text-color);
-  padding: 8px 15px;
-  border: none;
-  border-radius: 8px;
+#checkInCard,
+#checkOutCard {
   cursor: pointer;
+}
+
+/* Attendance information */
+
+#checkInStatus,
+#checkInTime,
+#workingHours,
+#checkOutTime,
+#breakInfo {
+  margin-top: 8px;
+}
+
+/* Check in status */
+
+#checkInStatus {
+  font-weight: 600;
+  color: #28a745;
+}
+
+/* Total working hours */
+
+#workingHours {
+  font-size: 20px;
+  font-weight: bold;
+  color: var(--primary);
+}
+
+/* Better hover effect */
+
+#checkInCard:hover,
+#checkOutCard:hover {
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
 }
