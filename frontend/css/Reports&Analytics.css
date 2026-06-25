@@ -49,9 +49,6 @@ body {
   min-height: 100vh;
   line-height: 1.5;
   transition: background-color 0.3s, color 0.3s;
-  /* display: grid;
-  grid-template-areas: "navbar" "main";
-  grid-template-rows: auto 1fr; */
   height: 100vh;
   align-items: center;
   justify-content: center;
@@ -61,6 +58,7 @@ h1, h2, h3, h4, h5 {
   font-family: 'Poppins', sans-serif;
   color: var(--text-primary);
   font-weight: 600;
+  font-size: 20px;
 }
 
 
@@ -70,11 +68,12 @@ h1, h2, h3, h4, h5 {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 1.5em;
+  margin:0px 60px;
+  margin-top: 50px;
 }
 
 .report_heading_text > h1 {
-  font-size: 48px;
+  font-size: 40px;
   font-weight: bold;
 }
 
@@ -154,11 +153,12 @@ div.reports_head_2 {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: -2.5em 5.5em 1.5em 1.5em;;
+  margin:0px 60px;
 }
 
 .reports_head_2 > p {
   font-size: 18px;
+  margin-right:40px;
 }
 
 /* Filter Div */
@@ -167,7 +167,7 @@ div.reports_head_2 {
   position: relative;
   width: 200px;
   font-family: inherit;
-  margin: 10px 25px;
+  margin:20px 60px;
 }
 
 .dropdown_toggle {
@@ -253,13 +253,11 @@ body.dark_mode .dropdown_option:hover {
 /* Report Head Cards */
 
 .reports_head_cards {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1.5rem;
-  padding: 1rem;
-  width: 100%;
-  overflow-x: auto;
-   align-items: stretch;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 50px 60px;
+  gap:20px;
 }
 
 /* Card common styles */
@@ -273,7 +271,7 @@ body.dark_mode .dropdown_option:hover {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   display: flex;
   align-items: center;
-  min-width: 200px;
+  min-width:340px;
   gap: 20px;
    transition: all 0.3s ease;
 }
@@ -300,7 +298,7 @@ body.dark_mode .dropdown_option:hover {
 .ad_daily_text h2,
 .punctuality_text h2,
 .active_days_text h2 {
-  font-size: 1.5rem;
+  font-size:22px;
   color: var(--text-primary);
   margin-bottom: 0.5rem;
 }
@@ -309,7 +307,7 @@ body.dark_mode .dropdown_option:hover {
 .ad_daily_text p,
 .punctuality_text p,
 .active_days_text p {
-  font-size: 1.5rem;
+  font-size:20px;
   font-weight: 600;
   color: var(--text-secondary);
 }
@@ -389,7 +387,7 @@ body.dark_mode .dropdown_option:hover {
 
 /* Bar Chart Section */
 .bar_chart_section {
-  margin: 2rem auto;
+  margin:30px auto;
   padding: 1.5rem;
   background: var(--surface);
   border: 1px solid var(--border);
@@ -488,7 +486,7 @@ body.dark_mode .dropdown_option:hover {
 
 /* Chart container */
 .pie_chart_section {
-  margin: 2rem auto;
+ margin-bottom:60px !important;
   padding: 1.5rem;
   background: var(--surface);
   border: 1px solid var(--border);
@@ -580,7 +578,7 @@ body.dark_mode .dropdown_option:hover {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  margin: 0 auto;
+  margin: 20px auto;
 }
 
 .pie_chart_div_1,

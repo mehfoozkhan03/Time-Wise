@@ -39,21 +39,12 @@ body.dark-mode {
   padding: 0;
   box-sizing: border-box;
 }
-
 body {
   font-family: 'Inter', sans-serif;
-  color: var(--text-primary);
-  color: var(--text-secondary);
   background: var(--bg);
   min-height: 100vh;
   line-height: 1.5;
   transition: background-color 0.3s, color 0.3s;
-  display: grid;
-  grid-template-areas: "navbar" "main";
-  grid-template-rows: auto 1fr;
-  height: 100vh;
-  align-items: center;
-  justify-content: center;
 }
 
 h1, h2, h3, h4, h5 {
@@ -346,7 +337,7 @@ body.sidebar-open .navbar_dashbaord {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
+  min-height:550px;
   padding: 1rem;
 }
 
@@ -357,7 +348,8 @@ body.sidebar-open .navbar_dashbaord {
   box-shadow: 
   0 4px 6px rgba(0,0,0,0.12),
   0 10px 30px rgba(0,0,0,0.1);
-  width: min(90%, 420px);
+  width:520px;
+  height:360px;
   text-align: center;
   margin: auto;
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
@@ -386,7 +378,8 @@ body.sidebar-open .navbar_dashbaord {
 .login_container h1 {
   font-size: 2rem;
   margin-bottom: 1rem;
-  color: var(--text-primary);
+  word-spacing:2px;
+  color: #1F242D;
   font-weight: 700;
   letter-spacing: -0.025em;
   line-height: 1.3;
@@ -404,6 +397,7 @@ body.sidebar-open .navbar_dashbaord {
 .admin_input {
   width: 100%;
   padding: 0.9rem 1rem;
+  margin: 8px 0px;
   border: 2px solid var(--border);
   border-radius: 10px;
   font-size: 1rem;

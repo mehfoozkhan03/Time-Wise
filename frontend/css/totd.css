@@ -31,6 +31,13 @@ main {
   box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
     rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
 }
+.todo_heading{
+  margin-top: 20px;
+  text-transform: capitalize;
+  letter-spacing: 0.5px;
+  word-spacing:5px;
+
+}
 .light-mode {
   display: none;
 }
@@ -43,14 +50,15 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 50px;
+  gap:40px;
 }
 .thought-cards {
   width: 80%;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   align-items: center;
-  gap: 40px 20px;
+  gap: 50px 30px;
+  margin-bottom: 40px;
 }
 .card-1 {
   width: 100%;

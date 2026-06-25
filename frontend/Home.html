@@ -39,32 +39,53 @@
 
     <section class="overview">
 
-      <div class="card_check_in">
-        <div class="check_in_header">
-          <h3>Today's Check-In</h3>
-          <i class="fa-solid fa-alarm-clock"></i>
+        <div class="card_check_in" id="checkInCard">
+            <div class="check_in_header">
+            <h3>Today's Check-In</h3>
+            <i class="fa-solid fa-alarm-clock"></i>
+            </div>
+
+            <p id="checkInStatus">
+            <strong>Not Checked In</strong>
+            </p>
+
+            <p id="checkInTime">
+            Waiting for check-in
+            </p>
         </div>
-        <p><strong>Not Checked In</strong></p>
-        <p>Waiting for check-in</p>
-      </div>
 
-      <div class="card_hours">
-        <div class="check_out_header">
-          <h3>Today's Check-out</h3>
-          <i class="fa-solid fa-alarm-clock"></i>
+        <div class="card_hours" id="checkOutCard">
+            <div class="check_out_header">
+            <h3>Today's Check-out</h3>
+            <i class="fa-solid fa-alarm-clock"></i>
+            </div>
+
+            <p id="workingHours">
+            0h 0m
+            </p>
+
+            <p id="checkOutTime">
+            Start your day & track
+            </p>
         </div>
-        <p>0h 0m</p>
-        <p>Start your day & track</p>
-      </div>
-    </section>
 
-    <div class="card break-timer">
-      <h3>Break Timer</h3>
-      <i class="fa-solid fa-coffee"></i>
-      <p>Track your break time</p>
-      <button id="break-button">Take A Break</button>
-    </div>
+        </section>
 
+        <div class="card break-timer">
+
+        <h3>Break Timer</h3>
+
+        <i class="fa-solid fa-coffee"></i>
+
+        <p id="breakInfo">
+            Track your break time
+        </p>
+
+        <button id="break-button">
+            Take A Break
+        </button>
+
+        </div>
 
     <section class="top-thought">
       <h3>Today's Top Thought</h3>
@@ -129,6 +150,7 @@
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
 <script src="./js/Home.js"></script>
+<script src="../frontend/js/CH_IN_OUT_Break.js"></script>
 <script type="module">
   // RAHMAT CODE
   import { navbar, style, footer } from "./js/nav_footer.js";
