@@ -66,8 +66,7 @@ h1, h2, h3, h4, h5 {
 /* Employee Info Section */
 
 .employee_info_section {
-  padding: 40px;
-  margin: 20px;
+  margin:70px 30px;
   display: flex;
   justify-content: center;
   gap: 80px;
@@ -207,9 +206,11 @@ h1, h2, h3, h4, h5 {
 }
 
 /* Employee Badges */
-
+.emp_number{
+  margin: 10px 0px;
+}
 .employee_badges {
-  margin-top: 1.5rem;
+  margin-top:0px;
   padding: 1.2rem;
   background: var(--surface);
   border-radius: 16px;
@@ -269,7 +270,7 @@ h1, h2, h3, h4, h5 {
 /* Employee Section Contact */
 .emp_sect_contact {
  border: 1.5px solid var(--border);
- padding: 20px;
+ padding: 30px 30px;
  border-radius: 10px;
  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
  height: 400px;
@@ -341,9 +342,8 @@ h1, h2, h3, h4, h5 {
 /* Main Content Starts here */
 
 .main_content {
-  border: 1px solid black;
   margin: 20px;
-  padding: 40px;
+  padding:0px  50px;
 }
 
 .overview {
@@ -551,13 +551,12 @@ h1, h2, h3, h4, h5 {
   padding: 40px;
   margin: 20px;
 }
-
- .header {
+ .headerparents{
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 20px;
-}
+} 
 
  .header h3 {
   font-size: 20px;
@@ -620,7 +619,7 @@ h1, h2, h3, h4, h5 {
   gap: 1.5rem;
   align-items: flex-start;
   justify-content: space-between;
-  margin-top: 2rem;
+  margin-top:3rem;
 }
 
 /* individual card */
@@ -692,7 +691,7 @@ h1, h2, h3, h4, h5 {
   border: 1px solid var(--border);
   border-radius: 18px;
   padding: 12px;
-  margin-top: 10px;
+  margin:20px 0px;
   background-color: var(--surface);
 }
 
@@ -884,9 +883,7 @@ h1, h2, h3, h4, h5 {
   display: flex;
  flex-direction: column;
  gap: 12px;
- /* padding: 2.8rem; */
- /* border: 1px solid black; */
- margin: 2rem 0;
+ margin:3rem 0;
 }
 
 .attendace_table {
@@ -1351,7 +1348,8 @@ textarea,
 /* Performance Section */
 
 .performance {
-  padding: 2rem;
+  padding: 3rem;
+ 
   background: var(--bg);
 }
 
