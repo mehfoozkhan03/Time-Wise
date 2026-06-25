@@ -4,29 +4,29 @@
    THEME COLOR VARIABLES
 ============================= */
 :root {
-  --bg: #F9FBFC;
-  --surface: #EEF3F7;
-  --primary: #29A3E0;
-  --primary-hover: #218FC4;
-  --secondary: #D4EBF7;
-  --text-primary: #2C2F3A;
-  --text-secondary: #6E7A88;
-  --border: #D6DDE3;
-  --success: #A9D6C2;
-  --error: #F2A3A3;
+  --bg: #f9fbfc;
+  --surface: #eef3f7;
+  --primary: #29a3e0;
+  --primary-hover: #218fc4;
+  --secondary: #d4ebf7;
+  --text-primary: #2c2f3a;
+  --text-secondary: #6e7a88;
+  --border: #d6dde3;
+  --success: #a9d6c2;
+  --error: #f2a3a3;
 }
 
 body.dark-mode {
-  --bg: #1F242D;
-  --surface: #2A2F3A;
-  --primary: #3EB5E8;
-  --primary-hover: #53C1F0;
-  --secondary: #8AD5F2;
-  --text-primary: #E4E8ED;
-  --text-secondary: #A2ACB8;
-  --border: #3B4251;
-  --success: #81E6C3;
-  --error: #F17C7C;
+  --bg: #1f242d;
+  --surface: #2a2f3a;
+  --primary: #3eb5e8;
+  --primary-hover: #53c1f0;
+  --secondary: #8ad5f2;
+  --text-primary: #e4e8ed;
+  --text-secondary: #a2acb8;
+  --border: #3b4251;
+  --success: #81e6c3;
+  --error: #f17c7c;
 }
 
 /* ============================
@@ -41,18 +41,24 @@ body.dark-mode {
 body {
   font-family: 'Inter', sans-serif;
   color: var(--text-primary);
-  color: var(--text-secondary);
+  /* color: var(--text-secondary); */
   background: var(--bg);
   min-height: 100vh;
   line-height: 1.5;
-  transition: background-color 0.3s, color 0.3s;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
   /* display: grid; */
   height: 100vh;
   align-items: center;
   justify-content: center;
 }
 
-h1, h2, h3, h4, h5 {
+h1,
+h2,
+h3,
+h4,
+h5 {
   font-family: 'Poppins', sans-serif;
   color: var(--text-primary);
   font-weight: 600;
@@ -65,29 +71,27 @@ h1, h2, h3, h4, h5 {
 main {
   /* padding: 20px; */
   width: 80%;
-  margin: auto
-  ;
+  margin: auto;
 }
 
 .welcome {
-  background: var(--secondary-bg-color);
-  padding:30px;
-  margin-bottom:40px;
-  margin-top:55px;
+  /* background: var(--secondary-bg-color); */
+  background: var(--surface-);
+  padding: 20px;
+  margin-bottom: 20px;
   border-left: 4px solid #007bff;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   border-radius: 12px;
   text-align: center;
   position: relative;
-
 }
 
-.welcome h2{
+.welcome h2 {
   font-size: 32px;
   color: var(--text-primary);
 }
 
-.welcome img{
+.welcome img {
   position: absolute;
   width: 60px;
   top: 13%;
@@ -118,16 +122,16 @@ blockquote {
   gap: 35px;
   align-items: center;
   justify-content: center;
-  margin-bottom:25px;
+  margin-bottom: 25px;
 }
 
 .card_check_in {
- border-left: 4px solid #28a745;
- width: 100%;
- padding: 16px;
- box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
- border-radius: 12px;
- transition: transform 0.3s ease-in-out;
+  border-left: 4px solid #28a745;
+  width: 100%;
+  padding: 16px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  transition: transform 0.3s ease-in-out;
 }
 
 .card_check_in:hover {
@@ -146,7 +150,7 @@ blockquote {
   font-size: 24px;
 }
 
-.overview-head{
+.overview-head {
   text-align: center;
   color: var(--text-primary);
 }
@@ -173,7 +177,6 @@ blockquote {
   display: flex;
   gap: 35px;
   align-items: center;
-
 }
 
 .card {
@@ -191,12 +194,11 @@ blockquote {
   font-size: 25px;
 }
 
-
 .top-thought {
   background: #fff;
   /* border: 1px solid black; */
   padding: 20px;
-  margin:50px 0px;
+  margin: 50px 0px;
 }
 
 .thought-box {
@@ -231,11 +233,11 @@ blockquote {
   margin-top: 10px;
 }
 
-.featured, .view-all {
+.featured,
+.view-all {
   text-decoration: none;
   color: #007bff;
 }
-
 
 .container {
   /* max-width: 1200px; */
@@ -245,7 +247,7 @@ blockquote {
 
 h1 {
   text-align: center;
-  margin:30px 0px;
+  margin: 30px 0px;
   color: #111827;
 }
 
@@ -253,7 +255,7 @@ h1 {
   display: grid;
   grid-template-columns: auto auto;
   gap: 1.5rem;
-  margin-bottom:70px;
+  margin-bottom: 70px;
 }
 
 .cards {
@@ -274,9 +276,9 @@ h1 {
 }
 
 .cards h2 {
-  font-size:20px;
+  font-size: 20px;
   color: #1f2937;
- margin-bottom: 0.5rem; 
+  margin-bottom: 0.5rem;
 }
 
 .cards p {
@@ -284,32 +286,33 @@ h1 {
   font-size: 0.95rem;
 }
 
- .view{
-
-    color: #007bff;
-    text-decoration: none;
+.view {
+  color: #007bff;
+  text-decoration: none;
 }
 
-.view i{
+.view i {
   font-size: 20px;
   transition: 1s;
 }
 
-.view i:hover{
+.view i:hover {
   translate: 20px;
 }
 
 /* Pop Up of Break Button */
 
-/* Break Timer Card */
+/* Break timer card */
+
 .card.break-timer {
-  background-color: var(--secondary-bg-color);
-  color: var(--text-color);
+  background-color: var(--surface);
+  color: var(--text-primary);
   border-radius: 12px;
   padding: 20px;
   text-align: center;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease-in-out;
+  position: relative;
 }
 
 .card.break-timer:hover {
@@ -322,57 +325,70 @@ h1 {
 }
 
 .card.break-timer i {
+  position: static;
+  display: block;
   font-size: 2rem;
   margin-bottom: 10px;
-  color: var(--accent-color);
+  color: var(--primary);
 }
 
+/* Break button */
+
 #break-button {
-  background-color: var(--primary-color);
-  color: var(--button-text-color);
+  background-color: var(--primary);
+  color: white;
   padding: 10px 20px;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: 0.3s;
 }
 
 #break-button:hover {
-  background-color: var(--hover-color);
+  background-color: var(--primary-hover);
 }
 
+#break-button:disabled {
+  background-color: #bdbdbd;
+  cursor: not-allowed;
+  opacity: 0.8;
+}
 /* Popup Styles */
-#break-popup {
-  display: none;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: var(--popup-bg-color);
-  padding: 30px;
-  border-radius: 10px;
-  z-index: 999;
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-}
+/* /* Attendance cards can be clicked */
 
-#break-popup.active {
-  display: block;
-}
-
-#break-popup h3 {
-  margin-bottom: 15px;
-}
-
-#break-popup span {
-  font-size: 1.5rem;
-  margin-bottom: 20px;
-}
-
-#break-popup button {
-  background-color: var(--primary-color);
-  color: var(--button-text-color);
-  padding: 8px 15px;
-  border: none;
-  border-radius: 8px;
+#checkInCard,
+#checkOutCard {
   cursor: pointer;
+}
+
+/* Attendance information */
+
+#checkInStatus,
+#checkInTime,
+#workingHours,
+#checkOutTime,
+#breakInfo {
+  margin-top: 8px;
+}
+
+/* Check in status */
+
+#checkInStatus {
+  font-weight: 600;
+  color: #28a745;
+}
+
+/* Total working hours */
+
+#workingHours {
+  font-size: 20px;
+  font-weight: bold;
+  color: var(--primary);
+}
+
+/* Better hover effect */
+
+#checkInCard:hover,
+#checkOutCard:hover {
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
 }
