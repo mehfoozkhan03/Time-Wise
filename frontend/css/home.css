@@ -71,11 +71,11 @@ main {
 
 .welcome {
   background: var(--secondary-bg-color);
-  padding: 20px;
-  margin-bottom: 20px;
+  padding:30px;
+  margin-bottom:40px;
+  margin-top:55px;
   border-left: 4px solid #007bff;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  margin-top: 15px;
   border-radius: 12px;
   text-align: center;
   position: relative;
@@ -118,7 +118,7 @@ blockquote {
   gap: 35px;
   align-items: center;
   justify-content: center;
-  margin-bottom: 20px;
+  margin-bottom:25px;
 }
 
 .card_check_in {
@@ -194,8 +194,9 @@ blockquote {
 
 .top-thought {
   background: #fff;
+  /* border: 1px solid black; */
   padding: 20px;
-  margin-bottom: 20px;
+  margin:50px 0px;
 }
 
 .thought-box {
@@ -244,7 +245,7 @@ blockquote {
 
 h1 {
   text-align: center;
-  margin-bottom: 2rem;
+  margin:30px 0px;
   color: #111827;
 }
 
@@ -252,6 +253,7 @@ h1 {
   display: grid;
   grid-template-columns: auto auto;
   gap: 1.5rem;
+  margin-bottom:70px;
 }
 
 .cards {
@@ -272,9 +274,9 @@ h1 {
 }
 
 .cards h2 {
-  font-size: 22 px;
+  font-size:20px;
   color: #1f2937;
-  margin-bottom: 0.5rem;
+ margin-bottom: 0.5rem; 
 }
 
 .cards p {
