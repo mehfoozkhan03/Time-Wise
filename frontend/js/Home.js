@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
 const skeleton = document.querySelector("#homeSkeleton");
 const content = document.querySelector("#homeContent");
 
-window.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("load", () => {
   setTimeout(() => {
     skeleton.style.display = "none";
     content.classList.remove("hidden");
