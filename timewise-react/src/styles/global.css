@@ -1,0 +1,386 @@
+/* ==========================================================
+   GOOGLE FONTS
+========================================================== */
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap");
+
+/* ==========================================================
+   RESET
+========================================================== */
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ==========================================================
+   ROOT VARIABLES
+========================================================== */
+
+:root {
+  /* Backgrounds */
+  --bg: #F9FBFC;
+  --surface: #EEF3F7;
+  --surface_hover: #E6EDF3;
+
+  /* Brand */
+  --primary: #29A3E0;
+  --primary_hover: #218FC4;
+  --secondary: #D4EBF7;
+
+  /* Typography */
+  --text_primary: #2C2F3A;
+  --text_secondary: #6E7A88;
+
+  /* Borders */
+  --border: #D6DDE3;
+
+  /* Status */
+  --success: #A9D6C2;
+  --warning: #FFD27F;
+  --error: #F2A3A3;
+
+  /* Radius */
+  --radius_sm: 8px;
+  --radius_md: 12px;
+  --radius_lg: 18px;
+  --radius_xl: 24px;
+
+  /* Shadows */
+  --shadow_sm: 0 2px 6px rgba(0,0,0,.05);
+
+  --shadow_md: 0 6px 18px rgba(0,0,0,.08);
+
+  --shadow_lg: 0 14px 36px rgba(0,0,0,.12);
+
+  /* Transition */
+
+  --transition: .3s cubic-bezier(.4,0,.2,1);
+
+  /* Navbar */
+
+  --navbar_height: 78px;
+
+  /* Sidebar */
+
+  --sidebar_width: 270px;
+}
+
+/* ==========================================================
+   DARK MODE
+========================================================== */
+
+body.dark_mode {
+
+  --bg: #1F242D;
+
+  --surface: #2A2F3A;
+
+  --surface_hover: #353C48;
+
+  --primary: #3EB5E8;
+
+  --primary_hover: #53C1F0;
+
+  --secondary: #8AD5F2;
+
+  --text_primary: #E4E8ED;
+
+  --text_secondary: #A2ACB8;
+
+  --border: #3B4251;
+
+  --success: #81E6C3;
+
+  --warning: #FFD27F;
+
+  --error: #F17C7C;
+}
+
+/* ==========================================================
+   HTML
+========================================================== */
+
+html {
+
+  scroll-behavior: smooth;
+
+}
+
+body {
+
+  font-family: "Inter", sans-serif;
+
+  background: var(--bg);
+
+  color: var(--text_primary);
+
+  transition:
+    background var(--transition),
+    color var(--transition);
+
+  min-height: 100vh;
+
+  overflow-x: hidden;
+
+}
+
+/* ==========================================================
+   TYPOGRAPHY
+========================================================== */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+
+  font-family: "Poppins", sans-serif;
+
+  color: var(--text_primary);
+
+  font-weight: 600;
+
+}
+
+p {
+
+  color: var(--text_secondary);
+
+  line-height: 1.65;
+
+}
+
+small {
+
+  color: var(--text_secondary);
+
+}
+
+a {
+
+  text-decoration: none;
+
+  color: inherit;
+
+}
+
+ul {
+
+  list-style: none;
+
+}
+
+/* ==========================================================
+   BUTTON
+========================================================== */
+
+button {
+
+  font-family: inherit;
+
+  cursor: pointer;
+
+  border: none;
+
+  outline: none;
+
+  transition: var(--transition);
+
+}
+
+button:disabled {
+
+  cursor: not-allowed;
+
+  opacity: .6;
+
+}
+
+/* ==========================================================
+   INPUTS
+========================================================== */
+
+input,
+textarea,
+select {
+
+  font-family: inherit;
+
+  outline: none;
+
+  border: 1px solid var(--border);
+
+  background: var(--surface);
+
+  color: var(--text_primary);
+
+  transition: var(--transition);
+
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+
+  border-color: var(--primary);
+
+  box-shadow:
+      0 0 0 4px rgba(41,163,224,.18);
+
+}
+
+body.dark_mode input:focus,
+body.dark_mode textarea:focus,
+body.dark_mode select:focus {
+
+  box-shadow:
+      0 0 0 4px rgba(62,181,232,.18);
+
+}
+
+/* ==========================================================
+   IMAGES
+========================================================== */
+
+img {
+
+  display: block;
+
+  max-width: 100%;
+
+}
+
+/* ==========================================================
+   SCROLLBAR
+========================================================== */
+
+::-webkit-scrollbar {
+
+  width: 10px;
+
+}
+
+::-webkit-scrollbar-track {
+
+  background: var(--surface);
+
+}
+
+::-webkit-scrollbar-thumb {
+
+  background: var(--primary);
+
+  border-radius: 50px;
+
+}
+
+::-webkit-scrollbar-thumb:hover {
+
+  background: var(--primary_hover);
+
+}
+
+/* ==========================================================
+   SELECTION
+========================================================== */
+
+::selection {
+
+  background: var(--primary);
+
+  color: white;
+
+}
+
+/* ==========================================================
+   UTILITIES
+========================================================== */
+
+.container {
+
+  width: min(1400px, 92%);
+
+  margin-inline: auto;
+
+}
+
+.flex {
+
+  display: flex;
+
+}
+
+.flex_center {
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+}
+
+.grid {
+
+  display: grid;
+
+}
+
+.hidden {
+
+  display: none !important;
+
+}
+
+.text_center {
+
+  text-align: center;
+
+}
+
+.shadow {
+
+  box-shadow: var(--shadow_md);
+
+}
+
+.rounded {
+
+  border-radius: var(--radius_lg);
+
+}
+
+/* ==========================================================
+   ANIMATIONS
+========================================================== */
+
+@keyframes fade_in {
+
+  from {
+
+    opacity: 0;
+
+    transform: translateY(10px);
+
+  }
+
+  to {
+
+    opacity: 1;
+
+    transform: translateY(0);
+
+  }
+
+}
+
+.fade_in {
+
+  animation: fade_in .35s ease;
+
+}
