@@ -160,10 +160,10 @@ export const style = () => {
         /* scroll button start */
         .fa-angle-up{
             position: fixed;
-            top: 80%;
-            left: 96%;
-            padding: 6px 7px;
-            font-size: 32px;
+            bottom: 4%;
+            right: 1.5%;
+            padding: 5px 7px;
+            font-size: 33px;
             background-color: #218FC4;
             color: white;
             border-radius: 50%;
