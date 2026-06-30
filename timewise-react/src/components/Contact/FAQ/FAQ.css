@@ -1,0 +1,21 @@
+.question{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    cursor:pointer;
+    font-weight:600;
+
+    color:#2C2F3A;     /* FIX */
+}
+
+.question span{
+    font-size:24px;
+    font-weight:700;
+    color:#2C2F3A;     /* FIX */
+}
+
+.answer{
+    color:#6E7A88;
+    margin-top:15px;
+    line-height:1.6;
+}
