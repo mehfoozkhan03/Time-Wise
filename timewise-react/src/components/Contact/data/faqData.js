@@ -33,5 +33,25 @@ export const FAQData = [
         question: "What is Freeze Mode?",
         answer:
             "Freeze mode pauses your work session during breaks."
+    },
+
+    {   id: 6,
+        question: "How can I switch between light and dark modes?",
+        answer: "Visit the Settings Page to toggle between light and dark themes for a more personalized experience."
+    },
+    
+    {   id: 7,
+        question: "How do I track my work hours?",
+        answer: "Upon login, TimeWise automatically records your check-in time. You can view your total work hours on the Home Page and access your attendance history."
+    },
+
+    {   id: 8,
+        question: "What should I do if I forget my password?",
+        answer: "Click on the Forgot Password link on the login page and follow the instructions to reset your password.."
+    },
+
+    {   id: 9,
+        question: "How do I contact TimeWise support?",
+        answer: "Visit the Contact Us page and fill out the form with your query. Our support team will get back to you as soon as possible."
     }
 ];
