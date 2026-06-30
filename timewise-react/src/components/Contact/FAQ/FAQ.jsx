@@ -1,10 +1,10 @@
-import "./FAQ.css";
 import FAQItem from "../FAQItem";
-import {FAQData} from "../data/faqData";
+import { FAQData } from "../data/faqData";
+import "./FAQ.css";
 
-function FAQ(){
+function FAQ() {
 
-    return(
+    return (
 
         <div className="faqContainer">
 
@@ -12,14 +12,18 @@ function FAQ(){
                 Frequently Asked Questions
             </h1>
 
-            {
-                FAQData.map((faq)=>(
-                    <FAQItem
-                        key={faq.id}
-                        faq={faq}
-                    />
-                ))
-            }
+            <div className="faqList">
+
+                {
+                    FAQData.map((faq) => (
+                        <FAQItem
+                            key={faq.id}
+                            faq={faq}
+                        />
+                    ))
+                }
+
+            </div>
 
         </div>
     );

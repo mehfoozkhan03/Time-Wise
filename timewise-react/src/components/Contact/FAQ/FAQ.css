@@ -1,21 +1,16 @@
-.question{
+.faqContainer{
+    padding:60px 0;
+}
+
+.faqContainer h1{
+    text-align:center;
+    font-size:48px;
+    margin-bottom:50px;
+    color:#2C2F3A;
+}
+
+.faqList{
     display:flex;
-    justify-content:space-between;
-    align-items:center;
-    cursor:pointer;
-    font-weight:600;
-
-    color:#2C2F3A;     /* FIX */
-}
-
-.question span{
-    font-size:24px;
-    font-weight:700;
-    color:#2C2F3A;     /* FIX */
-}
-
-.answer{
-    color:#6E7A88;
-    margin-top:15px;
-    line-height:1.6;
+    flex-direction:column;
+    gap:35px;
 }
