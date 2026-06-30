@@ -2,7 +2,7 @@
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 18px;
-  padding: 24x;
+  padding: 24px;
   box-shadow: var(--shadow_sm);
   transition: all .3s ease;
 }
