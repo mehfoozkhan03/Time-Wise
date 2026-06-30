@@ -1,3 +1,5 @@
-.home_page {
-  padding: 40px 0 80px;
+.home_page{
+    width:min(1400px,92%);
+    margin:auto;
+    padding:48px 0 80px;
 }
