@@ -1,19 +1,46 @@
-.faqContainer{
+.faqContainer {
 
-    width:85%;
+    width: 90%;
 
-    max-width:1200px;
+    max-width: 1400px;
 
-    margin:auto;
+    margin: auto;
 
-    padding:60px 0;
+    padding: 60px 0;
 }
 
-.faqContainer h1{
+.faqContainer h1 {
 
-    text-align:center;
+    text-align: center;
 
-    margin-bottom:30px;
+    margin-bottom: 40px;
 
-    font-size:42px;
+    font-size: 42px;
+
+    color: var(--text_primary);
+}
+
+.faqGrid {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 30px;
+}
+
+.faqColumn {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 12px;
+}
+@media (max-width: 768px) {
+
+    .faqGrid {
+
+        grid-template-columns: 1fr;
+    }
 }

@@ -1,67 +1,124 @@
-.formPart{
-    background:#fff;
-    padding:40px;
-    border-radius:15px;
-    box-shadow:0 5px 20px rgba(0,0,0,.08);
+.formPart {
+
+    background: var(--surface);
+
+    padding: 28px;
+
+    border-radius: var(--radius_lg);
+
+    border: 1px solid var(--border);
+
+    box-shadow: var(--shadow_md);
+
+    transition: var(--transition);
+
+    width: 100%;
+
+    max-width: 700px;
 }
 
-.inputs{
-    display:flex;
-    gap:20px;
+.inputs {
+
+    display: flex;
+
+    gap: 16px;
 }
 
 .faqAnswer {
-    min-height: 32px;   
-    margin-top: 10px;
-    margin-bottom: 15px;
 
-    color: #2C2F3A;
-    font-size: 18px;
+    min-height: 20px;
+
+    margin-top: 4px;
+
+    margin-bottom: 8px;
+
+    color: var(--text_secondary);
+
+    font-size: 15px;
+
     font-weight: 500;
 
-    transition: all 0.3s ease;
+    transition: var(--transition);
 }
 
 .formPart input,
 .formPart select,
-.formPart textarea{
+.formPart textarea {
 
-    width:100%;
+    width: 100%;
 
-    padding:15px 20px;
+    padding: 14px 18px;
 
-    margin:10px 0;
+    margin: 6px 0;
 
-    background:#f5f5f5 !important;
+    background: var(--bg) !important;
 
-    color:#2C2F3A !important;
+    color: var(--text_primary) !important;
 
-    border:none;
+    border: 1px solid transparent;
 
-    border-radius:10px;
+    border-radius: var(--radius_md);
 
-    font-size:16px;
+    font-size: 16px;
+
+    transition: var(--transition);
+}
+
+.formPart input:hover,
+.formPart select:hover,
+.formPart textarea:hover {
+
+    background: var(--surface_hover) !important;
+}
+
+.formPart input:focus,
+.formPart select:focus,
+.formPart textarea:focus {
+
+    border-color: var(--primary);
+
+    background: var(--surface_hover) !important;
 }
 
 .formPart input::placeholder,
-.formPart textarea::placeholder{
-    color:#84828a;
+.formPart textarea::placeholder {
+
+    color: var(--text_secondary);
 }
 
-.formPart textarea{
-    resize:none;
+.formPart textarea {
+
+    resize: none;
+
+    min-height: 180px;
 }
 
-.formPart button{
-    padding:12px 32px;
-    border:1px solid #2C2F3A;
-    background:white;
-    cursor:pointer;
-    border-radius:5px;
-    transition:.3s;
+.formPart .btn {
+
+    padding: 12px 28px;
+
+    border: 1px solid var(--primary);
+
+    background: transparent;
+
+    color: var(--text_primary);
+
+    border-radius: var(--radius_sm);
+
+    font-size: 15px;
+
+    font-weight: 500;
+
+    cursor: pointer;
+
+    transition: var(--transition);
+
+    margin-top: 8px;
 }
 
-.formPart button:hover{
-    background:#2C2F3A;
-    color:white;
+.formPart .btn:hover {
+
+    background: var(--primary);
+
+    color: white;
 }
