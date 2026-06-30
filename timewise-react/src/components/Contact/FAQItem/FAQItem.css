@@ -1,0 +1,18 @@
+
+.faq{
+    background:#f5f5f5;
+    padding:20px;
+    border-radius:15px;
+    margin-bottom:20px;
+}
+
+.question{
+    display:flex;
+    justify-content:space-between;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.answer{
+    margin-top:15px;
+}
