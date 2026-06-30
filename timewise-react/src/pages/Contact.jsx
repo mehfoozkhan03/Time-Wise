@@ -17,6 +17,7 @@ function Contact() {
     return (
 
         <>
+        <div className="contactPage">
             <ContactHero />
 
             <div className="contactWrapper">
@@ -28,7 +29,7 @@ function Contact() {
             </div>
 
             <FAQ />
-
+        </div>
         </>
     );
 }
