@@ -53,5 +53,11 @@ export const FAQData = [
     {   id: 9,
         question: "How do I contact TimeWise support?",
         answer: "Visit the Contact Us page and fill out the form with your query. Our support team will get back to you as soon as possible."
+    },
+    {
+    id: 10,
+    question: "Can I view my attendance history?",
+    answer:
+        "Yes. TimeWise allows users to access their attendance history, including check-in and check-out times, break durations, and total working hours for previous days."
     }
 ];

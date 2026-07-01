@@ -1,10 +1,16 @@
+.contactPage{
+    background: linear-gradient(
+        90deg,
+        #1F242D,
+        #242B37
+    );
+
+    min-height:100vh;
+}
+
 .contactWrapper{
-
     display:flex;
-
     justify-content:space-between;
-
     gap:60px;
-
     padding:80px;
 }
