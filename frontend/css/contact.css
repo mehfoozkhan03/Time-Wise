@@ -48,7 +48,7 @@ h1 , h2{
 }
 
 .content {
-  background-image: url('/Contact.png');
+  background-image: url('./utils/img/Contact.jpg');
   height: 450px;
   background-size: cover;
   background-position: center;
@@ -73,7 +73,7 @@ h1 , h2{
   content: "";
   position: absolute;
   inset: 0;
-  background: #6E7A88;
+  /* background: #6E7A88; */
 }
 
 .content > * {
