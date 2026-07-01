@@ -1,0 +1,16 @@
+.faqContainer{
+    padding:60px 0;
+}
+
+.faqContainer h1{
+    text-align:center;
+    font-size:48px;
+    margin-bottom:50px;
+    color:#2C2F3A;
+}
+
+.faqList{
+    display:flex;
+    flex-direction:column;
+    gap:35px;
+}

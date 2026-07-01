@@ -1,0 +1,48 @@
+.faq{
+
+    margin-left:8rem;
+    margin-right:8rem;
+
+    background:#f5f5f5;
+
+    border-radius:20px;
+
+    padding:20px;
+
+    transition:.3s;
+}
+
+.question{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    cursor:pointer;
+
+    font-size:18px;
+
+    font-weight:600;
+
+    color:#2C2F3A;
+}
+
+.question span{
+
+    font-size:30px;
+
+    font-weight:bold;
+}
+
+.answer{
+
+    margin-top:20px;
+
+    color:#6E7A88;
+
+    line-height:1.7;
+
+    font-size:17px;
+}
