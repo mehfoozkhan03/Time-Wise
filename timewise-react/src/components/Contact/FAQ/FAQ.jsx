@@ -1,8 +1,19 @@
-import FAQItem from "../FAQItem";
+import FAQItem from "../FAQItem/FAQItem";
 import { FAQData } from "../data/faqData";
 import "./FAQ.css";
 
 function FAQ() {
+
+    const mid =
+        Math.ceil(
+            FAQData.length / 2
+        );
+
+    const leftFAQ =
+        FAQData.slice(0, mid);
+
+    const rightFAQ =
+        FAQData.slice(mid);
 
     return (
 
@@ -12,21 +23,39 @@ function FAQ() {
                 Frequently Asked Questions
             </h1>
 
-            <div className="faqList">
+            <div className="faqGrid">
 
-                {
-                    FAQData.map((faq) => (
-                        <FAQItem
-                            key={faq.id}
-                            faq={faq}
-                        />
-                    ))
-                }
+                <div className="faqColumn">
+
+                    {
+                        leftFAQ.map((faq) => (
+                            <FAQItem
+                                key={faq.id}
+                                faq={faq}
+                            />
+                        ))
+                    }
+
+                </div>
+
+                <div className="faqColumn">
+
+                    {
+                        rightFAQ.map((faq) => (
+                            <FAQItem
+                                key={faq.id}
+                                faq={faq}
+                            />
+                        ))
+                    }
+
+                </div>
 
             </div>
 
         </div>
     );
 }
+
 
 export default FAQ;
