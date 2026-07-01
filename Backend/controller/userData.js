@@ -1,15 +1,15 @@
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
 dotenv.config();
 
-import { userModel } from '../model/User.model.js';
-import { AdminModel } from '../model/Admin.model.js';
+import { userModel } from "../model/User.model.js";
+import { AdminModel } from "../model/Admin.model.js";
 
 const validation = (value) => {
   for (let key in value) {
-    if (value[key].trim() !== '') {
-      console.count('loop');
+    if (value[key].trim() !== "") {
+      console.count("loop");
       continue;
     }
     return false;
@@ -26,11 +26,12 @@ export const signup = async (req, res) => {
       });
       console.log(`🚀 ~ find_User_In_DB:`, find_User_In_DB);
       if (find_User_In_DB) {
-        res.send('user already exist in DB please login');
+        res.send("user already exist in DB please login");
       } else {
         // find Admin
 
         const FindAdminID = await AdminModel.find();
+        console.log(`🚀 ~ FindAdminID:`, FindAdminID);
 
         bcrypt.genSalt(+process.env.saltRounds, async function (err, salt) {
           if (err) {
@@ -47,17 +48,17 @@ export const signup = async (req, res) => {
             req.body.password = hash;
             const userCreted = await userModel.create({
               ...req.body,
-              adminID: FindAdminID[0]._id,
+              adminID: FindAdminID[0]?._id ?? null,
             });
             res.send(userCreted);
           });
         });
       }
     } else {
-      res.send('please enter somthing to save in DB...');
+      res.send("please enter somthing to save in DB...");
     }
   } catch (error) {
-    res.send({ msg: 'something went wrong...', error });
+    res.send({ msg: "something went wrong...", error });
   }
 };
 
@@ -72,9 +73,9 @@ export const admin_login = async (req, res) => {
     if (deepChecks) {
       const admin = await userModel.findOne(req.body);
       if (admin) {
-        res.send({ msg: 'admin login successfully', data: admin });
+        res.send({ msg: "admin login successfully", data: admin });
       } else {
-        res.send('wrong crendential❌');
+        res.send("wrong crendential❌");
       }
     } else {
       res.send(`please enter somthing in body`);
@@ -97,7 +98,7 @@ export const login = async (req, res) => {
           userData?.password,
           async function (err, data) {
             if (err) {
-              res.send({ msg: 'this is error in compare', err });
+              res.send({ msg: "this is error in compare", err });
             } else if (data) {
               const token = await jwt.sign(
                 {
@@ -107,9 +108,9 @@ export const login = async (req, res) => {
                 },
                 process.env?.PrivateKey,
               );
-              res.send({ msg: 'user successfully logged-in', token });
+              res.send({ msg: "user successfully logged-in", token });
             } else {
-              res.send({ msg: 'password not correct❌❗', response: req.body });
+              res.send({ msg: "password not correct❌❗", response: req.body });
             }
           },
         );
