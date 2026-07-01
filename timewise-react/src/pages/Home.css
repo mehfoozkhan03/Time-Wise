@@ -1,5 +1,23 @@
 .home_page{
-    width:min(1400px,92%);
+    width:min(1280px,92%);
     margin:auto;
-    padding:48px 0 80px;
+    padding:50px 0 100px;
+
+    display:flex;
+    flex-direction:column;
+    gap:40px;
+}
+
+.home_section{
+    width:100%;
+}
+
+@media(max-width:1100px){
+
+.home_middle{
+
+grid-template-columns:1fr;
+
+}
+
 }

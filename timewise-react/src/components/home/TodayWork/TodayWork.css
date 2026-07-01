@@ -1,0 +1,124 @@
+.today_work_card{
+    display:flex;
+    flex-direction:column;
+    gap:24px;
+    padding:30px;
+}
+
+.today_work_header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.today_work_header h2{
+    font-size:1.5rem;
+}
+
+.status{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:8px 18px;
+    border-radius:30px;
+    font-weight:600;
+    font-size:.9rem;
+}
+
+.status svg{
+    font-size:10px;
+}
+
+.status.idle{
+    background:#fdecec;
+    color:#e53935;
+}
+
+.status.working{
+    background:#e8f8ef;
+    color:#22c55e;
+}
+
+.status.break{
+    background:#fff8e6;
+    color:#f59e0b;
+}
+
+.status.checkedout{
+    background:#eef2ff;
+    color:#3b82f6;
+}
+
+.today_work_grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:20px;
+}
+
+.today_work_item{
+    display:flex;
+    align-items:center;
+    gap:18px;
+    padding:18px;
+    background:var(--surface);
+    border-radius:18px;
+}
+
+.today_work_item svg{
+    font-size:24px;
+    color:var(--primary);
+}
+
+.today_work_item span{
+    display:block;
+    color:var(--text-secondary);
+    font-size:.9rem;
+}
+
+.today_work_item strong{
+    display:block;
+    margin-top:4px;
+    font-size:1.2rem;
+}
+
+.today_work_action{
+  margin-top: 10px;
+}
+
+.today_work_button{
+    padding: 18px;
+    border:none;
+    border-radius:14px;
+    cursor:pointer;
+    color:white;
+    font-size:1rem;
+    font-weight:600;
+    font-size: 17px;
+    transition:.3s;
+    width: 100px;
+}
+
+.today_work_button:hover{
+    transform:translateY(-3px);
+}
+
+.check_in{
+    background:#2563eb;
+}
+
+.break{
+    background:#f59e0b;
+}
+
+.resume{
+    background:#10b981;
+}
+
+.checkout{
+    background:#dc2626;
+}
+
+.finished{
+    background:#6b7280;
+    cursor:not-allowed;
+}
