@@ -1,0 +1,67 @@
+.formPart{
+    background:#fff;
+    padding:40px;
+    border-radius:15px;
+    box-shadow:0 5px 20px rgba(0,0,0,.08);
+}
+
+.inputs{
+    display:flex;
+    gap:20px;
+}
+
+.faqAnswer {
+    min-height: 32px;   
+    margin-top: 10px;
+    margin-bottom: 15px;
+
+    color: #2C2F3A;
+    font-size: 18px;
+    font-weight: 500;
+
+    transition: all 0.3s ease;
+}
+
+.formPart input,
+.formPart select,
+.formPart textarea{
+
+    width:100%;
+
+    padding:15px 20px;
+
+    margin:10px 0;
+
+    background:#f5f5f5 !important;
+
+    color:#2C2F3A !important;
+
+    border:none;
+
+    border-radius:10px;
+
+    font-size:16px;
+}
+
+.formPart input::placeholder,
+.formPart textarea::placeholder{
+    color:#84828a;
+}
+
+.formPart textarea{
+    resize:none;
+}
+
+.formPart button{
+    padding:12px 32px;
+    border:1px solid #2C2F3A;
+    background:white;
+    cursor:pointer;
+    border-radius:5px;
+    transition:.3s;
+}
+
+.formPart button:hover{
+    background:#2C2F3A;
+    color:white;
+}

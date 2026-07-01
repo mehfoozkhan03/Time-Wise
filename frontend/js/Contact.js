@@ -83,8 +83,15 @@ document.querySelectorAll(".question").forEach(q => {
 
 const Answer = [
     "You can return any product within 30 days of purchase.",
-    "Yes, 24/7 customer support is available via email and chat."
-]
+
+    "Yes, 24/7 customer support is available via email and chat.",
+
+    "Our standard delivery time is between 3-7 business days.",
+
+    "Yes, you can update or cancel your order before it is dispatched.",
+
+    "You can contact us through email, phone, or the contact form below."
+];
 
 
 const showAnswer = (index) => {
