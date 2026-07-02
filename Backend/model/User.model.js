@@ -1,40 +1,93 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose'
 
 const userSchema = new mongoose.Schema(
   {
+    // ================= Basic Information =================
+
+    firstName: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
+    lastName: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
+    // Full name for backward compatibility
     name: {
       type: String,
       required: true,
+      trim: true,
     },
+
     email: {
       type: String,
       required: true,
       unique: true,
+      lowercase: true,
+      trim: true,
     },
+
     password: {
       type: String,
       required: true,
     },
+
     dob: {
       type: String,
     },
+
     gender: {
       type: String,
+      enum: ['Male', 'Female', 'Other'],
     },
 
-    // check_in: String,
-    // check_out: String,
-    // break_time: String,
+    // ================= Organization =================
+
+    role: {
+      type: String,
+      enum: ['employee', 'admin'],
+      default: 'employee',
+    },
+
+    department: {
+      type: String,
+      default: '',
+    },
+
+    designation: {
+      type: String,
+      default: '',
+    },
+
+    // ================= Profile =================
+
+    profileImage: {
+      type: String,
+      default: '',
+    },
+
+    theme: {
+      type: String,
+      enum: ['light', 'dark'],
+      default: 'dark',
+    },
+
+    // ================= Relations =================
 
     adminID: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Admin",
+      ref: 'Admin',
+      default: null,
     },
 
     attendance: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Attendance",
+        ref: 'Attendance',
       },
     ],
   },
@@ -42,6 +95,6 @@ const userSchema = new mongoose.Schema(
     timestamps: true,
     versionKey: false,
   },
-);
+)
 
-export const userModel = mongoose.model("User", userSchema);
+export const userModel = mongoose.model('User', userSchema)

@@ -19,50 +19,68 @@ const validation = (value) => {
 
 export const signup = async (req, res) => {
   try {
-    const deepChecks = validation(req.body);
-    if (deepChecks) {
-      const find_User_In_DB = await userModel.findOne({
-        email: req.body.email,
-      });
-      console.log(`🚀 ~ find_User_In_DB:`, find_User_In_DB);
-      if (find_User_In_DB) {
-        res.send("user already exist in DB please login");
-      } else {
-        // find Admin
+    const deepChecks = validation(req.body)
 
-        const FindAdminID = await AdminModel.find();
-        console.log(`🚀 ~ FindAdminID:`, FindAdminID);
-
-        bcrypt.genSalt(+process.env.saltRounds, async function (err, salt) {
-          if (err) {
-            res.send(
-              `this is error which i got in generate_salt method ${err}`,
-            );
-          }
-          bcrypt.hash(req.body.password, salt, async function (err, hash) {
-            console.log(`🚀 ~ hash:`, hash);
-            // Store hash in your password DB.
-            if (err) {
-              res.send(`this is error which i got in has method ${err}`);
-            }
-            req.body.password = hash;
-            const userCreted = await userModel.create({
-              ...req.body,
-              adminID: FindAdminID[0]?._id ?? null,
-            });
-            res.send(userCreted);
-          });
-        });
-      }
-    } else {
-      res.send("please enter somthing to save in DB...");
+    if (!deepChecks) {
+      return res.status(400).send('Please enter all required fields.')
     }
-  } catch (error) {
-    res.send({ msg: "something went wrong...", error });
-  }
-};
 
-/* 
+    const find_User_In_DB = await userModel.findOne({
+      email: req.body.email,
+    })
+
+    if (find_User_In_DB) {
+      return res.status(409).send('User already exists. Please login.')
+    }
+
+    // Find Admin
+    const FindAdminID = await AdminModel.find()
+
+    bcrypt.genSalt(+process.env.saltRounds, async function (err, salt) {
+      if (err) {
+        return res.status(500).send({
+          msg: 'Error generating salt',
+          error: err,
+        })
+      }
+
+      bcrypt.hash(req.body.password, salt, async function (err, hash) {
+        if (err) {
+          return res.status(500).send({
+            msg: 'Error hashing password',
+            error: err,
+          })
+        }
+
+        // Hash password
+        req.body.password = hash
+
+        // Create full name automatically
+        const fullName = `${req.body.firstName} ${req.body.lastName}`.trim()
+
+        const userCreated = await userModel.create({
+          ...req.body,
+
+          name: fullName,
+
+          adminID: FindAdminID[0]?._id ?? null,
+        })
+
+        res.status(201).json({
+          msg: 'User created successfully',
+          user: userCreated,
+        })
+      })
+    })
+  } catch (error) {
+    res.status(500).json({
+      msg: 'Something went wrong...',
+      error,
+    })
+  }
+}
+
+/*
 admin user_name: admin
 admin user_pass: admin@123
 */
