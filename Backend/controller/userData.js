@@ -9,7 +9,7 @@ import { AdminModel } from "../model/Admin.model.js";
 const validation = (value) => {
   for (let key in value) {
     if (value[key].trim() !== "") {
-      console.count("loop");
+      // console.count("loop");
       continue;
     }
     return false;
