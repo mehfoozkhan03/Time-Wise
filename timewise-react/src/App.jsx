@@ -7,6 +7,7 @@ import Dashboard from "./pages/Dashboard";
 import Community from "./pages/Community";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
+import SignUpPage from "./pages/Login";
 
 export default function App() {
   return (
@@ -19,8 +20,9 @@ export default function App() {
           <Route path="/community" element={<Community />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/signup" element={<SignUpPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
-  );
+  )
 }

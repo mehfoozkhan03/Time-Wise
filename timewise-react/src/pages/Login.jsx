@@ -5,8 +5,7 @@ const SignUpPage = () => {
   const [isActive, setIsActive] = useState(false);
 
   return (
-    <div className={`container ${isActive ? "active" : ""}`}>
-
+    <div className={`login_container ${isActive ? 'login_active' : ''}`}>
       {/* ================= Sign Up Form ================= */}
       <div className="sign-up">
         <form>
@@ -47,9 +46,7 @@ const SignUpPage = () => {
               className="form_input"
               placeholder=""
             />
-            <label htmlFor="signup-confirm-password">
-              Confirm Password
-            </label>
+            <label htmlFor="signup-confirm-password">Confirm Password</label>
           </div>
 
           <div className="content_input">
@@ -103,10 +100,9 @@ const SignUpPage = () => {
       </div>
 
       {/* ================= Toggle Panel ================= */}
-      <div className="toogle-container">
-        <div className="toogle">
-
-          <div className="toogle-panel toogle-left">
+      <div className="login_toggle_container">
+        <div className="login_toggle">
+          <div className="login_toggle_panel login_toggle_left">
             <h1>Welcome Back!</h1>
             <p>Log in to access your account</p>
 
@@ -119,7 +115,7 @@ const SignUpPage = () => {
             </button>
           </div>
 
-          <div className="toogle-panel toogle-right">
+          <div className="login_toggle_panel login_toggle_right">
             <h1>Hello, Friend!</h1>
             <p>Register to start your journey with us</p>
 
@@ -131,12 +127,10 @@ const SignUpPage = () => {
               Sign Up
             </button>
           </div>
-
         </div>
       </div>
-
     </div>
-  );
+  )
 };
 
 export default SignUpPage;
