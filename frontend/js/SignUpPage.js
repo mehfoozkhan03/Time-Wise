@@ -10,6 +10,7 @@ registerBtn.addEventListener('click', () => {
 loginBtn.addEventListener('click', () => {
   container.classList.remove('active');
 });
+// jjdsj
 
 // User data storage
 // let users = JSON.parse(localStorage.getItem('users')) || [];
