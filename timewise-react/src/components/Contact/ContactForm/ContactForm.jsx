@@ -123,7 +123,7 @@ function ContactForm() {
                 />
 
                 <textarea
-                    rows="10"
+                    rows="6"
                     name="message"
                     placeholder="Your Message"
                     value={formData.message}
