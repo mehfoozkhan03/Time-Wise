@@ -1,0 +1,124 @@
+.formPart {
+
+    background: var(--surface);
+
+    padding: 28px;
+
+    border-radius: var(--radius_lg);
+
+    border: 1px solid var(--border);
+
+    box-shadow: var(--shadow_md);
+
+    transition: var(--transition);
+
+    width: 100%;
+
+    max-width: 700px;
+}
+
+.inputs {
+
+    display: flex;
+
+    gap: 16px;
+}
+
+.faqAnswer {
+
+    min-height: 20px;
+
+    margin-top: 4px;
+
+    margin-bottom: 8px;
+
+    color: var(--text_secondary);
+
+    font-size: 15px;
+
+    font-weight: 500;
+
+    transition: var(--transition);
+}
+
+.formPart input,
+.formPart select,
+.formPart textarea {
+
+    width: 100%;
+
+    padding: 14px 18px;
+
+    margin: 6px 0;
+
+    background: var(--bg) !important;
+
+    color: var(--text_primary) !important;
+
+    border: 1px solid transparent;
+
+    border-radius: var(--radius_md);
+
+    font-size: 16px;
+
+    transition: var(--transition);
+}
+
+.formPart input:hover,
+.formPart select:hover,
+.formPart textarea:hover {
+
+    background: var(--surface_hover) !important;
+}
+
+.formPart input:focus,
+.formPart select:focus,
+.formPart textarea:focus {
+
+    border-color: var(--primary);
+
+    background: var(--surface_hover) !important;
+}
+
+.formPart input::placeholder,
+.formPart textarea::placeholder {
+
+    color: var(--text_secondary);
+}
+
+.formPart textarea {
+
+    resize: none;
+
+    min-height: 180px;
+}
+
+.formPart .btn {
+
+    padding: 12px 28px;
+
+    border: 1px solid var(--primary);
+
+    background: transparent;
+
+    color: var(--text_primary);
+
+    border-radius: var(--radius_sm);
+
+    font-size: 15px;
+
+    font-weight: 500;
+
+    cursor: pointer;
+
+    transition: var(--transition);
+
+    margin-top: 8px;
+}
+
+.formPart .btn:hover {
+
+    background: var(--primary);
+
+    color: white;
+}

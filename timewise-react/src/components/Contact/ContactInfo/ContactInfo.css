@@ -1,0 +1,14 @@
+.contactInfo{
+    width:50%;
+}
+
+.head{
+    margin-bottom:40px;
+}
+
+.infoItem{
+    display:flex;
+    gap:15px;
+    margin-bottom:30px;
+    align-items:center;
+}

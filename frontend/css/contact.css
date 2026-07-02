@@ -48,7 +48,7 @@ h1 , h2{
 }
 
 .content {
-  background-image: url('/Contact.png');
+  background-image: url('https://raw.githubusercontent.com/hetuk2005/webDevelopment/refs/heads/main/Utils/Contact.jpg');
   height: 450px;
   background-size: cover;
   background-position: center;
@@ -57,6 +57,8 @@ h1 , h2{
   padding:140px 0;
   text-align: center;
 }
+
+
 .head{
   color:#F9FBFC;
   font-size:44px;
@@ -73,7 +75,7 @@ h1 , h2{
   content: "";
   position: absolute;
   inset: 0;
-  background: #6E7A88;
+  /* background: #6E7A88; */
 }
 
 .content > * {
@@ -132,10 +134,15 @@ form{
   gap: 10px;
 }
 
-.form_part {
-  width: 47%;
-  padding: 40px;
-  box-shadow: 10px 10px 20px 20px rgba(0, 0, 0, 0.15);
+.form_part{
+    background: white;
+    padding: 40px;
+    border-radius: 10px;
+
+    box-shadow:
+        0 5px 20px rgba(0,0,0,0.08);
+
+    transition: 0.3s;
 }
 
 .enquiry{

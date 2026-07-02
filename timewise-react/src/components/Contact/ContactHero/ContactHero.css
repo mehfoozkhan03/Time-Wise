@@ -1,0 +1,23 @@
+.contactHero{
+    background-image:url("https://raw.githubusercontent.com/hetuk2005/webDevelopment/refs/heads/main/Utils/Contact.jpg");
+    background-size:cover;
+    background-position:center;
+    height:450px;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+
+    text-align:center;
+}
+
+.contactHero h1{
+    color:white;
+    font-size:44px;
+}
+
+.contactHero p{
+    width:700px;
+    color:#ddd;
+}
