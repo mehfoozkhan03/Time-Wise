@@ -1,0 +1,54 @@
+#cursor_dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: #29a3e0; /* change to your brand color */
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  z-index: 999999;
+  transition:
+    opacity 0.3s,
+    width 0.3s,
+    height 0.3s;
+}
+
+#cursor_ring {
+  width: 35px;
+  height: 35px;
+  border: 2px solid #29a3e0;
+  border-radius: 50%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  z-index: 999998;
+  transition:
+    width 0.3s,
+    height 0.3s,
+    background 0.3s,
+    transform 0.1s;
+}
+
+#cursor_dot.hovered {
+  opacity: 0;
+}
+
+#cursor_ring.hovered {
+  width: 55px;
+  height: 55px;
+  border: none;
+  background: rgba(41, 163, 225, 0.23);
+  box-shadow: 0 0 19px rgba(41, 163, 225, 0.35);
+  transition:
+    width 0.25s ease,
+    height 0.25s ease,
+    background 0.25s ease;
+}
+
+#cursor_ring.clicked {
+  transform: translate(-50%, -50%) scale(0.85);
+}
