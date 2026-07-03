@@ -7,10 +7,12 @@ import Dashboard from "./pages/Dashboard";
 import Community from "./pages/Community";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
+import BubbleCursor from "./components/BubbleArrow/bubbleArrow";
 
 export default function App() {
   return (
     <BrowserRouter>
+      <BubbleCursor />
       <Routes>
         {/* Main Website */}
         <Route element={<MainLayout />}>
