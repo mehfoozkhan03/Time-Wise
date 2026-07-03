@@ -64,7 +64,7 @@ export default function Performance() {
   ]
 
   return (
-    <section className="performance">
+    <section className="performance" id="tour-stats-grid">
       <h2>Your Performance</h2>
 
       <div className="performance_grid">
@@ -73,5 +73,5 @@ export default function Performance() {
         ))}
       </div>
     </section>
-  )
+  );
 }

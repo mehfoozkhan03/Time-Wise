@@ -1,71 +1,69 @@
+import "./CompanyUpdates.css";
 
+import Card from "../../Card/Card";
 
-import './CompanyUpdates.css'
-
-import Card from '../../Card/Card'
-
-import UpdateCard from './UpdateCard'
+import UpdateCard from "./UpdateCard";
 
 import {
   FaBirthdayCake,
   FaBullhorn,
   FaTrophy,
   FaCalendarAlt,
-} from 'react-icons/fa'
+} from "react-icons/fa";
 
 export default function CompanyUpdates() {
   const updates = [
     {
       title: "Sarah's Birthday",
 
-      description: 'Wish Sarah from Design Team a wonderful birthday!',
+      description: "Wish Sarah from Design Team a wonderful birthday!",
 
-      time: 'Today',
+      time: "Today",
 
       icon: <FaBirthdayCake />,
 
-      color: '#f59e0b',
+      color: "#f59e0b",
     },
 
     {
-      title: 'Company Announcement',
+      title: "Company Announcement",
 
-      description: 'Friday will be Work From Home for all employees.',
+      description: "Friday will be Work From Home for all employees.",
 
-      time: '2 hours ago',
+      time: "2 hours ago",
 
       icon: <FaBullhorn />,
 
-      color: '#29A3E0',
+      color: "#29A3E0",
     },
 
     {
-      title: 'Hackathon Winners',
+      title: "Hackathon Winners",
 
-      description: 'Team Alpha secured first place in the internal hackathon.',
+      description: "Team Alpha secured first place in the internal hackathon.",
 
-      time: 'Yesterday',
+      time: "Yesterday",
 
       icon: <FaTrophy />,
 
-      color: '#22c55e',
+      color: "#22c55e",
     },
 
     {
-      title: 'Sprint Planning',
+      title: "Sprint Planning",
 
-      description: 'Frontend Sprint Planning starts tomorrow at 10:00 AM.',
+      description: "Frontend Sprint Planning starts tomorrow at 10:00 AM.",
 
-      time: 'Tomorrow',
+      time: "Tomorrow",
 
       icon: <FaCalendarAlt />,
 
-      color: '#8b5cf6',
+      color: "#8b5cf6",
     },
-  ]
+  ];
 
   return (
-    <section className="company_updates">
+    <section className="company_updates" id="tour-company-updates">
       <h2>Company Updates</h2>
 
       <Card>
@@ -74,5 +72,5 @@ export default function CompanyUpdates() {
         ))}
       </Card>
     </section>
-  )
+  );
 }
