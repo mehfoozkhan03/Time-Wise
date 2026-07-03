@@ -112,15 +112,15 @@ const tourSteps = [
     },
   },
 
-  // ── 9. Stats grid ──────────────────────────────────────────────────────────
+  // ── 9. Today's Work ───────────────────────────────────────────────────────
   {
-    element: "#tour-stats-grid",
+    element: "#tour-today-work",
     popover: {
-      title: "📈 Performance Cards",
+      title: "🕐 Today's Work",
       description:
-        "Detailed cards for Productivity, Attendance, Weekly Hours, and your Current Streak — each with a progress bar.",
+        "Check in, take breaks, and check out from here. Your session time, break time and working hours update live.",
       side: "bottom",
-      align: "center",
+      align: "start",
     },
   },
 
@@ -148,7 +148,43 @@ const tourSteps = [
     },
   },
 
-  // ── 12. Done ───────────────────────────────────────────────────────────────
+  // ── 12. Quick Actions ──────────────────────────────────────────────────────
+  {
+    element: "#tour-quick-actions",
+    popover: {
+      title: "⚡ Quick Actions",
+      description:
+        "One-click shortcuts to <strong>Attendance</strong>, <strong>Community</strong>, <strong>Reports</strong>, and <strong>Settings</strong> — no hunting through menus.",
+      side: "top",
+      align: "start",
+    },
+  },
+
+  // ── 13. Stats grid ──────────────────────────────────────────────────────────
+  {
+    element: "#tour-stats-grid",
+    popover: {
+      title: "📈 Performance Cards",
+      description:
+        "Detailed cards for Productivity, Attendance, Weekly Hours, and your Current Streak — each with a progress bar.",
+      side: "left",
+      align: "center",
+    },
+  },
+
+  // ── 14. Company Updates ────────────────────────────────────────────────────
+  {
+    element: "#tour-company-updates",
+    popover: {
+      title: "📢 Company Updates",
+      description:
+        "Stay in the loop — birthdays, announcements, hackathon results and upcoming events all in one place.",
+      side: "top",
+      align: "start",
+    },
+  },
+
+  // ── 15. Done ───────────────────────────────────────────────────────────────
   {
     popover: {
       title: "You're all set! 🎉",

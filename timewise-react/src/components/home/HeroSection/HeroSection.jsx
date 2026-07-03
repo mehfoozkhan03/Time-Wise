@@ -61,10 +61,10 @@ export default function HeroSection() {
       </div>
 
       <Card className="hero_right">
-        <div className="hero_stat">
+        <div className="hero_stat" id="tour-hero-stat">
           <FaFire className="fire" />
 
-          <div id="tour-hero-stat">
+          <div>
             <h2>12</h2>
             <p>Day Streak</p>
           </div>

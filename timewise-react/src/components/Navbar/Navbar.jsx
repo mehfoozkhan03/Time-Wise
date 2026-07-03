@@ -30,9 +30,9 @@ export default function Navbar() {
         {/* <img src={logo} alt="TimeWise Logo" /> */}
 
         <div className="logo_text">
-          <h2>TimeWise</h2>
-
-          <span>Employee Productivity</span>
+          {/* <h2>TimeWise</h2>
+          <span>Employee Productivity</span> */}
+          <img src="/Time_Wise_Logo_DarkMode.svg" alt="Logo" />
         </div>
       </div>
 
@@ -93,7 +93,7 @@ export default function Navbar() {
 
         {/* Profile */}
 
-        <div className="profile_container" id='tour-profile'>
+        <div className="profile_container" id="tour-profile">
           <button
             className="profile_btn"
             onClick={() => setProfileOpen(!profileOpen)}
@@ -120,8 +120,14 @@ export default function Navbar() {
           )}
         </div>
 
-<button onClick={triggerTour} className='tour_trigger_btn' aria-label='Start Product Tour'>Show Tour</button>
-        
+        <button
+          onClick={triggerTour}
+          className="tour_trigger_btn"
+          aria-label="Start Product Tour"
+        >
+          Show Tour
+        </button>
+
         {/* Mobile */}
 
         <button

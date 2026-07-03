@@ -1,54 +1,54 @@
-import './QuickActions.css'
+import "./QuickActions.css";
 
-import ActionCard from './ActionCard'
+import ActionCard from "./ActionCard";
 
-import { FaCalendarCheck, FaUsers, FaCog, FaChartBar } from 'react-icons/fa'
+import { FaCalendarCheck, FaUsers, FaCog, FaChartBar } from "react-icons/fa";
 
 export default function QuickActions() {
   const actions = [
     {
-      title: 'Attendance',
+      title: "Attendance",
 
       description: "View today's attendance and history.",
 
       icon: <FaCalendarCheck />,
 
-      to: '/attendance',
+      to: "/attendance",
     },
 
     {
-      title: 'Community',
+      title: "Community",
 
-      description: 'Share ideas with your colleagues.',
+      description: "Share ideas with your colleagues.",
 
       icon: <FaUsers />,
 
-      to: '/community',
+      to: "/community",
     },
 
     {
-      title: 'Reports',
+      title: "Reports",
 
-      description: 'See your work analytics.',
+      description: "See your work analytics.",
 
       icon: <FaChartBar />,
 
-      to: '/reports',
+      to: "/reports",
     },
 
     {
-      title: 'Settings',
+      title: "Settings",
 
-      description: 'Manage profile and preferences.',
+      description: "Manage profile and preferences.",
 
       icon: <FaCog />,
 
-      to: '/settings',
+      to: "/settings",
     },
-  ]
+  ];
 
   return (
-    <section className="quick_actions">
+    <section className="quick_actions" id="tour-quick-actions">
       <h2>Quick Actions</h2>
 
       <div className="quick_grid">
@@ -57,5 +57,5 @@ export default function QuickActions() {
         ))}
       </div>
     </section>
-  )
+  );
 }
