@@ -1,136 +1,161 @@
 import { useState } from "react";
-import "../styles/Login.css";
+// import "../styles/Login.css";
+import { AnimatePresence, motion } from "framer-motion";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const SignUpPage = () => {
-  const [isActive, setIsActive] = useState(false);
+ const [isRegister, setIsRegister] = useState(false);
+
+  const [showLoginPassword, setShowLoginPassword] = useState(false);
+  const [showRegisterPassword, setShowRegisterPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (isRegister) {
+      alert("Registration Form Submitted");
+    } else {
+      alert("Login Form Submitted");
+    }
+  };
 
   return (
-    <div className={`login_container ${isActive ? 'login_active' : ''}`}>
-      {/* ================= Sign Up Form ================= */}
-      <div className="sign-up">
-        <form>
-          <div className="content_input">
-            <input
-              type="text"
-              id="signup-name"
-              className="form_input"
-              placeholder=""
-            />
-            <label htmlFor="signup-name">Full Name</label>
-          </div>
+    <div className="login-page">
+      <AnimatePresence mode="wait">
+        {!isRegister ? (
+          <motion.form
+            onSubmit={handleSubmit}
+            key="login"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -30 }}
+            transition={{ duration: 0.25 }}
+            className="login-form"
+          >
+            <h2>Login</h2>
 
-          <div className="content_input">
-            <input
-              type="email"
-              id="signup-email"
-              className="form_input"
-              placeholder=""
-            />
-            <label htmlFor="signup-email">Email</label>
-          </div>
+            <div clas   sName="input-box">
+              <input type="text" placeholder="Username" required />
+            </div>
 
-          <div className="content_input">
-            <input
-              type="password"
-              id="signup-password"
-              className="form_input"
-              placeholder=""
-            />
-            <label htmlFor="signup-password">Password</label>
-          </div>
+            <div className="input-box password-box">
+              <input
+                type={showLoginPassword ? "text" : "password"}
+                placeholder="Password"
+                required
+              />
 
-          <div className="content_input">
-            <input
-              type="password"
-              id="signup-confirm-password"
-              className="form_input"
-              placeholder=""
-            />
-            <label htmlFor="signup-confirm-password">Confirm Password</label>
-          </div>
+              <span
+                className="eye-icon"
+                onClick={() =>
+                  setShowLoginPassword(!showLoginPassword)
+                }
+              >
+                {showLoginPassword ? (
+                  <FaEye />
+                ) : (
+                  <FaEyeSlash />
+                )}
+              </span>
+            </div>
 
-          <div className="content_input">
-            <input type="date" className="form_input_1" />
-          </div>
+            <button type="submit">Login</button>
 
-          <div className="content_input">
-            <select>
-              <option value="">Select Gender</option>
-              <option>Male</option>
-              <option>Female</option>
-              <option>Other</option>
-            </select>
-          </div>
+            <p className="message">
+              Don't have an account?{" "}
+              <span onClick={() => setIsRegister(true)}>
+                Register now
+              </span>
+            </p>
+          </motion.form>
+        ) : (
+          <motion.form
+            onSubmit={handleSubmit}
+            key="register"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -30 }}
+            transition={{ duration: 0.25 }}
+            className="register-form"
+          >
+            <h2>New Registration</h2>
 
-          <button type="submit">Sign Up</button>
-        </form>
-      </div>
+            <div className="input-box">
+              <input type="text" placeholder="Username" required />
+            </div>
 
-      {/* ================= Login Form ================= */}
-      <div className="sign-in">
-        <form>
-          <h1 className="sign_in">Login</h1>
+            <div className="input-box">
+              <input type="email" placeholder="Email" required />
+            </div>
 
-          <span>or use email password</span>
+            <div className="input-box password-box">
+              <input
+                type={showRegisterPassword ? "text" : "password"}
+                placeholder="Password"
+                required
+              />
 
-          <div className="content_input">
-            <input
-              type="email"
-              id="login-email"
-              className="form_input"
-              placeholder=""
-            />
-            <label htmlFor="login-email">Email</label>
-          </div>
+              <span
+                className="eye-icon"
+                onClick={() =>
+                  setShowRegisterPassword(
+                    !showRegisterPassword
+                  )
+                }
+              >
+                {showRegisterPassword ? (
+                  <FaEye />
+                ) : (
+                  <FaEyeSlash />
+                )}
+              </span>
+            </div>
 
-          <div className="content_input">
-            <input
-              type="password"
-              id="login-password"
-              className="form_input"
-              placeholder=""
-            />
-            <label htmlFor="login-password">Password</label>
-          </div>
+            <div className="input-box password-box">
+              <input
+                type={
+                  showConfirmPassword
+                    ? "text"
+                    : "password"
+                }
+                placeholder="Confirm Password"
+                required
+              />
 
-          <a href="#">Forgot password?</a>
+              <span
+                className="eye-icon"
+                onClick={() =>
+                  setShowConfirmPassword(
+                    !showConfirmPassword
+                  )
+                }
+              >
+                {showConfirmPassword ? (
+                  <FaEye />
+                ) : (
+                  <FaEyeSlash />
+                )}
+              </span>
+            </div>
 
-          <button type="submit">Login</button>
-        </form>
-      </div>
+            <div className="input-box">
+              <input type="date" required />
+            </div>
 
-      {/* ================= Toggle Panel ================= */}
-      <div className="login_toggle_container">
-        <div className="login_toggle">
-          <div className="login_toggle_panel login_toggle_left">
-            <h1>Welcome Back!</h1>
-            <p>Log in to access your account</p>
+            <button type="submit">Register</button>
 
-            <button
-              type="button"
-              className="hidden"
-              onClick={() => setIsActive(false)}
-            >
-              Login
-            </button>
-          </div>
-
-          <div className="login_toggle_panel login_toggle_right">
-            <h1>Hello, Friend!</h1>
-            <p>Register to start your journey with us</p>
-
-            <button
-              type="button"
-              className="hidden"
-              onClick={() => setIsActive(true)}
-            >
-              Sign Up
-            </button>
-          </div>
-        </div>
-      </div>
+            <p className="message">
+              Already have an account?{" "}
+              <span onClick={() => setIsRegister(false)}>
+                Sign In
+              </span>
+            </p>
+          </motion.form>
+        )}
+      </AnimatePresence>
     </div>
-  )
+  );
 };
 
 export default SignUpPage;
