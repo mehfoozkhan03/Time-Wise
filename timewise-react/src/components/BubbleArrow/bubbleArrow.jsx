@@ -55,6 +55,10 @@ export default function BubbleCursor() {
       }
     };
 
+    document.addEventListener("mousemove", onMouseMove);
+    document.addEventListener("mouseover", onMouseOver);
+    document.addEventListener("mouseout", onMouseOut);
+
     let animId;
 
     function animateRing() {

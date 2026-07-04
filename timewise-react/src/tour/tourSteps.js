@@ -17,7 +17,19 @@ const tourSteps = [
     },
   },
 
-  // ── 1. Navbar logo ─────────────────────────────────────────────────────────
+  // ── 1. Scroll Progress Bar ─────────────────────────────────────────────────
+  {
+    element: "#tour-progress-bar",
+    popover: {
+      title: "📜 Scroll Progress Bar",
+      description:
+        "This bar at the very top shows how much of the page you have scrolled. It fills up as you scroll down.",
+      side: "bottom",
+      align: "center",
+    },
+  },
+
+  // ── 2. Navbar logo ─────────────────────────────────────────────────────────
   {
     element: "#tour-logo",
     popover: {
@@ -29,7 +41,7 @@ const tourSteps = [
     },
   },
 
-  // ── 2. Nav links ───────────────────────────────────────────────────────────
+  // ── 3. Nav links ───────────────────────────────────────────────────────────
   {
     element: "#tour-nav-links",
     popover: {
@@ -41,7 +53,7 @@ const tourSteps = [
     },
   },
 
-  // ── 3. Notification bell ───────────────────────────────────────────────────
+  // ── 4. Notification bell ───────────────────────────────────────────────────
   {
     element: "#tour-notifications",
     popover: {
@@ -53,7 +65,7 @@ const tourSteps = [
     },
   },
 
-  // ── 4. Profile button ──────────────────────────────────────────────────────
+  // ── 5. Profile button ──────────────────────────────────────────────────────
   {
     element: "#tour-profile",
     popover: {
@@ -64,7 +76,7 @@ const tourSteps = [
     },
   },
 
-  // ── 5. Hero greeting ───────────────────────────────────────────────────────
+  // ── 6. Hero greeting ───────────────────────────────────────────────────────
   {
     element: "#tour-hero-greeting",
     popover: {
@@ -76,7 +88,7 @@ const tourSteps = [
     },
   },
 
-  // ── 6. Hero date/time info ─────────────────────────────────────────────────
+  // ── 7. Hero date/time info ─────────────────────────────────────────────────
   {
     element: "#tour-hero-info",
     popover: {
@@ -88,7 +100,7 @@ const tourSteps = [
     },
   },
 
-  // ── 7. Streak card ─────────────────────────────────────────────────────────
+  // ── 8. Streak card ─────────────────────────────────────────────────────────
   {
     element: "#tour-hero-stat",
     popover: {
@@ -100,7 +112,7 @@ const tourSteps = [
     },
   },
 
-  // ── 8. Quick progress rows ─────────────────────────────────────────────────
+  // ── 9. Quick progress rows ─────────────────────────────────────────────────
   {
     element: "#tour-hero-progress",
     popover: {
@@ -112,7 +124,7 @@ const tourSteps = [
     },
   },
 
-  // ── 9. Today's Work ───────────────────────────────────────────────────────
+  // ── 10. Today's Work ───────────────────────────────────────────────────────
   {
     element: "#tour-today-work",
     popover: {
@@ -124,7 +136,7 @@ const tourSteps = [
     },
   },
 
-  // ── 10. Thought card ───────────────────────────────────────────────────────
+  // ── 11. Thought card ───────────────────────────────────────────────────────
   {
     element: "#tour-thought-card",
     popover: {
@@ -136,7 +148,7 @@ const tourSteps = [
     },
   },
 
-  // ── 11. Thought actions ────────────────────────────────────────────────────
+  // ── 12. Thought actions ────────────────────────────────────────────────────
   {
     element: "#tour-thought-actions",
     popover: {
@@ -148,7 +160,7 @@ const tourSteps = [
     },
   },
 
-  // ── 12. Quick Actions ──────────────────────────────────────────────────────
+  // ── 13. Quick Actions ──────────────────────────────────────────────────────
   {
     element: "#tour-quick-actions",
     popover: {
@@ -160,7 +172,7 @@ const tourSteps = [
     },
   },
 
-  // ── 13. Stats grid ──────────────────────────────────────────────────────────
+  // ── 14. Stats grid ──────────────────────────────────────────────────────────
   {
     element: "#tour-stats-grid",
     popover: {
@@ -172,7 +184,7 @@ const tourSteps = [
     },
   },
 
-  // ── 14. Company Updates ────────────────────────────────────────────────────
+  // ── 15. Company Updates ────────────────────────────────────────────────────
   {
     element: "#tour-company-updates",
     popover: {
@@ -184,7 +196,7 @@ const tourSteps = [
     },
   },
 
-  // ── 15. Done ───────────────────────────────────────────────────────────────
+  // ── 16. Done ───────────────────────────────────────────────────────────────
   {
     popover: {
       title: "You're all set! 🎉",
