@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Table</title>
+    <link rel="stylesheet" href="EmployeeTable.css">
+</head>
+<body>
+
+<div class="table-box">
+    <h1>Employees</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Designation</th>
+                <th>View</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>EMP001</td>
+                <td>Arnav Kharade</td>
+                <td>Manager</td>
+                <td><button onclick="viewEmployee('EMP001')">View</button></td>
+            </tr>
+
+            <tr>
+                <td>EMP002</td>
+                <td>Afan Khala</td>
+                <td>Developer</td>
+                <td><button onclick="viewEmployee('EMP002')">View</button></td>
+            </tr>
+
+            <tr>
+                <td>EMP003</td>
+                <td>Deepak Yadav</td>
+                <td>Frontend Dev</td>
+                <td><button onclick="viewEmployee('EMP003')">View</button></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script src="EmployeeTable.js"></script>
+</body>
+</html>
