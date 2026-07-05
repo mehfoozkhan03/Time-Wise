@@ -10,15 +10,15 @@
 .scroll_progress_bar {
   height: 100%;
   width: 0%;
-  background: linear-gradient(to right, #c8e6f5, #29a3e0, #29a3e0);
+  background: #29a3e0;
   transition: width 0.1s ease;
   border-radius: 0 5px 5px 0;
 }
 
 /* Dark mode */
-body.dark .scroll_progress {
+/* body.dark .scroll_progress {
   background: #2d2d2d;
 }
 body.dark .scroll_progress_bar {
   background: #3eb5e8;
-}
+} */
