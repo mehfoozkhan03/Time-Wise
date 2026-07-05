@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema(
   {
@@ -42,52 +42,52 @@ const userSchema = new mongoose.Schema(
 
     gender: {
       type: String,
-      enum: ['Male', 'Female', 'Other'],
+      enum: ["Male", "Female", "Other"],
     },
 
     // ================= Organization =================
 
     role: {
       type: String,
-      enum: ['employee', 'admin'],
-      default: 'employee',
+      enum: ["employee", "admin"],
+      default: "employee",
     },
 
     department: {
       type: String,
-      default: '',
+      default: "",
     },
 
     designation: {
       type: String,
-      default: '',
+      default: "",
     },
 
     // ================= Profile =================
 
     profileImage: {
       type: String,
-      default: '',
+      default: "",
     },
 
     theme: {
       type: String,
-      enum: ['light', 'dark'],
-      default: 'dark',
+      enum: ["light", "dark"],
+      default: "dark",
     },
 
     // ================= Relations =================
 
     adminID: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Admin',
+      ref: "Admin",
       default: null,
     },
 
     attendance: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Attendance',
+        ref: "Attendance",
       },
     ],
   },
@@ -95,6 +95,6 @@ const userSchema = new mongoose.Schema(
     timestamps: true,
     versionKey: false,
   },
-)
+);
 
-export const userModel = mongoose.model('User', userSchema)
+export const userModel = mongoose.model("User", userSchema);
