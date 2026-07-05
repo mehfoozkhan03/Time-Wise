@@ -106,14 +106,14 @@ input{
   right: 15px;
   transform: translateY(-50%);
   cursor: pointer;
-  color: #666;
+  color:#1F242D;
   font-size: 18px;
   display: flex;
   align-items: center;
 }
 
 .eye-icon:hover {
-  color: rgb(205, 89, 7);
+  color:#218FC4;
 }
 .input-box select {
   width: 100%;
