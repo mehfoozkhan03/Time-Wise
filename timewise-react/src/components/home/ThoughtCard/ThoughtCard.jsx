@@ -12,7 +12,7 @@ import {
 
 export default function ThoughtCard() {
   return (
-    <Card className="thought_card">
+    <Card className="thought_card" id="tour-thought-card">
       <div className="thought_header">
         <div className="thought_user">
           <div className="thought_avatar">AK</div>
@@ -40,7 +40,7 @@ export default function ThoughtCard() {
         achievements.
       </p>
 
-      <div className="thought_actions">
+      <div className="thought_actions" id="tour-thought-actions">
         <button>
           <FaHeart />
           28
@@ -56,5 +56,5 @@ export default function ThoughtCard() {
         </button>
       </div>
     </Card>
-  )
+  );
 }

@@ -37,7 +37,7 @@ export default function StatsGrid() {
   ]
 
   return (
-    <section className="stats_grid">
+    <section className="stats_grid" id='tour-stats-grid'>
       {stats.map((stat) => (
         <StatCard key={stat.title} {...stat} />
       ))}

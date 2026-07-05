@@ -17,7 +17,7 @@ const commentSchema = new mongoose.Schema(
   {
     timestamps: true,
     _id: true,
-  }
+  },
 );
 
 const postSchema = new mongoose.Schema(
@@ -86,8 +86,7 @@ const postSchema = new mongoose.Schema(
   {
     timestamps: true,
     versionKey: false,
-  }
+  },
 );
 
-export const postModel =
-  mongoose.model("Post", postSchema);
+export const postModel = mongoose.model("Post", postSchema);
