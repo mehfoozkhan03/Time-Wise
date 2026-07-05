@@ -7,7 +7,7 @@
 
 
 /*  */
-section{
+.sing_login{
   height:90vh;
   display: flex;
   justify-content: center;
@@ -57,7 +57,7 @@ section{
   font-size: 16px;
 }
 
-button {
+.loginsumit {
   width: 100%;
   padding: 15px;
   background:#363b4d;
@@ -71,7 +71,7 @@ button {
   margin-bottom: 10px;
 }
 
-button:hover {
+.loginsumit:hover {
   background: #218FC4;
 }
 
