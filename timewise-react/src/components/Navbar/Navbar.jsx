@@ -125,7 +125,7 @@ export default function Navbar() {
           className="tour_trigger_btn"
           aria-label="Start Product Tour"
         >
-          Show Tour
+          Show Demo
         </button>
 
         {/* Mobile */}
