@@ -10,7 +10,6 @@
 .scroll_progress_bar {
   height: 100%;
   width: 0%;
-  background: #29a3e0;
   transition: width 0.1s ease;
   border-radius: 0 5px 5px 0;
 }
