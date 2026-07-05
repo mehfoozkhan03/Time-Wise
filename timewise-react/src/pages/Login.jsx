@@ -21,7 +21,7 @@ const SignUpPage = () => {
   };
 
   return (
-    <section>
+    <div className="sing_login">
     <div className="login-page">
       <AnimatePresence mode="wait">
         {!isRegister ? (
@@ -61,7 +61,7 @@ const SignUpPage = () => {
               </span>
             </div>
 
-            <button type="submit">Login</button>
+            <button type="submit" className="loginsumit">Login</button>
 
             <p className="message">
               Don't have an account?{" "}
@@ -155,7 +155,7 @@ const SignUpPage = () => {
 </div>
           
 
-            <button type="submit">Register</button>
+            <button type="submit" className="loginsumit">Register</button>
 
             <p className="message">
               Already have an account?{" "}
@@ -167,7 +167,7 @@ const SignUpPage = () => {
         )}
       </AnimatePresence>
     </div>
-    </section>
+    </div>
   );
 };
 
