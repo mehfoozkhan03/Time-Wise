@@ -11,14 +11,12 @@ export default function ScrollProgressBar() {
       const total = document.documentElement.scrollHeight - window.innerHeight;
       const progress = (scrolled / total) * 100;
 
-      const transparentPart = progress * 0.5;
+      // Bar width = full progress
+      bar.style.width = `${progress}%`;
+      bar.style.transform = "none"; // remove any leftover transform
 
-      bar.style.width = `${progress - transparentPart}%`;
-      bar.style.transform = `translateX(${transparentPart}%)`;
-
-      // Transparent portion is always half of 100% (the bar's own width)
-      // So at 50% scroll → bar is 50% wide, first 50% of bar is transparent
-      // At 100% scroll → bar is 100% wide, first 50% of bar is transparent
+      // First 50% of bar = transparent, second 50% = colored
+      // These % are always relative to the bar's own width
       bar.style.background = `linear-gradient(
     to right,
     transparent 0%,
@@ -26,6 +24,7 @@ export default function ScrollProgressBar() {
     #29A3E0 100%
   )`;
     };
+
     window.addEventListener("scroll", onScroll);
 
     return () => {
