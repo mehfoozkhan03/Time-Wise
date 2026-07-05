@@ -1,10 +1,10 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const attendanceSchema = new mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      ref: "User",
       required: true,
     },
 
@@ -36,8 +36,8 @@ const attendanceSchema = new mongoose.Schema(
 
     status: {
       type: String,
-      enum: ['Present', 'Absent', 'Leave', 'Holiday'],
-      default: 'Absent',
+      enum: ["Present", "Absent", "Leave", "Holiday"],
+      default: "Absent",
     },
 
     // Extra fields for filtering
@@ -61,4 +61,4 @@ attendanceSchema.index(
   },
 );
 
-export const attendanceModel = mongoose.model('Attendance', attendanceSchema);
+export const attendanceModel = mongoose.model("Attendance", attendanceSchema);
