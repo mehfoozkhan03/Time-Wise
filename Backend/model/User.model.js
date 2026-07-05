@@ -83,7 +83,19 @@ const userSchema = new mongoose.Schema(
       ref: "Admin",
       default: null,
     },
+    posts: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Post",
+      },
+    ],
 
+    notifications: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Notification",
+      },
+    ],
     attendance: [
       {
         type: mongoose.Schema.Types.ObjectId,

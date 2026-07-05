@@ -1,5 +1,3 @@
-// Skeleton Loading
-
 const skeleton = document.querySelector("#aboutSkeleton");
 const content = document.querySelector("#aboutContent");
 

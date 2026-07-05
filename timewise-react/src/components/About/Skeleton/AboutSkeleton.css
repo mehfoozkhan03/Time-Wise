@@ -1,0 +1,334 @@
+/* ======================================================
+    SKELETON STYLES
+====================================================== */
+
+.aboutSkeleton {
+    width: 100%;
+    animation: fade_in .3s ease;
+}
+
+.hidden {
+    display: none;
+}
+
+/* shimmer effect */
+
+.sk_line,
+.sk_icon,
+.sk_avatar,
+.sk_star,
+.sk_value_icon,
+.sk_award,
+.sk_button,
+.clockCircle,
+.dotSkeleton,
+.missionSkeletonCard,
+.teamSkeletonCard,
+.testimonialCard,
+.coreSkeletonCard {
+
+    position: relative;
+    overflow: hidden;
+    background: var(--surface);
+    border-radius: var(--radius_md);
+}
+
+.sk_line::before,
+.sk_icon::before,
+.sk_avatar::before,
+.sk_star::before,
+.sk_value_icon::before,
+.sk_award::before,
+.sk_button::before,
+.clockCircle::before,
+.dotSkeleton::before,
+.missionSkeletonCard::before,
+.teamSkeletonCard::before,
+.testimonialCard::before,
+.coreSkeletonCard::before {
+
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: -100%;
+
+    width: 100%;
+    height: 100%;
+
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,.15),
+        transparent
+    );
+
+    animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+
+    100% {
+        left: 100%;
+    }
+}
+
+/* ======================================================
+   HERO SKELETON
+====================================================== */
+
+.heroSkeleton {
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    padding: 60px 20px;
+}
+
+.hero_title {
+
+    width: 420px;
+    height: 55px;
+
+    margin-bottom: 20px;
+}
+
+.hero_text {
+
+    width: 600px;
+    height: 22px;
+
+    margin-bottom: 40px;
+}
+
+.clockSkeleton {
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: relative;
+}
+
+.clockCircle {
+
+    width: 220px;
+    height: 220px;
+
+    border-radius: 50%;
+}
+
+.dotSkeleton {
+
+    position: absolute;
+
+    width: 25px;
+    height: 25px;
+
+    border-radius: 50%;
+}
+
+.dotSkeleton:first-child {
+
+    left: -40px;
+    bottom: 20px;
+}
+
+.dotSkeleton:last-child {
+
+    right: -40px;
+    top: 20px;
+}
+
+/* ======================================================
+   MISSION SKELETON
+====================================================== */
+
+.missionSkeleton {
+
+    padding: 80px 50px;
+}
+
+.missionCards {
+
+    display: flex;
+    justify-content: center;
+
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.missionSkeletonCard {
+
+    width: 450px;
+    height: 220px;
+
+    padding: 30px;
+
+    border-radius: var(--radius_lg);
+}
+
+.sk_icon {
+
+    width: 60px;
+    height: 60px;
+
+    border-radius: 12px;
+
+    margin-bottom: 20px;
+}
+
+/* ======================================================
+   TEAM SKELETON
+====================================================== */
+
+.teamSkeleton {
+
+    padding: 80px 50px;
+}
+
+.teamGrid {
+
+    display: flex;
+    justify-content: center;
+
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.teamSkeletonCard {
+
+    width: 260px;
+    height: 320px;
+
+    padding: 20px;
+
+    border-radius: var(--radius_lg);
+}
+
+.sk_avatar {
+
+    width: 80px;
+    height: 80px;
+
+    border-radius: 50%;
+
+    margin: auto auto 20px;
+}
+
+/* ======================================================
+   TESTIMONIAL SKELETON
+====================================================== */
+
+.testimonialSkeleton {
+
+    padding: 80px 50px;
+}
+
+.testimonialGrid {
+
+    display: flex;
+    justify-content: center;
+
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.testimonialCard {
+
+    width: 380px;
+    height: 250px;
+
+    padding: 25px;
+
+    border-radius: var(--radius_lg);
+}
+
+.sk_star {
+
+    width: 120px;
+    height: 20px;
+
+    margin-bottom: 20px;
+}
+
+/* ======================================================
+   CORE VALUES SKELETON
+====================================================== */
+
+.coreSkeleton {
+
+    padding: 80px 50px;
+}
+
+.coreGrid {
+
+    display: flex;
+    justify-content: center;
+
+    gap: 25px;
+    flex-wrap: wrap;
+}
+
+.coreSkeletonCard {
+
+    width: 260px;
+    height: 260px;
+
+    padding: 25px;
+
+    border-radius: var(--radius_lg);
+}
+
+.sk_value_icon {
+
+    width: 70px;
+    height: 70px;
+
+    border-radius: 50%;
+
+    margin-bottom: 20px;
+}
+
+/* ======================================================
+   CTA SKELETON
+====================================================== */
+
+.ctaSkeleton {
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: 60%;
+
+    margin: 80px auto;
+
+    padding: 50px;
+
+    border-radius: var(--radius_lg);
+
+    background: var(--surface);
+}
+
+.sk_award {
+
+    width: 70px;
+    height: 70px;
+
+    border-radius: 50%;
+
+    margin-bottom: 25px;
+}
+
+.sk_button {
+
+    width: 180px;
+    height: 50px;
+
+    border-radius: var(--radius_md);
+
+    margin-top: 25px;
+}
