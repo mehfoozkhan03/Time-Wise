@@ -7,18 +7,15 @@ import Dashboard from "./pages/Dashboard";
 import Community from "./pages/Community";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
-<<<<<<< HEAD
 import SignUpPage from "./pages/Login";
-=======
 import BubbleCursor from "./components/BubbleArrow/bubbleArrow";
-import ProgressBar from "./components/ProgressBar/progressBar"
->>>>>>> e2e7f883aefbbe8f73cb944fd8f8ce9c04c1375c
+import ProgressBar from "./components/ProgressBar/progressBar";
 
 export default function App() {
   return (
     <BrowserRouter>
       <BubbleCursor />
-      <ProgressBar/>
+      <ProgressBar />
       <Routes>
         {/* Main Website */}
         <Route element={<MainLayout />}>
@@ -31,5 +28,5 @@ export default function App() {
         </Route>
       </Routes>
     </BrowserRouter>
-  )
+  );
 }

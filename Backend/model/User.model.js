@@ -45,13 +45,13 @@ const userSchema = new mongoose.Schema(
       enum: ["Male", "Female", "Other"],
     },
 
-    // ================= Organization =================
-
     role: {
       type: String,
       enum: ["employee", "admin"],
       default: "employee",
     },
+
+    // ================= Organization =================
 
     department: {
       type: String,
