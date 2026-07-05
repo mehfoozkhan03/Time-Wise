@@ -182,3 +182,32 @@
     border-right-color: var(--border);
   }
 }
+
+/* Driver JS */
+
+/* driver.js popover — TimeWise theme overrides */
+.driver-popover {
+  border-radius: 16px !important;
+  box-shadow: var(--shadow_lg) !important;
+  border: 1px solid var(--border) !important;
+  background: var(--surface) !important;
+  color: var(--text_primary) !important;
+}
+
+.driver-popover-title {
+  color: var(--text_primary) !important;
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+}
+
+.driver-popover-description {
+  color: var(--text_secondary) !important;
+  font-size: 0.875rem !important;
+  line-height: 1.6 !important;
+}
+
+.driver-popover-next-btn,
+.driver-popover-prev-btn {
+  background: var(--primary) !important;
+  border-radius: 8px !important;
+}

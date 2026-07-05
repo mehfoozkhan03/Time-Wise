@@ -1,9 +1,9 @@
-import './TodayWork.css'
+import "./TodayWork.css";
 
-import Card from '../../Card/Card'
-import useAttendance from '../../../hooks/useAttendance'
+import Card from "../../Card/Card";
+import useAttendance from "../../../hooks/useAttendance";
 
-import { FaCircle, FaClock, FaCoffee, FaCalendarCheck } from 'react-icons/fa'
+import { FaCircle, FaClock, FaCoffee, FaCalendarCheck } from "react-icons/fa";
 
 export default function TodayWork() {
   const {
@@ -15,68 +15,68 @@ export default function TodayWork() {
     sessionTime,
     workingTime,
     breakTime,
-  } = useAttendance()
+  } = useAttendance();
 
   function renderButton() {
     switch (attendance.status) {
-      case 'idle':
+      case "idle":
         return (
           <button className="today_work_button check_in" onClick={checkIn}>
             Check In
           </button>
-        )
+        );
 
-      case 'working':
+      case "working":
         return (
           <button className="today_work_button break" onClick={startBreak}>
             Take Break
           </button>
-        )
+        );
 
-      case 'break':
+      case "break":
         return (
           <button className="today_work_button resume" onClick={endBreak}>
             Resume Work
           </button>
-        )
+        );
 
-      case 'checkedout':
+      case "checkedout":
         return (
           <button className="today_work_button finished" disabled>
             Completed
           </button>
-        )
+        );
 
       default:
         return (
           <button className="today_work_button checkout" onClick={checkOut}>
             Check Out
           </button>
-        )
+        );
     }
   }
 
   function getStatus() {
     switch (attendance.status) {
-      case 'idle':
-        return 'Not Checked In'
+      case "idle":
+        return "Not Checked In";
 
-      case 'working':
-        return 'Working'
+      case "working":
+        return "Working";
 
-      case 'break':
-        return 'On Break'
+      case "break":
+        return "On Break";
 
-      case 'checkedout':
-        return 'Checked Out'
+      case "checkedout":
+        return "Checked Out";
 
       default:
-        return ''
+        return "";
     }
   }
 
   return (
-    <Card className="today_work_card">
+    <Card className="today_work_card" id="tour-today-work">
       <div className="today_work_header">
         <h2>Today's Work</h2>
 
@@ -94,7 +94,7 @@ export default function TodayWork() {
             <strong>
               {attendance.checkInTime
                 ? attendance.checkInTime.toLocaleTimeString()
-                : '--:--'}
+                : "--:--"}
             </strong>
           </div>
         </div>
@@ -125,8 +125,8 @@ export default function TodayWork() {
       </div>
 
       <div className="today_work_action">
-        {attendance.status !== 'checkedout' && renderButton()}
+        {attendance.status !== "checkedout" && renderButton()}
       </div>
     </Card>
-  )
+  );
 }

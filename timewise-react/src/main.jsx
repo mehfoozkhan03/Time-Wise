@@ -10,12 +10,18 @@ import { ThemeProvider } from './context/ThemeContext'
 
 import { AuthProvider } from './context/AuthContext'
 
-ReactDOM.createRoot(document.getElementById('root')).render(
+import { Provider } from "react-redux";
+
+import store from "../src/store/index.js";
+
+ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <ThemeProvider>
-      <AuthProvider>
-        <App />
-      </AuthProvider>
-    </ThemeProvider>
+    <Provider store={store}>
+      <ThemeProvider>
+        <AuthProvider>
+          <App />
+        </AuthProvider>
+      </ThemeProvider>
+    </Provider>
   </React.StrictMode>,
-)
+);

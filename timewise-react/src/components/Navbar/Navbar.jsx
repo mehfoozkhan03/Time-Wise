@@ -7,12 +7,18 @@ import { useState } from 'react'
 
 import { FaBell, FaBars, FaTimes, FaChevronDown } from 'react-icons/fa'
 
+import { useTour } from "../../hooks/useTour";
+
+import tourSteps from "../../tour/tourSteps";
+
 export default function Navbar() {
-  const [mobileOpen, setMobileOpen] = useState(false)
+  const [mobileOpen, setMobileOpen] = useState(false);
 
-  const [profileOpen, setProfileOpen] = useState(false)
+  const [profileOpen, setProfileOpen] = useState(false);
 
-  const [notificationOpen, setNotificationOpen] = useState(false)
+  const [notificationOpen, setNotificationOpen] = useState(false);
+
+  const { triggerTour } = useTour(tourSteps);
 
   return (
     <header className="navbar">
@@ -20,13 +26,13 @@ export default function Navbar() {
               LEFT
       =========================== */}
 
-      <div className="navbar_logo">
+      <div className="navbar_logo" id="tour-logo">
         {/* <img src={logo} alt="TimeWise Logo" /> */}
 
         <div className="logo_text">
-          <h2>TimeWise</h2>
-
-          <span>Employee Productivity</span>
+          {/* <h2>TimeWise</h2>
+          <span>Employee Productivity</span> */}
+          <img src="/Time_Wise_Logo_DarkMode.svg" alt="Logo" />
         </div>
       </div>
 
@@ -34,7 +40,10 @@ export default function Navbar() {
             CENTER
       =========================== */}
 
-      <nav className={`navbar_links ${mobileOpen ? 'active' : ''}`}>
+      <nav
+        className={`navbar_links ${mobileOpen ? "active" : ""}`}
+        id="tour-nav-links"
+      >
         <NavLink to="/">Home</NavLink>
 
         <NavLink to="/dashboard">Dashboard</NavLink>
@@ -53,7 +62,7 @@ export default function Navbar() {
       <div className="navbar_right">
         {/* Notification */}
 
-        <div className="notification_container">
+        <div className="notification_container" id="tour-notifications">
           <button
             className="notification_btn"
             onClick={() => setNotificationOpen(!notificationOpen)}
@@ -84,7 +93,7 @@ export default function Navbar() {
 
         {/* Profile */}
 
-        <div className="profile_container">
+        <div className="profile_container" id="tour-profile">
           <button
             className="profile_btn"
             onClick={() => setProfileOpen(!profileOpen)}
@@ -111,6 +120,14 @@ export default function Navbar() {
           )}
         </div>
 
+        <button
+          onClick={triggerTour}
+          className="tour_trigger_btn"
+          aria-label="Start Product Tour"
+        >
+          Show Demo
+        </button>
+
         {/* Mobile */}
 
         <button
@@ -121,5 +138,5 @@ export default function Navbar() {
         </button>
       </div>
     </header>
-  )
+  );
 }
