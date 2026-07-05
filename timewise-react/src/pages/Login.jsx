@@ -1,5 +1,5 @@
 import { useState } from "react";
-// import "../styles/Login.css";
+import "../styles/Login.css";
 import { AnimatePresence, motion } from "framer-motion";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
@@ -21,6 +21,7 @@ const SignUpPage = () => {
   };
 
   return (
+    <section>
     <div className="login-page">
       <AnimatePresence mode="wait">
         {!isRegister ? (
@@ -35,7 +36,7 @@ const SignUpPage = () => {
           >
             <h2>Login</h2>
 
-            <div clas   sName="input-box">
+            <div className="input-box">
               <input type="text" placeholder="Username" required />
             </div>
 
@@ -140,8 +141,19 @@ const SignUpPage = () => {
             </div>
 
             <div className="input-box">
-              <input type="date" required />
+              <input type="date"  placeholder="dd-mm-yy" required />
             </div>
+
+            <div className="input-box">
+            <select required defaultValue="">
+            <option value="" disabled>  Select Gender
+</option>
+    <option value="male">Male</option>
+    <option value="female">Female</option>
+    <option value="other">Other</option>
+  </select>
+</div>
+          
 
             <button type="submit">Register</button>
 
@@ -155,6 +167,7 @@ const SignUpPage = () => {
         )}
       </AnimatePresence>
     </div>
+    </section>
   );
 };
 
