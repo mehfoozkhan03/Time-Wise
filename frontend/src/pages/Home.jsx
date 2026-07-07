@@ -3,10 +3,11 @@ import { useNavigate } from 'react-router-dom'
 
 import HeroSection from '../components/home/HeroSection/HeroSection'
 import TodayWork from '../components/home/TodayWork/TodayWork'
-import ThoughtCard from '../components/home/ThoughtCard/ThoughtCard'
 import QuickActions from '../components/home/QuickActions/QuickActions'
 import Performance from '../components/home/Performance/Performance'
 import CompanyUpdates from '../components/home/CompanyUpdates/CompanyUpdates'
+import FeaturedThought from '../components/home/FeaturedThought/FeaturedThought'
+import Footer from '../components/Footer/Footer'
 
 export default function Home() {
   const navigate = useNavigate()
@@ -17,7 +18,7 @@ export default function Home() {
 
       <TodayWork />
 
-      <ThoughtCard />
+      <FeaturedThought />
 
       <QuickActions />
 
@@ -28,6 +29,7 @@ export default function Home() {
       <button className="signup_btn" onClick={() => navigate('/signup')}>
         Sign Up
       </button>
+      <Footer />
     </main>
   )
 }
