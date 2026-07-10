@@ -10,10 +10,11 @@ import Contact from "./pages/Contact";
 import SignUpPage from "./pages/Login";
 import BubbleCursor from "./components/BubbleArrow/bubbleArrow";
 import ProgressBar from "./components/ProgressBar/progressBar";
-
+import RouteLoader from "./components/RouteLoader";
 export default function App() {
   return (
     <BrowserRouter>
+    <RouteLoader />
       <BubbleCursor />
       <ProgressBar />
       <Routes>
