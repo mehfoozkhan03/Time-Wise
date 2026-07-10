@@ -1,14 +1,14 @@
-import './TodayWork.css'
+import "./TodayWork.css";
 
-import { useState } from 'react'
+import { useState } from "react";
 
-import Card from '../../Card/Card'
+import Card from "../../Card/Card";
 
-import BreakModal from './BreakModal'
+import BreakModal from "./BreakModal";
 
-import useAttendance from '../../../hooks/useAttendance'
+import useAttendance from "../../../hooks/useAttendance";
 
-import { FaCircle, FaClock, FaCoffee, FaSignInAlt } from 'react-icons/fa'
+import { FaCircle, FaClock, FaCoffee, FaSignInAlt } from "react-icons/fa";
 
 export default function TodayWork() {
   const {
@@ -20,56 +20,56 @@ export default function TodayWork() {
     sessionTime,
     workingTime,
     breakTime,
-  } = useAttendance()
+  } = useAttendance();
 
-  const [showBreakModal, setShowBreakModal] = useState(false)
+  const [showBreakModal, setShowBreakModal] = useState(false);
 
   const handleBreak = () => {
-    startBreak()
-    setShowBreakModal(true)
-  }
+    startBreak();
+    setShowBreakModal(true);
+  };
 
   const handleResume = () => {
-    endBreak()
-    setShowBreakModal(false)
-  }
+    endBreak();
+    setShowBreakModal(false);
+  };
 
   const getStatus = () => {
     switch (attendance.status) {
-      case 'idle':
-        return 'Not Checked In'
+      case "idle":
+        return "Not Checked In";
 
-      case 'working':
-        return 'Working'
+      case "working":
+        return "Working";
 
-      case 'break':
-        return 'On Break'
+      case "break":
+        return "On Break";
 
-      case 'checkedout':
-        return 'Checked Out'
+      case "checkedout":
+        return "Checked Out";
 
       default:
-        return ''
+        return "";
     }
-  }
+  };
 
   const renderButton = () => {
     switch (attendance.status) {
-      case 'idle':
+      case "idle":
         return (
           <button className="today_primary_button" onClick={checkIn}>
             Check In
           </button>
-        )
+        );
 
-      case 'working':
+      case "working":
         return (
           <button className="today_primary_button break" onClick={handleBreak}>
             Take Break
           </button>
-        )
+        );
 
-      case 'break':
+      case "break":
         return (
           <button
             className="today_primary_button resume"
@@ -77,27 +77,27 @@ export default function TodayWork() {
           >
             Resume Work
           </button>
-        )
+        );
 
-      case 'checkedout':
+      case "checkedout":
         return (
           <button className="today_primary_button finished" disabled>
             Work Completed
           </button>
-        )
+        );
 
       default:
         return (
           <button className="today_primary_button checkout" onClick={checkOut}>
             Check Out
           </button>
-        )
+        );
     }
-  }
+  };
 
   return (
     <>
-      <Card className="today_work">
+      <Card className="today_work" id="tour-today-work">
         <div className="today_header">
           <div>
             <h2>Today's Work</h2>
@@ -122,7 +122,7 @@ export default function TodayWork() {
               <strong>
                 {attendance.checkInTime
                   ? attendance.checkInTime.toLocaleTimeString()
-                  : '--:--'}
+                  : "--:--"}
               </strong>
             </div>
           </div>
@@ -163,5 +163,5 @@ export default function TodayWork() {
 
       <BreakModal isOpen={showBreakModal} onResume={handleResume} />
     </>
-  )
+  );
 }
