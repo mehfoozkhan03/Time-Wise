@@ -16,12 +16,6 @@ const userSchema = new mongoose.Schema(
       trim: true,
     },
 
-    // Full name for backward compatibility
-    name: {
-      type: String,
-      required: true,
-      trim: true,
-    },
 
     email: {
       type: String,

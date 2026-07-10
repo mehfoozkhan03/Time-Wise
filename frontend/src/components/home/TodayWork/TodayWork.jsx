@@ -1,9 +1,14 @@
-import "./TodayWork.css";
+import './TodayWork.css'
 
-import Card from "../../Card/Card";
-import useAttendance from "../../../hooks/useAttendance";
+import { useState } from 'react'
 
-import { FaCircle, FaClock, FaCoffee, FaCalendarCheck } from "react-icons/fa";
+import Card from '../../Card/Card'
+
+import BreakModal from './BreakModal'
+
+import useAttendance from '../../../hooks/useAttendance'
+
+import { FaCircle, FaClock, FaCoffee, FaSignInAlt } from 'react-icons/fa'
 
 export default function TodayWork() {
   const {
@@ -15,118 +20,148 @@ export default function TodayWork() {
     sessionTime,
     workingTime,
     breakTime,
-  } = useAttendance();
+  } = useAttendance()
 
-  function renderButton() {
+  const [showBreakModal, setShowBreakModal] = useState(false)
+
+  const handleBreak = () => {
+    startBreak()
+    setShowBreakModal(true)
+  }
+
+  const handleResume = () => {
+    endBreak()
+    setShowBreakModal(false)
+  }
+
+  const getStatus = () => {
     switch (attendance.status) {
-      case "idle":
-        return (
-          <button className="today_work_button check_in" onClick={checkIn}>
-            Check In
-          </button>
-        );
+      case 'idle':
+        return 'Not Checked In'
 
-      case "working":
-        return (
-          <button className="today_work_button break" onClick={startBreak}>
-            Take Break
-          </button>
-        );
+      case 'working':
+        return 'Working'
 
-      case "break":
-        return (
-          <button className="today_work_button resume" onClick={endBreak}>
-            Resume Work
-          </button>
-        );
+      case 'break':
+        return 'On Break'
 
-      case "checkedout":
-        return (
-          <button className="today_work_button finished" disabled>
-            Completed
-          </button>
-        );
+      case 'checkedout':
+        return 'Checked Out'
 
       default:
-        return (
-          <button className="today_work_button checkout" onClick={checkOut}>
-            Check Out
-          </button>
-        );
+        return ''
     }
   }
 
-  function getStatus() {
+  const renderButton = () => {
     switch (attendance.status) {
-      case "idle":
-        return "Not Checked In";
+      case 'idle':
+        return (
+          <button className="today_primary_button" onClick={checkIn}>
+            Check In
+          </button>
+        )
 
-      case "working":
-        return "Working";
+      case 'working':
+        return (
+          <button className="today_primary_button break" onClick={handleBreak}>
+            Take Break
+          </button>
+        )
 
-      case "break":
-        return "On Break";
+      case 'break':
+        return (
+          <button
+            className="today_primary_button resume"
+            onClick={handleResume}
+          >
+            Resume Work
+          </button>
+        )
 
-      case "checkedout":
-        return "Checked Out";
+      case 'checkedout':
+        return (
+          <button className="today_primary_button finished" disabled>
+            Work Completed
+          </button>
+        )
 
       default:
-        return "";
+        return (
+          <button className="today_primary_button checkout" onClick={checkOut}>
+            Check Out
+          </button>
+        )
     }
   }
 
   return (
-    <Card className="today_work_card" id="tour-today-work">
-      <div className="today_work_header">
-        <h2>Today's Work</h2>
-
-        <div className={`status ${attendance.status}`}>
-          <FaCircle />
-          {getStatus()}
-        </div>
-      </div>
-
-      <div className="today_work_grid">
-        <div className="today_work_item">
-          <FaCalendarCheck />
+    <>
+      <Card className="today_work">
+        <div className="today_header">
           <div>
-            <span>Checked In</span>
-            <strong>
-              {attendance.checkInTime
-                ? attendance.checkInTime.toLocaleTimeString()
-                : "--:--"}
-            </strong>
+            <h2>Today's Work</h2>
+
+            <p>Your attendance summary for today</p>
+          </div>
+
+          <div className={`today_status ${attendance.status}`}>
+            <FaCircle />
+
+            {getStatus()}
           </div>
         </div>
 
-        <div className="today_work_item">
-          <FaClock />
-          <div>
-            <span>Current Session</span>
-            <strong>{sessionTime}</strong>
+        <div className="today_content">
+          <div className="today_stat">
+            <FaSignInAlt />
+
+            <div>
+              <span>Checked In</span>
+
+              <strong>
+                {attendance.checkInTime
+                  ? attendance.checkInTime.toLocaleTimeString()
+                  : '--:--'}
+              </strong>
+            </div>
+          </div>
+
+          <div className="today_stat">
+            <FaClock />
+
+            <div>
+              <span>Current Session</span>
+
+              <strong>{sessionTime}</strong>
+            </div>
+          </div>
+
+          <div className="today_stat">
+            <FaClock />
+
+            <div>
+              <span>Working Time</span>
+
+              <strong>{workingTime}</strong>
+            </div>
+          </div>
+
+          <div className="today_stat">
+            <FaCoffee />
+
+            <div>
+              <span>Break Used</span>
+
+              <strong>{breakTime}</strong>
+            </div>
           </div>
         </div>
 
-        <div className="today_work_item">
-          <FaCoffee />
-          <div>
-            <span>Break Used</span>
-            <strong>{breakTime}</strong>
-          </div>
-        </div>
+        <div className="today_action">{renderButton()}</div>
+      </Card>
 
-        <div className="today_work_item">
-          <FaClock />
-          <div>
-            <span>Working Hours</span>
-            <strong>{workingTime}</strong>
-          </div>
-        </div>
-      </div>
-
-      <div className="today_work_action">
-        {attendance.status !== "checkedout" && renderButton()}
-      </div>
-    </Card>
-  );
+      <BreakModal isOpen={showBreakModal} onResume={handleResume} />
+    </>
+  )
 }

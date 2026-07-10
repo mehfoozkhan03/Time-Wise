@@ -61,8 +61,6 @@ export const signup = async (req, res) => {
         const userCreated = await userModel.create({
           ...req.body,
 
-          name: fullName,
-
           adminID: FindAdminID[0]?._id ?? null,
         })
 
