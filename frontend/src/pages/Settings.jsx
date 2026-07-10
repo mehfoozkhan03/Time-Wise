@@ -71,7 +71,7 @@ export const Settings = () => {
                     </div>
                     <Outlet/>
                 </div>
-                
+
             </div>
 
         </>
