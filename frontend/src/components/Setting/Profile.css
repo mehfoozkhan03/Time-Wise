@@ -1,0 +1,158 @@
+.profile-container{
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.avtar-main-container{
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    height: 160px;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+}
+.avatar-heading{
+    height: 30%;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+.avatar-heading>h2{
+    font-size: 16px;
+}
+
+.profile-card{
+    height: 70%;
+    display:flex;
+    align-items:center;
+    gap:20px;
+    padding: 20px 0;
+}
+
+.avatar-container{
+    position:relative;
+}
+
+.avatar{
+    width:70px;
+    height:70px;
+    border-radius:50%;
+    background:#6C63FF;
+    color:#fff;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:30px;
+    font-weight:bold;
+}
+
+.camera-btn{
+    position:absolute;
+    bottom:0;
+    right:-2px;
+    width:26px;
+    height:26px;
+    border-radius:50%;
+    background:#4F46E5;
+    color:#fff;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    cursor:pointer;
+    border:2px solid #fff;
+    font-size:14px;
+}
+
+.profile-info h2{
+    font-size:16px;
+}
+
+.profile-info p{
+    color:#666;
+    margin-bottom:12px;
+    font-size: 12px;
+}
+
+.upload-link{
+    color:#4F46E5;
+    cursor:pointer;
+    font-weight:600;
+}
+
+.upload-link:hover{
+    text-decoration:underline;
+}
+
+/* Personal Information */
+.personal-information-container{
+    padding: 10px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+}
+.personal-information-heading>h2{
+    padding-bottom: 20px;
+    font-size: 16px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+.personal-information-form{
+    width: 100%;
+    padding-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+.top-data{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+.top-data input{
+    width: 100%;
+}
+.top-data>div{
+    padding: 7px;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+.top-data>div>div{
+    padding-left: 10px;
+    display: flex;
+    align-items: center;
+    border: 1px solid black;
+    border-radius: 10px;
+    background-color: #eef3f7;
+}
+.top-data>div>div>input{
+    padding: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    background-color: transparent;
+    border: none;
+    outline: none;
+}
+.bio{
+    width: 100%;
+    padding: 10px;
+}
+.bio>textarea{
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.save_changes{
+    padding: 20px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 10px;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+}
+.change-btn{
+    padding: 8px 15px;
+    color: white;
+    font-size: 15px;
+    border-radius: 10px;
+    background-color: blue;
+}

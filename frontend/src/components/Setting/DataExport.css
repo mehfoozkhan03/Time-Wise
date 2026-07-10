@@ -1,0 +1,156 @@
+.dataexport-container{
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+.dataexport-heading{
+    padding-top: 20px;
+}
+.dataexport-heading>h2{
+    font-size: 18px;
+}
+.dataexport-heading>p{
+    font-size: 14px;
+}
+
+/* Export attendance data */
+.export-attendance-data{
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    border-radius: 10px;
+    border-right-color: white;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+}
+.attendance-export-heading{
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    padding-bottom: 20px;
+}
+.attendance-export-heading>h3{
+    font-size: 16px;
+}
+.attendance-range-format{
+    padding-top: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+.date-range{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.data-range-selection,
+.file-format{
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+.attendance-range-format select{
+    padding: 10px;
+    width: 200px;
+    border-radius: 10px;
+}
+.download-attendance{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background-color: blue;
+    padding: 12px;
+    border-radius: 10px;
+}
+.download-icon{
+    color: white;
+    font-size: 18px;
+}
+.download-attendance>button{
+    background-color: transparent;
+    color: white;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+/* Recent export */
+.recent-export{
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    border-radius: 10px;
+    border-right-color: white;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+}
+.recent-heading{
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    padding-bottom: 20px;
+}
+.recent-heading>h3{
+    font-size: 16px;
+}
+.recent-export-content{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.recent-export-content>div{
+    padding-top: 5px;
+    padding-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.attendance-report>div>h3,
+.monthly-summary>div>h3,
+.leave-balance-report>div>h3{
+    font-size: 14px;
+}
+.attendance-report>div>p,
+.monthly-summary>div>p,
+.leave-balance-report>div>p{
+    font-size: 12px;
+}
+.attendance-report,
+.monthly-summary{
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+.download-container{
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+.fidownload{
+    color: blue;
+}
+.download-container>button{
+    color: blue;
+    background-color: transparent;
+    font-size: 13px;
+}
+.download-container>button:hover{
+    text-decoration: underline;
+}
+
+/* Data retention */
+.data-retention{
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    border-radius: 10px;
+    border-right-color: white;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+}
+.retention-heading{
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    padding-bottom: 20px;
+}
+.retention-heading>h3{
+    font-size: 14px;
+}
+.retention-content{
+    padding-top: 5px;
+}
+.retention-content>p{
+    font-size: 14px;
+}
