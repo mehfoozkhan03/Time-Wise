@@ -105,9 +105,10 @@
   padding: 20px 0;
   padding-left: 40px;
 }
-.content-heading {
-  height: 50px;
-  display: flex;
-  gap: 5px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  .content-heading{
+    height: 50px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 }
