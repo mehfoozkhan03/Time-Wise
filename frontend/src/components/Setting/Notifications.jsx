@@ -1,8 +1,5 @@
-import { IoToggleOutline } from "react-icons/io5";
-import { IoToggle } from "react-icons/io5";
-
-
 import "../../components/Setting/Notification.css"
+import { SwitchBtn } from "../SwichBtn/SwitchBtn";
 
 export const Notification = () => {
 
@@ -27,8 +24,7 @@ export const Notification = () => {
                                 <p>Sent to silentkiller@gmail.com</p>
                             </div>
                             <div>
-                                <IoToggleOutline />
-                                <IoToggle />
+                                <SwitchBtn />
                             </div>
                         </div>
                         <div className="push-notification">
@@ -37,8 +33,7 @@ export const Notification = () => {
                                 <p>Browser and mobile app alerts</p>
                             </div>
                             <div>
-                                <IoToggleOutline />
-                                <IoToggle />
+                                <SwitchBtn />
                             </div>
                         </div>
                         <div className="sms-alert">
@@ -47,8 +42,7 @@ export const Notification = () => {
                                 <p>Text messages to 9262986281</p>
                             </div>
                             <div>
-                                <IoToggleOutline />
-                                <IoToggle />
+                                <SwitchBtn />
                             </div>
                         </div>
                     </div>
@@ -66,8 +60,7 @@ export const Notification = () => {
                                 <p>5-minute reminder before your scheduled check-in</p>
                             </div>
                             <div>
-                                <IoToggleOutline />
-                                <IoToggle />
+                                <SwitchBtn />
                             </div>
                         </div>
                         <div className="checkout-reminder">
@@ -76,8 +69,7 @@ export const Notification = () => {
                                 <p>Alert when your scheduled check-out time approaches</p>
                             </div>
                             <div>
-                                <IoToggleOutline />
-                                <IoToggle />
+                                <SwitchBtn />
                             </div>
                         </div>
                         <div className="leave-approval">
@@ -86,8 +78,7 @@ export const Notification = () => {
                                 <p>When your leave requests are approved or declined</p>
                             </div>
                             <div>
-                                <IoToggleOutline />
-                                <IoToggle />
+                                <SwitchBtn />
                             </div>
                         </div>
                         <div className="payslip-available">
@@ -96,8 +87,7 @@ export const Notification = () => {
                                 <p>When a new payslip is generated for your account</p>
                             </div>
                             <div>
-                                <IoToggleOutline />
-                                <IoToggle />
+                                <SwitchBtn />
                             </div>
                         </div>
                         <div className="team-update">
@@ -106,8 +96,7 @@ export const Notification = () => {
                                 <p>When teammates change schedules or submit leave requests</p>
                             </div>
                             <div>
-                                <IoToggleOutline />
-                                <IoToggle />
+                                <SwitchBtn />
                             </div>
                         </div>
                         <div className="weekly-digest">
@@ -116,8 +105,7 @@ export const Notification = () => {
                                 <p>Summary of your hours and attendance every Monday</p>
                             </div>
                             <div>
-                                <IoToggleOutline />
-                                <IoToggle />
+                                <SwitchBtn />
                             </div>
                         </div>
                     </div>

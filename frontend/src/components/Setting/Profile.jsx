@@ -8,25 +8,25 @@ import { MdLocationOn } from "react-icons/md";
 export const Profile = () => {
   return (
     <>
-      <div className="profile-container">
+      <div className="setting-profile-container">
         {/* Profile heading */}
-        <div className="profile_heading">
+        <div className="setting-profile_heading">
           <h3>Profile</h3>
           <p>Manage your personal information and public profile.</p>
         </div>
 
         {/* Avatar */}
-        <div className="avtar-main-container">
-          <div className="avatar-heading">
+        <div className="setting-avtar-main-container">
+          <div className="setting-avatar-heading">
             <h2>Avatar</h2>
           </div>
-          <div class="profile-card">
-            <div class="avatar-container">
-              <div class="avatar">SK</div>
+          <div className="setting-profile-card">
+            <div className="setting-avatar-container">
+              <div className="setting-avatar">SK</div>
 
               <label
                 for="photo"
-                class="camera-btn"
+                className="setting-camera-btn"
               >
                 📷
               </label>
@@ -39,13 +39,13 @@ export const Profile = () => {
               />
             </div>
 
-            <div class="profile-info">
+            <div className="setting-profile-info">
               <h2>Silent Killer</h2>
               <p>JPG, PNG or WebP · Max 5 MB</p>
 
               <label
                 for="photo"
-                class="upload-link"
+                className="setting-upload-link"
               >
                 Upload photo
               </label>
