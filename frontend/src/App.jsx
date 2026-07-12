@@ -22,33 +22,45 @@ import { Security } from "./components/Setting/Security";
 import { HelpSupport } from './components/Setting/HelpSupport';
 
 
+import EmployeeTable from "./pages/EmployeeTable";
+import EmployeeDetails from "./pages/EmployeeDetails";
+
 export default function App() {
   return (
     <BrowserRouter>
-    <RouteLoader />
-      <BubbleCursor />
-      <ProgressBar />
-      <Routes>
-        {/* Main Website */}
-        <Route element={<MainLayout />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/community" element={<Community />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/signup" element={<SignUpPage />} />
-          <Route path="/settings" element={<Settings />} >
-            <Route index element={<Profile />}></Route>
-            <Route path="profile" element={<Profile />} />
-            <Route path="attendance" element={<Attendance />}></Route>
-            <Route path="appearance" element={<Appearance />}></Route>
-            <Route path="notification" element={<Notification />}></Route>
-            <Route path="security" element={<Security />}></Route>
-            <Route path="data_export" element={<DataExport />}></Route>
-            <Route path="help_support" element={<HelpSupport />}></Route>
-          </Route> 
-        </Route>
-      </Routes>
-    </BrowserRouter>
+  <RouteLoader />
+  <BubbleCursor />
+  <ProgressBar />
+
+  <Routes>
+    <Route element={<MainLayout />}>
+
+      {/* Main Website */}
+      <Route path="/" element={<Home />} />
+      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/community" element={<Community />} />
+      <Route path="/about" element={<About />} />
+      <Route path="/contact" element={<Contact />} />
+      <Route path="/signup" element={<SignUpPage />} />
+
+      {/* Employee */}
+      <Route path="/employees" element={<EmployeeTable />} />
+      <Route path="/employee-details" element={<EmployeeDetails />} />
+
+      {/* Settings */}
+      <Route path="/settings" element={<Settings />}>
+        <Route index element={<Profile />} />
+        <Route path="profile" element={<Profile />} />
+        <Route path="attendance" element={<Attendance />} />
+        <Route path="appearance" element={<Appearance />} />
+        <Route path="notification" element={<Notification />} />
+        <Route path="security" element={<Security />} />
+        <Route path="data_export" element={<DataExport />} />
+        <Route path="help_support" element={<HelpSupport />} />
+      </Route>
+
+    </Route>
+  </Routes>
+</BrowserRouter>
   );
 }
