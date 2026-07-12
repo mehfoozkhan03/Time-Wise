@@ -239,7 +239,7 @@ body.dark_mode textarea:focus,
 body.dark_mode select:focus {
 
   box-shadow:
-      0 0 0 4px rgba(62,181,232,.18);
+      0 0 0 0 rgba(62,181,232,.18);
 
 }
 
