@@ -31,13 +31,13 @@ export default function App() {
       <Routes>
         {/* Main Website */}
         <Route element={<MainLayout />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/community" element={<Community />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/signup" element={<SignUpPage />} />
-          <Route path="/settings" element={<Settings />} >
+            <Route path="/" element={<Home />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/community" element={<Community />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/signup" element={<SignUpPage />} />
+            <Route path="/settings" element={<Settings />} >
             <Route index element={<Profile />}></Route>
             <Route path="profile" element={<Profile />} />
             <Route path="attendance" element={<Attendance />}></Route>

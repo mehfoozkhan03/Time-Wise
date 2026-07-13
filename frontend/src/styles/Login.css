@@ -131,3 +131,9 @@ input {
 .input-box select:focus {
   border-color: #f2f2f2 !important;
 }
+.error{
+  color:red;
+  font-size:13px;
+  margin-top:4px;
+  display:block;
+}
