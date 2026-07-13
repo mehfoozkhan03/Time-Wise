@@ -19,9 +19,10 @@ const SignUpPage = () => {
     dob: "",
     gender: "",
   });
-  // setErrors({});
+
 
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
