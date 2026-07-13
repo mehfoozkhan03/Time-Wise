@@ -15,22 +15,21 @@ export default function Footer() {
   return (
     <footer className="footer">
       <div className="footer_top">
-
         <div className="footer_brand">
           <img
-            src="../frontend/css/utils/Logos/Time_Wise_Logo_DarkMode.svg"
+            src="/Time_Wise_Logo_DarkMode.svg"
             alt="TimeWise Logo"
             className="footer_logo"
           />
 
-          {/* <h3>Smarter Employee Management</h3> */}
+          <h3>Smarter Employee Management</h3>
 
           <p>
-            TimeWise streamlines attendance tracking, leave management,
-            employee collaboration, productivity monitoring, and workplace
-            communication through one intelligent workspace. Built for
-            modern organizations, it empowers teams with seamless workflows,
-            real-time insights, and a better employee experience.
+            TimeWise streamlines attendance tracking, leave management, employee
+            collaboration, productivity monitoring, and workplace communication
+            through one intelligent workspace. Built for modern organizations,
+            it empowers teams with seamless workflows, real-time insights, and a
+            better employee experience.
           </p>
         </div>
 
@@ -60,8 +59,8 @@ export default function Footer() {
 
       <div className="footer_bottom">
         <p>
-          © {year} TimeWise. Built with{" "}
-          <FaHeart className="footer_heart" /> by Team TimeWise.
+          © {year} TimeWise. Built with <FaHeart className="footer_heart" /> by
+          Team TimeWise.
         </p>
 
         <div className="footer_social">

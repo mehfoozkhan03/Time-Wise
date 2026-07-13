@@ -39,11 +39,12 @@ body.dark_mode .navbar {
   width: 75px;
   height: 35px;
   object-fit: contain;
+  scale: 1.07;
   transition: var(--transition);
 }
 
 .navbar_logo:hover img {
-  transform: scale(1.06);
+  transform: scale(1.07);
 }
 
 .logo_text {

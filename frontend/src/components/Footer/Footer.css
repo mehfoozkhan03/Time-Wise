@@ -27,14 +27,14 @@
     margin-bottom: 12px;
 }
 
-/* .footer_brand h3 {
+.footer_brand h3 {
     max-width: 400px;
     font-size: 30px;
     font-weight: 700;
     line-height: 1.2;
     color: var(--text_primary);
     margin-bottom: 16px;
-} */
+}
 
 .footer_brand p {
     max-width: 430px;
