@@ -5,6 +5,7 @@ import { IoToggle } from "react-icons/io5";
 
 
 import "../../components/Setting/Security.css"
+import { SwitchBtn } from "../SwichBtn/SwitchBtn";
 
 
 export const Security = () => {
@@ -57,8 +58,7 @@ export const Security = () => {
                             <p>Require a verification code on every sign-in</p>
                         </div>
                         <div>
-                            <IoToggleOutline />
-                            <IoToggle />
+                            <SwitchBtn />
                         </div>
                     </div>
                 </div>
@@ -74,8 +74,7 @@ export const Security = () => {
                             <p>Get notified when your account is accessed from a new device</p>
                         </div>
                         <div>
-                            <IoToggleOutline />
-                            <IoToggle />
+                            <SwitchBtn />
                         </div>
                     </div>
                     <div className="session-timeout">
