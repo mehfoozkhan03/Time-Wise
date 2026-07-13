@@ -3,6 +3,7 @@ import { IoToggle } from "react-icons/io5";
 
 
 import "../../components/Setting/Attendance.css"
+import { SwitchBtn } from "../SwichBtn/SwitchBtn";
 
 export const Attendance = () => {
   return (
@@ -61,8 +62,7 @@ export const Attendance = () => {
                 </p>
               </div>
               <div>
-                <IoToggleOutline />
-                <IoToggle />
+                <SwitchBtn />
               </div>
             </div>
             <div className="geo-fence-checkin">
@@ -73,8 +73,7 @@ export const Attendance = () => {
                 </p>
               </div>
               <div>
-                <IoToggleOutline />
-                <IoToggle />
+                <SwitchBtn />
               </div>
             </div>
             <div className="overtime-alerts">
@@ -85,8 +84,7 @@ export const Attendance = () => {
                 </p>
               </div>
               <div>
-                <IoToggleOutline />
-                <IoToggle />
+                <SwitchBtn />
               </div>
             </div>
           </div>
