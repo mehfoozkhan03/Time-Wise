@@ -1,15 +1,15 @@
-import jwt from 'jsonwebtoken'
-import { decode } from 'node:punycode'
+import jwt from 'jsonwebtoken';
+import { decode } from 'node:punycode';
 
 export const auth = (req, res, next) => {
   try {
-    const token = req.cookis.token
+    const token = req.cookies.token;
 
     if (!token) {
       return res.status(401).json({
         success: false,
         message: 'Authentication required,',
-      })
+      });
     }
 
     jwt.verify(token, process.env.PrivateKey, (err, decoded) => {
@@ -17,19 +17,19 @@ export const auth = (req, res, next) => {
         return res.status(401).json({
           success: false,
           message: 'Invalid or expired token.',
-        })
+        });
       }
 
-      req.user = decoded
+      req.user = decoded;
 
-      next()
-    })
+      next();
+    });
   } catch (error) {
-    console.error('Auth Middleware Error:', error)
+    console.error('Auth Middleware Error:', error);
 
     return res.status(500).json({
       success: false,
       message: 'Internal Server Error',
-    })
+    });
   }
-}
+};

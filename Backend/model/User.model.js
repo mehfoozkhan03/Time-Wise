@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema(
   {
@@ -104,6 +104,6 @@ const userSchema = new mongoose.Schema(
     timestamps: true,
     versionKey: false,
   },
-)
+);
 
-export const userModel = mongoose.model("User", userSchema);
+export const userModel = mongoose.model('User', userSchema);
