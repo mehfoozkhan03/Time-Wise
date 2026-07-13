@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { authService } from '../services/authService';
 import '../styles/Login.css';
 
 const SignUpPage = () => {
@@ -11,10 +12,10 @@ const SignUpPage = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [formData, setFormData] = useState({
-    username: '',
+    firstName: '',
+    lastName: '',
     email: '',
     password: '',
-    confirmPassword: '',
     dob: '',
     gender: '',
   });
@@ -123,12 +124,7 @@ const SignUpPage = () => {
       alert('Registration Form Submitted');
     } else {
       if (!validateLogin()) return;
-
-      console.log('Login Data:', {
-        email: formData.email,
-        password: formData.password,
-      });
-
+      authService.login(formData);
       alert('Login Form Submitted');
     }
   };
