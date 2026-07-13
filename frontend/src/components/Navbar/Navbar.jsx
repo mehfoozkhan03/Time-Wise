@@ -98,7 +98,7 @@ export default function Navbar() {
             className="profile_btn"
             onClick={() => setProfileOpen(!profileOpen)}
           >
-            <div className="avatar">AK</div>
+            <div className="avatar1">AK</div>
 
             <div className="profile_info">
               <h4>Arnav Kharade</h4>
