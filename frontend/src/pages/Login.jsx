@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { authService } from "../services/authService";
 import "../styles/Login.css";
 
 const SignUpPage = () => {
@@ -18,6 +19,7 @@ const SignUpPage = () => {
     dob: "",
     gender: "",
   });
+  // setErrors({});
 
   const [errors, setErrors] = useState({});
 
@@ -36,23 +38,27 @@ const SignUpPage = () => {
     }));
   };
 
-  const validateLogin = () => {
-    let newErrors = {};
-    let isValid = true;
+const validateLogin = () => {
+  let newErrors = {};
+  let isValid = true;
 
-    if (!formData.email.trim()) {
-      newErrors.email = "Email is required";
-      isValid = false;
-    }
+  if (!formData.email.trim()) {
+    newErrors.email = "Email is required";
+    isValid = false;
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+    newErrors.email = "Invalid email";
+    isValid = false;
+  }
 
-    if (!formData.password) {
-      newErrors.password = "Password is required";
-      isValid = false;
-    }
+  if (!formData.password) {
+    newErrors.password = "Password is required";
+    isValid = false;
+  }
 
-    setErrors(newErrors);
-    return isValid;
-  };
+  setErrors(newErrors);
+  return isValid;
+};
+
 
   const validateSignup = () => {
     let newErrors = {};
@@ -81,10 +87,10 @@ const SignUpPage = () => {
       newErrors.password = "Password is required";
       isValid = false;
     } else if (
-      !/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&#]{8,}$/.test(formData.password)
+      !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/.test(formData.password)
     ) {
       newErrors.password =
-        "Minimum 8 characters with one letter and one number";
+  "Minimum 8 characters with uppercase, lowercase, number and special character";
       isValid = false;
     }
 
@@ -113,25 +119,65 @@ const SignUpPage = () => {
     return isValid;
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
+  setLoading(true);
+
+  try {
     if (isRegister) {
-      if (!validateSignup()) return;
+      if (!validateSignup()) {
+        setLoading(false);
+        return;
+      }
 
-      console.log("Register Data:", formData);
-      alert("Registration Form Submitted");
+      const { data } = await authService.signup(formData);
+
+      console.log(data);
+
+      alert(data.message || "Registration Successful");
+
+      setIsRegister(false);
     } else {
-      if (!validateLogin()) return;
+      if (!validateLogin()) {
+        setLoading(false);
+        return;
+      }
 
-      console.log("Login Data:", {
+      const { data } = await authService.login({
         email: formData.email,
         password: formData.password,
       });
 
-      alert("Login Form Submitted");
+      console.log(data);
+
+      // Save JWT Token
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+      }
+
+      alert(data.message || "Login Successful");
     }
-  };
+
+    setFormData({
+      username: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      dob: "",
+      gender: "",
+    });
+
+    setErrors({});
+  } catch (error) {
+    console.error(error);
+
+    alert(error.response?.data?.message || "Something went wrong");
+  } finally {
+    setLoading(false);
+  }
+};
+
 return (
   <div className="sing_login">
     <div className="login-page">
@@ -180,9 +226,7 @@ return (
               </span>
             </div>
 
-            <button type="submit" className="loginsumit">
-              Login
-            </button>
+            <button type="submit" className="loginsumit" disabled={loading}>{loading ? "Please wait..." : "Login"}</button>
 
             <p className="message">
               Don't have an account?{" "}
@@ -307,9 +351,7 @@ return (
               <p className="error">{errors.gender}</p>
             </div>
 
-            <button type="submit" className="loginsumit">
-              Register
-            </button>
+            <button type="submit" className="loginsumit" disabled={loading}>  {loading ? "Please wait..." : "Register"}</button>
 
             <p className="message">
               Already have an account?{" "}
