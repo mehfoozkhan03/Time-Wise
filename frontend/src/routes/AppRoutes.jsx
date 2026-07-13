@@ -20,6 +20,8 @@ import { Notification } from './../components/Setting/Notifications';
 import { Security } from './../components/Setting/Security';
 import { DataExport } from './../components/Setting/DataExport';
 import { HelpSupport } from './../components/Setting/HelpSupport';
+import EmployeeTable from '../pages/EmployeeTable';
+import EmployeeDetails from '../pages/EmployeeDetails';
 
 export const AppRoutes = () => {
   return (
