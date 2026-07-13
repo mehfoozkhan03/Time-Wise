@@ -46,7 +46,7 @@ export default function App() {
             <Route path="security" element={<Security />}></Route>
             <Route path="data_export" element={<DataExport />}></Route>
             <Route path="help_support" element={<HelpSupport />}></Route>
-          </Route> 
+          </Route>
         </Route>
       </Routes>
     </BrowserRouter>

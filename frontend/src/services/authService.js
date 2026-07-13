@@ -1,7 +1,9 @@
-import api from './api';
-
 export const authService = {
   login(data) {
+    return api.post('/user/login', data);
+  },
+
+  signup(data) {
     return api.post('/user/signup', data);
   },
 
