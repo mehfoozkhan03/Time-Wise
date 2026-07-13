@@ -11,11 +11,14 @@ const userSchema = new mongoose.Schema(
     },
 
     lastName: {
-      type: String,
+      type: String,``
       required: true,
       trim: true,
     },
 
+    name: {
+      type: String,
+    },
 
     email: {
       type: String,
@@ -36,64 +39,64 @@ const userSchema = new mongoose.Schema(
 
     gender: {
       type: String,
-      enum: ["Male", "Female", "Other"],
+      enum: ['Male', 'Female', 'Other'],
     },
 
     role: {
       type: String,
-      enum: ["employee", "admin"],
-      default: "employee",
+      enum: ['employee', 'admin'],
+      default: 'employee',
     },
 
     // ================= Organization =================
 
     department: {
       type: String,
-      default: "",
+      default: null,
     },
 
     designation: {
       type: String,
-      default: "",
+      default: null,
     },
 
     // ================= Profile =================
 
     profileImage: {
       type: String,
-      default: "",
+      default: null,
     },
 
     theme: {
       type: String,
-      enum: ["light", "dark", "system"],
-      default: "system",
+      enum: ['light', 'dark', 'system'],
+      default: 'system',
     },
 
     // ================= Relations =================
 
     adminID: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Admin",
+      ref: 'Admin',
       default: null,
     },
     posts: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Post",
+        ref: 'Post',
       },
     ],
 
     notifications: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Notification",
+        ref: 'Notification',
       },
     ],
     attendance: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Attendance",
+        ref: 'Attendance',
       },
     ],
   },
@@ -101,6 +104,6 @@ const userSchema = new mongoose.Schema(
     timestamps: true,
     versionKey: false,
   },
-);
+)
 
 export const userModel = mongoose.model("User", userSchema);

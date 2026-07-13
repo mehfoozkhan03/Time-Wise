@@ -1,41 +1,46 @@
-import express from 'express';
-import dotenv from 'dotenv';
-import cors from 'cors';
+import express from 'express'
+import dotenv from 'dotenv'
+import cors from 'cors'
+import cookieParser from 'cookie-parser'
 
-dotenv.config();
-import { Connection } from './config/db.js';
-// import { blogRoutes } from './Routes/Blog.routes.js';
-import { userRoutes } from './Routes/User.routes.js';
-import { auth } from './middleware/AuthMiddleware.js';
-// import { blogModel } from './model/Blog.model.js';
+dotenv.config()
 
-const server = express();
+import { Connection } from './config/db.js'
+import { userRoutes } from './Routes/User.routes.js'
+import { auth } from './middleware/AuthMiddleware.js'
 
-server.use(express.text(), express.json(), cors());
+const server = express()
 
-/* server.get('/', async (req, res) => {
-  const blogs = await blogModel.find().populate('author');
-  res.send(blogs);
-}); */
+// ================= Middleware =================
 
-// routes
-server.use('/user', userRoutes);
+server.use(
+  cors({
+    origin: 'http://localhost:5173', // Vite frontend
+    credentials: true,
+  }),
+)
 
-// auth-check
-server.use(auth);
+server.use(express.json())
+server.use(express.text())
+server.use(cookieParser())
 
-// blog routes
-// server.use('/blog', blogRoutes);
+// ================= Routes =================
 
-// server running
+server.use('/user', userRoutes)
+
+// Protected Routes
+server.use(auth)
+
+// ================= Server =================
+
 server.listen(process.env.Port, async () => {
   try {
-    await Connection();
-    console.log('DB Connected successfully✅');
+    await Connection()
+    console.log('DB Connected successfully ✅')
   } catch (error) {
-    console.log(`🚀 ~ error:`, error);
-    console.log('DB Crashed! something went wrong ❌');
+    console.log(error)
+    console.log('DB Crashed! Something went wrong ❌')
   } finally {
-    console.log(`port is running on ${process.env.Port}`);
+    console.log(`Server running on port ${process.env.Port}`)
   }
-});
+})
