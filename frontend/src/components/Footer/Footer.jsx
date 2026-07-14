@@ -17,7 +17,7 @@ export default function Footer() {
       <div className="footer_top">
         <div className="footer_brand">
           <img
-            src="/Time_Wise_Logo_DarkMode.svg"
+            src="/Dark_Mode_F.svg"
             alt="TimeWise Logo"
             className="footer_logo"
           />
