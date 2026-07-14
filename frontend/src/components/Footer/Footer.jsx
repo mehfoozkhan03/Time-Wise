@@ -1,15 +1,21 @@
-import './Footer.css'
+import "./Footer.css";
 
-import { Link } from 'react-router-dom'
+import { Link } from "react-router-dom";
 
-import { FaLinkedin, FaGithub, FaEnvelope, FaHeart } from 'react-icons/fa'
+import {
+  FaLinkedin,
+  FaGithub,
+  FaEnvelope,
+  FaHeart,
+} from "react-icons/fa";
 
 export default function Footer() {
-  const year = new Date().getFullYear()
+  const year = new Date().getFullYear();
 
   return (
     <footer className="footer">
       <div className="footer_top">
+
         <div className="footer_brand">
           <img
             src="../frontend/css/utils/Logos/Time_Wise_Logo_DarkMode.svg"
@@ -17,9 +23,14 @@ export default function Footer() {
             className="footer_logo"
           />
 
+          {/* <h3>Smarter Employee Management</h3> */}
+
           <p>
-            TimeWise is a modern employee management platform designed to
-            simplify attendance, collaboration, and workplace productivity.
+            TimeWise streamlines attendance tracking, leave management,
+            employee collaboration, productivity monitoring, and workplace
+            communication through one intelligent workspace. Built for
+            modern organizations, it empowers teams with seamless workflows,
+            real-time insights, and a better employee experience.
           </p>
         </div>
 
@@ -27,11 +38,9 @@ export default function Footer() {
           <h3>Quick Links</h3>
 
           <Link to="/">Home</Link>
-
+          <Link to="/dashboard">Dashboard</Link>
           <Link to="/community">Community</Link>
-
           <Link to="/about">About</Link>
-
           <Link to="/contact">Contact</Link>
         </div>
 
@@ -40,8 +49,10 @@ export default function Footer() {
 
           <p>
             <FaEnvelope />
-            support@timewise.com
+            <span>support@timewise.com</span>
           </p>
+
+          <p>Mon – Fri • 9:00 AM – 6:00 PM</p>
 
           <p>Version 1.0.0</p>
         </div>
@@ -49,21 +60,30 @@ export default function Footer() {
 
       <div className="footer_bottom">
         <p>
-          © {year} TimeWise. Built with
-          <FaHeart className="footer_heart" />
-          by Team TimeWise.
+          © {year} TimeWise. Built with{" "}
+          <FaHeart className="footer_heart" /> by Team TimeWise.
         </p>
 
         <div className="footer_social">
-          <a href="#">
+          <a
+            href="https://github.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub"
+          >
             <FaGithub />
           </a>
 
-          <a href="#">
+          <a
+            href="https://linkedin.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="LinkedIn"
+          >
             <FaLinkedin />
           </a>
         </div>
       </div>
     </footer>
-  )
+  );
 }
