@@ -23,6 +23,8 @@ import { HelpSupport } from './../components/Setting/HelpSupport';
 import EmployeeTable from '../pages/EmployeeTable';
 import EmployeeDetails from '../pages/EmployeeDetails';
 
+import { PrivateRoutes } from '../components/PrivateRoutes';
+
 export const AppRoutes = () => {
   return (
     <>
@@ -32,7 +34,14 @@ export const AppRoutes = () => {
       <Routes>
         {/* Main Website */}
         <Route element={<MainLayout />}>
-          <Route path="/" element={<Home />} />
+          <Route
+            path="/"
+            element={
+              <PrivateRoutes>
+                <Home />
+              </PrivateRoutes>
+            }
+          />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/community" element={<Community />} />
           <Route path="/about" element={<About />} />
