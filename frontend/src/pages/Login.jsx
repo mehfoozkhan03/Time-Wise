@@ -21,6 +21,7 @@ const SignUpPage = () => {
   });
 
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -43,6 +44,9 @@ const SignUpPage = () => {
 
     if (!formData.email.trim()) {
       newErrors.email = 'Email is required';
+      isValid = false;
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = 'Invalid email';
       isValid = false;
     }
 
@@ -82,10 +86,12 @@ const SignUpPage = () => {
       newErrors.password = 'Password is required';
       isValid = false;
     } else if (
-      !/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&#]{8,}$/.test(formData.password)
+      !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/.test(
+        formData.password,
+      )
     ) {
       newErrors.password =
-        'Minimum 8 characters with one letter and one number';
+        'Minimum 8 characters with uppercase, lowercase, number and special character';
       isValid = false;
     }
 
@@ -114,20 +120,65 @@ const SignUpPage = () => {
     return isValid;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (isRegister) {
-      if (!validateSignup()) return;
+    setLoading(true);
 
-      console.log('Register Data:', formData);
-      alert('Registration Form Submitted');
-    } else {
-      if (!validateLogin()) return;
-      authService.login(formData);
-      alert('Login Form Submitted');
+    try {
+      if (isRegister) {
+        if (!validateSignup()) {
+          setLoading(false);
+          return;
+        }
+
+        const { data } = await authService.signup(formData);
+
+        console.log(data);
+
+        alert(data.message || 'Registration Successful');
+
+        setIsRegister(false);
+      } else {
+        if (!validateLogin()) {
+          setLoading(false);
+          return;
+        }
+
+        const { data } = await authService.login({
+          email: formData.email,
+          password: formData.password,
+        });
+
+        console.log(data);
+
+        // Save JWT Token
+        if (data.token) {
+          localStorage.setItem('token', data.token);
+        }
+
+        alert(data.message || 'Login Successful');
+      }
+
+      setFormData({
+        username: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+        dob: '',
+        gender: '',
+      });
+
+      setErrors({});
+    } catch (error) {
+      console.error(error);
+
+      alert(error.response?.data?.message || 'Something went wrong');
+    } finally {
+      setLoading(false);
     }
   };
+
   return (
     <div className="sing_login">
       <div className="login-page">
@@ -174,8 +225,8 @@ const SignUpPage = () => {
                 </span>
               </div>
 
-              <button type="submit" className="loginsumit">
-                Login
+              <button type="submit" className="loginsumit" disabled={loading}>
+                {loading ? 'Please wait...' : 'Login'}
               </button>
 
               <p className="message">
@@ -297,8 +348,9 @@ const SignUpPage = () => {
                 <p className="error">{errors.gender}</p>
               </div>
 
-              <button type="submit" className="loginsumit">
-                Register
+              <button type="submit" className="loginsumit" disabled={loading}>
+                {' '}
+                {loading ? 'Please wait...' : 'Register'}
               </button>
 
               <p className="message">
