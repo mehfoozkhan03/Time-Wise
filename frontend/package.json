@@ -16,12 +16,13 @@
     "driver.js": "^1.6.0",
     "framer-motion": "^12.42.2",
     "moment": "^2.30.1",
+    "parallax-js": "^3.1.0",
     "react": "^19.2.7",
     "react-chartjs-2": "^5.3.1",
     "react-dom": "^19.2.7",
-    "react-redux": "^9.3.0",
     "react-icons": "^5.7.0",
-    "react-router-dom": "^7.18.0"
+    "react-redux": "^9.3.0",
+    "react-router-dom": "^7.18.1"
   },
   "devDependencies": {
     "@types/react": "^19.2.17",
