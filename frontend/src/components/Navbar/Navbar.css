@@ -37,13 +37,10 @@ body.dark_mode .navbar {
 
 .navbar_logo img {
   width: 75px;
-  height: 35px;
+  height: 70px;
   object-fit: contain;
+  scale: 1.07;
   transition: var(--transition);
-}
-
-.navbar_logo:hover img {
-  transform: scale(1.06);
 }
 
 .logo_text {
@@ -184,6 +181,10 @@ body.dark_mode .navbar {
   background: var(--secondary);
 }
 
+.profile_btn > svg {
+  fill: #fff;
+}
+
 .avatar {
   width: 46px;
   height: 46px;
@@ -271,7 +272,7 @@ body.dark_mode .navbar {
 
 /* Tour Button */
 
-.tour_trigger_btn{
+.tour_trigger_btn {
   padding: 13px 11px;
   background: var(--surface);
   border-radius: 13px;
@@ -318,10 +319,10 @@ body.dark_mode .navbar {
   }
   .navbar_links {
     position: fixed;
-    top: var(--navbar_height);
+    top: 61px;
     left: -100%;
-    width: 280px;
-    height: calc(100vh - var(--navbar_height));
+    width: 291px;
+    height: 91vh;
     background: var(--surface);
     display: flex;
     flex-direction: column;
@@ -364,4 +365,102 @@ body.dark_mode .navbar {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* ==========================================================
+   MEDIA QUERY 
+========================================================== */
+
+@media (max-width: 320px) {
+  .navbar {
+    height: 61px;
+    padding: 0 15px;
+  }
+  .navbar_logo {
+    gap: 7px;
+  }
+  .navbar_logo img {
+    height: 29px;
+  }
+  .logo_text h2 {
+    font-size: 0.9rem;
+  }
+  .navbar_links {
+    width: 221px;
+    padding: 1.5rem 1rem;
+    gap: 1.3rem;
+  }
+  .navbar_links a {
+    font-size: 0.9rem;
+  }
+  .navbar_right {
+    gap: 11px;
+  }
+  .profile_info,
+  .notification_btn,
+  .logo_text span {
+    display: none;
+  }
+  .profile_btn {
+    padding: 5px 11px;
+  }
+  .tour_trigger_btn {
+    padding: 5px 13px;
+    font-size: x-small;
+  }
+  .avatar {
+    width: 37px;
+    height: 37px;
+    font-size: 0.9rem;
+  }
+  .mobile_btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 41px;
+    height: 37px;
+    border-radius: 7px;
+  }
+  .profile_dropdown,
+  .notification_dropdown {
+    width: 221px;
+    right: 0;
+  }
+}
+
+@media (min-width: 321px) and (max-width: 430px) {
+  .profile_btn {
+    padding: 7px 11px;
+  }
+  .tour_trigger_btn {
+    padding: 7px 9px;
+    border-radius: 5px;
+    font-size: x-small;
+  }
+  .avatar {
+    width: 37px;
+    height: 37px;
+    font-size: 0.9rem;
+  }
+  .mobile_btn {
+    width: 35px;
+    height: 35px;
+    border-radius: 7px;
+    padding: 5px;
+  }
+  .navbar_links {
+    top: 77px;
+  }
+}
+
+@media (min-width: 431px) and(max-width:840px) {
+}
+
+@media (min-width: 841px) and(max-width:1340px) {
+}
+
+@media (min-width: 1341px) and(max-width:1440px) {
+}
+
+@media (min-width: 2560px) {
 }
