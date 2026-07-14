@@ -23,7 +23,7 @@ export default function Footer() {
             className="footer_logo"
           />
 
-          {/* <h3>Smarter Employee Management</h3> */}
+          <h3>Smarter Employee Management</h3>
 
           <p>
             TimeWise streamlines attendance tracking, leave management,
