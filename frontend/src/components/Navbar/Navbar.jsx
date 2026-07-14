@@ -1,24 +1,24 @@
-import './Navbar.css'
+import { NavLink, useLocation } from "react-router-dom";
+import { useState } from "react";
+
+import "./Navbar.css";
 // import logo from '../../assets'
-
-import { NavLink } from 'react-router-dom'
-
-import { useState } from 'react'
-
-import { FaBell, FaBars, FaTimes, FaChevronDown } from 'react-icons/fa'
-
+import { FaBell, FaBars, FaTimes, FaChevronDown } from "react-icons/fa";
 import { useTour } from "../../hooks/useTour";
-
-import tourSteps from "../../tour/tourSteps";
+import { tourSteps } from "../../tour/tourSteps";
 
 export default function Navbar() {
+  const location = useLocation();
+
+  const isHome = location.pathname === "/";
+
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const [profileOpen, setProfileOpen] = useState(false);
 
   const [notificationOpen, setNotificationOpen] = useState(false);
 
-  const { triggerTour } = useTour(tourSteps);
+  const { triggerTour } = useTour(tourSteps());
 
   return (
     <header className="navbar">
@@ -98,7 +98,7 @@ export default function Navbar() {
             className="profile_btn"
             onClick={() => setProfileOpen(!profileOpen)}
           >
-            <div className="avatar1">AK</div>
+            <div className="avatar">AK</div>
 
             <div className="profile_info">
               <h4>Arnav Kharade</h4>
@@ -120,17 +120,20 @@ export default function Navbar() {
           )}
         </div>
 
-        <button
-          onClick={triggerTour}
-          className="tour_trigger_btn"
-          aria-label="Start Product Tour"
-        >
-          Show Demo
-        </button>
+        {isHome && (
+          <button
+            id="tour-trigger-btn"
+            onClick={triggerTour}
+            className="tour_trigger_btn"
+          >
+            Show Demo
+          </button>
+        )}
 
         {/* Mobile */}
 
         <button
+          id="tour-mobile-btn"
           className="mobile_btn"
           onClick={() => setMobileOpen(!mobileOpen)}
         >
