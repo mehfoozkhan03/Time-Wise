@@ -412,7 +412,7 @@ body.dark_mode .navbar {
     padding: 5px 13px;
     font-size: x-small;
   }
-  .avatar1 {
+  .avatar {
     width: 37px;
     height: 37px;
     font-size: 0.9rem;
@@ -441,7 +441,7 @@ body.dark_mode .navbar {
     border-radius: 5px;
     font-size: x-small;
   }
-  .avatar1 {
+  .avatar {
     width: 37px;
     height: 37px;
     font-size: 0.9rem;
