@@ -3,8 +3,13 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { authService } from '../services/authService';
 import '../styles/Login.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { loading, loginSuccess } from '../store/authSlice';
 
 const SignUpPage = () => {
+  const dispatch = useDispatch();
+  const { isLoading, isError } = useSelector((store) => store.auth);
+
   const [isRegister, setIsRegister] = useState(false);
 
   const [showLoginPassword, setShowLoginPassword] = useState(false);
@@ -16,12 +21,13 @@ const SignUpPage = () => {
     lastName: '',
     email: '',
     password: '',
+    confirmPassword: '',
     dob: '',
     gender: '',
   });
 
   const [errors, setErrors] = useState({});
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -31,7 +37,6 @@ const SignUpPage = () => {
       [name]: value,
     }));
 
-    // Remove error while typing
     setErrors((prev) => ({
       ...prev,
       [name]: '',
@@ -63,16 +68,22 @@ const SignUpPage = () => {
     let newErrors = {};
     let isValid = true;
 
-    // Username
-    if (!formData.username.trim()) {
-      newErrors.username = 'Name is required';
+    if (!formData.firstName.trim()) {
+      newErrors.firstName = 'First name is required';
       isValid = false;
-    } else if (!/^[A-Za-z ]{2,50}$/.test(formData.username)) {
-      newErrors.username = 'Name should be 2-50 letters';
+    } else if (!/^[A-Za-z ]{2,50}$/.test(formData.firstName)) {
+      newErrors.firstName = 'First name should be 2-50 letters';
       isValid = false;
     }
 
-    // Email
+    if (!formData.lastName.trim()) {
+      newErrors.lastName = 'Last name is required';
+      isValid = false;
+    } else if (!/^[A-Za-z ]{2,50}$/.test(formData.lastName)) {
+      newErrors.lastName = 'Last name should be 2-50 letters';
+      isValid = false;
+    }
+
     if (!formData.email.trim()) {
       newErrors.email = 'Email is required';
       isValid = false;
@@ -81,7 +92,6 @@ const SignUpPage = () => {
       isValid = false;
     }
 
-    // Password
     if (!formData.password) {
       newErrors.password = 'Password is required';
       isValid = false;
@@ -95,7 +105,6 @@ const SignUpPage = () => {
       isValid = false;
     }
 
-    // Confirm Password
     if (!formData.confirmPassword) {
       newErrors.confirmPassword = 'Confirm password is required';
       isValid = false;
@@ -104,13 +113,11 @@ const SignUpPage = () => {
       isValid = false;
     }
 
-    // DOB
     if (!formData.dob) {
       newErrors.dob = 'Date of birth is required';
       isValid = false;
     }
 
-    // Gender
     if (!formData.gender) {
       newErrors.gender = 'Please select gender';
       isValid = false;
@@ -123,25 +130,25 @@ const SignUpPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    setLoading(true);
+    dispatch(loading());
 
     try {
       if (isRegister) {
         if (!validateSignup()) {
-          setLoading(false);
+          dispatch(loading());
           return;
         }
 
         const { data } = await authService.signup(formData);
 
-        console.log(data);
+        // here we have to put modal "data"
 
         alert(data.message || 'Registration Successful');
 
         setIsRegister(false);
       } else {
         if (!validateLogin()) {
-          setLoading(false);
+          // setLoading(false);
           return;
         }
 
@@ -150,18 +157,14 @@ const SignUpPage = () => {
           password: formData.password,
         });
 
-        console.log(data);
-
-        // Save JWT Token
-        if (data.token) {
-          localStorage.setItem('token', data.token);
-        }
+        dispatch(loginSuccess());
 
         alert(data.message || 'Login Successful');
       }
 
       setFormData({
-        username: '',
+        firstName: '',
+        lastName: '',
         email: '',
         password: '',
         confirmPassword: '',
@@ -175,7 +178,7 @@ const SignUpPage = () => {
 
       alert(error.response?.data?.message || 'Something went wrong');
     } finally {
-      setLoading(false);
+      console.log('done');
     }
   };
 
@@ -225,8 +228,8 @@ const SignUpPage = () => {
                 </span>
               </div>
 
-              <button type="submit" className="loginsumit" disabled={loading}>
-                {loading ? 'Please wait...' : 'Login'}
+              <button type="submit" className="loginsumit" disabled={isLoading}>
+                {isLoading ? 'Please wait...' : 'Login'}
               </button>
 
               <p className="message">
@@ -235,7 +238,8 @@ const SignUpPage = () => {
                   onClick={() => {
                     setIsRegister(true);
                     setFormData({
-                      username: '',
+                      firstName: '',
+                      lastName: '',
                       email: '',
                       password: '',
                       confirmPassword: '',
@@ -263,13 +267,23 @@ const SignUpPage = () => {
               <div className="input-box">
                 <input
                   type="text"
-                  name="username"
-                  value={formData.username}
+                  name="firstName"
+                  value={formData.firstName}
                   onChange={handleChange}
-                  placeholder="Username"
+                  placeholder="First Name"
                 />
+                <p className="error">{errors.firstName}</p>
+              </div>
 
-                <p className="error">{errors.username}</p>
+              <div className="input-box">
+                <input
+                  type="text"
+                  name="lastName"
+                  value={formData.lastName}
+                  onChange={handleChange}
+                  placeholder="Last Name"
+                />
+                <p className="error">{errors.lastName}</p>
               </div>
 
               <div className="input-box">
@@ -280,7 +294,6 @@ const SignUpPage = () => {
                   onChange={handleChange}
                   placeholder="Email"
                 />
-
                 <p className="error">{errors.email}</p>
               </div>
 
@@ -329,7 +342,6 @@ const SignUpPage = () => {
                   value={formData.dob}
                   onChange={handleChange}
                 />
-
                 <p className="error">{errors.dob}</p>
               </div>
 
@@ -340,17 +352,16 @@ const SignUpPage = () => {
                   onChange={handleChange}
                 >
                   <option value="">Select Gender</option>
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                  <option value="other">Other</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
                 </select>
 
                 <p className="error">{errors.gender}</p>
               </div>
 
-              <button type="submit" className="loginsumit" disabled={loading}>
-                {' '}
-                {loading ? 'Please wait...' : 'Register'}
+              <button type="submit" className="loginsumit" disabled={isLoading}>
+                {isLoading ? 'Please wait...' : 'Register'}
               </button>
 
               <p className="message">
@@ -358,14 +369,18 @@ const SignUpPage = () => {
                 <span
                   onClick={() => {
                     setIsRegister(false);
+
                     setFormData({
-                      username: '',
+                      firstName: '',
+                      lastName: '',
                       email: '',
                       password: '',
                       confirmPassword: '',
                       dob: '',
                       gender: '',
                     });
+
+                    setErrors({});
                   }}
                 >
                   Sign In
