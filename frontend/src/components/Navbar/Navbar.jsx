@@ -32,7 +32,7 @@ export default function Navbar() {
         <div className="logo_text">
           {/* <h2>TimeWise</h2>
           <span>Employee Productivity</span> */}
-          <img src="/Time_Wise_Logo_DarkMode.svg" alt="Logo" />
+          <img src="/Dark_Mode_N.svg" alt="Logo" />
         </div>
       </div>
 
