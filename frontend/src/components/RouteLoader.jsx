@@ -1,28 +1,19 @@
-import { useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
-import Loader from "./Loader";
+import { useLocation } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import Loader from './Loader';
+import { useSelector } from 'react-redux';
 
 function RouteLoader() {
-
   const location = useLocation();
 
-  const [loading, setLoading] = useState(true);
+  const { isLoading } = useSelector((state) => {
+    return state.auth;
+  });
+  console.log(`🚀 ~ isLoading:`, isLoading);
 
-  useEffect(() => {
-
-    setLoading(true);
-
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 700);
-
-    return () => clearTimeout(timer);
-
-  }, [location.pathname]);
-
-  if (!loading) return null;
-
-  return <Loader />;
+  if (isLoading) {
+    return <Loader />;
+  }
 }
 
 export default RouteLoader;

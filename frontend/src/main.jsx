@@ -1,21 +1,21 @@
-import React from "react";
+import React from 'react';
 
-import ReactDOM from "react-dom/client";
+import ReactDOM from 'react-dom/client';
 
-import App from "./App";
+import App from './App';
 
-import "./styles/global.css";
+import './styles/global.css';
 
-import { ThemeProvider } from "./context/ThemeContext";
+import { ThemeProvider } from './context/ThemeContext';
 
-import { AuthProvider } from "./context/AuthContext";
+import { AuthProvider } from './context/AuthContext';
 
-import { Provider } from "react-redux";
+import { Provider } from 'react-redux';
 
-import store from "../src/store/index.js";
+import store from '../src/store/index.js';
 
-ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <>
     <Provider store={store}>
       <ThemeProvider>
         <AuthProvider>
@@ -23,5 +23,5 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         </AuthProvider>
       </ThemeProvider>
     </Provider>
-  </React.StrictMode>,
+  </>,
 );
