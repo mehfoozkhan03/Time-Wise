@@ -1,4 +1,4 @@
-import api from "./api";
+import api from "../services/api"
 
 export const authService = {
   signup(data) {
@@ -6,14 +6,18 @@ export const authService = {
   },
 
   login(data) {
-    return api.post("/user/login", data);
+    return api.post('/user/login', data);
   },
 
+  // signup(data) {
+  //   return api.post('/user/signup', data);
+  // },
+
   logout() {
-    return api.post("/user/logout");
+    return api.post('/auth/logout');
   },
 
   getCurrentUser() {
-    return api.get("/user/me");
+    return api.get('/auth/me');
   },
 };

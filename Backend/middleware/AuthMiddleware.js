@@ -1,29 +1,35 @@
 import jwt from 'jsonwebtoken';
+import { decode } from 'node:punycode';
 
 export const auth = (req, res, next) => {
-  console.log(`🚀 ~ req.headers.token:`, req.headers);
-  /* 
-  token : 'Barer e2@csndo%$@'
-  */
-  if (req.headers.token) {
-    const token = req.headers.token.split(' ')[1];
-    console.log(`🚀 ~ token:`, token);
-    if (token) {
-      jwt.verify(token, process.env.PrivateKey, async function (err, decoded) {
-        if (err) {
-          res.send(`error in token verification ${err}`);
-        }
+  try {
+    const token = req.cookies.token;
 
-        console.log(`🚀 ~ decoded:`, decoded);
-
-        if (decoded) {
-          await (req.userCode = decoded);
-          next();
-        }
-        // res.send({ msg: 'decode Data', data: decoded });
+    if (!token) {
+      return res.status(401).json({
+        success: false,
+        message: 'Authentication required,',
       });
     }
-  } else {
-    res.send('token is not present in headers❌');
+
+    jwt.verify(token, process.env.PrivateKey, (err, decoded) => {
+      if (err) {
+        return res.status(401).json({
+          success: false,
+          message: 'Invalid or expired token.',
+        });
+      }
+
+      req.user = decoded;
+
+      next();
+    });
+  } catch (error) {
+    console.error('Auth Middleware Error:', error);
+
+    return res.status(500).json({
+      success: false,
+      message: 'Internal Server Error',
+    });
   }
 };
