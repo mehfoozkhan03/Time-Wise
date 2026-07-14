@@ -30,7 +30,7 @@ export default function FeaturedThought() {
   }
 
   return (
-    <section className="featured_thought_section">
+    <section className="featured_thought_section" id="tour-thought-card">
       <h2>Featured Thought</h2>
 
       <Card className="featured_thought_card">
@@ -53,7 +53,7 @@ export default function FeaturedThought() {
 
         <blockquote>"{thought.content}"</blockquote>
 
-        <div className="thought_actions">
+        <div className="thought_actions" id="tour-thought-actions">
           <div className="action_item">
             <FaHeart />
             <span>{thought.likes}</span>
@@ -65,13 +65,13 @@ export default function FeaturedThought() {
           </div>
 
           <div className="action_item">
-            <FaBookmark className={thought.bookmarked ? 'bookmarked' : ''} />
+            <FaBookmark className={thought.bookmarked ? "bookmarked" : ""} />
           </div>
         </div>
 
         <button
           className="community_button"
-          onClick={() => navigate('/community')}
+          onClick={() => navigate("/community")}
         >
           <span>View Community</span>
 
@@ -79,5 +79,5 @@ export default function FeaturedThought() {
         </button>
       </Card>
     </section>
-  )
+  );
 }
