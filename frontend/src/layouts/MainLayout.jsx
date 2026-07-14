@@ -10,6 +10,9 @@ export default function MainLayout() {
       <main className="main_layout">
         <Outlet />
       </main>
+
+      <Footer />
+      
     </>
   );
 }
