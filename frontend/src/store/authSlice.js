@@ -1,9 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  isAuthenticated: false,
-  loading: false,
-  error: false,
+  token: document.cookie
+    .split('; ')
+    .some((cookie) => cookie.startsWith('token='))
+    ? true
+    : false,
+  isLoading: false,
+  isError: false,
 };
 
 const authSlice = createSlice({
@@ -12,27 +16,41 @@ const authSlice = createSlice({
   initialState,
 
   reducers: {
-    loginStart(state) {
-      state.loading = true;
+    loading(state) {
+      state.isLoading = true;
+      state.isError = false;
     },
 
-    loginSuccess(state) {
-      state.loading = false;
-      state.isAuthenticated = true;
+    error(state) {
+      state.isError = true;
+      state.isLoading = false;
+    },
+
+    loginSuccess(state, action) {
+      const hasToken = document.cookie
+        .split('; ')
+        .some((cookie) => cookie.startsWith('token='));
+      console.log(`🚀 ~ hasToken:`, hasToken);
+      state.isLoading = false;
+      state.token = hasToken || false;
     },
 
     logoutSuccess(state) {
-      state.loading = false;
-      state.isAuthenticated = false;
+      state.isLoading = false;
+      state.token = false;
     },
 
-    setAuthenticated(state, action) {
-      state.isAuthenticated = action.payload;
-    },
+    // setAuthenticated(state, action) {
+    //   state.isAuthenticated = action.payload;
+    // },
   },
 });
 
-export const { loginStart, loginSuccess, logoutSuccess, setAuthenticated } =
-  authSlice.actions;
+export const { loading, loginSuccess, logoutSuccess } = authSlice.actions;
 
 export default authSlice.reducer;
+
+/* 
+deepakyadav786@gmail.com
+Deeoakyadav@123 
+*/
