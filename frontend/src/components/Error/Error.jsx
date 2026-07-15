@@ -63,8 +63,8 @@ export function Error() {
         <div className="nf_text">
           <article>
             <p>
-              Uh oh! Looks like you got lost. <br />
-              Go back to the homepage
+              Uh Oh! Looks Like You Got Lost. <br />
+              Go Back To The Homepage
             </p>
             <button onClick={() => navigate("/")}>Back To Home Page</button>
           </article>
