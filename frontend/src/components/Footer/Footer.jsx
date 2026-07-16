@@ -16,7 +16,7 @@ export default function Footer() {
     <footer className="footer">
       <div className="footer_top">
         <div className="footer_brand">
-          <img src="/Logo.svg" alt="TimeWise Logo" className="footer_logo" />
+          <img src="/Logo_F.svg" alt="TimeWise Logo" className="footer_logo" />
 
           <h3>Smarter Employee Management</h3>
 

@@ -1,23 +1,24 @@
-.home_page{
-    width:min(1280px,92%);
-    margin:auto;
-    padding:50px 0 100px;
-
-    display:flex;
-    flex-direction:column;
-    gap:40px;
+.home_page {
+  width: min(1280px, 92%);
+  margin: auto;
+  padding: 50px 0 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
 }
 
-.home_section{
-    width:100%;
+.home_section {
+  width: 100%;
 }
 
-@media(max-width:1100px){
-
-.home_middle{
-
-grid-template-columns:1fr;
-
+@media (max-width: 320px) {
+  .home_page {
+    gap: 21px;
+  }
 }
 
+@media (max-width: 1100px) {
+  .home_middle {
+    grid-template-columns: 1fr;
+  }
 }
