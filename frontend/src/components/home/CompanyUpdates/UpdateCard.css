@@ -1,13 +1,17 @@
-.company_updates{
-
-margin-top:60px;
-
+.company_updates {
+  margin-top: 60px;
 }
 
-.company_updates h2{
+.company_updates h2 {
+  font-size: 32px;
+  margin-bottom: 24px;
+}
 
-font-size:32px;
-
-margin-bottom:24px;
-
+@media (max-width: 320px) {
+  .company_updates h2 {
+    font-size: 23px;
+  }
+  .company_updates{
+    margin-top: 21px;
+  }
 }

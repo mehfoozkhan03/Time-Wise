@@ -158,62 +158,52 @@
 }
 
 @media (max-width: 992px) {
-
     .footer_top {
         grid-template-columns: 1fr;
         row-gap: 36px;
         padding: 32px 0;
     }
-
     .footer_brand p {
         max-width: 100%;
     }
-
     .footer_bottom {
         flex-direction: column;
         text-align: center;
         gap: 16px;
         padding-top: 16px;
     }
-
     .footer_social {
         margin-left: 0;
     }
-
 }
 
-@media (max-width: 600px) {
-
+@media (max-width: 320px) {
     .footer {
-        margin: 60px auto 15px;
+        margin: 15px auto;
     }
-
     .footer_top {
         row-gap: 28px;
         padding: 28px 0;
     }
-
     .footer_logo {
         width: 110px;
     }
-
     .footer_brand h3 {
         font-size: 25px;
     }
-
     .footer_brand p {
         font-size: 15px;
     }
-
     .footer_links h3,
     .footer_contact h3 {
         font-size: 20px;
     }
-
     .footer_social a {
         width: 38px;
         height: 38px;
         font-size: 15px;
     }
-
+    .footer_bottom p{
+        flex-wrap: wrap;
+    }
 }

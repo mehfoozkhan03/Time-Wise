@@ -33,13 +33,13 @@ body.dark_mode .navbar {
   gap: 0.9rem;
   cursor: pointer;
   user-select: none;
+  padding-top: 17px;
 }
 
 .navbar_logo img {
-  width: 75px;
-  height: 70px;
-  object-fit: contain;
-  scale: 1.07;
+  width: 79px;
+  height: 79px;
+  object-fit: cover;
   transition: var(--transition);
 }
 
@@ -380,7 +380,7 @@ body.dark_mode .navbar {
     gap: 7px;
   }
   .navbar_logo img {
-    height: 29px;
+    object-fit: contain;
   }
   .logo_text h2 {
     font-size: 0.9rem;
