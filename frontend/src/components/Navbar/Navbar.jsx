@@ -1,16 +1,15 @@
-import { NavLink, useLocation } from "react-router-dom";
-import { useState } from "react";
+import { NavLink, useLocation } from 'react-router-dom';
+import { useState, useEffect, useRef } from 'react'; // NEW: Added useRef for notification timer
 
-import "./Navbar.css";
-// import logo from '../../assets'
-import { FaBell, FaBars, FaTimes, FaChevronDown } from "react-icons/fa";
-import { useTour } from "../../hooks/useTour";
-import { tourSteps } from "../../tour/tourSteps";
+import './Navbar.css';
+import { FaBell, FaBars, FaTimes, FaChevronDown } from 'react-icons/fa';
+import { useTour } from '../../hooks/useTour';
+import { tourSteps } from '../../tour/tourSteps';
 
 export default function Navbar() {
   const location = useLocation();
 
-  const isHome = location.pathname === "/";
+  const isHome = location.pathname === '/';
 
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -20,6 +19,29 @@ export default function Navbar() {
 
   const { triggerTour } = useTour(tourSteps());
 
+  // ==========================
+  // NEW: Timer for notification close delay
+  // ==========================
+  const notificationTimer = useRef(null);
+
+  // ==========================
+  // NEW: Close all dropdowns when route changes
+  // ==========================
+  useEffect(() => {
+    setNotificationOpen(false);
+    setProfileOpen(false);
+    setMobileOpen(false);
+  }, [location.pathname]);
+
+  // ==========================
+  // NEW: Clear timer when Navbar unmounts
+  // ==========================
+  useEffect(() => {
+    return () => {
+      clearTimeout(notificationTimer.current);
+    };
+  }, []);
+
   return (
     <header className="navbar">
       {/* ==========================
@@ -27,8 +49,6 @@ export default function Navbar() {
       =========================== */}
 
       <div className="navbar_logo" id="tour-logo">
-        {/* <img src={logo} alt="TimeWise Logo" /> */}
-
         <div className="logo_text">
           {/* <h2>TimeWise</h2>
           <span>Employee Productivity</span> */}
@@ -41,7 +61,7 @@ export default function Navbar() {
       =========================== */}
 
       <nav
-        className={`navbar_links ${mobileOpen ? "active" : ""}`}
+        className={`navbar_links ${mobileOpen ? 'active' : ''}`}
         id="tour-nav-links"
       >
         <NavLink to="/">Home</NavLink>
@@ -62,10 +82,29 @@ export default function Navbar() {
       <div className="navbar_right">
         {/* Notification */}
 
-        <div className="notification_container" id="tour-notifications">
+        <div
+          className="notification_container"
+          id="tour-notifications"
+          // NEW: Open notification immediately
+          onMouseEnter={() => {
+            clearTimeout(notificationTimer.current); // NEW
+            setProfileOpen(false); // NEW: Close profile
+            setNotificationOpen(true);
+          }}
+          // NEW: Close notification after small delay
+          onMouseLeave={() => {
+            notificationTimer.current = setTimeout(() => {
+              setNotificationOpen(false);
+            }, 200); // NEW: 200ms delay
+          }}
+        >
           <button
             className="notification_btn"
-            onClick={() => setNotificationOpen(!notificationOpen)}
+            // NEW: Optional click support for mobile
+            onClick={() => {
+              setProfileOpen(false);
+              setNotificationOpen((prev) => !prev);
+            }}
           >
             <FaBell />
 
@@ -73,7 +112,19 @@ export default function Navbar() {
           </button>
 
           {notificationOpen && (
-            <div className="notification_dropdown">
+            <div
+              className="notification_dropdown"
+              // NEW: Keep dropdown open while hovering it
+              onMouseEnter={() => {
+                clearTimeout(notificationTimer.current);
+              }}
+              // NEW: Start close timer after leaving dropdown
+              onMouseLeave={() => {
+                notificationTimer.current = setTimeout(() => {
+                  setNotificationOpen(false);
+                }, 200);
+              }}
+            >
               <h4>Notifications</h4>
 
               <div className="notification_item">
@@ -96,7 +147,11 @@ export default function Navbar() {
         <div className="profile_container" id="tour-profile">
           <button
             className="profile_btn"
-            onClick={() => setProfileOpen(!profileOpen)}
+            onClick={() => {
+              // NEW: Close notification before opening profile
+              setNotificationOpen(false);
+              setProfileOpen((prev) => !prev);
+            }}
           >
             <div className="avatar">AK</div>
 
