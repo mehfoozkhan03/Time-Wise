@@ -23,7 +23,7 @@ export const DashboardSidebar = () => {
         <>
             <div className="dashboardSidebar-container">
                 <div className="dashboard-logo">
-                    <img src="../../../public/Logo.svg" alt="logo" />
+                    <img src="/Logo_N.svg" alt="logo" />
                 </div>
                 <div className="dashboardSidebar-list">
                     <NavLink to="home" className="dashboard-home dashboard-navlink">

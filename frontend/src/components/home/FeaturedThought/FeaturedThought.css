@@ -42,6 +42,7 @@
   justify-content: center;
   align-items: center;
   font-size: 24px;
+  text-transform: uppercase;
   font-weight: 700;
   transition: 0.3s;
 }
@@ -53,6 +54,7 @@
 .thought_author h3 {
   font-size: 22px;
   margin-bottom: 4px;
+  text-transform: capitalize;
 }
 
 .thought_author span {
@@ -122,5 +124,32 @@ blockquote {
   .community_button {
     width: 100%;
     justify-content: center;
+  }
+}
+
+@media (max-width: 430px) {
+  .featured_thought_section {
+    margin-top: 21px;
+  }
+  .featured_thought_section h2 {
+    font-size: 23px;
+  }
+  .featured_badge {
+    width: 100%;
+    justify-content: center;
+  }
+  .author_avatar {
+    font-size: 25px;
+    width: 51px;
+    height: 51px;
+    padding-top: 3px;
+  }
+  .thought_actions {
+    justify-content: left;
+    gap: 35px;
+  }
+  blockquote {
+    padding: 20px 18px;
+    font-size: 1rem;
   }
 }

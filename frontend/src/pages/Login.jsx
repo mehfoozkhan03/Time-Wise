@@ -4,7 +4,8 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { authService } from '../services/authService';
 import '../styles/Login.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { loading, loginSuccess } from '../store/authSlice';
+import { loginUser, registerUser } from '../store/authSlice';
+import { useNavigate } from 'react-router-dom';
 
 const initialFormData = {
   firstName: '',
@@ -23,9 +24,9 @@ const passwordRegex =
 
 const nameRegex = /^[A-Za-z ]{2,50}$/;
 
-
 const SignUpPage = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { isLoading, isError } = useSelector((store) => store.auth);
 
   const [isRegister, setIsRegister] = useState(false);
@@ -34,16 +35,15 @@ const SignUpPage = () => {
   const [showRegisterPassword, setShowRegisterPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
- const [formData, setFormData] = useState(initialFormData);
+  const [formData, setFormData] = useState(initialFormData);
 
   const [errors, setErrors] = useState({});
   // const [loading, setLoading] = useState(false);
 
   const resetForm = () => {
-  setFormData(initialFormData);
-  setErrors({});
-};
-
+    setFormData(initialFormData);
+    setErrors({});
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -107,7 +107,7 @@ const SignUpPage = () => {
       newErrors.email = 'Invalid email format';
       isValid = false;
     }
-    
+
     if (!formData.password) {
       newErrors.password = 'Password is required';
       isValid = false;
@@ -139,47 +139,47 @@ const SignUpPage = () => {
     return isValid;
   };
 
- const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  const isValid = isRegister
-    ? validateSignup()
-    : validateLogin();
+    const isValid = isRegister ? validateSignup() : validateLogin();
 
-  if (!isValid) return;
+    if (!isValid) return;
 
-  dispatch(loading());
+    try {
+      if (isRegister) {
+        const result = await dispatch(registerUser(formData));
 
-  try {
-  if (isRegister) {
+        if (registerUser.fulfilled.match(result)) {
+          alert(result.payload.message || 'Registration Successful');
 
-    const { data } = await authService.signup(formData);
+          resetForm();
+          setIsRegister(false);
+        } else {
+          alert(result.payload || 'Registration Failed');
+        }
+      } else {
+        const result = await dispatch(
+          loginUser({
+            email: formData.email,
+            password: formData.password,
+          }),
+        );
 
-    alert(data.message || 'Registration Successful');
+        if (loginUser.fulfilled.match(result)) {
+          alert(result.payload.message || 'Login Successful');
 
-    setIsRegister(false);
-
-  } else {
-
-    const { data } = await authService.login({
-      email: formData.email,
-      password: formData.password,
-    });
-
-    dispatch(loginSuccess());
-
-    alert(data.message || 'Login Successful');
-  }
-
-  resetForm();
-
-} catch (error) {
-    console.error(error);
-    alert(error.response?.data?.message || 'Something went wrong');
-  } finally {
-    console.log('done');
-  }
-};
+          resetForm();
+          navigate('/');
+        } else {
+          alert(result.payload || 'Login Failed');
+        }
+      }
+    } catch (error) {
+      console.error(error);
+      alert('Something went wrong');
+    }
+  };
 
   return (
     <div className="sing_login">
@@ -236,7 +236,7 @@ const SignUpPage = () => {
                 <span
                   onClick={() => {
                     setIsRegister(true);
-                   resetForm();
+                    resetForm();
                   }}
                 >
                   Register now
@@ -355,7 +355,18 @@ const SignUpPage = () => {
                 {isLoading ? 'Please wait...' : 'Register'}
               </button>
 
-              <p className="message">Already have an account?{' '}<span onClick={() => { setIsRegister(false); resetForm(); }}> Sign In </span></p>
+              <p className="message">
+                Already have an account?{' '}
+                <span
+                  onClick={() => {
+                    setIsRegister(false);
+                    resetForm();
+                  }}
+                >
+                  {' '}
+                  Sign In{' '}
+                </span>
+              </p>
             </motion.form>
           )}
         </AnimatePresence>
@@ -364,4 +375,3 @@ const SignUpPage = () => {
   );
 };
 export default SignUpPage;
-
