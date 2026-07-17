@@ -17,13 +17,6 @@ const initialFormData = {
   gender: '',
 };
 
-const [modal, setModal] = useState({
-  open: false,
-  type: '',
-  title: '',
-  message: '',
-});
-
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const passwordRegex =
