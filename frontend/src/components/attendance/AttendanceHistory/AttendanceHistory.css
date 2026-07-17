@@ -1,0 +1,31 @@
+.attendance_history {
+  background: var(--surface);
+
+  border: 1px solid var(--border);
+
+  border-radius: var(--radius_lg);
+
+  padding: 1.75rem;
+
+  box-shadow: var(--shadow_sm);
+}
+
+.attendance_history_header {
+  margin-bottom: 1.5rem;
+}
+
+.attendance_history_header h2 {
+  margin-bottom: .4rem;
+}
+
+.attendance_history_empty {
+  padding: 4rem 1rem;
+
+  text-align: center;
+
+  color: var(--text_secondary);
+
+  border: 2px dashed var(--border);
+
+  border-radius: var(--radius_md);
+}
