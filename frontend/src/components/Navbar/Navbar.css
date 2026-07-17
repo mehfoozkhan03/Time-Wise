@@ -212,7 +212,13 @@ body.dark_mode .navbar {
   font-size: 0.78rem;
   color: var(--text_secondary);
 }
+.profile_arrow {
+  transition: transform 0.3s ease;
+}
 
+.profile_arrow.rotate {
+  transform: rotate(180deg);
+}
 /* ==========================================================
    PROFILE DROPDOWN
 ========================================================== */
