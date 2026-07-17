@@ -1,0 +1,125 @@
+.calendarHeader{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:25px 30px;
+
+    border-bottom:1px solid #3d4658;
+
+    background:#313846;
+
+}
+
+.calendarTitle{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+}
+
+.calendarTitle svg{
+
+    font-size:24px;
+
+    color:#38bdf8;
+
+}
+
+.calendarTitle h2{
+
+    color:white;
+
+    font-size:30px;
+
+    font-weight:700;
+
+}
+
+.calendarActions{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+}
+
+.calendarBtn{
+
+    width:42px;
+
+    height:42px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#20252f;
+
+    color:white;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.calendarBtn:hover{
+
+    background:#38bdf8;
+
+}
+
+.todayBtn{
+
+    border:none;
+
+    padding:11px 20px;
+
+    border-radius:10px;
+
+    background:#38bdf8;
+
+    color:white;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.todayBtn:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:0 6px 20px rgba(56,189,248,.3);
+
+}
+
+@media(max-width:768px){
+
+.calendarHeader{
+
+    flex-direction:column;
+
+    gap:20px;
+
+}
+
+.calendarTitle h2{
+
+    font-size:24px;
+
+}
+
+}
