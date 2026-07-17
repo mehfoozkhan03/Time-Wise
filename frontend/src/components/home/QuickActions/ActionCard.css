@@ -45,7 +45,7 @@
   transition: 0.35s;
 }
 
-@media (max-width: 320px) {
+@media (max-width: 430px) {
   .action_card {
     gap: 7px;
   }

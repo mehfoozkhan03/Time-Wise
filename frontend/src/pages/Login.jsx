@@ -1,20 +1,28 @@
-import { useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import { authService } from '../services/authService';
-import '../styles/Login.css';
-import { useDispatch, useSelector } from 'react-redux';
-import { loading, loginSuccess } from '../store/authSlice';
+import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+
+import "../styles/Login.css";
+import { authService } from "../services/authService";
+import { loading, loginSuccess } from "../store/authSlice";
 
 const initialFormData = {
-  firstName: '',
-  lastName: '',
-  email: '',
-  password: '',
-  confirmPassword: '',
-  dob: '',
-  gender: '',
+  firstName: "",
+  lastName: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
+  dob: "",
+  gender: "",
 };
+
+const [modal, setModal] = useState({
+  open: false,
+  type: "",
+  title: "",
+  message: "",
+});
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -22,7 +30,6 @@ const passwordRegex =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
 
 const nameRegex = /^[A-Za-z ]{2,50}$/;
-
 
 const SignUpPage = () => {
   const dispatch = useDispatch();
@@ -34,16 +41,15 @@ const SignUpPage = () => {
   const [showRegisterPassword, setShowRegisterPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
- const [formData, setFormData] = useState(initialFormData);
+  const [formData, setFormData] = useState(initialFormData);
 
   const [errors, setErrors] = useState({});
   // const [loading, setLoading] = useState(false);
 
   const resetForm = () => {
-  setFormData(initialFormData);
-  setErrors({});
-};
-
+    setFormData(initialFormData);
+    setErrors({});
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -55,7 +61,7 @@ const SignUpPage = () => {
 
     setErrors((prev) => ({
       ...prev,
-      [name]: '',
+      [name]: "",
     }));
   };
 
@@ -64,15 +70,15 @@ const SignUpPage = () => {
     let isValid = true;
 
     if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
+      newErrors.email = "Email is required";
       isValid = false;
     } else if (!emailRegex.test(formData.email)) {
-      newErrors.email = 'Invalid email';
+      newErrors.email = "Invalid email";
       isValid = false;
     }
 
     if (!formData.password) {
-      newErrors.password = 'Password is required';
+      newErrors.password = "Password is required";
       isValid = false;
     }
 
@@ -85,40 +91,40 @@ const SignUpPage = () => {
     let isValid = true;
 
     if (!formData.firstName.trim()) {
-      newErrors.firstName = 'First name is required';
+      newErrors.firstName = "First name is required";
       isValid = false;
     } else if (!nameRegex.test(formData.firstName)) {
-      newErrors.firstName = 'First name should be 2-50 letters';
+      newErrors.firstName = "First name should be 2-50 letters";
       isValid = false;
     }
 
     if (!formData.lastName.trim()) {
-      newErrors.lastName = 'Last name is required';
+      newErrors.lastName = "Last name is required";
       isValid = false;
     } else if (!nameRegex.test(formData.lastName)) {
-      newErrors.lastName = 'Last name should be 2-50 letters';
+      newErrors.lastName = "Last name should be 2-50 letters";
       isValid = false;
     }
 
     if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
+      newErrors.email = "Email is required";
       isValid = false;
     } else if (!emailRegex.test(formData.email)) {
-      newErrors.email = 'Invalid email format';
+      newErrors.email = "Invalid email format";
       isValid = false;
     }
 
     if (!formData.password) {
-      newErrors.password = 'Password is required';
+      newErrors.password = "Password is required";
       isValid = false;
     } else if (!passwordRegex.test(formData.password)) {
       newErrors.password =
-        'Minimum 8 characters with uppercase, lowercase, number and special character';
+        "Minimum 8 characters with uppercase, lowercase, number and special character";
       isValid = false;
     }
 
     if (!formData.confirmPassword) {
-      newErrors.confirmPassword = 'Confirm password is required';
+      newErrors.confirmPassword = "Confirm password is required";
       isValid = false;
     } else if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = "Passwords don't match";
@@ -126,12 +132,12 @@ const SignUpPage = () => {
     }
 
     if (!formData.dob) {
-      newErrors.dob = 'Date of birth is required';
+      newErrors.dob = "Date of birth is required";
       isValid = false;
     }
 
     if (!formData.gender) {
-      newErrors.gender = 'Please select gender';
+      newErrors.gender = "Please select gender";
       isValid = false;
     }
 
@@ -139,47 +145,57 @@ const SignUpPage = () => {
     return isValid;
   };
 
- const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  const isValid = isRegister
-    ? validateSignup()
-    : validateLogin();
+    const isValid = isRegister ? validateSignup() : validateLogin();
 
-  if (!isValid) return;
+    if (!isValid) return;
 
-  dispatch(loading());
+    dispatch(loading());
 
-  try {
-  if (isRegister) {
+    try {
+      if (isRegister) {
+        const { data } = await authService.signup(formData);
 
-    const { data } = await authService.signup(formData);
+        setModal({
+          open: true,
+          type: "success",
+          title: "Registration Successful",
+          message:
+            data.message || "Your account has been created successfully.",
+        });
 
-    alert(data.message || 'Registration Successful');
+        setIsRegister(false);
+      } else {
+        const { data } = await authService.login({
+          email: formData.email,
+          password: formData.password,
+        });
 
-    setIsRegister(false);
+        dispatch(loginSuccess());
 
-  } else {
+        setModal({
+          open: true,
+          type: "success",
+          title: "Login Successful",
+          message: data.message || "Welcome back!",
+        });
+      }
 
-    const { data } = await authService.login({
-      email: formData.email,
-      password: formData.password,
-    });
-
-    dispatch(loginSuccess());
-
-    alert(data.message || 'Login Successful');
-  }
-
-  resetForm();
-
-} catch (error) {
-    console.error(error);
-    alert(error.response?.data?.message || 'Something went wrong');
-  } finally {
-    console.log('done');
-  }
-};
+      resetForm();
+    } catch (error) {
+      console.error(error);
+      setModal({
+        open: true,
+        type: "error",
+        title: "Oops!",
+        message: error.response?.data?.message || "Something went wrong.",
+      });
+    } finally {
+      console.log("done");
+    }
+  };
 
   return (
     <div className="sing_login">
@@ -210,7 +226,7 @@ const SignUpPage = () => {
 
               <div className="input-box password-box">
                 <input
-                  type={showLoginPassword ? 'text' : 'password'}
+                  type={showLoginPassword ? "text" : "password"}
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
@@ -228,15 +244,15 @@ const SignUpPage = () => {
               </div>
 
               <button type="submit" className="loginsumit" disabled={isLoading}>
-                {isLoading ? 'Please wait...' : 'Login'}
+                {isLoading ? "Please wait..." : "Login"}
               </button>
 
               <p className="message">
-                Don't have an account?{' '}
+                Don't have an account?{" "}
                 <span
                   onClick={() => {
                     setIsRegister(true);
-                   resetForm();
+                    resetForm();
                   }}
                 >
                   Register now
@@ -290,7 +306,7 @@ const SignUpPage = () => {
 
               <div className="input-box password-box">
                 <input
-                  type={showRegisterPassword ? 'text' : 'password'}
+                  type={showRegisterPassword ? "text" : "password"}
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
@@ -309,7 +325,7 @@ const SignUpPage = () => {
 
               <div className="input-box password-box">
                 <input
-                  type={showConfirmPassword ? 'text' : 'password'}
+                  type={showConfirmPassword ? "text" : "password"}
                   name="confirmPassword"
                   value={formData.confirmPassword}
                   onChange={handleChange}
@@ -352,10 +368,21 @@ const SignUpPage = () => {
               </div>
 
               <button type="submit" className="loginsumit" disabled={isLoading}>
-                {isLoading ? 'Please wait...' : 'Register'}
+                {isLoading ? "Please wait..." : "Register"}
               </button>
 
-              <p className="message">Already have an account?{' '}<span onClick={() => { setIsRegister(false); resetForm(); }}> Sign In </span></p>
+              <p className="message">
+                Already have an account?{" "}
+                <span
+                  onClick={() => {
+                    setIsRegister(false);
+                    resetForm();
+                  }}
+                >
+                  {" "}
+                  Sign In{" "}
+                </span>
+              </p>
             </motion.form>
           )}
         </AnimatePresence>
@@ -366,9 +393,6 @@ const SignUpPage = () => {
 export default SignUpPage;
 
 //optimize code
-
-
-
 
 // import { useState } from 'react';
 // import { AnimatePresence, motion } from 'framer-motion';
