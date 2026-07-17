@@ -42,7 +42,7 @@
   color: var(--text-secondary);
 }
 
-@media (max-width: 320px) {
+@media (max-width: 430px) {
     .company_updates h2{
         font-size: 23px;
     }
