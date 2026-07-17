@@ -1,26 +1,9 @@
 import './BreakModal.css'
 
-import { useEffect, useState } from 'react'
-
 import { FaCoffee, FaPlay } from 'react-icons/fa'
 
-export default function BreakModal({ isOpen, onResume }) {
-  const BREAK_LIMIT = 30 * 60 // 30 minutes
-
-  const [seconds, setSeconds] = useState(0)
-
-  useEffect(() => {
-    if (!isOpen) {
-      setSeconds(0)
-      return
-    }
-
-    const interval = setInterval(() => {
-      setSeconds((prev) => prev + 1)
-    }, 1000)
-
-    return () => clearInterval(interval)
-  }, [isOpen])
+export default function BreakModal({ isOpen, onResume, breakSeconds }) {
+  const BREAK_LIMIT = 30 * 60
 
   if (!isOpen) return null
 
@@ -31,7 +14,7 @@ export default function BreakModal({ isOpen, onResume }) {
     return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`
   }
 
-  const remaining = Math.max(BREAK_LIMIT - seconds, 0)
+  const remaining = Math.max(BREAK_LIMIT - breakSeconds, 0)
 
   return (
     <div className="break_overlay">
@@ -44,7 +27,7 @@ export default function BreakModal({ isOpen, onResume }) {
 
         <p>Relax for a while. Your break timer is running.</p>
 
-        <div className="break_timer">{formatTime(seconds)}</div>
+        <div className="break_timer">{formatTime(breakSeconds)}</div>
 
         <div className="break_remaining">
           Remaining

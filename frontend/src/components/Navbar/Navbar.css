@@ -212,7 +212,13 @@ body.dark_mode .navbar {
   font-size: 0.78rem;
   color: var(--text_secondary);
 }
+.profile_arrow {
+  transition: transform 0.3s ease;
+}
 
+.profile_arrow.rotate {
+  transform: rotate(180deg);
+}
 /* ==========================================================
    PROFILE DROPDOWN
 ========================================================== */
@@ -371,7 +377,7 @@ body.dark_mode .navbar {
    MEDIA QUERY 
 ========================================================== */
 
-@media (max-width: 320px) {
+@media (max-width: 430px) {
   .navbar {
     height: 61px;
     padding: 0 15px;
