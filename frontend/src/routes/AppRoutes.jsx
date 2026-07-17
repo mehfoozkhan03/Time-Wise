@@ -24,6 +24,14 @@ import EmployeeTable from '../pages/EmployeeTable';
 import EmployeeDetails from '../pages/EmployeeDetails';
 
 import { PrivateRoutes } from '../components/PrivateRoutes';
+import { DashboardHome } from '../components/Dashboard/DashboardHome';
+import { DashboardEmployee } from './../components/Dashboard/DashboardEmployee';
+import { DashboardAttendance } from './../components/Dashboard/DashboardAttendance';
+import { DashboardThuoght } from './../components/Dashboard/DashboardThought';
+import { DashboardNotification } from './../components/Dashboard/DashboardNotification';
+import { DashboardAnnouncement } from './../components/Dashboard/DashboardAnnouncement';
+import { DashboardReport } from './../components/Dashboard/DashboardReport';
+import { DashboardSetting } from './../components/Dashboard/DashboardSetting';
 
 export const AppRoutes = () => {
   return (
@@ -42,7 +50,17 @@ export const AppRoutes = () => {
               </PrivateRoutes>
             }
           />
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/dashboard" element={<Dashboard />}>
+            <Route index element={<DashboardHome />}></Route>
+            <Route path="home" element={<DashboardHome />}></Route>
+            <Route path="employee" element={<DashboardEmployee />}></Route>
+            <Route path="attendance" element={<DashboardAttendance />}></Route>
+            <Route path="thought" element={<DashboardThuoght />}></Route>
+            <Route path="notification" element={<DashboardNotification />}></Route>
+            <Route path="announcement" element={<DashboardAnnouncement />}></Route>
+            <Route path="report" element={<DashboardReport />}></Route>
+            <Route path="setting" element={<DashboardSetting />}></Route>
+          </Route>
           <Route path="/community" element={<Community />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
