@@ -1,0 +1,176 @@
+.calendarDay{
+
+    min-height:130px;
+
+    background:#313846;
+
+    border:1px solid #40495d;
+
+    border-radius:14px;
+
+    padding:10px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    transition:.25s;
+
+    cursor:pointer;
+
+    overflow:hidden;
+
+    position:relative;
+
+}
+
+.calendarDay:hover{
+
+    border-color:#38bdf8;
+
+    transform:translateY(-3px);
+
+    box-shadow:0 8px 18px rgba(0,0,0,.25);
+
+}
+
+.calendarDate{
+
+    display:flex;
+
+    justify-content:flex-end;
+
+    margin-bottom:10px;
+
+}
+
+.calendarDate span{
+
+    width:34px;
+
+    height:34px;
+
+    border-radius:50%;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-weight:600;
+
+    color:#fff;
+
+    transition:.25s;
+
+}
+
+.calendarEvents{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:5px;
+
+    margin-top:5px;
+
+    overflow:hidden;
+}
+
+/* Today */
+
+.today{
+
+    border:2px solid #38bdf8;
+
+}
+
+.today .calendarDate span{
+
+    background:#38bdf8;
+
+    color:#fff;
+
+}
+
+/* Selected */
+
+.selectedDay{
+
+    background:#394255;
+
+    border-color:#60a5fa;
+
+}
+
+/* Previous / Next Month */
+
+.otherMonth{
+
+    opacity:.45;
+
+    background:#2a303d;
+
+}
+
+.otherMonth:hover{
+
+    opacity:.7;
+
+}
+
+.moreEvents{
+
+    color:#38bdf8;
+
+    font-size:12px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    padding-left:4px;
+
+}
+
+.moreEvents:hover{
+
+    text-decoration:underline;
+
+}
+
+/* Responsive */
+
+@media(max-width:992px){
+
+.calendarDay{
+
+    min-height:110px;
+
+}
+
+}
+
+@media(max-width:768px){
+
+.calendarDay{
+
+    min-height:90px;
+
+    padding:8px;
+
+}
+
+.calendarDate span{
+
+    width:28px;
+
+    height:28px;
+
+    font-size:14px;
+
+}
+
+}

@@ -1,0 +1,231 @@
+.eventModalOverlay{
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.55);
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    z-index:999;
+
+}
+
+.eventModal{
+
+    width:500px;
+
+    max-width:95%;
+
+    background:#2d333f;
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+    border:1px solid #3b4558;
+
+    animation:popup .25s ease;
+
+}
+
+@keyframes popup{
+
+    from{
+
+        transform:scale(.9);
+
+        opacity:0;
+
+    }
+
+    to{
+
+        transform:scale(1);
+
+        opacity:1;
+
+    }
+
+}
+
+.modalHeader{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:18px 22px;
+
+    border-bottom:1px solid #40495d;
+
+}
+
+.modalHeader h2{
+
+    color:white;
+
+}
+
+.modalHeader button{
+
+    border:none;
+
+    background:none;
+
+    color:white;
+
+    cursor:pointer;
+
+    font-size:18px;
+
+}
+
+.modalBody{
+
+    padding:25px;
+
+}
+
+.eventHeading{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    margin-bottom:20px;
+
+}
+
+.eventEmoji{
+
+    font-size:26px;
+
+}
+
+.eventHeading h3{
+
+    color:white;
+
+}
+
+.modalInfo{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:16px;
+
+    margin-top:25px;
+
+}
+
+.modalInfo p{
+
+    color:#d1d5db;
+
+}
+
+.modalInfo strong{
+
+    color:white;
+
+    margin-right:6px;
+
+}
+
+.description{
+
+    margin-top:25px;
+
+}
+
+.description h4{
+
+    color:white;
+
+    margin-bottom:8px;
+
+}
+
+.description p{
+
+    color:#d1d5db;
+
+    line-height:1.6;
+
+}
+
+.infoRow{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:16px;
+
+    padding:14px;
+
+    background:#353d4b;
+
+    border:1px solid #414a5d;
+
+    border-radius:12px;
+
+}
+
+.modalFooter{
+
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:12px;
+
+    padding:20px;
+
+    border-top:1px solid #40495d;
+
+}
+
+.editBtn{
+
+    background:#38bdf8;
+
+    color:white;
+
+    border:none;
+
+    padding:10px 18px;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+}
+
+.deleteBtn{
+
+    background:#ef4444;
+
+    color:white;
+
+    border:none;
+
+    padding:10px 18px;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+}
