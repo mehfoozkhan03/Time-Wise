@@ -1,0 +1,24 @@
+.attendance_page {
+  padding: 2rem 0 4rem;
+}
+
+.attendance_header {
+  margin-bottom: 2rem;
+}
+
+.attendance_header h1 {
+  font-size: 2rem;
+  margin-bottom: .35rem;
+}
+
+.attendance_header p {
+  max-width: 650px;
+}
+
+.attendance_today {
+  margin-bottom: 2rem;
+}
+
+.attendance_history_wrapper {
+  margin-top: 2rem;
+}
