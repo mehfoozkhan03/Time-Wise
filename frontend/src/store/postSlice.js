@@ -1,4 +1,25 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { postService } from '../services/postService'
+
+// ======================================================
+// Fetch Featured Thought
+// ======================================================
+
+export const fetchFeaturedThought = createAsyncThunk(
+  'post/fetchFeaturedThought',
+
+  async (_, thunkAPI) => {
+    try {
+      const { data } = await postService.getFeaturedThought()
+
+      return data.featuredThought
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || 'Unable to fetch featured thought',
+      )
+    }
+  },
+)
 
 const initialState = {
   posts: [],
@@ -6,6 +27,10 @@ const initialState = {
   featured: null,
 
   loading: false,
+
+  isError: false,
+
+  errorMessage: '',
 }
 
 const postSlice = createSlice({
@@ -56,7 +81,28 @@ const postSlice = createSlice({
       state.posts = []
       state.featured = null
       state.loading = false
+      state.isError = false
+      state.errorMessage = ''
     },
+  },
+
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchFeaturedThought.pending, (state) => {
+        state.loading = true
+        state.isError = false
+      })
+
+      .addCase(fetchFeaturedThought.fulfilled, (state, action) => {
+        state.loading = false
+        state.featured = action.payload
+      })
+
+      .addCase(fetchFeaturedThought.rejected, (state, action) => {
+        state.loading = false
+        state.isError = true
+        state.errorMessage = action.payload
+      })
   },
 })
 

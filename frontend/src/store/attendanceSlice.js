@@ -3,9 +3,11 @@ import { createSlice } from '@reduxjs/toolkit'
 const initialState = {
   today: null,
 
-  status: 'idle',
+  requestStatus: 'idle',
 
   loading: false,
+
+  error: null,
 }
 
 const attendanceSlice = createSlice({
@@ -18,25 +20,32 @@ const attendanceSlice = createSlice({
       state.today = action.payload
     },
 
-    setAttendanceStatus(state, action) {
-      state.status = action.payload
+    setRequestStatus(state, action) {
+      state.requestStatus = action.payload
     },
 
     setAttendanceLoading(state, action) {
       state.loading = action.payload
     },
 
+    setAttendanceError(state, action) {
+      state.error = action.payload
+    },
+
     clearAttendance(state) {
       state.today = null
-      state.status = 'idle'
+      state.requestStatus = 'idle'
+      state.loading = false
+      state.error = null
     },
   },
 })
 
 export const {
   setAttendance,
-  setAttendanceStatus,
+  setRequestStatus,
   setAttendanceLoading,
+  setAttendanceError,
   clearAttendance,
 } = attendanceSlice.actions
 

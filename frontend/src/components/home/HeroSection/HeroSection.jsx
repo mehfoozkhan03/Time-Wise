@@ -1,30 +1,49 @@
-import "./HeroSection.css";
+import './HeroSection.css'
 
-import Card from "../../Card/Card";
+import Card from '../../Card/Card'
 
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react'
+import { useSelector } from 'react-redux'
 
-import { FaFire, FaCalendarAlt, FaClock } from "react-icons/fa";
+import { FaFire, FaCalendarAlt, FaClock } from 'react-icons/fa'
 
 export default function HeroSection() {
-  const [time, setTime] = useState(new Date());
+  const [time, setTime] = useState(new Date())
+
+  const { user, isLoading } = useSelector((state) => state.auth)
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setTime(new Date());
-    }, 1000);
+      setTime(new Date())
+    }, 1000)
 
-    return () => clearInterval(interval);
-  }, []);
+    return () => clearInterval(interval)
+  }, [])
 
   const greeting = () => {
-    const hour = time.getHours();
+    const hour = time.getHours()
 
-    if (hour < 12) return "Good Morning";
-    if (hour < 18) return "Good Afternoon";
+    if (hour < 12) return 'Good Morning'
+    if (hour < 18) return 'Good Afternoon'
 
-    return "Good Evening";
-  };
+    return 'Good Evening'
+  }
+
+  const capitalize = (text) => {
+    if (!text) return ''
+
+    return text.charAt(0).toUpperCase() + text.slice(1)
+  }
+
+  if (isLoading) {
+    return (
+      <section className="hero">
+        <div className="hero_left">
+          <h1>Loading...</h1>
+        </div>
+      </section>
+    )
+  }
 
   return (
     <section className="hero">
@@ -33,10 +52,14 @@ export default function HeroSection() {
           <h1>
             {greeting()},
             <br />
-            Arnav.
+            {capitalize(user?.firstName) || 'Employee'}.
           </h1>
 
-          <p>Let's make today productive.</p>
+          <p>
+            {user?.designation && user?.department
+              ? `${user.designation} • ${user.department}`
+              : "Let's make today productive."}
+          </p>
         </div>
 
         <div className="hero_info" id="tour-hero-info">
@@ -44,10 +67,10 @@ export default function HeroSection() {
             <FaCalendarAlt />
 
             <span>
-              {time.toLocaleDateString("en-US", {
-                weekday: "long",
-                month: "long",
-                day: "numeric",
+              {time.toLocaleDateString('en-US', {
+                weekday: 'long',
+                month: 'long',
+                day: 'numeric',
               })}
             </span>
           </div>
@@ -88,5 +111,5 @@ export default function HeroSection() {
         </div>
       </Card>
     </section>
-  );
+  )
 }
