@@ -1,24 +1,22 @@
 import express from 'express'
 
+import {
+  createPost,
+  getAllPosts,
+  getFeaturedThought,
+} from '../controllers/postData.js'
+
+import { auth } from '../middleware/AuthMiddleware.js'
+
 const postRoutes = express.Router()
 
-console.log('✅ Post.routes.js loaded')
+// Create Post
+postRoutes.post('/', auth, createPost)
 
-postRoutes.use((req, res, next) => {
-  console.log('POST ROUTER HIT:', req.method, req.originalUrl)
-  next()
-})
+// Get All Posts
+postRoutes.get('/', auth, getAllPosts)
 
-postRoutes.get('/test', (req, res) => {
-  res.send('TEST WORKS')
-})
-
-postRoutes.get('/featured', (req, res) => {
-  res.send('FEATURED WORKS')
-})
-
-postRoutes.post('/', (req, res) => {
-  res.send('CREATE WORKS')
-})
+// Featured Thought
+postRoutes.get('/featured', auth, getFeaturedThought)
 
 export { postRoutes }
