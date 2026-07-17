@@ -1,5 +1,4 @@
 import jwt from 'jsonwebtoken';
-import { decode } from 'node:punycode';
 
 export const auth = (req, res, next) => {
   try {

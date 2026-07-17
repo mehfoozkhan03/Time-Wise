@@ -3,9 +3,13 @@ import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 
 export const PrivateRoutes = ({ children }) => {
-  const { token } = useSelector((state) => state.auth);
-  console.log(`🚀 ~ token:`, token);
-  if (token === false) {
+  const { isAuthenticated } = useSelector((state) => state.auth);
+  console.log(`🚀 ~ isAuthenticated:`, isAuthenticated);
+  if (
+    !isAuthenticated ||
+    isAuthenticated === undefined ||
+    isAuthenticated === null
+  ) {
     return <Navigate to="/signup" />;
   }
   return children;

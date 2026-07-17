@@ -12,7 +12,7 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     async function loadUser() {
       try {
-        const res = await api.get('/auth/me')
+        const res = await api.get('/user/me')
 
         setUser(res.data)
       } catch {
