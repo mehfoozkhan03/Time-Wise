@@ -2,6 +2,7 @@ import { useEffect, useRef, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
+import "../App.css";
 import { startTour, endTour, setCurrentStep } from "../store/tourSlice";
 
 export function useTour(steps, config = {}) {

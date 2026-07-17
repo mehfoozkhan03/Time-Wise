@@ -1,217 +1,126 @@
-.featured_thought_section{
-
-margin-top:60px;
-
+.featured_thought_section {
+  margin-top: 60px;
 }
 
-.featured_thought_section h2{
+.featured_thought_section h2 {
+  font-size: 32px;
 
-font-size:32px;
-
-margin-bottom:24px;
-
+  margin-bottom: 24px;
 }
 
-.featured_thought_card{
-
-display:flex;
-
-flex-direction:column;
-
-gap:26px;
-
+.featured_thought_card {
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
 }
 
-.featured_badge{
-
-display:inline-flex;
-
-align-items:center;
-
-gap:10px;
-
-padding:10px 18px;
-
-border-radius:999px;
-
-background:#FFF7E6;
-
-color:#F59E0B;
-
-font-weight:600;
-
-width:max-content;
-
+.featured_badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: #fff7e6;
+  color: #f59e0b;
+  font-weight: 600;
+  width: max-content;
 }
 
-.thought_author{
-
-display:flex;
-
-align-items:center;
-
-gap:18px;
-
+.thought_author {
+  display: flex;
+  align-items: center;
+  gap: 18px;
 }
 
-.author_avatar{
-
-width:64px;
-
-height:64px;
-
-border-radius:50%;
-
-background:var(--primary);
-
-color:white;
-
-display:flex;
-
-justify-content:center;
-
-align-items:center;
-
-font-size:24px;
-
-font-weight:700;
-
-transition:.3s;
-
+.author_avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  font-weight: 700;
+  transition: 0.3s;
 }
 
-.featured_thought_card:hover .author_avatar{
-
-transform:scale(1.08);
-
+.featured_thought_card:hover .author_avatar {
+  transform: scale(1.08);
 }
 
-.thought_author h3{
-
-font-size:22px;
-
-margin-bottom:4px;
-
+.thought_author h3 {
+  font-size: 22px;
+  margin-bottom: 4px;
 }
 
-.thought_author span{
-
-color:var(--text-secondary);
-
+.thought_author span {
+  color: var(--text-secondary);
 }
 
-blockquote{
-
-margin:0;
-
-padding:24px;
-
-border-left:5px solid var(--primary);
-
-background:var(--bg);
-
-border-radius:16px;
-
-font-size:1.15rem;
-
-font-style:italic;
-
-line-height:1.8;
-
-color:var(--text-primary);
-
+blockquote {
+  margin: 0;
+  padding: 24px;
+  border-left: 5px solid var(--primary);
+  background: var(--bg);
+  border-radius: 16px;
+  font-size: 1.15rem;
+  font-style: italic;
+  line-height: 1.8;
+  color: var(--text-primary);
 }
 
-.thought_actions{
-
-display:flex;
-
-gap:30px;
-
-align-items:center;
-
+.thought_actions {
+  display: flex;
+  gap: 30px;
+  align-items: center;
 }
 
-.thought_actions div{
-
-display:flex;
-
-align-items:center;
-
-gap:8px;
-
-cursor:pointer;
-
-color:var(--text-secondary);
-
-transition:.3s;
-
+.thought_actions div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: 0.3s;
 }
 
-.thought_actions div:hover{
-
-color:var(--primary);
-
+.thought_actions div:hover {
+  color: var(--primary);
 }
 
-.bookmarked{
-
-color:#F59E0B;
-
+.bookmarked {
+  color: #f59e0b;
 }
 
-.community_button{
-
-align-self:flex-start;
-
-display:flex;
-
-align-items:center;
-
-gap:12px;
-
-padding:14px 24px;
-
-border:none;
-
-border-radius:14px;
-
-background:var(--primary);
-
-color:white;
-
-cursor:pointer;
-
-font-size:16px;
-
-font-weight:600;
-
-transition:.3s;
-
+.community_button {
+  align-self: flex-start;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 24px;
+  border: none;
+  border-radius: 14px;
+  background: var(--primary);
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  transition: 0.3s;
 }
 
-.community_button:hover{
-
-transform:translateY(-3px);
-
+.community_button:hover {
+  transform: translateY(-3px);
 }
 
-@media(max-width:700px){
-
-.thought_actions{
-
-justify-content:space-between;
-
-gap:0;
-
-}
-
-.community_button{
-
-width:100%;
-
-justify-content:center;
-
-}
-
+@media (max-width: 700px) {
+  .thought_actions {
+    justify-content: space-between;
+    gap: 0;
+  }
+  .community_button {
+    width: 100%;
+    justify-content: center;
+  }
 }

@@ -63,8 +63,9 @@ export default function BubbleCursor() {
 
     function animateRing() {
       if (!isHovering) {
-        ringX += (mouseX - ringX) * 0.45;
-        ringY += (mouseY - ringY) * 0.45;
+        const ease = 1;
+        ringX += (mouseX - ringX) * ease;
+        ringY += (mouseY - ringY) * ease;
 
         ring.style.left = ringX + "px";
         ring.style.top = ringY + "px";

@@ -167,7 +167,7 @@
 
   &::before,
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     top: -4.5px;
     border: 5px solid transparent;
@@ -187,10 +187,10 @@
 
 /* driver.js popover — TimeWise theme overrides */
 .driver-popover {
-  border-radius: 16px !important;
+  border-radius: 17px !important;
   box-shadow: var(--shadow_lg) !important;
   border: 1px solid var(--border) !important;
-  background: var(--surface) !important;
+  background: var(--surface);
   color: var(--text_primary) !important;
 }
 
@@ -203,11 +203,15 @@
 .driver-popover-description {
   color: var(--text_secondary) !important;
   font-size: 0.875rem !important;
-  line-height: 1.6 !important;
+  line-height: 1.5 !important;
 }
 
 .driver-popover-next-btn,
 .driver-popover-prev-btn {
-  background: var(--primary) !important;
-  border-radius: 8px !important;
+  border-radius: 9px !important;
+  background: var(--primary);
+}
+
+.driver-popover-close-btn {
+  color: var(--text_primary) !important;
 }
