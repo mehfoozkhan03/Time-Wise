@@ -2,7 +2,7 @@
    GOOGLE FONTS
 ========================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap");
 
 /* ==========================================================
    RESET
@@ -108,7 +108,7 @@ html {
 }
 
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
 
   background: var(--bg);
 
@@ -133,7 +133,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 
   color: var(--text_primary);
 
@@ -222,7 +222,6 @@ body.dark_mode select:focus {
 
 img {
   display: block;
-
   max-width: 100%;
 }
 
@@ -254,7 +253,6 @@ img {
 
 ::selection {
   background: var(--primary);
-
   color: white;
 }
 
@@ -264,7 +262,6 @@ img {
 
 .container {
   width: min(1400px, 92%);
-
   margin-inline: auto;
 }
 
@@ -274,9 +271,7 @@ img {
 
 .flex_center {
   display: flex;
-
   justify-content: center;
-
   align-items: center;
 }
 
@@ -307,13 +302,10 @@ img {
 @keyframes fade_in {
   from {
     opacity: 0;
-
     transform: translateY(10px);
   }
-
   to {
     opacity: 1;
-
     transform: translateY(0);
   }
 }

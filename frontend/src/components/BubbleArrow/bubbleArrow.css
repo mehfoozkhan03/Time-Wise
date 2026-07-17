@@ -5,10 +5,10 @@
   position: fixed;
   top: 0;
   left: 0;
-  background: #29a3e0; /* change to your brand color */
+  background: #29a3e0;
   pointer-events: none;
   transform: translate(-50%, -50%);
-  z-index: 999999;
+  z-index: 2147483646; /* one below ring so ring is always on top */
   transition:
     opacity 0.3s,
     width 0.3s,
@@ -23,14 +23,16 @@
   position: fixed;
   top: 0;
   left: 0;
-  pointer-events: none;
+  pointer-events: none; /* was missing — caused jitter as ring blocked mouse events */
   transform: translate(-50%, -50%);
-  z-index: 999998;
+  z-index: 2147483647; /* max safe z-index, always on top */
   transition:
-    width 0.3s,
-    height 0.3s,
-    background 0.3s,
-    transform 0.1s;
+    width 0.25s ease,
+    height 0.25s ease,
+    background 0.25s ease,
+    border 0.25s ease,
+    box-shadow 0.25s ease;
+  /* NOTE: no transform transition — transform is set via rAF for smooth lag */
 }
 
 #cursor_dot.hovered {
@@ -43,10 +45,6 @@
   border: none;
   background: rgba(41, 163, 225, 0.23);
   box-shadow: 0 0 19px rgba(41, 163, 225, 0.35);
-  transition:
-    width 0.25s ease,
-    height 0.25s ease,
-    background 0.25s ease;
 }
 
 #cursor_ring.clicked {
