@@ -15,6 +15,7 @@
 .hero_left p {
   font-size: 1.1rem;
   margin-bottom: 30px;
+  text-transform: capitalize;
 }
 
 .hero_info {
@@ -83,5 +84,20 @@
 @media (max-width: 600px) {
   .hero_info {
     flex-direction: column;
+  }
+}
+
+@media (max-width: 320px) {
+  .hero {
+    margin-top: 21px;
+  }
+  .hero_left h1 {
+    font-size: 2.1rem;
+  }
+  .hero_info {
+    gap: 15px;
+  }
+  .hero_left p {
+    margin-bottom: 23px;
   }
 }
