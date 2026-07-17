@@ -1,64 +1,82 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose'
 
 const attendanceSchema = new mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: 'User',
       required: true,
     },
 
-    attendanceDate: {
+    date: {
       type: Date,
       required: true,
     },
 
-    checkInTime: Date,
-    checkOutTime: Date,
+    checkInTime: {
+      type: Date,
+      default: null,
+    },
+
+    checkOutTime: {
+      type: Date,
+      default: null,
+    },
 
     breaks: [
       {
-        breakStart: Date,
-        breakEnd: Date,
-        duration: Number,
+        breakStart: {
+          type: Date,
+          required: true,
+        },
+
+        breakEnd: {
+          type: Date,
+          default: null,
+        },
+
+        duration: {
+          type: Number,
+          default: 0,
+        },
       },
     ],
 
-    totalBreakMinutes: {
+    totalBreakSeconds: {
       type: Number,
       default: 0,
     },
 
-    totalWorkingMinutes: {
+    totalWorkingSeconds: {
       type: Number,
       default: 0,
     },
 
     status: {
       type: String,
-      enum: ["Present", "Absent", "Leave", "Holiday"],
-      default: "Absent",
+      enum: ['Present', 'Late', 'Absent', 'Leave', 'Holiday', 'Half Day'],
+      default: 'Absent',
     },
 
-    // Extra fields for filtering
-    day: Number,
-    month: Number,
-    year: Number,
+    notes: {
+      type: String,
+      trim: true,
+      default: '',
+    },
   },
   {
     timestamps: true,
   },
-);
+)
 
-// Prevent duplicate attendance for same day
 attendanceSchema.index(
   {
     user: 1,
-    attendanceDate: 1,
+    date: 1,
   },
   {
     unique: true,
   },
-);
+)
 
-export const attendanceModel = mongoose.model("Attendance", attendanceSchema);
+export const attendanceModel = mongoose.model('Attendance', attendanceSchema)

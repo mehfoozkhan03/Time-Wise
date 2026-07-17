@@ -10,14 +10,18 @@ export const attendanceService = {
   },
 
   startBreak() {
-    return api.post('/attendance/start-break')
+    return api.post('/attendance/break/start')
   },
 
   endBreak() {
-    return api.post('/attendance/end-break')
+    return api.post('/attendance/break/end')
   },
 
   getTodayAttendance() {
     return api.get('/attendance/today')
+  },
+
+  getAttendanceHistory() {
+    return api.get('/attendance/history')
   },
 }
