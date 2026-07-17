@@ -6,6 +6,24 @@ import '../styles/Login.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { loading, loginSuccess } from '../store/authSlice';
 
+const initialFormData = {
+  firstName: '',
+  lastName: '',
+  email: '',
+  password: '',
+  confirmPassword: '',
+  dob: '',
+  gender: '',
+};
+
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const passwordRegex =
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
+
+const nameRegex = /^[A-Za-z ]{2,50}$/;
+
+
 const SignUpPage = () => {
   const dispatch = useDispatch();
   const { isLoading, isError } = useSelector((store) => store.auth);
@@ -16,18 +34,16 @@ const SignUpPage = () => {
   const [showRegisterPassword, setShowRegisterPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    dob: '',
-    gender: '',
-  });
+ const [formData, setFormData] = useState(initialFormData);
 
   const [errors, setErrors] = useState({});
   // const [loading, setLoading] = useState(false);
+
+  const resetForm = () => {
+  setFormData(initialFormData);
+  setErrors({});
+};
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -50,7 +66,7 @@ const SignUpPage = () => {
     if (!formData.email.trim()) {
       newErrors.email = 'Email is required';
       isValid = false;
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+    } else if (!emailRegex.test(formData.email)) {
       newErrors.email = 'Invalid email';
       isValid = false;
     }
@@ -71,7 +87,7 @@ const SignUpPage = () => {
     if (!formData.firstName.trim()) {
       newErrors.firstName = 'First name is required';
       isValid = false;
-    } else if (!/^[A-Za-z ]{2,50}$/.test(formData.firstName)) {
+    } else if (!nameRegex.test(formData.firstName)) {
       newErrors.firstName = 'First name should be 2-50 letters';
       isValid = false;
     }
@@ -79,7 +95,7 @@ const SignUpPage = () => {
     if (!formData.lastName.trim()) {
       newErrors.lastName = 'Last name is required';
       isValid = false;
-    } else if (!/^[A-Za-z ]{2,50}$/.test(formData.lastName)) {
+    } else if (!nameRegex.test(formData.lastName)) {
       newErrors.lastName = 'Last name should be 2-50 letters';
       isValid = false;
     }
@@ -87,7 +103,7 @@ const SignUpPage = () => {
     if (!formData.email.trim()) {
       newErrors.email = 'Email is required';
       isValid = false;
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+    } else if (!emailRegex.test(formData.email)) {
       newErrors.email = 'Invalid email format';
       isValid = false;
     }
@@ -95,11 +111,7 @@ const SignUpPage = () => {
     if (!formData.password) {
       newErrors.password = 'Password is required';
       isValid = false;
-    } else if (
-      !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/.test(
-        formData.password,
-      )
-    ) {
+    } else if (!passwordRegex.test(formData.password)) {
       newErrors.password =
         'Minimum 8 characters with uppercase, lowercase, number and special character';
       isValid = false;
@@ -127,60 +139,47 @@ const SignUpPage = () => {
     return isValid;
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+ const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    dispatch(loading());
+  const isValid = isRegister
+    ? validateSignup()
+    : validateLogin();
 
-    try {
-      if (isRegister) {
-        if (!validateSignup()) {
-          dispatch(loading());
-          return;
-        }
+  if (!isValid) return;
 
-        const { data } = await authService.signup(formData);
+  dispatch(loading());
 
-        // here we have to put modal "data"
+  try {
+  if (isRegister) {
 
-        alert(data.message || 'Registration Successful');
+    const { data } = await authService.signup(formData);
 
-        setIsRegister(false);
-      } else {
-        if (!validateLogin()) {
-          // setLoading(false);
-          return;
-        }
+    alert(data.message || 'Registration Successful');
 
-        const { data } = await authService.login({
-          email: formData.email,
-          password: formData.password,
-        });
+    setIsRegister(false);
 
-        dispatch(loginSuccess());
+  } else {
 
-        alert(data.message || 'Login Successful');
-      }
+    const { data } = await authService.login({
+      email: formData.email,
+      password: formData.password,
+    });
 
-      setFormData({
-        firstName: '',
-        lastName: '',
-        email: '',
-        password: '',
-        confirmPassword: '',
-        dob: '',
-        gender: '',
-      });
+    dispatch(loginSuccess());
 
-      setErrors({});
-    } catch (error) {
-      console.error(error);
+    alert(data.message || 'Login Successful');
+  }
 
-      alert(error.response?.data?.message || 'Something went wrong');
-    } finally {
-      console.log('done');
-    }
-  };
+  resetForm();
+
+} catch (error) {
+    console.error(error);
+    alert(error.response?.data?.message || 'Something went wrong');
+  } finally {
+    console.log('done');
+  }
+};
 
   return (
     <div className="sing_login">
@@ -237,15 +236,7 @@ const SignUpPage = () => {
                 <span
                   onClick={() => {
                     setIsRegister(true);
-                    setFormData({
-                      firstName: '',
-                      lastName: '',
-                      email: '',
-                      password: '',
-                      confirmPassword: '',
-                      dob: '',
-                      gender: '',
-                    });
+                   resetForm();
                   }}
                 >
                   Register now
@@ -364,28 +355,7 @@ const SignUpPage = () => {
                 {isLoading ? 'Please wait...' : 'Register'}
               </button>
 
-              <p className="message">
-                Already have an account?{' '}
-                <span
-                  onClick={() => {
-                    setIsRegister(false);
-
-                    setFormData({
-                      firstName: '',
-                      lastName: '',
-                      email: '',
-                      password: '',
-                      confirmPassword: '',
-                      dob: '',
-                      gender: '',
-                    });
-
-                    setErrors({});
-                  }}
-                >
-                  Sign In
-                </span>
-              </p>
+              <p className="message">Already have an account?{' '}<span onClick={() => { setIsRegister(false); resetForm(); }}> Sign In </span></p>
             </motion.form>
           )}
         </AnimatePresence>
@@ -393,5 +363,407 @@ const SignUpPage = () => {
     </div>
   );
 };
-
 export default SignUpPage;
+
+//optimize code
+
+
+
+
+// import { useState } from 'react';
+// import { AnimatePresence, motion } from 'framer-motion';
+// import { FaEye, FaEyeSlash } from 'react-icons/fa';
+// import { authService } from '../services/authService';
+// import '../styles/Login.css';
+// import { useDispatch, useSelector } from 'react-redux';
+// import { loading, loginSuccess } from '../store/authSlice';
+
+// const SignUpPage = () => {
+//   const dispatch = useDispatch();
+//   const { isLoading, isError } = useSelector((store) => store.auth);
+
+//   const [isRegister, setIsRegister] = useState(false);
+
+//   const [showLoginPassword, setShowLoginPassword] = useState(false);
+//   const [showRegisterPassword, setShowRegisterPassword] = useState(false);
+//   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+//   const [formData, setFormData] = useState({
+//     firstName: '',
+//     lastName: '',
+//     email: '',
+//     password: '',
+//     confirmPassword: '',
+//     dob: '',
+//     gender: '',
+//   });
+
+//   const [errors, setErrors] = useState({});
+//   // const [loading, setLoading] = useState(false);
+
+//   const handleChange = (e) => {
+//     const { name, value } = e.target;
+
+//     setFormData((prev) => ({
+//       ...prev,
+//       [name]: value,
+//     }));
+
+//     setErrors((prev) => ({
+//       ...prev,
+//       [name]: '',
+//     }));
+//   };
+
+//   const validateLogin = () => {
+//     let newErrors = {};
+//     let isValid = true;
+
+//     if (!formData.email.trim()) {
+//       newErrors.email = 'Email is required';
+//       isValid = false;
+//     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+//       newErrors.email = 'Invalid email';
+//       isValid = false;
+//     }
+
+//     if (!formData.password) {
+//       newErrors.password = 'Password is required';
+//       isValid = false;
+//     }
+
+//     setErrors(newErrors);
+//     return isValid;
+//   };
+
+//   const validateSignup = () => {
+//     let newErrors = {};
+//     let isValid = true;
+
+//     if (!formData.firstName.trim()) {
+//       newErrors.firstName = 'First name is required';
+//       isValid = false;
+//     } else if (!/^[A-Za-z ]{2,50}$/.test(formData.firstName)) {
+//       newErrors.firstName = 'First name should be 2-50 letters';
+//       isValid = false;
+//     }
+
+//     if (!formData.lastName.trim()) {
+//       newErrors.lastName = 'Last name is required';
+//       isValid = false;
+//     } else if (!/^[A-Za-z ]{2,50}$/.test(formData.lastName)) {
+//       newErrors.lastName = 'Last name should be 2-50 letters';
+//       isValid = false;
+//     }
+
+//     if (!formData.email.trim()) {
+//       newErrors.email = 'Email is required';
+//       isValid = false;
+//     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+//       newErrors.email = 'Invalid email format';
+//       isValid = false;
+//     }
+
+//     if (!formData.password) {
+//       newErrors.password = 'Password is required';
+//       isValid = false;
+//     } else if (
+//       !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/.test(
+//         formData.password,
+//       )
+//     ) {
+//       newErrors.password =
+//         'Minimum 8 characters with uppercase, lowercase, number and special character';
+//       isValid = false;
+//     }
+
+//     if (!formData.confirmPassword) {
+//       newErrors.confirmPassword = 'Confirm password is required';
+//       isValid = false;
+//     } else if (formData.password !== formData.confirmPassword) {
+//       newErrors.confirmPassword = "Passwords don't match";
+//       isValid = false;
+//     }
+
+//     if (!formData.dob) {
+//       newErrors.dob = 'Date of birth is required';
+//       isValid = false;
+//     }
+
+//     if (!formData.gender) {
+//       newErrors.gender = 'Please select gender';
+//       isValid = false;
+//     }
+
+//     setErrors(newErrors);
+//     return isValid;
+//   };
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+
+//     dispatch(loading());
+
+//     try {
+//       if (isRegister) {
+//         if (!validateSignup()) {
+//           dispatch(loading());
+//           return;
+//         }
+
+//         const { data } = await authService.signup(formData);
+
+//         // here we have to put modal "data"
+
+//         alert(data.message || 'Registration Successful');
+
+//         setIsRegister(false);
+//       } else {
+//         if (!validateLogin()) {
+//           // setLoading(false);
+//           return;
+//         }
+
+//         const { data } = await authService.login({
+//           email: formData.email,
+//           password: formData.password,
+//         });
+
+//         dispatch(loginSuccess());
+
+//         alert(data.message || 'Login Successful');
+//       }
+
+//       setFormData({
+//         firstName: '',
+//         lastName: '',
+//         email: '',
+//         password: '',
+//         confirmPassword: '',
+//         dob: '',
+//         gender: '',
+//       });
+
+//       setErrors({});
+//     } catch (error) {
+//       console.error(error);
+
+//       alert(error.response?.data?.message || 'Something went wrong');
+//     } finally {
+//       console.log('done');
+//     }
+//   };
+
+//   return (
+//     <div className="sing_login">
+//       <div className="login-page">
+//         <AnimatePresence mode="wait">
+//           {!isRegister ? (
+//             <motion.form
+//               key="login"
+//               onSubmit={handleSubmit}
+//               className="login-form"
+//               initial={{ opacity: 0, y: 30 }}
+//               animate={{ opacity: 1, y: 0 }}
+//               exit={{ opacity: 0, y: -30 }}
+//               transition={{ duration: 0.25 }}
+//             >
+//               <h2>Login</h2>
+
+//               <div className="input-box">
+//                 <input
+//                   type="email"
+//                   name="email"
+//                   value={formData.email}
+//                   onChange={handleChange}
+//                   placeholder="Email"
+//                 />
+//                 <p className="error">{errors.email}</p>
+//               </div>
+
+//               <div className="input-box password-box">
+//                 <input
+//                   type={showLoginPassword ? 'text' : 'password'}
+//                   name="password"
+//                   value={formData.password}
+//                   onChange={handleChange}
+//                   placeholder="Password"
+//                 />
+
+//                 <p className="error">{errors.password}</p>
+
+//                 <span
+//                   className="eye-icon"
+//                   onClick={() => setShowLoginPassword(!showLoginPassword)}
+//                 >
+//                   {showLoginPassword ? <FaEye /> : <FaEyeSlash />}
+//                 </span>
+//               </div>
+
+//               <button type="submit" className="loginsumit" disabled={isLoading}>
+//                 {isLoading ? 'Please wait...' : 'Login'}
+//               </button>
+
+//               <p className="message">
+//                 Don't have an account?{' '}
+//                 <span
+//                   onClick={() => {
+//                     setIsRegister(true);
+//                     setFormData({
+//                       firstName: '',
+//                       lastName: '',
+//                       email: '',
+//                       password: '',
+//                       confirmPassword: '',
+//                       dob: '',
+//                       gender: '',
+//                     });
+//                   }}
+//                 >
+//                   Register now
+//                 </span>
+//               </p>
+//             </motion.form>
+//           ) : (
+//             <motion.form
+//               key="register"
+//               onSubmit={handleSubmit}
+//               className="register-form"
+//               initial={{ opacity: 0, y: 30 }}
+//               animate={{ opacity: 1, y: 0 }}
+//               exit={{ opacity: 0, y: -30 }}
+//               transition={{ duration: 0.25 }}
+//             >
+//               <h2>New Registration</h2>
+
+//               <div className="input-box">
+//                 <input
+//                   type="text"
+//                   name="firstName"
+//                   value={formData.firstName}
+//                   onChange={handleChange}
+//                   placeholder="First Name"
+//                 />
+//                 <p className="error">{errors.firstName}</p>
+//               </div>
+
+//               <div className="input-box">
+//                 <input
+//                   type="text"
+//                   name="lastName"
+//                   value={formData.lastName}
+//                   onChange={handleChange}
+//                   placeholder="Last Name"
+//                 />
+//                 <p className="error">{errors.lastName}</p>
+//               </div>
+
+//               <div className="input-box">
+//                 <input
+//                   type="email"
+//                   name="email"
+//                   value={formData.email}
+//                   onChange={handleChange}
+//                   placeholder="Email"
+//                 />
+//                 <p className="error">{errors.email}</p>
+//               </div>
+
+//               <div className="input-box password-box">
+//                 <input
+//                   type={showRegisterPassword ? 'text' : 'password'}
+//                   name="password"
+//                   value={formData.password}
+//                   onChange={handleChange}
+//                   placeholder="Password"
+//                 />
+
+//                 <p className="error">{errors.password}</p>
+
+//                 <span
+//                   className="eye-icon"
+//                   onClick={() => setShowRegisterPassword(!showRegisterPassword)}
+//                 >
+//                   {showRegisterPassword ? <FaEye /> : <FaEyeSlash />}
+//                 </span>
+//               </div>
+
+//               <div className="input-box password-box">
+//                 <input
+//                   type={showConfirmPassword ? 'text' : 'password'}
+//                   name="confirmPassword"
+//                   value={formData.confirmPassword}
+//                   onChange={handleChange}
+//                   placeholder="Confirm Password"
+//                 />
+
+//                 <p className="error">{errors.confirmPassword}</p>
+
+//                 <span
+//                   className="eye-icon"
+//                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+//                 >
+//                   {showConfirmPassword ? <FaEye /> : <FaEyeSlash />}
+//                 </span>
+//               </div>
+
+//               <div className="input-box">
+//                 <input
+//                   type="date"
+//                   name="dob"
+//                   value={formData.dob}
+//                   onChange={handleChange}
+//                 />
+//                 <p className="error">{errors.dob}</p>
+//               </div>
+
+//               <div className="input-box">
+//                 <select
+//                   name="gender"
+//                   value={formData.gender}
+//                   onChange={handleChange}
+//                 >
+//                   <option value="">Select Gender</option>
+//                   <option value="Male">Male</option>
+//                   <option value="Female">Female</option>
+//                   <option value="Other">Other</option>
+//                 </select>
+
+//                 <p className="error">{errors.gender}</p>
+//               </div>
+
+//               <button type="submit" className="loginsumit" disabled={isLoading}>
+//                 {isLoading ? 'Please wait...' : 'Register'}
+//               </button>
+
+//               <p className="message">
+//                 Already have an account?{' '}
+//                 <span
+//                   onClick={() => {
+//                     setIsRegister(false);
+
+//                     setFormData({
+//                       firstName: '',
+//                       lastName: '',
+//                       email: '',
+//                       password: '',
+//                       confirmPassword: '',
+//                       dob: '',
+//                       gender: '',
+//                     });
+
+//                     setErrors({});
+//                   }}
+//                 >
+//                   Sign In
+//                 </span>
+//               </p>
+//             </motion.form>
+//           )}
+//         </AnimatePresence>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default SignUpPage;
