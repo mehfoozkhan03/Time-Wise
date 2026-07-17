@@ -53,7 +53,7 @@ export const SettingSidebar = () => {
         <div className="sidebar_container">
           <div className="logo">
             <img
-              src="../../public/Time_Wise_Logo_DarkMode.svg"
+              src="../../../public/Logo.svg"
               alt="logo"
             />
           </div>
