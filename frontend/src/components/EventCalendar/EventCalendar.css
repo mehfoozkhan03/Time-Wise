@@ -1,0 +1,22 @@
+.eventCalendar {
+
+    width: min(1400px,95%);
+    margin: 40px auto;
+
+    background:#2d333f;
+
+    border:1px solid #3d4658;
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.25);
+
+}
+
+.calendarBody{
+
+    padding:25px;
+
+}

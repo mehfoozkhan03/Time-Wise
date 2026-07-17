@@ -1,0 +1,60 @@
+.eventBadge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  width: 100%;
+  min-height: 28px;
+
+  padding: 6px 10px;
+
+  border-radius: 8px;
+
+  color: #fff;
+
+  font-size: 12px;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  overflow: hidden;
+
+  transition: all 0.25s ease;
+}
+
+.eventBadge:hover {
+  transform: translateX(4px);
+  filter: brightness(1.08);
+}
+
+.eventIcon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 14px;
+
+  flex-shrink: 0;
+}
+
+.eventTitle {
+  flex: 1;
+
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 768px) {
+
+  .eventBadge {
+    padding: 5px 8px;
+    font-size: 11px;
+    min-height: 24px;
+  }
+
+  .eventIcon {
+    font-size: 12px;
+  }
+
+}
