@@ -1,0 +1,101 @@
+.upcomingEvents{
+
+    background:#2d333f;
+
+    border:1px solid #40495d;
+
+    border-radius:18px;
+
+    padding:22px;
+
+}
+
+.upcomingEvents h3{
+
+    color:white;
+
+    margin-bottom:20px;
+
+}
+
+.upcomingCard{
+
+    display:flex;
+
+    gap:14px;
+
+    align-items:center;
+
+    margin-bottom:18px;
+
+    padding-bottom:18px;
+
+    border-bottom:1px solid #40495d;
+
+}
+
+.upcomingCard:last-child{
+
+    margin-bottom:0;
+
+    border:none;
+
+    padding-bottom:0;
+
+}
+
+.eventCircle{
+
+    width:42px;
+
+    height:42px;
+
+    border-radius:50%;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    color:white;
+
+    font-size:18px;
+
+    flex-shrink:0;
+
+}
+
+.upcomingContent{
+
+    flex:1;
+
+}
+
+.upcomingContent h4{
+
+    color:white;
+
+    font-size:15px;
+
+    margin-bottom:6px;
+
+}
+
+.upcomingContent span{
+
+    color:#94a3b8;
+
+    font-size:13px;
+
+}
+
+.noEvents{
+
+    color:#94a3b8;
+
+    text-align:center;
+
+    padding:20px;
+
+}

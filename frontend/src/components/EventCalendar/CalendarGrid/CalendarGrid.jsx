@@ -4,7 +4,7 @@ import CalendarDay from "../CalendarDay/CalendarDay";
 import { events } from "../data/events";
 import { holidayData } from "../data/holidays";
 
-export default function CalendarGrid({     currentDate, onEventClick }) {
+export default function CalendarGrid({ currentDate, filters, onEventClick }) {
 
   const month = currentDate.getMonth();
   const year = currentDate.getFullYear();
@@ -20,7 +20,33 @@ export default function CalendarGrid({     currentDate, onEventClick }) {
   // Sunday = 0, Monday = 1...
   const startDay = firstDay.getDay();
 
-  const days = [];
+const dayEvents = day
+
+? allEvents.filter((event)=>{
+
+    const sameDate =
+
+        event.date===day.toISOString().split("T")[0];
+
+    const typeMatch =
+
+        filters[event.type];
+
+      const searchMatch =
+
+          !searchTerm ||
+
+          event.employee?.toLowerCase().includes(
+
+              searchTerm.toLowerCase()
+
+          );
+
+      return sameDate && typeMatch && searchMatch;
+
+  })
+
+  :[];
 
   // Empty cells before the 1st
   for (let i = 0; i < startDay; i++) {
