@@ -11,6 +11,8 @@ import {
   FaTrash,
 } from "react-icons/fa";
 
+import { formatDate, formatTime} from "../utils/dateUtils";
+
 import { EVENT_CONFIG } from "../data/eventConfig";
 
 export default function EventModal({ event, onClose }) {
@@ -95,7 +97,7 @@ export default function EventModal({ event, onClose }) {
 
                 <span>Date</span>
 
-                <p>{event.date}</p>
+                <p>{formatDate(event.date)}</p>
 
               </div>
 
@@ -110,11 +112,15 @@ export default function EventModal({ event, onClose }) {
                 <span>Time</span>
 
                 <p>
+                    {formatTime(event.startTime)}
 
-                  {event.startTime || "--"}
+                    {
 
-                  {event.endTime && ` - ${event.endTime}`}
+                        event.endTime &&
 
+                        ` - ${formatTime(event.endTime)}`
+
+                    }
                 </p>
 
               </div>

@@ -17,6 +17,12 @@
 
 .calendarBody{
 
+    display:grid;
+
+    grid-template-columns:2fr 360px;
+
+    gap:24px;
+
     padding:25px;
 
 }
