@@ -1,0 +1,127 @@
+.miniCalendar{
+
+    padding:18px;
+
+}
+
+.miniHeader{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:18px;
+
+}
+
+.miniHeader h3{
+
+    color:white;
+
+    font-size:16px;
+
+}
+
+.miniHeader button{
+
+    width:34px;
+
+    height:34px;
+
+    border:none;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+    background:#394255;
+
+    color:white;
+
+    transition:.25s;
+
+}
+
+.miniHeader button:hover{
+
+    background:#38bdf8;
+
+}
+
+.miniWeekDays{
+
+    display:grid;
+
+    grid-template-columns:repeat(7,1fr);
+
+    margin-bottom:8px;
+
+}
+
+.miniWeekDays span{
+
+    text-align:center;
+
+    color:#94a3b8;
+
+    font-size:12px;
+
+    font-weight:600;
+
+}
+
+.miniGrid{
+
+    display:grid;
+
+    grid-template-columns:repeat(7,1fr);
+
+    gap:6px;
+
+}
+
+.miniDay{
+
+    aspect-ratio:1;
+
+    border:none;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+    background:#313846;
+
+    color:white;
+
+    transition:.25s;
+
+    font-size:12px;
+
+}
+
+.miniDay:hover{
+
+    background:#38bdf8;
+
+}
+
+.miniDay.today{
+
+    background:#38bdf8;
+
+}
+
+.miniDay.selected{
+
+    border:2px solid white;
+
+}
+
+.miniDay.otherMonth{
+
+    opacity:.35;
+
+}

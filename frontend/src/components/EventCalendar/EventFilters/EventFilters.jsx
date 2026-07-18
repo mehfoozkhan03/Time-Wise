@@ -1,40 +1,40 @@
 import "./EventFilters.css";
 
-import { EVENT_CONFIG } from "../data/eventConfig";
 import { FaSearch } from "react-icons/fa";
 
+import { EVENT_CONFIG } from "../../../data/eventConfig";
+
 export default function EventFilters({
+
     filters,
-    setFilters,
+
+    toggleFilter,
+
     searchTerm,
-    setSearchTerm
+
+    setSearchTerm,
+
+    selectAll,
+
+    clearAll,
+
+    events
+
 }) {
 
-    function toggleFilter(type){
+    return (
 
-        setFilters((prev)=>({
-
-            ...prev,
-
-            [type]: !prev[type]
-
-        }));
-
-    }
-
-    return(
-        
         <div className="eventFilters">
 
-            <div className="searchBox">
+            <div className="searchBar">
 
-                <FaSearch />
+                <FaSearch/>
 
                 <input
 
                     type="text"
 
-                    placeholder="Search employee..."
+                    placeholder="Search employee or event..."
 
                     value={searchTerm}
 
@@ -44,54 +44,84 @@ export default function EventFilters({
 
             </div>
 
+            <div className="filterActions">
+
+                <button
+
+                    onClick={selectAll}
+
+                >
+
+                    Select All
+
+                </button>
+
+                <button
+
+                    onClick={clearAll}
+
+                >
+
+                    Clear All
+
+                </button>
+
+            </div>
+
             <div className="filterList">
 
                 {
 
-                    Object.entries(EVENT_CONFIG).map(([type,config])=>(
+                    Object.entries(EVENT_CONFIG).map(([type,config])=>{
 
-                        <label
+                        const count = events.filter(
 
-                            key={type}
+                            event=>event.type===type
 
-                            className={`filterItem ${filters[type] ? "active" : ""}`}
+                        ).length;
 
-                        >
+                        return(
 
-                            <input
+                            <button
 
-                                type="checkbox"
+                                key={type}
 
-                                checked={filters[type]}
+                                onClick={()=>toggleFilter(type)}
 
-                                onChange={()=>toggleFilter(type)}
+                                className={`filterChip ${filters[type] ? "active" : ""}`}
 
-                            />
+                            >
 
-                            <span
+                                <span className="chipIcon">
 
-                                className="filterColor"
+                                    {config.icon}
 
-                                style={{
+                                </span>
 
-                                    backgroundColor:config.color
+                                <span>
 
-                                }}
+                                    {config.label}
 
-                            />
+                                </span>
 
-                            {config.icon}
+                                <span className="count">
 
-                            {config.label}
+                                    {count}
 
-                        </label>
+                                </span>
 
-                    ))
+                            </button>
+
+                        );
+
+                    })
 
                 }
 
             </div>
+
         </div>
+
     );
 
 }

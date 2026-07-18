@@ -1,119 +1,116 @@
 import "./CalendarGrid.css";
 
 import CalendarDay from "../CalendarDay/CalendarDay";
-import { events } from "../data/events";
-import { holidayData } from "../data/holidays";
 
-export default function CalendarGrid({ currentDate, filters, onEventClick }) {
+import {
 
-  const month = currentDate.getMonth();
-  const year = currentDate.getFullYear();
+    WEEK_DAYS,
 
-  const allEvents = [...events, ...holidayData];
+    generateCalendar,
 
-  // First day of current month
-  const firstDay = new Date(year, month, 1);
+    isSameDate,
 
-  // Last date of current month
-  const lastDate = new Date(year, month + 1, 0).getDate();
+} from "../../../utils/calendarUtils";
 
-  // Sunday = 0, Monday = 1...
-  const startDay = firstDay.getDay();
+export default function CalendarGrid({
+    currentDate,
 
-const dayEvents = day
+    selectedDate,
 
-? allEvents.filter((event)=>{
+    selectDate,
 
-    const sameDate =
+    events,
 
-        event.date===day.toISOString().split("T")[0];
+    onEventClick,
 
-    const typeMatch =
+}) {
 
-        filters[event.type];
+    const calendar = generateCalendar(currentDate);
 
-      const searchMatch =
+    return (
 
-          !searchTerm ||
+        <section className="calendarWrapper">
 
-          event.employee?.toLowerCase().includes(
+            <div className="weekHeader">
 
-              searchTerm.toLowerCase()
+                {
 
-          );
+                    WEEK_DAYS.map((day) => (
 
-      return sameDate && typeMatch && searchMatch;
+                        <div key={day}>
 
-  })
+                            {day}
 
-  :[];
+                        </div>
 
-  // Empty cells before the 1st
-  for (let i = 0; i < startDay; i++) {
-    days.push(null);
-  }
+                    ))
 
-  // Current month dates
-  for (let i = 1; i <= lastDate; i++) {
-    days.push(new Date(year, month, i));
-  }
-  
+                }
 
-  return (
-    <>
-      {/* Week Names */}
-      <div className="weekHeader">
-        <div>Sun</div>
-        <div>Mon</div>
-        <div>Tue</div>
-        <div>Wed</div>
-        <div>Thu</div>
-        <div>Fri</div>
-        <div>Sat</div>
-      </div>
+            </div>
 
-      {/* Calendar Grid */}
-      <div className="calendarGrid">
+            <div className="calendarGrid">
 
-        {days.map((day, index) => {
+                {
 
-          const today = new Date();
+                    calendar.map((item) => {
 
-          const isToday =
-            day &&
-            day.getDate() === today.getDate() &&
-            day.getMonth() === today.getMonth() &&
-            day.getFullYear() === today.getFullYear();
+                        const dayEvents = events.filter(
 
-          const dayEvents = day
-          ? allEvents.filter((event) => {
+                            (event) =>
 
-              return (
-                event.date === day.toISOString().split("T")[0]
-              );
+                                event.date ===
 
-            })
-          : [];
+                                item.date
 
+                                    .toISOString()
 
-          return (
-            <CalendarDay
-                key={index}
-                day={day.date}
-                isCurrentMonth={day.currentMonth}
-                isToday={day.isToday}
-                events={dayEvents}
-                onEventClick={onEventClick}
-                // key={index}
-                // day={day}
-                // isCurrentMonth={true}
-                // isToday={isToday}
-                // events={dayEvents}
-            />
-          );
-        })}
+                                    .split("T")[0]
 
-      </div>
-    </>
-  );
+                        );
+
+                        return (
+
+                            <CalendarDay
+
+                                key={item.date.toISOString()}
+
+                                day={item.date}
+
+                                events={dayEvents}
+
+                                isCurrentMonth={item.currentMonth}
+
+                                isToday={item.isToday}
+
+                                isSelected={
+
+                                    isSameDate(
+
+                                        item.date,
+
+                                        selectedDate
+
+                                    )
+
+                                }
+
+                                onSelectDate={selectDate}
+
+                                onEventClick={onEventClick}
+
+                            />
+
+                        );
+
+                    })
+
+                }
+
+            </div>
+
+        </section>
+
+    );
+
 }

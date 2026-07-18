@@ -34,7 +34,7 @@ export const formatFullDate = (date) => {
 
 };
 
-// Format: 09:00 AM
+// Format: 9:00 AM
 export const formatTime = (time) => {
 
     if (!time) return "--";
@@ -78,5 +78,45 @@ export const isWeekend = (date) => {
     const day = new Date(date).getDay();
 
     return day === 0 || day === 6;
+
+};
+
+// Today's Date
+export const getToday = () => {
+
+    const today = new Date();
+
+    return new Date(
+
+        today.getFullYear(),
+
+        today.getMonth(),
+
+        today.getDate()
+
+    );
+
+};
+
+// Today / Tomorrow / Date
+export const getRelativeDateLabel = (date) => {
+
+    const today = getToday();
+
+    const eventDate = new Date(date);
+
+    const diff = Math.floor(
+
+        (eventDate - today) /
+
+        (1000 * 60 * 60 * 24)
+
+    );
+
+    if (diff === 0) return "Today";
+
+    if (diff === 1) return "Tomorrow";
+
+    return formatFullDate(date);
 
 };
