@@ -14,6 +14,7 @@ import RouteLoader from './../components/RouteLoader';
 
 import { Settings } from './../pages/Settings';
 import { Profile } from './../components/Setting/Profile';
+import Calendar from './../components/Setting/Calendar'
 import { Attendance } from './../components/Setting/Attendance';
 import { Appearance } from './../components/Setting/Appearance';
 import { Notification } from './../components/Setting/Notifications';
@@ -79,6 +80,7 @@ export const AppRoutes = () => {
             <Route index element={<Profile />}></Route>
             <Route path="profile" element={<Profile />} />
             <Route path="attendance" element={<Attendance />}></Route>
+            <Route path="calendar" element={<Calendar />} />
             <Route path="appearance" element={<Appearance />}></Route>
             <Route path="notification" element={<Notification />}></Route>
             <Route path="security" element={<Security />}></Route>

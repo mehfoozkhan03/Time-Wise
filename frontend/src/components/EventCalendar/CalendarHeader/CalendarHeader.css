@@ -6,103 +6,65 @@
 
     align-items:center;
 
-    padding:25px 30px;
-
-    border-bottom:1px solid #3d4658;
+    padding:20px 24px;
 
     background:#313846;
 
-}
+    border:1px solid #40495d;
 
-.calendarTitle{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:14px;
+    border-radius:16px;
 
 }
 
-.calendarTitle svg{
+.headerTitle h2{
 
-    font-size:24px;
+    color:#fff;
 
-    color:#38bdf8;
-
-}
-
-.calendarTitle h2{
-
-    color:white;
-
-    font-size:30px;
+    font-size:26px;
 
     font-weight:700;
 
 }
 
-.calendarActions{
+.headerActions{
 
     display:flex;
-
-    align-items:center;
 
     gap:12px;
 
 }
 
-.calendarBtn{
-
-    width:42px;
-
-    height:42px;
-
-    border:none;
-
-    border-radius:10px;
-
-    background:#20252f;
-
-    color:white;
-
-    cursor:pointer;
-
-    transition:.25s;
-
-}
-
-.calendarBtn:hover{
-
-    background:#38bdf8;
-
-}
+.navBtn,
 
 .todayBtn{
 
-    border:none;
+    display:flex;
 
-    padding:11px 20px;
+    align-items:center;
+
+    gap:8px;
+
+    padding:10px 18px;
+
+    border:none;
 
     border-radius:10px;
 
-    background:#38bdf8;
+    cursor:pointer;
+
+    background:#242a34;
 
     color:white;
-
-    font-weight:600;
-
-    cursor:pointer;
 
     transition:.25s;
 
 }
 
+.navBtn:hover,
+
 .todayBtn:hover{
 
-    transform:translateY(-2px);
-
-    box-shadow:0 6px 20px rgba(56,189,248,.3);
+    background:#38bdf8;
 
 }
 
@@ -112,13 +74,7 @@
 
     flex-direction:column;
 
-    gap:20px;
-
-}
-
-.calendarTitle h2{
-
-    font-size:24px;
+    gap:16px;
 
 }
 

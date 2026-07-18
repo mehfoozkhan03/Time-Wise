@@ -1,60 +1,133 @@
-.eventBadge {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.eventBadge{
 
-  width: 100%;
-  min-height: 28px;
+    display:flex;
 
-  padding: 6px 10px;
+    align-items:center;
 
-  border-radius: 8px;
+    gap:12px;
 
-  color: #fff;
+    padding:10px;
 
-  font-size: 12px;
-  font-weight: 500;
+    background:#313846;
 
-  cursor: pointer;
+    border-left:4px solid var(--event-color);
 
-  overflow: hidden;
+    border-radius:10px;
 
-  transition: all 0.25s ease;
-}
+    cursor:pointer;
 
-.eventBadge:hover {
-  transform: translateX(4px);
-  filter: brightness(1.08);
-}
-
-.eventIcon {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  font-size: 14px;
-
-  flex-shrink: 0;
-}
-
-.eventTitle {
-  flex: 1;
-
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-@media (max-width: 768px) {
-
-  .eventBadge {
-    padding: 5px 8px;
-    font-size: 11px;
-    min-height: 24px;
-  }
-
-  .eventIcon {
-    font-size: 12px;
-  }
+    transition:.25s;
 
 }
+
+.eventBadge:hover{
+
+    transform:translateX(4px);
+
+    background:#394255;
+
+}
+/* 
+.eventAvatar{
+
+    width:34px;
+
+    height:34px;
+
+    border-radius:50%;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    color:white;
+
+    font-size:12px;
+
+    font-weight:700;
+
+    flex-shrink:0;
+
+}
+
+.eventTypeIcon{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    color:var(--event-color);
+
+    font-size:13px;
+
+}
+
+.eventContent{
+
+    flex:1;
+
+    overflow:hidden;
+
+}
+
+.eventContent h5{
+
+    color:white;
+
+    font-size:12px;
+
+    font-weight:600;
+
+    overflow:hidden;
+
+    white-space:nowrap;
+
+    text-overflow:ellipsis;
+
+}
+
+.eventMeta{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    margin-top:4px;
+
+    font-size:11px;
+
+    color:#94a3b8;
+
+}
+
+@media(max-width:768px){
+
+.eventBadge{
+
+    padding:8px;
+
+}
+
+.eventAvatar{
+
+    width:28px;
+
+    height:28px;
+
+    font-size:10px;
+
+}
+
+.eventContent h5{
+
+    font-size:11px;
+
+}
+
+} */

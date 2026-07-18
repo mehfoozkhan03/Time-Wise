@@ -1,123 +1,83 @@
 import "./CalendarHeader.css";
 
 import {
-
-    FaChevronLeft,
-    FaChevronRight,
-    FaCalendarAlt
-
+  FaChevronLeft,
+  FaChevronRight,
+  FaCalendarDay,
 } from "react-icons/fa";
+
+import { getMonthName } from "../../../utils/calendarUtils";
 
 export default function CalendarHeader({
 
-    currentDate,
-    setCurrentDate
+  currentDate,
+
+  previousMonth,
+
+  nextMonth,
+
+  goToToday,
 
 }) {
 
-    const month = currentDate.toLocaleString("default", {
+  return (
 
-        month:"long"
+    <div className="calendarHeader">
 
-    });
+      <div className="headerTitle">
 
-    const year = currentDate.getFullYear();
+        <h2>
 
-    function nextMonth(){
+          {getMonthName(currentDate)} {currentDate.getFullYear()}
 
-        setCurrentDate(
+        </h2>
 
-            new Date(
+      </div>
 
-                year,
+      <div className="headerActions">
 
-                currentDate.getMonth()+1,
+        <button
 
-                1
+          onClick={previousMonth}
 
-            )
+          className="navBtn"
 
-        );
+        >
 
-    }
+          <FaChevronLeft />
 
-    function previousMonth(){
+        </button>
 
-        setCurrentDate(
+        <button
 
-            new Date(
+          onClick={goToToday}
 
-                year,
+          className="todayBtn"
 
-                currentDate.getMonth()-1,
+        >
 
-                1
+          <FaCalendarDay />
 
-            )
+          Today
 
-        );
+        </button>
 
-    }
+        <button
 
-    function today(){
+          onClick={nextMonth}
 
-        setCurrentDate(
+          className="navBtn"
 
-            new Date()
+        >
 
-        );
+          <FaChevronRight />
 
-    }
+        </button>
 
-    return(
+      </div>
 
-        <div className="calendarHeader">
+    </div>
 
-            <div className="calendarTitle">
-
-                <FaCalendarAlt/>
-
-                <h2>
-
-                    {month} {year}
-
-                </h2>
-
-            </div>
-
-            <div className="calendarActions">
-
-                <button
-                    onClick={previousMonth}
-                    className="calendarBtn"
-                >
-
-                    <FaChevronLeft/>
-
-                </button>
-
-                <button
-                    onClick={today}
-                    className="todayBtn"
-                >
-
-                    Today
-
-                </button>
-
-                <button
-                    onClick={nextMonth}
-                    className="calendarBtn"
-                >
-
-                    <FaChevronRight/>
-
-                </button>
-
-            </div>
-
-        </div>
-
-    );
+  );
 
 }

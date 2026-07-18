@@ -1,89 +1,113 @@
 import "./UpcomingEvents.css";
 
-import { EVENT_CONFIG } from "../data/eventConfig";
-import { formatDate } from "../utils/dateUtils";
+import {
+
+    getRelativeDateLabel,
+
+} from "../../../utils/dateUtils";
+
+import {
+
+    getUpcomingEvents,
+
+} from "../../../utils/eventUtils";
+
+import {
+
+    FaCalendarAlt,
+
+    FaArrowRight,
+
+    FaCalendarTimes,
+
+} from "react-icons/fa";
+
+import EventItem from "../../Common/EventItem/EventItem";
+import EmptyState from "../../Common/EmptyState/EmptyState";
 
 export default function UpcomingEvents({
 
-    events
+    events,
+
+    onEventClick,
 
 }) {
 
-    const upcomingEvents = [...events]
-
-        .sort((a, b) => new Date(a.date) - new Date(b.date))
-
-        .slice(0, 6);
+    const upcomingEvents = getUpcomingEvents(events);
 
     return (
 
         <div className="upcomingEvents">
 
-            <h3>
+            <div className="sectionHeader">
 
-                Upcoming Events
+                <FaCalendarAlt />
 
-            </h3>
+                <h3>
+
+                    Upcoming Events
+
+                </h3>
+
+            </div>
 
             {
 
                 upcomingEvents.length === 0 ? (
 
-                    <p className="noEvents">
+                    <EmptyState
 
-                        No Upcoming Events
+                        icon={<FaCalendarTimes />}
 
-                    </p>
+                        title="No Upcoming Events"
+
+                        description="You're all caught up. There are no upcoming events."
+
+                    />
 
                 ) : (
 
-                    upcomingEvents.map((event) => {
+                    upcomingEvents.map((event) => (
 
-                        const config = EVENT_CONFIG[event.type];
+                        <div
 
-                        return (
+                            key={event.id}
 
-                            <div
-                                key={event.id}
-                                className="upcomingCard"
-                            >
+                            className="upcomingWrapper"
 
-                                <div
-                                    className="eventCircle"
-                                    style={{
-                                        backgroundColor: config.color
-                                    }}
-                                >
+                        >
 
-                                    {config.icon}
+                            <EventItem
 
-                                </div>
+                                event={event}
 
-                                <div className="upcomingContent">
+                                variant="sidebar"
 
-                                    <h4>
+                                onClick={onEventClick}
 
-                                        {event.title}
+                            />
 
-                                    </h4>
+                            <p className="eventDate">
 
-                                    <span>
+                                {getRelativeDateLabel(event.date)}
 
-                                        {formatDate(event.date)}
+                            </p>
 
-                                    </span>
+                        </div>
 
-                                </div>
-
-                            </div>
-
-                        );
-
-                    })
+                    ))
 
                 )
 
             }
+
+            <button className="viewAllBtn">
+
+                View All
+
+                <FaArrowRight />
+
+            </button>
 
         </div>
 

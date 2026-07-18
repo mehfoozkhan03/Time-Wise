@@ -2,89 +2,77 @@
 
     display:flex;
 
-    flex-wrap:wrap;
+    flex-direction:column;
 
-    gap:14px;
-
-    padding:20px;
-
-    background:#313846;
-
-    border-bottom:1px solid #40495d;
-
-}
-
-.filterItem{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:10px;
-
-    color:white;
-
-    cursor:pointer;
-
-    user-select:none;
-
-}
-
-.filterItem input{
-
-    cursor:pointer;
-
-}
-
-.filterColor{
-
-    width:14px;
-
-    height:14px;
-
-    border-radius:50%;
-
-}
-
-.searchBox{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:10px;
-
-    width:100%;
-
-    background:#242a34;
-
-    padding:12px 18px;
-
-    border-radius:12px;
+    gap:18px;
 
     margin-bottom:20px;
 
 }
 
-.searchBox svg{
+.searchBar{
 
-    color:#94a3b8;
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    background:#2d333f;
+
+    border:1px solid #40495d;
+
+    padding:14px 18px;
+
+    border-radius:14px;
 
 }
 
-.searchBox input{
+.searchBar input{
 
     flex:1;
+
+    background:none;
 
     border:none;
 
     outline:none;
 
-    background:none;
-
     color:white;
 
     font-size:15px;
+
+}
+
+.searchBar svg{
+
+    color:#94a3b8;
+
+}
+
+.filterActions{
+
+    display:flex;
+
+    gap:12px;
+
+}
+
+.filterActions button{
+
+    padding:10px 18px;
+
+    border:none;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    background:#38bdf8;
+
+    color:white;
+
+    font-weight:600;
 
 }
 
@@ -98,7 +86,7 @@
 
 }
 
-.filterItem{
+.filterChip{
 
     display:flex;
 
@@ -106,45 +94,44 @@
 
     gap:8px;
 
-    background:#242a34;
+    padding:10px 16px;
 
-    border:1px solid #3b4558;
+    border-radius:999px;
 
-    border-radius:30px;
+    border:1px solid #40495d;
 
-    padding:8px 16px;
+    background:#313846;
+
+    color:white;
+
+    cursor:pointer;
 
     transition:.25s;
 
 }
 
-.filterItem.active{
+.filterChip.active{
 
     border-color:#38bdf8;
 
-    background:#313846;
+    background:#1f2937;
 
 }
 
-.filterItem:hover{
+.filterChip:hover{
 
-    border-color:#38bdf8;
-
-}
-
-
-@media(max-width:768px){
-
-.eventFilters{
-
-    gap:10px;
+    transform:translateY(-2px);
 
 }
 
-.filterItem{
+.count{
 
-    font-size:13px;
+    background:#38bdf8;
 
-}
+    padding:2px 8px;
+
+    border-radius:999px;
+
+    font-size:11px;
 
 }
