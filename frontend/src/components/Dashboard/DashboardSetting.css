@@ -1,0 +1,109 @@
+.dashboardSetting-container{
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+.dashboardSetting-header{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.dashboardSetting-header>h3{
+    font-size: 18px;
+}
+.dashboardSetting-header>span{
+    font-size: 12px;
+    color: #757f9b;
+}
+
+/* dashboard setting content */
+.dashboardSetting-content{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+}
+
+/* company setting */
+.dashboard-company-setting{
+    padding: 30px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    background-color: #1c2230;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    transition: all 0.4s ease;
+}
+.dashboard-company-setting:hover{
+    background-color: #232a3a;
+}
+.dashboard-company-setting>h3{
+    font-size: 16px;
+}
+.dashboard-company-setting>div{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.dashboard-company-setting>div>div{
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+.dashboard-company-setting>div>div>input{
+    padding: 12px 15px;
+    border-radius: 10px;
+    background-color: #161b21;
+}
+.dashboard-company-setting>div>div>label{
+    color: #6b788b;
+    font-size: 12px;
+    font-weight: 600;
+}
+.dashboard-company-setting>button{
+    padding: 12px 15px;
+    border-radius: 10px;
+    background-color: #28a3df;
+    color: #fff;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+/* Notification preference */
+.dashboard-notification-preference{
+    padding: 30px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    background-color: #1c2230;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    transition: all 0.4s ease;
+}
+.dashboard-notification-preference:hover{
+    background-color: #232a3a;
+}
+.dashboard-notification-preference>h3{
+    font-size: 16px;
+}
+.notification-preference-content{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.notification-preference-content>div{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 10px;
+}
+.notification-preference-content>div>p{
+    font-size: 14px;
+    color: #eae7e7;
+}
+.notification-preference-switch-btn{
+    background-color: #161b21;
+    height: 10px;
+}
