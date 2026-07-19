@@ -1,63 +1,63 @@
+/* ===========================
+   Mini Calendar
+=========================== */
+
+.miniCalendarCard .cardBody{
+    padding:18px;
+}
+
+/* Header */
+
 .miniHeader{
-
     display:flex;
-
+    align-items:center;
     justify-content:space-between;
 
-    align-items:center;
-
-    margin-bottom:18px;
-
+    margin-bottom:16px;
 }
 
 .miniHeader h3{
+    flex:1;
+
+    text-align:center;
 
     color:#fff;
 
-    font-size:16px;
-
-    font-weight:600;
-
+    font-size:17px;
+    font-weight:700;
 }
 
 .miniHeader button{
 
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
     width:34px;
-
     height:34px;
 
-    border:none;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 
+    border:none;
     border-radius:8px;
 
     background:#394255;
-
     color:#fff;
 
     cursor:pointer;
 
-    transition:all .25s ease;
-
+    transition:.2s;
 }
 
 .miniHeader button:hover{
 
     background:#38bdf8;
 
-    transform:translateY(-2px);
-
 }
+
+/* Week Names */
 
 .miniWeekDays{
 
     display:grid;
-
     grid-template-columns:repeat(7,1fr);
 
     gap:6px;
@@ -73,69 +73,82 @@
     color:#94a3b8;
 
     font-size:11px;
-
-    font-weight:600;
+    font-weight:700;
 
     text-transform:uppercase;
 
 }
 
+/* Grid */
+
 .miniGrid{
 
     display:grid;
-
     grid-template-columns:repeat(7,1fr);
 
     gap:6px;
 
 }
 
+/* Days */
+
 .miniDay{
 
+    width:100%;
     aspect-ratio:1;
 
     display:flex;
-
     justify-content:center;
-
     align-items:center;
 
     border:none;
-
     border-radius:8px;
 
-    background:#313846;
+    background:transparent;
 
     color:#fff;
 
+    font-size:12px;
+    font-weight:600;
+
     cursor:pointer;
 
-    transition:all .25s ease;
-
-    font-size:12px;
-
+    transition:.2s;
 }
 
 .miniDay:hover{
 
-    background:#38bdf8;
+    background:#394255;
 
 }
 
 .miniDay.today{
 
     background:#38bdf8;
+    color:#fff;
 
 }
 
 .miniDay.selected{
 
-    outline:2px solid #fff;
+    background:#4f46e5;
+
+    color:#fff;
 
 }
 
 .miniDay.otherMonth{
 
-    opacity:.35;
+    opacity:.28;
+
+}
+
+/* Focus */
+
+.miniHeader button:focus-visible,
+.miniDay:focus-visible{
+
+    outline:2px solid #38bdf8;
+    outline-offset:2px;
 
 }

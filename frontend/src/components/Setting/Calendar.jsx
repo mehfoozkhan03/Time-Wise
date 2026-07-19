@@ -3,11 +3,7 @@
   import EventCalendar from '../EventCalendar/EventCalendar';
 
   const Calendar = () => {
-    return (
-      <div>
-        <EventCalendar />
-      </div>
-    )
+    return <EventCalendar />;
   }
 
-  export default Calendar
+  export default Calendar;

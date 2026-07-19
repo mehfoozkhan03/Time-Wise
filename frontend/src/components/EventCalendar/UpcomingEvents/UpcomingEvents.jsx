@@ -1,49 +1,41 @@
 import "./UpcomingEvents.css";
 
-import {
-
-    getRelativeDateLabel,
-
-} from "../../../utils/dateUtils";
+import { memo, useMemo } from "react";
 
 import {
-
-    getUpcomingEvents,
-
-} from "../../../utils/eventUtils";
-
-import {
-
     FaCalendarAlt,
-
     FaArrowRight,
-
     FaCalendarTimes,
-
 } from "react-icons/fa";
 
 import Card from "../../Common/Card/Card";
 import EventItem from "../../Common/EventItem/EventItem";
 import EmptyState from "../../Common/EmptyState/EmptyState";
 
-export default function UpcomingEvents({
+import {
+    getUpcomingEvents,
+} from "../../../utils/eventUtils";
 
+import {
+    getRelativeDateLabel,
+} from "../../../utils/dateUtils";
+
+function UpcomingEvents({
     events,
-
     onEventClick,
-
 }) {
 
-    const upcomingEvents = getUpcomingEvents(events);
+    const upcomingEvents = useMemo(
+        () => getUpcomingEvents(events).slice(0, 4),
+        [events]
+    );
 
     return (
 
         <Card
-
             title="Upcoming Events"
-
             icon={<FaCalendarAlt />}
-
+            className="upcomingCard"
         >
 
             {
@@ -51,52 +43,52 @@ export default function UpcomingEvents({
                 upcomingEvents.length === 0 ? (
 
                     <EmptyState
-
                         icon={<FaCalendarTimes />}
-
                         title="No Upcoming Events"
-
-                        description="You're all caught up. There are no upcoming events."
-
+                        description="You're all caught up."
                     />
 
                 ) : (
 
-                    upcomingEvents.map((event) => (
+                    <div className="upcomingList">
 
-                        <div
+                        {
 
-                            key={event.id}
+                            upcomingEvents.map(event => (
 
-                            className="upcomingWrapper"
+                                <div
+                                    key={event.id}
+                                    className="upcomingItem"
+                                >
 
-                        >
+                                    <EventItem
+                                        event={event}
+                                        variant="compact"
+                                        onClick={onEventClick}
+                                    />
 
-                            <EventItem
+                                    <span className="eventDate">
 
-                                event={event}
+                                        {getRelativeDateLabel(event.date)}
 
-                                variant="sidebar"
+                                    </span>
 
-                                onClick={onEventClick}
+                                </div>
 
-                            />
+                            ))
 
-                            <p className="eventDate">
+                        }
 
-                                {getRelativeDateLabel(event.date)}
-
-                            </p>
-
-                        </div>
-
-                    ))
+                    </div>
 
                 )
 
             }
 
-            <button className="viewAllBtn">
+            <button
+                type="button"
+                className="viewAllBtn"
+            >
 
                 View All
 
@@ -109,3 +101,5 @@ export default function UpcomingEvents({
     );
 
 }
+
+export default memo(UpcomingEvents);

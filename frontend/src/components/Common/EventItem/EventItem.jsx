@@ -1,133 +1,120 @@
 import "./EventItem.css";
 
+import {
+    memo,
+    useCallback,
+    useMemo,
+} from "react";
+
 import { EVENT_CONFIG } from "../../../data/eventConfig";
 
 import { formatTime } from "../../../utils/dateUtils";
 
 import {
-
     getInitials,
-
     getAvatarColor,
-
 } from "../../../utils/stringUtils";
 
-export default function EventItem({
-
+function EventItem({
     event,
-
     variant = "default",
-
     showAvatar = true,
-
     showTime = true,
-
     showType = true,
-
     onClick,
-
 }) {
-
-    const config = EVENT_CONFIG[event.type];
+    const config = useMemo(
+        () => EVENT_CONFIG[event.type],
+        [event.type]
+    );
 
     if (!config) return null;
 
     const Icon = config.icon;
 
-    const handleClick = (e) => {
+    const avatarColor = useMemo(
+        () => getAvatarColor(event.employee),
+        [event.employee]
+    );
 
-        e.stopPropagation();
+    const initials = useMemo(
+        () => getInitials(event.employee),
+        [event.employee]
+    );
 
-        onClick?.(event);
+    const formattedTime = useMemo(
+        () =>
+            event.startTime
+                ? formatTime(event.startTime)
+                : "",
+        [event.startTime]
+    );
 
-    };
+    const handleClick = useCallback(
+        (e) => {
+            e.stopPropagation();
+            onClick?.(event);
+        },
+        [event, onClick]
+    );
+
+    const handleKeyDown = useCallback(
+        (e) => {
+            if (
+                e.key === "Enter" ||
+                e.key === " "
+            ) {
+                e.preventDefault();
+                onClick?.(event);
+            }
+        },
+        [event, onClick]
+    );
 
     return (
-
         <div
-
             className={`eventItem ${variant}`}
-
-            onClick={handleClick}
-
             style={{
-
                 "--event-color": config.color,
-
             }}
-
+            onClick={handleClick}
+            onKeyDown={handleKeyDown}
+            role={onClick ? "button" : undefined}
+            tabIndex={onClick ? 0 : undefined}
         >
-
-            {
-
-                showAvatar && (
-
-                    <div
-
-                        className="eventItemAvatar"
-
-                        style={{
-
-                            background: getAvatarColor(event.employee),
-
-                        }}
-
-                    >
-
-                        {getInitials(event.employee)}
-
-                    </div>
-
-                )
-
-            }
+            {showAvatar && (
+                <div
+                    className="eventItemAvatar"
+                    style={{
+                        background: avatarColor,
+                    }}
+                >
+                    {initials}
+                </div>
+            )}
 
             <div className="eventItemContent">
-
                 <h5 title={event.title}>
-
                     {event.title}
-
                 </h5>
 
                 <div className="eventItemMeta">
+                    {showType && (
+                        <span className="eventItemIcon">
+                            <Icon />
+                        </span>
+                    )}
 
-                    {
-
-                        showType && (
-
-                            <span className="eventItemIcon">
-
-                                <Icon />
-
-                            </span>
-
-                        )
-
-                    }
-
-                    {
-
-                        showTime &&
-
-                        event.startTime && (
-
+                    {showTime &&
+                        formattedTime && (
                             <span>
-
-                                {formatTime(event.startTime)}
-
+                                {formattedTime}
                             </span>
-
-                        )
-
-                    }
-
+                        )}
                 </div>
-
             </div>
-
         </div>
-
     );
-
 }
+
+export default memo(EventItem);

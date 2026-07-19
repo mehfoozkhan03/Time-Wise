@@ -1,96 +1,82 @@
 import "./EventLegend.css";
 
+import { memo, useMemo } from "react";
 import { FaListUl } from "react-icons/fa";
 
 import Card from "../../Common/Card/Card";
-
 import { EVENT_CONFIG } from "../../../data/eventConfig";
 
-export default function EventLegend({
-
+function EventLegend({
     filters,
-
     toggleFilter,
-
 }) {
+
+    const legendItems = useMemo(
+        () => Object.entries(EVENT_CONFIG),
+        []
+    );
 
     return (
 
         <Card
-
             title="Event Legend"
-
             icon={<FaListUl />}
-
+            className="legendCard"
         >
 
             <div className="legendList">
 
                 {
 
-                    Object.entries(EVENT_CONFIG).map(
+                    legendItems.map(([type, config]) => {
 
-                        ([type, config]) => {
+                        const Icon = config.icon;
 
-                            const Icon = config.icon;
+                        const active = filters[type];
 
-                            const active = filters[type];
+                        return (
 
-                            return (
+                            <button
+                                key={type}
+                                type="button"
+                                className={`legendItem ${
+                                    active ? "active" : "inactive"
+                                }`}
+                                onClick={() => toggleFilter(type)}
+                            >
 
-                                <button
-
-                                    key={type}
-
-                                    className={`legendItem ${
-
-                                        active
-
-                                            ? "active"
-
-                                            : "inactive"
-
-                                    }`}
-
-                                    onClick={() =>
-
-                                        toggleFilter(type)
-
-                                    }
-
+                                <div
+                                    className="legendIcon"
+                                    style={{
+                                        "--legend-color": config.color,
+                                    }}
                                 >
+                                    <Icon />
+                                </div>
 
-                                    <div
+                                <div className="legendContent">
 
-                                        className="legendIcon"
-
-                                        style={{
-
-                                            "--legend-color":
-
-                                                config.color,
-
-                                        }}
-
-                                    >
-
-                                        <Icon />
-
-                                    </div>
-
-                                    <span>
+                                    <span className="legendTitle">
 
                                         {config.label}
 
                                     </span>
 
-                                </button>
+                                    <small>
 
-                            );
+                                        {active
+                                            ? "Visible"
+                                            : "Hidden"}
 
-                        }
+                                    </small>
 
-                    )
+                                </div>
+
+                            </button>
+
+                        );
+
+                    })
 
                 }
 
@@ -101,3 +87,5 @@ export default function EventLegend({
     );
 
 }
+
+export default memo(EventLegend);

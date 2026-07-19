@@ -1,133 +1,90 @@
 import "./TodaySummary.css";
 
+import { memo, useMemo } from "react";
+
 import {
-
     FaChartPie,
-
     FaRegCalendarCheck,
-
 } from "react-icons/fa";
 
 import Card from "../../Common/Card/Card";
-
 import EmptyState from "../../Common/EmptyState/EmptyState";
 
 import { EVENT_CONFIG } from "../../../data/eventConfig";
+import { getTodaySummary } from "../../../utils/eventUtils";
 
-import {
+function TodaySummary({ events }) {
 
-    getTodaySummary,
-
-} from "../../../utils/eventUtils";
-
-export default function TodaySummary({
-
-    events,
-
-}) {
-
-    const summaryData = getTodaySummary(
-
-        events,
-
-        EVENT_CONFIG
-
+    const summaryData = useMemo(
+        () => getTodaySummary(events, EVENT_CONFIG),
+        [events]
     );
 
     return (
-
         <Card
-
             title="Today's Summary"
-
             icon={<FaChartPie />}
-
+            className="summaryCard"
         >
+            {summaryData.length === 0 ? (
+                <EmptyState
+                    icon={<FaRegCalendarCheck />}
+                    title="No Events Today"
+                    description="No scheduled events for today."
+                />
+            ) : (
+                <div className="summaryList">
 
-            {
+                    {summaryData.map((item) => {
 
-                summaryData.length === 0 ? (
+                        const Icon = item.config.icon;
 
-                    <EmptyState
+                        return (
 
-                        icon={<FaRegCalendarCheck />}
+                            <div
+                                key={item.type}
+                                className="summaryItem"
+                            >
 
-                        title="No Events Today"
-
-                        description="There are no scheduled events for today."
-
-                    />
-
-                ) : (
-
-                    <div className="summaryList">
-
-                        {
-
-                            summaryData.map((item) => {
-
-                                const Icon = item.config.icon;
-
-                                return (
+                                <div className="summaryLeft">
 
                                     <div
-
-                                        key={item.type}
-
-                                        className="summaryItem"
-
+                                        className="summaryIcon"
+                                        style={{
+                                            "--summary-color": item.config.color,
+                                        }}
                                     >
+                                        <Icon />
+                                    </div>
 
-                                        <div className="summaryLeft">
+                                    <div className="summaryContent">
 
-                                            <div
-
-                                                className="summaryIcon"
-
-                                                style={{
-
-                                                    "--summary-color":
-
-                                                        item.config.color,
-
-                                                }}
-
-                                            >
-
-                                                <Icon />
-
-                                            </div>
-
-                                            <span>
-
-                                                {item.config.label}
-
-                                            </span>
-
-                                        </div>
-
-                                        <span className="summaryCount">
-
-                                            {item.count}
-
+                                        <span className="summaryTitle">
+                                            {item.config.label}
                                         </span>
+
+                                        <small>
+                                            Today's Events
+                                        </small>
 
                                     </div>
 
-                                );
+                                </div>
 
-                            })
+                                <span className="summaryCount">
+                                    {item.count}
+                                </span>
 
-                        }
+                            </div>
 
-                    </div>
+                        );
 
-                )
+                    })}
 
-            }
-
+                </div>
+            )}
         </Card>
-
     );
-
 }
+
+export default memo(TodaySummary);
