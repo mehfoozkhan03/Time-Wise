@@ -58,7 +58,11 @@
   transition: 0.35s;
 }
 
+<<<<<<< HEAD
 @media (max-width: 320px) {
+=======
+@media (max-width: 840px) {
+>>>>>>> 0623fba53cdf1a9ff7f23d796e88b3bf1df577de
   .action_card {
     gap: 7px;
   }

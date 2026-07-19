@@ -168,7 +168,7 @@
   }
 }
 
-@media (max-width: 430px) {
+@media (max-width: 840px) {
   .footer {
     margin: 0;
   }
@@ -210,7 +210,7 @@
   .footer_contact h3 {
     margin-bottom: 0;
   }
-  .footer_contact{
+  .footer_contact {
     gap: 5px;
   }
 }
