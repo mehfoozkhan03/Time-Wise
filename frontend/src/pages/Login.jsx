@@ -1,20 +1,21 @@
-import { useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import { authService } from '../services/authService';
-import '../styles/Login.css';
-import { useDispatch, useSelector } from 'react-redux';
-import { loginUser, registerUser } from '../store/authSlice';
-import { useNavigate } from 'react-router-dom';
+import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { authService } from "../services/authService";
+import "../styles/Login.css";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser, registerUser } from "../store/authSlice";
+import { useNavigate } from "react-router-dom";
+import { Feedback } from "./FeedBack"; // ← dynamic modal
 
 const initialFormData = {
-  firstName: '',
-  lastName: '',
-  email: '',
-  password: '',
-  confirmPassword: '',
-  dob: '',
-  gender: '',
+  firstName: "",
+  lastName: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
+  dob: "",
+  gender: "",
 };
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -36,9 +37,34 @@ const SignUpPage = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [formData, setFormData] = useState(initialFormData);
-
   const [errors, setErrors] = useState({});
-  // const [loading, setLoading] = useState(false);
+
+  // ── Modal state ──────────────────────────────────────────────────────────────
+  const [modal, setModal] = useState({
+    open: false,
+    type: "", // "success" | "error"
+    title: "",
+    message: "",
+    onCloseCb: null, // optional callback to run after modal closes
+  });
+
+  const showModal = (type, title, message, onCloseCb = null) => {
+    setModal({ open: true, type, title, message, onCloseCb });
+  };
+
+  const closeModal = () => {
+    const cb = modal.onCloseCb;
+    setModal({
+      open: false,
+      type: "",
+      title: "",
+      message: "",
+      onCloseCb: null,
+    });
+    if (cb) cb(); // run any post-close action (e.g. navigate)
+  };
+
+  // ── Helpers ──────────────────────────────────────────────────────────────────
 
   const resetForm = () => {
     setFormData(initialFormData);
@@ -55,24 +81,26 @@ const SignUpPage = () => {
 
     setErrors((prev) => ({
       ...prev,
-      [name]: '',
+      [name]: "",
     }));
   };
+
+  // ── Validation ────────────────────────────────────────────────────────────────
 
   const validateLogin = () => {
     let newErrors = {};
     let isValid = true;
 
     if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
+      newErrors.email = "Email is required";
       isValid = false;
     } else if (!emailRegex.test(formData.email)) {
-      newErrors.email = 'Invalid email';
+      newErrors.email = "Invalid email";
       isValid = false;
     }
 
     if (!formData.password) {
-      newErrors.password = 'Password is required';
+      newErrors.password = "Password is required";
       isValid = false;
     }
 
@@ -85,40 +113,40 @@ const SignUpPage = () => {
     let isValid = true;
 
     if (!formData.firstName.trim()) {
-      newErrors.firstName = 'First name is required';
+      newErrors.firstName = "First name is required";
       isValid = false;
     } else if (!nameRegex.test(formData.firstName)) {
-      newErrors.firstName = 'First name should be 2-50 letters';
+      newErrors.firstName = "First name should be 2-50 letters";
       isValid = false;
     }
 
     if (!formData.lastName.trim()) {
-      newErrors.lastName = 'Last name is required';
+      newErrors.lastName = "Last name is required";
       isValid = false;
     } else if (!nameRegex.test(formData.lastName)) {
-      newErrors.lastName = 'Last name should be 2-50 letters';
+      newErrors.lastName = "Last name should be 2-50 letters";
       isValid = false;
     }
 
     if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
+      newErrors.email = "Email is required";
       isValid = false;
     } else if (!emailRegex.test(formData.email)) {
-      newErrors.email = 'Invalid email format';
+      newErrors.email = "Invalid email format";
       isValid = false;
     }
 
     if (!formData.password) {
-      newErrors.password = 'Password is required';
+      newErrors.password = "Password is required";
       isValid = false;
     } else if (!passwordRegex.test(formData.password)) {
       newErrors.password =
-        'Minimum 8 characters with uppercase, lowercase, number and special character';
+        "Minimum 8 characters with uppercase, lowercase, number and special character";
       isValid = false;
     }
 
     if (!formData.confirmPassword) {
-      newErrors.confirmPassword = 'Confirm password is required';
+      newErrors.confirmPassword = "Confirm password is required";
       isValid = false;
     } else if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = "Passwords don't match";
@@ -126,12 +154,12 @@ const SignUpPage = () => {
     }
 
     if (!formData.dob) {
-      newErrors.dob = 'Date of birth is required';
+      newErrors.dob = "Date of birth is required";
       isValid = false;
     }
 
     if (!formData.gender) {
-      newErrors.gender = 'Please select gender';
+      newErrors.gender = "Please select gender";
       isValid = false;
     }
 
@@ -139,11 +167,12 @@ const SignUpPage = () => {
     return isValid;
   };
 
+  // ── Submit ────────────────────────────────────────────────────────────────────
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const isValid = isRegister ? validateSignup() : validateLogin();
-
     if (!isValid) return;
 
     try {
@@ -151,12 +180,20 @@ const SignUpPage = () => {
         const result = await dispatch(registerUser(formData));
 
         if (registerUser.fulfilled.match(result)) {
-          alert(result.payload.message || 'Registration Successful');
-
           resetForm();
           setIsRegister(false);
+          showModal(
+            "success",
+            "Registration Successful",
+            result.payload.message ||
+              "Your account has been created successfully.",
+          );
         } else {
-          alert(result.payload || 'Registration Failed');
+          showModal(
+            "error",
+            "Registration Failed",
+            result.payload || "Something went wrong. Please try again.",
+          );
         }
       } else {
         const result = await dispatch(
@@ -167,19 +204,29 @@ const SignUpPage = () => {
         );
 
         if (loginUser.fulfilled.match(result)) {
-          alert(result.payload.message || 'Login Successful');
-
           resetForm();
-          navigate('/');
+          // navigate AFTER the user closes the success modal
+          showModal(
+            "success",
+            "Login Successful",
+            result.payload.message || "Welcome back!",
+            () => navigate("/"),
+          );
         } else {
-          alert(result.payload || 'Login Failed');
+          showModal(
+            "error",
+            "Login Failed",
+            result.payload || "Invalid credentials. Please try again.",
+          );
         }
       }
     } catch (error) {
       console.error(error);
-      alert('Something went wrong');
+      showModal("error", "Oops!", "Something went wrong. Please try again.");
     }
   };
+
+  // ── Render ────────────────────────────────────────────────────────────────────
 
   return (
     <div className="sing_login">
@@ -210,7 +257,7 @@ const SignUpPage = () => {
 
               <div className="input-box password-box">
                 <input
-                  type={showLoginPassword ? 'text' : 'password'}
+                  type={showLoginPassword ? "text" : "password"}
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
@@ -228,11 +275,11 @@ const SignUpPage = () => {
               </div>
 
               <button type="submit" className="loginsumit" disabled={isLoading}>
-                {isLoading ? 'Please wait...' : 'Login'}
+                {isLoading ? "Please wait..." : "Login"}
               </button>
 
               <p className="message">
-                Don't have an account?{' '}
+                Don't have an account?{" "}
                 <span
                   onClick={() => {
                     setIsRegister(true);
@@ -290,7 +337,7 @@ const SignUpPage = () => {
 
               <div className="input-box password-box">
                 <input
-                  type={showRegisterPassword ? 'text' : 'password'}
+                  type={showRegisterPassword ? "text" : "password"}
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
@@ -309,7 +356,7 @@ const SignUpPage = () => {
 
               <div className="input-box password-box">
                 <input
-                  type={showConfirmPassword ? 'text' : 'password'}
+                  type={showConfirmPassword ? "text" : "password"}
                   name="confirmPassword"
                   value={formData.confirmPassword}
                   onChange={handleChange}
@@ -352,26 +399,36 @@ const SignUpPage = () => {
               </div>
 
               <button type="submit" className="loginsumit" disabled={isLoading}>
-                {isLoading ? 'Please wait...' : 'Register'}
+                {isLoading ? "Please wait..." : "Register"}
               </button>
 
               <p className="message">
-                Already have an account?{' '}
+                Already have an account?{" "}
                 <span
                   onClick={() => {
                     setIsRegister(false);
                     resetForm();
                   }}
                 >
-                  {' '}
-                  Sign In{' '}
+                  {" "}
+                  Sign In{" "}
                 </span>
               </p>
             </motion.form>
           )}
         </AnimatePresence>
       </div>
+
+      {/* ── Dynamic feedback modal ── */}
+      <Feedback
+        isOpen={modal.open}
+        type={modal.type}
+        title={modal.title}
+        message={modal.message}
+        onClose={closeModal}
+      />
     </div>
   );
 };
+
 export default SignUpPage;
