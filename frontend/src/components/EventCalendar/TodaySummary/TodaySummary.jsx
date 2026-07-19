@@ -1,5 +1,17 @@
 import "./TodaySummary.css";
 
+import {
+
+    FaChartPie,
+
+    FaRegCalendarCheck,
+
+} from "react-icons/fa";
+
+import Card from "../../Common/Card/Card";
+
+import EmptyState from "../../Common/EmptyState/EmptyState";
+
 import { EVENT_CONFIG } from "../../../data/eventConfig";
 
 import {
@@ -7,14 +19,6 @@ import {
     getTodaySummary,
 
 } from "../../../utils/eventUtils";
-
-import EmptyState from "../../Common/EmptyState/EmptyState";
-
-import {
-
-    FaRegCalendarCheck,
-
-} from "react-icons/fa";
 
 export default function TodaySummary({
 
@@ -32,13 +36,13 @@ export default function TodaySummary({
 
     return (
 
-        <div className="todaySummary">
+        <Card
 
-            <h3>
+            title="Today's Summary"
 
-                Today's Summary
+            icon={<FaChartPie />}
 
-            </h3>
+        >
 
             {
 
@@ -122,7 +126,7 @@ export default function TodaySummary({
 
             }
 
-        </div>
+        </Card>
 
     );
 

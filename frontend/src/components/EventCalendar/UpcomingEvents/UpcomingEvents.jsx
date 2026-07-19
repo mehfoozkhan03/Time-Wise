@@ -22,6 +22,7 @@ import {
 
 } from "react-icons/fa";
 
+import Card from "../../Common/Card/Card";
 import EventItem from "../../Common/EventItem/EventItem";
 import EmptyState from "../../Common/EmptyState/EmptyState";
 
@@ -37,19 +38,13 @@ export default function UpcomingEvents({
 
     return (
 
-        <div className="upcomingEvents">
+        <Card
 
-            <div className="sectionHeader">
+            title="Upcoming Events"
 
-                <FaCalendarAlt />
+            icon={<FaCalendarAlt />}
 
-                <h3>
-
-                    Upcoming Events
-
-                </h3>
-
-            </div>
+        >
 
             {
 
@@ -109,7 +104,7 @@ export default function UpcomingEvents({
 
             </button>
 
-        </div>
+        </Card>
 
     );
 

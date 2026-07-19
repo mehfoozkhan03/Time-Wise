@@ -1,14 +1,14 @@
 .eventCalendar{
 
-    width:100%;
-
-    min-height:100vh;
-
     display:flex;
 
     flex-direction:column;
 
-    gap:20px;
+    gap:24px;
+
+    width:100%;
+
+    min-height:100vh;
 
     animation:fadeIn .35s ease;
 
@@ -18,7 +18,7 @@
 
     display:grid;
 
-    grid-template-columns:1fr 340px;
+    grid-template-columns:minmax(0,1fr) 340px;
 
     gap:24px;
 
@@ -40,7 +40,7 @@
 
     .eventCalendar{
 
-        gap:16px;
+        gap:18px;
 
     }
 
@@ -52,7 +52,7 @@
 
         opacity:0;
 
-        transform:translateY(15px);
+        transform:translateY(12px);
 
     }
 

@@ -1,6 +1,12 @@
 .calendarDay{
 
+    display:flex;
+
+    flex-direction:column;
+
     min-height:140px;
+
+    padding:10px;
 
     background:#2d333f;
 
@@ -8,15 +14,9 @@
 
     border-radius:14px;
 
-    padding:10px;
-
-    display:flex;
-
-    flex-direction:column;
-
     cursor:pointer;
 
-    transition:.25s;
+    transition:all .25s ease;
 
 }
 
@@ -40,21 +40,45 @@
 
 .dayNumber{
 
-    width:34px;
-
-    height:34px;
-
-    border-radius:50%;
-
     display:flex;
 
     justify-content:center;
 
     align-items:center;
 
-    color:white;
+    width:34px;
+
+    height:34px;
+
+    border-radius:50%;
+
+    color:#fff;
+
+    font-size:14px;
 
     font-weight:600;
+
+    transition:all .25s ease;
+
+}
+
+.today .dayNumber{
+
+    background:#38bdf8;
+
+}
+
+.selected{
+
+    border-color:#38bdf8;
+
+    box-shadow:0 0 0 2px rgba(56,189,248,.15);
+
+}
+
+.otherMonth{
+
+    opacity:.35;
 
 }
 
@@ -70,70 +94,62 @@
 
 }
 
-.today .dayNumber{
-
-    background:#38bdf8;
-
-}
-
-.selected{
-
-    border:2px solid #38bdf8;
-
-}
-
-.otherMonth{
-
-    opacity:.35;
-
-}
-
-.moreEvents{
-
-    color:#94a3b8;
-
-    font-size:12px;
-
-    text-align:center;
-
-    margin-top:4px;
-
-}
-
 .emptyEvents{
 
     flex:1;
 
 }
 
-@media(max-width:992px){
+.moreEvents{
 
-.calendarDay{
+    margin-top:auto;
 
-    min-height:120px;
+    color:#94a3b8;
+
+    font-size:11px;
+
+    text-align:center;
+
+    font-weight:500;
 
 }
+
+@media(max-width:992px){
+
+    .calendarDay{
+
+        min-height:120px;
+
+    }
 
 }
 
 @media(max-width:768px){
 
-.calendarDay{
+    .calendarDay{
 
-    min-height:90px;
+        min-height:90px;
 
-    padding:6px;
+        padding:6px;
 
-}
+        border-radius:10px;
 
-.dayNumber{
+    }
 
-    width:28px;
+    .dayNumber{
 
-    height:28px;
+        width:28px;
 
-    font-size:13px;
+        height:28px;
 
-}
+        font-size:12px;
+
+    }
+
+    .dayEvents{
+
+        gap:4px;
+
+    }
 
 }

@@ -10,32 +10,31 @@
 
 }
 
+/* Card component already provides
+   background, border and radius */
+
 .calendarSidebar > *{
 
-    background:#2d333f;
-
-    border:1px solid #40495d;
-
-    border-radius:16px;
-
-    overflow:hidden;
-
-    transition:.25s;
-
-}
-
-.calendarSidebar > *:hover{
-
-    border-color:#38bdf8;
+    width:100%;
 
 }
 
 @media(max-width:1200px){
 
-.calendarSidebar{
+    .calendarSidebar{
 
-    margin-top:20px;
+        margin-top:20px;
+
+    }
 
 }
+
+@media(max-width:768px){
+
+    .calendarSidebar{
+
+        gap:16px;
+
+    }
 
 }
