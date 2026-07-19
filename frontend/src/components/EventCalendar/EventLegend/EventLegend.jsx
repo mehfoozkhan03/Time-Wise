@@ -1,5 +1,9 @@
 import "./EventLegend.css";
 
+import { FaListUl } from "react-icons/fa";
+
+import Card from "../../Common/Card/Card";
+
 import { EVENT_CONFIG } from "../../../data/eventConfig";
 
 export default function EventLegend({
@@ -12,13 +16,13 @@ export default function EventLegend({
 
     return (
 
-        <div className="eventLegend">
+        <Card
 
-            <h3>
+            title="Event Legend"
 
-                Event Legend
+            icon={<FaListUl />}
 
-            </h3>
+        >
 
             <div className="legendList">
 
@@ -92,7 +96,7 @@ export default function EventLegend({
 
             </div>
 
-        </div>
+        </Card>
 
     );
 

@@ -4,13 +4,17 @@
 
     inset:0;
 
-    background:rgba(0,0,0,.65);
-
     display:flex;
 
     justify-content:center;
 
     align-items:center;
+
+    padding:20px;
+
+    background:rgba(0,0,0,.65);
+
+    backdrop-filter:blur(4px);
 
     z-index:999;
 
@@ -20,15 +24,15 @@
 
 .eventModal{
 
-    width:min(650px,95%);
+    width:min(680px,100%);
 
     background:#2d333f;
+
+    border:1px solid #40495d;
 
     border-radius:18px;
 
     overflow:hidden;
-
-    border:1px solid #40495d;
 
     animation:popup .3s ease;
 
@@ -41,6 +45,8 @@
     justify-content:space-between;
 
     align-items:center;
+
+    gap:20px;
 
     padding:22px;
 
@@ -60,21 +66,21 @@
 
 .eventIcon{
 
-    width:56px;
-
-    height:56px;
-
-    border-radius:50%;
-
     display:flex;
 
     justify-content:center;
 
     align-items:center;
 
+    width:56px;
+
+    height:56px;
+
+    border-radius:50%;
+
     background:var(--event-color);
 
-    color:white;
+    color:#fff;
 
     font-size:22px;
 
@@ -82,7 +88,7 @@
 
 .modalTitle h2{
 
-    color:white;
+    color:#fff;
 
     margin-bottom:6px;
 
@@ -90,7 +96,9 @@
 
 .eventType{
 
-    display:inline-block;
+    display:inline-flex;
+
+    align-items:center;
 
     padding:5px 12px;
 
@@ -98,7 +106,7 @@
 
     background:var(--event-color);
 
-    color:white;
+    color:#fff;
 
     font-size:12px;
 
@@ -108,6 +116,12 @@
 
 .closeBtn{
 
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
     width:42px;
 
     height:42px;
@@ -116,19 +130,21 @@
 
     border-radius:50%;
 
-    cursor:pointer;
-
     background:#394255;
 
-    color:white;
+    color:#fff;
 
-    transition:.25s;
+    cursor:pointer;
+
+    transition:all .25s ease;
 
 }
 
 .closeBtn:hover{
 
     background:#ef4444;
+
+    transform:rotate(90deg);
 
 }
 
@@ -138,7 +154,7 @@
 
     flex-direction:column;
 
-    gap:16px;
+    gap:18px;
 
     padding:24px;
 
@@ -148,17 +164,17 @@
 
     padding:18px;
 
-    border-radius:12px;
-
     background:#313846;
 
     border:1px solid #40495d;
+
+    border-radius:12px;
 
 }
 
 .descriptionCard h3{
 
-    color:white;
+    color:#fff;
 
     margin-bottom:12px;
 
@@ -178,7 +194,7 @@
 
     justify-content:flex-end;
 
-    gap:14px;
+    gap:12px;
 
     padding:20px 24px;
 
@@ -187,13 +203,18 @@
 }
 
 .editBtn,
+
 .deleteBtn{
 
     display:flex;
 
+    justify-content:center;
+
     align-items:center;
 
     gap:8px;
+
+    min-width:120px;
 
     padding:12px 20px;
 
@@ -201,11 +222,13 @@
 
     border-radius:10px;
 
-    cursor:pointer;
+    color:#fff;
 
     font-weight:600;
 
-    transition:.25s;
+    cursor:pointer;
+
+    transition:all .25s ease;
 
 }
 
@@ -213,22 +236,29 @@
 
     background:#38bdf8;
 
-    color:white;
-
 }
 
 .deleteBtn{
 
     background:#ef4444;
 
-    color:white;
-
 }
 
 .editBtn:hover,
+
 .deleteBtn:hover{
 
     transform:translateY(-2px);
+
+    filter:brightness(1.08);
+
+}
+
+.editBtn:active,
+
+.deleteBtn:active{
+
+    transform:scale(.98);
 
 }
 
@@ -238,7 +268,7 @@
 
         opacity:0;
 
-        transform:scale(.9);
+        transform:scale(.92);
 
     }
 
@@ -270,31 +300,38 @@
 
 @media(max-width:768px){
 
-.modalHeader{
+    .eventModal{
 
-    padding:18px;
+        border-radius:14px;
 
-}
+    }
 
-.modalBody{
+    .modalHeader{
 
-    padding:18px;
+        padding:18px;
 
-}
+    }
 
-.modalFooter{
+    .modalBody{
 
-    flex-direction:column;
+        padding:18px;
 
-}
+    }
 
-.editBtn,
-.deleteBtn{
+    .modalFooter{
 
-    width:100%;
+        flex-direction:column;
 
-    justify-content:center;
+        padding:18px;
 
-}
+    }
+
+    .editBtn,
+
+    .deleteBtn{
+
+        width:100%;
+
+    }
 
 }

@@ -1,9 +1,3 @@
-.miniCalendar{
-
-    padding:18px;
-
-}
-
 .miniHeader{
 
     display:flex;
@@ -18,13 +12,21 @@
 
 .miniHeader h3{
 
-    color:white;
+    color:#fff;
 
     font-size:16px;
+
+    font-weight:600;
 
 }
 
 .miniHeader button{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
 
     width:34px;
 
@@ -34,19 +36,21 @@
 
     border-radius:8px;
 
-    cursor:pointer;
-
     background:#394255;
 
-    color:white;
+    color:#fff;
 
-    transition:.25s;
+    cursor:pointer;
+
+    transition:all .25s ease;
 
 }
 
 .miniHeader button:hover{
 
     background:#38bdf8;
+
+    transform:translateY(-2px);
 
 }
 
@@ -56,7 +60,9 @@
 
     grid-template-columns:repeat(7,1fr);
 
-    margin-bottom:8px;
+    gap:6px;
+
+    margin-bottom:10px;
 
 }
 
@@ -66,9 +72,11 @@
 
     color:#94a3b8;
 
-    font-size:12px;
+    font-size:11px;
 
     font-weight:600;
+
+    text-transform:uppercase;
 
 }
 
@@ -86,17 +94,23 @@
 
     aspect-ratio:1;
 
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
     border:none;
 
     border-radius:8px;
 
-    cursor:pointer;
-
     background:#313846;
 
-    color:white;
+    color:#fff;
 
-    transition:.25s;
+    cursor:pointer;
+
+    transition:all .25s ease;
 
     font-size:12px;
 
@@ -116,7 +130,7 @@
 
 .miniDay.selected{
 
-    border:2px solid white;
+    outline:2px solid #fff;
 
 }
 

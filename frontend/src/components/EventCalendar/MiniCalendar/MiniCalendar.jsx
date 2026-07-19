@@ -1,15 +1,31 @@
 import "./MiniCalendar.css";
 
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import {
+
+    FaChevronLeft,
+
+    FaChevronRight,
+
+    FaCalendarAlt,
+
+} from "react-icons/fa";
+
+import Card from "../../Common/Card/Card";
 
 import {
+
     WEEK_DAYS,
+
     generateCalendar,
+
     getMonthName,
+
     isSameDate,
+
 } from "../../../utils/calendarUtils";
 
 export default function MiniCalendar({
+
     currentDate,
 
     selectedDate,
@@ -19,21 +35,24 @@ export default function MiniCalendar({
     previousMonth,
 
     nextMonth,
+
 }) {
 
     const days = generateCalendar(currentDate);
 
     return (
 
-        <div className="miniCalendar">
+        <Card
+
+            title="Mini Calendar"
+
+            icon={<FaCalendarAlt />}
+
+        >
 
             <div className="miniHeader">
 
-                <button
-
-                    onClick={previousMonth}
-
-                >
+                <button onClick={previousMonth}>
 
                     <FaChevronLeft />
 
@@ -41,15 +60,15 @@ export default function MiniCalendar({
 
                 <h3>
 
-                    {getMonthName(currentDate)} {currentDate.getFullYear()}
+                    {getMonthName(currentDate)}
+
+                    {" "}
+
+                    {currentDate.getFullYear()}
 
                 </h3>
 
-                <button
-
-                    onClick={nextMonth}
-
-                >
+                <button onClick={nextMonth}>
 
                     <FaChevronRight />
 
@@ -61,7 +80,7 @@ export default function MiniCalendar({
 
                 {
 
-                    WEEK_DAYS.map((day)=>(
+                    WEEK_DAYS.map((day) => (
 
                         <span key={day}>
 
@@ -79,23 +98,23 @@ export default function MiniCalendar({
 
                 {
 
-                    days.map((item,index)=>(
+                    days.map((item, index) => (
 
                         <button
 
                             key={index}
 
                             className={`miniDay
-                            
-                            ${!item.currentMonth ? "otherMonth" : ""}
 
-                            ${item.isToday ? "today" : ""}
+                                ${!item.currentMonth ? "otherMonth" : ""}
 
-                            ${isSameDate(item.date,selectedDate) ? "selected" : ""}
+                                ${item.isToday ? "today" : ""}
+
+                                ${isSameDate(item.date, selectedDate) ? "selected" : ""}
 
                             `}
 
-                            onClick={()=>selectDate(day)(item.date)}
+                            onClick={() => selectDate(item.date)}
 
                         >
 
@@ -109,7 +128,7 @@ export default function MiniCalendar({
 
             </div>
 
-        </div>
+        </Card>
 
     );
 

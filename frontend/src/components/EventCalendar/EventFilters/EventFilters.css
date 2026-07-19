@@ -18,13 +18,29 @@
 
     gap:12px;
 
+    padding:14px 18px;
+
     background:#2d333f;
 
     border:1px solid #40495d;
 
-    padding:14px 18px;
-
     border-radius:14px;
+
+    transition:all .25s ease;
+
+}
+
+.searchBar:focus-within{
+
+    border-color:#38bdf8;
+
+}
+
+.searchBar svg{
+
+    color:#94a3b8;
+
+    flex-shrink:0;
 
 }
 
@@ -32,19 +48,19 @@
 
     flex:1;
 
-    background:none;
+    background:transparent;
 
     border:none;
 
     outline:none;
 
-    color:white;
+    color:#fff;
 
     font-size:15px;
 
 }
 
-.searchBar svg{
+.searchBar input::placeholder{
 
     color:#94a3b8;
 
@@ -53,6 +69,8 @@
 .filterActions{
 
     display:flex;
+
+    flex-wrap:wrap;
 
     gap:12px;
 
@@ -66,13 +84,23 @@
 
     border-radius:10px;
 
-    cursor:pointer;
-
     background:#38bdf8;
 
-    color:white;
+    color:#fff;
 
     font-weight:600;
+
+    cursor:pointer;
+
+    transition:all .25s ease;
+
+}
+
+.filterActions button:hover{
+
+    transform:translateY(-2px);
+
+    filter:brightness(1.08);
 
 }
 
@@ -96,25 +124,17 @@
 
     padding:10px 16px;
 
-    border-radius:999px;
-
     border:1px solid #40495d;
+
+    border-radius:999px;
 
     background:#313846;
 
-    color:white;
+    color:#fff;
 
     cursor:pointer;
 
-    transition:.25s;
-
-}
-
-.filterChip.active{
-
-    border-color:#38bdf8;
-
-    background:#1f2937;
+    transition:all .25s ease;
 
 }
 
@@ -124,14 +144,52 @@
 
 }
 
+.filterChip.active{
+
+    background:#1f2937;
+
+    border-color:#38bdf8;
+
+}
+
 .count{
 
-    background:#38bdf8;
+    display:flex;
 
-    padding:2px 8px;
+    justify-content:center;
+
+    align-items:center;
+
+    min-width:22px;
+
+    height:22px;
+
+    padding:0 6px;
 
     border-radius:999px;
 
+    background:#38bdf8;
+
+    color:#fff;
+
     font-size:11px;
+
+    font-weight:700;
+
+}
+
+@media(max-width:768px){
+
+    .filterActions{
+
+        width:100%;
+
+    }
+
+    .filterActions button{
+
+        flex:1;
+
+    }
 
 }

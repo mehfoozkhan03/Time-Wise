@@ -4,7 +4,7 @@
 
     flex-direction:column;
 
-    gap:12px;
+    gap:14px;
 
 }
 
@@ -12,21 +12,31 @@
 
     display:grid;
 
-    grid-template-columns:repeat(7,1fr);
+    grid-template-columns:repeat(7,minmax(0,1fr));
 
-    margin-bottom:12px;
+    gap:12px;
 
 }
 
 .weekHeader div{
 
-    text-align:center;
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding:10px;
 
     color:#94a3b8;
 
+    font-size:14px;
+
     font-weight:600;
 
-    padding:10px;
+    text-transform:uppercase;
+
+    letter-spacing:.5px;
 
 }
 
@@ -34,7 +44,7 @@
 
     display:grid;
 
-    grid-template-columns:repeat(7,1fr);
+    grid-template-columns:repeat(7,minmax(0,1fr));
 
     gap:12px;
 
@@ -42,26 +52,32 @@
 
 @media(max-width:1200px){
 
-.calendarGrid{
+    .calendarGrid,
 
-    gap:8px;
+    .weekHeader{
 
-}
+        gap:8px;
+
+    }
 
 }
 
 @media(max-width:768px){
 
-.calendarGrid{
+    .calendarGrid,
 
-    gap:5px;
+    .weekHeader{
 
-}
+        gap:6px;
 
-.weekHeader div{
+    }
 
-    font-size:12px;
+    .weekHeader div{
 
-}
+        padding:6px;
+
+        font-size:11px;
+
+    }
 
 }
