@@ -1,8 +1,8 @@
-import './FeaturedThought.css'
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 
 import Card from '../../Card/Card'
+import './FeaturedThought.css'
 
 import {
   FaHeart,

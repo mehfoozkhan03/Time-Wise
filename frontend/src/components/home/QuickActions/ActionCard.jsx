@@ -1,10 +1,11 @@
-import './ActionCard.css'
-import Card from '../../Card/Card'
-import { FaArrowRight } from 'react-icons/fa'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from "react-router-dom";
+
+import "./ActionCard.css";
+import Card from "../../Card/Card";
+import { FaArrowRight } from "react-icons/fa";
 
 export default function ActionCard({ icon, title, description, to }) {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   return (
     <Card className="action_card" onClick={() => navigate(to)}>
@@ -18,5 +19,5 @@ export default function ActionCard({ icon, title, description, to }) {
         <FaArrowRight />
       </div>
     </Card>
-  )
+  );
 }

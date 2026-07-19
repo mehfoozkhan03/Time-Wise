@@ -1,45 +1,45 @@
-import './HeroSection.css'
+import "./HeroSection.css";
 
-import Card from '../../Card/Card'
+import Card from "../../Card/Card";
 
-import { useState, useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 
-import { FaFire, FaCalendarAlt, FaClock } from 'react-icons/fa'
-import { data } from 'react-router-dom'
+import { FaFire, FaCalendarAlt, FaClock } from "react-icons/fa";
+import { data } from "react-router-dom";
 
 export default function HeroSection() {
-  const [time, setTime] = useState(new Date())
+  const [time, setTime] = useState(new Date());
 
-  const { user, isLoading } = useSelector((state) => state.auth)
+  const { user, isLoading } = useSelector((state) => state.auth);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setTime(new Date())
-    }, 1000)
+      setTime(new Date());
+    }, 1000);
 
-    return () => clearInterval(interval)
-  }, [])
+    return () => clearInterval(interval);
+  }, []);
 
-const greeting = () => {
-  const hour = time.getHours();
+  const greeting = () => {
+    const hour = time.getHours();
 
-  if (hour >= 5 && hour < 12) {
-    return "Good Morning";
-  } else if (hour >= 12 && hour < 17) {
-    return "Good Afternoon";
-  } else if (hour >= 17 && hour < 20) {
-    return "Good Evening";
-  } else {
-    return "Good Night";
-  }
-};
+    if (hour >= 5 && hour < 12) {
+      return "Good Morning";
+    } else if (hour >= 12 && hour < 17) {
+      return "Good Afternoon";
+    } else if (hour >= 17 && hour < 20) {
+      return "Good Evening";
+    } else {
+      return "Good Night";
+    }
+  };
 
   const capitalize = (text) => {
-    if (!text) return ''
+    if (!text) return "";
 
-    return text.charAt(0).toUpperCase() + text.slice(1)
-  }
+    return text.charAt(0).toUpperCase() + text.slice(1);
+  };
 
   if (isLoading) {
     return (
@@ -48,7 +48,7 @@ const greeting = () => {
           <h1>Loading...</h1>
         </div>
       </section>
-    )
+    );
   }
 
   return (
@@ -58,7 +58,7 @@ const greeting = () => {
           <h1>
             {greeting()},
             <br />
-            {capitalize(user?.firstName) || 'Employee'}.
+            {capitalize(user?.firstName) || "Employee"}.
           </h1>
 
           <p>
@@ -73,10 +73,10 @@ const greeting = () => {
             <FaCalendarAlt />
 
             <span>
-              {time.toLocaleDateString('en-US', {
-                weekday: 'long',
-                month: 'long',
-                day: 'numeric',
+              {time.toLocaleDateString("en-US", {
+                weekday: "long",
+                month: "long",
+                day: "numeric",
               })}
             </span>
           </div>
@@ -85,13 +85,13 @@ const greeting = () => {
             <FaClock />
 
             <span>
-            {time.toLocaleTimeString("en-US", {
-             hour: "2-digit",
-              minute: "2-digit",
-              second: "2-digit",
-              hour12: true,
-             })}
-          </span>
+              {time.toLocaleTimeString("en-US", {
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+                hour12: true,
+              })}
+            </span>
           </div>
         </div>
       </div>
@@ -124,9 +124,8 @@ const greeting = () => {
         </div>
       </Card>
     </section>
-  )
+  );
 }
-
 
 //morninig=5-12am
 //aftrnoon=12pm-5pm

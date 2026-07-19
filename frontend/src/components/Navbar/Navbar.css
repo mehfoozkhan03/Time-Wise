@@ -377,7 +377,7 @@ body.dark_mode .navbar {
    MEDIA QUERY 
 ========================================================== */
 
-@media (max-width: 430px) {
+@media (max-width: 840px) {
   .navbar {
     height: 61px;
     padding: 0 15px;
