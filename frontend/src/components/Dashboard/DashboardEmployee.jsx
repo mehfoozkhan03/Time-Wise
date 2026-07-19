@@ -4,6 +4,7 @@ import { FaPlus } from "react-icons/fa6"
 import { FaSearch } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 import { MdEdit, MdDelete } from "react-icons/md";
+import { FaKey } from "react-icons/fa";
 
 export const DashboardEmployee = () => {
     return (
@@ -48,268 +49,146 @@ export const DashboardEmployee = () => {
                 </div>
 
                 {/* Employee details Table */}
-                <div className="dashboard-employee-details">
-                    <table>
-                        <thead>
-                            <tr>
-                                <td>EMPLOYEE</td>
-                                <td>DPARTMENT</td>
-                                <td>DESIGNATION</td>
-                                <td>ROLE</td>
-                                <td>STATUS</td>
-                                <td>ACTIONS</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <div className="dashboardEmployee-avatar">
 
-                                    </div>
-                                    <div>
-                                        <p>Sarah Mitchell</p>
-                                        <span>#ID001</span>
-                                    </div>
-                                </td>
-                                <td>Design</td>
-                                <td>Senior Designer</td>
-                                <td>
-                                    <div>Admin</div>
-                                </td>
-                                <td>
-                                    <div>
-                                        <div className="dashboardEmployee-dot"></div>
-                                        <span>Active</span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div className="dashboardEmployee-actions">
-                                        <div className="dashboardEmployee-view">
-                                            <FaEyeSlash />
-                                            <span>View</span>
-                                        </div>
-                                        <div className="dashboardEmployee-edit">
-                                            <MdEdit />
-                                            <span>Edit</span>
-                                        </div>
-                                        <div    className="dashboardEmployee-delete">
-                                            <MdDelete />
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div className="dashboardEmployee-avatar">
-
-                                    </div>
-                                    <div>
-                                        <p>Sarah Mitchell</p>
-                                        <span>#ID001</span>
-                                    </div>
-                                </td>
-                                <td>Design</td>
-                                <td>Senior Designer</td>
-                                <td>
-                                    <div>Admin</div>
-                                </td>
-                                <td>
-                                    <div>
-                                        <div className="dashboardEmployee-dot"></div>
-                                        <span>Active</span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div className="dashboardEmployee-view">
-                                        <FaEyeSlash />
-                                        <span>View</span>
-                                    </div>
-                                    <div>
-                                        <MdEdit />
-                                        <span>Edit</span>
-                                    </div>
-                                    <div>
-                                        <MdDelete />
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div className="dashboardEmployee-avatar">
-
-                                    </div>
-                                    <div>
-                                        <p>Sarah Mitchell</p>
-                                        <span>#ID001</span>
-                                    </div>
-                                </td>
-                                <td>Design</td>
-                                <td>Senior Designer</td>
-                                <td>
-                                    <div>Admin</div>
-                                </td>
-                                <td>
-                                    <div>
-                                        <div className="dashboardEmployee-dot"></div>
-                                        <span>Active</span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div className="dashboardEmployee-view">
-                                        <FaEyeSlash />
-                                        <span>View</span>
-                                    </div>
-                                    <div>
-                                        <MdEdit />
-                                        <span>Edit</span>
-                                    </div>
-                                    <div>
-                                        <MdDelete />
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div className="dashboardEmployee-avatar">
-
-                                    </div>
-                                    <div>
-                                        <p>Sarah Mitchell</p>
-                                        <span>#ID001</span>
-                                    </div>
-                                </td>
-                                <td>Design</td>
-                                <td>Senior Designer</td>
-                                <td>
-                                    <div>Admin</div>
-                                </td>
-                                <td>
-                                    <div>
-                                        <div className="dashboardEmployee-dot"></div>
-                                        <span>Active</span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div className="dashboardEmployee-view">
-                                        <FaEyeSlash />
-                                        <span>View</span>
-                                    </div>
-                                    <div>
-                                        <MdEdit />
-                                        <span>Edit</span>
-                                    </div>
-                                    <div>
-                                        <MdDelete />
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div className="dashboardEmployee-avatar">
-
-                                    </div>
-                                    <div>
-                                        <p>Sarah Mitchell</p>
-                                        <span>#ID001</span>
-                                    </div>
-                                </td>
-                                <td>Design</td>
-                                <td>Senior Designer</td>
-                                <td>
-                                    <div>Admin</div>
-                                </td>
-                                <td>
-                                    <div>
-                                        <div className="dashboardEmployee-dot"></div>
-                                        <span>Active</span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div className="dashboardEmployee-view">
-                                        <FaEyeSlash />
-                                        <span>View</span>
-                                    </div>
-                                    <div>
-                                        <MdEdit />
-                                        <span>Edit</span>
-                                    </div>
-                                    <div>
-                                        <MdDelete />
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div className="dashboardEmployee-avatar">
-
-                                    </div>
-                                    <div>
-                                        <p>Sarah Mitchell</p>
-                                        <span>#ID001</span>
-                                    </div>
-                                </td>
-                                <td>Design</td>
-                                <td>Senior Designer</td>
-                                <td>
-                                    <div>Admin</div>
-                                </td>
-                                <td>
-                                    <div>
-                                        <div className="dashboardEmployee-dot"></div>
-                                        <span>Active</span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div className="dashboardEmployee-view">
-                                        <FaEyeSlash />
-                                        <span>View</span>
-                                    </div>
-                                    <div>
-                                        <MdEdit />
-                                        <span>Edit</span>
-                                    </div>
-                                    <div>
-                                        <MdDelete />
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div className="dashboardEmployee-avatar">
-
-                                    </div>
-                                    <div>
-                                        <p>Sarah Mitchell</p>
-                                        <span>#ID001</span>
-                                    </div>
-                                </td>
-                                <td>Design</td>
-                                <td>Senior Designer</td>
-                                <td>
-                                    <div>Admin</div>
-                                </td>
-                                <td>
-                                    <div>
-                                        <div className="dashboardEmployee-dot"></div>
-                                        <span>Active</span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div className="dashboardEmployee-view">
-                                        <FaEyeSlash />
-                                        <span>View</span>
-                                    </div>
-                                    <div>
-                                        <MdEdit />
-                                        <span>Edit</span>
-                                    </div>
-                                    <div>
-                                        <MdDelete />
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div className="dahboardEmployee-details">
+                    <div className="dashboardEmployee-header">
+                        <div>EMPLOYEE</div>
+                        <div>DEPARTMENT</div>
+                        <div>DESIGNATION</div>
+                        <div>ROLE</div>
+                        <div>STATUS</div>
+                        <div>ACTIONS</div>
+                    </div>
+                    <div className="dashboardEmployee-users">
+                        <div className="employee-users-container">
+                            <div className="dashboardEmployee-information">
+                                <div className="dashboardEmploye-avatar">SM</div>
+                                <div className="dashboardEmployee-name">
+                                    <p>Sarah Mitchell</p>
+                                    <span>ID #0001</span>
+                                </div>
+                            </div>
+                            <div className="dashboardEmployee-department">Design</div>
+                            <div className="dashboardEmployee-designation">Senior Designer</div>
+                            <div className="dashboardEmployee-role">Admin</div>
+                            <div className="dashboardEmployee-status">
+                                <div></div>
+                                <span>Active</span>
+                            </div>
+                            <div className="dashboardEmployee-actions">
+                                <div className="dashboardEmployee-view">
+                                    <FaEyeSlash style={{color: "#479ef5", fontSize: "14px"}} />
+                                    <span style={{color: "#50bbf5"}}>View</span>
+                                </div>
+                                <div>
+                                    <MdEdit style={{color: "#f8845d", fontSize: "14px"}} />
+                                    <span style={{color: "#5bbaa7"}}>Edit</span>
+                                </div>
+                                <div>
+                                    <MdDelete style={{color: "#c44261", fontSize: "14px"}} />
+                                </div>
+                                <div>
+                                    <FaKey style={{color: "#fdcb4b", fontSize: "12px"}} />
+                                </div>
+                            </div>
+                        </div>
+                        <div className="employee-users-container">
+                            <div className="dashboardEmployee-information">
+                                <div className="dashboardEmploye-avatar">SM</div>
+                                <div className="dashboardEmployee-name">
+                                    <p>Sarah Mitchell</p>
+                                    <span>ID #0001</span>
+                                </div>
+                            </div>
+                            <div className="dashboardEmployee-department">Design</div>
+                            <div className="dashboardEmployee-designation">Senior Designer</div>
+                            <div className="dashboardEmployee-role">Admin</div>
+                            <div className="dashboardEmployee-status">
+                                <div></div>
+                                <span>Active</span>
+                            </div>
+                            <div className="dashboardEmployee-actions">
+                                <div className="dashboardEmployee-view">
+                                    <FaEyeSlash style={{color: "#479ef5", fontSize: "14px"}} />
+                                    <span style={{color: "#50bbf5"}}>View</span>
+                                </div>
+                                <div>
+                                    <MdEdit style={{color: "#f8845d", fontSize: "14px"}} />
+                                    <span style={{color: "#5bbaa7"}}>Edit</span>
+                                </div>
+                                <div>
+                                    <MdDelete style={{color: "#c44261", fontSize: "14px"}} />
+                                </div>
+                                <div>
+                                    <FaKey style={{color: "#fdcb4b", fontSize: "12px"}} />
+                                </div>
+                            </div>
+                        </div>
+                        <div className="employee-users-container">
+                            <div className="dashboardEmployee-information">
+                                <div className="dashboardEmploye-avatar">SM</div>
+                                <div className="dashboardEmployee-name">
+                                    <p>Sarah Mitchell</p>
+                                    <span>ID #0001</span>
+                                </div>
+                            </div>
+                            <div className="dashboardEmployee-department">Design</div>
+                            <div className="dashboardEmployee-designation">Senior Designer</div>
+                            <div className="dashboardEmployee-role">Admin</div>
+                            <div className="dashboardEmployee-status">
+                                <div></div>
+                                <span>Inactive</span>
+                            </div>
+                            <div className="dashboardEmployee-actions">
+                                <div className="dashboardEmployee-view">
+                                    <FaEyeSlash style={{color: "#479ef5", fontSize: "14px"}} />
+                                    <span style={{color: "#50bbf5"}}>View</span>
+                                </div>
+                                <div>
+                                    <MdEdit style={{color: "#f8845d", fontSize: "14px"}} />
+                                    <span style={{color: "#5bbaa7"}}>Edit</span>
+                                </div>
+                                <div>
+                                    <MdDelete style={{color: "#c44261", fontSize: "14px"}} />
+                                </div>
+                                <div>
+                                    <FaKey style={{color: "#fdcb4b", fontSize: "12px"}} />
+                                </div>
+                            </div>
+                        </div>
+                        <div style={{border: "none"}} className="employee-users-container">
+                            <div className="dashboardEmployee-information">
+                                <div className="dashboardEmploye-avatar">SM</div>
+                                <div className="dashboardEmployee-name">
+                                    <p>Sarah Mitchell</p>
+                                    <span>ID #0001</span>
+                                </div>
+                            </div>
+                            <div className="dashboardEmployee-department">Design</div>
+                            <div className="dashboardEmployee-designation">Senior Designer</div>
+                            <div className="dashboardEmployee-role">Admin</div>
+                            <div className="dashboardEmployee-status">
+                                <div></div>
+                                <span>Active</span>
+                            </div>
+                            <div className="dashboardEmployee-actions">
+                                <div className="dashboardEmployee-view">
+                                    <FaEyeSlash style={{color: "#479ef5", fontSize: "14px"}} />
+                                    <span style={{color: "#50bbf5"}}>View</span>
+                                </div>
+                                <div>
+                                    <MdEdit style={{color: "#f8845d", fontSize: "14px"}} />
+                                    <span style={{color: "#5bbaa7"}}>Edit</span>
+                                </div>
+                                <div>
+                                    <MdDelete style={{color: "#c44261", fontSize: "14px"}} />
+                                </div>
+                                <div>
+                                    <FaKey style={{color: "#fdcb4b", fontSize: "12px"}} />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </>

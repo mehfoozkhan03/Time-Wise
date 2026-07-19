@@ -30,8 +30,42 @@ export const DashboardAttendance = () => {
                             <div style={{color: "#4a9f91"}}>09:02</div>
                             <div>13:00–13:45</div>
                             <div>18:10</div>
-                            <div>8h 23m</div>
+                            <div style={{color: "#fff", fontWeight: "bold"}}>8h 23m</div>
+                            <div className="dashboardAttendance-status">
+                                <div></div>
+                                <span>Present</span>
+                            </div>
+                        </div>
+                        <div>
                             <div>
+                                <div className="dashboardAttendance-avatar">SM</div>
+                                <div>
+                                    <p style={{fontSize: "14px"}}>Sarah Mitchell</p>
+                                    <span style={{fontSize: "11px", opacity: "0.7"}}>Design</span>
+                                </div>
+                            </div>
+                            <div style={{color: "#4a9f91"}}>09:02</div>
+                            <div>13:00–13:45</div>
+                            <div>18:10</div>
+                            <div style={{color: "#fff", fontWeight: "bold"}}>8h 23m</div>
+                            <div className="dashboardAttendance-status">
+                                <div></div>
+                                <span>Present</span>
+                            </div>
+                        </div>
+                        <div style={{border: "none"}}>
+                            <div>
+                                <div className="dashboardAttendance-avatar">SM</div>
+                                <div>
+                                    <p style={{fontSize: "14px"}}>Sarah Mitchell</p>
+                                    <span style={{fontSize: "11px", opacity: "0.7"}}>Design</span>
+                                </div>
+                            </div>
+                            <div style={{color: "#4a9f91"}}>09:02</div>
+                            <div>13:00–13:45</div>
+                            <div>18:10</div>
+                            <div style={{color: "#fff", fontWeight: "bold"}}>8h 23m</div>
+                            <div className="dashboardAttendance-status">
                                 <div></div>
                                 <span>Present</span>
                             </div>
