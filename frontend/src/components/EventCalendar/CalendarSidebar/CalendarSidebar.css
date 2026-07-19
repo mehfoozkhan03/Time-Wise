@@ -1,40 +1,40 @@
-.calendarSidebar{
+.calendarSidebar {
+    display: flex;
+    flex-direction: column;
 
-    display:flex;
+    gap: 24px;
 
-    flex-direction:column;
+    width: 100%;
+    min-width: 0;
 
-    gap:20px;
-
-    width:100%;
-
+    align-self: start;
 }
 
-/* Card component already provides
-   background, border and radius */
-
-.calendarSidebar > *{
-
-    width:100%;
-
+.calendarSidebar > * {
+    width: 100%;
 }
 
-@media(max-width:1200px){
+.calendarSidebar .card {
+    width: 100%;
+}
 
-    .calendarSidebar{
+.calendarSidebar .card:not(:last-child) {
+    margin-bottom: 0;
+}
 
-        margin-top:20px;
+@media (max-width:1200px) {
 
+    .calendarSidebar {
+        margin-top: 24px;
     }
 
 }
 
-@media(max-width:768px){
+@media (max-width:768px) {
 
-    .calendarSidebar{
-
-        gap:16px;
-
+    .calendarSidebar {
+        gap: 18px;
+        margin-top: 20px;
     }
 
 }

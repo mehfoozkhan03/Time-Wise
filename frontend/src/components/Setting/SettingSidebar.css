@@ -1,9 +1,22 @@
 /* Setting page css */
-.setting_container {
+/* .setting_container {
   width: 100%;
   padding: 0 200px;
   display: flex;
   background-color: var(--accent-bg);
+} */
+.setting_container{
+    width:100%;
+    max-width:1700px;
+    margin:0 auto;
+
+    padding:0 32px;
+
+    display:flex;
+    align-items:flex-start;
+    gap:32px;
+
+    background:var(--accent-bg);
 }
 
 .setting-link{
@@ -27,14 +40,25 @@
 }
 
 
-.sidebar_container {
+/* .sidebar_container {
   position: sticky;
   top: 0;
   padding: 0 20px;
   height: 100vh;
   width: 25%;
   background-color: #0f1219;
+} */
+
+.sidebar_container{
+    width:300px;
+    flex-shrink:0;
+
+    position:sticky;
+    top:0;
+
+    height:100vh;
 }
+
 .logo {
   height: 10vh;
   display: flex;
@@ -100,11 +124,18 @@
 }
 
 /* content container */
-.content-container {
+/* .content-container {
   width: 75%;
   padding: 20px 0;
   padding-left: 40px;
+} */
+.content-container{
+    flex:1;
+    min-width:0;
+
+    padding:20px 0;
 }
+
   .content-heading{
     height: 50px;
     display: flex;
