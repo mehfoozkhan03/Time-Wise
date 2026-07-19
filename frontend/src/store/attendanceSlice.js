@@ -17,6 +17,20 @@ export const getTodayAttendance = createAsyncThunk(
   },
 )
 
+export const getAttendanceHistory = createAsyncThunk(
+  'attendance/getAttendanceHistory',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await attendanceService.getAttendanceHistory()
+      return response.data.attendance
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || 'Failed to fetch attendance history',
+      )
+    }
+  },
+)
+
 export const checkIn = createAsyncThunk(
   'attendance/checkIn',
   async (_, { rejectWithValue }) => {
@@ -76,6 +90,8 @@ export const checkOut = createAsyncThunk(
 const initialState = {
   today: null,
 
+  history: [],
+
   loading: false,
 
   error: null,
@@ -91,6 +107,7 @@ const attendanceSlice = createSlice({
   reducers: {
     clearAttendance(state) {
       state.today = null
+      state.history = []
       state.loading = false
       state.error = null
     },
@@ -112,6 +129,23 @@ const attendanceSlice = createSlice({
       })
 
       .addCase(getTodayAttendance.rejected, (state, action) => {
+        state.loading = false
+        state.error = action.payload
+      })
+
+      // ================= HISTORY =================
+
+      .addCase(getAttendanceHistory.pending, (state) => {
+        state.loading = true
+        state.error = null
+      })
+
+      .addCase(getAttendanceHistory.fulfilled, (state, action) => {
+        state.loading = false
+        state.history = action.payload
+      })
+
+      .addCase(getAttendanceHistory.rejected, (state, action) => {
         state.loading = false
         state.error = action.payload
       })

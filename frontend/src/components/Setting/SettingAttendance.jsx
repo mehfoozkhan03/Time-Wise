@@ -5,7 +5,7 @@ import { IoToggle } from "react-icons/io5";
 import "../../components/Setting/Attendance.css"
 import { SwitchBtn } from "../SwichBtn/SwitchBtn";
 
-export const Attendance = () => {
+export const SettingAttendance = () => {
   return (
     <>
       <div className="attendance-container">

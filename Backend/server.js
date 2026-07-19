@@ -14,16 +14,14 @@ const server = express()
 
 /// ================= Middleware =================
 
-server.use(cookieParser())
-server.use(express.json())
-server.use(express.text())
-
 server.use(
   cors({
-    origin: 'http://localhost:5173',
+    origin: ['http://localhost:9000','http://localhost:5173',"http://localhost:5174"],
     credentials: true,
-  }),
-)
+  })
+);
+
+server.use(express.json(),express.text(),cookieParser())
 
 // ================= Routes =================
 
