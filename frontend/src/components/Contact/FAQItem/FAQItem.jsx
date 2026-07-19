@@ -1,38 +1,17 @@
-import { useState } from "react";
 import "./FAQItem.css";
 
-function FAQItem({faq}) {
+function FAQItem({ faq, open, onToggle }) {
+  return (
+    <div className={`faq ${open ? "active" : ""}`}>
+      <div className="question" onClick={onToggle}>
+        <span className="questionText">{faq.question}</span>
 
-    const [open,setOpen] =
-    useState(false);
+        <span className="icon">{open ? "-" : "+"}</span>
+      </div>
 
-    return (
-
-        <div className="faq">
-
-            <div
-                className="question"
-                onClick={()=>setOpen(!open)}
-            >
-
-                {faq.question}
-
-                <span>
-                    {open ? "-" : "+"}
-                </span>
-
-            </div>
-
-            {
-                open && (
-                    <div className="answer">
-                        {faq.answer}
-                    </div>
-                )
-            }
-
-        </div>
-    );
+      <div className={`answer ${open ? "show" : ""}`}>{faq.answer}</div>
+    </div>
+  );
 }
 
 export default FAQItem;
