@@ -1,7 +1,5 @@
 import "./QuickActions.css";
-
 import ActionCard from "./ActionCard";
-
 import { FaCalendarCheck, FaUsers, FaCog, FaChartBar } from "react-icons/fa";
 
 export default function QuickActions() {

@@ -42,10 +42,10 @@
   color: var(--text-secondary);
 }
 
-@media (max-width: 430px) {
-    .company_updates h2{
-        font-size: 23px;
-    }
+@media (max-width: 840px) {
+  .company_updates h2 {
+    font-size: 23px;
+  }
   .tw_card {
     padding: 17px 11px;
   }
