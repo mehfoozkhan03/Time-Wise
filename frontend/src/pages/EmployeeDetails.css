@@ -139,7 +139,7 @@ margin-left:10px;
   cursor: pointer;
 }
 
-@media (max-width: 430px) {
+@media (max-width: 840px) {
   .avatar {
     font-size: 0.9rem;
   }
