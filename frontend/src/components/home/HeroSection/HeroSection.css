@@ -87,7 +87,7 @@
   }
 }
 
-@media (max-width: 320px) {
+@media (max-width: 840px) {
   .hero {
     margin-top: 21px;
   }
@@ -99,5 +99,11 @@
   }
   .hero_left p {
     margin-bottom: 23px;
+  }
+}
+
+@media (min-width: 381px) and (max-width: 430px) {
+  .hero_left h1 {
+    font-size: 2.3rem;
   }
 }

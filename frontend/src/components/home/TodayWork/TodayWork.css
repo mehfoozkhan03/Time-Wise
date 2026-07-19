@@ -133,7 +133,7 @@
   }
 }
 
-@media (max-width: 430px) {
+@media (max-width: 840px) {
   .today_header h2 {
     font-size: 25px;
   }
@@ -141,14 +141,20 @@
     width: 100%;
     justify-content: center;
   }
-  .today_work{
+  .today_work {
     gap: 11px;
   }
-  .today_primary_button{
+  .today_primary_button {
     padding: 11px;
   }
-  .today_content{
+  .today_content {
     gap: 11px;
+    margin-top: 11px;
+  }
+  .today_action {
+    margin-top: 0;
+  }
+  .today_action button {
     margin-top: 11px;
   }
 }
