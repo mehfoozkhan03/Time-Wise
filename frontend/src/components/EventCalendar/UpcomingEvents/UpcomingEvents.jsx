@@ -64,9 +64,18 @@ function UpcomingEvents({
                                     <EventItem
                                         event={event}
                                         variant="compact"
+                                        showAvatar={false}
+                                        showTime={false}
+                                        showType={false}
                                         onClick={onEventClick}
                                     />
-
+{/* <EventItem
+    event={event}
+    variant="compact"
+    showTime={false}
+    showType={false}
+    onClick={onEventClick}
+/> */}
                                     <span className="eventDate">
 
                                         {getRelativeDateLabel(event.date)}

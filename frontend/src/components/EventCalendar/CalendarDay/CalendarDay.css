@@ -1,22 +1,23 @@
 .calendarDay{
 
     display:flex;
-
     flex-direction:column;
 
-    min-height:140px;
+    min-height:115px;
 
-    padding:10px;
+    padding:8px;
 
     background:#2d333f;
 
     border:1px solid #40495d;
-
-    border-radius:14px;
+    border-radius:12px;
 
     cursor:pointer;
 
-    transition:all .25s ease;
+    transition:
+        border-color .2s ease,
+        transform .2s ease,
+        box-shadow .2s ease;
 
 }
 
@@ -31,34 +32,27 @@
 .dayHeader{
 
     display:flex;
-
     justify-content:flex-end;
 
-    margin-bottom:10px;
+    margin-bottom:8px;
 
 }
 
 .dayNumber{
 
+    width:30px;
+    height:30px;
+
     display:flex;
-
     justify-content:center;
-
     align-items:center;
-
-    width:34px;
-
-    height:34px;
 
     border-radius:50%;
 
     color:#fff;
 
-    font-size:14px;
-
+    font-size:13px;
     font-weight:600;
-
-    transition:all .25s ease;
 
 }
 
@@ -72,7 +66,7 @@
 
     border-color:#38bdf8;
 
-    box-shadow:0 0 0 2px rgba(56,189,248,.15);
+    box-shadow:0 0 0 2px rgba(56,189,248,.18);
 
 }
 
@@ -85,10 +79,9 @@
 .dayEvents{
 
     display:flex;
-
     flex-direction:column;
 
-    gap:6px;
+    gap:4px;
 
     flex:1;
 
@@ -104,13 +97,14 @@
 
     margin-top:auto;
 
+    padding-top:4px;
+
     color:#94a3b8;
 
-    font-size:11px;
+    font-size:10px;
+    font-weight:600;
 
     text-align:center;
-
-    font-weight:500;
 
 }
 
@@ -118,7 +112,7 @@
 
     .calendarDay{
 
-        min-height:120px;
+        min-height:100px;
 
     }
 
@@ -128,7 +122,7 @@
 
     .calendarDay{
 
-        min-height:90px;
+        min-height:82px;
 
         padding:6px;
 
@@ -138,17 +132,16 @@
 
     .dayNumber{
 
-        width:28px;
+        width:26px;
+        height:26px;
 
-        height:28px;
-
-        font-size:12px;
+        font-size:11px;
 
     }
 
     .dayEvents{
 
-        gap:4px;
+        gap:3px;
 
     }
 
