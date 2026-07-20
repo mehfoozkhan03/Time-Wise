@@ -1,14 +1,42 @@
-.contactInfo{
-    width:50%;
+.contactInfo {
+  width: 50%;
 }
 
-.head{
-    margin-bottom:40px;
+.head {
+  margin-bottom: 40px;
 }
 
-.infoItem{
-    display:flex;
-    gap:15px;
-    margin-bottom:30px;
-    align-items:center;
+.infoItem {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 30px;
+  align-items: center;
+}
+
+@media (max-width: 320px) {
+  .contactInfo {
+    width: 100%;
+  }
+  .head{
+    margin-bottom: 21px;
+  }
+  .info_parent {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+  .infoItem {
+    flex-direction: column;
+    margin-bottom: 11px;
+  }
+  .infoItem div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .infoItem div h2,
+  .infoItem div p {
+    font-size: medium;
+  }
 }
