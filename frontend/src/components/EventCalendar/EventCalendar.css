@@ -1,58 +1,45 @@
-.calendarBody{
-    display:grid;
-    grid-template-columns:minmax(0,1fr) 360px;
-    gap:28px;
-    align-items:start;
+.calendarBody {
+  display: grid;
+
+  grid-template-columns: minmax(0, 1fr) 340px;
+
+  gap: 24px;
+
+  align-items: start;
 }
 
-.eventCalendar{
+.eventCalendar {
+  display: flex;
 
-    display:flex;
+  flex-direction: column;
 
-    flex-direction:column;
+  gap: 24px;
 
-    gap:24px;
-
-    width:100%;
-
+  width: 100%;
 }
 
-@media(max-width:1200px){
-
-    .calendarBody{
-
-        grid-template-columns:1fr;
-
-    }
-
+@media (max-width: 1200px) {
+  .calendarBody {
+    grid-template-columns: 1fr;
+  }
 }
 
-@media(max-width:768px){
-
-    .eventCalendar{
-
-        gap:18px;
-
-    }
-
+@media (max-width: 768px) {
+  .eventCalendar {
+    gap: 18px;
+  }
 }
 
-@keyframes fadeIn{
+@keyframes fadeIn {
+  from {
+    opacity: 0;
 
-    from{
+    transform: translateY(12px);
+  }
 
-        opacity:0;
+  to {
+    opacity: 1;
 
-        transform:translateY(12px);
-
-    }
-
-    to{
-
-        opacity:1;
-
-        transform:translateY(0);
-
-    }
-
+    transform: translateY(0);
+  }
 }
