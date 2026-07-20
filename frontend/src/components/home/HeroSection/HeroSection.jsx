@@ -1,45 +1,42 @@
-import "./HeroSection.css";
+import './HeroSection.css'
 
-import Card from "../../Card/Card";
+import Card from '../../Card/Card'
 
-import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useState, useEffect } from 'react'
+import { useSelector } from 'react-redux'
 
-import { FaFire, FaCalendarAlt, FaClock } from "react-icons/fa";
-import { data } from "react-router-dom";
+import { FaFire, FaCalendarAlt, FaClock } from 'react-icons/fa'
 
 export default function HeroSection() {
-  const [time, setTime] = useState(new Date());
+  const [time, setTime] = useState(new Date())
 
-  const { user, isLoading } = useSelector((state) => state.auth);
+  const { user, isLoading } = useSelector((state) => state.auth)
+
+  const { stats } = useSelector((state) => state.dashboard)
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setTime(new Date());
-    }, 1000);
+      setTime(new Date())
+    }, 1000)
 
-    return () => clearInterval(interval);
-  }, []);
+    return () => clearInterval(interval)
+  }, [])
 
   const greeting = () => {
-    const hour = time.getHours();
+    const hour = time.getHours()
 
-    if (hour >= 5 && hour < 12) {
-      return "Good Morning";
-    } else if (hour >= 12 && hour < 17) {
-      return "Good Afternoon";
-    } else if (hour >= 17 && hour < 20) {
-      return "Good Evening";
-    } else {
-      return "Good Night";
-    }
-  };
+    if (hour >= 5 && hour < 12) return 'Good Morning'
+    if (hour >= 12 && hour < 17) return 'Good Afternoon'
+    if (hour >= 17 && hour < 20) return 'Good Evening'
+
+    return 'Good Night'
+  }
 
   const capitalize = (text) => {
-    if (!text) return "";
+    if (!text) return ''
 
-    return text.charAt(0).toUpperCase() + text.slice(1);
-  };
+    return text.charAt(0).toUpperCase() + text.slice(1)
+  }
 
   if (isLoading) {
     return (
@@ -48,7 +45,7 @@ export default function HeroSection() {
           <h1>Loading...</h1>
         </div>
       </section>
-    );
+    )
   }
 
   return (
@@ -58,7 +55,7 @@ export default function HeroSection() {
           <h1>
             {greeting()},
             <br />
-            {capitalize(user?.firstName) || "Employee"}.
+            {capitalize(user?.firstName) || 'Employee'}.
           </h1>
 
           <p>
@@ -73,10 +70,10 @@ export default function HeroSection() {
             <FaCalendarAlt />
 
             <span>
-              {time.toLocaleDateString("en-US", {
-                weekday: "long",
-                month: "long",
-                day: "numeric",
+              {time.toLocaleDateString('en-US', {
+                weekday: 'long',
+                month: 'long',
+                day: 'numeric',
               })}
             </span>
           </div>
@@ -85,10 +82,10 @@ export default function HeroSection() {
             <FaClock />
 
             <span>
-              {time.toLocaleTimeString("en-US", {
-                hour: "2-digit",
-                minute: "2-digit",
-                second: "2-digit",
+              {time.toLocaleTimeString('en-US', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
                 hour12: true,
               })}
             </span>
@@ -101,7 +98,7 @@ export default function HeroSection() {
           <FaFire className="fire" />
 
           <div>
-            <h2>12</h2>
+            <h2>{stats.dayStreak}</h2>
             <p>Day Streak</p>
           </div>
         </div>
@@ -109,25 +106,20 @@ export default function HeroSection() {
         <div className="hero_progress" id="tour-hero-progress">
           <div>
             <span>Attendance</span>
-            <strong>97%</strong>
+            <strong>{stats.attendancePercentage}%</strong>
           </div>
 
           <div>
             <span>Weekly Hours</span>
-            <strong>39.2h</strong>
+            <strong>{stats.weeklyHours}h</strong>
           </div>
 
           <div>
             <span>Productivity</span>
-            <strong>89%</strong>
+            <strong>{stats.productivity}%</strong>
           </div>
         </div>
       </Card>
     </section>
-  );
+  )
 }
-
-//morninig=5-12am
-//aftrnoon=12pm-5pm
-//evening=5pm-8pm
-//night=8pm-5am

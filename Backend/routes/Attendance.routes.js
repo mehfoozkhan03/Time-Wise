@@ -7,6 +7,7 @@ import {
   checkOut,
   getTodayAttendance,
   getAttendanceHistory,
+  getDashboardStats,
 } from '../controllers/attendanceController.js'
 
 const attendanceRouter = express.Router()
@@ -22,5 +23,7 @@ attendanceRouter.post('/checkout', auth, checkOut)
 attendanceRouter.get('/today', auth, getTodayAttendance)
 
 attendanceRouter.get('/history', auth, getAttendanceHistory)
+
+attendanceRouter.get('/dashboard-stats', auth, getDashboardStats)
 
 export { attendanceRouter }
