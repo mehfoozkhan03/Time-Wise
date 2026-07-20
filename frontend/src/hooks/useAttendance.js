@@ -7,6 +7,7 @@ import {
   startBreak,
   endBreak,
   getTodayAttendance,
+  getAttendanceHistory,
 } from '../store/attendanceSlice'
 
 export default function useAttendance() {
@@ -14,6 +15,7 @@ export default function useAttendance() {
 
   const {
     today: attendance,
+    history,
     loading,
     error,
   } = useSelector((state) => state.attendance)
@@ -32,6 +34,8 @@ export default function useAttendance() {
 
   // ================= API Actions =================
 
+  // ================= API Actions =================
+
   const handleCheckIn = () => dispatch(checkIn())
 
   const handleStartBreak = () => dispatch(startBreak())
@@ -39,6 +43,8 @@ export default function useAttendance() {
   const handleEndBreak = () => dispatch(endBreak())
 
   const handleCheckOut = () => dispatch(checkOut())
+
+  const fetchAttendanceHistory = () => dispatch(getAttendanceHistory())
 
   // ================= Derived Status =================
 
@@ -112,6 +118,8 @@ export default function useAttendance() {
   return {
     attendance,
 
+    history,
+
     loading,
 
     error,
@@ -125,6 +133,8 @@ export default function useAttendance() {
     endBreak: handleEndBreak,
 
     checkOut: handleCheckOut,
+
+    fetchAttendanceHistory,
 
     sessionTime: formatTime(sessionSeconds),
 
