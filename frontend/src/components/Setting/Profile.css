@@ -11,11 +11,11 @@
 }
 
 .setting-avtar-main-container{
-    background-color: #0f1219;
     border-radius: 10px;
     padding: 20px;
     height: 160px;
     box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+    background-color: var(--surface);
 }
 .setting-avatar-heading{
     height: 30%;
@@ -90,9 +90,9 @@
 /* Personal Information */
 .personal-information-container{
     padding: 10px;
-    background-color: #0f1219;
     border-radius: 10px;
     box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+    background-color: var(--surface);
 }
 .personal-information-heading>h2{
     padding-bottom: 20px;
@@ -124,9 +124,8 @@
     padding-left: 10px;
     display: flex;
     align-items: center;
-    border: 1px solid black;
+    border: 1px solid var(--border);
     border-radius: 10px;
-    background-color: #eef3f7;
 }
 .top-data>div>div>input{
     padding: 10px;
@@ -154,7 +153,7 @@
     align-items: center;
     border-radius: 10px;
     box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
-    background-color: #0f1219 !important;
+    background-color: var(--surface) !important;
 }
 .change-btn{
     padding: 8px 15px;

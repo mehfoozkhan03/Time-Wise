@@ -1,3 +1,6 @@
+import "../styles/Dashboard.css";
+
+
 import { Outlet, useLocation } from "react-router-dom";
 import { DashboardSidebar } from "../components/Dashboard/DashboardSidebar";
 
@@ -13,10 +16,8 @@ import {
 } from "react-icons/fa6";
 
 import { FaSearch } from "react-icons/fa";
-import { IoMdArrowDropdown } from "react-icons/io";
-import { IoMdArrowDropup } from "react-icons/io";
+import { IoMdArrowDropdown, IoMdArrowDropup } from "react-icons/io";
 
-import "../styles/Dashboard.css";
 
 export default function Dashboard() {
   const location = useLocation();

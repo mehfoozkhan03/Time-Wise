@@ -1,0 +1,11 @@
+.setting-page-container{
+    width: 100%;
+    display: flex;
+    gap: 20px;
+}
+.content-heading{
+    border-bottom: 1px solid var(--border);
+}
+.setting-page-content{
+    width: 100%;
+}
