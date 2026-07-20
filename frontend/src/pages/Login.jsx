@@ -200,11 +200,14 @@ const SignUpPage = () => {
               <div className="input-box">
                 <input
                   type="email"
+                  autoComplete="off"
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  placeholder="Email"
+                  placeholder=""
+                  required
                 />
+                 <label>Email</label>
                 <p className="error">{errors.email}</p>
               </div>
 
@@ -212,11 +215,13 @@ const SignUpPage = () => {
                 <input
                   type={showLoginPassword ? 'text' : 'password'}
                   name="password"
+                  autoComplete="new-password"
                   value={formData.password}
                   onChange={handleChange}
-                  placeholder="Password"
+                  placeholder=""
+                  required
                 />
-
+                 <label>Password</label>
                 <p className="error">{errors.password}</p>
 
                 <span
@@ -256,13 +261,16 @@ const SignUpPage = () => {
               <h2>New Registration</h2>
 
               <div className="input-box">
-                <input
-                  type="text"
+               <input
+                 type="text"
                   name="firstName"
                   value={formData.firstName}
                   onChange={handleChange}
-                  placeholder="First Name"
+                  placeholder=" "
+                  required
                 />
+
+               <label>First Name</label>
                 <p className="error">{errors.firstName}</p>
               </div>
 
@@ -272,8 +280,11 @@ const SignUpPage = () => {
                   name="lastName"
                   value={formData.lastName}
                   onChange={handleChange}
-                  placeholder="Last Name"
+                  placeholder=""
+                  required
                 />
+
+                <label>Last Name</label>
                 <p className="error">{errors.lastName}</p>
               </div>
 
@@ -283,8 +294,10 @@ const SignUpPage = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  placeholder="Email"
+                  placeholder=""
+                  required
                 />
+                 <label>Email</label>
                 <p className="error">{errors.email}</p>
               </div>
 
@@ -294,9 +307,10 @@ const SignUpPage = () => {
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
-                  placeholder="Password"
+                  placeholder=""
+                  required
                 />
-
+                   <label>Password</label>
                 <p className="error">{errors.password}</p>
 
                 <span
@@ -313,8 +327,11 @@ const SignUpPage = () => {
                   name="confirmPassword"
                   value={formData.confirmPassword}
                   onChange={handleChange}
-                  placeholder="Confirm Password"
+                  placeholder=""
+                  required
                 />
+
+                  <label>Confirm Password</label>
 
                 <p className="error">{errors.confirmPassword}</p>
 
