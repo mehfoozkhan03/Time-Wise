@@ -1,15 +1,15 @@
 import "./FeedBack.css";
-
 import { FaCheckCircle, FaTimesCircle, FaTimes } from "react-icons/fa";
 
 /**
- * FeedbackModal — a dynamic modal for success / error feedback.
+ * FeedbackModal — dynamic modal for success / error feedback.
  *
  * Props:
  *   isOpen   {boolean}  — controls visibility
  *   type     {string}   — "success" | "error"
  *   title    {string}   — heading text
  *   message  {string}   — body text
+ *   reason   {string}   — (optional) specific error detail shown in a highlight box
  *   onClose  {function} — called when the user dismisses the modal
  */
 export function Feedback({
@@ -17,6 +17,7 @@ export function Feedback({
   type = "success",
   title,
   message,
+  reason,
   onClose,
 }) {
   if (!isOpen) return null;
@@ -29,7 +30,7 @@ export function Feedback({
         className={`feedback_modal feedback_modal--${type}`}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Close (×) button */}
+        {/* Close button */}
         <button className="feedback_close" onClick={onClose} aria-label="Close">
           <FaTimes />
         </button>
@@ -39,9 +40,19 @@ export function Feedback({
           {isSuccess ? <FaCheckCircle /> : <FaTimesCircle />}
         </div>
 
-        {/* Text */}
+        {/* Title */}
         <h2 className="feedback_title">{title}</h2>
+
+        {/* Body message */}
         <p className="feedback_message">{message}</p>
+
+        {/* ── Reason box — only shown on error when reason is provided ── */}
+        {!isSuccess && reason && (
+          <div className="feedback_reason">
+            <span className="feedback_reason_label">Reason</span>
+            <span className="feedback_reason_text">{reason}</span>
+          </div>
+        )}
 
         {/* Action button */}
         <button

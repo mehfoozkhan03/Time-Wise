@@ -156,18 +156,6 @@
   transform: translateY(-3px);
 }
 
-@media (max-width: 992px) {
-  .footer_brand p {
-    max-width: 100%;
-  }
-  .footer_bottom {
-    flex-direction: column;
-    text-align: center;
-    gap: 16px;
-    padding-top: 16px;
-  }
-}
-
 @media (max-width: 840px) {
   .footer {
     margin: 0;
@@ -186,6 +174,7 @@
   }
   .footer_brand p {
     font-size: 15px;
+    max-width: 100%;
   }
   .footer_links h3,
   .footer_contact h3 {
@@ -200,11 +189,14 @@
     padding: 0 11px;
     padding-top: 17px;
     align-items: start;
+    flex-wrap: wrap;
   }
   .footer_bottom p {
     flex-direction: column;
     text-transform: capitalize;
     align-items: start;
+    gap: 17px;
+    padding-top: 17px;
   }
   .footer_links h3,
   .footer_contact h3 {
