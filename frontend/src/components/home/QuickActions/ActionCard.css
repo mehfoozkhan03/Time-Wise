@@ -3,7 +3,7 @@
   display: flex;
   flex-direction: column;
   gap: 18px;
-  height: 220px;
+  height: 245px;
   position: relative;
   overflow: hidden;
 }
@@ -17,8 +17,9 @@
 }
 
 .action_icon {
-  width: 60px;
-  height: 60px;
+  width:45px;
+  height:45px;
+  padding: 8px 8px;
   background: rgba(41, 163, 224, 0.12);
   border-radius: 18px;
   display: flex;
@@ -30,16 +31,16 @@
 }
 
 [data-id="1"]{
-  color: var(--primary)
+  color: #3B82F6
 }
 [data-id="2"]{
-  color: var(--primary)
+  color:#10B981
 }
 [data-id="3"]{
-  color: var(--primary)
+  color:#F59E0B
 }
 [data-id="4"]{
-  color: var(--primary)
+  color:#8B5CF6
 }
 
 .action_card h3 {
