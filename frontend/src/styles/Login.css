@@ -26,7 +26,7 @@ select:-webkit-autofill {
 }
 
 .login-page {
-  width: 410px;
+  width: 400px;
   padding: 30px 40px;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(15px);
@@ -61,7 +61,7 @@ select:-webkit-autofill {
   text-align: center;
   margin-bottom: 30px;
   font-weight: 700;
-  color: #2f3b59;
+  color:#1f242d;
   letter-spacing: 0.5px;
 }
 
@@ -87,7 +87,6 @@ select:-webkit-autofill {
 .input-box textarea:focus {
   outline: none;
   background: #ffffff;
-  border: 1px solid #667eea;
   box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.15);
   transition: all 0.3s ease;
 }
@@ -118,7 +117,7 @@ select:-webkit-autofill {
 .loginsumit {
   width: 100%;
   padding: 15px;
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background:#20242d;
   color: white;
   border: none;
   cursor: pointer;
@@ -133,7 +132,7 @@ select:-webkit-autofill {
 
 .loginsumit:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 25px rgba(79, 70, 229, 0.3);
+  background: #29a3e0;
 }
 
 .message {
@@ -141,9 +140,8 @@ select:-webkit-autofill {
   color: #565555;
   font-size: 16px;
 }
-
 .message span {
-  color: #072192;
+  color:#2c2f3a;
   cursor: pointer;
   font-weight: bold;
 }
@@ -167,7 +165,7 @@ input {
   right: 15px;
   transform: translateY(-50%);
   cursor: pointer;
-  color: #03567f;
+  color:#6e7a88;
   font-size: 18px;
   display: flex;
   align-items: center;
