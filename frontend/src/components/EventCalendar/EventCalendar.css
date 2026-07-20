@@ -1,22 +1,58 @@
-.eventCalendar {
+.calendarBody{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 360px;
+    gap:28px;
+    align-items:start;
+}
 
-    width: min(1400px,95%);
-    margin: 40px auto;
+.eventCalendar{
 
-    background:#2d333f;
+    display:flex;
 
-    border:1px solid #3d4658;
+    flex-direction:column;
 
-    border-radius:18px;
+    gap:24px;
 
-    overflow:hidden;
-
-    box-shadow:0 10px 30px rgba(0,0,0,.25);
+    width:100%;
 
 }
 
-.calendarBody{
+@media(max-width:1200px){
 
-    padding:25px;
+    .calendarBody{
+
+        grid-template-columns:1fr;
+
+    }
+
+}
+
+@media(max-width:768px){
+
+    .eventCalendar{
+
+        gap:18px;
+
+    }
+
+}
+
+@keyframes fadeIn{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(12px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
 
 }

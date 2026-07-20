@@ -4,53 +4,37 @@
 
     inset:0;
 
-    background:rgba(0,0,0,.55);
-
     display:flex;
 
     justify-content:center;
 
     align-items:center;
 
+    padding:20px;
+
+    background:rgba(0,0,0,.65);
+
+    backdrop-filter:blur(4px);
+
     z-index:999;
+
+    animation:fadeIn .25s ease;
 
 }
 
 .eventModal{
 
-    width:500px;
-
-    max-width:95%;
+    width:min(680px,100%);
 
     background:#2d333f;
+
+    border:1px solid #40495d;
 
     border-radius:18px;
 
     overflow:hidden;
 
-    border:1px solid #3b4558;
-
-    animation:popup .25s ease;
-
-}
-
-@keyframes popup{
-
-    from{
-
-        transform:scale(.9);
-
-        opacity:0;
-
-    }
-
-    to{
-
-        transform:scale(1);
-
-        opacity:1;
-
-    }
+    animation:popup .3s ease;
 
 }
 
@@ -62,125 +46,145 @@
 
     align-items:center;
 
-    padding:18px 22px;
+    gap:20px;
+
+    padding:22px;
 
     border-bottom:1px solid #40495d;
 
 }
 
-.modalHeader h2{
+.modalTitle{
 
-    color:white;
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
 
 }
 
-.modalHeader button{
+.eventIcon{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    width:56px;
+
+    height:56px;
+
+    border-radius:50%;
+
+    background:var(--event-color);
+
+    color:#fff;
+
+    font-size:22px;
+
+}
+
+.modalTitle h2{
+
+    color:#fff;
+
+    margin-bottom:6px;
+
+}
+
+.eventType{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    padding:5px 12px;
+
+    border-radius:999px;
+
+    background:var(--event-color);
+
+    color:#fff;
+
+    font-size:12px;
+
+    font-weight:600;
+
+}
+
+.closeBtn{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    width:42px;
+
+    height:42px;
 
     border:none;
 
-    background:none;
+    border-radius:50%;
 
-    color:white;
+    background:#394255;
+
+    color:#fff;
 
     cursor:pointer;
 
-    font-size:18px;
+    transition:all .25s ease;
+
+}
+
+.closeBtn:hover{
+
+    background:#ef4444;
+
+    transform:rotate(90deg);
 
 }
 
 .modalBody{
 
-    padding:25px;
-
-}
-
-.eventHeading{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:12px;
-
-    margin-bottom:20px;
-
-}
-
-.eventEmoji{
-
-    font-size:26px;
-
-}
-
-.eventHeading h3{
-
-    color:white;
-
-}
-
-.modalInfo{
-
     display:flex;
 
     flex-direction:column;
 
-    gap:16px;
+    gap:18px;
 
-    margin-top:25px;
-
-}
-
-.modalInfo p{
-
-    color:#d1d5db;
+    padding:24px;
 
 }
 
-.modalInfo strong{
+.descriptionCard{
 
-    color:white;
+    padding:18px;
 
-    margin-right:6px;
+    background:#313846;
 
-}
-
-.description{
-
-    margin-top:25px;
-
-}
-
-.description h4{
-
-    color:white;
-
-    margin-bottom:8px;
-
-}
-
-.description p{
-
-    color:#d1d5db;
-
-    line-height:1.6;
-
-}
-
-.infoRow{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:16px;
-
-    padding:14px;
-
-    background:#353d4b;
-
-    border:1px solid #414a5d;
+    border:1px solid #40495d;
 
     border-radius:12px;
+
+}
+
+.descriptionCard h3{
+
+    color:#fff;
+
+    margin-bottom:12px;
+
+}
+
+.descriptionCard p{
+
+    color:#d1d5db;
+
+    line-height:1.7;
 
 }
 
@@ -192,9 +196,39 @@
 
     gap:12px;
 
-    padding:20px;
+    padding:20px 24px;
 
     border-top:1px solid #40495d;
+
+}
+
+.editBtn,
+
+.deleteBtn{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:8px;
+
+    min-width:120px;
+
+    padding:12px 20px;
+
+    border:none;
+
+    border-radius:10px;
+
+    color:#fff;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:all .25s ease;
 
 }
 
@@ -202,30 +236,102 @@
 
     background:#38bdf8;
 
-    color:white;
-
-    border:none;
-
-    padding:10px 18px;
-
-    border-radius:8px;
-
-    cursor:pointer;
-
 }
 
 .deleteBtn{
 
     background:#ef4444;
 
-    color:white;
+}
 
-    border:none;
+.editBtn:hover,
 
-    padding:10px 18px;
+.deleteBtn:hover{
 
-    border-radius:8px;
+    transform:translateY(-2px);
 
-    cursor:pointer;
+    filter:brightness(1.08);
+
+}
+
+.editBtn:active,
+
+.deleteBtn:active{
+
+    transform:scale(.98);
+
+}
+
+@keyframes popup{
+
+    from{
+
+        opacity:0;
+
+        transform:scale(.92);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:scale(1);
+
+    }
+
+}
+
+@keyframes fadeIn{
+
+    from{
+
+        opacity:0;
+
+    }
+
+    to{
+
+        opacity:1;
+
+    }
+
+}
+
+@media(max-width:768px){
+
+    .eventModal{
+
+        border-radius:14px;
+
+    }
+
+    .modalHeader{
+
+        padding:18px;
+
+    }
+
+    .modalBody{
+
+        padding:18px;
+
+    }
+
+    .modalFooter{
+
+        flex-direction:column;
+
+        padding:18px;
+
+    }
+
+    .editBtn,
+
+    .deleteBtn{
+
+        width:100%;
+
+    }
 
 }

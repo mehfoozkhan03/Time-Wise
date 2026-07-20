@@ -1,0 +1,40 @@
+.calendarSidebar {
+    display: flex;
+    flex-direction: column;
+
+    gap: 24px;
+
+    width: 100%;
+    min-width: 0;
+
+    align-self: start;
+}
+
+.calendarSidebar > * {
+    width: 100%;
+}
+
+.calendarSidebar .card {
+    width: 100%;
+}
+
+.calendarSidebar .card:not(:last-child) {
+    margin-bottom: 0;
+}
+
+@media (max-width:1200px) {
+
+    .calendarSidebar {
+        margin-top: 24px;
+    }
+
+}
+
+@media (max-width:768px) {
+
+    .calendarSidebar {
+        gap: 18px;
+        margin-top: 20px;
+    }
+
+}

@@ -1,0 +1,25 @@
+.card {
+    width: 100%;
+
+    background: #313846;
+
+    border: 1px solid #40495d;
+    border-radius: 14px;
+
+    overflow: hidden;
+
+    transition:
+        border-color .25s ease,
+        box-shadow .25s ease,
+        transform .25s ease;
+}
+
+.card:hover {
+
+    border-color: #38bdf8;
+
+    box-shadow: 0 10px 24px rgba(0,0,0,.18);
+
+    transform: translateY(-2px);
+
+}

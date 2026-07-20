@@ -1,0 +1,168 @@
+/* ===========================
+   Card
+=========================== */
+
+.summaryCard .cardBody{
+    padding:18px;
+}
+
+/* ===========================
+   List
+=========================== */
+
+.summaryList{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+/* ===========================
+   Item
+=========================== */
+
+.summaryItem{
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:12px 0;
+
+    border-bottom:1px solid #40495d;
+
+    transition:all .2s ease;
+
+}
+
+.summaryItem:last-child{
+
+    border-bottom:none;
+    padding-bottom:0;
+
+}
+
+.summaryItem:hover{
+
+    transform:translateX(2px);
+
+}
+
+/* ===========================
+   Left
+=========================== */
+
+.summaryLeft{
+
+    display:flex;
+    align-items:center;
+    gap:12px;
+
+    min-width:0;
+
+}
+
+/* ===========================
+   Icon
+=========================== */
+
+.summaryIcon{
+
+    width:36px;
+    height:36px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    border-radius:10px;
+
+    background:var(--summary-color);
+
+    color:#fff;
+
+    font-size:15px;
+
+    flex-shrink:0;
+
+}
+
+/* ===========================
+   Content
+=========================== */
+
+.summaryContent{
+
+    display:flex;
+    flex-direction:column;
+
+}
+
+.summaryTitle{
+
+    color:#fff;
+
+    font-size:14px;
+    font-weight:600;
+
+    line-height:1.2;
+
+}
+
+.summaryContent small{
+
+    margin-top:2px;
+
+    color:#94a3b8;
+
+    font-size:11px;
+
+}
+
+/* ===========================
+   Count
+=========================== */
+
+.summaryCount{
+
+    min-width:34px;
+    height:28px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    padding:0 10px;
+
+    border-radius:999px;
+
+    background:#202633;
+
+    color:#38bdf8;
+
+    font-size:12px;
+    font-weight:700;
+
+    flex-shrink:0;
+
+}
+
+/* ===========================
+   Responsive
+=========================== */
+
+@media (max-width:768px){
+
+    .summaryCard .cardBody{
+        padding:16px;
+    }
+
+    .summaryIcon{
+        width:34px;
+        height:34px;
+    }
+
+    .summaryTitle{
+        font-size:13px;
+    }
+
+}

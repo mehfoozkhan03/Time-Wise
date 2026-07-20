@@ -1,0 +1,47 @@
+/* ===========================
+   Compact Variant
+=========================== */
+
+.eventItem.compact{
+
+    padding:8px;
+
+    gap:8px;
+
+    border-left-width:3px;
+
+    border-radius:10px;
+
+}
+
+.eventItem.compact .eventItemAvatar{
+
+    width:28px;
+
+    height:28px;
+
+    font-size:10px;
+
+}
+
+.eventItem.compact .eventItemContent h5{
+
+    font-size:12px;
+
+    margin-bottom:2px;
+
+}
+
+.eventItem.compact .eventItemMeta{
+
+    gap:6px;
+
+    font-size:10px;
+
+}
+
+.eventItem.compact .eventItemIcon{
+
+    font-size:11px;
+
+}
