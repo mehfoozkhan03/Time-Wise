@@ -1,69 +1,25 @@
 import "./Card.css";
 
 export default function Card({
+  title,
 
-    title,
+  icon,
 
-    icon,
+  children,
 
-    children,
-
-    className = "",
-
+  className = "",
 }) {
+  return (
+    <section className={`card ${className}`}>
+      {(title || icon) && (
+        <div className="cardHeader">
+          {icon && <span className="cardIcon">{icon}</span>}
 
-    return (
+          {title && <h3>{title}</h3>}
+        </div>
+      )}
 
-        <section className={`card ${className}`}>
-
-            {
-
-                (title || icon) && (
-
-                    <div className="cardHeader">
-
-                        {
-
-                            icon && (
-
-                                <span className="cardIcon">
-
-                                    {icon}
-
-                                </span>
-
-                            )
-
-                        }
-
-                        {
-
-                            title && (
-
-                                <h3>
-
-                                    {title}
-
-                                </h3>
-
-                            )
-
-                        }
-
-                    </div>
-
-                )
-
-            }
-
-            <div className="cardBody">
-
-                {children}
-
-            </div>
-
-        </section>
-
-    );
-
+      <div className="cardBody">{children}</div>
+    </section>
+  );
 }

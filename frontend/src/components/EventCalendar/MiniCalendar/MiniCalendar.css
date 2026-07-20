@@ -1,154 +1,148 @@
-/* ===========================
+/* ==========================================
    Mini Calendar
-=========================== */
+========================================== */
 
-.miniCalendarCard .cardBody{
-    padding:16px;
+.miniCalendarCard .cardBody {
+  display: flex;
+  flex-direction: column;
+
+  gap: 8px;
 }
 
-/* Header */
+/* ==========================================
+   Header
+========================================== */
 
-.miniHeader{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
+.miniHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
-    margin-bottom:10px;
+  gap: 10px;
 }
 
-.miniHeader h3{
-    flex:1;
+.miniHeader h3 {
+  flex: 1;
 
-    text-align:center;
+  margin: 0;
 
-    color:#fff;
+  text-align: center;
 
-    font-size:17px;
-    font-weight:700;
+  color: #fff;
+
+  font-size: 15px;
+  font-weight: 700;
 }
 
-.miniHeader button{
+.miniHeader button {
+  width: 32px;
+  height: 32px;
 
-    width:34px;
-    height:34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-    display:flex;
-    align-items:center;
-    justify-content:center;
+  border: none;
+  border-radius: 8px;
 
-    border:none;
-    border-radius:8px;
+  background: #394255;
 
-    background:#394255;
-    color:#fff;
+  color: #fff;
 
-    cursor:pointer;
+  cursor: pointer;
 
-    transition:.2s;
+  transition: 0.2s;
 }
 
-.miniHeader button:hover{
-
-    background:#38bdf8;
-
+.miniHeader button:hover {
+  background: #38bdf8;
 }
 
-/* Week Names */
+/* ==========================================
+   Week Names
+========================================== */
 
-.miniWeekDays{
+.miniWeekDays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
 
-    display:grid;
-    grid-template-columns:repeat(7,1fr);
-
-    gap:6px;
-
-    margin-bottom:6px;
-
+  gap: 3px;
 }
 
-.miniWeekDays span{
+.miniWeekDays span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-    text-align:center;
+  height: 18px;
 
-    color:#94a3b8;
+  color: #94a3b8;
 
-    font-size:11px;
-    font-weight:700;
-
-    text-transform:uppercase;
-
+  font-size: 10px;
+  font-weight: 600;
 }
 
-/* Grid */
+/* ==========================================
+   Calendar Grid
+========================================== */
 
-.miniGrid{
+.miniGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
 
-    display:grid;
-    grid-template-columns:repeat(7,1fr);
-
-    gap:4px;
-
+  gap: 4px;
 }
 
-/* Days */
+/* ==========================================
+   Days
+========================================== */
 
-.miniDay{
+.miniDay {
+  width: 100%;
 
-    width:100%;
-    aspect-ratio:1;
+  aspect-ratio: 1;
 
-    display:flex;
-    justify-content:center;
-    align-items:center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-    border:none;
-    border-radius:8px;
+  border: none;
+  border-radius: 8px;
 
-    background:transparent;
+  background: transparent;
 
-    color:#fff;
+  color: #fff;
 
-    font-size:12px;
-    font-weight:600;
+  font-size: 11px;
+  font-weight: 600;
 
-    cursor:pointer;
+  cursor: pointer;
 
-    transition:.2s;
+  transition: 0.2s;
 }
 
-.miniDay:hover{
-
-    background:#394255;
-
+.miniDay:hover {
+  background: #394255;
 }
 
-.miniDay.today{
+.miniDay.today {
+  background: #38bdf8;
 
-    background:#38bdf8;
-    color:#fff;
-
+  color: #fff;
 }
 
-.miniDay.selected{
+.miniDay.selected {
+  background: #6366f1;
 
-    background:#4f46e5;
-
-    color:#fff;
-
+  color: #fff;
 }
 
-.miniDay.otherMonth{
-
-    opacity:.28;
-
+.miniDay.otherMonth {
+  opacity: 0.35;
 }
-
-/* Focus */
 
 .miniHeader button:focus-visible,
-.miniDay:focus-visible{
-
-    outline:2px solid #38bdf8;
-    outline-offset:2px;
-
+.miniDay:focus-visible {
+  outline: 2px solid #38bdf8;
+  outline-offset: 2px;
 }

@@ -1,148 +1,116 @@
-.calendarDay{
+.calendarDay {
+  display: flex;
+  flex-direction: column;
 
-    display:flex;
-    flex-direction:column;
+  min-height: 115px;
 
-    min-height:115px;
+  padding: 8px;
 
-    padding:8px;
+  background: #2d333f;
 
-    background:#2d333f;
+  border: 1px solid #40495d;
+  border-radius: 12px;
 
-    border:1px solid #40495d;
-    border-radius:12px;
+  cursor: pointer;
 
-    cursor:pointer;
-
-    transition:
-        border-color .2s ease,
-        transform .2s ease,
-        box-shadow .2s ease;
-
+  transition:
+    border-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-.calendarDay:hover{
+.calendarDay:hover {
+  border-color: #38bdf8;
 
-    border-color:#38bdf8;
-
-    transform:translateY(-2px);
-
+  transform: translateY(-2px);
 }
 
-.dayHeader{
+.dayHeader {
+  display: flex;
+  justify-content: flex-end;
 
-    display:flex;
-    justify-content:flex-end;
-
-    margin-bottom:8px;
-
+  margin-bottom: 8px;
 }
 
-.dayNumber{
+.dayNumber {
+  width: 30px;
+  height: 30px;
 
-    width:30px;
-    height:30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-    display:flex;
-    justify-content:center;
-    align-items:center;
+  border-radius: 50%;
 
-    border-radius:50%;
+  color: #fff;
 
-    color:#fff;
-
-    font-size:13px;
-    font-weight:600;
-
+  font-size: 13px;
+  font-weight: 600;
 }
 
-.today .dayNumber{
-
-    background:#38bdf8;
-
+.today .dayNumber {
+  background: #38bdf8;
 }
 
-.selected{
+.selected {
+  border-color: #38bdf8;
 
-    border-color:#38bdf8;
-
-    box-shadow:0 0 0 2px rgba(56,189,248,.18);
-
+  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.18);
 }
 
-.otherMonth{
-
-    opacity:.35;
-
+.otherMonth {
+  opacity: 0.35;
 }
 
-.dayEvents{
+.dayEvents {
+  display: flex;
+  flex-direction: column;
 
-    display:flex;
-    flex-direction:column;
+  gap: 4px;
 
-    gap:4px;
-
-    flex:1;
-
+  flex: 1;
 }
 
-.emptyEvents{
-
-    flex:1;
-
+.emptyEvents {
+  flex: 1;
 }
 
-.moreEvents{
+.moreEvents {
+  margin-top: auto;
 
-    margin-top:auto;
+  padding-top: 4px;
 
-    padding-top:4px;
+  color: #94a3b8;
 
-    color:#94a3b8;
+  font-size: 10px;
+  font-weight: 600;
 
-    font-size:10px;
-    font-weight:600;
-
-    text-align:center;
-
+  text-align: center;
 }
 
-@media(max-width:992px){
-
-    .calendarDay{
-
-        min-height:100px;
-
-    }
-
+@media (max-width: 992px) {
+  .calendarDay {
+    min-height: 100px;
+  }
 }
 
-@media(max-width:768px){
+@media (max-width: 768px) {
+  .calendarDay {
+    min-height: 82px;
 
-    .calendarDay{
+    padding: 6px;
 
-        min-height:82px;
+    border-radius: 10px;
+  }
 
-        padding:6px;
+  .dayNumber {
+    width: 26px;
+    height: 26px;
 
-        border-radius:10px;
+    font-size: 11px;
+  }
 
-    }
-
-    .dayNumber{
-
-        width:26px;
-        height:26px;
-
-        font-size:11px;
-
-    }
-
-    .dayEvents{
-
-        gap:3px;
-
-    }
-
+  .dayEvents {
+    gap: 3px;
+  }
 }

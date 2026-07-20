@@ -1,83 +1,140 @@
-.emptyState{
+/* ==========================================
+   Empty State
+========================================== */
 
-    display:flex;
+.emptyState {
+  display: flex;
+  flex-direction: column;
 
-    flex-direction:column;
+  justify-content: center;
+  align-items: center;
 
-    justify-content:center;
+  gap: 12px;
 
-    align-items:center;
+  width: 100%;
 
-    gap:8px;
+  min-height: 70px;
 
-    min-height:70px;
+  padding: 24px 20px;
 
-    padding:16px;
+  text-align: center;
 
-    text-align:center;
+  background: #394255;
 
-    border:2px dashed #40495d;
+  border: 2px dashed #4b5565;
+  border-radius: 14px;
 
-    border-radius:12px;
+  transition:
+    border-color 0.25s ease,
+    background-color 0.25s ease;
 
-    background:#313846;
-
-    animation:fadeIn .25s ease;
-
+  animation: fadeIn 0.25s ease;
 }
 
-.emptyIcon{
+.emptyState:hover {
+  border-color: #38bdf8;
 
-    width:46px;
-
-    height:46px;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    border-radius:50%;
-
-    background:#394255;
-
-    color:#38bdf8;
-
-    font-size:20px;
-
+  background: #40495d;
 }
 
-.emptyState h3{
+/* ==========================================
+   Icon
+========================================== */
 
-    color:#fff;
+.emptyIcon {
+  width: 52px;
+  height: 52px;
 
-    font-size:15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-    font-weight:600;
+  flex-shrink: 0;
 
+  border-radius: 50%;
+
+  background: rgba(56, 189, 248, 0.12);
+
+  color: #38bdf8;
+
+  font-size: 22px;
 }
 
-.emptyState p{
+/* ==========================================
+   Title
+========================================== */
 
-    max-width:220px;
+.emptyState h3 {
+  margin: 0;
 
-    color:#94a3b8;
+  color: #ffffff;
 
-    font-size:12px;
+  font-size: 15px;
+  font-weight: 600;
 
-    line-height:1.5;
-
+  line-height: 1.3;
 }
 
-@media(max-width:768px){
+/* ==========================================
+   Description
+========================================== */
 
-    .emptyState{
+.emptyState p {
+  margin: 0;
 
-        min-height:100px;
+  max-width: 240px;
 
-        padding:18px;
+  color: #94a3b8;
 
-    }
+  font-size: 12px;
 
+  line-height: 1.6;
+}
+
+/* ==========================================
+   Tablet
+========================================== */
+
+@media (max-width: 768px) {
+  .emptyState {
+    min-height: 120px;
+
+    padding: 20px 16px;
+
+    gap: 10px;
+  }
+
+  .emptyIcon {
+    width: 46px;
+    height: 46px;
+
+    font-size: 20px;
+  }
+
+  .emptyState h3 {
+    font-size: 14px;
+  }
+
+  .emptyState p {
+    font-size: 11px;
+  }
+}
+
+/* ==========================================
+   Mobile
+========================================== */
+
+@media (max-width: 480px) {
+  .emptyState {
+    min-height: 110px;
+
+    padding: 18px 14px;
+  }
+
+  .emptyIcon {
+    width: 42px;
+    height: 42px;
+
+    font-size: 18px;
+  }
 }

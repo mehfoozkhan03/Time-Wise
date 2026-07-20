@@ -1,195 +1,161 @@
-.eventFilters{
+.eventFilters {
+  display: flex;
 
-    display:flex;
+  flex-direction: column;
 
-    flex-direction:column;
+  gap: 18px;
 
-    gap:18px;
-
-    margin-bottom:20px;
-
+  margin-bottom: 20px;
 }
 
-.searchBar{
+.searchBar {
+  display: flex;
 
-    display:flex;
+  align-items: center;
 
-    align-items:center;
+  gap: 12px;
 
-    gap:12px;
+  padding: 14px 18px;
 
-    padding:14px 18px;
+  background: #2d333f;
 
-    background:#2d333f;
+  border: 1px solid #40495d;
 
-    border:1px solid #40495d;
+  border-radius: 14px;
 
-    border-radius:14px;
-
-    transition:all .25s ease;
-
+  transition: all 0.25s ease;
 }
 
-.searchBar:focus-within{
-
-    border-color:#38bdf8;
-
+.searchBar:focus-within {
+  border-color: #38bdf8;
 }
 
-.searchBar svg{
+.searchBar svg {
+  color: #94a3b8;
 
-    color:#94a3b8;
-
-    flex-shrink:0;
-
+  flex-shrink: 0;
 }
 
-.searchBar input{
+.searchBar input {
+  flex: 1;
 
-    flex:1;
+  background: transparent;
 
-    background:transparent;
+  border: none;
 
-    border:none;
+  outline: none;
 
-    outline:none;
+  color: #fff;
 
-    color:#fff;
-
-    font-size:15px;
-
+  font-size: 15px;
 }
 
-.searchBar input::placeholder{
-
-    color:#94a3b8;
-
+.searchBar input::placeholder {
+  color: #94a3b8;
 }
 
-.filterActions{
+.filterActions {
+  display: flex;
 
-    display:flex;
+  flex-wrap: wrap;
 
-    flex-wrap:wrap;
-
-    gap:12px;
-
+  gap: 12px;
 }
 
-.filterActions button{
+.filterActions button {
+  padding: 10px 18px;
 
-    padding:10px 18px;
+  border: none;
 
-    border:none;
+  border-radius: 10px;
 
-    border-radius:10px;
+  background: #38bdf8;
 
-    background:#38bdf8;
+  color: #fff;
 
-    color:#fff;
+  font-weight: 600;
 
-    font-weight:600;
+  cursor: pointer;
 
-    cursor:pointer;
-
-    transition:all .25s ease;
-
+  transition: all 0.25s ease;
 }
 
-.filterActions button:hover{
+.filterActions button:hover {
+  transform: translateY(-2px);
 
-    transform:translateY(-2px);
-
-    filter:brightness(1.08);
-
+  filter: brightness(1.08);
 }
 
-.filterList{
+.filterList {
+  display: flex;
 
-    display:flex;
+  flex-wrap: wrap;
 
-    flex-wrap:wrap;
-
-    gap:12px;
-
+  gap: 12px;
 }
 
-.filterChip{
+.filterChip {
+  display: flex;
 
-    display:flex;
+  align-items: center;
 
-    align-items:center;
+  gap: 8px;
 
-    gap:8px;
+  padding: 10px 16px;
 
-    padding:10px 16px;
+  border: 1px solid #40495d;
 
-    border:1px solid #40495d;
+  border-radius: 999px;
 
-    border-radius:999px;
+  background: #313846;
 
-    background:#313846;
+  color: #fff;
 
-    color:#fff;
+  cursor: pointer;
 
-    cursor:pointer;
-
-    transition:all .25s ease;
-
+  transition: all 0.25s ease;
 }
 
-.filterChip:hover{
-
-    transform:translateY(-2px);
-
+.filterChip:hover {
+  transform: translateY(-2px);
 }
 
-.filterChip.active{
+.filterChip.active {
+  background: #1f2937;
 
-    background:#1f2937;
-
-    border-color:#38bdf8;
-
+  border-color: #38bdf8;
 }
 
-.count{
+.count {
+  display: flex;
 
-    display:flex;
+  justify-content: center;
 
-    justify-content:center;
+  align-items: center;
 
-    align-items:center;
+  min-width: 22px;
 
-    min-width:22px;
+  height: 22px;
 
-    height:22px;
+  padding: 0 6px;
 
-    padding:0 6px;
+  border-radius: 999px;
 
-    border-radius:999px;
+  background: #38bdf8;
 
-    background:#38bdf8;
+  color: #fff;
 
-    color:#fff;
+  font-size: 11px;
 
-    font-size:11px;
-
-    font-weight:700;
-
+  font-weight: 700;
 }
 
-@media(max-width:768px){
+@media (max-width: 768px) {
+  .filterActions {
+    width: 100%;
+  }
 
-    .filterActions{
-
-        width:100%;
-
-    }
-
-    .filterActions button{
-
-        flex:1;
-
-    }
-
+  .filterActions button {
+    flex: 1;
+  }
 }
