@@ -1,3 +1,5 @@
+import "./EventBadge.css";
+
 import { memo } from "react";
 
 import EventItem from "../../Common/EventItem/EventItem";
