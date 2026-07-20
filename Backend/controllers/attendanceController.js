@@ -294,3 +294,144 @@ export const getAttendanceHistory = async (req, res) => {
     });
   }
 };
+
+// ================= Dashboard Stats =================
+
+export const getDashboardStats = async (req, res) => {
+  try {
+    const userID = req.user.userID
+
+    const now = new Date()
+
+    // ---------- Current Week (Monday -> Sunday) ----------
+
+    const weekStart = new Date(now)
+    const day = weekStart.getDay()
+
+    const diff = day === 0 ? -6 : 1 - day
+
+    weekStart.setDate(weekStart.getDate() + diff)
+    weekStart.setHours(0, 0, 0, 0)
+
+    const weekEnd = new Date(weekStart)
+    weekEnd.setDate(weekEnd.getDate() + 6)
+    weekEnd.setHours(23, 59, 59, 999)
+
+    // ---------- Current Month ----------
+
+    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1)
+
+    const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0)
+    monthEnd.setHours(23, 59, 59, 999)
+
+    // ---------- Weekly Hours ----------
+
+    const weeklyAttendance = await attendanceModel.find({
+      user: userID,
+      date: {
+        $gte: weekStart,
+        $lte: weekEnd,
+      },
+    })
+
+    const totalWeeklySeconds = weeklyAttendance.reduce(
+      (sum, record) => sum + record.totalWorkingSeconds,
+      0,
+    )
+
+    const weeklyHours = Number(
+      (totalWeeklySeconds / 3600).toFixed(1),
+    )
+
+    // ---------- Attendance Percentage ----------
+
+    const monthlyAttendance = await attendanceModel.find({
+      user: userID,
+      date: {
+        $gte: monthStart,
+        $lte: monthEnd,
+      },
+    })
+
+    let workingDays = 0
+
+    for (
+      let d = new Date(monthStart);
+      d <= now;
+      d.setDate(d.getDate() + 1)
+    ) {
+      const day = d.getDay()
+
+      if (day !== 0 && day !== 6) {
+        workingDays++
+      }
+    }
+
+    const presentDays = monthlyAttendance.filter(
+      (record) => record.status === 'Present',
+    ).length
+
+    const attendancePercentage =
+      workingDays === 0
+        ? 0
+        : Math.round((presentDays / workingDays) * 100)
+
+    // ---------- Productivity ----------
+
+    const productivity = Math.min(
+      Math.round((weeklyHours / 40) * 100),
+      100,
+    )
+
+    // ---------- Day Streak ----------
+
+    const allAttendance = await attendanceModel
+      .find({
+        user: userID,
+        status: 'Present',
+      })
+      .sort({
+        date: -1,
+      })
+
+    let streak = 0
+
+    let cursor = new Date(now)
+    cursor.setHours(0, 0, 0, 0)
+
+    while (true) {
+      if (cursor.getDay() === 0 || cursor.getDay() === 6) {
+        cursor.setDate(cursor.getDate() - 1)
+        continue
+      }
+
+      const found = allAttendance.find(
+        (record) =>
+          record.date.toDateString() === cursor.toDateString(),
+      )
+
+      if (!found) break
+
+      streak++
+
+      cursor.setDate(cursor.getDate() - 1)
+    }
+
+    return res.status(200).json({
+      success: true,
+      stats: {
+        dayStreak: streak,
+        attendancePercentage,
+        weeklyHours,
+        productivity,
+      },
+    })
+  } catch (error) {
+    console.error('Dashboard Stats Error:', error)
+
+    return res.status(500).json({
+      success: false,
+      message: 'Internal Server Error.',
+    })
+  }
+}
