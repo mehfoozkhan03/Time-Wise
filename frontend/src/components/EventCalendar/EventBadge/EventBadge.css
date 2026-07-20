@@ -1,4 +1,12 @@
-.eventBadge{
+/* ======================================
+   EventBadge
+
+   Styling is inherited from EventItem.css
+   using variant="compact".
+
+   This file is intentionally kept empty.
+====================================== */
+/* .eventBadge{
 
     display:flex;
 
@@ -26,7 +34,7 @@
 
     background:#394255;
 
-}
+} */
 /* 
 .eventAvatar{
 
