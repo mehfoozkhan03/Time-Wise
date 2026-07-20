@@ -15,7 +15,7 @@ import RouteLoader from './../components/RouteLoader';
 import { Settings } from './../pages/Settings';
 import { Profile } from './../components/Setting/Profile';
 import Calendar from './../components/Setting/Calendar';
-import { Attendance } from './../components/Setting/Attendance';
+import { SettingAttendance } from './../components/Setting/SettingAttendance';
 import { Appearance } from './../components/Setting/Appearance';
 import { Notification } from './../components/Setting/Notifications';
 import { Security } from './../components/Setting/Security';
@@ -34,7 +34,7 @@ import { DashboardNotification } from './../components/Dashboard/DashboardNotifi
 import { DashboardAnnouncement } from './../components/Dashboard/DashboardAnnouncement';
 import { DashboardReport } from './../components/Dashboard/DashboardReport';
 import { DashboardSetting } from './../components/Dashboard/DashboardSetting';
-// import Attendance from '../pages/Attendance/Attendance';
+import Attendance from '../pages/Attendance/Attendance';
 
 export const AppRoutes = () => {
   return (
@@ -88,7 +88,7 @@ export const AppRoutes = () => {
           <Route path="/settings" element={<Settings />}>
             <Route index element={<Profile />}></Route>
             <Route path="profile" element={<Profile />} />
-            <Route path="attendance" element={<Attendance />}></Route>
+            <Route path="attendance" element={<SettingAttendance />}></Route>
             <Route path="calendar" element={<Calendar />} />
             <Route path="appearance" element={<Appearance />}></Route>
             <Route path="notification" element={<Notification />}></Route>

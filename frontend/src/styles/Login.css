@@ -30,12 +30,12 @@ select:-webkit-autofill {
   padding: 30px 40px;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(15px);
-    border: 1px solid rgba(79, 70, 229, .08);
-box-shadow:
-        0 30px 60px rgba(0,0,0,.22),
-        0 12px 35px rgba(79,70,229,.12);
+  border: 1px solid rgba(79, 70, 229, 0.08);
+  box-shadow:
+    0 30px 60px rgba(0, 0, 0, 0.22),
+    0 12px 35px rgba(79, 70, 229, 0.12);
   transition: 0.4s;
-  border-radius:5px;
+  border-radius: 5px;
 }
 .login-page:hover {
   transform: translateY(-5px);
@@ -76,9 +76,9 @@ box-shadow:
   padding: 10px 15px 8px;
   border: none;
   outline: none;
-  border:1px solid #d9defd;
+  border: 1px solid #d9defd;
   border-radius: 5px;
- background:#f8f9ff !important;
+  background: #f8f9ff !important;
   color: #444343;
   font-size: 18px;
 }
@@ -97,7 +97,7 @@ box-shadow:
   left: 10px;
   top: 50%;
   transform: translateY(-50%);
- color: #444343;
+  color: #444343;
   font-size: 18px;
   letter-spacing: 0.5px;
   pointer-events: none;
@@ -133,7 +133,7 @@ box-shadow:
 
 .loginsumit:hover {
   transform: translateY(-2px);
-    box-shadow: 0 12px 25px rgba(79,70,229,.30);
+  box-shadow: 0 12px 25px rgba(79, 70, 229, 0.3);
 }
 
 .message {
@@ -197,7 +197,7 @@ input {
 }
 
 /*  */
-.login-page {
+/* .login-page {
   position: relative;
   overflow: hidden;
   border-radius: 18px;
@@ -242,4 +242,4 @@ input {
   box-shadow:
     0 25px 60px rgba(0, 0, 0, .18),
     0 10px 30px rgba(79, 70, 229, .10);
-}
+} */

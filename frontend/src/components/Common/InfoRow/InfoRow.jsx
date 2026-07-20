@@ -1,43 +1,23 @@
-import "./InfoRow.css";
+import './InfoRow.css';
 
 export default function InfoRow({
+  icon: Icon,
 
-    icon: Icon,
+  label,
 
-    label,
-
-    value,
-
+  value,
 }) {
+  return (
+    <div className="infoRow">
+      <div className="infoIcon">
+        <Icon />
+      </div>
 
-    return (
+      <div className="infoContent">
+        <span className="infoLabel">{label}</span>
 
-        <div className="infoRow">
-
-            <div className="infoIcon">
-
-                <Icon />
-
-            </div>
-
-            <div className="infoContent">
-
-                <span className="infoLabel">
-
-                    {label}
-
-                </span>
-
-                <p className="infoValue">
-
-                    {value || "--"}
-
-                </p>
-
-            </div>
-
-        </div>
-
-    );
-
+        <p className="infoValue">{value || '--'}</p>
+      </div>
+    </div>
+  );
 }
