@@ -86,6 +86,10 @@
 
 .today_action {
   margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
 }
 
 .today_primary_button {
@@ -153,8 +157,17 @@
   }
   .today_action {
     margin-top: 0;
+    flex-direction: column;
+    gap: 0;
   }
   .today_action button {
     margin-top: 11px;
+  }
+}
+
+@media (min-width: 431px) and (max-width: 840px) {
+  .today_action {
+    flex-direction: row;
+    gap: 15px;
   }
 }
