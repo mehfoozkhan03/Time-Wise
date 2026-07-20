@@ -24,4 +24,8 @@ export const attendanceService = {
   getAttendanceHistory() {
     return api.get('/attendance/history')
   },
+
+  getDashboardStats() {
+    return api.get('/attendance/dashboard-stats')
+  },
 }
