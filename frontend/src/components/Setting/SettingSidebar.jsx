@@ -9,6 +9,7 @@ import { RiPaletteLine } from "react-icons/ri";
 import { FaLock } from "react-icons/fa";
 import { GoDatabase } from "react-icons/go";
 import { MdOutlineContactSupport } from "react-icons/md";
+import { FaCalendarAlt } from "react-icons/fa";
 
 export const SettingSidebar = () => {
   const location = useLocation();
@@ -21,6 +22,10 @@ export const SettingSidebar = () => {
     "/settings/attendance": {
       title: "Attendance",
       icon: <MdOutlineWatchLater />,
+    },
+    "/settings/calendar": {
+      title: "Calendar",
+      icon: <FaCalendarAlt />,
     },
     "/settings/notification": {
       title: "Notifications",
@@ -72,6 +77,10 @@ export const SettingSidebar = () => {
             >
               <MdOutlineWatchLater className="icon" />
               <span>Attendance</span>
+            </NavLink>
+            <NavLink to="calendar" className="setting-link">
+              <FaCalendarAlt className="icon" />
+              <span>Calendar</span>
             </NavLink>
             <NavLink
               to="notification"

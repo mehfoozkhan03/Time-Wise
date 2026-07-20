@@ -6,43 +6,41 @@
 
     align-items:center;
 
-    padding:25px 30px;
+    gap:20px;
 
-    border-bottom:1px solid #3d4658;
+    padding:20px 24px;
 
     background:#313846;
 
+    border:1px solid #40495d;
+
+    border-radius:16px;
+
 }
 
-.calendarTitle{
+.headerTitle{
 
     display:flex;
 
-    align-items:center;
+    flex-direction:column;
 
-    gap:14px;
-
-}
-
-.calendarTitle svg{
-
-    font-size:24px;
-
-    color:#38bdf8;
+    gap:4px;
 
 }
 
-.calendarTitle h2{
+.headerTitle h2{
 
-    color:white;
+    color:#fff;
 
-    font-size:30px;
+    font-size:28px;
 
     font-weight:700;
 
+    line-height:1.2;
+
 }
 
-.calendarActions{
+.headerActions{
 
     display:flex;
 
@@ -50,76 +48,80 @@
 
     gap:12px;
 
-}
-
-.calendarBtn{
-
-    width:42px;
-
-    height:42px;
-
-    border:none;
-
-    border-radius:10px;
-
-    background:#20252f;
-
-    color:white;
-
-    cursor:pointer;
-
-    transition:.25s;
+    flex-wrap:wrap;
 
 }
 
-.calendarBtn:hover{
-
-    background:#38bdf8;
-
-}
+.navBtn,
 
 .todayBtn{
 
-    border:none;
+    display:flex;
 
-    padding:11px 20px;
+    align-items:center;
+
+    justify-content:center;
+
+    gap:8px;
+
+    min-width:46px;
+
+    height:44px;
+
+    padding:0 18px;
+
+    border:none;
 
     border-radius:10px;
 
-    background:#38bdf8;
+    background:#242a34;
 
-    color:white;
-
-    font-weight:600;
+    color:#fff;
 
     cursor:pointer;
 
-    transition:.25s;
+    transition:all .25s ease;
 
 }
 
+.navBtn:hover,
+
 .todayBtn:hover{
+
+    background:#38bdf8;
 
     transform:translateY(-2px);
 
-    box-shadow:0 6px 20px rgba(56,189,248,.3);
+}
+
+.navBtn:active,
+
+.todayBtn:active{
+
+    transform:scale(.97);
 
 }
 
 @media(max-width:768px){
 
-.calendarHeader{
+    .calendarHeader{
 
-    flex-direction:column;
+        flex-direction:column;
 
-    gap:20px;
+        align-items:stretch;
 
-}
+    }
 
-.calendarTitle h2{
+    .headerTitle{
 
-    font-size:24px;
+        text-align:center;
 
-}
+    }
+
+    .headerActions{
+
+        justify-content:center;
+
+    }
 
 }

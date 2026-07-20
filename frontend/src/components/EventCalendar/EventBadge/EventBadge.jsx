@@ -1,45 +1,18 @@
-import "./EventBadge.css";
+import { memo } from "react";
 
-import { EVENT_CONFIG } from "../data/eventConfig.js";
+import EventItem from "../../Common/EventItem/EventItem";
 
-export default function EventBadge({ event , onClick }) {
-
-    const config = EVENT_CONFIG[event.type];
-
-    if(!config) return null;
-
-    return(
-
-        <div
-
-            className="eventBadge"
-            onClick={(e) => {
-              e.stopPropagation();
-              onClick();
-              }}
-
-            style={{
-
-                backgroundColor:config.color
-
-            }}
-
-        >
-
-            <span className="eventIcon">
-
-                {config.icon}
-
-            </span>
-
-            <span className="eventTitle">
-
-                {event.title}
-
-            </span>
-
-        </div>
-
+function EventBadge({
+    event,
+    onClick,
+}) {
+    return (
+        <EventItem
+            event={event}
+            variant="compact"
+            onClick={onClick}
+        />
     );
-
 }
+
+export default memo(EventBadge);

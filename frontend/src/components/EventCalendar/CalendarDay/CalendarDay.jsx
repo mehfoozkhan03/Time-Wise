@@ -3,82 +3,105 @@ import "./CalendarDay.css";
 import EventBadge from "../EventBadge/EventBadge";
 
 export default function CalendarDay({
+
     day,
+
+    events,
+
     isCurrentMonth,
+
     isToday,
+
     isSelected,
+
     onSelectDate,
-    events = [],
-    onEventClick
+
+    onEventClick,
+
 }) {
-  const handleClick = () => {
-    if (!day) return;
 
-    if (onSelectDate) {
-      onSelectDate(day);
-    }
-  };
+    return (
 
-  return (
-    <div
-      onClick={handleClick}
-      className={`
-        calendarDay
-        ${!isCurrentMonth ? "otherMonth" : ""}
-        ${isToday ? "today" : ""}
-        ${isSelected ? "selectedDay" : ""}
-      `}
-    >
-      {/* Date Number */}
+        <div
 
-      <div className="calendarDate">
+            className={`calendarDay
+                ${!isCurrentMonth ? "otherMonth" : ""}
+                ${isToday ? "today" : ""}
+                ${isSelected ? "selected" : ""}
+            `}
 
-        <span>{day.getDate()}</span>
+            onClick={() => onSelectDate(day)}
 
-      </div>
+        >
 
-      {/* Events */}
+            <div className="dayHeader">
 
-        <div className="calendarEvents">
+                <span className="dayNumber">
 
-            {
+                    {day.getDate()}
 
-                events
-                    .slice(0,3)
-                    .map((event)=>{
+                </span>
 
-                        return(
+            </div>
 
-                            <EventBadge
+            <div className="dayEvents">
+
+                {
+
+                    events.length === 0 ?
+
+                        <div className="emptyEvents">
+
+                        </div>
+
+                        :
+
+                        events.slice(0,3).map((event)=>(
+
+                            <div
 
                                 key={event.id}
 
-                                event={event}
+                                onClick={(e)=>{
 
-                                onClick={() => onEventClick(event)}
-                            />
+                                    e.stopPropagation();
 
-                        );
+                                    onEventClick(event);
 
-                    })
+                                }}
 
-            }
+                            >
 
-            {
+                                <EventBadge
 
-                events.length > 3 && (
+                                    event={event}
+                                    onClick={() => onEventClick(event)}
+                                />
 
-                    <div className="moreEvents">
+                            </div>
 
-                        +{events.length-3} More
+                        ))
 
-                    </div>
+                }
 
-                )
+                {
 
-            }
+                    events.length > 3 && (
+
+                        <div className="moreEvents">
+
+                            +{events.length-3} More
+
+                        </div>
+
+                    )
+
+                }
+
+            </div>
 
         </div>
-    </div>
-  );
+
+    );
+
 }

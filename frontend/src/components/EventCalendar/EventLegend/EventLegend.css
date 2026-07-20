@@ -1,0 +1,167 @@
+/* ===========================
+   Card
+=========================== */
+
+.legendCard .cardBody{
+    padding:18px;
+}
+
+/* ===========================
+   List
+=========================== */
+
+.legendList{
+
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+
+}
+
+/* ===========================
+   Item
+=========================== */
+
+.legendItem{
+
+    display:flex;
+    align-items:center;
+    gap:12px;
+
+    width:100%;
+
+    padding:12px;
+
+    border:none;
+    border-radius:12px;
+
+    background:#313846;
+
+    color:#fff;
+
+    text-align:left;
+
+    cursor:pointer;
+
+    transition:
+        background-color .2s ease,
+        transform .2s ease,
+        opacity .2s ease;
+
+}
+
+.legendItem:hover{
+
+    background:#394255;
+
+    transform:translateX(2px);
+
+}
+
+/* ===========================
+   States
+=========================== */
+
+.legendItem.active{
+
+    opacity:1;
+
+}
+
+.legendItem.inactive{
+
+    opacity:.45;
+
+}
+
+/* ===========================
+   Icon
+=========================== */
+
+.legendIcon{
+
+    width:36px;
+    height:36px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:10px;
+
+    background:var(--legend-color);
+
+    color:#fff;
+
+    font-size:15px;
+
+    flex-shrink:0;
+
+}
+
+/* ===========================
+   Content
+=========================== */
+
+.legendContent{
+
+    display:flex;
+    flex-direction:column;
+
+    min-width:0;
+
+}
+
+.legendTitle{
+
+    color:#fff;
+
+    font-size:14px;
+    font-weight:600;
+
+    line-height:1.2;
+
+}
+
+.legendContent small{
+
+    margin-top:2px;
+
+    color:#94a3b8;
+
+    font-size:11px;
+
+}
+
+/* ===========================
+   Focus
+=========================== */
+
+.legendItem:focus-visible{
+
+    outline:2px solid #38bdf8;
+
+    outline-offset:2px;
+
+}
+
+/* ===========================
+   Responsive
+=========================== */
+
+@media (max-width:768px){
+
+    .legendCard .cardBody{
+
+        padding:16px;
+
+    }
+
+    .legendIcon{
+
+        width:34px;
+        height:34px;
+
+    }
+
+}

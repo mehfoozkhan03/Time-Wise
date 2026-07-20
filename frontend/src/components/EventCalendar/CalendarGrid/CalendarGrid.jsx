@@ -1,93 +1,79 @@
 import "./CalendarGrid.css";
 
+import { useMemo } from "react";
+
 import CalendarDay from "../CalendarDay/CalendarDay";
-import { events } from "../data/events";
-import { holidayData } from "../data/holidays";
 
-export default function CalendarGrid({     currentDate, onEventClick }) {
+import {
+    WEEK_DAYS,
+    generateCalendar,
+    isSameDate,
+} from "../../../utils/calendarUtils";
 
-  const month = currentDate.getMonth();
-  const year = currentDate.getFullYear();
+export default function CalendarGrid({
+    currentDate,
+    selectedDate,
+    selectDate,
+    events,
+    onEventClick,
+}) {
+    const calendar = useMemo(
+        () => generateCalendar(currentDate),
+        [currentDate]
+    );
 
-  const allEvents = [...events, ...holidayData];
+    const eventsByDate = useMemo(() => {
+        const map = new Map();
 
-  // First day of current month
-  const firstDay = new Date(year, month, 1);
+        for (const event of events) {
+            const list = map.get(event.date);
 
-  // Last date of current month
-  const lastDate = new Date(year, month + 1, 0).getDate();
+            if (list) {
+                list.push(event);
+            } else {
+                map.set(event.date, [event]);
+            }
+        }
 
-  // Sunday = 0, Monday = 1...
-  const startDay = firstDay.getDay();
+        return map;
+    }, [events]);
 
-  const days = [];
+    return (
+        <section className="calendarWrapper">
+            <div className="weekHeader">
+                {WEEK_DAYS.map((day) => (
+                    <div key={day}>
+                        {day}
+                    </div>
+                ))}
+            </div>
 
-  // Empty cells before the 1st
-  for (let i = 0; i < startDay; i++) {
-    days.push(null);
-  }
+            <div className="calendarGrid">
+                {calendar.map((item) => {
+                    const dateKey = item.date
+                        .toISOString()
+                        .split("T")[0];
 
-  // Current month dates
-  for (let i = 1; i <= lastDate; i++) {
-    days.push(new Date(year, month, i));
-  }
-  
+                    const dayEvents =
+                        eventsByDate.get(dateKey) ?? [];
 
-  return (
-    <>
-      {/* Week Names */}
-      <div className="weekHeader">
-        <div>Sun</div>
-        <div>Mon</div>
-        <div>Tue</div>
-        <div>Wed</div>
-        <div>Thu</div>
-        <div>Fri</div>
-        <div>Sat</div>
-      </div>
-
-      {/* Calendar Grid */}
-      <div className="calendarGrid">
-
-        {days.map((day, index) => {
-
-          const today = new Date();
-
-          const isToday =
-            day &&
-            day.getDate() === today.getDate() &&
-            day.getMonth() === today.getMonth() &&
-            day.getFullYear() === today.getFullYear();
-
-          const dayEvents = day
-          ? allEvents.filter((event) => {
-
-              return (
-                event.date === day.toISOString().split("T")[0]
-              );
-
-            })
-          : [];
-
-
-          return (
-            <CalendarDay
-                key={index}
-                day={day.date}
-                isCurrentMonth={day.currentMonth}
-                isToday={day.isToday}
-                events={dayEvents}
-                onEventClick={onEventClick}
-                // key={index}
-                // day={day}
-                // isCurrentMonth={true}
-                // isToday={isToday}
-                // events={dayEvents}
-            />
-          );
-        })}
-
-      </div>
-    </>
-  );
+                    return (
+                        <CalendarDay
+                            key={dateKey}
+                            day={item.date}
+                            events={dayEvents}
+                            isCurrentMonth={item.currentMonth}
+                            isToday={item.isToday}
+                            isSelected={isSameDate(
+                                item.date,
+                                selectedDate
+                            )}
+                            onSelectDate={selectDate}
+                            onEventClick={onEventClick}
+                        />
+                    );
+                })}
+            </div>
+        </section>
+    );
 }
