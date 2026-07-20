@@ -1,12 +1,11 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit'
 
-import tourReducer from './tourSlice';
-
-import authReducer from './authSlice';
-
-import attendanceReducer from './attendanceSlice';
-import notificationReducer from './notificationSlice';
-import postReducer from './postSlice';
+import tourReducer from './tourSlice'
+import authReducer from './authSlice'
+import attendanceReducer from './attendanceSlice'
+import notificationReducer from './notificationSlice'
+import postReducer from './postSlice'
+import dashboardReducer from './dashboardSlice'
 
 const store = configureStore({
   reducer: {
@@ -19,7 +18,9 @@ const store = configureStore({
     notification: notificationReducer,
 
     post: postReducer,
-  },
-});
 
-export default store;
+    dashboard: dashboardReducer,
+  },
+})
+
+export default store

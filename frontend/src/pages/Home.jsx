@@ -12,6 +12,7 @@ import FeaturedThought from '../components/home/FeaturedThought/FeaturedThought'
 
 import { fetchCurrentUser } from '../store/authSlice'
 import { fetchFeaturedThought } from '../store/postSlice'
+import { getDashboardStats } from '../store/dashboardSlice'
 
 export default function Home() {
   const navigate = useNavigate()
@@ -21,6 +22,7 @@ export default function Home() {
   useEffect(() => {
     dispatch(fetchCurrentUser())
     dispatch(fetchFeaturedThought())
+    dispatch(getDashboardStats())
   }, [dispatch])
 
   return (
