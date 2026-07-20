@@ -1,0 +1,133 @@
+.dashboardReport-container{
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+.dashboardReport-header{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.dashboardReport-header>h3{
+    font-size: 20px;
+}
+.dashboardReport-header>span{
+    font-size: 12px;
+    color: #9ba3b0;
+}
+
+/* dashboard grid */
+.dashboardReport-grid-container{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.dashboardReport-grid-content{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+/* Dashboard attendance chart */
+.dashboardReport-attendance-chart{
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 20px;
+    background-color: #1c2230;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.attendance-chart-heading{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.attendance-chart-heading>h3{
+    font-size: 14px;
+}
+.dashboardAttendance-chart-content{
+    padding-left: 30px;
+}
+
+
+/* Dasbhboard department */
+.dashboardReport-department-chart{
+    padding: 20px 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background-color: #1c2230;
+}
+.department-chart-heading{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.department-chart-heading>h3{
+    font-size: 14px;
+}
+.department-chart{
+    width: 200px;
+    height: 200px;
+}
+.dashboardDepartment-chart-content{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: center;
+    gap: 30px;
+}
+.department-chart-details{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.department-chart-details>div{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.department-chart-details>div>div{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.department-chart-box{
+    height: 12px;
+    width: 12px;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+}
+.department-chart-details>div>div>div:nth-child(2){
+    font-size: 12px;
+    color: #8d98bc;
+}
+.department-chart-details>div>span{
+    font-size: 12px;
+    font-weight: bold;
+}
+
+
+/* Dashboard attedance trend */
+.dashboardReport-attendance-trend{
+    padding: 30px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+.attendance-trend-heading{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.attendance-trend-heading>h3{
+    font-size: 14px;
+}
+.attendance-trend-chart{
+    height: 250px;
+}

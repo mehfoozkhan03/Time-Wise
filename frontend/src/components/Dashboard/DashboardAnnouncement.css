@@ -1,0 +1,95 @@
+.dashboardAnnouncement-container{
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.dashboardAnnouncement-header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.dashboardAnnouncement-heading{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.dashboardAnnouncement-heading>h3{
+    font-size: 20px;
+}
+.dashboardAnnouncement-heading>span{
+    font-size: 13px;
+    color: #877d94;
+}
+.dashboardAnnouncement-new{
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    border-radius: 10px;
+    border: 1px solid #327e61;
+    background-color: #192d2d;
+}
+.dashboardAnnouncement-new>span{
+    color: #42a47f;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* Dashboard content card */
+.dashboardAnnouncement-content{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+}
+.dashboardAnnouncement-content-card{
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border: 1px solid var(--border);
+    background-color: #1c2230;
+    border-radius: 20px;
+}
+.dashboardAnnouncement-header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.dashboardAnnouncement-category{
+    background-color: #1e3d53;
+    padding: 5px 10px;
+    border-radius: 20px;
+    color: #40adeb;
+    font-size: 11px;
+    font-weight: 600;
+}
+.dashboardAnnouncement-date{
+    font-size: 11px;
+    color: #677183;
+}
+.dashboardAnnouncement-title>h3{
+    font-size: 14px;
+}
+.dashboardAnnouncement-description>p{
+    font-size: 12px;
+    color: #838fa4;
+}
+.dashboardAnnouncement-actions{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+.announcement-edit{
+    padding: 7px 15px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background-color: #1d2e3f;
+    border-radius: 10px;
+}
+.announcement-delete{
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
