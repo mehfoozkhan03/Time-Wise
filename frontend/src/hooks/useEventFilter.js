@@ -34,21 +34,33 @@ export default function useEventFilter(events) {
         );
     }, []);
 
-    const filteredEvents = useMemo(() => {
-        const search = searchTerm.trim().toLowerCase();
+const filteredEvents = useMemo(() => {
+    const keywords = searchTerm
+        .trim()
+        .toLowerCase()
+        .split(/\s+/)
+        .filter(Boolean);
 
-        return events.filter((event) => {
-            if (!filters[event.type]) return false;
+    return events.filter((event) => {
+        if (!filters[event.type]) return false;
 
-            if (!search) return true;
+        if (keywords.length === 0) return true;
 
-            return (
-                event.employee?.toLowerCase().includes(search) ||
-                event.department?.toLowerCase().includes(search) ||
-                event.title?.toLowerCase().includes(search) ||
-                event.description?.toLowerCase().includes(search)
-            );
-        });
+        const searchableText = [
+            event.employee,
+            event.department,
+            event.title,
+            event.description,
+            EVENT_CONFIG[event.type]?.label,
+        ]
+            .filter(Boolean)
+            .join(" ")
+            .toLowerCase();
+
+        return keywords.every((keyword) =>
+            searchableText.includes(keyword)
+        );
+    });
     }, [events, filters, searchTerm]);
 
     return {

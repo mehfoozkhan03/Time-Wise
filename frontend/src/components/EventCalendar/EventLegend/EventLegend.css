@@ -1,167 +1,111 @@
-/* ===========================
-   Card
-=========================== */
+/* ==========================================
+   Event Legend
+========================================== */
 
-.legendCard .cardBody{
-    padding:18px;
+.legendCard .cardBody {
+  display: flex;
+  flex-direction: column;
+
+  gap: 12px;
 }
 
-/* ===========================
+/* ==========================================
    List
-=========================== */
+========================================== */
 
-.legendList{
+.legendList {
+  display: flex;
+  flex-direction: column;
 
-    display:flex;
-    flex-direction:column;
-    gap:12px;
-
+  gap: 8px;
 }
 
-/* ===========================
+/* ==========================================
    Item
-=========================== */
+========================================== */
 
-.legendItem{
+.legendItem {
+  width: 100%;
 
-    display:flex;
-    align-items:center;
-    gap:12px;
+  display: flex;
+  align-items: center;
 
-    width:100%;
+  gap: 10px;
 
-    padding:12px;
+  padding: 10px 12px;
 
-    border:none;
-    border-radius:12px;
+  border: none;
+  border-radius: 10px;
 
-    background:#313846;
+  background: #394255;
 
-    color:#fff;
+  color: #fff;
 
-    text-align:left;
+  cursor: pointer;
 
-    cursor:pointer;
-
-    transition:
-        background-color .2s ease,
-        transform .2s ease,
-        opacity .2s ease;
-
+  transition: 0.2s;
 }
 
-.legendItem:hover{
-
-    background:#394255;
-
-    transform:translateX(2px);
-
+.legendItem:hover {
+  background: #465167;
 }
 
-/* ===========================
-   States
-=========================== */
-
-.legendItem.active{
-
-    opacity:1;
-
+.legendItem.active {
+  opacity: 1;
 }
 
-.legendItem.inactive{
-
-    opacity:.45;
-
+.legendItem.inactive {
+  opacity: 0.45;
 }
 
-/* ===========================
+/* ==========================================
    Icon
-=========================== */
+========================================== */
 
-.legendIcon{
+.legendIcon {
+  width: 30px;
+  height: 32px;
+  padding: 10px;
 
-    width:36px;
-    height:36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-shrink: 0;
 
-    display:flex;
-    align-items:center;
-    justify-content:center;
+  border-radius: 8px;
 
-    border-radius:10px;
+  background: var(--legend-color);
 
-    background:var(--legend-color);
+  color: #fff;
 
-    color:#fff;
-
-    font-size:15px;
-
-    flex-shrink:0;
-
+  font-size: 13px;
 }
 
-/* ===========================
+/* ==========================================
    Content
-=========================== */
+========================================== */
 
-.legendContent{
+.legendContent {
+  display: flex;
+  flex-direction: column;
 
-    display:flex;
-    flex-direction:column;
-
-    min-width:0;
-
+  min-width: 0;
 }
 
-.legendTitle{
+.legendTitle {
+  color: #fff;
 
-    color:#fff;
+  font-size: 13px;
+  font-weight: 600;
 
-    font-size:14px;
-    font-weight:600;
-
-    line-height:1.2;
-
+  line-height: 1.2;
 }
 
-.legendContent small{
+.legendContent small {
+  margin-top: 2px;
 
-    margin-top:2px;
+  color: #94a3b8;
 
-    color:#94a3b8;
-
-    font-size:11px;
-
-}
-
-/* ===========================
-   Focus
-=========================== */
-
-.legendItem:focus-visible{
-
-    outline:2px solid #38bdf8;
-
-    outline-offset:2px;
-
-}
-
-/* ===========================
-   Responsive
-=========================== */
-
-@media (max-width:768px){
-
-    .legendCard .cardBody{
-
-        padding:16px;
-
-    }
-
-    .legendIcon{
-
-        width:34px;
-        height:34px;
-
-    }
-
+  font-size: 10px;
 }
