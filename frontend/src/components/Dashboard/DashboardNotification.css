@@ -30,11 +30,11 @@
     gap: 25px;
     border-radius: 20px;
     border: 1px solid var(--border);
-    background-color: #1c2230;
+    background-color: var(--surface);
     transition: all 0.4s ease;
 }
 .create-notification-content:hover{
-    background-color: #212736;
+    background-color: var(--surface_hover);
 }
 .create-notification-content>div{
     display: flex;
@@ -49,21 +49,22 @@
 .create-notification-title>input{
     padding: 12px 20px;
     border-radius: 10px;
-    background-color: #161b21;
+    background-color: var(--surface);
     outline: none;
 }
 .create-notification-msg>textarea{
     padding: 15px 20px;
     resize: none;
     border-radius: 10px;
-    background-color: #161b21;
+    background-color: var(--surface);
 }
 .audience-selection{
     padding: 12px 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: #161b21;
+    border: 1px solid var(--border);
+    background-color: var(--surface);
     border-radius: 10px;
 }
 .audience-selection-list{
@@ -75,7 +76,7 @@
     justify-content: center;
     flex-direction: row !important;
     gap: 10px !important;
-    background-color: #28a3df;
+    background-color: var(--primary);
     border-radius: 10px;
 }
 .create-notification-btn>span{
@@ -100,7 +101,7 @@
 }
 .recent-notification-header>span{
     font-size: 12px;
-    color: #7e8ba7;
+    color: var(--text_primary);
 }
 .recent-notification-content-container{
     display: flex;
@@ -112,8 +113,8 @@
     display: flex;
     justify-content: space-between;
     border-radius: 15px;
-    border: 1px solid #2a303a;
-    background-color: #0e1720;
+    border: 1px solid transparent;
+    background-color: var(--surface);
 }
 .recent-notification-content:hover{
     border: 1px solid var(--border);
@@ -138,7 +139,7 @@
 }
 .recent-notification-msg>p{
     font-size: 13px;
-    color: #fff;
+    color: var(--text_secondary);
     font-weight: bold;
 }
 .recent-notification-msg>span{
@@ -149,5 +150,5 @@
     height: 6px;
     width: 6px;
     border-radius: 50%;
-    background-color: #2fa1dc;
+    background-color: var(--secondary);
 }

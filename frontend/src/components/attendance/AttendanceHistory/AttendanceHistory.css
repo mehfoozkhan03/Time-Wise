@@ -131,15 +131,12 @@
     display:flex;
     justify-content:space-between;
     align-items:center;
+    gap:20px;
 
     background:#343a4a;
-
     padding:18px 22px;
-
     border-radius:18px;
-
     border:1px solid rgba(255,255,255,.08);
-
     margin-bottom:25px;
 }
 
@@ -247,4 +244,208 @@
 
 .today_btn:hover{
     background:#2e3442;
+}
+
+/*  */
+
+/* ===========================
+   Month Modal Overlay
+=========================== */
+
+.month_modal_overlay {
+  position: fixed;
+  inset: 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  z-index: 9999;
+
+  animation: fadeIn .25s ease;
+}
+
+
+/* ===========================
+   Modal Box
+=========================== */
+
+.month_modal {
+  width: 430px;
+  max-width: 90%;
+
+  background: #1e293b;
+  color: #fff;
+
+  border: 1px solid rgba(255,255,255,.08);
+
+  border-radius: 18px;
+
+  padding: 24px;
+
+  box-shadow: 0 20px 50px rgba(0,0,0,.5);
+
+  animation: popup .25s ease;
+}
+
+
+/* ===========================
+   Heading
+=========================== */
+
+.month_modal h3 {
+  text-align: center;
+  margin-bottom: 25px;
+
+  font-size: 22px;
+  font-weight: 600;
+
+  color: #fff;
+}
+
+
+/* ===========================
+   Month Grid
+=========================== */
+
+.month_grid {
+  display: grid;
+
+  grid-template-columns: repeat(3,1fr);
+
+  gap: 15px;
+}
+
+
+/* ===========================
+   Month Button
+=========================== */
+
+.month_grid button {
+
+  height: 60px;
+
+  border: 1px solid rgba(255,255,255,.08);
+
+  border-radius: 12px;
+
+  background: #2b3648;
+
+  color: #fff;
+
+  cursor: pointer;
+
+  font-size: 15px;
+
+  font-weight: 600;
+
+  transition: .3s;
+}
+
+.month_grid button:hover {
+
+  background: #4f46e5;
+
+  border-color: #4f46e5;
+
+  transform: translateY(-3px);
+}
+
+.month_grid button:active{
+
+  transform: scale(.95);
+}
+
+
+/* ===========================
+   Selected Month
+=========================== */
+
+.active_month{
+
+  background:#4f46e5 !important;
+
+  border-color:#4f46e5 !important;
+
+  color:#fff;
+}
+
+
+/* ===========================
+   Scrollbar
+=========================== */
+
+.month_modal::-webkit-scrollbar{
+
+  width:6px;
+}
+
+.month_modal::-webkit-scrollbar-thumb{
+
+  background:#4f46e5;
+
+  border-radius:10px;
+}
+
+
+/* ===========================
+   Animation
+=========================== */
+
+@keyframes fadeIn{
+
+  from{
+    opacity:0;
+  }
+
+  to{
+    opacity:1;
+  }
+
+}
+
+@keyframes popup{
+
+  from{
+    opacity:0;
+    transform:scale(.9);
+  }
+
+  to{
+    opacity:1;
+    transform:scale(1);
+  }
+
+}
+
+.month_modal_header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+.close_modal_btn{
+    width:36px;
+    height:36px;
+
+    border:none;
+    border-radius:50%;
+
+    background:#2b3648;
+    color:#fff;
+
+    cursor:pointer;
+
+    font-size:18px;
+
+    transition:.3s;
+}
+
+.close_modal_btn:hover{
+    background:#ef4444;
 }

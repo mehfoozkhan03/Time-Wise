@@ -10,9 +10,9 @@
   padding: 80px;
 }
 
-@media (max-width: 320px) {
+@media (max-width: 840px) {
   .contactWrapper {
     flex-direction: column;
-    padding: 15px 7px;
+    padding: 15px;
   }
 }

@@ -1,6 +1,6 @@
 .footer {
   width: min(1400px, 92%);
-  margin: 80px auto 20px;
+  margin: 21px auto;
   padding: 0;
   animation: fade_in 0.5s ease;
 }

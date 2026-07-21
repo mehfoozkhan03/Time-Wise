@@ -2,7 +2,7 @@ import { IoToggleOutline } from "react-icons/io5";
 import { IoToggle } from "react-icons/io5";
 
 
-import "../../components/Setting/Attendance.css"
+import "../../components/Setting/SettingAttendance.css"
 import { SwitchBtn } from "../SwichBtn/SwitchBtn";
 
 export const SettingAttendance = () => {

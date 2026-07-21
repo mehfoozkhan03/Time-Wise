@@ -29,14 +29,14 @@
     padding: 30px;
     border: 1px solid var(--border);
     border-radius: 20px;
-    background-color: #1c2230;
+    background-color: var(--surface);
     display: flex;
     flex-direction: column;
     gap: 20px;
     transition: all 0.4s ease;
 }
 .dashboard-company-setting:hover{
-    background-color: #232a3a;
+    background-color: var(--surface_hover);
 }
 .dashboard-company-setting>h3{
     font-size: 16px;
@@ -54,7 +54,7 @@
 .dashboard-company-setting>div>div>input{
     padding: 12px 15px;
     border-radius: 10px;
-    background-color: #161b21;
+    background-color: var(--surface);
 }
 .dashboard-company-setting>div>div>label{
     color: #6b788b;
@@ -75,14 +75,14 @@
     padding: 30px;
     border: 1px solid var(--border);
     border-radius: 20px;
-    background-color: #1c2230;
+    background-color: var(--surface);
     display: flex;
     flex-direction: column;
     gap: 20px;
     transition: all 0.4s ease;
 }
 .dashboard-notification-preference:hover{
-    background-color: #232a3a;
+    background-color: var(--surface_hover);
 }
 .dashboard-notification-preference>h3{
     font-size: 16px;
