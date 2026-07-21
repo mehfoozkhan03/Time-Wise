@@ -51,5 +51,19 @@
   }
   .update_card {
     gap: 15px;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .update_content{
+    text-align: center;
+  }
+}
+
+@media (min-width:431px) and (max-width:840px){
+  .update_card{
+    flex-direction: row;
+  }
+  .update_content{
+    text-align: unset;
   }
 }
