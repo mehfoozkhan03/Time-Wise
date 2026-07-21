@@ -19,9 +19,18 @@ export const getDashboardStats = createAsyncThunk(
 const initialState = {
   stats: {
     dayStreak: 0,
+    longestStreak: 0,
+
     attendancePercentage: 0,
+
     weeklyHours: 0,
+    monthlyHours: 0,
+
     productivity: 0,
+
+    averageCheckIn: '--:--',
+
+    averageBreakDuration: 0,
   },
 
   loading: false,
