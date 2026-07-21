@@ -4,7 +4,7 @@ import { memo, useMemo } from "react";
 
 import { FaCalendarAlt, FaArrowRight, FaCalendarTimes } from "react-icons/fa";
 
-import Card from "../../Common/Card/Card";
+import Card from "../../Common/CalendarCard/Card";
 import EventItem from "../../Common/EventItem/EventItem";
 import EmptyState from "../../Common/EmptyState/EmptyState";
 
@@ -43,12 +43,12 @@ function UpcomingEvents({ events, onEventClick }) {
                 onClick={onEventClick}
               />
               {/* <EventItem
-    event={event}
-    variant="compact"
-    showTime={false}
-    showType={false}
-    onClick={onEventClick}
-/> */}
+                event={event}
+                variant="compact"
+                showTime={false}
+                showType={false}
+                onClick={onEventClick}
+            /> */}
               <span className="eventDate">
                 {getRelativeDateLabel(event.date)}
               </span>
