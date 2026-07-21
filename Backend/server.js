@@ -9,6 +9,7 @@ import { Connection } from './config/db.js'
 import { userRoutes } from './routes/User.routes.js'
 import { postRoutes } from './routes/Post.routes.js'
 import { attendanceRouter } from './routes/Attendance.routes.js'
+import calendarRoutes from "./routes/Calendar.routes.js";
 
 const server = express()
 
@@ -30,6 +31,8 @@ server.use('/user', userRoutes)
 server.use('/posts', postRoutes)
 
 server.use('/attendance', attendanceRouter)
+
+server.use("/calendar", calendarRoutes);
 
 // ================= Server =================
 
