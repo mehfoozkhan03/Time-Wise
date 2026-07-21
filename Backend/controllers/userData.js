@@ -254,3 +254,7 @@ export const getCurrentUser = async (req, res) => {
     })
   }
 }
+
+// Get All User
+
+
