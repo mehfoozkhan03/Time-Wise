@@ -1,4 +1,5 @@
 .security-container{
+    padding: 20px;
     display: flex;
     flex-direction: column;
     gap: 25px;
@@ -20,12 +21,12 @@
     flex-direction: column;
     gap: 15px;
     border-radius: 10px;
-    background-color: white;
+    background-color: var(--surface);
     box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
 }
 .change-password-heading{
     padding-bottom: 20px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid var(--border);
 }
 .change-password-heading>h3{
     font-size: 16px;
@@ -40,7 +41,8 @@
     width: 100%;
     border: none;
     padding: 12px 20px;
-    background-color: transparent;
+    border-radius: 10px;
+    /* background-color: var(--surface); */
 }
 .change-password-content label{
     font-size: 15px;
@@ -56,13 +58,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #edf3f9;
-    border: 1px solid rgba(0, 0, 0, 0.2);
+    background-color: var(--surface);
+    border: 1px solid var(--border);
     border-radius: 10px;
 }
 .confirm-new-password>input{
-    background-color: #eef3f9;
-    border: 1px solid rgba(0, 0, 0, 0.2);
+    background-color: var(--surface);
+    border: 1px solid var(--border);
     border-radius: 10px;
 }
 
@@ -73,12 +75,12 @@
     flex-direction: column;
     gap: 15px;
     border-radius: 10px;
-    background-color: white;
+    background-color: var(--surface);
     box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
 }
 .two-factor-heading{
     padding-bottom: 15px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid var(--border);
 }
 .two-factor-heading>h3{
     font-size: 16px;
@@ -100,11 +102,12 @@
     flex-direction: column;
     gap: 15px;
     border-radius: 10px;
-    background-color: white;
+    background-color: var(--surface);
     box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
 }
 .session-heading{
     padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
 }
 .session-heading>h3{
     font-size: 16px;
@@ -117,7 +120,7 @@
     align-items: center;
 }
 .login-alert{
-    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid var(--border);
 }
 .login-alert>div>h3,
 .session-timeout>div>h3{
@@ -140,12 +143,11 @@
     justify-content: space-between;
     align-items: center;
     border-radius: 10px;
-    background-color: white;
     box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
 }
 .change-btn{
     padding: 8px 15px;
-    color: white;
+    color: var(--text_primary);
     font-size: 15px;
     border-radius: 10px;
     background-color: blue;
