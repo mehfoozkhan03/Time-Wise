@@ -1,6 +1,5 @@
 import './Attendance.css'
 
-import TodayWork from '../../components/attendance/TodayWork/TodayWork'
 import AttendanceHistory from '../../components/attendance/AttendanceHistory/AttendanceHistory'
 
 export default function Attendance() {

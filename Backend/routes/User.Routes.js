@@ -24,6 +24,8 @@ userRoutes.post('/login', login)
 
 userRoutes.post('/adminlogin', admin_login)
 
-userRoutes.get('/me', auth, getCurrentUser)
+userRoutes.get('/me', auth, getCurrentUser);
+
+// userRoutes.get('/alluser', auth, getAllUser)
 
 export { userRoutes }
