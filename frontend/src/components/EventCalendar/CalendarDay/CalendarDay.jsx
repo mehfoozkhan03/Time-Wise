@@ -12,14 +12,23 @@ export default function CalendarDay({
   onEventClick,
 }) {
   return (
-    <div
-      className={`calendarDay
-                ${!isCurrentMonth ? "otherMonth" : ""}
-                ${isToday ? "today" : ""}
-                ${isSelected ? "selected" : ""}
-            `}
-      onClick={() => onSelectDate(day)}
-    >
+      <div
+          className={`calendarDay
+              ${!isCurrentMonth ? "otherMonth" : ""}
+              ${isToday ? "today" : ""}
+              ${isSelected ? "selected" : ""}
+          `}
+          onClick={() => onSelectDate(day)}
+          role="button"
+          tabIndex={0}
+          aria-label={`Select ${day.toDateString()}`}
+          onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  onSelectDate(day);
+              }
+          }}
+      >
       <div className="dayHeader">
         <span className="dayNumber">{day.getDate()}</span>
       </div>
