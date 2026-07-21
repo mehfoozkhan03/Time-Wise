@@ -1,17 +1,17 @@
-import { NavLink, useLocation } from "react-router-dom";
-import { useState, useEffect, useRef } from "react"; // NEW: Added useRef for notification timer
-import { useSelector } from "react-redux";
-import "./Navbar.css";
-import { FaBell, FaBars, FaTimes, FaChevronDown } from "react-icons/fa";
-import { useTour } from "../../hooks/useTour";
-import { tourSteps } from "../../tour/tourSteps";
+import { NavLink, useLocation } from 'react-router-dom';
+import { useState, useEffect, useRef } from 'react'; // NEW: Added useRef for notification timer
+import { useSelector } from 'react-redux';
+import './Navbar.css';
+import { FaBell, FaBars, FaTimes, FaChevronDown } from 'react-icons/fa';
+import { useTour } from '../../hooks/useTour';
+import { tourSteps } from '../../tour/tourSteps';
 
 export default function Navbar() {
   const location = useLocation();
   const { user } = useSelector((state) => state.auth);
   console.log(user);
 
-  const isHome = location.pathname === "/";
+  const isHome = location.pathname === '/';
 
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -21,15 +21,15 @@ export default function Navbar() {
 
   const { triggerTour } = useTour(tourSteps());
 
-    // ==========================
-    // NEW: Notification Ref
-    // ==========================
-    const notificationRef = useRef(null);
+  // ==========================
+  // NEW: Notification Ref
+  // ==========================
+  const notificationRef = useRef(null);
 
-    // ==========================
-    // NEW: Profile Ref
-    // ==========================
-    const profileRef = useRef(null);
+  // ==========================
+  // NEW: Profile Ref
+  // ==========================
+  const profileRef = useRef(null);
 
   // ==========================
   // NEW: Close all dropdowns when route changes
@@ -43,32 +43,26 @@ export default function Navbar() {
   // ==========================
   // NEW: Close dropdowns when clicking outside
   // ==========================
-    useEffect(() => {
-      function handleClickOutside(event) {
-        if (
-          notificationRef.current &&
-          !notificationRef.current.contains(event.target)
-        ) {
-          setNotificationOpen(false);
-        }
-
-        if (
-          profileRef.current &&
-          !profileRef.current.contains(event.target)
-        ) {
-          setProfileOpen(false);
-        }
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (
+        notificationRef.current &&
+        !notificationRef.current.contains(event.target)
+      ) {
+        setNotificationOpen(false);
       }
 
-      document.addEventListener("mousedown", handleClickOutside);
+      if (profileRef.current && !profileRef.current.contains(event.target)) {
+        setProfileOpen(false);
+      }
+    }
 
-      return () => {
-        document.removeEventListener(
-          "mousedown",
-          handleClickOutside
-        );
-      };
-    }, []);
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return (
     <header className="navbar">
@@ -77,9 +71,11 @@ export default function Navbar() {
       =========================== */}
 
       <div className="navbar_logo" id="tour-logo">
-        <div className="logo_text">
-          <img src="/Logo_N.svg" alt="Logo" />
-        </div>
+        <NavLink to="/">
+          <div className="logo_text">
+            <img src="/Logo_N.svg" alt="Logo" />
+          </div>
+        </NavLink>
       </div>
 
       {/* ==========================
@@ -87,7 +83,7 @@ export default function Navbar() {
       =========================== */}
 
       <nav
-        className={`navbar_links ${mobileOpen ? "active" : ""}`}
+        className={`navbar_links ${mobileOpen ? 'active' : ''}`}
         id="tour-nav-links"
       >
         <NavLink to="/">Home</NavLink>
@@ -106,119 +102,98 @@ export default function Navbar() {
       =========================== */}
 
       <div className="navbar_right">
-      
-      {/* Notification */}
+        {/* Notification */}
 
-      <div
-        className="notification_container"
-        id="tour-notifications"
-        ref={notificationRef} // NEW
-      >
-        <button
-          className="notification_btn"
-          onClick={() => {
-            // NEW: Close profile
-            setProfileOpen(false);
-
-            // NEW: Toggle notification
-            setNotificationOpen((prev) => !prev);
-          }}
+        <div
+          className="notification_container"
+          id="tour-notifications"
+          ref={notificationRef} // NEW
         >
-          <FaBell />
-
-          <span className="notification_count">3</span>
-        </button>
-
-        {notificationOpen && (
-          <div className="notification_dropdown">
-            <h4>Notifications</h4>
-
-            <div className="notification_item">
-              Manager approved your leave.
-            </div>
-
-            <div className="notification_item">
-              John liked your thought.
-            </div>
-
-            <div className="notification_item">
-              Performance review available.
-            </div>
-
-            <button className="view_all_btn">
-              View All
-            </button>
-          </div>
-        )}
-      </div>
-
-    {/* Profile */}
-
-    <div
-      className="profile_container"
-      id="tour-profile"
-      ref={profileRef} // NEW
-    >
-      <button
-        className="profile_btn"
-        onClick={() => {
-          // NEW: Close notification
-          setNotificationOpen(false);
-
-          // NEW: Toggle profile
-          setProfileOpen((prev) => !prev);
-        }}
-      >
-      <div className="avatar">
-  {user
-    ? `${user.firstName[0]}${user.lastName[0]}`.toUpperCase()
-    : "U"}
-  </div>
-
-        <div className="profile_info">
-   <h4>
-  {user
-    ? `${user.firstName.charAt(0).toUpperCase()}${user.firstName.slice(1)} ${
-        user.lastName.charAt(0).toUpperCase() + user.lastName.slice(1)
-      }`
-    : "User"}
-</h4>
-
-          <span>Frontend Developer</span>
-        </div>
-
-        <FaChevronDown
-          className={`profile_arrow ${profileOpen ? "rotate" : ""}`}
-        />
-      </button>
-
-      {profileOpen && (
-        <div className="profile_dropdown">
-          <NavLink
-            to="/employee"
-            onClick={() => setProfileOpen(false)}
-          >
-            My Profile
-          </NavLink>
-
-          <NavLink
-            to="/settings"
-            onClick={() => setProfileOpen(false)}
-          >
-            Settings
-          </NavLink>
-
           <button
+            className="notification_btn"
             onClick={() => {
+              // NEW: Close profile
               setProfileOpen(false);
-              // Logout logic
+
+              // NEW: Toggle notification
+              setNotificationOpen((prev) => !prev);
             }}
           >
-            Logout
+            <FaBell />
+
+            <span className="notification_count">3</span>
           </button>
+
+          {notificationOpen && (
+            <div className="notification_dropdown">
+              <h4>Notifications</h4>
+
+              <div className="notification_item">
+                Manager approved your leave.
+              </div>
+
+              <div className="notification_item">John liked your thought.</div>
+
+              <div className="notification_item">
+                Performance review available.
+              </div>
+
+              <button className="view_all_btn">View All</button>
+            </div>
+          )}
         </div>
-      )}
-    </div>
+
+        {/* Profile */}
+
+        <div
+          className="profile_container"
+          id="tour-profile"
+          ref={profileRef} // NEW
+        >
+          <button
+            className="profile_btn"
+            onClick={() => {
+              // NEW: Close notification
+              setNotificationOpen(false);
+
+              // NEW: Toggle profile
+              setProfileOpen((prev) => !prev);
+            }}
+          >
+            <div className="avatar">AK</div>
+
+            <div className="profile_info">
+              <h4>Arnav Kharade</h4>
+
+              <span>Frontend Developer</span>
+            </div>
+
+            <FaChevronDown
+              className={`profile_arrow ${profileOpen ? 'rotate' : ''}`}
+            />
+          </button>
+
+          {profileOpen && (
+            <div className="profile_dropdown">
+              <NavLink to="/employee" onClick={() => setProfileOpen(false)}>
+                My Profile
+              </NavLink>
+
+              <NavLink to="/settings" onClick={() => setProfileOpen(false)}>
+                Settings
+              </NavLink>
+
+              <button
+                onClick={() => {
+                  setProfileOpen(false);
+                  // Logout logic
+                }}
+              >
+                Logout
+              </button>
+            </div>
+          )}
+        </div>
 
         {isHome && (
           <button

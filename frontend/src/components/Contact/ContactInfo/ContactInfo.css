@@ -13,11 +13,11 @@
   align-items: center;
 }
 
-@media (max-width: 320px) {
+@media (max-width: 840px) {
   .contactInfo {
     width: 100%;
   }
-  .head{
+  .head {
     margin-bottom: 21px;
   }
   .info_parent {
@@ -38,5 +38,14 @@
   .infoItem div h2,
   .infoItem div p {
     font-size: medium;
+  }
+}
+
+@media (min-width: 430px) and (max-width: 840px) {
+  .info_parent {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 15px;
   }
 }
