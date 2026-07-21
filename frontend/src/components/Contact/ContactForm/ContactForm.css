@@ -92,3 +92,9 @@
   background: var(--primary);
   color: white;
 }
+
+@media (min-width: 430px) and (max-width: 840px) {
+.formPart{
+  max-width: none;
+}
+}
