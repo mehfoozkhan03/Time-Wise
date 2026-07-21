@@ -9,7 +9,6 @@ import { tourSteps } from "../../tour/tourSteps";
 export default function Navbar() {
   const location = useLocation();
   const { user } = useSelector((state) => state.auth);
-  console.log(user);
 
   const isHome = location.pathname === "/";
 
@@ -170,9 +169,7 @@ export default function Navbar() {
         }}
       >
       <div className="avatar">
-  {user
-    ? `${user.firstName[0]}${user.lastName[0]}`.toUpperCase()
-    : "U"}
+  {user? `${user.firstName[0]}${user.lastName[0]}`.toUpperCase(): "U"}
   </div>
 
         <div className="profile_info">
