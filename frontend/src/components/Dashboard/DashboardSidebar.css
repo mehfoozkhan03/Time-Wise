@@ -1,7 +1,6 @@
 .dashboardSidebar-container{
     position: sticky;
     bottom: 0;
-    background-color: #161b21;
     border: 1px solid var(--border);
     width: 270px;
     height: 89vh;
@@ -23,6 +22,7 @@
     height: 61vh;
     display: flex;
     flex-direction: column;
+    gap: 5px;
     border-bottom: 1px solid var(--border);
 }
 .dashboard-navlink{
@@ -38,9 +38,11 @@
 }
 .dashboard-navlink:hover{
     background-color: var(--surface_hover);
+    color: var(--text_primary);
 }
-.dashboard-navlink:active{
-    background-color: #152d3c;
+.dashboard-navlink.active{
+    background-color: var(--primary_hover);
+    color: var(--text_primary);
 }
 
 /* dashboard logout */

@@ -93,13 +93,6 @@ export const SettingSidebar = () => {
             </div>
           </div>
         </div>
-        {/* <div className="content-container">
-          <div className="content-heading">
-            <span>{currentPage.icon}</span>
-            <h4>{currentPage.title}</h4>
-          </div>
-          <Outlet />
-        </div> */}
       </div>
     </>
   );
