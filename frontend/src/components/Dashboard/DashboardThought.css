@@ -28,7 +28,7 @@
     padding: 20px;
     border: 1px solid var(--border);
     border-radius: 20px;
-    background-color: #1c2230;
+    background-color: var(--surface);
 }
 .dashboardThought-upper{
     display: flex;
@@ -54,7 +54,7 @@
 .thought-user>div:nth-child(1)>p{
     font-size: 15px;
     font-weight: bold;
-    color: #d3cdcd;
+    color: var(--text_primary);
 }
 .thought-user>div:nth-child(1)>span{
     font-size: 11px;
