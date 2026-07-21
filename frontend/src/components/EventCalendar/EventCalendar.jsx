@@ -1,6 +1,6 @@
 import "./EventCalendar.css";
 
-import { useMemo, useState, useCallback } from "react";
+import { useMemo, useState, useCallback, useEffect } from "react";
 
 import useCalendar from "../../hooks/useCalendar";
 import useEventFilter from "../../hooks/useEventFilter";
@@ -13,8 +13,14 @@ import CalendarGrid from "./CalendarGrid/CalendarGrid";
 import CalendarSidebar from "./CalendarSidebar/CalendarSidebar";
 import EventFilters from "./EventFilters/EventFilters";
 import EventModal from "./EventModal/EventModal";
+// import CalendarSkeleton from "../Common/CalendarSkeleton/CalendarSkeleton";
 
 export default function EventCalendar() {
+    /* ---------------- Calendar Skeleton ---------------- */
+    // const { events, loading } = useSelector(
+    //     state => state.calendar
+    // );
+    
     /* ---------------- Calendar ---------------- */
 
     const {
@@ -57,6 +63,9 @@ export default function EventCalendar() {
         filteredEvents,
     } = useEventFilter(allEvents);
 
+            // if (loading) {
+            //      return <CalendarSkeleton />;
+            // }
     return (
         <section className="eventCalendar">
             <CalendarHeader
@@ -102,6 +111,8 @@ export default function EventCalendar() {
                 event={selectedEvent}
                 onClose={handleCloseModal}
             />
+        
         </section>
+        
     );
 }
