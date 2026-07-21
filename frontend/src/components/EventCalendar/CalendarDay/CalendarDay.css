@@ -1,148 +1,119 @@
-.calendarDay{
+.calendarDay {
+  display: flex;
+  flex-direction: column;
 
-    display:flex;
-    flex-direction:column;
+  min-height: 115px;
 
-    min-height:115px;
+  padding: 8px;
 
-    padding:8px;
+  background: #2d333f;
 
-    background:#2d333f;
+  border: 1px solid #40495d;
+  border-radius: 12px;
 
-    border:1px solid #40495d;
-    border-radius:12px;
+  cursor: pointer;
 
-    cursor:pointer;
-
-    transition:
-        border-color .2s ease,
-        transform .2s ease,
-        box-shadow .2s ease;
-
+  transition:
+    border-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-.calendarDay:hover{
+.calendarDay:hover {
+  border-color: #38bdf8;
 
-    border-color:#38bdf8;
+  transform: translateY(-2px);
+}
+.calendarDay:focus-visible{
+    outline:2px solid #38bdf8;
+    outline-offset:3px;
+}
+.dayHeader {
+  display: flex;
+  justify-content: flex-end;
 
-    transform:translateY(-2px);
-
+  margin-bottom: 8px;
 }
 
-.dayHeader{
+.dayNumber {
+  width: 30px;
+  height: 30px;
 
-    display:flex;
-    justify-content:flex-end;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-    margin-bottom:8px;
+  border-radius: 50%;
 
+  color: #fff;
+
+  font-size: 13px;
+  font-weight: 600;
 }
 
-.dayNumber{
-
-    width:30px;
-    height:30px;
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-
-    border-radius:50%;
-
-    color:#fff;
-
-    font-size:13px;
-    font-weight:600;
-
+.today .dayNumber {
+  background: #38bdf8;
 }
 
-.today .dayNumber{
+.selected {
+  border-color: #38bdf8;
 
-    background:#38bdf8;
-
+  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.18);
 }
 
-.selected{
-
-    border-color:#38bdf8;
-
-    box-shadow:0 0 0 2px rgba(56,189,248,.18);
-
+.otherMonth {
+  opacity: 0.35;
 }
 
-.otherMonth{
+.dayEvents {
+  display: flex;
+  flex-direction: column;
 
-    opacity:.35;
+  gap: 4px;
 
+  flex: 1;
 }
 
-.dayEvents{
-
-    display:flex;
-    flex-direction:column;
-
-    gap:4px;
-
-    flex:1;
-
+.emptyEvents {
+  flex: 1;
 }
 
-.emptyEvents{
+.moreEvents {
+  margin-top: auto;
 
-    flex:1;
+  padding-top: 4px;
 
+  color: #94a3b8;
+
+  font-size: 10px;
+  font-weight: 600;
+
+  text-align: center;
 }
 
-.moreEvents{
-
-    margin-top:auto;
-
-    padding-top:4px;
-
-    color:#94a3b8;
-
-    font-size:10px;
-    font-weight:600;
-
-    text-align:center;
-
+@media (max-width: 992px) {
+  .calendarDay {
+    min-height: 100px;
+  }
 }
 
-@media(max-width:992px){
+@media (max-width: 768px) {
+  .calendarDay {
+    min-height: 82px;
 
-    .calendarDay{
+    padding: 6px;
 
-        min-height:100px;
+    border-radius: 10px;
+  }
 
-    }
+  .dayNumber {
+    width: 26px;
+    height: 26px;
 
-}
+    font-size: 11px;
+  }
 
-@media(max-width:768px){
-
-    .calendarDay{
-
-        min-height:82px;
-
-        padding:6px;
-
-        border-radius:10px;
-
-    }
-
-    .dayNumber{
-
-        width:26px;
-        height:26px;
-
-        font-size:11px;
-
-    }
-
-    .dayEvents{
-
-        gap:3px;
-
-    }
-
+  .dayEvents {
+    gap: 3px;
+  }
 }
