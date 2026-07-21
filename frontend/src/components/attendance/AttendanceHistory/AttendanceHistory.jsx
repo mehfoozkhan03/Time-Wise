@@ -7,9 +7,6 @@ import useAttendance from '../../../hooks/useAttendance'
 export default function AttendanceHistory() {
   const { history, loading, error, fetchAttendanceHistory } = useAttendance()
 
-  useEffect(() => {
-    fetchAttendanceHistory()
-  }, [])
 
   function formatDate(date) {
     return new Date(date).toLocaleDateString('en-IN', {
@@ -31,8 +28,6 @@ export default function AttendanceHistory() {
   function formatDuration(seconds = 0) {
     const h = Math.floor(seconds / 3600)
     const m = Math.floor((seconds % 3600) / 60)
-
-    
 
     return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`
   }
@@ -64,9 +59,24 @@ useEffect(() => {
   }
 }, [months.length]);
 
-const currentMonth =
-currentIndex >= 0 ? months[currentIndex] : null;
+const currentMonth = currentIndex >= 0 ? months[currentIndex] : null;
 
+const [showMonthModal, setShowMonthModal] = useState(false);
+
+const monthNames = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
 
 const previousMonth = () => {
   setCurrentIndex((prev) => {
@@ -85,6 +95,11 @@ const nextMonth = () => {
     return prev;
   });
 };
+
+ useEffect(() => {
+   window.scrollTo(0, 0);
+    fetchAttendanceHistory()
+  }, [])
 
   return (
     <section className="attendance_history">
@@ -132,11 +147,10 @@ const nextMonth = () => {
 </button>
 
 <button
-  className="today_btn"
-  onClick={() => setCurrentIndex(months.length - 1)}
+  className="month_btn"
+  onClick={() => setShowMonthModal(true)}
 >
   <FaCalendarAlt />
-  Today
 </button>
 
 <button
@@ -187,6 +201,58 @@ const nextMonth = () => {
   </div>
   </>
 )}
+
+{showMonthModal && (
+  <div
+    className="month_modal_overlay"
+    onClick={() => setShowMonthModal(false)}
+  >
+    <div
+      className="month_modal"
+      onClick={(e) => e.stopPropagation()}
+    >
+    <div className="month_modal_header">
+  <h3>Select Month</h3>
+
+  <button
+    className="close_modal_btn"
+    onClick={() => setShowMonthModal(false)}  >
+    ✕
+  </button>
+         </div>
+
+      <div className="month_grid">
+        {monthNames.map((month) => (
+          <button
+            key={month}
+            className={
+              currentMonth?.startsWith(month)
+                ? "active_month"
+                : ""
+            }
+            onClick={() => {
+              const index = months.findIndex((m) =>
+                m.startsWith(month)
+              );
+
+              if (index !== -1) {
+                setCurrentIndex(index);
+              }
+
+              setShowMonthModal(false);
+            }}
+          >
+            {month.slice(0, 3)}
+          </button>
+        ))}
+      </div>
+
+    </div>
+  </div>
+)}
+
     </section>
+
+
   )
 }
