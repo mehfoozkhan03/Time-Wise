@@ -3,7 +3,7 @@ import "./MiniCalendar.css";
 import { memo, useMemo } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
-import Card from "../../Common/Card/Card";
+import Card from "../../Common/CalendarCard/Card";
 
 import {
   WEEK_DAYS,
