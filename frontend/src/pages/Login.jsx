@@ -54,8 +54,7 @@ const SignUpPage = () => {
     reasonOrCb = null,
     onCloseCb = null,
   ) => {
-    // Allow calling as: showModal('error', title, msg, 'reason text')
-    //               or: showModal('success', title, msg, () => navigate('/'))
+  
     const isCallback = typeof reasonOrCb === "function";
     setModal({
       open: true,
