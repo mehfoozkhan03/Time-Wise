@@ -21,6 +21,9 @@
 }
 
 @media (max-width: 840px) {
+  .contactHero{
+    height: 300px;
+  }
   .contactHero p {
     padding: 15px;
     width: fit-content;
