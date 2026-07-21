@@ -7,9 +7,6 @@ import useAttendance from '../../../hooks/useAttendance'
 export default function AttendanceHistory() {
   const { history, loading, error, fetchAttendanceHistory } = useAttendance()
 
-  useEffect(() => {
-    fetchAttendanceHistory()
-  }, [])
 
   function formatDate(date) {
     return new Date(date).toLocaleDateString('en-IN', {
@@ -32,8 +29,6 @@ export default function AttendanceHistory() {
     const h = Math.floor(seconds / 3600)
     const m = Math.floor((seconds % 3600) / 60)
 
-    
-
     return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`
   }
 
@@ -55,34 +50,56 @@ export default function AttendanceHistory() {
 
 const months = Object.keys(groupedHistory);
 
-const [currentIndex, setCurrentIndex] = useState(0);
+const [currentIndex, setCurrentIndex] = useState(-1);
 
-const currentMonth = months[currentIndex];
-
+// Jab months load ho jaye to latest month select karo
 useEffect(() => {
-  if (months.length > 0 && currentIndex >= months.length) {
+  if (months.length > 0) {
     setCurrentIndex(months.length - 1);
   }
 }, [months.length]);
 
+const currentMonth = currentIndex >= 0 ? months[currentIndex] : null;
+
+const [showMonthModal, setShowMonthModal] = useState(false);
+
+const monthNames = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
 
 const previousMonth = () => {
-  console.log("Previous Click");
-  console.log(currentIndex);
-
-  if (currentIndex > 0) {
-    setCurrentIndex((prev) => prev - 1);
-  }
+  setCurrentIndex((prev) => {
+    if (prev > 0) {
+      return prev - 1;
+    }
+    return prev;
+  });
 };
 
 const nextMonth = () => {
-  console.log("Next Click");
-  console.log(currentIndex);
-
-  if (currentIndex < months.length - 1) {
-    setCurrentIndex((prev) => prev + 1);
-  }
+  setCurrentIndex((prev) => {
+    if (prev < months.length - 1) {
+      return prev + 1;
+    }
+    return prev;
+  });
 };
+
+ useEffect(() => {
+   window.scrollTo(0, 0);
+    fetchAttendanceHistory()
+  }, [])
 
   return (
     <section className="attendance_history">
@@ -120,35 +137,29 @@ const nextMonth = () => {
       <h2>{currentMonth}</h2>
     </div>
 
-    <div className="month_indicator">
-      <span></span>
-    </div>
-
     <div className="month_actions">
+<button
+  className="month_btn"
+  onClick={previousMonth}
+  disabled={currentIndex <= 0}
+>
+  <FaChevronLeft />
+</button>
 
-      <button
-        className="month_btn"
-        onClick={previousMonth}
-        disabled={currentIndex === 0}
-      >
-        <FaChevronLeft />
-      </button>
+<button
+  className="month_btn"
+  onClick={() => setShowMonthModal(true)}
+>
+  <FaCalendarAlt />
+</button>
 
-      <button
-        className="today_btn"
-        onClick={() => setCurrentIndex(months.length - 1)}
-      >
-        <FaCalendarAlt />
-        Today
-      </button>
-
-      <button
-        className="month_btn"
-        onClick={nextMonth}
-        disabled={currentIndex === months.length - 1}
-      >
-        <FaChevronRight />
-      </button>
+<button
+  className="month_btn"
+  onClick={nextMonth}
+  disabled={currentIndex >= months.length - 1}
+>
+  <FaChevronRight />
+</button>
 
     </div>
 
@@ -168,27 +179,80 @@ const nextMonth = () => {
         </tr>
       </thead>
 
-      <tbody>
-        {groupedHistory[currentMonth].map((record) => (
-          <tr key={record._id}>
-            <td>{formatDate(record.date)}</td>
-            <td>{formatTime(record.checkInTime)}</td>
-            <td>{formatTime(record.checkOutTime)}</td>
-            <td>{formatDuration(record.totalWorkingSeconds)}</td>
-            <td>{formatDuration(record.totalBreakSeconds)}</td>
-            <td>
-              <span className="attendance_status">
-                {record.status}
-              </span>
-            </td>
-          </tr>
-        ))}
-      </tbody>
+     <tbody>
+  {currentMonth &&
+    groupedHistory[currentMonth]?.map((record) => (
+      <tr key={record._id}>
+        <td>{formatDate(record.date)}</td>
+        <td>{formatTime(record.checkInTime)}</td>
+        <td>{formatTime(record.checkOutTime)}</td>
+        <td>{formatDuration(record.totalWorkingSeconds)}</td>
+        <td>{formatDuration(record.totalBreakSeconds)}</td>
+        <td>
+          <span className="attendance_status">
+            {record.status}
+          </span>
+        </td>
+      </tr>
+    ))}
+</tbody>
 
     </table>
   </div>
   </>
 )}
+
+{showMonthModal && (
+  <div
+    className="month_modal_overlay"
+    onClick={() => setShowMonthModal(false)}
+  >
+    <div
+      className="month_modal"
+      onClick={(e) => e.stopPropagation()}
+    >
+    <div className="month_modal_header">
+  <h3>Select Month</h3>
+
+  <button
+    className="close_modal_btn"
+    onClick={() => setShowMonthModal(false)}  >
+    ✕
+  </button>
+         </div>
+
+      <div className="month_grid">
+        {monthNames.map((month) => (
+          <button
+            key={month}
+            className={
+              currentMonth?.startsWith(month)
+                ? "active_month"
+                : ""
+            }
+            onClick={() => {
+              const index = months.findIndex((m) =>
+                m.startsWith(month)
+              );
+
+              if (index !== -1) {
+                setCurrentIndex(index);
+              }
+
+              setShowMonthModal(false);
+            }}
+          >
+            {month.slice(0, 3)}
+          </button>
+        ))}
+      </div>
+
+    </div>
+  </div>
+)}
+
     </section>
+
+
   )
 }

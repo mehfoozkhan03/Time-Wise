@@ -92,3 +92,19 @@
   background: var(--primary);
   color: white;
 }
+
+@media (max-width: 840px) {
+  .inputs {
+    flex-direction: column;
+    gap: 0;
+  }
+  .formPart .btn{
+    width: 100%;
+  }
+}
+
+@media (min-width: 430px) and (max-width: 840px) {
+  .formPart {
+    max-width: none;
+  }
+}

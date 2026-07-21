@@ -48,7 +48,7 @@
     flex-direction: column;
     gap: 10px;
     border: 1px solid var(--border);
-    background-color: #1c2230;
+    background-color: var(--surface);
     border-radius: 20px;
 }
 .dashboardAnnouncement-header{

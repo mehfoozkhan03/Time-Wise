@@ -17,7 +17,7 @@
 .home-circle{
     height: 10px;
     width: 10px;
-    background-color: #30a0de;
+    background-color: var(--primary);
     border-radius: 50%;
 }
 .home-card{
@@ -28,7 +28,7 @@
     gap: 20px;
     border: 1px solid var(--border);
     border-radius: 20px;
-    background-color: #1c2230;
+    background-color: var(--surface);
 }
 .circle-container{
     display: flex;
@@ -53,11 +53,11 @@
     gap: 10px;
     border: 1px solid var(--border);
     border-radius: 20px;
-    background-color: #152330;
+    background-color: var(--surface);
 }
 .home-thought>p{
     font-size: 14px;
-    color: #fff;
+    color: var(--text_primary);
 }
 .home-thought-heading{
     display: flex;
@@ -66,7 +66,7 @@
 }
 .home-thought-heading>span{
     font-size: 13px;
-    color: #4997c8;
+    color: var(-primary);
     font-weight: bold;
 }
 .thought-avatar-container{
@@ -79,7 +79,7 @@
     width: 25px;
     border: 1px solid var(--border);
     border-radius: 50%;
-    background-color: rgb(108, 108, 177);
+    background-color: var(--primary);
 }
 
 /* Quick action */
@@ -180,7 +180,7 @@
     border: 1px solid var(--border);
     padding: 7px 20px;
     border-radius: 20px;
-    background-color: #152330;
+    background-color: var(--surface);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -190,6 +190,14 @@
     align-items: center;
     gap: 15px;
 }
+.employe-left p{
+    font-size: 16px;
+    color: var(--text_primary);
+}
+.employe-left span{
+    font-size: 12px;
+    color: var(--text_secondary);
+}
 .recent-employee-avatar{
     height: 30px;
     width: 30px;
@@ -197,7 +205,7 @@
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    background-color: #2889bf;
+    background-color: var(--primary);
 }
 .recent-dot-container{
     padding: 5px 10px;
@@ -230,10 +238,9 @@
     font-weight: 500;
 }
 .attendance-chart-container{
-    background-color: #1c2230;
+    background-color: var(--surface);
     border: 1px solid var(--border);
     padding: 20px;
     border-radius: 20px;
-    /* width: 500px; */
     height: 280px;
 }

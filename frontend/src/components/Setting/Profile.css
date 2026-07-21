@@ -2,6 +2,7 @@
     display: flex;
     flex-direction: column;
     gap: 25px;
+    padding: 20px;
 }
 .setting-profile_heading{
     padding-top: 20px;
@@ -12,14 +13,14 @@
 
 .setting-avtar-main-container{
     border-radius: 10px;
-    padding: 20px;
-    height: 160px;
+    height: 200px;
     box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
     background-color: var(--surface);
 }
 .setting-avatar-heading{
     height: 30%;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    border-bottom: 1px solid var(--border);
 }
 .setting-avatar-heading>h2{
     font-size: 16px;
@@ -34,6 +35,7 @@
 }
 
 .setting-avatar-container{
+    padding: 20px;
     position:relative;
 }
 
@@ -89,17 +91,19 @@
 
 /* Personal Information */
 .personal-information-container{
-    padding: 10px;
     border-radius: 10px;
     box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
     background-color: var(--surface);
 }
+.personal-information-heading{
+    padding: 20px;
+    border-bottom: 1px solid var(--border);
+}
 .personal-information-heading>h2{
-    padding-bottom: 20px;
     font-size: 16px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 }
 .personal-information-form{
+    padding: 20px;
     width: 100%;
     padding-top: 15px;
     display: flex;
@@ -138,6 +142,9 @@
 .bio{
     width: 100%;
     padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 .bio>textarea{
     width: 100%;

@@ -1,4 +1,5 @@
 .dataexport-container{
+    padding: 20px;
     display: flex;
     flex-direction: column;
     gap: 25px;
@@ -20,11 +21,11 @@
     flex-direction: column;
     gap: 15px;
     border-radius: 10px;
-    border-right-color: white;
+    background-color: var(--surface);
     box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
 }
 .attendance-export-heading{
-    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid var(--border);
     padding-bottom: 20px;
 }
 .attendance-export-heading>h3{
@@ -78,11 +79,11 @@
     flex-direction: column;
     gap: 15px;
     border-radius: 10px;
-    border-right-color: white;
+    background-color: var(--surface);
     box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
 }
 .recent-heading{
-    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid var(--border);
     padding-bottom: 20px;
 }
 .recent-heading>h3{
@@ -112,7 +113,7 @@
 }
 .attendance-report,
 .monthly-summary{
-    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid var(--border);
 }
 .download-container{
     display: flex;
@@ -138,11 +139,11 @@
     flex-direction: column;
     gap: 15px;
     border-radius: 10px;
-    border-right-color: white;
+    background-color: var(--surface);
     box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
 }
 .retention-heading{
-    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid var(--border);
     padding-bottom: 20px;
 }
 .retention-heading>h3{
