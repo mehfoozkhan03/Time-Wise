@@ -20,7 +20,7 @@
   color: #ddd;
 }
 
-@media (max-width: 320px) {
+@media (max-width: 840px) {
   .contactHero p {
     padding: 15px;
     width: fit-content;
