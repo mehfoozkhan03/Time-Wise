@@ -1,48 +1,35 @@
 import { NavLink, useLocation } from 'react-router-dom';
-import { useState, useEffect, useRef } from 'react'; // NEW: Added useRef for notification timer
+import { useState, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
-import './Navbar.css';
 import { FaBell, FaBars, FaTimes, FaChevronDown } from 'react-icons/fa';
+
+import './Navbar.css';
 import { useTour } from '../../hooks/useTour';
 import { tourSteps } from '../../tour/tourSteps';
 
 export default function Navbar() {
   const location = useLocation();
   const { user } = useSelector((state) => state.auth);
-  console.log(user);
 
   const isHome = location.pathname === '/';
 
   const [mobileOpen, setMobileOpen] = useState(false);
-
   const [profileOpen, setProfileOpen] = useState(false);
-
   const [notificationOpen, setNotificationOpen] = useState(false);
 
   const { triggerTour } = useTour(tourSteps());
 
-  // ==========================
-  // NEW: Notification Ref
-  // ==========================
   const notificationRef = useRef(null);
-
-  // ==========================
-  // NEW: Profile Ref
-  // ==========================
   const profileRef = useRef(null);
 
-  // ==========================
-  // NEW: Close all dropdowns when route changes
-  // ==========================
+  // Close everything on route change
   useEffect(() => {
-    setNotificationOpen(false);
-    setProfileOpen(false);
     setMobileOpen(false);
+    setProfileOpen(false);
+    setNotificationOpen(false);
   }, [location.pathname]);
 
-  // ==========================
-  // NEW: Close dropdowns when clicking outside
-  // ==========================
+  // Close dropdowns on outside click
   useEffect(() => {
     function handleClickOutside(event) {
       if (
@@ -66,9 +53,9 @@ export default function Navbar() {
 
   return (
     <header className="navbar">
-      {/* ==========================
-              LEFT
-      =========================== */}
+      {/* =======================
+            Logo
+      ======================= */}
 
       <div className="navbar_logo" id="tour-logo">
         <NavLink to="/">
@@ -78,28 +65,24 @@ export default function Navbar() {
         </NavLink>
       </div>
 
-      {/* ==========================
-            CENTER
-      =========================== */}
+      {/* =======================
+            Navigation
+      ======================= */}
 
       <nav
         className={`navbar_links ${mobileOpen ? 'active' : ''}`}
         id="tour-nav-links"
       >
         <NavLink to="/">Home</NavLink>
-
         <NavLink to="/dashboard">Dashboard</NavLink>
-
         <NavLink to="/community">Community</NavLink>
-
         <NavLink to="/about">About</NavLink>
-
         <NavLink to="/contact">Contact</NavLink>
       </nav>
 
-      {/* ==========================
-              RIGHT
-      =========================== */}
+      {/* =======================
+            Right Side
+      ======================= */}
 
       <div className="navbar_right">
         {/* Notification */}
@@ -107,20 +90,16 @@ export default function Navbar() {
         <div
           className="notification_container"
           id="tour-notifications"
-          ref={notificationRef} // NEW
+          ref={notificationRef}
         >
           <button
             className="notification_btn"
             onClick={() => {
-              // NEW: Close profile
               setProfileOpen(false);
-
-              // NEW: Toggle notification
               setNotificationOpen((prev) => !prev);
             }}
           >
             <FaBell />
-
             <span className="notification_count">3</span>
           </button>
 
@@ -145,25 +124,31 @@ export default function Navbar() {
 
         {/* Profile */}
 
-        <div
-          className="profile_container"
-          id="tour-profile"
-          ref={profileRef} // NEW
-        >
+        <div className="profile_container" id="tour-profile" ref={profileRef}>
           <button
             className="profile_btn"
             onClick={() => {
-              // NEW: Close notification
               setNotificationOpen(false);
-
-              // NEW: Toggle profile
               setProfileOpen((prev) => !prev);
             }}
           >
-            <div className="avatar">AK</div>
+            <div className="avatar">
+              {user
+                ? `${user.firstName?.[0] ?? ''}${user.lastName?.[0] ?? ''}`.toUpperCase()
+                : 'U'}
+            </div>
 
             <div className="profile_info">
-              <h4>Arnav Kharade</h4>
+              <h4>
+                {user
+                  ? `${user.firstName
+                      ?.charAt(0)
+                      .toUpperCase()}${user.firstName?.slice(1)} ${
+                      user.lastName?.charAt(0).toUpperCase() +
+                      user.lastName?.slice(1)
+                    }`
+                  : 'User'}
+              </h4>
 
               <span>Frontend Developer</span>
             </div>
@@ -186,7 +171,10 @@ export default function Navbar() {
               <button
                 onClick={() => {
                   setProfileOpen(false);
-                  // Logout logic
+
+                  // TODO:
+                  // dispatch(logout());
+                  // navigate('/login');
                 }}
               >
                 Logout
@@ -195,22 +183,24 @@ export default function Navbar() {
           )}
         </div>
 
+        {/* Show Demo */}
+
         {isHome && (
           <button
             id="tour-trigger-btn"
-            onClick={triggerTour}
             className="tour_trigger_btn"
+            onClick={triggerTour}
           >
             Show Demo
           </button>
         )}
 
-        {/* Mobile */}
+        {/* Mobile Menu */}
 
         <button
           id="tour-mobile-btn"
           className="mobile_btn"
-          onClick={() => setMobileOpen(!mobileOpen)}
+          onClick={() => setMobileOpen((prev) => !prev)}
         >
           {mobileOpen ? <FaTimes /> : <FaBars />}
         </button>
