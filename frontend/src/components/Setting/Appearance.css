@@ -1,4 +1,5 @@
 .appearance-container{
+    padding: 20px;
     display: flex;
     flex-direction: column;
     gap: 25px;
@@ -20,7 +21,7 @@
     flex-direction: column;
     gap: 15px;
     border-radius: 10px;
-    background-color: white;
+    background-color: var(--surface);
     box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
 }
 .theme-heading{
@@ -36,13 +37,13 @@
     align-content: center;
 }
 .theme-mode>div{
-    border: 1px solid rgba(0, 0, 0, 0.2);
     height: 110px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 5px;
+    border: 1px solid var(--border);
     border-radius: 15px;
 }
 .theme-mode>div>p{
@@ -59,12 +60,12 @@
     flex-direction: column;
     gap: 15px;
     border-radius: 10px;
-    background-color: white;
+    background-color: var(--surface);
     box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
 }
 .accent-heading{
     padding-bottom: 20px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid var(--border);
 }
 .accent-heading>h3{
     font-size: 16px;
@@ -110,12 +111,12 @@
     flex-direction: column;
     gap: 15px;
     border-radius: 10px;
-    background-color: white;
+    background-color: var(--surface);
     box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
 }
 .layout-heading{
     padding-bottom: 20px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid var(--border);
 }
 .layout-heading>h3{
     font-size: 16px;
@@ -133,7 +134,7 @@
 }
 .display-density,
 .language{
-    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid var(--border);
 }
 .layout>div>div>h3{
     font-size: 14px;
@@ -156,12 +157,11 @@
     justify-content: space-between;
     align-items: center;
     border-radius: 10px;
-    background-color: white;
     box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
 }
 .change-btn{
     padding: 8px 15px;
-    color: white;
+    color: var(--text_primary);
     font-size: 15px;
     border-radius: 10px;
     background-color: blue;
