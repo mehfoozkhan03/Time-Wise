@@ -27,12 +27,16 @@ export default function Navbar() {
   const notificationRef = useRef(null);
   const profileRef = useRef(null);
 
-  const handleLogout = () => {
-    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+  const handleLogout = async () => {
+    try {
+      await authService.logout();
 
-    dispatch(logout());
+      dispatch(logout());
 
-    navigate("/login");
+      navigate("/login");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   // Close everything on route change
