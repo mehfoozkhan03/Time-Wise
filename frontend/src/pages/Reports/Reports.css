@@ -35,7 +35,7 @@ html {
 
 body {
   margin: 0;
-  background-color: #080c14;
+  background-color: var(-bg);
   color: #e8edf5;
   font-family: "DM Sans", sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -69,6 +69,10 @@ body {
 .glass-card * {
   cursor: default !important;
   user-select: none;
+}
+
+.reportsDiv{
+  background: var(--bg);
 }
 
 /* Card glass effect */
