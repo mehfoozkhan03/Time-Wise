@@ -32,11 +32,11 @@ export function KPICard({
         <div>
           <div
             style={{
-              fontSize: 11,
+              fontSize: 15,
               fontWeight: 500,
               color: "#64748b",
               textTransform: "uppercase",
-              letterSpacing: "0.08em",
+              letterSpacing: "0.01em",
               marginBottom: 6,
             }}
           >
@@ -65,7 +65,7 @@ export function KPICard({
             {unit && (
               <span
                 style={{
-                  fontSize: 13,
+                  fontSize: 15,
                   color: "#475569",
                   fontWeight: 500,
                 }}
@@ -78,7 +78,7 @@ export function KPICard({
           {sub && (
             <div
               style={{
-                fontSize: 11.5,
+                fontSize: 13,
                 color: "#475569",
                 marginTop: 4,
               }}
@@ -122,7 +122,7 @@ export function KPICard({
 
       <div
         style={{
-          fontSize: 10.5,
+          fontSize: 13,
           color: "#334155",
           marginTop: -4,
         }}
