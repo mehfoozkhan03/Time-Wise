@@ -16,14 +16,13 @@ export function WorkSummary({ summaryItems }) {
           <div
             key={item.label}
             style={{
-              background: "rgba(255,255,255,0.025)",
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
               borderRadius: 10,
               padding: "12px 14px",
-              border: "1px solid rgba(255,255,255,0.04)",
             }}
+            className="workDiv"
           >
             <div
               style={{
@@ -39,7 +38,6 @@ export function WorkSummary({ summaryItems }) {
                 fontFamily: "JetBrains Mono, monospace",
                 fontSize: 15,
                 fontWeight: 600,
-                color: "#e8edf5",
                 marginBottom: 2,
               }}
             >

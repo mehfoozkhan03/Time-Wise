@@ -1,7 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=JetBrains+Mono:wght@400;500;600&display=swap");
 
-@import "tailwindcss";
-
 @theme inline {
   --color-background: #080c14;
   --color-foreground: #e8edf5;
@@ -28,31 +26,12 @@
   box-sizing: border-box;
 }
 
-html {
-  scrollbar-width: thin;
-  scrollbar-color: #1e2d4a transparent;
-}
-
 body {
   margin: 0;
   background-color: var(-bg);
   color: #e8edf5;
   font-family: "DM Sans", sans-serif;
   -webkit-font-smoothing: antialiased;
-}
-
-::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
-}
-
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #1e2d4a;
-  border-radius: 99px;
 }
 
 .font-display {
@@ -63,21 +42,33 @@ body {
   font-family: "JetBrains Mono", monospace;
 }
 
-.stagger,
+/* .stagger,
 .stagger *,
 .glass-card,
 .glass-card * {
   cursor: default !important;
   user-select: none;
+} */
+
+.reportsDiv,
+.chartDiv {
+  background: var(--bg);
+  color: var(--text_primary) !important;
 }
 
-.reportsDiv{
-  background: var(--bg);
+.reportsDiv button {
+  background: var(--primary);
+}
+
+.chartDiv button {
+  background: var(--primary);
+  color: var(--text_primary);
 }
 
 /* Card glass effect */
-.glass-card {
-  background: #0d1322;
+.glass-card,
+.workDiv {
+  background: var(--bg);
   border: 1px solid rgba(255, 255, 255, 0.065);
   border-radius: 14px;
   box-shadow:
@@ -86,7 +77,8 @@ body {
 }
 
 /* Subtle glow on hover */
-.card-hover {
+.card-hover,
+.workDiv {
   transition:
     transform 0.28s ease,
     border-color 0.28s ease,
@@ -94,15 +86,14 @@ body {
     background 0.28s ease;
 }
 
-.card-hover:hover {
-  transform: translateY(-4px);
+.card-hover:hover,
+.workDiv:hover {
+  transform: translateY(-3px);
   border-color: rgba(99, 102, 241, 0.28);
-
   box-shadow:
     0 16px 40px rgba(0, 0, 0, 0.45),
     0 0 0 1px rgba(99, 102, 241, 0.12),
     0 0 24px rgba(99, 102, 241, 0.08);
-
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.015), transparent);
 }
 
@@ -124,7 +115,6 @@ body {
   from {
     width: 0%;
   }
-
   to {
     width: var(--target-width);
   }
@@ -136,13 +126,11 @@ body {
 
 /* Pulse dot */
 @keyframes pulse-dot {
-
   0%,
   100% {
     opacity: 1;
     transform: scale(1);
   }
-
   50% {
     opacity: 0.5;
     transform: scale(0.85);
@@ -159,7 +147,6 @@ body {
     opacity: 0;
     transform: translateY(12px);
   }
-
   to {
     opacity: 1;
     transform: translateY(0);
