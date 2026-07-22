@@ -32,13 +32,21 @@
 
   padding-bottom: 8px;
 
-  border-bottom: 1px solid #40495d;
+  border-bottom: 1px solid var(--border);
+
+  transition:
+    border-color var(--transition),
+    transform var(--transition);
 }
 
 .upcomingItem:last-child {
   padding-bottom: 0;
 
   border-bottom: none;
+}
+
+.upcomingItem:hover {
+  transform: translateX(2px);
 }
 
 /* ==========================================
@@ -48,7 +56,7 @@
 .eventDate {
   margin-left: 40px;
 
-  color: #94a3b8;
+  color: var(--text_secondary);
 
   font-size: 10px;
 
@@ -71,17 +79,16 @@
   margin-top: 8px;
 
   width: 100%;
-
   height: 40px;
 
   display: flex;
   justify-content: center;
   align-items: center;
 
-  border: none;
-  border-radius: 10px;
+  border: 1px solid var(--primary);
+  border-radius: var(--radius_sm);
 
-  background: #38bdf8;
+  background: var(--primary);
 
   color: #fff;
 
@@ -90,9 +97,28 @@
 
   cursor: pointer;
 
-  transition: 0.2s;
+  transition:
+    background var(--transition),
+    border-color var(--transition),
+    transform var(--transition),
+    box-shadow var(--transition);
 }
 
 .viewAllBtn:hover {
-  filter: brightness(1.08);
+  background: var(--primary_hover);
+
+  border-color: var(--primary_hover);
+
+  box-shadow: var(--shadow_sm);
+
+  transform: translateY(-2px);
+}
+
+.viewAllBtn:active {
+  transform: scale(0.98);
+}
+
+.viewAllBtn:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
 }

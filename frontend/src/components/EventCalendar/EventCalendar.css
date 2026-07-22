@@ -1,18 +1,14 @@
 .calendarBody {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 320px;
-    gap: 16px;
-
-    align-items: stretch;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 16px;
+  align-items: stretch;
 }
 
 .eventCalendar {
   display: flex;
-
   flex-direction: column;
-
   gap: 24px;
-
   width: 100%;
 }
 
@@ -31,13 +27,11 @@
 @keyframes fadeIn {
   from {
     opacity: 0;
-
     transform: translateY(12px);
   }
 
   to {
     opacity: 1;
-
     transform: translateY(0);
   }
 }
