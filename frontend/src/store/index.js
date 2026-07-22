@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
 
 import tourReducer from './tourSlice'
+import adminAuthReducer from "./adminAuthSlice";
 import authReducer from './authSlice'
 import attendanceReducer from './attendanceSlice'
 import notificationReducer from './notificationSlice'
@@ -10,6 +11,8 @@ import dashboardReducer from './dashboardSlice'
 const store = configureStore({
   reducer: {
     tour: tourReducer,
+
+    adminAuth: adminAuthReducer,
 
     auth: authReducer,
 
