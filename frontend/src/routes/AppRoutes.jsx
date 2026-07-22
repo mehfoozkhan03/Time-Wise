@@ -75,7 +75,7 @@ export const AppRoutes = () => {
           />
           <Route path="/dashboard" element={<AdminDashboard />}>
             <Route index element={<DashboardHome />}></Route>
-            <Route path="home" element={<DashboardHome />}></Route>
+            <Route path="/dashboard/" element={<DashboardHome />}></Route>
             <Route path="employee" element={<DashboardEmployee />}></Route>
             <Route path="attendance" element={<DashboardAttendance />}></Route>
             <Route path="thought" element={<DashboardThuoght />}></Route>
