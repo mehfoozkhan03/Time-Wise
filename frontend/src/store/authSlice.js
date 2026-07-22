@@ -109,7 +109,7 @@ const authSlice = createSlice({
       })
 
       //admin
-      .addCase(adminLogin.pending, (state) => {
+      /*   .addCase(adminLogin.pending, (state) => {
         state.isLoading = true;
         state.isError = false;
         state.errorMessage = '';
@@ -128,7 +128,7 @@ const authSlice = createSlice({
         state.isError = true;
         state.errorMessage = action.payload;
       })
-
+ */
       // ================= Current User =================
 
       .addCase(fetchCurrentUser.pending, (state) => {

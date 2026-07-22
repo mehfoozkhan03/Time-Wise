@@ -73,7 +73,7 @@ export const AppRoutes = () => {
               </PrivateRoutes>
             }
           />
-          <Route path="/dashboard" element={<Dashboard />}>
+          <Route path="/dashboard" element={<AdminDashboard />}>
             <Route index element={<DashboardHome />}></Route>
             <Route path="home" element={<DashboardHome />}></Route>
             <Route path="employee" element={<DashboardEmployee />}></Route>
