@@ -45,6 +45,22 @@ export const registerUser = createAsyncThunk(
   },
 );
 
+// Theme
+export const updateTheme = createAsyncThunk(
+  "auth/updateTheme",
+  async (theme, thunkAPI) => {
+    try {
+      const { data } = await authService.updateTheme(theme);
+      return data.theme;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Failed to update theme"
+      );
+    }
+  }
+);
+
+
 const initialState = {
   isAuthenticated: document.cookie
     .split('; ')
@@ -111,7 +127,13 @@ const authSlice = createSlice({
         state.isAuthenticated = false;
         state.isError = true;
         state.errorMessage = action.payload;
-      });
+      })
+
+      .addCase(updateTheme.fulfilled, (state, action) => {
+        if (state.user) {
+          state.user.theme = action.payload;
+        }
+})
   },
 });
 
@@ -122,3 +144,5 @@ export default authSlice.reducer;
 deepakyadav786@gmail.com
 Deeoakyadav@123
 */
+
+

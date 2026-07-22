@@ -1,4 +1,4 @@
-import "../../components/Dashboard/DashboardThought.css"
+import "./DashboardThought.css"
 
 
 import { TiPin } from "react-icons/ti";

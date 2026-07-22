@@ -1,5 +1,5 @@
 import "../styles/Setting.css"
-import { SettingSidebar } from "../components/Setting/SettingSidebar";
+import { SettingSidebar } from "../components/Setting/SettingSidebar/SettingSidebar";
 
 import { useLocation, Outlet } from "react-router-dom";
 
