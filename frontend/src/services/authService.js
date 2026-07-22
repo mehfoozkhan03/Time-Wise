@@ -16,4 +16,7 @@ export const authService = {
   getCurrentUser() {
     return api.get('/user/me');
   },
+  updateTheme(theme) {
+    return api.patch("/user/theme", { theme });
+  },
 };

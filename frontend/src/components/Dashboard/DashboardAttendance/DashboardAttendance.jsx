@@ -1,4 +1,4 @@
-import "../../components/Dashboard/DashboardAttendance.css"
+import "./DashboardAttendance.css"
 
 
 export const DashboardAttendance = () => {

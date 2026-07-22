@@ -1,4 +1,4 @@
-import "../Dashboard/DashboardHome.css";
+import "./DashboardHome.css";
 
 import {
   FaUsers,

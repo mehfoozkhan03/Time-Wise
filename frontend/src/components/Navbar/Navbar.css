@@ -12,16 +12,16 @@
   align-items: center;
   justify-content: space-between;
   padding: 0 3rem;
-  background: rgba(249, 251, 252, 0.88);
+  /* background: rgba(249, 251, 252, 0.88); */
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
   border-bottom: 1px solid var(--border);
   transition: var(--transition);
 }
 
-body.dark_mode .navbar {
+/* body.dark_mode .navbar {
   background: rgba(31, 36, 45, 0.9);
-}
+} */
 
 /* ==========================================================
    LOGO

@@ -1,6 +1,6 @@
 import { FiDownload } from "react-icons/fi";
 
-import "../../components/Setting/DataExport.css"
+import "./DataExport.css"
 
 
 export const DataExport = () => {

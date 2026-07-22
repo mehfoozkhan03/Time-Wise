@@ -1,5 +1,5 @@
-import  "../Dashboard/DashboardSetting.css"
-import { SwitchBtn } from './../SwichBtn/SwitchBtn';
+import  "./DashboardSetting.css"
+import { SwitchBtn } from '../../SwichBtn/SwitchBtn';
 
 
 export const DashboardSetting = () => {

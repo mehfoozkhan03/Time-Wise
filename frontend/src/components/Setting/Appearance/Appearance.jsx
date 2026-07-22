@@ -1,12 +1,14 @@
+import "./Appearance.css";
+
+
 import { MdOutlineLightMode } from "react-icons/md";
 import { MdOutlineDarkMode } from "react-icons/md";
 import { CiLaptop } from "react-icons/ci";
-
-
-import "../../components/Setting/Appearance.css"
+import { useTheme } from "../../../context/ThemeContext";
 
 
 export const Appearance = () => {
+    const { changeTheme } = useTheme();
 
 
     return (
@@ -23,15 +25,15 @@ export const Appearance = () => {
                         <h3>Theme</h3>
                     </div>
                     <div className="theme-mode">
-                        <div className="light-mode">
+                        <div className="light-mode" onClick={() => changeTheme("light")}>
                             <MdOutlineLightMode className="mode-icon" />
                             <p>Light</p>
                         </div>
-                        <div className="dark-mode">
+                        <div className="dark-mode" onClick={() => changeTheme("dark")}>
                             <MdOutlineDarkMode className="mode-icon" />
                             <p>Dark</p>
                         </div>
-                        <div className="system-mode">
+                        <div className="system-mode" onClick={() => changeTheme("system")}>
                             <CiLaptop className="mode-icon" />
                             <p>System</p>
                         </div>
@@ -39,7 +41,7 @@ export const Appearance = () => {
                 </div>
 
                 {/* Accent color */}
-                <div className="accent-color-container">
+                {/* <div className="accent-color-container">
                     <div className="accent-heading">
                         <h3>Accent color</h3>
                     </div>
@@ -50,7 +52,7 @@ export const Appearance = () => {
                         <div className="rose"></div>
                         <div className="amber"></div>
                     </div>
-                </div>
+                </div> */}
 
                 {/* Layout & Localization */}
                 <div className="layout-localization">
