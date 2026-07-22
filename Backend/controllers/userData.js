@@ -303,3 +303,27 @@ export const updateTheme = async (req, res) => {
     });
   }
 };
+
+// ================= logout =================
+
+export const logout = async (req, res) => {
+  try {
+    res.clearCookie('token', {
+      httpOnly: false, // use the same value as login
+      secure: false, // true in production with HTTPS
+      sameSite: 'Lax', // same as login
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: 'Logout successful',
+    });
+  } catch (error) {
+    console.error('Logout Error:', error);
+
+    return res.status(500).json({
+      success: false,
+      message: 'Internal Server Error',
+    });
+  }
+};
