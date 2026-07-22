@@ -1,4 +1,4 @@
-import "../Dashboard/DashboardReport.css";
+import "./DashboardReport.css";
 
 import { FaChartBar } from "react-icons/fa6";
 import { FcDepartment } from "react-icons/fc";

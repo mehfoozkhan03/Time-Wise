@@ -2,7 +2,7 @@ import "../styles/Dashboard.css";
 
 
 import { Outlet, useLocation } from "react-router-dom";
-import { DashboardSidebar } from "../components/Dashboard/DashboardSidebar";
+import { DashboardSidebar } from "../components/Dashboard/DashboardSidebar/DashboardSidebar";
 
 import { MdOutlineSpaceDashboard } from "react-icons/md";
 import {
@@ -19,7 +19,7 @@ import { FaSearch } from "react-icons/fa";
 import { IoMdArrowDropdown, IoMdArrowDropup } from "react-icons/io";
 
 
-export default function Dashboard() {
+export default function AdminDashboard() {
   const location = useLocation();
 
   const headerData = {

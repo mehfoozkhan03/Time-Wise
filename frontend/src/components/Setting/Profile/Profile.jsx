@@ -1,4 +1,4 @@
-import "../../components/Setting/Profile.css";
+import "./Profile.css";
 
 import { CiUser } from "react-icons/ci";
 import { MdOutlineEmail } from "react-icons/md";

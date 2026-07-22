@@ -1,4 +1,4 @@
-import "../Dashboard/DashboardNotification.css"
+import "./DashboardNotification.css"
 
 
 import { FaBell, FaCloud } from "react-icons/fa6";
