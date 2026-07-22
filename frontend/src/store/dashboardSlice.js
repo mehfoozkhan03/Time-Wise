@@ -28,6 +28,10 @@ const initialState = {
 
     productivity: 0,
 
+    weeklyTarget: 40,
+    weeklyHoursRemaining: 40,
+    weeklyGoalPercentage: 0,
+
     averageCheckIn: '--:--',
 
     averageBreakDuration: 0,
