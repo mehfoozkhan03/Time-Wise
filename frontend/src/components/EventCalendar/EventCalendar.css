@@ -1,11 +1,9 @@
 .calendarBody {
-  display: grid;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 16px;
 
-  grid-template-columns: minmax(0, 1fr) 340px;
-
-  gap: 24px;
-
-  align-items: start;
+    align-items: stretch;
 }
 
 .eventCalendar {
