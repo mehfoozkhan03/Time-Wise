@@ -1,0 +1,21 @@
+.employee_profile{
+    width:100%;
+    padding:40px;
+    display:flex;
+    flex-direction:column;
+    gap:28px;
+}
+
+.employee_bottom{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:28px;
+}
+
+@media(max-width:900px){
+
+.employee_bottom{
+    grid-template-columns:1fr;
+}
+
+}
