@@ -7,6 +7,7 @@ import notificationReducer from './notificationSlice';
 import postReducer from './postSlice';
 import dashboardReducer from './dashboardSlice';
 import reportsReducer from './reportsSlice';
+import adminAuthReducer from './adminAuthSlice';
 
 const store = configureStore({
   reducer: {
