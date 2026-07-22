@@ -1,0 +1,54 @@
+.calendarWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+
+  width: 100%;
+}
+
+.weekHeader {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.weekHeader div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 10px 0;
+
+  color: #94a3b8;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.calendarGrid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 10px;
+}
+
+@media (max-width: 1200px) {
+  .weekHeader,
+  .calendarGrid {
+    gap: 8px;
+  }
+}
+
+@media (max-width: 768px) {
+  .weekHeader,
+  .calendarGrid {
+    gap: 6px;
+  }
+
+  .weekHeader div {
+    font-size: 11px;
+    padding: 6px 0;
+  }
+}

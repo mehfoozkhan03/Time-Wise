@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AdminLogin</title>
+  <link rel="stylesheet" href="css/AdminDashboard.css">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;600&display=swap"
+    rel="stylesheet" />
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+</head>
+
+<body>
+   <header class="header">
+
+  </header>
+<div class="login_wrapper">
+ <div class="login_container">
+  <h1>TimeWise Admin</h1>
+  <form id="adminLoginForm">
+    <input type="text" id="adminUsername" placeholder="Admin Username" class="admin_input" autocomplete="off" required/>
+    <input type="password" id="adminPassword" placeholder="Password" class="admin_input" required/>
+    <button type="submit" class="admin_button">Login</button>
+    <p id="errorMessage" class="error_message"></p>
+  </form>
+ </div>
+</div>
+
+ <footer class="footer">
+  
+  </footer>
+</body>
+<script src="js/AdminLogin.js"></script>
+
+<script type="module">
+  // RAHMAT CODE
+  import { navbar, style, footer } from "./js/nav_footer.js";
+  document.querySelector(".header").innerHTML = navbar();
+
+
+  let styleTag = document.createElement("style");
+  styleTag.textContent = style();
+  document.head.append(styleTag);
+
+  document.querySelector(".footer").innerHTML = footer();
+
+  const navBar = document.querySelector(".navbar-container");
+  const header = document.querySelector(".header");
+
+  // when we scroll the webpage a little bit then both classes fixed & fixed-header will be added & when we go on the top of the webpage these classes will be removed
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 0) {
+      navBar.classList.add("fixed");
+      header.classList.add("fixed-header");
+    } else {
+      navBar.classList.remove("fixed");
+      header.classList.remove("fixed-header");
+    }
+  });
+
+  // scroll button
+  const scrollBtn = document.querySelector(".fa-angle-up");
+
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 100) {
+      scrollBtn.classList.add("showScrollBtn");
+    } else {
+      scrollBtn.classList.remove("showScrollBtn");
+    }
+  });
+
+  window.scrollUp = function () {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
+
+</script>
+</html>

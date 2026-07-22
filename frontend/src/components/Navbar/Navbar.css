@@ -1,0 +1,472 @@
+/* ==========================================================
+   NAVBAR
+========================================================== */
+
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+  height: var(--navbar_height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 3rem;
+  background: rgba(249, 251, 252, 0.88);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-bottom: 1px solid var(--border);
+  transition: var(--transition);
+}
+
+body.dark_mode .navbar {
+  background: rgba(31, 36, 45, 0.9);
+}
+
+/* ==========================================================
+   LOGO
+========================================================== */
+
+.navbar_logo {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  cursor: pointer;
+  user-select: none;
+  padding-top: 17px;
+}
+
+.navbar_logo img {
+  width: 79px;
+  height: 79px;
+  object-fit: cover;
+  transition: var(--transition);
+}
+
+.logo_text {
+  display: flex;
+  flex-direction: column;
+}
+
+.logo_text h2 {
+  font-size: 1.28rem;
+  color: var(--text_primary);
+}
+
+.logo_text span {
+  font-size: 0.82rem;
+  color: var(--text_secondary);
+}
+
+/* ==========================================================
+   CENTER LINKS
+========================================================== */
+
+.navbar_links {
+  display: flex;
+  align-items: center;
+  gap: 2.8rem;
+}
+
+.navbar_links a {
+  position: relative;
+  font-size: 0.96rem;
+  font-weight: 600;
+  color: var(--text_secondary);
+  transition: var(--transition);
+}
+
+.navbar_links a:hover {
+  color: var(--primary);
+}
+
+.navbar_links a.active {
+  color: var(--primary);
+}
+
+.navbar_links a::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -8px;
+  transform: translateX(-50%);
+  width: 0;
+  height: 3px;
+  border-radius: 50px;
+  background: var(--primary);
+  transition: 0.35s ease;
+}
+
+.navbar_links a:hover::after,
+.navbar_links a.active::after {
+  width: 100%;
+}
+
+/* ==========================================================
+   RIGHT SIDE
+========================================================== */
+
+.navbar_right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* ==========================================================
+   NOTIFICATION
+========================================================== */
+
+.notification_container {
+  position: relative;
+}
+
+.notification_btn {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: var(--surface);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--text_primary);
+  box-shadow: var(--shadow_sm);
+}
+
+.notification_btn svg {
+  font-size: 1.1rem;
+}
+
+.notification_btn:hover {
+  background: var(--primary);
+  color: white;
+  transform: translateY(-2px);
+}
+
+.notification_count {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--error);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+/* ==========================================================
+   PROFILE
+========================================================== */
+
+.profile_container {
+  position: relative;
+}
+
+.profile_btn {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.45rem 0.75rem;
+  border-radius: 16px;
+  background: var(--surface);
+  box-shadow: var(--shadow_sm);
+}
+
+.profile_btn:hover {
+  background: var(--secondary);
+}
+
+.profile_btn > svg {
+  fill: #fff;
+}
+
+.avatar {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--primary_hover));
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-weight: 700;
+}
+
+.profile_info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.profile_info h4 {
+  font-size: 0.92rem;
+  color: var(--text_primary);
+}
+
+.profile_info span {
+  font-size: 0.78rem;
+  color: var(--text_secondary);
+}
+.profile_arrow {
+  transition: transform 0.3s ease;
+}
+
+.profile_arrow.rotate {
+  transform: rotate(180deg);
+}
+/* ==========================================================
+   PROFILE DROPDOWN
+========================================================== */
+
+.profile_dropdown,
+.notification_dropdown {
+  position: absolute;
+  top: 72px;
+  right: 0;
+  width: 260px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: var(--shadow_lg);
+  animation: dropdown 0.25s ease;
+}
+
+.notification_dropdown h4 {
+  padding: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.notification_item {
+  padding: 1rem;
+  color: var(--text_secondary);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.notification_item:hover {
+  background: var(--secondary);
+}
+
+.view_all_btn {
+  width: 100%;
+  padding: 0.9rem;
+  background: var(--primary);
+  color: white;
+}
+
+.profile_dropdown a,
+.profile_dropdown button {
+  width: 100%;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  color: var(--text_primary);
+  background: transparent;
+  transition: var(--transition);
+}
+
+.profile_dropdown a:hover,
+.profile_dropdown button:hover {
+  background: var(--secondary);
+}
+
+/* Tour Button */
+
+.tour_trigger_btn {
+  padding: 13px 11px;
+  background: var(--surface);
+  border-radius: 13px;
+  color: #fff;
+  font-weight: 900;
+  font-size: small;
+}
+
+/* ==========================================================
+   MOBILE BUTTON
+========================================================== */
+
+.mobile_btn {
+  display: none;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: var(--surface);
+  color: var(--text_primary);
+}
+
+/* ==========================================================
+   RESPONSIVE
+========================================================== */
+
+@media (max-width: 1024px) {
+  .navbar {
+    padding: 0 1.5rem;
+  }
+  .navbar_links {
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .logo_text span {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    padding: 0 1rem;
+  }
+  .navbar_links {
+    position: fixed;
+    top: 61px;
+    left: -100%;
+    width: 291px;
+    height: 91vh;
+    background: var(--surface);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 2rem;
+    gap: 2rem;
+    border-right: 1px solid var(--border);
+    transition: 0.35s ease;
+  }
+  .navbar_links.active {
+    left: 0;
+  }
+  .mobile_btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .profile_info {
+    display: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .notification_btn {
+    display: none;
+  }
+}
+
+/* ==========================================================
+   ANIMATIONS
+========================================================== */
+
+@keyframes dropdown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==========================================================
+   MEDIA QUERY 
+========================================================== */
+
+@media (max-width: 840px) {
+  .navbar {
+    height: 61px;
+    padding: 0 15px;
+  }
+  .navbar_logo {
+    gap: 7px;
+  }
+  .navbar_logo img {
+    object-fit: contain;
+  }
+  .logo_text h2 {
+    font-size: 0.9rem;
+  }
+  .navbar_links {
+    width: 221px;
+    padding: 1.5rem 1rem;
+    gap: 1.3rem;
+  }
+  .navbar_links a {
+    font-size: 0.9rem;
+  }
+  .navbar_right {
+    gap: 11px;
+  }
+  .profile_info,
+  .notification_btn,
+  .logo_text span {
+    display: none;
+  }
+  .profile_btn {
+    padding: 5px 11px;
+  }
+  .tour_trigger_btn {
+    padding: 5px 13px;
+    font-size: x-small;
+  }
+  .avatar {
+    width: 37px;
+    height: 37px;
+    font-size: 0.9rem;
+  }
+  .mobile_btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 41px;
+    height: 37px;
+    border-radius: 7px;
+  }
+  .profile_dropdown,
+  .notification_dropdown {
+    width: 221px;
+    right: 0;
+  }
+}
+
+@media (min-width: 321px) and (max-width: 430px) {
+  .profile_btn {
+    padding: 7px 11px;
+  }
+  .tour_trigger_btn {
+    padding: 7px 9px;
+    border-radius: 5px;
+    font-size: x-small;
+  }
+  .avatar {
+    width: 37px;
+    height: 37px;
+    font-size: 0.9rem;
+  }
+  .mobile_btn {
+    width: 35px;
+    height: 35px;
+    border-radius: 7px;
+    padding: 5px;
+  }
+  .navbar_links {
+    top: 77px;
+  }
+}
+
+@media (min-width: 431px) and(max-width:840px) {
+}
+
+@media (min-width: 841px) and(max-width:1340px) {
+}
+
+@media (min-width: 1341px) and(max-width:1440px) {
+}
+
+@media (min-width: 2560px) {
+}

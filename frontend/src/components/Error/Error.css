@@ -1,0 +1,414 @@
+@import url("https://fonts.googleapis.com/css?family=Barlow+Condensed:300,400,500,600,700,800,900|Barlow:300,400,500,600,700,800,900&display=swap");
+
+/* ==========================================================
+   WRAPPER
+========================================================== */
+
+.nf_wrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+  font-family: "Barlow", sans-serif;
+}
+
+/* ==========================================================
+   CONTAINER
+========================================================== */
+
+.nf_container {
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  transition: all 0.4s ease;
+}
+
+/* ==========================================================
+   PARALLAX SCENE
+========================================================== */
+
+.nf_scene {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  vertical-align: middle;
+}
+
+/* ==========================================================
+   SHARED — one / two / three / circle / p404
+========================================================== */
+
+.nf_one,
+.nf_two,
+.nf_three,
+.nf_circle,
+.nf_p404 {
+  width: 61%;
+  height: 61%;
+  top: 21% !important;
+  left: 21% !important;
+  min-width: 400px;
+  min-height: 400px;
+}
+
+@media screen and (max-width: 799px) {
+  .nf_one,
+  .nf_two,
+  .nf_three,
+  .nf_circle,
+  .nf_p404 {
+    width: 90%;
+    height: 90%;
+    top: 5% !important;
+    left: 5% !important;
+    min-width: 281px;
+    min-height: 281px;
+  }
+}
+
+@media screen and (max-height: 660px) {
+  .nf_one,
+  .nf_two,
+  .nf_three,
+  .nf_circle,
+  .nf_p404 {
+    min-width: 281px;
+    min-height: 281px;
+    width: 61%;
+    height: 61%;
+    top: 21% !important;
+    left: 21% !important;
+  }
+}
+
+/* ==========================================================
+   CONTENT WRAPPER (inner circle + pieces)
+========================================================== */
+
+.nf_content {
+  width: 601px;
+  height: 601px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: nf_content 0.7s cubic-bezier(1, 0.07, 0.25, 1) backwards;
+}
+
+@keyframes nf_content {
+  0% {
+    width: 0;
+  }
+}
+
+@media screen and (max-width: 799px) {
+  .nf_content {
+    width: 300px;
+    height: 300px;
+  }
+}
+
+/* ==========================================================
+   PIECES
+========================================================== */
+
+.nf_piece {
+  width: 201px;
+  height: 81px;
+  display: flex;
+  position: absolute;
+  border-radius: 81px;
+  z-index: 1;
+  animation: nf_pieceLeft 7s cubic-bezier(1, 0.07, 0.25, 1) infinite both;
+}
+
+@keyframes nf_pieceLeft {
+  50% {
+    left: 81%;
+    width: 10%;
+  }
+}
+
+@keyframes nf_pieceRight {
+  50% {
+    right: 81%;
+    width: 10%;
+  }
+}
+
+.nf_one .nf_content::before {
+  content: "";
+  position: absolute;
+  width: 601px;
+  height: 601px;
+  background-color: rgba(26, 74, 114, 0.3);
+  border-radius: 100%;
+  box-shadow:
+    inset 5px 21px 41px rgba(15, 41, 66, 0.25),
+    inset 5px 0px 5px rgba(15, 41, 66, 0.3),
+    inset 5px 5px 21px rgba(15, 41, 66, 0.25),
+    3px 3px 5px rgba(255, 255, 255, 0.15);
+  animation: nf_circle 0.7s 0.5s cubic-bezier(1, 0.07, 0.25, 1) backwards;
+}
+
+@media screen and (max-width: 799px) {
+  .nf_one .nf_content::before {
+    width: 300px;
+    height: 300px;
+  }
+}
+
+.nf_one .nf_piece {
+  background: linear-gradient(90deg, #3eb5e8 13.7%, #00d4ff 94.65%);
+}
+.nf_one .nf_piece:nth-child(1) {
+  right: 15%;
+  top: 19%;
+  height: 30px;
+  width: 121px;
+  animation-delay: 0.5s;
+  animation-name: nf_pieceRight;
+}
+.nf_one .nf_piece:nth-child(2) {
+  left: 15%;
+  top: 45%;
+  width: 150px;
+  height: 50px;
+  animation-delay: 1s;
+  animation-name: nf_pieceLeft;
+}
+.nf_one .nf_piece:nth-child(3) {
+  left: 10%;
+  top: 75%;
+  height: 21px;
+  width: 70px;
+  animation-delay: 1.5s;
+  animation-name: nf_pieceLeft;
+}
+
+.nf_two .nf_piece {
+  background: linear-gradient(90deg, #00d4ff 0%, #3eb5e8 100%);
+}
+.nf_two .nf_piece:nth-child(1) {
+  left: 0%;
+  top: 25%;
+  height: 41px;
+  width: 121px;
+  animation-delay: 3s;
+  animation-name: nf_pieceLeft;
+}
+.nf_two .nf_piece:nth-child(2) {
+  right: 15%;
+  top: 35%;
+  width: 181px;
+  height: 50px;
+  animation-delay: 2.5s;
+  animation-name: nf_pieceRight;
+}
+.nf_two .nf_piece:nth-child(3) {
+  right: 10%;
+  top: 81%;
+  height: 21px;
+  width: 161px;
+  animation-delay: 3s;
+  animation-name: nf_pieceRight;
+}
+
+.nf_three .nf_piece {
+  background: #1a7fb8;
+}
+.nf_three .nf_piece:nth-child(1) {
+  left: 25%;
+  top: 35%;
+  height: 21px;
+  width: 81px;
+  animation-name: nf_pieceLeft;
+  animation-delay: 3.5s;
+}
+.nf_three .nf_piece:nth-child(2) {
+  right: 10%;
+  top: 55%;
+  width: 141px;
+  height: 41px;
+  animation-name: nf_pieceRight;
+  animation-delay: 3s;
+}
+.nf_three .nf_piece:nth-child(3) {
+  left: 41%;
+  top: 69%;
+  height: 21px;
+  width: 81px;
+  animation-name: nf_pieceLeft;
+  animation-delay: 4.5s;
+}
+
+/* ==========================================================
+   CIRCLE
+========================================================== */
+
+.nf_circle {
+  position: absolute;
+}
+
+.nf_circle::before {
+  content: "";
+  position: absolute;
+  width: 801px;
+  height: 801px;
+  background-color: rgba(15, 41, 66, 0.2);
+  border-radius: 100%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow:
+    inset 5px 20px 40px rgba(15, 41, 66, 0.25),
+    inset 5px 0px 5px rgba(15, 41, 66, 0.3),
+    inset 5px 5px 20px rgba(15, 41, 66, 0.25),
+    2px 2px 5px rgba(255, 255, 255, 0.15);
+  animation: nf_circle 0.7s cubic-bezier(1, 0.07, 0.25, 1) backwards;
+}
+
+@keyframes nf_circle {
+  0% {
+    width: 0;
+    height: 0;
+  }
+}
+
+@media screen and (max-width: 799px) {
+  .nf_circle::before {
+    width: 401px;
+    height: 401px;
+  }
+}
+
+/* ==========================================================
+   404 TEXT
+========================================================== */
+
+.nf_p404 {
+  font-size: 201px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: white;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  z-index: 2;
+  animation: nf_anime404 0.5s cubic-bezier(0.3, 0.7, 1, 1.05) both;
+  animation-delay: 1.3s;
+  font-family: "Barlow Condensed", sans-serif;
+}
+
+@media screen and (max-width: 799px) {
+  .nf_p404 {
+    font-size: 101px;
+  }
+}
+
+@keyframes nf_anime404 {
+  0% {
+    opacity: 0;
+    transform: scale(10) skew(21deg, 21deg);
+  }
+}
+
+.nf_p404:nth-of-type(2) {
+  color: #0f2942;
+  z-index: 1;
+  animation-delay: 1s;
+  filter: blur(11px);
+  opacity: 0.7;
+}
+
+/* ==========================================================
+   TEXT SECTION
+========================================================== */
+
+.nf_text {
+  width: 61%;
+  height: 41%;
+  min-width: 401px;
+  min-height: 500px;
+  position: absolute;
+  margin: 41px 0;
+  animation: nf_text 0.5s 1.7s ease backwards;
+}
+
+@keyframes nf_text {
+  0% {
+    opacity: 0;
+    transform: translateY(41px);
+  }
+}
+
+@media screen and (max-width: 799px) {
+  .nf_text {
+    min-height: 401px;
+    height: 81%;
+    min-width: unset;
+    width: 90%;
+  }
+}
+
+.nf_text article {
+  width: 401px;
+  position: absolute;
+  bottom: 0;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+@media screen and (max-width: 799px) {
+  .nf_text article {
+    width: 100%;
+  }
+}
+
+.nf_text article p {
+  color: #fff;
+  font-size: 19px;
+  letter-spacing: 0.5px;
+  margin-bottom: 41px;
+  text-shadow: 7px 7px 10px #0f2942;
+  text-transform: capitalize;
+}
+
+.nf_text article button {
+  height: 45px;
+  padding: 0 30px;
+  border-radius: 50px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0px 15px 21px rgba(15, 41, 66, 0.45);
+  z-index: 3;
+  color: #3eb5e8;
+  background-color: white;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  font-family: "Barlow", sans-serif;
+}
+
+.nf_text article button:hover {
+  box-shadow: 0px 10px 10px -10px rgba(15, 41, 66, 0.45);
+  transform: translateY(5px);
+  background: #3eb5e8;
+  color: white;
+}

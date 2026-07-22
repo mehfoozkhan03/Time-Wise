@@ -1,0 +1,148 @@
+/* ==========================================
+   Mini Calendar
+========================================== */
+
+.miniCalendarCard .cardBody {
+  display: flex;
+  flex-direction: column;
+
+  gap: 8px;
+}
+
+/* ==========================================
+   Header
+========================================== */
+
+.miniHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 10px;
+}
+
+.miniHeader h3 {
+  flex: 1;
+
+  margin: 0;
+
+  text-align: center;
+
+  color: #fff;
+
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.miniHeader button {
+  width: 32px;
+  height: 32px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  border-radius: 8px;
+
+  background: #394255;
+
+  color: #fff;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.miniHeader button:hover {
+  background: #38bdf8;
+}
+
+/* ==========================================
+   Week Names
+========================================== */
+
+.miniWeekDays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+
+  gap: 3px;
+}
+
+.miniWeekDays span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 18px;
+
+  color: #94a3b8;
+
+  font-size: 10px;
+  font-weight: 600;
+}
+
+/* ==========================================
+   Calendar Grid
+========================================== */
+
+.miniGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+
+  gap: 4px;
+}
+
+/* ==========================================
+   Days
+========================================== */
+
+.miniDay {
+  width: 100%;
+
+  aspect-ratio: 1;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border: none;
+  border-radius: 8px;
+
+  background: transparent;
+
+  color: #fff;
+
+  font-size: 11px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.miniDay:hover {
+  background: #394255;
+}
+
+.miniDay.today {
+  background: #38bdf8;
+
+  color: #fff;
+}
+
+.miniDay.selected {
+  background: #6366f1;
+
+  color: #fff;
+}
+
+.miniDay.otherMonth {
+  opacity: 0.35;
+}
+
+.miniHeader button:focus-visible,
+.miniDay:focus-visible {
+  outline: 2px solid #38bdf8;
+  outline-offset: 2px;
+}

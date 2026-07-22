@@ -1,0 +1,43 @@
+/* ==========================================
+   Calendar Sidebar
+========================================== */
+
+.calendarSidebar {
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  min-width: 0;
+
+  gap: 20px;
+
+  align-self: flex-start;
+}
+
+.calendarSidebar > * {
+  width: 100%;
+  /* min-height: 400px; */
+}
+
+.calendarSidebar .card {
+  width: 100%;
+  min-height: 370px;
+}
+
+/* ==========================================
+   Responsive
+========================================== */
+
+@media (max-width: 1200px) {
+  .calendarSidebar {
+    margin-top: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .calendarSidebar {
+    gap: 18px;
+
+    margin-top: 20px;
+  }
+}

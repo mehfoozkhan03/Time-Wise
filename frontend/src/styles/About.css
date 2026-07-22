@@ -1,0 +1,580 @@
+/* AboutHero */
+
+.about_header_section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 50px;
+  flex-direction: column;
+}
+
+.about_header {
+  font-size: 22px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.black_header {
+  font-size: 50px;
+}
+
+.blue_header {
+  font-size: 46px;
+  color: var(--primary);
+}
+
+.about_header_body {
+  width: 50%;
+  text-align: center;
+  font-size: large;
+  margin-top: 15px;
+}
+
+.clock_wrapper {
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  margin-top: 3rem;
+  border: 2px solid var(--primary);
+  background: var(--secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.clock {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 4px solid var(--primary);
+  position: relative;
+  animation: spin 20s linear infinite;
+}
+
+.clock::before {
+  content: "";
+  position: absolute;
+  width: 4px;
+  height: 20px;
+  background: var(--primary);
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.clock::after {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 4px;
+  background: var(--primary);
+  top: 50%;
+  left: 50%;
+  transform: translateY(-50%);
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  position: absolute;
+  animation: float 3s ease-in-out infinite;
+}
+
+.dot1 {
+  background: #facc15;
+  bottom: 20px;
+  left: -55px;
+  width: 30px;
+  height: 30px;
+}
+
+.dot2 {
+  background: #86efac;
+  top: 40px;
+  right: -70px;
+  width: 20px;
+  height: 20px;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* Mission */
+
+.mission_card {
+  margin-top: 60px;
+}
+
+.mission_card h1 {
+  font-size: 42px;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.mission_card p {
+  text-align: center;
+  color: var(--text_secondary);
+}
+
+.mission_card_hero {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: 35px;
+  margin: 60px auto;
+  width: 90%;
+}
+
+.mission_box {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 320px;
+  background: var(--surface);
+  padding: 40px;
+  border-radius: var(--radius_xl);
+  box-shadow: var(--shadow_md);
+  transition: var(--transition);
+}
+
+.mission_box:hover {
+  transform: translateY(-5px);
+}
+
+.mission_box h2 {
+  font-size: 28px;
+  margin: 20px 0;
+  line-height: 1.2;
+  min-height: 70px;
+}
+
+.mission_box p {
+  font-size: 18px;
+  line-height: 1.8;
+  color: var(--text_secondary);
+  flex: 1;
+}
+
+.bullseye,
+.star_div {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 18px;
+  font-size: 30px;
+  margin-bottom: 25px;
+}
+
+.bullseye {
+  background: rgba(41, 163, 224, 0.2);
+  color: var(--primary);
+}
+
+.star_div {
+  background: rgba(129, 230, 195, 0.2);
+  color: var(--success);
+}
+
+/* Team */
+.meet_the_team {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 60px;
+}
+
+.header_mtm {
+  text-align: center;
+}
+
+.mtm_cards {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 50px;
+}
+
+.content {
+  background: var(--surface);
+  border-radius: 20px;
+  padding: 20px;
+  margin: 10px 30px;
+  text-align: center;
+  box-shadow: var(--shadow_md);
+}
+
+.mtm_pfp {
+  background: var(--primary);
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  margin: 1em auto;
+}
+
+.content span {
+  color: var(--primary);
+}
+
+/* Testimonials */
+.what_users_say {
+  margin-top: 30px;
+}
+
+.what_users_say h1,
+.what_users_say p {
+  text-align: center;
+}
+
+.user_say_content {
+  display: flex;
+  justify-content: center;
+  margin: 0 50px;
+}
+
+.review {
+  border-left: 5px solid var(--primary);
+  border-radius: 20px;
+  box-shadow: var(--shadow_md);
+  padding: 15px;
+  margin: 40px 20px;
+}
+
+.review hr {
+  margin: 25px 0 15px;
+}
+
+.review p {
+  font-size: 18px;
+  margin-top: 10px;
+}
+
+.stars {
+  color: gold;
+}
+
+/* CoreValues */
+.core_values {
+  text-align: center;
+  margin-bottom: 80px;
+}
+
+.core_values_wrapper {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin: 40px 50px;
+  flex-wrap: wrap;
+}
+
+.cards {
+  width: 280px;
+  background: var(--surface);
+  padding: 30px 25px;
+  border-radius: var(--radius_lg);
+  box-shadow: var(--shadow_md);
+  transition: var(--transition);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.cards:hover {
+  transform: translateY(-10px);
+}
+
+.cards h3 {
+  font-size: 30px;
+}
+
+.cards p {
+  text-align: center;
+  line-height: 1.7;
+  color: var(--text_secondary);
+}
+
+/* icon wrappers */
+
+.heart,
+.eye,
+.growth,
+.people {
+  width: 70px;
+  height: 70px;
+  border-radius: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 32px;
+  color: white;
+}
+
+.heart {
+  background: #e8a3a7;
+}
+
+.eye {
+  background: #42a5de;
+}
+
+.growth {
+  background: #a9d6c2;
+}
+
+.people {
+  background: #f3cb79;
+}
+
+/* CTA */
+.transform {
+  background: var(--primary);
+  width: 70%;
+  max-width: 1000px;
+  margin: 60px auto;
+  padding: 40px 50px;
+  border-radius: var(--radius_xl);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  box-shadow: var(--shadow_lg);
+}
+
+.fa-award {
+  font-size: 34px;
+  color: white;
+}
+
+.transform h2 {
+  color: white;
+  font-size: 32px;
+  font-weight: 700;
+  text-align: center;
+  line-height: 1.3;
+}
+
+.transform p {
+  width: 70%;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 18px;
+  text-align: center;
+  line-height: 1.6;
+}
+
+.start_today_btn {
+  padding: 14px 34px;
+  background: white;
+  color: var(--primary);
+  border: none;
+  border-radius: 14px;
+  font-size: 18px;
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.start_today_btn:hover {
+  transform: translateY(-2px);
+}
+
+@media (max-width: 430px) {
+  .about_header_section {
+    margin-top: 25px;
+  }
+  .black_header,
+  .blue_header,
+  .mission_card h1,
+  .header_mtm h1 {
+    font-size: 35px;
+    text-align: center;
+  }
+  .what_users_say h1,
+  .core_values h1 {
+    font-size: 29px;
+  }
+  .header_mtm p {
+    font-size: 17px;
+    text-align: center;
+  }
+  .about_header_body {
+    width: 100%;
+    padding: 0 15px;
+  }
+  .dot1 {
+    left: -35px;
+  }
+  .dot2 {
+    right: -25px;
+  }
+  .mission_card_hero {
+    margin: 30px 15px;
+    gap: 21px;
+    flex-wrap: wrap;
+  }
+  .mission_box {
+    padding: 30px 15px;
+  }
+  .mtm_cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    margin: 21px;
+    gap: 21px;
+  }
+  .content {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin: 0;
+    padding: 21px 11px;
+  }
+  .mtm_pfp {
+    width: 45px;
+    height: 45px;
+  }
+  .content h3 {
+    font-size: medium;
+  }
+  .content p,
+  .content span {
+    font-size: small;
+  }
+  .what_users_say {
+    margin: 25px 0;
+  }
+  .user_say_content {
+    flex-wrap: wrap;
+    margin: 0 11px;
+  }
+  .review {
+    margin: 15px 21px;
+  }
+  .stars {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .review h3 {
+    text-align: center;
+    padding-bottom: 5px;
+  }
+  .review span {
+    display: block;
+    text-align: center;
+  }
+  .core_values {
+    margin-bottom: 30px;
+  }
+  .core_values_wrapper {
+    margin: 31px 15px;
+    gap: 15px;
+  }
+  .cards {
+    width: 100%;
+  }
+  .transform {
+    width: 90%;
+    max-width: none;
+    padding: 31px 15px;
+    margin: 25px 15px;
+  }
+  .transform h2 {
+    font-size: 21px;
+  }
+  .transform p {
+    width: 100%;
+  }
+}
+
+@media (min-width: 431px) and (max-width: 840px) {
+  .cards h3,
+  .transform h2 {
+    font-size: 25px;
+  }
+  .transform p{
+    font-size: 19px;
+    width: 81%;
+  }
+  .about_header_section {
+    margin-top: 25px;
+  }
+  .about_header_body {
+    width: 100%;
+    padding: 0 25px;
+  }
+  .mission_card_hero {
+    margin: 35px auto;
+    gap: 25px;
+  }
+  .meet_the_team {
+    margin-top: 35px;
+  }
+  .mtm_cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin: 21px;
+  }
+  .content {
+    margin: 5px 3px;
+  }
+  .user_say_content {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    margin: 0 21px;
+  }
+  .core_values {
+    margin-bottom: 15px;
+  }
+  .core_values_wrapper {
+    margin: 25px 15px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .cards {
+    width: 100%;
+  }
+  .stars {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .review h3 {
+    text-align: center;
+    padding-bottom: 5px;
+  }
+  .review span {
+    display: block;
+    text-align: center;
+  }
+  .transform {
+    width: 95%;
+    max-width: none;
+    margin: 35px 15px;
+  }
+}

@@ -1,0 +1,52 @@
+#cursor_dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: #29a3e0;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  z-index: 2147483646; /* one below ring so ring is always on top */
+  transition:
+    opacity 0.3s,
+    width 0.3s,
+    height 0.3s;
+}
+
+#cursor_ring {
+  width: 35px;
+  height: 35px;
+  border: 2px solid #29a3e0;
+  border-radius: 50%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none; /* was missing — caused jitter as ring blocked mouse events */
+  transform: translate(-50%, -50%);
+  z-index: 2147483647; /* max safe z-index, always on top */
+  transition:
+    width 0.25s ease,
+    height 0.25s ease,
+    background 0.25s ease,
+    border 0.25s ease,
+    box-shadow 0.25s ease;
+  /* NOTE: no transform transition — transform is set via rAF for smooth lag */
+}
+
+#cursor_dot.hovered {
+  opacity: 0;
+}
+
+#cursor_ring.hovered {
+  width: 55px;
+  height: 55px;
+  border: none;
+  background: rgba(41, 163, 225, 0.23);
+  box-shadow: 0 0 19px rgba(41, 163, 225, 0.35);
+}
+
+#cursor_ring.clicked {
+  transform: translate(-50%, -50%) scale(0.85);
+}

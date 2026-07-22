@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="../frontend/css/contact.css">
+
+    <!-- font awesome link -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css"
+        integrity="sha512-DxV+EoADOkOygM4IR9yXP8Sb2qwgidEmeqAEmDKIOfPRQZOWbXCzLC6vjbZyy0vPisbH2SyW27+ddLVCN+OMzQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+
+</head>
+
+<body>
+    <header class="header"></header>
+
+    <div class="Full_Contact">
+        <div class="content">
+<<<<<<< HEAD
+=======
+            <img  id= img src="https://images.unsplash.com/photo-1560264280-88b68371db39?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="contact us">
+            <div class="img"></div>
+>>>>>>> dd663fc380724532ac4e079d54469666ee53f9e6
+            <h2 class="head">Contact Us</h2>
+            <p class="header_text">We're always happy to hear from you.
+                Get in touch with our team for support,
+                suggestions, or any questions about TimeWise.</p>
+        </div>
+
+        <div class="Contact">
+
+            <div class="info">
+
+                <div class="head1">
+                    <h1>GET IN TOUCH WITH US</h1>
+                    <p class="para">At TimeWise, we value every user. Whether you're facing an issue, need guidance, or simply want to share feedback, we're always ready to help.</p>
+                </div>
+
+                <div class="information">
+                    <i class="fa-solid fa-envelope"></i>
+                    <div class="desc">
+                        <h2>Email Us</h2>
+                        <p class="data">support@timewise.com</p>
+                    </div>
+                </div>
+
+                <div class="information">
+                    <i class="fa-solid fa-phone"></i>
+                    <div class="desc">
+                        <h2>Call Us</h2>
+                        <p class="data">+91 98765 43210</p>
+                    </div>
+                </div>
+
+                <div class="information">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <div class="desc">
+                        <h2>Location</h2>
+                        <p class="data">Mumbai, Maharashtra, India</p>
+                    </div>
+                </div>
+
+                <div class="information">
+                    <i class="fa-solid fa-clock"></i>
+                    <div class="desc">
+                        <h2>Working Hours</h2>
+                        <p class="data">Monday - Friday 9:00 AM - 6:00 PM IST</p>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="form_part">
+                <form action="">
+                    <div class="inputs">
+                        <input type="text" placeholder="Your Name">
+                        <input type="email" placeholder="Your Email">
+                    </div>
+
+                    <div>
+                        <select
+                        id="faqDropdown"
+                        class="enquiry"
+                        onchange="showAnswer(this.value)">
+
+                            <option value="">Select a question</option>
+
+                            <option value="0">
+                                What is your return policy?
+                            </option>
+
+                            <option value="1">
+                                Do you offer customer support?
+                            </option>
+
+                            <option value="2">
+                                How long does shipping take?
+                            </option>
+
+                            <option value="3">
+                                Can I cancel my order?
+                            </option>
+
+                            <option value="4">
+                                How can I contact support?
+                            </option>
+
+                        </select>
+
+                        <p id="faqAnswer" style="margin-top: 10px;"></p>
+
+                        <input type="text" placeholder="Subject">
+
+                    </div>
+
+                    <div>
+                        <textarea name="" id="" cols="30" rows="10" placeholder="Your Message"></textarea>
+                    </div>
+
+                    <div>
+                        <button type="btn" class="btn">Send Message</button>
+                    </div>
+
+                </form>
+            </div>
+
+
+        </div>
+
+        <div class="FAQ">
+            <h1 class="FAQ_head">Frequently Asked Questions</h1>
+
+
+            <div id="faq-container">
+
+            </div>
+        </div>
+
+
+    </div>
+
+    <script src="../frontend/js/Contact.js"></script>
+
+    <footer class="footer"></footer>
+</body>
+
+
+
+<script type="module">
+    import { navbar, style, footer } from "../frontend/js/nav_footer.js"
+    document.querySelector(".header").innerHTML = navbar();
+
+    let styleTag = document.createElement("style");
+    styleTag.textContent = style();
+    document.head.append(styleTag);
+
+    document.querySelector(".footer").innerHTML = footer();
+
+
+    const navBar = document.querySelector('.navbar-container');
+    const header = document.querySelector('.header');
+
+    // when we scroll the webpage a little bit then both classes fixed & fixed-header will be added & when we go on the top of the webpage these classes will be removed
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 0) {
+            navBar.classList.add('fixed');
+            header.classList.add('fixed-header');
+        } else {
+            navBar.classList.remove('fixed');
+            header.classList.remove('fixed-header');
+        }
+    });
+
+    // scroll button
+    const scrollBtn = document.querySelector(".fa-angle-up");
+
+    window.addEventListener("scroll", () => {
+        if (window.scrollY > 100) {
+            scrollBtn.classList.add("showScrollBtn");
+        }
+        else {
+            scrollBtn.classList.remove("showScrollBtn")
+        }
+    });
+
+    window.scrollUp = function () {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        })
+    }
+
+</script>
+
+</html>

@@ -1,0 +1,933 @@
+@import url("https://fonts.googleapis.com/css2?family=Playwrite+DK+Loopet:wght@100..400&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
+
+/* ============================
+   THEME COLOR VARIABLES
+============================= */
+:root {
+  --bg: #f9fbfc;
+  --surface: #eef3f7;
+  --primary: #29a3e0;
+  --primary-hover: #218fc4;
+  --secondary: #d4ebf7;
+  --text-primary: #2c2f3a;
+  --text-secondary: #6e7a88;
+  --border: #d6dde3;
+  --success: #a9d6c2;
+  --error: #f2a3a3;
+}
+
+body.dark-mode {
+  --bg: #1f242d;
+  --surface: #2a2f3a;
+  --primary: #3eb5e8;
+  --primary-hover: #53c1f0;
+  --secondary: #8ad5f2;
+  --text-primary: #e4e8ed;
+  --text-secondary: #a2acb8;
+  --border: #3b4251;
+  --success: #81e6c3;
+  --error: #f17c7c;
+}
+
+/* ============================
+   GLOBAL STYLES
+============================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  color: var(--text-primary);
+  color: var(--text-secondary);
+  background: var(--bg);
+  min-height: 100vh;
+  line-height: 1.5;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
+  /* display: grid; */
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: "Poppins", sans-serif;
+  color: var(--text-primary);
+  font-weight: 600;
+  margin-bottom: 6px;
+  text-transform: capitalize;
+}
+.meet {
+  font-size: 19px;
+  word-spacing: 1px;
+}
+/* About Section Header */
+
+.about_header_section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 50px;
+  flex-direction: column;
+}
+
+.about_header {
+  font-size: 22px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.black_header {
+  font-size: 50px;
+}
+
+.blue_header {
+  font-size: 46px;
+  color: var(--primary-hover);
+}
+
+.about_header_body {
+  width: 50%;
+  /* display: flex;
+  justify-content: center;
+  align-items: center; */
+  text-align: center;
+  font-size: large;
+  margin-top: 15px;
+}
+
+/* Clock */
+
+/* Main Circle  */
+.clock_wrapper {
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  margin-top: 3rem;
+  border: 2px solid #29a3e0;
+  background: #d3eaf7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-shadow: 0 0 40px rgba(59, 130, 246, 0.2);
+}
+
+/* Clock Icon */
+
+.clock {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 4px solid #3b82f6;
+  position: relative;
+  animation: spin 20s linear infinite;
+}
+
+/* Hour hand */
+
+.clock::before {
+  content: "";
+  position: absolute;
+  width: 4px;
+  height: 20px;
+  background: #3b82f6;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Minute hand */
+
+.clock::after {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 4px;
+  background: #3b82f6;
+  top: 50%;
+  left: 50%;
+  transform: translateY(-50%);
+}
+
+/* Spinnig Animation */
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Floating dots */
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  position: absolute;
+  animation: float 3s ease-in-out infinite;
+}
+
+.dot1 {
+  background: #facc15;
+  bottom: 20px;
+  left: -55px;
+  height: 30px;
+  width: 30px;
+}
+
+.dot2 {
+  background: #86efac;
+  top: 40px;
+  right: -70px;
+  height: 20px;
+  width: 20px;
+  animation-delay: 1s;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* Mission Card */
+
+.mission_card {
+  margin-top: 60px;
+}
+
+.mission_card > h1 {
+  font-size: 35px;
+  text-align: center;
+}
+.TimeWise1 {
+  margin: 10px 0px;
+  word-spacing: 1px;
+}
+.mission_card > p {
+  text-align: center;
+}
+
+.bi-bullseye {
+  font-size: 20px;
+  color: var(--bg);
+}
+
+.bi-star {
+  font-size: 20px;
+  color: var(--bg);
+}
+
+/* Mission Card Details */
+
+.mission_card_hero {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin: 0 auto;
+  margin-top: 50px;
+  line-height: 1.75em;
+  flex-wrap: wrap;
+}
+
+.built,
+.transperancy {
+  background: var(--surface);
+  padding: 2rem;
+  border-radius: 20px;
+  width: 40%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.bullseye,
+.star_div {
+  padding: 1rem;
+  border-radius: 16px;
+  height: 50px;
+  width: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.bullseye {
+  background: #2fa4e1;
+}
+
+.star_div {
+  background: #a8d6c3;
+}
+
+/* Meet The Team Section */
+
+.meet_the_team {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 60px;
+}
+
+.header_mtm {
+  text-align: center;
+  padding: 10px;
+}
+
+.mtm_cards {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px 50px;
+}
+
+.content {
+  /* border: 1px solid red; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: 10px 30px;
+  background: var(--surface);
+  border-radius: 20px;
+  padding-top: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.mtm_pfp {
+  /* border: 1px solid red; */
+  background: var(--primary);
+  box-shadow: 0 0 8px 2px rgba(41, 163, 224, 0.4);
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  margin: 1em 3em;
+  align-items: center;
+}
+
+.mtm_pfp:hover {
+  transform: scale(1.2);
+  transition: 0.2s;
+}
+
+.mtm_pfp > p {
+  font-size: 22px;
+  color: var(--bg);
+}
+
+.content > span {
+  color: var(--primary-hover);
+}
+
+/* What users say */
+
+.what_users_say {
+  margin-top: 30px;
+}
+
+.what_users_say > h1 {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.what_users_say > p {
+  text-align: center;
+}
+
+.user_say_content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0px 50px;
+}
+
+.bi-star-fill {
+  color: gold;
+}
+.Our {
+  margin-top: 10px;
+}
+.review {
+  border-left: 5px solid var(--primary);
+  border-radius: 20px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  padding: 15px;
+  margin: 40px 20px;
+}
+
+.review > hr {
+  margin: 25px 0px 15px 0;
+}
+.TimeWise {
+  word-spacing: 3px;
+  letter-spacing: 0.5px;
+  text-transform: capitalize;
+}
+.review p {
+  font-size: 18px;
+  margin-top: 10px;
+}
+
+/* Core Values Section */
+
+.core_values {
+  text-align: center;
+  margin-bottom: 80px;
+}
+
+.core_values_wrapper {
+  margin: 30px 50px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.core_values_wrapper > h1 {
+  font-weight: 1000;
+}
+
+.cards {
+  background: var(--surface);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  line-height: 27px;
+  padding: 20px;
+  margin: 0 15px;
+}
+
+.cards:hover {
+  transform: translateY(-12px);
+  transition: 0.35s;
+}
+
+.fa-heart {
+  padding: 12px;
+  border: 1px solid #f0aaab;
+  border-radius: 12px;
+  background: #f0aaab;
+  font-size: 36px;
+  color: white;
+  margin-bottom: 1rem;
+}
+
+.fa-eye {
+  padding: 12px;
+  border: 1px solid #3cabe3;
+  border-radius: 12px;
+  background: #3cabe3;
+  color: white;
+  font-size: 36px;
+  margin-bottom: 1rem;
+}
+
+.fa-arrow-trend-up {
+  padding: 12px;
+  border: 1px solid #b0d8c9;
+  border-radius: 12px;
+  background: #b0d8c9;
+  color: white;
+  font-size: 36px;
+  margin-bottom: 1rem;
+}
+
+.fa-users {
+  padding: 12px;
+  border: 1px solid #fdd48b;
+  border-radius: 12px;
+  background: #fdd48b;
+  color: white;
+  font-size: 36px;
+  margin-bottom: 1rem;
+}
+
+/* Transform section */
+
+.transform {
+  background: var(--primary);
+  color: white;
+  height: 315px;
+  width: 55%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  padding: 16px;
+  margin: 0px auto;
+  border-radius: 12px;
+  margin-bottom: 80px;
+}
+
+.transform > h2 {
+  color: white;
+}
+
+.transform > p {
+  width: 50%;
+  text-align: center;
+}
+
+.fa-award {
+  font-size: 36px;
+}
+
+.start_today_btn {
+  padding: 12px 26px;
+  color: var(--primary);
+  background: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: large;
+  font-weight: 500;
+}
+
+.start_today_btn:hover {
+  transform: scale(1.2);
+  transition: 0.4s;
+}
+
+.start_today_btn:active {
+  transform: translateY(12px);
+  transition: 0.2s;
+}
+
+/* Skeleton Loading */
+
+.hidden {
+  display: none;
+}
+
+.sk_line::before,
+.clockCircle::before,
+.sk_icon::before,
+.sk_avatar::before,
+.sk_star::before,
+.sk_value_icon::before,
+.sk_award::before,
+.sk_button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -150px;
+  width: 150px;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, #ffffff80, transparent);
+  animation: shimmer 1.1s infinite;
+}
+
+@keyframes shimmer {
+  100% {
+    left: 100%;
+  }
+}
+
+/* Hero Skeleton */
+
+.heroSkeleton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0 31px;
+  margin-top: 50px;
+  margin-bottom: 70px;
+}
+
+.sk_line {
+  background: var(--surface);
+  position: relative;
+  overflow: hidden;
+  border-radius: 11px;
+}
+
+.hero_title {
+  width: 261px;
+  height: 49px;
+  margin: 9px 0;
+}
+
+.hero_title.second {
+  width: 361px;
+}
+
+.hero_text {
+  width: 651px;
+  height: 19px;
+  margin-top: 19px;
+}
+
+.hero_text.short {
+  width: 500px;
+}
+
+.clockSkeleton {
+  position: relative;
+  width: 221px;
+  height: 221px;
+  margin-top: 45px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.clockCircle {
+  width: 221px;
+  height: 221px;
+  border-radius: 50%;
+  background: var(--surface);
+  position: relative;
+  overflow: hidden;
+}
+
+.dotSkeleton {
+  border-radius: 50%;
+  background: var(--surface);
+  position: absolute;
+}
+
+.dotLeft {
+  width: 29px;
+  height: 29px;
+  left: -41px;
+  bottom: 35px;
+}
+
+.dotRight {
+  width: 19px;
+  height: 19px;
+  right: -30px;
+  top: 45px;
+}
+
+/* Mission Skeleton */
+
+.missionSkeleton {
+  margin: 70px 0;
+}
+
+.mission_title {
+  width: 341px;
+  height: 39px;
+  margin: 0 auto 21px;
+}
+
+.mission_subtitle {
+  width: 550px;
+  height: 19px;
+  margin: 0 auto 45px;
+}
+
+.missionCards {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  margin: 0 101px;
+}
+
+.missionSkeletonCard {
+  flex: 1;
+  border-radius: 21px;
+  background: var(--surface);
+  position: relative;
+  padding: 33px;
+  overflow: hidden;
+  width: 35%;
+}
+
+.sk_icon {
+  width: 57px;
+  height: 57px;
+  border-radius: 17px;
+  background: var(--bg);
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 23px;
+}
+
+.card_title {
+  width: 221px;
+  height: 23px;
+  margin-bottom: 25px;
+}
+
+.card_text {
+  margin-top: 15px;
+  width: 100%;
+  height: 15px;
+}
+
+.card_text.short {
+  width: 75%;
+}
+
+/* Meet The Team Skeleton */
+
+.teamSkeleton {
+  margin: 70px 51px;
+}
+
+.team_title {
+  width: 281px;
+  height: 39px;
+  margin: 0 auto 19px;
+}
+
+.team_subtitle {
+  width: 500px;
+  height: 19px;
+  margin: 0 auto 45px;
+}
+
+.teamGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 29px;
+}
+
+.teamSkeletonCard {
+  background: var(--surface);
+  padding: 30px 23px;
+  text-align: center;
+  border-radius: 21px;
+}
+
+.sk_avatar {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  margin: 0 auto 23px;
+  position: relative;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+.team_name {
+  width: 141px;
+  height: 21px;
+  margin: 0 auto 15px;
+}
+
+.team_role {
+  width: 110px;
+  height: 15px;
+  margin: 0 auto 25px;
+}
+
+.team_text {
+  width: 100%;
+  height: 15px;
+  margin-top: 15px;
+}
+
+.team_text.short {
+  width: 75%;
+  margin: 0 auto;
+}
+
+/* Testimonial Skeleton */
+
+.testimonialSkeleton {
+  margin: 70px 51px;
+}
+
+.testimonial_title {
+  width: 321px;
+  height: 39px;
+  margin: 0 auto 19px;
+}
+
+.testimonial_title {
+  width: 421px;
+  height: 19px;
+  margin: 0 auto 45px;
+}
+
+.testimonialGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+.testimonialCard {
+  background: var(--surface);
+  border-radius: 21px;
+  padding: 29px;
+}
+
+.starRow {
+  display: flex;
+  gap: 9px;
+  margin-bottom: 25px;
+}
+
+.sk_star {
+  background: var(--bg);
+  position: relative;
+  overflow: hidden;
+  border-radius: 50%;
+  width: 19px;
+  height: 19px;
+}
+
+.review_text {
+  width: 100%;
+  height: 15px;
+  margin-top: 15px;
+}
+
+.review_text.short {
+  width: 70%;
+}
+
+.reviewDivider {
+  margin: 29px 0;
+  background: var(--bg);
+  width: 100%;
+  height: 2px;
+}
+
+.reviewerName {
+  width: 141px;
+  height: 19px;
+  margin-bottom: 15px;
+}
+
+.reviewerRole {
+  width: 111px;
+  height: 15px;
+}
+
+/* Core Value Skeleton */
+
+.coreSkeleton {
+  margin: 81px 51px;
+}
+
+.core_title {
+  width: 261px;
+  height: 39px;
+  margin: 0 auto 19px;
+}
+
+.core_subtitle {
+  width: 471px;
+  height: 19px;
+  margin: 0 auto 45px;
+}
+
+.coreGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 29px;
+}
+
+.coreSkeletonCard {
+  background: var(--surface);
+  border-radius: 21px;
+  padding: 29px;
+  text-align: center;
+}
+
+.sk_value_icon {
+  width: 65px;
+  height: 65px;
+  border-radius: 19px;
+  background: var(--bg);
+  margin: 0 auto 25px;
+  position: relative;
+  overflow: hidden;
+}
+
+.value_title {
+  width: 150px;
+  height: 21px;
+  margin: 0 auto 23px;
+}
+
+.value_text {
+  width: 100%;
+  height: 15px;
+  margin-top: 15px;
+}
+
+.value_text.short {
+  width: 75%;
+  margin: 0 auto;
+}
+
+.ctaSkeleton {
+  width: 55%;
+  margin: 81px auto;
+  padding: 41px;
+  border-radius: 21px;
+  background: var(--primary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.sk_award {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 25px;
+  background: #ffffff40;
+}
+
+.cta_title {
+  width: 421px;
+  height: 30px;
+  background: #ffffff40;
+  margin-bottom: 25px;
+}
+
+.cta_text {
+  width: 81%;
+  height: 17px;
+  background: #ffffff40;
+  margin-bottom: 15px;
+}
+
+.cta_text.short {
+  width: 60%;
+}
+
+.sk_button {
+  width: 201px;
+  height: 50px;
+  background: #fff;
+  margin-top: 35px;
+  border-radius: 13px;
+  position: relative;
+  overflow: hidden;
+}

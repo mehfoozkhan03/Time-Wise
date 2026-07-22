@@ -1,0 +1,101 @@
+.attendance-container{
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.attendance-heading>p{
+    font-size: 14px;
+}
+
+.attendance-heading>h2{
+    font-size: 16px;
+}
+.work-schedule{
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    border-radius: 10px;
+    background-color: var(--surface);
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+}
+.schedule-heading{
+    border-bottom: 1px solid var(--border);
+}
+.schedule-heading>h2{
+    font-size: 16px;
+    padding-bottom: 20px;
+}
+.times-container{
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 20px;
+}
+.times-container>div{
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+.times-container>div>label{
+    font-size: 14px;
+    font-weight: 520;
+}
+.times-container>div>input{
+    padding: 10px;
+    border-radius: 10px;
+    color: var(--text_primary) !important;
+}
+.work-days>select{
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.smart-attendance{
+    padding: 20px;
+    border-radius: 10px;
+    background-color: var(--surface);
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+}
+.smart-heading>h2{
+    font-size: 16px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+}
+.smart-attendance-feature{
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.smart-attendance-feature>div{
+    padding-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+}
+.smart-attendance-feature>div>div>h3{
+    font-size: 14px;
+    font-weight: 500;
+}
+.smart-attendance-feature>div>div>p{
+    font-size: 12px;
+}
+
+
+.save_changes{
+    padding: 20px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+}
+.change-btn{
+    padding: 8px 15px;
+    color: white;
+    font-size: 15px;
+    border-radius: 10px;
+    background-color: blue;
+}

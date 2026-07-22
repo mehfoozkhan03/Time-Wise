@@ -1,0 +1,140 @@
+/* ==========================================
+   Empty State
+========================================== */
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+  align-items: center;
+
+  gap: 12px;
+
+  width: 100%;
+
+  min-height: 70px;
+
+  padding: 24px 20px;
+
+  text-align: center;
+
+  background: #394255;
+
+  border: 2px dashed #4b5565;
+  border-radius: 14px;
+
+  transition:
+    border-color 0.25s ease,
+    background-color 0.25s ease;
+
+  animation: fadeIn 0.25s ease;
+}
+
+.emptyState:hover {
+  border-color: #38bdf8;
+
+  background: #40495d;
+}
+
+/* ==========================================
+   Icon
+========================================== */
+
+.emptyIcon {
+  width: 52px;
+  height: 52px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background: rgba(56, 189, 248, 0.12);
+
+  color: #38bdf8;
+
+  font-size: 22px;
+}
+
+/* ==========================================
+   Title
+========================================== */
+
+.emptyState h3 {
+  margin: 0;
+
+  color: #ffffff;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  line-height: 1.3;
+}
+
+/* ==========================================
+   Description
+========================================== */
+
+.emptyState p {
+  margin: 0;
+
+  max-width: 240px;
+
+  color: #94a3b8;
+
+  font-size: 12px;
+
+  line-height: 1.6;
+}
+
+/* ==========================================
+   Tablet
+========================================== */
+
+@media (max-width: 768px) {
+  .emptyState {
+    min-height: 120px;
+
+    padding: 20px 16px;
+
+    gap: 10px;
+  }
+
+  .emptyIcon {
+    width: 46px;
+    height: 46px;
+
+    font-size: 20px;
+  }
+
+  .emptyState h3 {
+    font-size: 14px;
+  }
+
+  .emptyState p {
+    font-size: 11px;
+  }
+}
+
+/* ==========================================
+   Mobile
+========================================== */
+
+@media (max-width: 480px) {
+  .emptyState {
+    min-height: 110px;
+
+    padding: 18px 14px;
+  }
+
+  .emptyIcon {
+    width: 42px;
+    height: 42px;
+
+    font-size: 18px;
+  }
+}

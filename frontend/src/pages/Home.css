@@ -1,0 +1,25 @@
+.home_page {
+  width: min(1280px, 92%);
+  margin: auto;
+  padding: 50px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.home_section {
+  width: 100%;
+}
+
+@media (max-width: 840px) {
+  .home_page {
+    gap: 21px;
+    padding: 11px 0 31px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .home_middle {
+    grid-template-columns: 1fr;
+  }
+}

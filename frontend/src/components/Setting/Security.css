@@ -1,0 +1,154 @@
+.security-container{
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+.security-heading{
+    padding-top: 20px;
+}
+.security-heading>h2{
+    font-size: 18px;
+}
+.security-heading>p{
+    font-size: 14px;
+}
+
+/* change password */
+.change-password{
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    border-radius: 10px;
+    background-color: var(--surface);
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+}
+.change-password-heading{
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+}
+.change-password-heading>h3{
+    font-size: 16px;
+}
+.change-password-content{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.change-password-content input{
+    width: 100%;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 10px;
+    /* background-color: var(--surface); */
+}
+.change-password-content label{
+    font-size: 15px;
+}
+.change-password-content>div{
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+.change-password-content>div>div{
+    padding-right: 15px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+}
+.confirm-new-password>input{
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+}
+
+/* two factor authentication */
+.two-factor-authentication{
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    border-radius: 10px;
+    background-color: var(--surface);
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+}
+.two-factor-heading{
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border);
+}
+.two-factor-heading>h3{
+    font-size: 16px;
+}
+.two-factor-content{
+    padding-top: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+.two-factor-content>div>h3{
+    font-size: 14px;
+}
+.two-factor-content>div>p{
+    font-size: 12px;
+}
+.session-access{
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    border-radius: 10px;
+    background-color: var(--surface);
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+}
+.session-heading{
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+}
+.session-heading>h3{
+    font-size: 16px;
+}
+.login-alert,
+.session-timeout{
+    padding-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.login-alert{
+    border-bottom: 1px solid var(--border);
+}
+.login-alert>div>h3,
+.session-timeout>div>h3{
+    font-size: 14px;
+}
+.login-alert>div>p,
+.session-timeout>div>p{
+    font-size: 12px;
+}
+.timeout-selection>select{
+    padding: 10px;
+    width: 150px;
+    border-radius: 10px;
+}
+
+/* Save changes */
+.save_changes{
+    padding: 20px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+}
+.change-btn{
+    padding: 8px 15px;
+    color: var(--text_primary);
+    font-size: 15px;
+    border-radius: 10px;
+    background-color: blue;
+}

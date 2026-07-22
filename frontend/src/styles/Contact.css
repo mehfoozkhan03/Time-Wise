@@ -1,0 +1,18 @@
+.contactPage {
+  background: linear-gradient(90deg, #1f242d, #242b37);
+  min-height: 100vh;
+}
+
+.contactWrapper {
+  display: flex;
+  justify-content: space-between;
+  gap: 60px;
+  padding: 80px;
+}
+
+@media (max-width: 840px) {
+  .contactWrapper {
+    flex-direction: column;
+    padding: 15px;
+  }
+}

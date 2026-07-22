@@ -1,0 +1,161 @@
+.eventFilters {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 18px;
+
+  margin-bottom: 20px;
+}
+
+.searchBar {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 14px 18px;
+
+  background: #2d333f;
+
+  border: 1px solid #40495d;
+
+  border-radius: 14px;
+
+  transition: all 0.25s ease;
+}
+
+.searchBar:focus-within {
+  border-color: #38bdf8;
+}
+
+.searchBar svg {
+  color: #94a3b8;
+
+  flex-shrink: 0;
+}
+
+.searchBar input {
+  flex: 1;
+
+  background: transparent;
+
+  border: none;
+
+  outline: none;
+
+  color: #fff;
+
+  font-size: 15px;
+}
+
+.searchBar input::placeholder {
+  color: #94a3b8;
+}
+
+.filterActions {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 12px;
+}
+
+.filterActions button {
+  padding: 10px 18px;
+
+  border: none;
+
+  border-radius: 10px;
+
+  background: #38bdf8;
+
+  color: #fff;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: all 0.25s ease;
+}
+
+.filterActions button:hover {
+  transform: translateY(-2px);
+
+  filter: brightness(1.08);
+}
+
+.filterList {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 12px;
+}
+
+.filterChip {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 10px 16px;
+
+  border: 1px solid #40495d;
+
+  border-radius: 999px;
+
+  background: #313846;
+
+  color: #fff;
+
+  cursor: pointer;
+
+  transition: all 0.25s ease;
+}
+
+.filterChip:hover {
+  transform: translateY(-2px);
+}
+
+.filterChip.active {
+  background: #1f2937;
+
+  border-color: #38bdf8;
+}
+
+.count {
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  min-width: 22px;
+
+  height: 22px;
+
+  padding: 0 6px;
+
+  border-radius: 999px;
+
+  background: #38bdf8;
+
+  color: #fff;
+
+  font-size: 11px;
+
+  font-weight: 700;
+}
+
+@media (max-width: 768px) {
+  .filterActions {
+    width: 100%;
+  }
+
+  .filterActions button {
+    flex: 1;
+  }
+}
