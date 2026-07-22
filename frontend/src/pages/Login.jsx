@@ -4,9 +4,10 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { authService } from "../services/authService";
 import "../styles/Login.css";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser, registerUser } from "../store/authSlice";
+import { loginUser, registerUser, adminLogin } from "../store/authSlice";
 import { useNavigate } from "react-router-dom";
 import { Feedback } from "./FeedBack";
+import { useLocation } from "react-router-dom";
 
 const initialFormData = {
   firstName: "",
@@ -37,6 +38,11 @@ const SignUpPage = () => {
   const [formData, setFormData] = useState(initialFormData);
   const [errors, setErrors] = useState({});
 
+  //admin login
+ const location = useLocation();
+const isAdminLogin = location.pathname === "/admin/login";
+console.log("pathname:", location.pathname);
+console.log("isAdminLogin:", isAdminLogin);
   // ── Modal state ──────────────────────────────────────────────────────────────
   const [modal, setModal] = useState({
     open: false,
@@ -176,67 +182,89 @@ const SignUpPage = () => {
 
   // ── Submit ────────────────────────────────────────────────────────────────────
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+ const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    const isValid = isRegister ? validateSignup() : validateLogin();
-    if (!isValid) return;
+  const isValid = isRegister ? validateSignup() : validateLogin();
+  if (!isValid) return;
 
-    try {
-      if (isRegister) {
-        const result = await dispatch(registerUser(formData));
+  try {
+    if (isRegister) {
+      const result = await dispatch(registerUser(formData));
 
-        if (registerUser.fulfilled.match(result)) {
-          resetForm();
-          setIsRegister(false);
-          showModal(
-            "success",
-            "Registration Successful",
-            "Your account has been created successfully.",
-          );
-        } else {
-          // Pass the server error as `reason`
-          showModal(
-            "error",
-            "Registration Failed",
-            "We could not create your account.",
-            result.payload || "An unexpected error occurred.",
-          );
-        }
-      } else {
-        const result = await dispatch(
-          loginUser({ email: formData.email, password: formData.password }),
+      if (registerUser.fulfilled.match(result)) {
+        resetForm();
+        setIsRegister(false);
+
+        showModal(
+          "success",
+          "Registration Successful",
+          "Your account has been created successfully."
         );
+      } else {
+        showModal(
+          "error",
+          "Registration Failed",
+          "We could not create your account.",
+          result.payload || "An unexpected error occurred."
+        );
+      }
+    } else {
 
-        if (loginUser.fulfilled.match(result)) {
-          resetForm();
+      //code change
+      // User Login / Admin Login
+
+      const result = isAdminLogin
+        ? await dispatch(
+            adminLogin({
+              email: formData.email,
+              password: formData.password,
+            })
+          )
+        : await dispatch(
+            loginUser({
+              email: formData.email,
+              password: formData.password,
+            })
+          );
+//
+      const isSuccess = isAdminLogin
+        ? adminLogin.fulfilled.match(result)
+        : loginUser.fulfilled.match(result);
+
+      if (isSuccess) {
+        resetForm();
+
+        if (isAdminLogin) {
+          navigate("/dashboard");
+        } else {
           showModal(
             "success",
             "Login Successful",
             result.payload.message || "Welcome back!",
-            () => navigate("/"),
-          );
-        } else {
-          // Pass the server error (e.g. "Invalid password") as `reason`
-          showModal(
-            "error",
-            "Login Failed",
-            "We could not sign you in.",
-            result.payload || "Invalid email or password.",
+            () => navigate("/")
           );
         }
+      } else {
+        showModal(
+          "error",
+          "Login Failed",
+          "We could not sign you in.",
+          result.payload || "Invalid email or password."
+        );
       }
-    } catch (error) {
-      console.error(error);
-      showModal(
-        "error",
-        "Oops!",
-        "Something went wrong on our end.",
-        error.message || "Please try again later.",
-      );
     }
-  };
+  } catch (error) {
+    console.error(error);
 
+    showModal(
+      "error",
+      "Oops!",
+      "Something went wrong on our end.",
+      error.message || "Please try again later."
+    );
+  }
+};
   // ── Render ────────────────────────────────────────────────────────────────────
 
   return (
@@ -245,7 +273,9 @@ const SignUpPage = () => {
         <AnimatePresence mode="wait">
           {!isRegister ? (
             <motion.form
-              key="login"
+
+              key={isAdminLogin ? "admin-login" : "user-login"}
+
               onSubmit={handleSubmit}
               className="login-form"
               initial={{ opacity: 0, y: 30 }}
@@ -253,7 +283,9 @@ const SignUpPage = () => {
               exit={{ opacity: 0, y: -30 }}
               transition={{ duration: 0.25 }}
             >
-              <h2>Login</h2>
+              {/* <h2>Login</h2> */}
+
+              <h2>{isAdminLogin ? "ADMIN LOGIN PAGE" : "USER LOGIN PAGE"}</h2>
 
               <div className="input-box">
                 <input
@@ -284,20 +316,19 @@ const SignUpPage = () => {
               </div>
 
               <button type="submit" className="loginsumit" disabled={isLoading}>
-                {isLoading ? "Please wait..." : "Login"}
+              {isLoading ? "Please wait..."  : isAdminLogin  ? "Admin Login" : "Login"}
               </button>
 
-              <p className="message">
-                Don't have an account?{" "}
-                <span
-                  onClick={() => {
-                    setIsRegister(true);
-                    resetForm();
-                  }}
-                >
-                  Register now
-                </span>
-              </p>
+            {/* code change */}
+            
+             {!isAdminLogin && (
+               <p className="message"> Don't have an account?{" "}<span onClick={() => { setIsRegister(true); resetForm();}} >
+               Register now
+             </span>
+             </p>
+            )}
+            {/*  */}
+
             </motion.form>
           ) : (
             <motion.form
@@ -436,3 +467,6 @@ const SignUpPage = () => {
 };
 
 export default SignUpPage;
+
+///admin/login
+// http://localhost:5174/admin/login

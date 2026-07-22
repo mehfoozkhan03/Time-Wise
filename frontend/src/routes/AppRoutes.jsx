@@ -1,7 +1,6 @@
 import { Route, Routes } from 'react-router-dom';
 
 import MainLayout from '../layouts/MainLayout';
-
 import Home from './../pages/Home';
 import AdminDashboard from './../pages/AdminDashboard';
 import Community from './../pages/Community';
@@ -86,15 +85,18 @@ export const AppRoutes = () => {
             ></Route>
             <Route
               path="announcement"
-              element={<DashboardAnnouncement />}
-            ></Route>
+              element={<DashboardAnnouncement />}></Route>
             <Route path="report" element={<DashboardReport />}></Route>
+
             <Route path="setting" element={<DashboardSetting />}></Route>
           </Route>
           <Route path="/community" element={<Community />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/signup" element={<SignUpPage />} />
+
+          <Route path="/admin/login" element={<SignUpPage />} /> 
+           
           {/* Employee */}
           <Route path="/employees" element={<EmployeeTable />} />
           <Route path="/employee-details" element={<EmployeeDetails />} />

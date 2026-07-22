@@ -9,6 +9,10 @@ export const authService = {
     return api.post('/user/login', data);
   },
 
+  /*   adminLogin(data) {
+    return api.post('/user/adminlogin', data);
+  },
+ */
   logout() {
     return api.post('/user/logout');
   },
@@ -17,6 +21,6 @@ export const authService = {
     return api.get('/user/me');
   },
   updateTheme(theme) {
-    return api.patch("/user/theme", { theme });
+    return api.patch('/user/theme', { theme });
   },
 };
