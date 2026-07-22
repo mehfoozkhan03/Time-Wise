@@ -45,6 +45,21 @@ export const registerUser = createAsyncThunk(
   },
 );
 
+// Theme
+export const updateTheme = createAsyncThunk(
+  'auth/updateTheme',
+  async (theme, thunkAPI) => {
+    try {
+      const { data } = await authService.updateTheme(theme);
+      return data.theme;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || 'Failed to update theme',
+      );
+    }
+  },
+);
+
 const initialState = {
   isAuthenticated: document.cookie
     .split('; ')
@@ -93,6 +108,27 @@ const authSlice = createSlice({
         state.errorMessage = action.payload;
       })
 
+      //admin
+      /*   .addCase(adminLogin.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+        state.errorMessage = '';
+      })
+
+      .addCase(adminLogin.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isAuthenticated = true;
+        state.user = action.payload.user;
+      })
+
+      .addCase(adminLogin.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isAuthenticated = false;
+        state.user = null;
+        state.isError = true;
+        state.errorMessage = action.payload;
+      })
+ */
       // ================= Current User =================
 
       .addCase(fetchCurrentUser.pending, (state) => {
@@ -111,6 +147,12 @@ const authSlice = createSlice({
         state.isAuthenticated = false;
         state.isError = true;
         state.errorMessage = action.payload;
+      })
+
+      .addCase(updateTheme.fulfilled, (state, action) => {
+        if (state.user) {
+          state.user.theme = action.payload;
+        }
       });
   },
 });

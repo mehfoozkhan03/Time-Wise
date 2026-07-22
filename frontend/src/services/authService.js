@@ -9,11 +9,18 @@ export const authService = {
     return api.post('/user/login', data);
   },
 
+  /*   adminLogin(data) {
+    return api.post('/user/adminlogin', data);
+  },
+ */
   logout() {
     return api.post('/user/logout');
   },
 
   getCurrentUser() {
     return api.get('/user/me');
+  },
+  updateTheme(theme) {
+    return api.patch('/user/theme', { theme });
   },
 };

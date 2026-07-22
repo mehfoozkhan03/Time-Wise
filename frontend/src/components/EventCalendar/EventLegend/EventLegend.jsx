@@ -3,7 +3,7 @@ import "./EventLegend.css";
 import { memo, useMemo } from "react";
 import { FaListUl } from "react-icons/fa";
 
-import Card from "../../Common/Card/Card";
+import Card from "../../Common/CalendarCard/Card";
 import { EVENT_CONFIG } from "../../../data/eventConfig";
 
 function EventLegend({

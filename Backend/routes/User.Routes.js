@@ -1,13 +1,15 @@
-import express from "express";
+import express from 'express';
 
 import {
   admin_login,
   login,
   signup,
   getCurrentUser,
+  updateTheme,
   logout,
-} from "../controllers/userData.js";
-import { auth } from "../middleware/AuthMiddleware.js";
+} from '../controllers/userData.js';
+
+import { auth } from '../middleware/AuthMiddleware.js';
 
 const userRoutes = express.Router();
 
@@ -19,14 +21,19 @@ const userRoutes = express.Router();
 
 // /user/me
 
-userRoutes.post("/signup", signup);
+userRoutes.post('/signup', signup);
 
-userRoutes.post("/logout", logout);
+userRoutes.post('/logout', logout);
 
-userRoutes.post("/login", login);
+userRoutes.post('/login', login);
 
-userRoutes.post("/adminlogin", admin_login);
+userRoutes.get('/me', auth, getCurrentUser);
 
-userRoutes.get("/me", auth, getCurrentUser);
+userRoutes.patch('/theme', auth, updateTheme);
+
+// userRoutes.get('/alluser', auth, getAllUser)
+userRoutes.post('/adminlogin', admin_login);
+
+userRoutes.get('/me', auth, getCurrentUser);
 
 export { userRoutes };

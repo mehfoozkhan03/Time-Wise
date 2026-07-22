@@ -4,7 +4,7 @@ import { memo, useMemo } from "react";
 
 import { FaChartPie, FaRegCalendarCheck } from "react-icons/fa";
 
-import Card from "../../Common/Card/Card";
+import Card from "../../Common/CalendarCard/Card";
 import EmptyState from "../../Common/EmptyState/EmptyState";
 
 import { EVENT_CONFIG } from "../../../data/eventConfig";
