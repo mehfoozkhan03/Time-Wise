@@ -9,6 +9,10 @@ export const authService = {
     return api.post('/user/login', data);
   },
 
+  adminLogin(data) {
+    return api.post("/user/adminlogin", data);
+  },
+
   logout() {
     return api.post('/user/logout');
   },
@@ -16,4 +20,6 @@ export const authService = {
   getCurrentUser() {
     return api.get('/user/me');
   },
+
+  
 };
