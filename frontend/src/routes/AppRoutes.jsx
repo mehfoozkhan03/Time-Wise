@@ -38,6 +38,7 @@ import { DashboardAnnouncement } from './../components/Dashboard/DashboardAnnoun
 import { DashboardReport } from './../components/Dashboard/DashboardReport/DashboardReport';
 import { DashboardSetting } from './../components/Dashboard/DashboardSetting/DashboardSetting';
 import { Reports } from './../pages/Reports/Reports';
+import EmployeeProfile from './../pages/EmployeeProfile/EmployeeProfile'
 
 export const AppRoutes = () => {
   return (
