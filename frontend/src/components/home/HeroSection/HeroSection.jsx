@@ -3,16 +3,35 @@ import './HeroSection.css'
 import Card from '../../Card/Card'
 
 import { useState, useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { getDashboardStats } from '../../../store/dashboardSlice'
 
 import { FaFire, FaCalendarAlt, FaClock } from 'react-icons/fa'
 
 export default function HeroSection() {
+  const dispatch = useDispatch()
+
   const [time, setTime] = useState(new Date())
 
   const { user, isLoading } = useSelector((state) => state.auth)
 
-  const { stats } = useSelector((state) => state.dashboard)
+  const stats = useSelector((state) => state.dashboard?.stats) || {
+    dayStreak: 0,
+    longestStreak: 0,
+    attendancePercentage: 0,
+    weeklyHours: 0,
+    monthlyHours: 0,
+    productivity: 0,
+    weeklyTarget: 40,
+    weeklyHoursRemaining: 40,
+    weeklyGoalPercentage: 0,
+    averageCheckIn: '--:--',
+    averageBreakDuration: 0,
+  }
+
+  useEffect(() => {
+    dispatch(getDashboardStats())
+  }, [dispatch])
 
   useEffect(() => {
     const interval = setInterval(() => {

@@ -1,75 +1,150 @@
-import "./Performance.css";
-import PerformanceCard from "./PerformanceCard";
-import { FaBullseye, FaClock, FaFire, FaCalendarCheck } from "react-icons/fa";
+import './Performance.css'
+
+import { useSelector } from 'react-redux'
+
+import PerformanceCard from './PerformanceCard'
+
+import { FaBullseye, FaClock, FaFire, FaCalendarCheck } from 'react-icons/fa'
 
 export default function Performance() {
-  const stats = [
+  const { stats } = useSelector((state) => state.dashboard)
+
+  const attendanceSubtitle = () => {
+    if (stats.attendancePercentage >= 98) return '⭐ Outstanding attendance'
+
+    if (stats.attendancePercentage >= 95) return 'Excellent consistency'
+
+    if (stats.attendancePercentage >= 90) return 'Great attendance'
+
+    if (stats.attendancePercentage >= 80) return 'Good attendance'
+
+    return 'Needs improvement'
+  }
+
+  const productivitySubtitle = () => {
+    if (stats.productivity >= 95) return '🔥 Exceptional productivity'
+
+    if (stats.productivity >= 85) return '👍 Above average productivity'
+
+    if (stats.productivity >= 70) return '⚡ Consistent performance'
+
+    return '📈 Improving steadily'
+  }
+
+  const weeklySubtitle = () => {
+    if (stats.weeklyHoursRemaining <= 0) {
+      const extra = Math.abs(stats.weeklyHoursRemaining).toFixed(1)
+
+      return extra === '0.0'
+        ? 'Weekly goal achieved 🎉'
+        : `${extra}h above target 💪`
+    }
+
+    return `${stats.weeklyHoursRemaining.toFixed(1)}h left this week`
+  }
+
+  const streakSubtitle = () => {
+    if (stats.longestStreak > 0 && stats.dayStreak === stats.longestStreak) {
+      return '🏆 New personal best!'
+    }
+
+    if (
+      stats.longestStreak > stats.dayStreak &&
+      stats.longestStreak - stats.dayStreak === 1
+    ) {
+      return '1 day away from your record'
+    }
+
+    if (stats.dayStreak >= 5) {
+      return '🔥 Keep the momentum going!'
+    }
+
+    return `Best: ${stats.longestStreak} days`
+  }
+
+  const attendanceColor = () => {
+    if (stats.attendancePercentage >= 95) return '#22c55e'
+    if (stats.attendancePercentage >= 80) return '#84cc16'
+    if (stats.attendancePercentage >= 60) return '#f59e0b'
+    return '#ef4444'
+  }
+
+  const weeklyColor = () => {
+    if (stats.weeklyGoalPercentage >= 100) return '#22c55e'
+    if (stats.weeklyGoalPercentage >= 80) return '#8b5cf6'
+    return '#29A3E0'
+  }
+
+  const performanceStats = [
     {
-      title: "Attendance",
+      title: 'Attendance',
 
-      value: "97%",
+      value: `${stats.attendancePercentage}%`,
 
-      subtitle: "Excellent consistency",
+      subtitle: attendanceSubtitle(),
 
-      progress: 97,
+      progress: stats.attendancePercentage,
 
-      color: "#22c55e",
+      color: attendanceColor(),
 
       icon: <FaCalendarCheck />,
     },
 
     {
-      title: "Productivity",
+      title: 'Productivity',
 
-      value: "89%",
+      value: `${stats.productivity}%`,
 
-      subtitle: "+6% from last week",
+      subtitle: productivitySubtitle(),
 
-      progress: 89,
+      progress: stats.productivity,
 
-      color: "#29A3E0",
+      color: '#29A3E0',
 
       icon: <FaBullseye />,
     },
 
     {
-      title: "Weekly Hours",
+      title: 'Weekly Hours',
 
-      value: "39.2",
+      value: stats.weeklyHours.toFixed(1),
 
-      subtitle: "Goal 45h",
+      subtitle: weeklySubtitle(),
 
-      progress: 87,
+      progress: Math.min(stats.weeklyGoalPercentage, 100),
 
-      color: "#8b5cf6",
+      color: weeklyColor(),
 
       icon: <FaClock />,
     },
 
     {
-      title: "Current Streak",
+      title: 'Current Streak',
 
-      value: "12",
+      value: stats.dayStreak,
 
-      subtitle: "Personal Best",
+      subtitle: streakSubtitle(),
 
-      progress: 100,
+      progress:
+        stats.longestStreak === 0
+          ? 0
+          : Math.min((stats.dayStreak / stats.longestStreak) * 100, 100),
 
-      color: "#f59e0b",
+      color: '#f59e0b',
 
       icon: <FaFire />,
     },
-  ];
+  ]
 
   return (
     <section className="performance" id="tour-stats-grid">
       <h2>Your Performance</h2>
 
       <div className="performance_grid">
-        {stats.map((stat) => (
+        {performanceStats.map((stat) => (
           <PerformanceCard key={stat.title} {...stat} />
         ))}
       </div>
     </section>
-  );
+  )
 }

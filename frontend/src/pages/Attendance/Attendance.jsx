@@ -13,9 +13,9 @@ export default function Attendance() {
         </p>
       </header>
 
-      <section className="attendance_today">
+      {/* <section className="attendance_today">
         <TodayWork />
-      </section>
+      </section> */}
 
       <section className="attendance_history_wrapper">
         <AttendanceHistory />
