@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
+import "./reports.css"
 import {
   setSearchLog,
   setStatusFilter,
@@ -62,7 +63,8 @@ export function Reports() {
 
   return (
     <div
-      style={{ minHeight: "100vh", background: "#080c14", paddingBottom: 60 }}
+      className="reportsDiv"
+      style={{ minHeight: "100vh", paddingBottom: 60 }}
     >
       {/* Ambient gradient background */}
       <div
