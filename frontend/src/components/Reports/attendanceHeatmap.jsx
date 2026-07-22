@@ -6,15 +6,6 @@ export function AttendanceHeatmap({ calendarData = [] }) {
   // July 2026 starts on Wednesday
   const startOffset = 3;
 
-  const cellColor = {
-    present: "#10b981",
-    late: "#f59e0b",
-    absent: "#ef4444",
-    leave: "#6366f1",
-    holiday: "#22d3ee",
-    weekend: "#1a2035",
-  };
-
   const cells = [...Array(startOffset).fill(null), ...calendarData];
 
   return (
@@ -32,7 +23,6 @@ export function AttendanceHeatmap({ calendarData = [] }) {
             key={day}
             style={{
               fontSize: 10,
-              color: "#475569",
               textAlign: "center",
               fontWeight: 600,
               letterSpacing: "0.06em",
@@ -61,22 +51,16 @@ export function AttendanceHeatmap({ calendarData = [] }) {
               aspectRatio: "1",
               borderRadius: 5,
               background: cell
-                ? cellColor[cell.status] +
-                  (cell.status === "weekend" ? "" : "22")
+                ? cell.status === "weekend"
+                  ? statusConfig[cell.status].bg
+                  : `${statusConfig[cell.status].dot}`
                 : "transparent",
-              border:
-                cell && cell.status !== "weekend"
-                  ? `1px solid ${cellColor[cell.status]}44`
-                  : "1px solid transparent",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              fontSize: 10,
+              fontSize: 15,
               fontWeight: 500,
-              color:
-                cell?.status === "weekend"
-                  ? "#1e2d4a"
-                  : cellColor[cell?.status || "present"] + "dd",
+              color: cell ? statusConfig[cell.status].text : "#000",
               cursor: "default",
               transition: "transform 0.15s",
             }}
