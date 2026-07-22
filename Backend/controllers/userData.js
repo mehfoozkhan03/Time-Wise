@@ -256,3 +256,50 @@ export const getCurrentUser = async (req, res) => {
 };
 
 // Get All User
+
+// Theme
+export const updateTheme = async (req, res) => {
+  try {
+    const { theme } = req.body;
+
+    // Validate theme
+    const allowedThemes = ['light', 'dark', 'system'];
+
+    if (!allowedThemes.includes(theme)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid theme',
+      });
+    }
+    console.log(req.user);
+    // Update user
+    const updatedUser = await userModel.findByIdAndUpdate(
+      req.user.userID,
+      { theme },
+      {
+        new: true,
+        runValidators: true,
+      },
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'Theme updated successfully.',
+      theme: updatedUser.theme,
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      success: false,
+      message: 'Internal Server Error',
+    });
+  }
+};

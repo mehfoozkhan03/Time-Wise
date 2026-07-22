@@ -1,4 +1,4 @@
-import "../Dashboard/DashboardAnnouncement.css"
+import "./DashboardAnnouncement.css"
 
 import { FaPlus } from "react-icons/fa";
 import { MdEdit, MdDelete } from "react-icons/md";

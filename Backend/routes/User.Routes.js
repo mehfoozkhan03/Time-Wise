@@ -5,6 +5,7 @@ import {
   login,
   signup,
   getCurrentUser,
+  updateTheme,
 } from '../controllers/userData.js'
 import { auth } from '../middleware/AuthMiddleware.js'
 
@@ -25,6 +26,8 @@ userRoutes.post('/login', login)
 userRoutes.post('/adminlogin', admin_login)
 
 userRoutes.get('/me', auth, getCurrentUser);
+
+userRoutes.patch("/theme", auth, updateTheme);
 
 // userRoutes.get('/alluser', auth, getAllUser)
 

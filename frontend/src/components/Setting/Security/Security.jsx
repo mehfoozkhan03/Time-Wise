@@ -4,8 +4,8 @@ import { IoToggleOutline } from "react-icons/io5";
 import { IoToggle } from "react-icons/io5";
 
 
-import "../../components/Setting/Security.css"
-import { SwitchBtn } from "../SwichBtn/SwitchBtn";
+import "./Security.css"
+import { SwitchBtn } from "../../SwichBtn/SwitchBtn";
 
 
 export const Security = () => {

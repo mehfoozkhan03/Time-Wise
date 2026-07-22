@@ -1,4 +1,4 @@
-import "../../components/Setting/SettingSidebar.css";
+import "./SettingSidebar.css";
 
 import { NavLink } from "react-router-dom";
 

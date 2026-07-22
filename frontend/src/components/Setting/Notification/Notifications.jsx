@@ -1,5 +1,5 @@
-import "../../components/Setting/Notification.css"
-import { SwitchBtn } from "../SwichBtn/SwitchBtn";
+import "./Notification.css"
+import { SwitchBtn } from "../../SwichBtn/SwitchBtn";
 
 export const Notification = () => {
 

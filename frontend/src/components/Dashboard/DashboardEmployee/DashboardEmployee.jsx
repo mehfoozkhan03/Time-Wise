@@ -1,4 +1,4 @@
-import "../../components/Dashboard/DashboardEmployee.css"
+import "./DashboardEmployee.css"
 
 import { FaPlus } from "react-icons/fa6"
 import { FaSearch } from "react-icons/fa";

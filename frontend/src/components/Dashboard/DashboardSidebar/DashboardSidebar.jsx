@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom';
 
-import "../Dashboard/DashboardSidebar.css";
-import "../../styles/global.css"
+import "./DashboardSidebar.css";
+import "../../../styles/global.css"
 
 import { MdOutlineSpaceDashboard } from "react-icons/md";
 import { IoIosArrowRoundBack } from "react-icons/io";
