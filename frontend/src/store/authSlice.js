@@ -45,40 +45,21 @@ export const registerUser = createAsyncThunk(
   },
 );
 
-<<<<<<< HEAD
 // Theme
 export const updateTheme = createAsyncThunk(
-  "auth/updateTheme",
+  'auth/updateTheme',
   async (theme, thunkAPI) => {
     try {
       const { data } = await authService.updateTheme(theme);
       return data.theme;
     } catch (error) {
       return thunkAPI.rejectWithValue(
-        error.response?.data?.message || "Failed to update theme"
-=======
-
-// admin login
-export const adminLogin = createAsyncThunk(
-  "auth/adminLogin",
-  async (credentials, thunkAPI) => {
-    try {
-      const { data } = await authService.adminLogin(credentials);
-      return data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(
-        error.response?.data?.message || "Admin Login Failed"
->>>>>>> d544bb9d3d5473354f6f18db4d1c45da7030e760
+        error.response?.data?.message || 'Failed to update theme',
       );
     }
-  }
+  },
 );
 
-<<<<<<< HEAD
-
-=======
-// 
->>>>>>> d544bb9d3d5473354f6f18db4d1c45da7030e760
 const initialState = {
   isAuthenticated: document.cookie
     .split('; ')
@@ -131,7 +112,7 @@ const authSlice = createSlice({
       .addCase(adminLogin.pending, (state) => {
         state.isLoading = true;
         state.isError = false;
-        state.errorMessage = "";
+        state.errorMessage = '';
       })
 
       .addCase(adminLogin.fulfilled, (state, action) => {
@@ -147,7 +128,6 @@ const authSlice = createSlice({
         state.isError = true;
         state.errorMessage = action.payload;
       })
-
 
       // ================= Current User =================
 
@@ -173,9 +153,8 @@ const authSlice = createSlice({
         if (state.user) {
           state.user.theme = action.payload;
         }
-})
+      });
   },
-  
 });
 
 export const { logout } = authSlice.actions;
@@ -185,5 +164,3 @@ export default authSlice.reducer;
 deepakyadav786@gmail.com
 Deeoakyadav@123
 */
-
-
