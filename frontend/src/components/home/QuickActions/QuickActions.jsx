@@ -50,8 +50,8 @@ export default function QuickActions() {
       <h2>Quick Actions</h2>
 
       <div className="quick_grid">
-        {actions.map((action,i) => (
-          <ActionCard id={i+1} key={action.title} {...action} />
+        {actions.map((action, i) => (
+          <ActionCard id={i + 1} key={action.title} {...action} />
         ))}
       </div>
     </section>

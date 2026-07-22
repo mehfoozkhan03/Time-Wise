@@ -13,15 +13,6 @@ import RouteLoader from './../components/RouteLoader';
 
 import Calendar from './../components/Setting/Calendar';
 
-// import { Settings } from './../pages/Settings';
-// import { Profile } from './../components/Setting/Profile';
-// import { SettingAttendance } from './../components/Setting/SettingAttendance';
-// import { Appearance } from './../components/Setting/Appearance';
-// import { Notification } from './../components/Setting/Notifications';
-// import { Security } from './../components/Setting/Security';
-// import { DataExport } from './../components/Setting/DataExport';
-// import { HelpSupport } from './../components/Setting/HelpSupport';
-
 import EmployeeTable from '../pages/EmployeeTable';
 import EmployeeDetails from '../pages/EmployeeDetails';
 import { Error } from '../components/Error/Error';
@@ -46,7 +37,7 @@ import { DashboardNotification } from './../components/Dashboard/DashboardNotifi
 import { DashboardAnnouncement } from './../components/Dashboard/DashboardAnnouncement/DashboardAnnouncement';
 import { DashboardReport } from './../components/Dashboard/DashboardReport/DashboardReport';
 import { DashboardSetting } from './../components/Dashboard/DashboardSetting/DashboardSetting';
-
+import { Reports } from './../pages/Reports/Reports';
 
 export const AppRoutes = () => {
   return (
@@ -73,7 +64,16 @@ export const AppRoutes = () => {
               </PrivateRoutes>
             }
           />
-          <Route path="/dashboard" element={<AdminDashboard />}>
+          <Route path="/dashboard" element={<AdminDashboard />}></Route>
+          <Route
+            path="/reports"
+            element={
+              <PrivateRoutes>
+                <Reports />
+              </PrivateRoutes>
+            }
+          />
+          <Route path="/dashboard" element={<Dashboard />}>
             <Route index element={<DashboardHome />}></Route>
             <Route path="home" element={<DashboardHome />}></Route>
             <Route path="employee" element={<DashboardEmployee />}></Route>
@@ -85,7 +85,8 @@ export const AppRoutes = () => {
             ></Route>
             <Route
               path="announcement"
-              element={<DashboardAnnouncement />}></Route>
+              element={<DashboardAnnouncement />}
+            ></Route>
             <Route path="report" element={<DashboardReport />}></Route>
 
             <Route path="setting" element={<DashboardSetting />}></Route>
@@ -95,8 +96,8 @@ export const AppRoutes = () => {
           <Route path="/contact" element={<Contact />} />
           <Route path="/signup" element={<SignUpPage />} />
 
-          <Route path="/admin/login" element={<SignUpPage />} /> 
-           
+          <Route path="/admin/login" element={<SignUpPage />} />
+
           {/* Employee */}
           <Route path="/employees" element={<EmployeeTable />} />
           <Route path="/employee-details" element={<EmployeeDetails />} />
