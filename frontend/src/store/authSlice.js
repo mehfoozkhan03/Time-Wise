@@ -45,6 +45,7 @@ export const registerUser = createAsyncThunk(
   },
 );
 
+<<<<<<< HEAD
 // Theme
 export const updateTheme = createAsyncThunk(
   "auth/updateTheme",
@@ -55,12 +56,29 @@ export const updateTheme = createAsyncThunk(
     } catch (error) {
       return thunkAPI.rejectWithValue(
         error.response?.data?.message || "Failed to update theme"
+=======
+
+// admin login
+export const adminLogin = createAsyncThunk(
+  "auth/adminLogin",
+  async (credentials, thunkAPI) => {
+    try {
+      const { data } = await authService.adminLogin(credentials);
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Admin Login Failed"
+>>>>>>> d544bb9d3d5473354f6f18db4d1c45da7030e760
       );
     }
   }
 );
 
+<<<<<<< HEAD
 
+=======
+// 
+>>>>>>> d544bb9d3d5473354f6f18db4d1c45da7030e760
 const initialState = {
   isAuthenticated: document.cookie
     .split('; ')
@@ -109,6 +127,28 @@ const authSlice = createSlice({
         state.errorMessage = action.payload;
       })
 
+      //admin
+      .addCase(adminLogin.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+        state.errorMessage = "";
+      })
+
+      .addCase(adminLogin.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isAuthenticated = true;
+        state.user = action.payload.user;
+      })
+
+      .addCase(adminLogin.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isAuthenticated = false;
+        state.user = null;
+        state.isError = true;
+        state.errorMessage = action.payload;
+      })
+
+
       // ================= Current User =================
 
       .addCase(fetchCurrentUser.pending, (state) => {
@@ -135,6 +175,7 @@ const authSlice = createSlice({
         }
 })
   },
+  
 });
 
 export const { logout } = authSlice.actions;
