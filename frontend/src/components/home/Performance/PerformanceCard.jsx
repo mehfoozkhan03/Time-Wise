@@ -10,10 +10,20 @@ export default function PerformanceCard({
   color,
   icon,
 }) {
+  const safeProgress = Math.max(0, Math.min(progress || 0, 100))
+
   return (
     <Card className="performance_card">
       <div className="performance_top">
-        <div className="performance_icon">{icon}</div>
+        <div
+          className="performance_icon"
+          style={{
+            color,
+            background: `${color}20`,
+          }}
+        >
+          {icon}
+        </div>
 
         <div>
           <p>{title}</p>
@@ -25,10 +35,10 @@ export default function PerformanceCard({
         <div
           className="performance_fill"
           style={{
-            width: `${progress}%`,
+            width: `${safeProgress}%`,
             background: color,
           }}
-        ></div>
+        />
       </div>
 
       <span>{subtitle}</span>
