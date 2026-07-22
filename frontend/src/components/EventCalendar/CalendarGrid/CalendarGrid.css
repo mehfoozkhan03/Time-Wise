@@ -1,7 +1,7 @@
 .calendarWrapper {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 10px;
 
   width: 100%;
 }
@@ -31,7 +31,7 @@
 .calendarGrid {
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
-  gap: 10px;
+  gap: 8px;
 }
 
 @media (max-width: 1200px) {
