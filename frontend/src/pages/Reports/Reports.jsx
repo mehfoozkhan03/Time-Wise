@@ -7,7 +7,6 @@ import {
   setActiveTab,
 } from "../../store/reportsSlice";
 import { attendanceLog } from "../../components/Reports/attendanceData";
-import { badges } from "../../components/Reports/badgesData";
 import { goals } from "../../components/Reports/goalsData";
 import { insights } from "../../components/Reports/insightsData";
 import {
@@ -82,9 +81,9 @@ export function Reports() {
 
       <div
         style={{
-          maxWidth: 1400,
-          margin: "0 auto",
-          padding: "0 24px",
+          // maxWidth: 1400,
+          margin: "0 15px",
+          padding: "0",
           position: "relative",
           zIndex: 1,
         }}
@@ -115,10 +114,7 @@ export function Reports() {
         {/* ── Goals & Badges ── */}
         <div
           style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: 16,
-            marginBottom: 20,
+            margin: "21px  0",
           }}
         >
           <GoalsSection goals={goals} />
@@ -132,24 +128,6 @@ export function Reports() {
           onSearchChange={(value) => dispatch(setSearchLog(value))}
           onStatusChange={(value) => dispatch(setStatusFilter(value))}
         />
-
-        {/* ── Footer ── */}
-        <div
-          style={{
-            textAlign: "center",
-            marginTop: 40,
-            paddingTop: 24,
-            borderTop: "1px solid rgba(255,255,255,0.04)",
-          }}
-        >
-          <span style={{ fontSize: 11.5, color: "#1e2d4a" }}>
-            TimeWise · Personal Analytics · Last synced{" "}
-            {new Date().toLocaleTimeString("en-US", {
-              hour: "2-digit",
-              minute: "2-digit",
-            })}
-          </span>
-        </div>
       </div>
     </div>
   );

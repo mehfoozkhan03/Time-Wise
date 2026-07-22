@@ -7,7 +7,7 @@ export function ReportsHeader({ dateRange, ranges }) {
   return (
     <div
       style={{
-        padding: "36px 0 28px",
+        padding: "36px 15px 28px",
         display: "flex",
         flexWrap: "wrap",
         gap: 20,

@@ -1,4 +1,4 @@
-import { KPICard } from "./KPICard";
+import { KPICard } from "./kpiCard";
 
 export function KPISection({ sparklineData }) {
   return (
@@ -6,7 +6,7 @@ export function KPISection({ sparklineData }) {
       className="stagger"
       style={{
         display: "grid",
-        gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
+        gridTemplateColumns: "repeat(4,1fr)",
         gap: 14,
         marginBottom: 28,
       }}

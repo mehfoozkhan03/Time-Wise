@@ -9,7 +9,7 @@ export function WorkSummary({ summaryItems }) {
         style={{
           display: "grid",
           gridTemplateColumns: "1fr 1fr",
-          gap: 12,
+          gap: 13,
         }}
       >
         {summaryItems.map((item) => (
@@ -17,6 +17,9 @@ export function WorkSummary({ summaryItems }) {
             key={item.label}
             style={{
               background: "rgba(255,255,255,0.025)",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
               borderRadius: 10,
               padding: "12px 14px",
               border: "1px solid rgba(255,255,255,0.04)",
@@ -24,7 +27,7 @@ export function WorkSummary({ summaryItems }) {
           >
             <div
               style={{
-                fontSize: 18,
+                fontSize: 19,
                 marginBottom: 4,
               }}
             >
@@ -34,7 +37,7 @@ export function WorkSummary({ summaryItems }) {
             <div
               style={{
                 fontFamily: "JetBrains Mono, monospace",
-                fontSize: 17,
+                fontSize: 15,
                 fontWeight: 600,
                 color: "#e8edf5",
                 marginBottom: 2,
@@ -45,8 +48,9 @@ export function WorkSummary({ summaryItems }) {
 
             <div
               style={{
-                fontSize: 11,
+                fontSize: 17,
                 color: "#475569",
+                textTransform: "capitalize",
               }}
             >
               {item.label}
