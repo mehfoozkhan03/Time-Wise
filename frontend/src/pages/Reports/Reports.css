@@ -62,11 +62,6 @@ body {
   font-family: "JetBrains Mono", monospace;
 }
 
-.glass-card,
-.glass-card * {
-  cursor: default;
-}
-
 /* Card glass effect */
 .glass-card {
   background: #0d1322;
