@@ -33,7 +33,7 @@ export default function Navbar() {
 
       dispatch(logout());
 
-      navigate("/login");
+      navigate("/signup");
     } catch (error) {
       console.log(error);
     }

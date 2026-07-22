@@ -65,7 +65,7 @@ export const AppRoutes = () => {
               </PrivateRoutes>
             }
           />
-          <Route path="/dashboard" element={<AdminDashboard />}></Route>
+          {/* <Route path="/dashboard" element={<AdminDashboard />}></Route> */}
           <Route
             path="/reports"
             element={
