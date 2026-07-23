@@ -1,21 +1,21 @@
 export const EVENT_TYPES = {
+    PRESENT: "PRESENT",
 
-    PRESENT: "present",
+    LEAVE: "LEAVE",
 
-    LEAVE: "leave",
+    WORK_EVENT: "WORK_EVENT",
 
-    WORK_EVENT: "work_event",
+    SPECIAL_EVENT: "SPECIAL_EVENT",
 
-    SPECIAL_EVENT: "special_event",
+    BIRTHDAY: "BIRTHDAY",
 
-    BIRTHDAY: "birthday",
+    HOLIDAY: "HOLIDAY",
 
-    HOLIDAY: "holiday",
+    WEEKEND: "WEEKEND",
 
-    WEEKEND: "weekend",
+    FESTIVAL: "FESTIVAL",
 
-    FESTIVAL: "festival",
+    GOVERNMENT_HOLIDAY: "GOVERNMENT_HOLIDAY",
 
-    GOVERNMENT_HOLIDAY: "government_holiday",
-
+    MEETING: "MEETING",
 };
