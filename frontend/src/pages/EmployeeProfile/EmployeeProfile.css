@@ -1,21 +1,381 @@
 .employee_profile{
-    width:100%;
-    padding:40px;
+    width:min(1450px,95%);
+    margin:2rem auto;
     display:flex;
     flex-direction:column;
-    gap:28px;
+    gap:1.8rem;
 }
 
-.employee_bottom{
+/* ================= HERO ================= */
+
+/* ================= HERO ================= */
+
+.profile_hero{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:28px;
+    overflow:hidden;
+    box-shadow:var(--shadow_md);
+}
+
+.profile_banner{
+    height:170px;
+    background:
+    linear-gradient(
+        135deg,
+        var(--primary),
+        var(--primary_hover)
+    );
+}
+
+.profile_content{
+    padding:0 2rem 2rem;
+    margin-top:-70px;
+}
+
+.profile_header{
+    display:flex;
+    align-items:flex-end;
+    gap:1.75rem;
+}
+
+.profile_avatar{
+    width:140px;
+    height:140px;
+    border-radius:50%;
+    border:6px solid var(--surface);
+    background:
+    linear-gradient(
+        135deg,
+        var(--primary),
+        var(--primary_hover)
+    );
+    color:white;
+    font-size:3rem;
+    font-weight:700;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
+    flex-shrink:0;
+}
+
+.profile_avatar img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.profile_text{
+    flex:1;
+    padding-bottom:.75rem;
+}
+
+.profile_tag{
+    display:inline-flex;
+    align-items:center;
+    padding:.45rem .9rem;
+    border-radius:999px;
+    background:rgba(41,163,224,.12);
+    color:var(--primary);
+    font-size:.8rem;
+    font-weight:600;
+}
+
+.profile_text h1{
+    margin-top:14px;
+    font-size:2.4rem;
+    font-weight:700;
+    color:var(--text_primary);
+}
+
+.profile_text p{
+    margin-top:6px;
+    color:var(--text_secondary);
+    font-size:1.05rem;
+    font-weight:600;
+}
+
+.profile_department{
+    display:inline-block;
+    margin-top:10px;
+    color:var(--text_secondary);
+}
+
+.status_badge{
+    display:flex;
+    align-items:center;
+    gap:.6rem;
+    padding:.7rem 1rem;
+    border-radius:999px;
+    background:rgba(34,197,94,.12);
+    color:#22c55e;
+    font-weight:600;
+    margin-left:auto;
+    margin-bottom:.8rem;
+}
+
+.status_dot{
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    background:#22c55e;
+}
+
+.profile_information{
+    margin-top:2.25rem;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:1rem;
+}
+
+.profile_information_card{
+    background:var(--bg);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:1.25rem;
+    transition:var(--transition);
+}
+
+.profile_information_card:hover{
+    transform:translateY(-4px);
+    border-color:var(--primary);
+}
+
+.profile_information_card span{
+    display:block;
+    font-size:.82rem;
+    color:var(--text_secondary);
+    margin-bottom:.45rem;
+}
+
+.profile_information_card h4{
+    font-size:1rem;
+    font-weight:600;
+    color:var(--text_primary);
+    word-break:break-word;
+}
+
+/* ================= QUICK STATS ================= */
+
+.profile_stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:1.4rem;
+}
+
+.profile_stat_card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:22px;
+    padding:1.4rem;
+    display:flex;
+    align-items:center;
+    gap:1rem;
+    transition:var(--transition);
+    box-shadow:var(--shadow_sm);
+}
+
+.profile_stat_card:hover{
+    transform:translateY(-5px);
+    border-color:var(--primary);
+}
+
+.profile_stat_icon{
+    width:62px;
+    height:62px;
+    border-radius:18px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:1.45rem;
+}
+
+.profile_stat_content span{
+    font-size:.85rem;
+    color:var(--text_secondary);
+}
+
+.profile_stat_content h2{
+    margin-top:.35rem;
+    font-size:2rem;
+}
+
+/* ================= GRID ================= */
+
+.profile_grid{
     display:grid;
     grid-template-columns:1fr 1fr;
-    gap:28px;
+    gap:1.5rem;
 }
 
-@media(max-width:900px){
+/* ================= PANELS ================= */
 
-.employee_bottom{
-    grid-template-columns:1fr;
+.performance_summary,
+.recent_activity{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:24px;
+    padding:1.8rem;
+    box-shadow:var(--shadow_sm);
+}
+
+.section_header{
+    margin-bottom:1.5rem;
+}
+
+.section_header h2{
+    font-size:1.3rem;
+}
+
+/* ================= PERFORMANCE ================= */
+
+.performance_grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:1rem;
+}
+
+.performance_item{
+    background:var(--bg);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:1rem;
+    display:flex;
+    gap:1rem;
+    align-items:center;
+    transition:var(--transition);
+}
+
+.performance_item:hover{
+    border-color:var(--primary);
+    transform:translateY(-4px);
+}
+
+.performance_icon{
+    width:54px;
+    height:54px;
+    border-radius:15px;
+    background:rgba(41,163,224,.12);
+    color:var(--primary);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:1.25rem;
+}
+
+.performance_item span{
+    color:var(--text_secondary);
+    font-size:.82rem;
+}
+
+.performance_item h3{
+    margin-top:.35rem;
+}
+
+/* ================= ACTIVITY ================= */
+
+.activity_list{
+    display:flex;
+    flex-direction:column;
+    gap:1.4rem;
+}
+
+.activity_item{
+    display:flex;
+    gap:1rem;
+}
+
+.activity_dot{
+    width:12px;
+    height:12px;
+    border-radius:50%;
+    background:var(--primary);
+    margin-top:.45rem;
+    flex-shrink:0;
+}
+
+.activity_content h4{
+    font-size:1rem;
+}
+
+.activity_content span{
+    color:var(--text_secondary);
+    font-size:.82rem;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width:1200px){
+
+.profile_stats{
+grid-template-columns:repeat(2,1fr);
+}
+
+.profile_grid{
+grid-template-columns:1fr;
+}
+
+.profile_information{
+grid-template-columns:repeat(2,1fr);
+}
+
+}
+
+@media (max-width:900px){
+
+.profile_header{
+flex-direction:column;
+align-items:center;
+text-align:center;
+}
+
+.profile_text{
+padding:0;
+}
+
+.status_badge{
+margin:0;
+}
+
+.profile_information{
+grid-template-columns:1fr;
+}
+
+.performance_grid{
+grid-template-columns:1fr;
+}
+
+}
+
+@media (max-width:650px){
+
+.employee_profile{
+width:95%;
+margin:1rem auto;
+}
+
+.profile_banner{
+height:120px;
+}
+
+.profile_content{
+padding:0 1rem 1.5rem;
+margin-top:-55px;
+}
+
+.profile_avatar{
+width:110px;
+height:110px;
+font-size:2.3rem;
+}
+
+.profile_text h1{
+font-size:1.8rem;
+}
+
+.profile_stats{
+grid-template-columns:1fr;
 }
 
 }
