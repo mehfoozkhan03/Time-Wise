@@ -1,5 +1,7 @@
 import express from "express";
 
+import { auth } from "../middleware/AuthMiddleware.js";
+
 import {
     getAllEvents,
     getEventById,
@@ -10,23 +12,21 @@ import {
 
 const router = express.Router();
 
-/* ==========================
-   Calendar Routes
-========================== */
+/* Authenticate all Calendar routes */
+router.use(auth);
 
-// Get all events
+/* =========================================
+   Calendar Routes
+========================================= */
+
 router.get("/", getAllEvents);
 
-// Get single event
 router.get("/:id", getEventById);
 
-// Create event
 router.post("/", createEvent);
 
-// Update event
 router.put("/:id", updateEvent);
 
-// Soft delete event
 router.delete("/:id", deleteEvent);
 
 export default router;

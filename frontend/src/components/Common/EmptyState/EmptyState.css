@@ -19,22 +19,25 @@
 
   text-align: center;
 
-  background: #394255;
+  background: var(--surface);
 
-  border: 2px dashed #4b5565;
-  border-radius: 14px;
+  border: 2px dashed var(--border);
+  border-radius: var(--radius_md);
 
   transition:
-    border-color 0.25s ease,
-    background-color 0.25s ease;
+    background var(--transition),
+    border-color var(--transition),
+    transform var(--transition);
 
   animation: fadeIn 0.25s ease;
 }
 
 .emptyState:hover {
-  border-color: #38bdf8;
+  background: var(--surface_hover);
 
-  background: #40495d;
+  border-color: var(--primary);
+
+  transform: translateY(-2px);
 }
 
 /* ==========================================
@@ -53,11 +56,19 @@
 
   border-radius: 50%;
 
-  background: rgba(56, 189, 248, 0.12);
+  background: rgba(41, 163, 224, 0.12);
 
-  color: #38bdf8;
+  color: var(--primary);
 
   font-size: 22px;
+
+  transition:
+    background var(--transition),
+    color var(--transition);
+}
+
+html.dark .emptyIcon {
+  background: rgba(62, 181, 232, 0.12);
 }
 
 /* ==========================================
@@ -67,7 +78,7 @@
 .emptyState h3 {
   margin: 0;
 
-  color: #ffffff;
+  color: var(--text_primary);
 
   font-size: 15px;
   font-weight: 600;
@@ -84,7 +95,7 @@
 
   max-width: 240px;
 
-  color: #94a3b8;
+  color: var(--text_secondary);
 
   font-size: 12px;
 

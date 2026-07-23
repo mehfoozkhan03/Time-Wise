@@ -2,13 +2,66 @@ import { calendarModel } from "../models/Calendar.model.js";
 import { userModel } from "../models/User.model.js";
 
 /* =========================================
-   GET ALL CALENDAR EVENTS
+   Event Visibility
+========================================= */
+
+const PUBLIC_EVENT_TYPES = [
+    "HOLIDAY",
+    "GOVERNMENT_HOLIDAY",
+    "FESTIVAL",
+    "SPECIAL_EVENT",
+    "MEETING",
+];
+
+const getVisibility = (type) =>
+    PUBLIC_EVENT_TYPES.includes(type)
+        ? "PUBLIC"
+        : "PRIVATE";
+
+/* =========================================
+   Logged In User Helper
+========================================= */
+
+const getLoggedInUser = async (req) => {
+    return await userModel.findById(req.user.userID);
+};
+
+/* =========================================
+   GET ALL EVENTS
 ========================================= */
 
 export const getAllEvents = async (req, res) => {
     try {
+
+        const loggedInUser = await getLoggedInUser(req);
+
+        if (!loggedInUser) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found.",
+            });
+        }
+
+        let query = {
+            isActive: true,
+        };
+
+        if (loggedInUser.role !== "admin") {
+            query = {
+                isActive: true,
+                $or: [
+                    {
+                        visibility: "PUBLIC",
+                    },
+                    {
+                        employeeId: loggedInUser._id,
+                    },
+                ],
+            };
+        }
+
         const events = await calendarModel
-            .find({ isActive: true })
+            .find(query)
             .sort({ date: 1 });
 
         return res.status(200).json({
@@ -16,22 +69,35 @@ export const getAllEvents = async (req, res) => {
             count: events.length,
             data: events,
         });
+
     } catch (error) {
+
         console.error("Get Events Error:", error);
 
         return res.status(500).json({
             success: false,
             message: "Failed to fetch calendar events.",
         });
+
     }
 };
 
 /* =========================================
-   GET SINGLE EVENT
+   GET EVENT BY ID
 ========================================= */
 
 export const getEventById = async (req, res) => {
     try {
+
+        const loggedInUser = await getLoggedInUser(req);
+
+        if (!loggedInUser) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found.",
+            });
+        }
+
         const event = await calendarModel.findById(req.params.id);
 
         if (!event || !event.isActive) {
@@ -41,17 +107,31 @@ export const getEventById = async (req, res) => {
             });
         }
 
+        if (
+            loggedInUser.role !== "admin" &&
+            event.visibility === "PRIVATE" &&
+            event.employeeId.toString() !== loggedInUser._id.toString()
+        ) {
+            return res.status(403).json({
+                success: false,
+                message: "Access denied.",
+            });
+        }
+
         return res.status(200).json({
             success: true,
             data: event,
         });
+
     } catch (error) {
+
         console.error("Get Event Error:", error);
 
         return res.status(500).json({
             success: false,
             message: "Failed to fetch event.",
         });
+
     }
 };
 
@@ -61,6 +141,23 @@ export const getEventById = async (req, res) => {
 
 export const createEvent = async (req, res) => {
     try {
+
+        const loggedInUser = await getLoggedInUser(req);
+
+        if (!loggedInUser) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found.",
+            });
+        }
+
+        if (loggedInUser.role !== "admin") {
+            return res.status(403).json({
+                success: false,
+                message: "Only admin can create calendar events.",
+            });
+        }
+
         const {
             title,
             description,
@@ -91,6 +188,7 @@ export const createEvent = async (req, res) => {
             date,
             startTime,
             endTime,
+
             employeeId,
 
             employeeName:
@@ -105,7 +203,9 @@ export const createEvent = async (req, res) => {
             color,
             isAllDay,
 
-            createdBy: req.user?._id ?? employee._id,
+            visibility: getVisibility(type),
+
+            createdBy: loggedInUser._id,
         });
 
         return res.status(201).json({
@@ -113,13 +213,16 @@ export const createEvent = async (req, res) => {
             message: "Event created successfully.",
             data: event,
         });
+
     } catch (error) {
+
         console.error("Create Event Error:", error);
 
         return res.status(500).json({
             success: false,
             message: "Failed to create event.",
         });
+
     }
 };
 
@@ -129,6 +232,23 @@ export const createEvent = async (req, res) => {
 
 export const updateEvent = async (req, res) => {
     try {
+
+        const loggedInUser = await getLoggedInUser(req);
+
+        if (!loggedInUser) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found.",
+            });
+        }
+
+        if (loggedInUser.role !== "admin") {
+            return res.status(403).json({
+                success: false,
+                message: "Only admin can update calendar events.",
+            });
+        }
+
         const event = await calendarModel.findById(req.params.id);
 
         if (!event || !event.isActive) {
@@ -140,7 +260,11 @@ export const updateEvent = async (req, res) => {
 
         Object.assign(event, req.body);
 
-        event.updatedBy = req.user?._id ?? null;
+        if (req.body.type) {
+            event.visibility = getVisibility(req.body.type);
+        }
+
+        event.updatedBy = loggedInUser._id;
 
         await event.save();
 
@@ -149,22 +273,42 @@ export const updateEvent = async (req, res) => {
             message: "Event updated successfully.",
             data: event,
         });
+
     } catch (error) {
+
         console.error("Update Event Error:", error);
 
         return res.status(500).json({
             success: false,
             message: "Failed to update event.",
         });
+
     }
 };
 
 /* =========================================
-   DELETE EVENT (Soft Delete)
+   DELETE EVENT
 ========================================= */
 
 export const deleteEvent = async (req, res) => {
     try {
+
+        const loggedInUser = await getLoggedInUser(req);
+
+        if (!loggedInUser) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found.",
+            });
+        }
+
+        if (loggedInUser.role !== "admin") {
+            return res.status(403).json({
+                success: false,
+                message: "Only admin can delete calendar events.",
+            });
+        }
+
         const event = await calendarModel.findById(req.params.id);
 
         if (!event || !event.isActive) {
@@ -175,7 +319,7 @@ export const deleteEvent = async (req, res) => {
         }
 
         event.isActive = false;
-        event.updatedBy = req.user?._id ?? null;
+        event.updatedBy = loggedInUser._id;
 
         await event.save();
 
@@ -183,12 +327,15 @@ export const deleteEvent = async (req, res) => {
             success: true,
             message: "Event deleted successfully.",
         });
+
     } catch (error) {
+
         console.error("Delete Event Error:", error);
 
         return res.status(500).json({
             success: false,
             message: "Failed to delete event.",
         });
+
     }
 };
