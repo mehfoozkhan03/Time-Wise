@@ -11,8 +11,8 @@ input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 textarea:-webkit-autofill,
 select:-webkit-autofill {
-  -webkit-box-shadow: 0 0 0px 1000px var(--bg) inset !important;
-  -webkit-text-fill-color:var(--text_primary) !important;
+  -webkit-box-shadow: 0 0 0px 1000px var(--text_primary) inset !important;
+  -webkit-text-fill-color:var(--surface_hover) !important;
   transition: background-color 9999s ease-in-out 0s;
 }
 
@@ -22,20 +22,20 @@ select:-webkit-autofill {
   display: flex;
   justify-content: center;
   align-items: center;
-  background:var(--bg);
+  background:var( --bg);
 }
 
 .login-page {
   width: 400px;
   padding: 30px 40px;
-  background: rgba(255, 255, 255, 0.95);
+  background:var(--text_primary);
   backdrop-filter: blur(15px);
-  border: 1px solid rgba(79, 70, 229, 0.08);
-  box-shadow:
+  border: 1px solid var(--text_secondary);
+  /* box-shadow:
     0 30px 60px rgba(0, 0, 0, 0.22),
-    0 12px 35px rgba(79, 70, 229, 0.12);
+    0 12px 35px rgba(79, 70, 229, 0.12); */
   transition: 0.4s;
-  border-radius: 5px;
+  border-radius:10px;
 }
 .login-page:hover {
   transform: translateY(-5px);
@@ -61,8 +61,15 @@ select:-webkit-autofill {
   text-align: center;
   margin-bottom: 30px;
   font-weight: 700;
-  color:#1f242d;
   letter-spacing: 0.5px;
+
+  background:var(--heading);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  display: inline-block;
+  width: 100%;
 }
 
 .input-box {
@@ -76,17 +83,20 @@ select:-webkit-autofill {
   padding: 10px 15px 8px;
   border: none;
   outline: none;
-  border: 1px solid #d9defd;
+  border: 1px solid var(--text_secondary);
   border-radius: 5px;
-  background: #f8f9ff !important;
-  color: #444343;
+  background:var(--text_primary)!important;
+  color:var(--text_secondary);
   font-size: 18px;
+}
+.input-box input:hover{
+  border:1px solid var(--primary);
 }
 .input-box input:focus,
 .input-box select:focus,
 .input-box textarea:focus {
   outline: none;
-  background: #ffffff;
+  background:var(--text_primary);
   box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.15);
   transition: all 0.3s ease;
 }
@@ -96,7 +106,7 @@ select:-webkit-autofill {
   left: 10px;
   top: 50%;
   transform: translateY(-50%);
-  color: #444343;
+  color:var( --surface_hover);
   font-size: 18px;
   letter-spacing: 0.5px;
   pointer-events: none;
@@ -108,8 +118,8 @@ select:-webkit-autofill {
 .input-box input:not(:placeholder-shown) + label {
   top: 0;
   font-size: 18px;
-  color: #444343;
-  background: #f8f9ff;
+  color:var( --surface_hover);
+  background:var(--text_primary);
   width: 190px;
   padding: 0px 13px;
 }
@@ -117,8 +127,8 @@ select:-webkit-autofill {
 .loginsumit {
   width: 100%;
   padding: 15px;
-  background:#20242d;
-  color: white;
+  background:var(--button);
+  color:var(--text_primary);
   border: none;
   cursor: pointer;
   text-transform: uppercase;
@@ -132,16 +142,16 @@ select:-webkit-autofill {
 
 .loginsumit:hover {
   transform: translateY(-2px);
-  background: #29a3e0;
+  background:var(--buttonhover);
 }
 
 .message {
   text-align: center;
-  color: #565555;
+  color:var(--surface);
   font-size: 16px;
 }
 .message span {
-  color:#2c2f3a;
+  color:var( --primary);
   cursor: pointer;
   font-weight: bold;
 }
@@ -156,7 +166,7 @@ select:-webkit-autofill {
   padding-right: 45px;
 }
 input {
-  color: #6b6969 !important;
+  color:var(--border)!important;
 }
 
 .eye-icon {
@@ -165,25 +175,25 @@ input {
   right: 15px;
   transform: translateY(-50%);
   cursor: pointer;
-  color:#6e7a88;
+  color:var(--surface_hover);
   font-size: 18px;
   display: flex;
   align-items: center;
 }
 
 .eye-icon:hover {
-  color: #218fc4;
+  color:var(--primary);
   transform: translateY(-50%) scale(1.15);
 }
 .input-box select {
   width: 100%;
   height: 50px;
-  border: 2px solid #d8ddff;
+   border: 1px solid var(--text_secondary);
   border-radius: 3px;
   padding: 0 15px;
   font-size: 18px;
   outline: none;
-  background: #f8f9ff !important;
+  background:var(--text_primary) !important;
   color: #444343;
 }
 
