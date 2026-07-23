@@ -1,6 +1,49 @@
 import { SectionLabel } from "./sectionLabel";
 
-export function WorkSummary({ summaryItems }) {
+export function WorkSummary({ dashboardStats }) {
+  const dynamicSummaryItems = [
+    {
+      label: "Weekly Hours",
+      value: `${dashboardStats.weeklyHours}h`,
+      icon: "📅",
+    },
+    {
+      label: "Monthly Hours",
+      value: `${dashboardStats.monthlyHours}h`,
+      icon: "🕐",
+    },
+    {
+      label: "Productivity",
+      value: `${dashboardStats.productivity}%`,
+      icon: "💡",
+    },
+    {
+      label: "Punctuality",
+      value: `${dashboardStats.punctuality}%`,
+      icon: "⏰",
+    },
+    {
+      label: "Current Streak",
+      value: `${dashboardStats.dayStreak} days`,
+      icon: "🔥",
+    },
+    {
+      label: "Longest Streak",
+      value: `${dashboardStats.longestStreak} days`,
+      icon: "🏆",
+    },
+    {
+      label: "Avg Break",
+      value: `${dashboardStats.averageBreakDuration} min`,
+      icon: "☕",
+    },
+    {
+      label: "Weekly Goal",
+      value: `${dashboardStats.weeklyGoalPercentage}%`,
+      icon: "🎯",
+    },
+  ];
+
   return (
     <div className="glass-card" style={{ padding: 24 }}>
       <SectionLabel>Work Summary</SectionLabel>
@@ -12,7 +55,7 @@ export function WorkSummary({ summaryItems }) {
           gap: 13,
         }}
       >
-        {summaryItems.map((item) => (
+        {dynamicSummaryItems.map((item) => (
           <div
             key={item.label}
             style={{
