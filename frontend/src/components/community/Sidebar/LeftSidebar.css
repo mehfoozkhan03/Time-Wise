@@ -1,0 +1,126 @@
+.left_sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.sidebar_search {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+
+    padding: .9rem 1rem;
+
+    background: var(--surface);
+
+    border: 1px solid var(--border);
+
+    border-radius: 16px;
+
+    transition: .25s ease;
+}
+
+.sidebar_search:focus-within {
+    border-color: var(--primary);
+}
+
+.search_icon {
+    font-size: 1.1rem;
+    color: var(--text_secondary);
+}
+
+.sidebar_search input {
+
+    flex: 1;
+
+    border: none;
+
+    outline: none;
+
+    background: transparent;
+
+    color: var(--text_primary);
+
+    font-size: .95rem;
+
+    font-family: inherit;
+
+}
+
+.sidebar_search input::placeholder {
+    color: var(--text_secondary);
+}
+
+.sidebar_section {
+
+    background: var(--surface);
+
+    border: 1px solid var(--border);
+
+    border-radius: 20px;
+
+    padding: .75rem;
+
+    display: flex;
+    flex-direction: column;
+    gap: .35rem;
+
+}
+
+.sidebar_item {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: .9rem;
+
+    width: 100%;
+
+    padding: .9rem 1rem;
+
+    border: none;
+
+    border-radius: 14px;
+
+    background: transparent;
+
+    color: var(--text_secondary);
+
+    cursor: pointer;
+
+    font-size: .95rem;
+
+    font-weight: 500;
+
+    transition: .25s ease;
+
+}
+
+.sidebar_item svg {
+
+    font-size: 1.2rem;
+
+}
+
+.sidebar_item:hover {
+
+    background: var(--surface_hover);
+
+    color: var(--text_primary);
+
+}
+
+.sidebar_item.active {
+
+    background: var(--primary);
+
+    color: white;
+
+}
+
+.sidebar_item.active:hover {
+
+    background: var(--primary_hover);
+
+}

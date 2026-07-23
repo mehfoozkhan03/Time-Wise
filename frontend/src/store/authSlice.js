@@ -8,7 +8,13 @@ export const fetchCurrentUser = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const { data } = await authService.getCurrentUser();
-      return data.user;
+
+      const cookiesVal = document.cookie
+        .split('; ')
+        .some((cookie) => cookie.startsWith('token='));
+      console.log(`🚀 ~ cookiesVal:`, cookiesVal);
+
+      return { data: data.user, cookies: cookiesVal };
     } catch (error) {
       return thunkAPI.rejectWithValue(
         error.response?.data?.message || 'Unable to fetch user',
@@ -61,10 +67,7 @@ export const updateTheme = createAsyncThunk(
 );
 
 const initialState = {
-  isAuthenticated: document.cookie
-    .split('; ')
-    .some((cookie) => cookie.startsWith('token=')),
-
+  isAuthenticated: null,
   user: null,
   isLoading: false,
   isError: false,
@@ -108,27 +111,6 @@ const authSlice = createSlice({
         state.errorMessage = action.payload;
       })
 
-      //admin
-      /*   .addCase(adminLogin.pending, (state) => {
-        state.isLoading = true;
-        state.isError = false;
-        state.errorMessage = '';
-      })
-
-      .addCase(adminLogin.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isAuthenticated = true;
-        state.user = action.payload.user;
-      })
-
-      .addCase(adminLogin.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isAuthenticated = false;
-        state.user = null;
-        state.isError = true;
-        state.errorMessage = action.payload;
-      })
- */
       // ================= Current User =================
 
       .addCase(fetchCurrentUser.pending, (state) => {
@@ -137,8 +119,8 @@ const authSlice = createSlice({
 
       .addCase(fetchCurrentUser.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.user = action.payload;
-        state.isAuthenticated = true;
+        state.user = action.payload.data;
+        state.isAuthenticated = action.payload.cookies;
       })
 
       .addCase(fetchCurrentUser.rejected, (state, action) => {
@@ -160,6 +142,7 @@ const authSlice = createSlice({
 export const { logout } = authSlice.actions;
 
 export default authSlice.reducer;
+
 /*
 deepakyadav786@gmail.com
 Deeoakyadav@123

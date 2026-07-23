@@ -30,13 +30,17 @@
 
     border-radius:18px;
 
-    background:var(--secondary);
+    background:var(--surface);
 
     transition:.3s;
 }
 
 .performance_item:hover{
     transform:translateY(-4px);
+}
+
+.performance_item>div:nth-child(2) span{
+    color: var(--text_primary);
 }
 
 .performance_icon{

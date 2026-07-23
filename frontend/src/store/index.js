@@ -1,5 +1,6 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore } from "@reduxjs/toolkit";
 
+<<<<<<< HEAD
 import tourReducer from './tourSlice';
 import authReducer from './authSlice';
 import attendanceReducer from './attendanceSlice';
@@ -9,6 +10,16 @@ import dashboardReducer from './dashboardSlice';
 import reportsReducer from './reportsSlice';
 import adminAuthReducer from './adminAuthSlice';
 import calendarReducer from "./calendarSlice";
+=======
+import tourReducer from "./tourSlice";
+import authReducer from "./authSlice";
+import attendanceReducer from "./attendanceSlice";
+import notificationReducer from "./notificationSlice";
+import postReducer from "./postSlice";
+import dashboardReducer from "./dashboardSlice";
+import reportsReducer from "./reportsSlice";
+import adminAuthReducer from "./adminAuthSlice";
+>>>>>>> 0e495f277054fda7fd76b7b6277da05d4f7e0bee
 
 const store = configureStore({
   reducer: {
@@ -30,6 +41,11 @@ const store = configureStore({
     
     calendar: calendarReducer, 
   },
+});
+
+store.subscribe(() => {
+  const { hasSeenTour } = store.getState().tour;
+  localStorage.setItem("tw_tour_seen", JSON.stringify(hasSeenTour));
 });
 
 export default store;
