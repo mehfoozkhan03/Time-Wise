@@ -34,7 +34,6 @@ export function ChartsSection({ activeTab, chartTabs, setTab }) {
       className="glass-card"
       style={{
         marginBottom: 20,
-        overflow: "hidden",
       }}
     >
       {/* Tab Bar */}
@@ -44,7 +43,6 @@ export function ChartsSection({ activeTab, chartTabs, setTab }) {
           borderBottom: "1px solid rgba(255,255,255,0.06)",
           padding: "0 20px",
           gap: 2,
-          overflowX: "hidden",
         }}
         className="chartDiv"
       >
@@ -177,7 +175,10 @@ export function ChartsSection({ activeTab, chartTabs, setTab }) {
                   axisLine={false}
                   tickLine={false}
                 />
-                <Tooltip content={<CustomTooltip />} cursor={{fill:"var(--success)"}} />
+                <Tooltip
+                  content={<CustomTooltip />}
+                  cursor={{ fill: "var(--success)" }}
+                />
                 <Legend wrapperStyle={{ fontSize: 12 }} />
                 <Bar
                   dataKey="actual"
