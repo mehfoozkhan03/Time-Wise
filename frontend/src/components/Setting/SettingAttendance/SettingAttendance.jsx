@@ -41,7 +41,6 @@ export const SettingAttendance = () => {
               <label htmlFor="worddays">Work Days</label>
               <select>
                 <option value="Monday-Friday">Monday-Friday</option>
-                <option value="Monday-Saturday">Monday-Saturday</option>
               </select>
             </div>
           </div>

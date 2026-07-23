@@ -4,8 +4,10 @@ import { CiUser } from "react-icons/ci";
 import { MdOutlineEmail } from "react-icons/md";
 import { FaPhoneAlt } from "react-icons/fa";
 import { MdLocationOn } from "react-icons/md";
+import { useSelector } from 'react-redux';
 
 export const Profile = () => {
+  const { user } = useSelector((state) => state.auth);
   return (
     <>
       <div className="setting-profile-container">
@@ -22,7 +24,9 @@ export const Profile = () => {
           </div>
           <div className="setting-profile-card">
             <div className="setting-avatar-container">
-              <div className="setting-avatar">SK</div>
+              <div className="setting-avatar">{user
+                ? `${user.firstName?.[0] ?? ""}${user.lastName?.[0] ?? ""}`.toUpperCase()
+                : "U"}</div>
 
               <label
                 for="photo"
@@ -40,7 +44,14 @@ export const Profile = () => {
             </div>
 
             <div className="setting-profile-info">
-              <h2>Silent Killer</h2>
+              <h2>{user
+                  ? `${user.firstName
+                      ?.charAt(0)
+                      .toUpperCase()}${user.firstName?.slice(1)} ${
+                      user.lastName?.charAt(0).toUpperCase() +
+                      user.lastName?.slice(1)
+                    }`
+                  : "User"}</h2>
               <p>JPG, PNG or WebP · Max 5 MB</p>
 
               <label
@@ -67,6 +78,14 @@ export const Profile = () => {
                   <input
                     type="text"
                     placeholder="Your full name"
+                    value={user
+                  ? `${user.firstName
+                      ?.charAt(0)
+                      .toUpperCase()}${user.firstName?.slice(1)} ${
+                      user.lastName?.charAt(0).toUpperCase() +
+                      user.lastName?.slice(1)
+                    }`
+                  : "User"}
                   />
                 </div>
               </div>
@@ -77,6 +96,7 @@ export const Profile = () => {
                   <input
                     type="email"
                     placeholder="Your work email"
+                    value={user?.email ?? "No Email"}
                   />
                 </div>
               </div>

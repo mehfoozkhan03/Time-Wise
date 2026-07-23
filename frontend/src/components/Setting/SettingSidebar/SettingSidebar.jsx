@@ -10,8 +10,12 @@ import { FaLock } from "react-icons/fa";
 import { GoDatabase } from "react-icons/go";
 import { MdOutlineContactSupport } from "react-icons/md";
 import { FaCalendarAlt } from "react-icons/fa";
+import { useSelector } from "react-redux";
 
 export const SettingSidebar = () => {
+  const { user } = useSelector((state) => state.auth);
+  console.log("🚀 ~ user:", user);
+  
   return (
     <>
       <div className="settingSidebar-container">
@@ -85,11 +89,20 @@ export const SettingSidebar = () => {
           </div>
           <div className="settingSidebar-userProfile">
             <div className="userProfile-img">
-              
+              {user
+                ? `${user.firstName?.[0] ?? ""}${user.lastName?.[0] ?? ""}`.toUpperCase()
+                : "U"}
             </div>
             <div className="user_details">
-              <p>Silent Killer</p>
-              <p>email@.com</p>
+              <p>{user
+                  ? `${user.firstName
+                      ?.charAt(0)
+                      .toUpperCase()}${user.firstName?.slice(1)} ${
+                      user.lastName?.charAt(0).toUpperCase() +
+                      user.lastName?.slice(1)
+                    }`
+                  : "User"}</p>
+              <p>{user?.email ?? "No email available"}</p>
             </div>
           </div>
         </div>
