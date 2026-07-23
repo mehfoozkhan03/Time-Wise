@@ -1,10 +1,10 @@
-import './EmployeeProfile.css'
+import './EmployeeProfile.css';
 
-import Hero from '../../components/employee/Hero/Hero'
-import QuickStats from '../../components/employee/QuickStats/QuickStats'
-import Achievements from '../../components/employee/Achievements/Achievements'
-import PerformanceSummary from '../../components/employee/PerformanceSummary/PerformanceSummary'
-import RecentActivity from '../../components/employee/RecentActivity/RecentActivity'
+import Hero from '../../components/employee/Hero/Hero';
+import QuickStats from '../../components/employee/QuickStats/QuickStats';
+// import Achievements from '../../components/employee/Achievements/Achievements';
+import PerformanceSummary from '../../components/employee/PerformanceSummary/PerformanceSummary';
+import RecentActivity from '../../components/employee/RecentActivity/RecentActivity';
 
 export default function EmployeeProfile() {
   return (
@@ -13,7 +13,7 @@ export default function EmployeeProfile() {
 
       <QuickStats />
 
-      <Achievements />
+      {/* <Achievements /> */}
 
       <div className="employee_bottom">
         <PerformanceSummary />
@@ -21,5 +21,5 @@ export default function EmployeeProfile() {
         <RecentActivity />
       </div>
     </main>
-  )
+  );
 }
