@@ -15,7 +15,6 @@ export function GoalProgress({ label, current, target, unit, color }) {
         <span
           style={{
             fontSize: 13,
-            color: "#94a3b8",
             fontWeight: 500,
           }}
         >
@@ -34,11 +33,10 @@ export function GoalProgress({ label, current, target, unit, color }) {
               fontFamily: "JetBrains Mono, monospace",
               fontSize: 13,
               fontWeight: 600,
-              color: "#e8edf5",
             }}
           >
             {current}
-            <span style={{ color: "#475569" }}>
+            <span>
               {" "}
               / {target} {unit}
             </span>

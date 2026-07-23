@@ -24,7 +24,6 @@ export function SectionLabel({ children }) {
           fontFamily: "Outfit, sans-serif",
           fontSize: 17,
           fontWeight: 600,
-          color: "#e8edf5",
           letterSpacing: "-0.01em",
         }}
       >

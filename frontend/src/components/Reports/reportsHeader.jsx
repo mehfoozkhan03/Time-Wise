@@ -46,7 +46,6 @@ export function ReportsHeader({ dateRange, ranges }) {
               fontFamily: "Outfit,sans-serif",
               fontSize: 26,
               fontWeight: 700,
-              color: "#e8edf5",
               letterSpacing: "-0.02em",
             }}
           >
@@ -58,7 +57,6 @@ export function ReportsHeader({ dateRange, ranges }) {
           style={{
             margin: 0,
             fontSize: 14,
-            color: "#64748b",
             maxWidth: 420,
           }}
         >
@@ -78,11 +76,9 @@ export function ReportsHeader({ dateRange, ranges }) {
         <div
           style={{
             display: "flex",
-            background: "#0d1322",
-            border: "1px solid rgba(255,255,255,.065)",
             borderRadius: 10,
             padding: 3,
-            gap: 2,
+            gap: 5,
           }}
         >
           {ranges.map((r) => (
@@ -96,9 +92,6 @@ export function ReportsHeader({ dateRange, ranges }) {
                 cursor: "pointer",
                 fontSize: 12.5,
                 fontWeight: 500,
-                background:
-                  dateRange === r.id ? "rgba(99,102,241,.18)" : "transparent",
-                color: dateRange === r.id ? "#818cf8" : "#64748b",
                 transition: "all .15s",
               }}
             >
@@ -114,9 +107,7 @@ export function ReportsHeader({ dateRange, ranges }) {
             gap: 6,
             padding: "8px 14px",
             borderRadius: 9,
-            background: "rgba(255,255,255,.04)",
             border: "1px solid rgba(255,255,255,.08)",
-            color: "#94a3b8",
             fontSize: 12.5,
             fontWeight: 500,
             cursor: "pointer",
@@ -132,9 +123,7 @@ export function ReportsHeader({ dateRange, ranges }) {
             gap: 6,
             padding: "8px 14px",
             borderRadius: 9,
-            background: "rgba(16,185,129,.08)",
             border: "1px solid rgba(16,185,129,.2)",
-            color: "#10b981",
             fontSize: 12.5,
             fontWeight: 500,
             cursor: "pointer",

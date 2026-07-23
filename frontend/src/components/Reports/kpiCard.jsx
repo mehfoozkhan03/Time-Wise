@@ -34,7 +34,6 @@ export function KPICard({
             style={{
               fontSize: 15,
               fontWeight: 500,
-              color: "#64748b",
               textTransform: "uppercase",
               letterSpacing: "0.01em",
               marginBottom: 6,
@@ -55,7 +54,6 @@ export function KPICard({
                 fontFamily: "Outfit, sans-serif",
                 fontSize: 28,
                 fontWeight: 700,
-                color: "#e8edf5",
                 lineHeight: 1,
               }}
             >
@@ -66,7 +64,6 @@ export function KPICard({
               <span
                 style={{
                   fontSize: 15,
-                  color: "#475569",
                   fontWeight: 500,
                 }}
               >
@@ -79,7 +76,6 @@ export function KPICard({
             <div
               style={{
                 fontSize: 13,
-                color: "#475569",
                 marginTop: 4,
               }}
             >
@@ -96,7 +92,6 @@ export function KPICard({
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            background: "rgba(255,255,255,0.04)",
             fontSize: 18,
             border: "1px solid rgba(255,255,255,0.06)",
             flexShrink: 0,
@@ -123,7 +118,6 @@ export function KPICard({
       <div
         style={{
           fontSize: 13,
-          color: "#334155",
           marginTop: -4,
         }}
       >

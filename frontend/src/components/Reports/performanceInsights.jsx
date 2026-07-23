@@ -1,4 +1,4 @@
-import { SectionLabel } from "./SectionLabel";
+import { SectionLabel } from "./sectionLabel";
 
 export function PerformanceInsights({ insights }) {
   return (
@@ -47,7 +47,6 @@ export function PerformanceInsights({ insights }) {
             <span
               style={{
                 fontSize: 13,
-                color: "#94a3b8",
                 lineHeight: 1.5,
               }}
             >

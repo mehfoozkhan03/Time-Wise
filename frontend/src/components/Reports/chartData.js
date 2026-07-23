@@ -50,6 +50,7 @@ export const attendanceDistribution = [
   { name: "Late", value: 1, color: "#f59e0b" },
   { name: "Leave", value: 2, color: "#6366f1" },
   { name: "Holiday", value: 1, color: "#22d3ee" },
+  { name: "Weekend", value: 1, color: "#ff00ff" },
 ];
 
 export const sparklineData = {
