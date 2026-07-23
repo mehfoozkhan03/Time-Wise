@@ -1,16 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
 
-<<<<<<< HEAD
-import tourReducer from './tourSlice';
-import authReducer from './authSlice';
-import attendanceReducer from './attendanceSlice';
-import notificationReducer from './notificationSlice';
-import postReducer from './postSlice';
-import dashboardReducer from './dashboardSlice';
-import reportsReducer from './reportsSlice';
-import adminAuthReducer from './adminAuthSlice';
-import calendarReducer from "./calendarSlice";
-=======
 import tourReducer from "./tourSlice";
 import authReducer from "./authSlice";
 import attendanceReducer from "./attendanceSlice";
@@ -19,7 +8,7 @@ import postReducer from "./postSlice";
 import dashboardReducer from "./dashboardSlice";
 import reportsReducer from "./reportsSlice";
 import adminAuthReducer from "./adminAuthSlice";
->>>>>>> 0e495f277054fda7fd76b7b6277da05d4f7e0bee
+import calendarReducer from "./calendarSlice"
 
 const store = configureStore({
   reducer: {
