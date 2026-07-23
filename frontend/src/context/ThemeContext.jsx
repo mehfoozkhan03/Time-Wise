@@ -84,10 +84,18 @@ export function ThemeProvider({ children }) {
     };
   }, [user]);
 
+  const currentTheme =
+    user?.theme === "system"
+      ? window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? "dark"
+        : "light"
+      : user?.theme || "light";
+
   return (
     <ThemeContext.Provider
       value={{
         changeTheme,
+        currentTheme,
       }}
     >
       {children}
