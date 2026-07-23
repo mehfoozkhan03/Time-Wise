@@ -1,18 +1,20 @@
-import mongoose from 'mongoose'
-import dotenv from 'dotenv'
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
 
-dotenv.config()
+dotenv.config({
+  path: '.env.production',
+});
 
 export const Connection = async () => {
   try {
     await mongoose.connect(process.env.DataBase, {
       dbName: 'time_wise',
-    })
+    });
 
-    console.log('MongoDB Connected Successfully ✅')
+    console.log('MongoDB Connected Successfully ✅');
   } catch (error) {
-    console.error('MongoDB Connection Error:')
-    console.error(error)
-    throw error
+    console.error('MongoDB Connection Error:');
+    console.error(error);
+    throw error;
   }
-}
+};
