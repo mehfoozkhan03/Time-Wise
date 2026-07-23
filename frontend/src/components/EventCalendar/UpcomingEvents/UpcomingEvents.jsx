@@ -9,14 +9,16 @@ import EventItem from "../../Common/EventItem/EventItem";
 import EmptyState from "../../Common/EmptyState/EmptyState";
 
 import { getUpcomingEvents } from "../../../utils/eventUtils";
-
 import { getRelativeDateLabel } from "../../../utils/dateUtils";
 
-function UpcomingEvents({ events, onEventClick }) {
-  const upcomingEvents = useMemo(
-    () => getUpcomingEvents(events).slice(0, 4),
-    [events],
-  );
+function UpcomingEvents({ events = [], onEventClick }) {
+  /* =========================================
+       Upcoming Events
+    ========================================= */
+
+  const upcomingEvents = useMemo(() => {
+    return getUpcomingEvents(events, 4);
+  }, [events]);
 
   return (
     <Card
@@ -33,7 +35,7 @@ function UpcomingEvents({ events, onEventClick }) {
       ) : (
         <div className="upcomingList">
           {upcomingEvents.map((event) => (
-            <div key={event.id} className="upcomingItem">
+            <div key={event._id ?? event.id} className="upcomingItem">
               <EventItem
                 event={event}
                 variant="compact"
@@ -42,13 +44,7 @@ function UpcomingEvents({ events, onEventClick }) {
                 showType={false}
                 onClick={onEventClick}
               />
-              {/* <EventItem
-                event={event}
-                variant="compact"
-                showTime={false}
-                showType={false}
-                onClick={onEventClick}
-            /> */}
+
               <span className="eventDate">
                 {getRelativeDateLabel(event.date)}
               </span>
