@@ -71,6 +71,17 @@
   padding: 0;
 }
 
+.typing-cursor {
+  display: inline-block;
+  color: var(--primary);
+  animation: blink 0.8s infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
 @media (max-width: 900px) {
   .hero {
     grid-template-columns: 1fr;
@@ -91,12 +102,15 @@
   .hero {
     margin-top: 21px;
   }
+
   .hero_left h1 {
     font-size: 2.1rem;
   }
+
   .hero_info {
     gap: 15px;
   }
+
   .hero_left p {
     margin-bottom: 23px;
   }
