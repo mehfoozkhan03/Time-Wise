@@ -1,11 +1,13 @@
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import "./reports.css"
+import "./reports.css";
 import {
   setSearchLog,
   setStatusFilter,
   setActiveTab,
+  setDashboardStats,
+  setAttendanceLog,
 } from "../../store/reportsSlice";
 import { attendanceLog } from "../../components/Reports/attendanceData";
 import { goals } from "../../components/Reports/goalsData";
@@ -23,6 +25,10 @@ import { ChartsSection } from "../../components/Reports/chartsSection";
 import { sparklineData } from "../../components/Reports/chartData";
 import { ReportsHeader } from "../../components/Reports/reportsHeader";
 import { KPISection } from "../../components/Reports/kpiSection";
+import {
+  getAttendanceHistory,
+  getDashboardStats,
+} from "../../services/reportsService";
 
 // ─── Types
 
@@ -48,6 +54,24 @@ export function Reports() {
   const { dateRange, searchLog, statusFilter, activeTab } = useSelector(
     (state) => state.reports,
   );
+
+  useEffect(() => {
+    const loadReports = async () => {
+
+      try {
+        const stats = await getDashboardStats();
+        const history = await getAttendanceHistory();
+        dispatch(setDashboardStats(stats));
+        dispatch(setAttendanceLog(history));
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    loadReports();
+  }, [dispatch]);
+
+  const { dashboardStats } = useSelector((state) => state.reports);
 
   const filteredLog = useMemo(
     () =>
@@ -92,7 +116,10 @@ export function Reports() {
       >
         <ReportsHeader dateRange={dateRange} ranges={ranges} />
 
-        <KPISection sparklineData={sparklineData} />
+        <KPISection
+          sparklineData={sparklineData}
+          dashboardStats={dashboardStats}
+        />
         {/* ── Two-column: Work Summary + Performance Insights ── */}
         <div
           style={{

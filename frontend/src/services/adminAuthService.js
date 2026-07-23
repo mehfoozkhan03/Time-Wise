@@ -8,7 +8,5 @@ const API = axios.create({
 export const adminAuthService = {
   login: (data) => API.post("/admin/login", data),
 
-  register: (data) => API.post("/admin/register", data),
-
-  getCurrentAdmin: () => API.get("/admin/me"),
+  // getCurrentAdmin: () => API.get("/admin/me"),
 };

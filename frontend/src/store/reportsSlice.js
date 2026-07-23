@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+
 import initialState from "./initialState";
 
 const reportsSlice = createSlice({
@@ -21,6 +22,10 @@ const reportsSlice = createSlice({
 
     setActiveTab(state, action) {
       state.activeTab = action.payload;
+    },
+
+    setDashboardStats(state, action) {
+      state.dashboardStats = action.payload;
     },
 
     setAttendanceLog(state, action) {
@@ -66,6 +71,7 @@ export const {
   setSearchLog,
   setStatusFilter,
   setActiveTab,
+  setDashboardStats,
   setAttendanceLog,
   setDailyHoursData,
   setWeeklyData,

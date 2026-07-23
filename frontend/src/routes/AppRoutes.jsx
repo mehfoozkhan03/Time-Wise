@@ -3,7 +3,7 @@ import { Route, Routes } from 'react-router-dom'
 import MainLayout from '../layouts/MainLayout'
 import Home from './../pages/Home'
 import AdminDashboard from './../pages/AdminDashboard'
-import Community from './../pages/Community'
+import Community from './../pages/Community/Community'
 import About from './../pages/About'
 import Contact from './../pages/Contact'
 import SignUpPage from './../pages/Login'
@@ -111,7 +111,14 @@ export const AppRoutes = () => {
 
           {/* ================= PUBLIC PAGES ================= */}
 
-          <Route path="/community" element={<Community />} />
+          <Route
+            path="/community"
+            element={
+              <PrivateRoutes>
+                <Community />
+              </PrivateRoutes>
+            }
+          />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/signup" element={<SignUpPage />} />
