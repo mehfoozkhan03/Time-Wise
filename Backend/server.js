@@ -10,6 +10,7 @@ import { userRoutes } from './routes/User.routes.js'
 import { postRoutes } from './routes/Post.routes.js'
 import { attendanceRouter } from './routes/Attendance.routes.js'
 import calendarRoutes from "./routes/Calendar.routes.js";
+import { contactRoute } from './routes/Contact.routes.js'
 
 const server = express()
 
@@ -33,6 +34,8 @@ server.use('/posts', postRoutes)
 server.use('/attendance', attendanceRouter)
 
 server.use("/calendar", calendarRoutes);
+
+server.use("/api/contact", contactRoute);
 
 // ================= Server =================
 

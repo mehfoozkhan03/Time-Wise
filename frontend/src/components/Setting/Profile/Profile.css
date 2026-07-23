@@ -138,6 +138,10 @@
     background-color: transparent;
     border: none;
     outline: none;
+    color: var(--text_secondary) !important;
+}
+.top-data>div>div>input::placeholder{
+    color: var(--text_secondary);
 }
 .bio{
     width: 100%;
