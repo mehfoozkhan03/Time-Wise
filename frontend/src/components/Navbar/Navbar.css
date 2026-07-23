@@ -168,11 +168,11 @@
 }
 
 .profile_btn:hover {
-  background: var(--secondary);
+  background: var(--primary);
 }
 
 .profile_btn > svg {
-  fill: #fff;
+  fill: var(--text_primary);
 }
 
 .avatar {
@@ -200,7 +200,7 @@
 
 .profile_info span {
   font-size: 0.78rem;
-  color: var(--text_secondary);
+  color: var(--text_primary);
 }
 .profile_arrow {
   transition: transform 0.3s ease;
@@ -234,13 +234,14 @@
 
 .notification_item {
   padding: 1rem;
-  color: var(--text_secondary);
+  color: var(--text_primary);
   cursor: pointer;
   transition: var(--transition);
 }
 
 .notification_item:hover {
-  background: var(--secondary);
+  color: #fff;
+    background: var(--primary);
 }
 
 .view_all_btn {
@@ -263,7 +264,8 @@
 
 .profile_dropdown a:hover,
 .profile_dropdown button:hover {
-  background: var(--secondary);
+  background: var(--primary);
+    color: #fff;
 }
 
 /* Tour Button */
