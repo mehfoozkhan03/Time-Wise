@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from 'mongoose'
 
 const userSchema = new mongoose.Schema(
   {
@@ -80,12 +80,6 @@ const userSchema = new mongoose.Schema(
       ref: 'Admin',
       default: null,
     },
-    posts: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Post',
-      },
-    ],
 
     notifications: [
       {
@@ -93,6 +87,7 @@ const userSchema = new mongoose.Schema(
         ref: 'Notification',
       },
     ],
+
     attendance: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -104,6 +99,6 @@ const userSchema = new mongoose.Schema(
     timestamps: true,
     versionKey: false,
   },
-);
+)
 
-export const userModel = mongoose.model('User', userSchema);
+export const userModel = mongoose.model('User', userSchema)
