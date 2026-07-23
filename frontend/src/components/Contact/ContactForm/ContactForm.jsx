@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import "./ContactForm.css";
 import { Feedback } from "../../../pages/FeedBack";
+import axios  from 'axios';
 
 function ContactForm() {
   const questions = [
@@ -92,40 +93,75 @@ function ContactForm() {
   };
 
   // ── Submit ────────────────────────────────────────────────────────────────
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault();
 
     setIsSubmitted(true);
 
     if (!validate()) return;
 
-    console.log(formData);
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/api/contact",
+        formData,
+      );
 
-    setFormData({
-      name: "",
-      email: "",
-      faq: "",
-      subject: "",
-      message: "",
-    });
+      setModal({
+        open: true,
+        type: "success",
+        title: "Message Sent!",
+        message: response.data.message,
+      });
 
-    setSelectedAnswer("");
+      setFormData({
+        name: "",
+        email: "",
+        faq: "",
+        subject: "",
+        message: "",
+      });
 
-    setErrors({});
-    setTouched({});
-    setIsSubmitted(false);
+      setSelectedAnswer("");
+      setErrors({});
+      setTouched({});
+      setIsSubmitted(false);
+    } catch (error) {
+      setModal({
+        open: true,
+        type: "error",
+        title: "Failed!",
+        message: error.response?.data?.message || "Something went wrong.",
+      });
+    }
 
-    setModal({
-      open: true,
-      type: "success",
-      title: "Message Sent!",
-      message: "Thank you for reaching out. We'll get back to you soon.",
-    });
+    // setFormData({
+    //   name: "",
+    //   email: "",
+    //   faq: "",
+    //   subject: "",
+    //   message: "",
+    // });
+
+    // setSelectedAnswer("");
+
+    // setErrors({});
+    // setTouched({});
+    // setIsSubmitted(false);
+
+    // setModal({
+    //   open: true,
+    //   type: "success",
+    //   title: "Message Sent!",
+    //   message: "Thank you for reaching out. We'll get back to you soon.",
+    // });
   };
 
   return (
     <div className="formPart">
-      <form onSubmit={submit} noValidate>
+      <form
+        onSubmit={submit}
+        noValidate
+      >
         <div className="inputs">
           <div className="input_group">
             <input
@@ -166,10 +202,17 @@ function ContactForm() {
           </div>
         </div>
 
-        <select name="faq" value={formData.faq} onChange={handleChange}>
+        <select
+          name="faq"
+          value={formData.faq}
+          onChange={handleChange}
+        >
           <option value="">Select Question (Optional)</option>
           {questions.map((question, index) => (
-            <option key={index} value={index}>
+            <option
+              key={index}
+              value={index}
+            >
               {question}
             </option>
           ))}
@@ -209,7 +252,10 @@ function ContactForm() {
         />
         {errors.message && <p className="form_error">{errors.message}</p>}
 
-        <button type="submit" className="btn">
+        <button
+          type="submit"
+          className="btn"
+        >
           Send Message
         </button>
       </form>
