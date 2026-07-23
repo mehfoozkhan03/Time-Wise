@@ -1,73 +1,87 @@
-.calendarSkeleton{
-    display:flex;
-    flex-direction:column;
-    gap:18px;
+.calendarSkeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
 }
 
-.skeletonHeader{
-    height:62px;
-    border-radius:14px;
-    background:#313846;
+.skeletonHeader {
+  height: 62px;
+  border-radius: var(--radius_md);
+  background: var(--surface);
 }
 
-.skeletonSearch{
-    height:46px;
-    border-radius:12px;
-    background:#313846;
+.skeletonSearch {
+  height: 46px;
+  border-radius: var(--radius_md);
+  background: var(--surface);
 }
 
-.skeletonFilters{
-    display:flex;
-    flex-wrap:wrap;
-    gap:10px;
+.skeletonFilters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
-.skeletonFilter{
-    width:110px;
-    height:36px;
-    border-radius:999px;
-    background:#313846;
+.skeletonFilter {
+  width: 110px;
+  height: 36px;
+  border-radius: 999px;
+  background: var(--surface);
 }
 
-.skeletonGrid{
-    display:grid;
-    grid-template-columns:repeat(7,1fr);
-    gap:12px;
+.skeletonGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 12px;
 }
 
-.skeletonDay{
-    height:140px;
-    border-radius:14px;
-    background:#313846;
+.skeletonDay {
+  height: 140px;
+  border-radius: var(--radius_md);
+  background: var(--surface);
 }
 
 .skeletonHeader,
 .skeletonSearch,
 .skeletonFilter,
-.skeletonDay{
-    position:relative;
-    overflow:hidden;
+.skeletonDay {
+  position: relative;
+  overflow: hidden;
 }
 
 .skeletonHeader::after,
 .skeletonSearch::after,
 .skeletonFilter::after,
-.skeletonDay::after{
-    content:"";
-    position:absolute;
-    inset:0;
-    transform:translateX(-100%);
-    background:linear-gradient(
-        90deg,
-        transparent,
-        rgba(255,255,255,.08),
-        transparent
-    );
-    animation:skeletonLoading 1.2s infinite;
+.skeletonDay::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.12),
+    transparent
+  );
+
+  animation: skeletonLoading 1.2s infinite;
 }
 
-@keyframes skeletonLoading{
-    to{
-        transform:translateX(100%);
-    }
+html.dark .skeletonHeader::after,
+html.dark .skeletonSearch::after,
+html.dark .skeletonFilter::after,
+html.dark .skeletonDay::after {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.08),
+    transparent
+  );
+}
+
+@keyframes skeletonLoading {
+  to {
+    transform: translateX(100%);
+  }
 }
