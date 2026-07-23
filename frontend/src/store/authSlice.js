@@ -9,12 +9,7 @@ export const fetchCurrentUser = createAsyncThunk(
     try {
       const { data } = await authService.getCurrentUser();
 
-      const cookiesVal = document.cookie
-        .split('; ')
-        .some((cookie) => cookie.startsWith('token='));
-      console.log(`🚀 ~ cookiesVal:`, cookiesVal);
-
-      return { data: data.user, cookies: cookiesVal };
+      return data.user;
     } catch (error) {
       return thunkAPI.rejectWithValue(
         error.response?.data?.message || 'Unable to fetch user',
@@ -67,7 +62,9 @@ export const updateTheme = createAsyncThunk(
 );
 
 const initialState = {
-  isAuthenticated: null,
+  isAuthenticated: document.cookie
+    .split('; ')
+    .some((cookie) => cookie.startsWith('token=')),
   user: null,
   isLoading: false,
   isError: false,
@@ -119,8 +116,10 @@ const authSlice = createSlice({
 
       .addCase(fetchCurrentUser.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.user = action.payload.data;
-        state.isAuthenticated = action.payload.cookies;
+        state.user = action.payload;
+        state.isAuthenticated = document.cookie
+          .split('; ')
+          .some((cookie) => cookie.startsWith('token='));
       })
 
       .addCase(fetchCurrentUser.rejected, (state, action) => {
