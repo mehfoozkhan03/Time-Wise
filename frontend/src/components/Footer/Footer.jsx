@@ -2,21 +2,23 @@ import "./Footer.css";
 
 import { Link } from "react-router-dom";
 
-import {
-  FaLinkedin,
-  FaGithub,
-  FaEnvelope,
-  FaHeart,
-} from "react-icons/fa";
+import { FaLinkedin, FaGithub, FaEnvelope, FaHeart } from "react-icons/fa";
+import { useTheme } from "../../context/ThemeContext";
 
 export default function Footer() {
   const year = new Date().getFullYear();
+
+  const { currentTheme } = useTheme();
 
   return (
     <footer className="footer">
       <div className="footer_top">
         <div className="footer_brand">
-          <img src="/Logo_F.svg" alt="TimeWise Logo" className="footer_logo" />
+          <img
+            src={currentTheme === "dark" ? "/Logo_F.svg" : "/Logo_F_Light.svg"}
+            alt="Logo"
+            className="footer_logo"
+          />
 
           <h3>Smarter Employee Management</h3>
 
