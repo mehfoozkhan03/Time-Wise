@@ -48,16 +48,6 @@
   flex-direction: column;
 }
 
-.logo_text h2 {
-  font-size: 1.28rem;
-  color: var(--text_primary);
-}
-
-.logo_text span {
-  font-size: 0.82rem;
-  color: var(--text_secondary);
-}
-
 /* ==========================================================
    CENTER LINKS
 ========================================================== */

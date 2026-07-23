@@ -8,10 +8,13 @@ import { useTour } from "../../hooks/useTour";
 import { tourSteps } from "../../tour/tourSteps";
 import { logout } from "../../store/authSlice";
 import { authService } from "../../services/authService";
+import { useTheme } from "../../context/ThemeContext";
 
 export default function Navbar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const { currentTheme } = useTheme();
 
   const location = useLocation();
   const { user } = useSelector((state) => state.auth);
@@ -77,7 +80,12 @@ export default function Navbar() {
       <div className="navbar_logo" id="tour-logo">
         <NavLink to="/">
           <div className="logo_text">
-            <img src="/Logo_N.svg" alt="Logo" />
+            <img
+              src={
+                currentTheme === "dark" ? "/Logo_N.svg" : "/Logo_N_Light.svg"
+              }
+              alt="Logo"
+            />
           </div>
         </NavLink>
       </div>

@@ -4,7 +4,7 @@ export function CustomTooltip({ active, payload, label }) {
   return (
     <div
       style={{
-        background: "#111827",
+        background: "var(--primary)",
         border: "1px solid rgba(255,255,255,0.08)",
         borderRadius: 10,
         padding: "10px 14px",
@@ -14,7 +14,6 @@ export function CustomTooltip({ active, payload, label }) {
       <div
         style={{
           fontSize: 11,
-          color: "#64748b",
           marginBottom: 6,
           fontFamily: "JetBrains Mono, monospace",
         }}
@@ -45,7 +44,6 @@ export function CustomTooltip({ active, payload, label }) {
           <span
             style={{
               fontSize: 12,
-              color: "#94a3b8",
             }}
           >
             {p.name}:
@@ -55,7 +53,6 @@ export function CustomTooltip({ active, payload, label }) {
             style={{
               fontSize: 12,
               fontWeight: 600,
-              color: "#e8edf5",
               fontFamily: "JetBrains Mono, monospace",
             }}
           >

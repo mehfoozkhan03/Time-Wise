@@ -1,5 +1,6 @@
 .contactPage {
-  background: linear-gradient(90deg, #1f242d, #242b37);
+  /* background: linear-gradient(90deg, #1f242d, #242b37); */
+  background: var(--bg);
   min-height: 100vh;
 }
 
