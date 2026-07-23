@@ -282,7 +282,7 @@ const SignUpPage = () => {
             >
               {/* <h2>Login</h2> */}
 
-              <h2>{isAdminLogin ? 'ADMIN LOGIN PAGE' : 'USER LOGIN PAGE'}</h2>
+              <h2>{isAdminLogin ? 'ADMIN LOGIN PAGE' : 'Login'}</h2>
 
               <div className="input-box">
                 <input
@@ -290,8 +290,9 @@ const SignUpPage = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  placeholder="Email"
+                  placeholder=""
                 />
+                  <label>Email</label>
                 <p className="error">{errors.email}</p>
               </div>
 
@@ -301,8 +302,9 @@ const SignUpPage = () => {
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
-                  placeholder="Password"
+                  placeholder=""
                 />
+                 <label>Password</label>
                 <p className="error">{errors.password}</p>
                 <span
                   className="eye-icon"
@@ -356,8 +358,9 @@ const SignUpPage = () => {
                   name="firstName"
                   value={formData.firstName}
                   onChange={handleChange}
-                  placeholder="First Name"
+                  placeholder=""
                 />
+                <label>First Name</label>
                 <p className="error">{errors.firstName}</p>
               </div>
 
@@ -367,8 +370,9 @@ const SignUpPage = () => {
                   name="lastName"
                   value={formData.lastName}
                   onChange={handleChange}
-                  placeholder="Last Name"
+                  placeholder=""
                 />
+                <label>Last Name</label>
                 <p className="error">{errors.lastName}</p>
               </div>
 
@@ -378,8 +382,9 @@ const SignUpPage = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  placeholder="Email"
+                  placeholder=""
                 />
+                <label>Email</label>
                 <p className="error">{errors.email}</p>
               </div>
 
@@ -389,8 +394,9 @@ const SignUpPage = () => {
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
-                  placeholder="Password"
+                  placeholder=""
                 />
+                <label>Password</label>
                 <p className="error">{errors.password}</p>
                 <span
                   className="eye-icon"
@@ -406,8 +412,9 @@ const SignUpPage = () => {
                   name="confirmPassword"
                   value={formData.confirmPassword}
                   onChange={handleChange}
-                  placeholder="Confirm Password"
+                  placeholder=""
                 />
+                <label>Confirm Password</label>
                 <p className="error">{errors.confirmPassword}</p>
                 <span
                   className="eye-icon"
