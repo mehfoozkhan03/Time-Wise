@@ -1,42 +1,14 @@
 import mongoose from 'mongoose'
 
-const commentSchema = new mongoose.Schema(
-  {
-    createdBy: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      required: true,
-    },
-
-    text: {
-      type: String,
-      required: true,
-      trim: true,
-      maxlength: 500,
-    },
-
-    likes: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-      },
-    ],
-  },
-  {
-    timestamps: true,
-    _id: true,
-    versionKey: false,
-  },
-)
-
 const postSchema = new mongoose.Schema(
   {
-    // ================= Relations =================
+    // ================= Author =================
 
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
       required: true,
+      index: true,
     },
 
     // ================= Content =================
@@ -68,16 +40,32 @@ const postSchema = new mongoose.Schema(
 
     // ================= Engagement =================
 
-    likes: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-      },
-    ],
+    likesCount: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
 
-    comments: [commentSchema],
+    commentsCount: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
 
-    // ================= Featured Thought =================
+    // ================= Visibility =================
+
+    visibility: {
+      type: String,
+      enum: ['public', 'department'],
+      default: 'public',
+    },
+
+    allowComments: {
+      type: Boolean,
+      default: true,
+    },
+
+    // ================= Featured =================
 
     isFeatured: {
       type: Boolean,
@@ -95,7 +83,7 @@ const postSchema = new mongoose.Schema(
       default: null,
     },
 
-    // ================= Status =================
+    // ================= Edit History =================
 
     isEdited: {
       type: Boolean,
@@ -106,6 +94,14 @@ const postSchema = new mongoose.Schema(
       type: Date,
       default: null,
     },
+
+    editedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      default: null,
+    },
+
+    // ================= Soft Delete =================
 
     isDeleted: {
       type: Boolean,

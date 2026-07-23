@@ -7,7 +7,7 @@ dotenv.config()
 
 import { Connection } from './config/db.js'
 import { userRoutes } from './routes/User.routes.js'
-import { postRoutes } from './routes/Post.routes.js'
+import  postRoutes  from './routes/Post.routes.js'
 import { attendanceRouter } from './routes/Attendance.routes.js'
 import calendarRoutes from "./routes/Calendar.routes.js";
 import { contactRoute } from './routes/Contact.routes.js'
