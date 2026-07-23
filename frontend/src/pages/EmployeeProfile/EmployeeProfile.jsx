@@ -5,6 +5,8 @@ import { useSelector } from 'react-redux';
 import QuickStats from '../../components/employee/QuickStats/QuickStats';
 import PerformanceSummary from '../../components/employee/PerformanceSummary/PerformanceSummary';
 import RecentActivity from '../../components/employee/RecentActivity/RecentActivity';
+import { Achievements } from '../../components/employee/Achievements/Achievements';
+import { LeaveSummary } from '../../components/employee/LeaveSummary/LeaveSummary';
 
 export default function EmployeeProfile() {
   const { user } = useSelector((state) => state.auth);
@@ -95,6 +97,10 @@ export default function EmployeeProfile() {
         <PerformanceSummary />
 
         <RecentActivity />
+
+        <Achievements />
+
+        <LeaveSummary />
       </div>
     </main>
   );
