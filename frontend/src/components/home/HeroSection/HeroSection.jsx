@@ -18,7 +18,28 @@ export default function HeroSection() {
   const [charIndex, setCharIndex] = useState(0);
   const [languageIndex, setLanguageIndex] = useState(0); // ← was missing
 
-  const languages = ["en", "hi", "gu", "mr", "ta", "te", "kn", "ml", "bn"];
+  const languages = [
+    "en",
+    "hi",
+    "mr",
+    "gu",
+    "ta",
+    "te",
+    "kn",
+    "ml",
+    "bn",
+    "pa",
+    "ur",
+    "fr",
+    "ja",
+    "zh",
+    "it",
+    "ko",
+    "ru",
+    "vi",
+    "es",
+    "ar",
+  ];
 
   const greeting = () => {
     const hour = new Date().getHours(); // always use live time for greeting

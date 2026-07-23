@@ -1,6 +1,6 @@
 import { KPICard } from "./kpiCard";
 
-export function KPISection({ sparklineData }) {
+export function KPISection({ sparklineData, dashboardStats = {} }) {
   return (
     <div
       className="stagger"
@@ -14,36 +14,36 @@ export function KPISection({ sparklineData }) {
       <KPICard
         icon="📅"
         label="Attendance Rate"
-        value="96"
+        value={dashboardStats?.attendancePercentage ?? "Loading..."}
         unit="%"
         trend={2.1}
         sparkData={sparklineData.attendance}
         sparkColor="#10b981"
-        sub="22 of 23 working days"
+        sub={`${dashboardStats.attendancePercentage}% attendance`}
       />
 
       <KPICard
         icon="🔥"
         label="Current Streak"
-        value="18"
+        value={dashboardStats?.dayStreak ?? "Loading..."}
         unit="days"
         trend={4}
         trendSuffix=" days"
         sparkData={sparklineData.streak}
         sparkColor="#f59e0b"
-        sub="Personal best this year"
+        sub={`Best: ${dashboardStats.longestStreak} days`}
       />
 
       <KPICard
         icon="🕐"
         label="Total Working hrs"
-        value="169"
+        value={dashboardStats.monthlyHours}
         unit="h"
         trend={5.8}
         trendSuffix="h"
         sparkData={sparklineData.hours}
         sparkColor="#6366f1"
-        sub="Jul 2026"
+        sub="This Month"
       />
 
       <KPICard
@@ -73,12 +73,12 @@ export function KPISection({ sparklineData }) {
       <KPICard
         icon="⚡"
         label="Productivity Score"
-        value="94"
+        value={dashboardStats.productivity}
         unit="pts"
         trend={7}
         sparkData={sparklineData.productivity}
         sparkColor="#6366f1"
-        sub="Top 15% in team"
+        sub={`${dashboardStats.punctuality}% punctuality`}
       />
 
       <KPICard
@@ -95,12 +95,12 @@ export function KPISection({ sparklineData }) {
       <KPICard
         icon="🕗"
         label="Avg Check-in Time"
-        value="08:42"
+        value={dashboardStats.averageCheckIn}
         trend={-12}
         trendSuffix=" min"
         sparkData={sparklineData.checkin}
         sparkColor="#22d3ee"
-        sub="12 min earlier vs last mo."
+        sub={`Avg Break: ${dashboardStats.averageBreakDuration} min`}
       />
     </div>
   );
