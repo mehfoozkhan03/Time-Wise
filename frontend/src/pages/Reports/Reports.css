@@ -1,6 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=JetBrains+Mono:wght@400;500;600&display=swap");
-
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 @theme inline {
   --color-background: #080c14;
@@ -16,9 +14,9 @@
   --color-success: #10b981;
   --color-warning: #f59e0b;
   --color-danger: #ef4444;
-  --font-display: "Outfit", sans-serif;
-  --font-body: "DM Sans", sans-serif;
-  --font-mono: "JetBrains Mono", monospace;
+  --font-display: 'Outfit', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
   --radius-card: 14px;
 }
 
@@ -37,7 +35,7 @@ body {
   margin: 0;
   background-color: var(-bg);
   color: #e8edf5;
-  font-family: "DM Sans", sans-serif;
+  font-family: 'DM Sans', sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -56,11 +54,11 @@ body {
 }
 
 .font-display {
-  font-family: "Outfit", sans-serif;
+  font-family: 'Outfit', sans-serif;
 }
 
 .font-mono {
-  font-family: "JetBrains Mono", monospace;
+  font-family: 'JetBrains Mono', monospace;
 }
 
 .stagger,
@@ -71,7 +69,7 @@ body {
   user-select: none;
 }
 
-.reportsDiv{
+.reportsDiv {
   background: var(--bg);
 }
 
@@ -136,7 +134,6 @@ body {
 
 /* Pulse dot */
 @keyframes pulse-dot {
-
   0%,
   100% {
     opacity: 1;
@@ -171,39 +168,39 @@ body {
 }
 
 /* Stagger children */
-.stagger>* {
+.stagger > * {
   animation: fade-in-up 0.45s cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 
-.stagger>*:nth-child(1) {
+.stagger > *:nth-child(1) {
   animation-delay: 0.05s;
 }
 
-.stagger>*:nth-child(2) {
+.stagger > *:nth-child(2) {
   animation-delay: 0.1s;
 }
 
-.stagger>*:nth-child(3) {
+.stagger > *:nth-child(3) {
   animation-delay: 0.15s;
 }
 
-.stagger>*:nth-child(4) {
+.stagger > *:nth-child(4) {
   animation-delay: 0.2s;
 }
 
-.stagger>*:nth-child(5) {
+.stagger > *:nth-child(5) {
   animation-delay: 0.25s;
 }
 
-.stagger>*:nth-child(6) {
+.stagger > *:nth-child(6) {
   animation-delay: 0.3s;
 }
 
-.stagger>*:nth-child(7) {
+.stagger > *:nth-child(7) {
   animation-delay: 0.35s;
 }
 
-.stagger>*:nth-child(8) {
+.stagger > *:nth-child(8) {
   animation-delay: 0.4s;
 }
 
