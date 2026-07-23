@@ -67,6 +67,12 @@
   /* Sidebar */
 
   --sidebar_width: 270px;
+
+  --button: linear-gradient(135deg, #667eea, #764ba2);
+
+  --buttonhover: linear-gradient(135deg, #4f46e5, #7c3aed);
+
+  --heading: linear-gradient(135deg, #6574e3 0%, #4258be 50%, #584190 100%);
 }
 
 /* ==========================================================
@@ -97,6 +103,11 @@ html.dark {
   --warning: #ffd27f;
 
   --error: #f17c7c;
+
+  --button:linear-gradient(135deg, #667eea, #764ba2);
+
+  --buttonhover:linear-gradient(135deg, #4f46e5, #7c3aed);
+  --heading:linear-gradient(135deg, #6574e3 0%, #4258be 50%, #584190 100%);
 }
 
 /* ==========================================================
