@@ -4,7 +4,8 @@ const tourSlice = createSlice({
   name: "tour",
   initialState: {
     isActive: false,
-    hasSeenTour: false,
+    // ← reads from localStorage on first load
+    hasSeenTour: JSON.parse(localStorage.getItem("tw_tour_seen") ?? "false"),
     currentStep: 0,
   },
   reducers: {
