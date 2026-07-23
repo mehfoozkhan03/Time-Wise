@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
-@theme inline {
+/* @theme inline {
   --color-background: #080c14;
   --color-foreground: #e8edf5;
   --color-card: #0d1322;
@@ -19,20 +19,20 @@
   --font-mono: 'JetBrains Mono', monospace;
   --radius-card: 14px;
 }
-
+ */
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
 
-body {
+/* body {
   margin: 0;
   background-color: var(-bg);
   color: #e8edf5;
   font-family: 'DM Sans', sans-serif;
   -webkit-font-smoothing: antialiased;
-}
+} */
 
 .font-display {
   font-family: 'Outfit', sans-serif;
