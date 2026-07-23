@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=JetBrains+Mono:wght@400;500;600&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 @theme inline {
   --color-background: #080c14;
@@ -56,10 +56,10 @@ body {
   color: var(--text_primary) !important;
 }
 
-<<<<<<< HEAD
 .reportsDiv {
   background: var(--bg);
-=======
+}
+
 .reportsDiv button {
   background: var(--primary);
 }
@@ -67,7 +67,6 @@ body {
 .chartDiv button {
   background: var(--primary);
   color: var(--text_primary);
->>>>>>> c3c7811e81ba473e701eac161a2a412f1f2f8d32
 }
 
 /* Card glass effect */
