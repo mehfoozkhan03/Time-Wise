@@ -73,6 +73,21 @@
   --buttonhover: linear-gradient(135deg, #4f46e5, #7c3aed);
 
   --heading: linear-gradient(135deg, #6574e3 0%, #4258be 50%, #584190 100%);
+
+  /* Card */
+--card: #ffffff;
+--card-hover: #f8fafc;
+
+/* Input */
+--input-bg: #ffffff;
+--input-text: #2c2f3a;
+--label-color: #6e7a88;
+
+/* Overlay */
+--overlay: rgba(255,255,255,.15);
+
+/* Focus */
+--focus-shadow: rgba(41,163,224,.18);
 }
 
 /* ==========================================================
@@ -108,6 +123,21 @@ html.dark {
 
   --buttonhover: linear-gradient(135deg, #4f46e5, #7c3aed);
   --heading: linear-gradient(135deg, #6574e3 0%, #4258be 50%, #584190 100%);
+
+  /* Card */
+--card: #ffffff;
+--card-hover: #f8fafc;
+
+/* Input */
+--input-bg: #ffffff;
+--input-text: #2c2f3a;
+--label-color: #6e7a88;
+
+/* Overlay */
+--overlay: rgba(255,255,255,.15);
+
+/* Focus */
+--focus-shadow: rgba(41,163,224,.18);
 }
 
 /* ==========================================================
