@@ -1,6 +1,7 @@
 import "./MiniCalendar.css";
 
-import { memo, useMemo } from "react";
+import { memo, useMemo, useCallback } from "react";
+
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 import Card from "../../Common/CalendarCard/Card";
@@ -19,7 +20,24 @@ function MiniCalendar({
   previousMonth,
   nextMonth,
 }) {
-  const days = useMemo(() => generateCalendar(currentDate), [currentDate]);
+  /* =========================================
+       Generate Calendar
+    ========================================= */
+
+  const days = useMemo(() => {
+    return generateCalendar(currentDate);
+  }, [currentDate]);
+
+  /* =========================================
+       Select Day
+    ========================================= */
+
+  const handleSelectDay = useCallback(
+    (date) => {
+      selectDate(date);
+    },
+    [selectDate],
+  );
 
   return (
     <Card className="miniCalendarCard">
@@ -48,23 +66,28 @@ function MiniCalendar({
       </div>
 
       <div className="miniGrid">
-        {days.map((day) => (
-          <button
-            key={day.date.toISOString()}
-            type="button"
-            onClick={() => selectDate(day.date)}
-            className={[
-              "miniDay",
-              !day.currentMonth && "otherMonth",
-              day.isToday && "today",
-              isSameDate(day.date, selectedDate) && "selected",
-            ]
-              .filter(Boolean)
-              .join(" ")}
-          >
-            {day.date.getDate()}
-          </button>
-        ))}
+        {days.map((day) => {
+          const isSelected = isSameDate(day.date, selectedDate);
+
+          return (
+            <button
+              key={day.date.toISOString()}
+              type="button"
+              onClick={() => handleSelectDay(day.date)}
+              aria-pressed={isSelected}
+              className={[
+                "miniDay",
+                !day.currentMonth && "otherMonth",
+                day.isToday && "today",
+                isSelected && "selected",
+              ]
+                .filter(Boolean)
+                .join(" ")}
+            >
+              {day.date.getDate()}
+            </button>
+          );
+        })}
       </div>
     </Card>
   );
