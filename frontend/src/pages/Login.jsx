@@ -10,6 +10,8 @@ import { useNavigate } from 'react-router-dom';
 import { Feedback } from './FeedBack';
 import { useLocation } from 'react-router-dom';
 
+import { adminAuthService } from '../services/adminAuthService';
+
 const initialFormData = {
   firstName: '',
   lastName: '',
@@ -42,8 +44,9 @@ const SignUpPage = () => {
   //admin login
   const location = useLocation();
   const isAdminLogin = location.pathname === '/admin/login';
-  console.log('pathname:', location.pathname);
-  console.log('isAdminLogin:', isAdminLogin);
+  // console.log('pathname:', location.pathname);
+  // console.log('isAdminLogin:', isAdminLogin);
+
   // ── Modal state ──────────────────────────────────────────────────────────────
   const [modal, setModal] = useState({
     open: false,
@@ -215,7 +218,7 @@ const SignUpPage = () => {
 
         const result = isAdminLogin
           ? await dispatch(
-              adminLogin({
+              loginAdmin({
                 email: formData.email,
                 password: formData.password,
               }),
@@ -228,7 +231,7 @@ const SignUpPage = () => {
             );
         //
         const isSuccess = isAdminLogin
-          ? adminLogin.fulfilled.match(result)
+          ? loginAdmin.fulfilled.match(result)
           : loginUser.fulfilled.match(result);
 
         if (isSuccess) {
@@ -292,7 +295,7 @@ const SignUpPage = () => {
                   onChange={handleChange}
                   placeholder=""
                 />
-                  <label>Email</label>
+                <label>Email</label>
                 <p className="error">{errors.email}</p>
               </div>
 
@@ -304,7 +307,7 @@ const SignUpPage = () => {
                   onChange={handleChange}
                   placeholder=""
                 />
-                 <label>Password</label>
+                <label>Password</label>
                 <p className="error">{errors.password}</p>
                 <span
                   className="eye-icon"

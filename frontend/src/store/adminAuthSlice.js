@@ -1,9 +1,9 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { adminAuthService } from "../services/adminAuthService";
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { adminAuthService } from '../services/adminAuthService';
 
 // ================= Fetch Logged In Admin =================
 
-export const fetchCurrentAdmin = createAsyncThunk(
+/* export const fetchCurrentAdmin = createAsyncThunk(
   "adminAuth/fetchCurrentAdmin",
   async (_, thunkAPI) => {
     try {
@@ -16,43 +16,27 @@ export const fetchCurrentAdmin = createAsyncThunk(
     }
   }
 );
-
+ */
 // ================= Login =================
 
 export const loginAdmin = createAsyncThunk(
-  "adminAuth/loginAdmin",
+  'adminAuth/loginAdmin',
   async (credentials, thunkAPI) => {
     try {
       const { data } = await adminAuthService.login(credentials);
       return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(
-        error.response?.data?.message || "Admin Login Failed"
+        error.response?.data?.message || 'Admin Login Failed',
       );
     }
-  }
-);
-
-// ================= Register =================
-
-export const registerAdmin = createAsyncThunk(
-  "adminAuth/registerAdmin",
-  async (adminData, thunkAPI) => {
-    try {
-      const { data } = await adminAuthService.register(adminData);
-      return data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(
-        error.response?.data?.message || "Admin Registration Failed"
-      );
-    }
-  }
+  },
 );
 
 const initialState = {
   isAuthenticated: document.cookie
-    .split("; ")
-    .some((cookie) => cookie.startsWith("adminToken=")),
+    .split('; ')
+    .some((cookie) => cookie.startsWith('adminToken=')),
 
   admin: null,
 
@@ -60,11 +44,11 @@ const initialState = {
 
   isError: false,
 
-  errorMessage: "",
+  errorMessage: '',
 };
 
 const adminAuthSlice = createSlice({
-  name: "adminAuth",
+  name: 'adminAuth',
 
   initialState,
 
@@ -74,7 +58,7 @@ const adminAuthSlice = createSlice({
       state.isAuthenticated = false;
       state.isLoading = false;
       state.isError = false;
-      state.errorMessage = "";
+      state.errorMessage = '';
     },
   },
 
@@ -86,7 +70,7 @@ const adminAuthSlice = createSlice({
       .addCase(loginAdmin.pending, (state) => {
         state.isLoading = true;
         state.isError = false;
-        state.errorMessage = "";
+        state.errorMessage = '';
       })
 
       .addCase(loginAdmin.fulfilled, (state, action) => {
@@ -101,11 +85,11 @@ const adminAuthSlice = createSlice({
         state.admin = null;
         state.isError = true;
         state.errorMessage = action.payload;
-      })
+      });
 
-      // ================= Current Admin =================
+    // ================= Current Admin =================
 
-      .addCase(fetchCurrentAdmin.pending, (state) => {
+    /*     .addCase(fetchCurrentAdmin.pending, (state) => {
         state.isLoading = true;
       })
 
@@ -122,22 +106,7 @@ const adminAuthSlice = createSlice({
         state.isError = true;
         state.errorMessage = action.payload;
       })
-
-      // ================= Register =================
-
-      .addCase(registerAdmin.pending, (state) => {
-        state.isLoading = true;
-      })
-
-      .addCase(registerAdmin.fulfilled, (state) => {
-        state.isLoading = false;
-      })
-
-      .addCase(registerAdmin.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.errorMessage = action.payload;
-      });
+ */
   },
 });
 

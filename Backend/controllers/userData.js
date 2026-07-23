@@ -163,6 +163,8 @@ export const login = async (req, res) => {
 // ================= Admin Login =================
 
 export const admin_login = async (req, res) => {
+  // Admin@123
+
   try {
     if (!validateLogin(req.body)) {
       return res.status(400).json({
@@ -202,8 +204,8 @@ export const admin_login = async (req, res) => {
       },
     );
 
-    res.cookie('token', token, {
-      httpOnly: true,
+    res.cookie('adminToken', token, {
+      httpOnly: false,
       secure: false,
       sameSite: 'lax',
       maxAge: 24 * 60 * 60 * 1000,
@@ -309,7 +311,7 @@ export const updateTheme = async (req, res) => {
 export const logout = async (req, res) => {
   try {
     res.clearCookie('token', {
-      httpOnly: false, 
+      httpOnly: false,
       secure: false,
       sameSite: 'Lax',
     });
