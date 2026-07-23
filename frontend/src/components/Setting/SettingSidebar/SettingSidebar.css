@@ -71,4 +71,16 @@
   width: 40px;
   border-radius: 50%;
   border: 1px solid var(--border);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--primary);
+}
+.user_details{
+  display: flex;
+  flex-direction: column;
+}
+.user_details>p{
+  font-size: 12px;
+  color: var(--text_primary);
 }

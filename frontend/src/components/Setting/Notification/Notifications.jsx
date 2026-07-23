@@ -1,7 +1,10 @@
 import "./Notification.css"
 import { SwitchBtn } from "../../SwichBtn/SwitchBtn";
+import { useSelector } from "react-redux";
 
 export const Notification = () => {
+
+    const {user} = useSelector((state) => state.auth)
 
     return (
         <>
@@ -21,7 +24,7 @@ export const Notification = () => {
                         <div className="email-notification">
                             <div>
                                 <h3>Email notifications</h3>
-                                <p>Sent to silentkiller@gmail.com</p>
+                                <p>Sent to {user?.email ?? "No Email"}</p>
                             </div>
                             <div>
                                 <SwitchBtn />
