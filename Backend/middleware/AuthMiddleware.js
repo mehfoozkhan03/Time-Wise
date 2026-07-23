@@ -11,7 +11,7 @@ export const auth = (req, res, next) => {
       });
     }
 
-    jwt.verify(token, proTcess.env.PrivateKey, (err, decoded) => {
+    jwt.verify(token, process.env.PrivateKey, (err, decoded) => {
       if (err) {
         return res.status(401).json({
           success: false,
