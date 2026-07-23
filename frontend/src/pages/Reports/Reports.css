@@ -61,7 +61,12 @@
 }
 
 .reportsDiv button {
-  background: var(--primary);
+  background: var(--text_primary);
+  color: var(--bg);
+}
+
+.reportsDiv button:hover{
+  background: #29a3e0;
 }
 
 .chartDiv button {
