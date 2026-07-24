@@ -11,7 +11,6 @@ import {
 } from "../../store/reportsSlice";
 import { AttendanceLog } from "../../components/Reports/attendanceLog";
 import { goals } from "../../components/Reports/goalsData";
-import { insights } from "../../components/Reports/insightsData";
 import { chartTabs, ranges } from "../../components/Reports/reportsConstants";
 import { WorkSummary } from "../../components/Reports/workSummary";
 import { PerformanceInsights } from "../../components/Reports/performanceInsights";
@@ -107,6 +106,59 @@ export function Reports() {
       });
   }, [attendanceLog, searchLog, statusFilter]);
 
+  const dynamicInsights = [
+    {
+      icon: dashboardStats.attendancePercentage >= 90 ? "📈" : "⚠️",
+      type: dashboardStats.attendancePercentage >= 90 ? "positive" : "neutral",
+      text:
+        dashboardStats.attendancePercentage >= 90
+          ? `Excellent attendance rate of ${dashboardStats.attendancePercentage}% this month.`
+          : `Attendance rate is ${dashboardStats.attendancePercentage}%. Try to improve consistency.`,
+    },
+
+    {
+      icon: dashboardStats.punctuality >= 90 ? "⏰" : "⚠️",
+      type: dashboardStats.punctuality >= 90 ? "positive" : "neutral",
+      text:
+        dashboardStats.punctuality >= 90
+          ? `Outstanding punctuality at ${dashboardStats.punctuality}%.`
+          : `Punctuality is ${dashboardStats.punctuality}%. Aim for more on-time check-ins.`,
+    },
+
+    {
+      icon: dashboardStats.productivity >= 80 ? "🎯" : "📊",
+      type: dashboardStats.productivity >= 80 ? "positive" : "neutral",
+      text:
+        dashboardStats.productivity >= 80
+          ? `Excellent productivity score of ${dashboardStats.productivity}%.`
+          : `Current productivity is ${dashboardStats.productivity}%. Focus on improving task completion.`,
+    },
+
+    {
+      icon: dashboardStats.weeklyGoalScore >= 100 ? "🏆" : "💼",
+      type: dashboardStats.weeklyGoalScore >= 100 ? "positive" : "neutral",
+      text:
+        dashboardStats.weeklyGoalScore >= 100
+          ? "Congratulations! You've achieved your weekly goal."
+          : `${dashboardStats.weeklyHoursRemaining} hours remain to complete this week's goal.`,
+    },
+
+    {
+      icon: dashboardStats.breakScore >= 90 ? "☕" : "⚠️",
+      type: dashboardStats.breakScore >= 90 ? "positive" : "neutral",
+      text:
+        dashboardStats.breakScore >= 90
+          ? `Excellent break management with a score of ${dashboardStats.breakScore}%.`
+          : `Break score is ${dashboardStats.breakScore}%. Try to manage breaks more effectively.`,
+    },
+
+    {
+      icon: "🔥",
+      type: "positive",
+      text: `You're currently on a ${dashboardStats.dayStreak}-day attendance streak. Your best streak is ${dashboardStats.longestStreak} days.`,
+    },
+  ];
+
   return (
     <div
       className="reportsDiv"
@@ -153,13 +205,14 @@ export function Reports() {
         >
           <WorkSummary dashboardStats={dashboardStats} />
 
-          <PerformanceInsights insights={insights} />
+          <PerformanceInsights insights={dynamicInsights} />
         </div>
 
         <ChartsSection
           activeTab={activeTab}
           chartTabs={chartTabs}
           setTab={(tab) => dispatch(setActiveTab(tab))}
+          attendanceLog={attendanceLog}
         />
 
         {/* ── Goals & Badges ── */}

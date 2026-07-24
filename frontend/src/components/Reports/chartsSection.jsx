@@ -21,14 +21,26 @@ import { SectionLabel } from "./sectionLabel";
 import { CustomTooltip } from "./CustomTooltip";
 import { AttendanceHeatmap } from "./AttendanceHeatmap";
 import {
-  dailyHoursData,
   weeklyData,
   attendanceDistribution,
   productivityData,
   calendarData,
 } from "./chartData";
 
-export function ChartsSection({ activeTab, chartTabs, setTab }) {
+export function ChartsSection({ activeTab, chartTabs, setTab, attendanceLog }) {
+  const dynamicDailyHoursData = (attendanceLog ?? [])
+    .filter((item) => item.status !== "Holiday")
+    .map((item) => ({
+      day: new Date(item.date).toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+      }),
+      hours: Number((item.totalWorkingSeconds / 3600).toFixed(1)),
+      target: 8,
+    }));
+
+  // console.log(dynamicDailyHoursData);
+
   return (
     <div
       className="glass-card"
@@ -79,7 +91,7 @@ export function ChartsSection({ activeTab, chartTabs, setTab }) {
 
             <ResponsiveContainer width="100%" height={280}>
               <AreaChart
-                data={dailyHoursData}
+                data={dynamicDailyHoursData}
                 margin={{ top: 5, right: 20, left: -10, bottom: 0 }}
               >
                 <defs>
