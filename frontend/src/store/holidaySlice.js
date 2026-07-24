@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-
 import { holidayService } from "../services/holidayService";
 
 /* =========================================
@@ -34,7 +33,7 @@ const initialState = {
 };
 
 /* =========================================
-   HOLIDAY SLICE
+   SLICE
 ========================================= */
 
 const holidaySlice = createSlice({
@@ -47,32 +46,22 @@ const holidaySlice = createSlice({
   extraReducers: (builder) => {
     builder
 
-      /* =========================================
-         Pending
-      ========================================= */
-
       .addCase(fetchHolidays.pending, (state) => {
         state.status = "loading";
         state.error = null;
       })
 
-      /* =========================================
-         Fulfilled
-      ========================================= */
-
       .addCase(fetchHolidays.fulfilled, (state, action) => {
-          console.log("Holiday API Payload:", action.payload);
+        console.log("✅ Holiday API Payload:", action.payload);
 
-          state.loading = false;
-          state.error = null;
-          state.holidays = action.payload;
+        state.status = "succeeded";
+        state.error = null;
+        state.holidays = action.payload;
       })
 
-      /* =========================================
-         Rejected
-      ========================================= */
-
       .addCase(fetchHolidays.rejected, (state, action) => {
+        console.error("❌ Holiday Error:", action.payload);
+
         state.status = "failed";
         state.error = action.payload;
       });

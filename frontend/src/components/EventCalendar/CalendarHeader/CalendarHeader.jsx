@@ -1,6 +1,6 @@
 import "./CalendarHeader.css";
 
-import { memo } from "react";
+import { memo, useMemo } from "react";
 
 import { FaChevronLeft, FaChevronRight, FaCalendarDay } from "react-icons/fa";
 
@@ -11,16 +11,20 @@ function CalendarHeader({ currentDate, previousMonth, nextMonth, goToToday }) {
      Safety Check
   ========================================= */
 
-  if (!currentDate) {
-    return null;
-  }
+  if (!currentDate) return null;
+
+  /* =========================================
+     Month Title
+  ========================================= */
+
+  const monthTitle = useMemo(() => {
+    return `${getMonthName(currentDate)} ${currentDate.getFullYear()}`;
+  }, [currentDate]);
 
   return (
     <header className="calendarHeader">
       <div className="headerTitle">
-        <h2>
-          {getMonthName(currentDate)} {currentDate.getFullYear()}
-        </h2>
+        <h2>{monthTitle}</h2>
       </div>
 
       <div className="headerActions">
@@ -42,7 +46,6 @@ function CalendarHeader({ currentDate, previousMonth, nextMonth, goToToday }) {
           title="Go to Today"
         >
           <FaCalendarDay />
-
           <span>Today</span>
         </button>
 
