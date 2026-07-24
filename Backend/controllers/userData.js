@@ -273,13 +273,12 @@ export const updateTheme = async (req, res) => {
         message: 'Invalid theme',
       });
     }
-    console.log(req.user);
-    // Update user
+
     const updatedUser = await userModel.findByIdAndUpdate(
       req.user.userID,
       { theme },
       {
-        new: true,
+        returnDocument: 'after', // Replaces new: true
         runValidators: true,
       },
     );
@@ -291,15 +290,15 @@ export const updateTheme = async (req, res) => {
       });
     }
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: 'Theme updated successfully.',
       theme: updatedUser.theme,
     });
   } catch (error) {
-    console.error(error);
+    console.error('Update Theme Error:', error);
 
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: 'Internal Server Error',
     });
