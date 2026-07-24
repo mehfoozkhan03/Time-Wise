@@ -24,7 +24,28 @@ export default function HeroSection() {
 
   const [charIndex, setCharIndex] = useState(0);
 
-  const languages = ["en", "hi", "mr", "gr", "ta", "te", "kn", "ml", "bn"];
+  const languages = [
+    "en",
+    "hi",
+    "mr",
+    "gu",
+    "ta",
+    "te",
+    "kn",
+    "ml",
+    "bn",
+    "pa",
+    "ur",
+    "ar",
+    "es",
+    "cz",
+    "ja",
+    "fr",
+    "vi",
+    "ko",
+    "it",
+    "ru",
+  ];
 
   const greeting = () => {
     const hour = time.getHours();
@@ -83,12 +104,12 @@ export default function HeroSection() {
   }, [charIndex, isDeleting, languageIndex, translations]);
 
   const translateGreeting = async () => {
-    const text = currentGreeting;
+    const text = `${currentGreeting},`;
 
     try {
       const translated = await Promise.all(
         languages.map(async (lang) => {
-          if (lang === "en") return text;
+          if (lang === "en") return `${text}`;
 
           const response = await fetch(
             `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${lang}&dt=t&q=${encodeURIComponent(
@@ -125,7 +146,7 @@ export default function HeroSection() {
   const attendance = useCountUp(stats.attendancePercentage);
   const weeklyHours = useCountUp(stats.weeklyHours);
   const productivity = useCountUp(stats.productivity);
-const dayStreak = useCountUp(stats.dayStreak);
+  const dayStreak = useCountUp(stats.dayStreak);
   useEffect(() => {
     dispatch(getDashboardStats());
   }, [dispatch]);
@@ -159,7 +180,8 @@ const dayStreak = useCountUp(stats.dayStreak);
       <div className="hero_left">
         <div id="tour-hero-greeting">
           <h1>
-            {displayText},<span className="typing-cursor">|</span>
+            {displayText}
+            <span className="typing-cursor">|</span>
           </h1>
           <h1 className="hero_name">
             {capitalize(user?.firstName) || "Employee"}.

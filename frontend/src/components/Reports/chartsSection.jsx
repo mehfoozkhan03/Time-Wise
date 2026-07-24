@@ -19,27 +19,206 @@ import {
 
 import { SectionLabel } from "./sectionLabel";
 import { CustomTooltip } from "./CustomTooltip";
-import { AttendanceHeatmap } from "./AttendanceHeatmap";
-import {
-  weeklyData,
-  attendanceDistribution,
-  productivityData,
-  calendarData,
-} from "./chartData";
+import { AttendanceHeatmap } from "./attendanceHeatmap";
 
-export function ChartsSection({ activeTab, chartTabs, setTab, attendanceLog }) {
-  const dynamicDailyHoursData = (attendanceLog ?? [])
-    .filter((item) => item.status !== "Holiday")
-    .map((item) => ({
-      day: new Date(item.date).toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-      }),
-      hours: Number((item.totalWorkingSeconds / 3600).toFixed(1)),
-      target: 8,
-    }));
+export function ChartsSection({
+  activeTab,
+  chartTabs,
+  setTab,
+  attendanceLog,
+  dashboardStats,
+}) {
+  // console.log("Attendance Log:", attendanceLog);
+
+  const filtered = (attendanceLog ?? []).filter(
+    (item) => item.status !== "Holiday",
+  );
+
+  // console.log("Filtered:", filtered);
+
+  const dynamicDailyHoursData = filtered.map((item) => ({
+    day: new Date(item.date).toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+    }),
+    hours: Number((item.totalWorkingSeconds / 3600).toFixed(1)),
+    target: 8,
+  }));
+
+  // console.log("Chart Data:", dynamicDailyHoursData);
 
   // console.log(dynamicDailyHoursData);
+
+  const weeklyMap = {};
+
+  (attendanceLog ?? []).forEach((item) => {
+    const date = new Date(item.date);
+
+    const month = date.toLocaleString("en-US", {
+      month: "short",
+    });
+
+    const weekNumber = Math.ceil(date.getDate() / 7);
+    const weekLabel = `${month} W${weekNumber}`;
+
+    if (!weeklyMap[weekLabel]) {
+      weeklyMap[weekLabel] = {
+        week: weekLabel,
+        actual: 0,
+        target: 40,
+      };
+    }
+
+    weeklyMap[weekLabel].actual += item.totalWorkingSeconds / 3600;
+  });
+
+  const dynamicWeeklyData = Object.values(weeklyMap).map((week) => ({
+    ...week,
+    actual: Number(week.actual.toFixed(1)),
+  }));
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const records = attendanceLog ?? [];
+
+  // Find the employee's first attendance day
+  const firstAttendanceDate =
+    records.length > 0
+      ? new Date(
+          Math.min(...records.map((item) => new Date(item.date).getTime())),
+        )
+      : null;
+
+  if (firstAttendanceDate) {
+    firstAttendanceDate.setHours(0, 0, 0, 0);
+  }
+
+  const currentDate = new Date();
+
+  const currentYear = currentDate.getFullYear();
+  const currentMonth = currentDate.getMonth(); // 0 = Jan
+
+  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+  const attendanceMap = new Map();
+
+  records.forEach((item) => {
+    const date = new Date(item.date);
+
+    const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+
+    attendanceMap.set(key, item); // YYYY-MM-DD
+  });
+
+  const statusCount = {
+    present: 0,
+    late: 0,
+    absent: 0,
+    leave: 0,
+    holiday: 0,
+    "half day": 0,
+  };
+
+  (records ?? []).forEach((item) => {
+    const status = item.status.toLowerCase();
+
+    if (statusCount.hasOwnProperty(status)) {
+      statusCount[status]++;
+    }
+  });
+
+  const dynamicAttendanceDistribution = [
+    {
+      name: "Present",
+      value: statusCount.present,
+      color: "#10b981",
+    },
+    {
+      name: "Late",
+      value: statusCount.late,
+      color: "#f59e0b",
+    },
+    {
+      name: "Absent",
+      value: statusCount.absent,
+      color: "#ef4444",
+    },
+    {
+      name: "Leave",
+      value: statusCount.leave,
+      color: "#3b82f6",
+    },
+    {
+      name: "Holiday",
+      value: statusCount.holiday,
+      color: "#8b5cf6",
+    },
+    {
+      name: "Half Day",
+      value: statusCount["half day"],
+      color: "#06b6d4",
+    },
+  ].filter((item) => item.value > 0);
+
+  const dynamicCalendarData = Array.from(
+    { length: daysInMonth },
+    (_, index) => {
+      const day = index + 1;
+
+      const currentDate = new Date(currentYear, currentMonth, day);
+      currentDate.setHours(0, 0, 0, 0);
+
+      const isWeekend =
+        currentDate.getDay() === 0 || currentDate.getDay() === 6;
+
+      const dateKey = `${currentYear}-${String(currentMonth + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+
+      const attendance = attendanceMap.get(dateKey);
+
+      // console.log({
+      //   dateKey,
+      //   attendance: attendanceMap.get(dateKey),
+      // });
+
+      // Weekend always stays weekend
+      if (isWeekend) {
+        return {
+          day,
+          status: "weekend",
+        };
+      }
+
+      if (attendance) {
+        return {
+          day,
+          status: attendance.status.toLowerCase(),
+        };
+      }
+
+      // Before employee joined
+      if (firstAttendanceDate && currentDate < firstAttendanceDate) {
+        return {
+          day,
+          status: "inactive",
+        };
+      }
+
+      // Future weekdays
+      if (currentDate > today) {
+        return {
+          day,
+          status: "inactive",
+        };
+      }
+
+      // Missing weekday between joining and today
+      return {
+        day,
+        status: "absent",
+      };
+    },
+  );
 
   return (
     <div
@@ -118,7 +297,6 @@ export function ChartsSection({ activeTab, chartTabs, setTab, attendanceLog }) {
                 />
 
                 <YAxis
-                  domain={[6, 11]}
                   tick={{
                     fill: "#475569",
                     fontSize: 11,
@@ -159,7 +337,7 @@ export function ChartsSection({ activeTab, chartTabs, setTab, attendanceLog }) {
 
             <ResponsiveContainer width="100%" height={280}>
               <BarChart
-                data={weeklyData}
+                data={dynamicWeeklyData}
                 margin={{ top: 5, right: 20, left: -10, bottom: 0 }}
                 barGap={4}
               >
@@ -214,7 +392,11 @@ export function ChartsSection({ activeTab, chartTabs, setTab, attendanceLog }) {
           <div>
             <SectionLabel>Attendance Calendar — July 2026</SectionLabel>
 
-            <AttendanceHeatmap calendarData={calendarData} />
+            <AttendanceHeatmap
+              calendarData={dynamicCalendarData}
+              year={currentYear}
+              month={currentMonth}
+            />
           </div>
         )}
 
@@ -234,7 +416,7 @@ export function ChartsSection({ activeTab, chartTabs, setTab, attendanceLog }) {
               <ResponsiveContainer width={240} height={240}>
                 <PieChart>
                   <Pie
-                    data={attendanceDistribution}
+                    data={dynamicAttendanceDistribution}
                     cx="50%"
                     cy="50%"
                     innerRadius={68}
@@ -242,7 +424,7 @@ export function ChartsSection({ activeTab, chartTabs, setTab, attendanceLog }) {
                     paddingAngle={3}
                     dataKey="value"
                   >
-                    {attendanceDistribution.map((entry, i) => (
+                    {dynamicAttendanceDistribution.map((entry, i) => (
                       <Cell key={i} fill={entry.color} stroke="transparent" />
                     ))}
                   </Pie>
@@ -266,7 +448,7 @@ export function ChartsSection({ activeTab, chartTabs, setTab, attendanceLog }) {
                   minWidth: 200,
                 }}
               >
-                {attendanceDistribution.map((item) => (
+                {dynamicAttendanceDistribution.map((item) => (
                   <div
                     key={item.name}
                     style={{ display: "flex", alignItems: "center", gap: 12 }}
@@ -311,70 +493,89 @@ export function ChartsSection({ activeTab, chartTabs, setTab, attendanceLog }) {
         {/* ---------------- PRODUCTIVITY ---------------- */}
         {activeTab === "productivity" && (
           <div>
-            <SectionLabel>Productivity Trend vs Team Average</SectionLabel>
+            <SectionLabel>Productivity Score</SectionLabel>
 
-            <ResponsiveContainer width="100%" height={280}>
-              <LineChart
-                data={productivityData}
-                margin={{ top: 5, right: 20, left: -10, bottom: 0 }}
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                padding: "40px 0",
+              }}
+            >
+              <div
+                style={{
+                  position: "relative",
+                  width: 220,
+                  height: 220,
+                }}
               >
-                <defs>
-                  <linearGradient id="prodGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#6366f1" stopOpacity="0.2" />
-                    <stop offset="100%" stopColor="#6366f1" stopOpacity="0" />
-                  </linearGradient>
-                </defs>
+                <svg width="220" height="220">
+                  {/* Background Circle */}
+                  <circle
+                    cx="110"
+                    cy="110"
+                    r="90"
+                    fill="none"
+                    stroke="rgba(255,255,255,0.08)"
+                    strokeWidth="14"
+                  />
 
-                <CartesianGrid
-                  strokeDasharray="3 3"
-                  stroke="rgba(255,255,255,0.04)"
-                />
+                  {/* Progress Circle */}
+                  <circle
+                    cx="110"
+                    cy="110"
+                    r="90"
+                    fill="none"
+                    stroke="#6366f1"
+                    strokeWidth="14"
+                    strokeLinecap="round"
+                    strokeDasharray={2 * Math.PI * 90}
+                    strokeDashoffset={
+                      (2 *
+                        Math.PI *
+                        90 *
+                        (100 - dashboardStats?.productivity ?? 0)) /
+                      100
+                    }
+                    transform="rotate(-90 110 110)"
+                    style={{
+                      transition: "stroke-dashoffset .6s ease",
+                    }}
+                  />
+                </svg>
 
-                <XAxis
-                  dataKey="week"
-                  tick={{
-                    fontSize: 11,
-                    fontFamily: "JetBrains Mono",
+                <div
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
                   }}
-                  axisLine={false}
-                  tickLine={false}
-                />
+                >
+                  <div
+                    style={{
+                      fontSize: 42,
+                      fontWeight: 700,
+                    }}
+                  >
+                    {dashboardStats?.productivity ?? 0}%
+                  </div>
 
-                <YAxis
-                  domain={[70, 100]}
-                  tick={{
-                    fontSize: 11,
-                    fontFamily: "JetBrains Mono",
-                  }}
-                  axisLine={false}
-                  tickLine={false}
-                />
-
-                <Tooltip content={<CustomTooltip />} />
-
-                <Legend wrapperStyle={{ fontSize: 12 }} />
-
-                <Line
-                  type="monotone"
-                  dataKey="score"
-                  name="Your Score"
-                  stroke="#6366f1"
-                  strokeWidth={2.5}
-                  dot={{ fill: "#6366f1", r: 4, strokeWidth: 0 }}
-                  activeDot={{ r: 6, fill: "#818cf8" }}
-                />
-
-                <Line
-                  type="monotone"
-                  dataKey="avg"
-                  name="Team Avg"
-                  stroke="#334155"
-                  strokeWidth={1.5}
-                  strokeDasharray="4 4"
-                  dot={false}
-                />
-              </LineChart>
-            </ResponsiveContainer>
+                  <div
+                    style={{
+                      marginTop: 8,
+                      fontSize: 14,
+                      color: "#64748b",
+                    }}
+                  >
+                    Productivity
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         )}
       </div>

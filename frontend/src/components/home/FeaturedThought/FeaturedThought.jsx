@@ -1,8 +1,8 @@
-import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-import Card from '../../Card/Card';
-import './FeaturedThought.css';
+import Card from "../../Card/Card";
+import "./FeaturedThought.css";
 
 import {
   FaHeart,
@@ -10,7 +10,7 @@ import {
   FaBookmark,
   FaArrowRight,
   FaStar,
-} from 'react-icons/fa';
+} from "react-icons/fa";
 
 export default function FeaturedThought() {
   const navigate = useNavigate();
@@ -43,7 +43,7 @@ export default function FeaturedThought() {
 
   const author = featured.createdBy;
 
-  const initials = `${author.firstName?.[0] ?? ''}${author.lastName?.[0] ?? ''}`;
+  const initials = `${author.firstName?.[0] ?? ""}${author.lastName?.[0] ?? ""}`;
 
   return (
     <section className="featured_thought_section" id="tour-thought-card">
@@ -90,7 +90,7 @@ export default function FeaturedThought() {
 
         <button
           className="community_button"
-          onClick={() => navigate('/community')}
+          onClick={() => navigate("/community")}
         >
           <span>View Community</span>
 

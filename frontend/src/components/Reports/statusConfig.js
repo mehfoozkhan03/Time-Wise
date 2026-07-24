@@ -29,10 +29,22 @@ export const statusConfig = {
     bg: "#22d3ee",
     text: "#000",
   },
+  inactive: {
+    label: "Weekend",
+    dot: "#D3D3D3",
+    bg: "#D3D3D3",
+    text: "#000",
+  },
   weekend: {
     label: "Weekend",
     dot: "#D3D3D3",
     bg: "#D3D3D3",
+    text: "#000",
+  },
+  "half day": {
+    label: "Half Day",
+    dot: "#8b5cf6",
+    bg: "#8b5cf6",
     text: "#000",
   },
 };
