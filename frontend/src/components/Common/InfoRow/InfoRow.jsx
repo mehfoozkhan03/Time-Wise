@@ -1,23 +1,23 @@
-import './InfoRow.css';
+import "./InfoRow.css";
 
-export default function InfoRow({
-  icon: Icon,
+import { memo } from "react";
 
-  label,
-
-  value,
-}) {
+function InfoRow({ icon: Icon, label, value }) {
   return (
     <div className="infoRow">
-      <div className="infoIcon">
-        <Icon />
-      </div>
+      {Icon && (
+        <div className="infoIcon" aria-hidden="true">
+          <Icon />
+        </div>
+      )}
 
       <div className="infoContent">
         <span className="infoLabel">{label}</span>
 
-        <p className="infoValue">{value || '--'}</p>
+        <p className="infoValue">{value || "--"}</p>
       </div>
     </div>
   );
 }
+
+export default memo(InfoRow);

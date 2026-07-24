@@ -1,6 +1,6 @@
 import "./CalendarGrid.css";
 
-import { useMemo } from "react";
+import { memo, useMemo } from "react";
 
 import CalendarDay from "../CalendarDay/CalendarDay";
 
@@ -10,7 +10,7 @@ import {
   isSameDate,
 } from "../../../utils/calendarUtils";
 
-export default function CalendarGrid({
+function CalendarGrid({
   currentDate,
   selectedDate,
   selectDate,
@@ -26,7 +26,13 @@ export default function CalendarGrid({
   }, [currentDate]);
 
   /* =========================================
-       Group Events by Date
+       Week Header
+    ========================================= */
+
+  const weekDays = useMemo(() => WEEK_DAYS, []);
+
+  /* =========================================
+       Group Events By Date
     ========================================= */
 
   const eventsByDate = useMemo(() => {
@@ -35,7 +41,21 @@ export default function CalendarGrid({
     events.forEach((event) => {
       if (!event?.date) return;
 
-      const dateKey = new Date(event.date).toISOString().split("T")[0];
+      let dateKey;
+
+      if (typeof event.date === "string") {
+        dateKey = event.date;
+      } else {
+        const eventDate = new Date(event.date);
+
+        if (Number.isNaN(eventDate.getTime())) return;
+
+        dateKey = [
+          eventDate.getFullYear(),
+          String(eventDate.getMonth() + 1).padStart(2, "0"),
+          String(eventDate.getDate()).padStart(2, "0"),
+        ].join("-");
+      }
 
       if (!map.has(dateKey)) {
         map.set(dateKey, []);
@@ -50,14 +70,20 @@ export default function CalendarGrid({
   return (
     <section className="calendarWrapper">
       <div className="weekHeader">
-        {WEEK_DAYS.map((day) => (
-          <div key={day}>{day}</div>
+        {weekDays.map((day) => (
+          <div key={day} role="columnheader">
+            {day}
+          </div>
         ))}
       </div>
 
       <div className="calendarGrid">
         {calendar.map((item) => {
-          const dateKey = item.date.toISOString().split("T")[0];
+          const dateKey = [
+            item.date.getFullYear(),
+            String(item.date.getMonth() + 1).padStart(2, "0"),
+            String(item.date.getDate()).padStart(2, "0"),
+          ].join("-");
 
           const dayEvents = eventsByDate.get(dateKey) ?? [];
 
@@ -78,3 +104,5 @@ export default function CalendarGrid({
     </section>
   );
 }
+
+export default memo(CalendarGrid);

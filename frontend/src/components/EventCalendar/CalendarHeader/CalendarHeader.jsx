@@ -1,20 +1,22 @@
 import "./CalendarHeader.css";
 
+import { memo } from "react";
+
 import { FaChevronLeft, FaChevronRight, FaCalendarDay } from "react-icons/fa";
 
 import { getMonthName } from "../../../utils/calendarUtils";
 
-export default function CalendarHeader({
-  currentDate,
+function CalendarHeader({ currentDate, previousMonth, nextMonth, goToToday }) {
+  /* =========================================
+     Safety Check
+  ========================================= */
 
-  previousMonth,
+  if (!currentDate) {
+    return null;
+  }
 
-  nextMonth,
-
-  goToToday,
-}) {
   return (
-    <div className="calendarHeader">
+    <header className="calendarHeader">
       <div className="headerTitle">
         <h2>
           {getMonthName(currentDate)} {currentDate.getFullYear()}
@@ -22,19 +24,40 @@ export default function CalendarHeader({
       </div>
 
       <div className="headerActions">
-        <button onClick={previousMonth} className="navBtn">
+        <button
+          type="button"
+          className="navBtn"
+          onClick={previousMonth}
+          aria-label="Previous month"
+          title="Previous Month"
+        >
           <FaChevronLeft />
         </button>
 
-        <button onClick={goToToday} className="todayBtn">
+        <button
+          type="button"
+          className="todayBtn"
+          onClick={goToToday}
+          aria-label="Go to today"
+          title="Go to Today"
+        >
           <FaCalendarDay />
-          Today
+
+          <span>Today</span>
         </button>
 
-        <button onClick={nextMonth} className="navBtn">
+        <button
+          type="button"
+          className="navBtn"
+          onClick={nextMonth}
+          aria-label="Next month"
+          title="Next Month"
+        >
           <FaChevronRight />
         </button>
       </div>
-    </div>
+    </header>
   );
 }
+
+export default memo(CalendarHeader);

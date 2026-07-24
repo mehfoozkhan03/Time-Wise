@@ -1,75 +1,102 @@
 import { useMemo, useState, useCallback } from "react";
+
 import { EVENT_CONFIG } from "../data/eventConfig";
 
-export default function useEventFilter(events) {
-    const initialFilters = useMemo(
-        () =>
-            Object.keys(EVENT_CONFIG).reduce((acc, key) => {
-                acc[key] = true;
-                return acc;
-            }, {}),
-        []
-    );
+const DEFAULT_FILTERS = Object.keys(EVENT_CONFIG).reduce((acc, key) => {
+  acc[key] = true;
+  return acc;
+}, {});
 
-    const [filters, setFilters] = useState(initialFilters);
-    const [searchTerm, setSearchTerm] = useState("");
+const EMPTY_FILTERS = Object.keys(EVENT_CONFIG).reduce((acc, key) => {
+  acc[key] = false;
+  return acc;
+}, {});
 
-    const toggleFilter = useCallback((type) => {
-        setFilters((prev) => ({
-            ...prev,
-            [type]: !prev[type],
-        }));
-    }, []);
+export default function useEventFilter(events = []) {
+  /* =========================================
+     State
+  ========================================= */
 
-    const selectAll = useCallback(() => {
-        setFilters(initialFilters);
-    }, [initialFilters]);
+  const [filters, setFilters] = useState(DEFAULT_FILTERS);
 
-    const clearAll = useCallback(() => {
-        setFilters(
-            Object.keys(EVENT_CONFIG).reduce((acc, key) => {
-                acc[key] = false;
-                return acc;
-            }, {})
-        );
-    }, []);
+  const [searchTerm, setSearchTerm] = useState("");
 
-const filteredEvents = useMemo(() => {
+  /* =========================================
+     Toggle Filter
+  ========================================= */
+
+  const toggleFilter = useCallback((type) => {
+    setFilters((prev) => ({
+      ...prev,
+      [type]: !prev[type],
+    }));
+  }, []);
+
+  /* =========================================
+     Select All
+  ========================================= */
+
+  const selectAll = useCallback(() => {
+    setFilters(DEFAULT_FILTERS);
+  }, []);
+
+  /* =========================================
+     Clear All
+  ========================================= */
+
+  const clearAll = useCallback(() => {
+    setFilters(EMPTY_FILTERS);
+  }, []);
+
+  /* =========================================
+     Filtered Events
+  ========================================= */
+
+  const filteredEvents = useMemo(() => {
     const keywords = searchTerm
-        .trim()
-        .toLowerCase()
-        .split(/\s+/)
-        .filter(Boolean);
+      .trim()
+      .toLowerCase()
+      .split(/\s+/)
+      .filter(Boolean);
 
     return events.filter((event) => {
-        if (!filters[event.type]) return false;
+      if (!event?.type) {
+        return false;
+      }
 
-        if (keywords.length === 0) return true;
+      if (!filters[event.type]) {
+        return false;
+      }
 
-        const searchableText = [
-            event.employee,
-            event.department,
-            event.title,
-            event.description,
-            EVENT_CONFIG[event.type]?.label,
-        ]
-            .filter(Boolean)
-            .join(" ")
-            .toLowerCase();
+      if (keywords.length === 0) {
+        return true;
+      }
 
-        return keywords.every((keyword) =>
-            searchableText.includes(keyword)
-        );
+      const searchableText = [
+        event.title,
+        event.description,
+        event.employee,
+        event.employeeName,
+        event.department,
+        EVENT_CONFIG[event.type]?.label,
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+
+      return keywords.every((keyword) =>
+        searchableText.includes(keyword)
+      );
     });
-    }, [events, filters, searchTerm]);
+  }, [events, filters, searchTerm]);
 
-    return {
-        filters,
-        searchTerm,
-        setSearchTerm,
-        toggleFilter,
-        selectAll,
-        clearAll,
-        filteredEvents,
-    };
+  return {
+    filters,
+    searchTerm,
+    setSearchTerm,
+    toggleFilter,
+    selectAll,
+    clearAll,
+    filteredEvents,
+  };
 }

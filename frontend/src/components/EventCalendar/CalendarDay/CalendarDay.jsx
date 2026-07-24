@@ -1,8 +1,10 @@
 import "./CalendarDay.css";
 
+import { memo, useCallback, useMemo } from "react";
+
 import EventBadge from "../EventBadge/EventBadge";
 
-export default function CalendarDay({
+function CalendarDay({
   day,
   events = [],
   isCurrentMonth,
@@ -11,52 +13,92 @@ export default function CalendarDay({
   onSelectDate,
   onEventClick,
 }) {
-  const handleSelectDate = () => {
+  /* =========================================
+     Visible Events
+  ========================================= */
+
+  const visibleEvents = useMemo(() => {
+    return events.slice(0, 2);
+  }, [events]);
+
+  /* =========================================
+     Select Date
+  ========================================= */
+
+  const handleSelectDate = useCallback(() => {
+    if (!onSelectDate) return;
+
     onSelectDate(day);
-  };
+  }, [day, onSelectDate]);
+
+  /* =========================================
+     Keyboard Support
+  ========================================= */
+
+  const handleKeyDown = useCallback(
+    (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        handleSelectDate();
+      }
+    },
+    [handleSelectDate],
+  );
+
+  /* =========================================
+     Stop Event Propagation
+  ========================================= */
+
+  const stopPropagation = useCallback((e) => {
+    e.stopPropagation();
+  }, []);
 
   return (
     <div
       className={`calendarDay
-                ${!isCurrentMonth ? "otherMonth" : ""}
-                ${isToday ? "today" : ""}
-                ${isSelected ? "selected" : ""}
-            `}
+        ${!isCurrentMonth ? "otherMonth" : ""}
+        ${isToday ? "today" : ""}
+        ${isSelected ? "selected" : ""}
+      `}
       onClick={handleSelectDate}
+      onKeyDown={handleKeyDown}
       role="button"
       tabIndex={0}
       aria-label={`Select ${day.toDateString()}`}
-      onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          handleSelectDate();
-        }
-      }}
+      aria-pressed={isSelected}
     >
-      {/* Day Number */}
+      {/* =========================================
+          Day Number
+      ========================================= */}
 
       <div className="dayHeader">
         <span className="dayNumber">{day.getDate()}</span>
       </div>
 
-      {/* Events */}
+      {/* =========================================
+          Events
+      ========================================= */}
 
       <div className="dayEvents">
-        {events.length === 0 ? (
+        {visibleEvents.length === 0 ? (
           <div className="emptyEvents" />
         ) : (
           <>
-            {events.slice(0, 2).map((event) => (
-              <div
-                key={event._id ?? event.id}
-                onClick={(e) => e.stopPropagation()}
-              >
+            {visibleEvents.map((event) => (
+              <div key={event._id || event.id} onClick={stopPropagation}>
                 <EventBadge event={event} onClick={onEventClick} />
               </div>
             ))}
 
             {events.length > 2 && (
-              <div className="moreEvents">+{events.length - 2} More</div>
+              <button
+                type="button"
+                className="moreEvents"
+                onClick={stopPropagation}
+                aria-label={`View ${events.length - 2} more events`}
+              >
+                +{events.length - 2} More
+              </button>
             )}
           </>
         )}
@@ -64,3 +106,5 @@ export default function CalendarDay({
     </div>
   );
 }
+
+export default memo(CalendarDay);
