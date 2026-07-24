@@ -1,10 +1,10 @@
 import { statusConfig } from "./statusConfig";
 
-export function AttendanceHeatmap({ calendarData = [] }) {
+export function AttendanceHeatmap({ calendarData = [], year, month }) {
   const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   // July 2026 starts on Wednesday
-  const startOffset = 3;
+  const startOffset = new Date(year, month, 1).getDay();
 
   const cells = [...Array(startOffset).fill(null), ...calendarData];
 
@@ -45,13 +45,27 @@ export function AttendanceHeatmap({ calendarData = [] }) {
           <div
             key={index}
             title={
-              cell ? `${cell.day} Jul — ${statusConfig[cell.status].label}` : ""
+              !cell
+                ? ""
+                : cell.status === "inactive"
+                  ? `${cell.day} ${new Date(year, month).toLocaleString(
+                      "en-US",
+                      {
+                        month: "short",
+                      },
+                    )}`
+                  : `${cell.day} ${new Date(year, month).toLocaleString(
+                      "en-US",
+                      {
+                        month: "short",
+                      },
+                    )} — ${statusConfig[cell.status].label}`
             }
             style={{
               aspectRatio: "1",
               borderRadius: 5,
               background: cell
-                ? cell.status === "weekend"
+                ? cell.status === "inactive" || cell.status === "weekend"
                   ? statusConfig[cell.status].bg
                   : `${statusConfig[cell.status].dot}`
                 : "transparent",
@@ -79,7 +93,7 @@ export function AttendanceHeatmap({ calendarData = [] }) {
         }}
       >
         {Object.entries(statusConfig)
-          .filter(([key]) => key !== "weekend")
+          .filter(([key]) => key !== "inactive")
           .map(([key, value]) => (
             <div
               key={key}
