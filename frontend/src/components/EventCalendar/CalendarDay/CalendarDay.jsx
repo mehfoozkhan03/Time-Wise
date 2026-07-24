@@ -4,34 +4,42 @@ import EventBadge from "../EventBadge/EventBadge";
 
 export default function CalendarDay({
   day,
-  events,
+  events = [],
   isCurrentMonth,
   isToday,
   isSelected,
   onSelectDate,
   onEventClick,
 }) {
+  const handleSelectDate = () => {
+    onSelectDate(day);
+  };
+
   return (
-      <div
-          className={`calendarDay
-              ${!isCurrentMonth ? "otherMonth" : ""}
-              ${isToday ? "today" : ""}
-              ${isSelected ? "selected" : ""}
-          `}
-          onClick={() => onSelectDate(day)}
-          role="button"
-          tabIndex={0}
-          aria-label={`Select ${day.toDateString()}`}
-          onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  onSelectDate(day);
-              }
-          }}
-      >
+    <div
+      className={`calendarDay
+                ${!isCurrentMonth ? "otherMonth" : ""}
+                ${isToday ? "today" : ""}
+                ${isSelected ? "selected" : ""}
+            `}
+      onClick={handleSelectDate}
+      role="button"
+      tabIndex={0}
+      aria-label={`Select ${day.toDateString()}`}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          handleSelectDate();
+        }
+      }}
+    >
+      {/* Day Number */}
+
       <div className="dayHeader">
         <span className="dayNumber">{day.getDate()}</span>
       </div>
+
+      {/* Events */}
 
       <div className="dayEvents">
         {events.length === 0 ? (
@@ -39,7 +47,10 @@ export default function CalendarDay({
         ) : (
           <>
             {events.slice(0, 2).map((event) => (
-              <div key={event.id} onClick={(e) => e.stopPropagation()}>
+              <div
+                key={event._id ?? event.id}
+                onClick={(e) => e.stopPropagation()}
+              >
                 <EventBadge event={event} onClick={onEventClick} />
               </div>
             ))}

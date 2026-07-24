@@ -1,122 +1,125 @@
-// Format: 24 Jul 2026
+/* =========================================
+   Format: 24 Jul 2026
+========================================= */
+
 export const formatDate = (date) => {
+  if (!date) return "--";
 
-    if (!date) return "--";
+  const parsedDate = new Date(date);
 
-    return new Date(date).toLocaleDateString("en-IN", {
+  if (isNaN(parsedDate)) return "--";
 
-        day: "numeric",
-
-        month: "short",
-
-        year: "numeric",
-
-    });
-
+  return parsedDate.toLocaleDateString("en-IN", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
 };
 
-// Format: Friday, 24 July 2026
+/* =========================================
+   Format: Friday, 24 July 2026
+========================================= */
+
 export const formatFullDate = (date) => {
+  if (!date) return "--";
 
-    if (!date) return "--";
+  const parsedDate = new Date(date);
 
-    return new Date(date).toLocaleDateString("en-IN", {
+  if (isNaN(parsedDate)) return "--";
 
-        weekday: "long",
-
-        day: "numeric",
-
-        month: "long",
-
-        year: "numeric",
-
-    });
-
+  return parsedDate.toLocaleDateString("en-IN", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
 };
 
-// Format: 9:00 AM
+/* =========================================
+   Format: 9:00 AM
+========================================= */
+
 export const formatTime = (time) => {
+  if (!time) return "--";
 
-    if (!time) return "--";
+  const [hour = 0, minute = 0] = time.split(":");
 
-    const [hour, minute] = time.split(":");
-
-    return new Date(0, 0, 0, hour, minute).toLocaleTimeString("en-IN", {
-
-        hour: "numeric",
-
-        minute: "2-digit",
-
-        hour12: true,
-
-    });
-
+  return new Date(0, 0, 0, Number(hour), Number(minute)).toLocaleTimeString(
+    "en-IN",
+    {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    },
+  );
 };
 
-// Check Today
+/* =========================================
+   Check Today
+========================================= */
+
 export const isToday = (date) => {
+  if (!date) return false;
 
-    const today = new Date();
+  const today = getToday();
 
-    const current = new Date(date);
+  const current = new Date(date);
 
-    return (
+  if (isNaN(current)) return false;
 
-        today.getDate() === current.getDate() &&
-
-        today.getMonth() === current.getMonth() &&
-
-        today.getFullYear() === current.getFullYear()
-
-    );
-
+  return (
+    today.getFullYear() === current.getFullYear() &&
+    today.getMonth() === current.getMonth() &&
+    today.getDate() === current.getDate()
+  );
 };
 
-// Check Weekend
+/* =========================================
+   Check Weekend
+========================================= */
+
 export const isWeekend = (date) => {
+  if (!date) return false;
 
-    const day = new Date(date).getDay();
+  const parsedDate = new Date(date);
 
-    return day === 0 || day === 6;
+  if (isNaN(parsedDate)) return false;
 
+  const day = parsedDate.getDay();
+
+  return day === 0 || day === 6;
 };
 
-// Today's Date
+/* =========================================
+   Today's Date
+========================================= */
+
 export const getToday = () => {
+  const today = new Date();
 
-    const today = new Date();
-
-    return new Date(
-
-        today.getFullYear(),
-
-        today.getMonth(),
-
-        today.getDate()
-
-    );
-
+  return new Date(today.getFullYear(), today.getMonth(), today.getDate());
 };
 
-// Today / Tomorrow / Date
+/* =========================================
+   Today / Tomorrow / Date
+========================================= */
+
 export const getRelativeDateLabel = (date) => {
+  if (!date) return "--";
 
-    const today = getToday();
+  const today = getToday();
 
-    const eventDate = new Date(date);
+  const eventDate = new Date(date);
 
-    const diff = Math.floor(
+  if (isNaN(eventDate)) return "--";
 
-        (eventDate - today) /
+  eventDate.setHours(0, 0, 0, 0);
 
-        (1000 * 60 * 60 * 24)
+  const diff = Math.round((eventDate - today) / (1000 * 60 * 60 * 24));
 
-    );
+  if (diff === 0) return "Today";
 
-    if (diff === 0) return "Today";
+  if (diff === 1) return "Tomorrow";
 
-    if (diff === 1) return "Tomorrow";
-
-    return formatFullDate(date);
-
+  return formatFullDate(date);
 };

@@ -13,8 +13,8 @@ function CalendarSidebar({
   selectDate,
   previousMonth,
   nextMonth,
-  events,
-  filters,
+  events = [],
+  filters = {},
   toggleFilter,
   onEventClick,
 }) {
