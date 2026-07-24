@@ -10,7 +10,6 @@ import {
   setAttendanceLog,
 } from "../../store/reportsSlice";
 import { AttendanceLog } from "../../components/Reports/attendanceLog";
-import { goals } from "../../components/Reports/goalsData";
 import { chartTabs, ranges } from "../../components/Reports/reportsConstants";
 import { WorkSummary } from "../../components/Reports/workSummary";
 import { PerformanceInsights } from "../../components/Reports/performanceInsights";
@@ -38,7 +37,7 @@ export function Reports() {
     attendanceLog,
   } = useSelector((state) => state.reports);
 
-  console.log(attendanceLog[0]);
+  // console.log("Dashboard Stats:", dashboardStats);
 
   useEffect(() => {
     const loadReports = async () => {
@@ -213,6 +212,7 @@ export function Reports() {
           chartTabs={chartTabs}
           setTab={(tab) => dispatch(setActiveTab(tab))}
           attendanceLog={attendanceLog}
+          dashboardStats={dashboardStats}
         />
 
         {/* ── Goals & Badges ── */}
@@ -221,7 +221,7 @@ export function Reports() {
             margin: "21px  0",
           }}
         >
-          <GoalsSection goals={goals} />
+          <GoalsSection dashboardStats={dashboardStats} />
         </div>
 
         <AttendanceLog
