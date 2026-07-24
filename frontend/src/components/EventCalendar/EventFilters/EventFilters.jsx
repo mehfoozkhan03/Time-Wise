@@ -1,6 +1,7 @@
 import "./EventFilters.css";
 
 import { memo, useMemo, useCallback } from "react";
+
 import { FaSearch } from "react-icons/fa";
 
 import { EVENT_CONFIG } from "../../../data/eventConfig";
@@ -15,8 +16,8 @@ function EventFilters({
   events = [],
 }) {
   /* =========================================
-       Event Counts
-    ========================================= */
+     Event Counts
+  ========================================= */
 
   const eventCounts = useMemo(() => {
     const counts = {};
@@ -24,23 +25,25 @@ function EventFilters({
     events.forEach((event) => {
       if (!event?.type) return;
 
-      counts[event.type] = (counts[event.type] || 0) + 1;
+      const type = String(event.type).toUpperCase();
+
+      counts[type] = (counts[type] || 0) + 1;
     });
 
     return counts;
   }, [events]);
 
   /* =========================================
-       Event Types
-    ========================================= */
+     Event Types
+  ========================================= */
 
   const eventTypes = useMemo(() => {
     return Object.entries(EVENT_CONFIG);
   }, []);
 
   /* =========================================
-       Search
-    ========================================= */
+     Search
+  ========================================= */
 
   const handleSearchChange = useCallback(
     (e) => {
@@ -50,8 +53,8 @@ function EventFilters({
   );
 
   /* =========================================
-       Toggle Filter
-    ========================================= */
+     Filter Toggle
+  ========================================= */
 
   const handleToggleFilter = useCallback(
     (type) => {
@@ -61,22 +64,26 @@ function EventFilters({
   );
 
   return (
-    <div className="eventFilters">
-      {/* Search */}
+    <section className="eventFilters">
+      {/* =========================================
+          Search
+      ========================================= */}
 
       <div className="searchBar">
         <FaSearch />
 
         <input
           type="text"
-          placeholder="Search employee or event..."
-          aria-label="Search events"
+          placeholder="Search by title, employee or event type..."
+          aria-label="Search calendar events"
           value={searchTerm}
           onChange={handleSearchChange}
         />
       </div>
 
-      {/* Actions */}
+      {/* =========================================
+          Actions
+      ========================================= */}
 
       <div className="filterActions">
         <button type="button" onClick={selectAll}>
@@ -88,26 +95,36 @@ function EventFilters({
         </button>
       </div>
 
-      {/* Filters */}
+      {/* =========================================
+          Filter Chips
+      ========================================= */}
 
       <div className="filterList">
-        {eventTypes.map(([type, config]) => (
-          <button
-            key={type}
-            type="button"
-            onClick={() => handleToggleFilter(type)}
-            className={`filterChip ${filters[type] ? "active" : ""}`}
-            aria-pressed={!!filters[type]}
-          >
-            <span className="chipIcon">{config.icon}</span>
+        {eventTypes.map(([type, config]) => {
+          const count = eventCounts[type] ?? 0;
 
-            <span>{config.label}</span>
+          return (
+            <button
+              key={type}
+              type="button"
+              className={`filterChip ${filters[type] ? "active" : ""}`}
+              aria-pressed={Boolean(filters[type])}
+              aria-label={`Toggle ${config.label} events`}
+              title={config.label}
+              onClick={() => handleToggleFilter(type)}
+            >
+              <span className="chipIcon">
+                <config.icon />
+              </span>
 
-            <span className="count">{eventCounts[type] ?? 0}</span>
-          </button>
-        ))}
+              <span>{config.label}</span>
+
+              <span className="count">{count}</span>
+            </button>
+          );
+        })}
       </div>
-    </div>
+    </section>
   );
 }
 

@@ -19,7 +19,7 @@ function CalendarSidebar({
   onEventClick,
 }) {
   return (
-    <aside className="calendarSidebar">
+    <aside className="calendarSidebar" aria-label="Calendar Sidebar">
       <MiniCalendar
         currentDate={currentDate}
         selectedDate={selectedDate}
