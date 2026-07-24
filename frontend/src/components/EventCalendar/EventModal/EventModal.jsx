@@ -19,7 +19,11 @@ import { formatFullDate, formatTime } from "../../../utils/dateUtils";
 
 import InfoRow from "../../Common/InfoRow/InfoRow";
 
-function EventModal({ event, onClose }) {
+function EventModal({ event, onClose, onEdit, onDelete }) {
+  /* =========================================
+       ESC Close
+    ========================================= */
+
   useEffect(() => {
     if (!event) return;
 
@@ -36,6 +40,10 @@ function EventModal({ event, onClose }) {
     };
   }, [event, onClose]);
 
+  /* =========================================
+       Handlers
+    ========================================= */
+
   const handleOverlayClick = useCallback(() => {
     onClose();
   }, [onClose]);
@@ -44,6 +52,14 @@ function EventModal({ event, onClose }) {
     e.stopPropagation();
   }, []);
 
+  const handleEdit = useCallback(() => {
+    onEdit?.(event);
+  }, [event, onEdit]);
+
+  const handleDelete = useCallback(() => {
+    onDelete?.(event);
+  }, [event, onDelete]);
+
   if (!event) return null;
 
   const config = EVENT_CONFIG[event.type];
@@ -51,6 +67,12 @@ function EventModal({ event, onClose }) {
   if (!config) return null;
 
   const Icon = config.icon;
+
+  const employeeName = event.employeeName ?? event.employee ?? "N/A";
+
+  const eventTime = event.isAllDay
+    ? "All Day"
+    : `${formatTime(event.startTime)} - ${formatTime(event.endTime)}`;
 
   return (
     <div
@@ -95,8 +117,8 @@ function EventModal({ event, onClose }) {
           <button
             type="button"
             className="closeBtn"
-            aria-label="Close event details"
             onClick={onClose}
+            aria-label="Close"
           >
             <FaTimes />
           </button>
@@ -105,12 +127,12 @@ function EventModal({ event, onClose }) {
         {/* Body */}
 
         <div className="modalBody">
-          <InfoRow icon={FaUser} label="Employee" value={event.employee} />
+          <InfoRow icon={FaUser} label="Employee" value={employeeName} />
 
           <InfoRow
             icon={FaBuilding}
             label="Department"
-            value={event.department}
+            value={event.department || "N/A"}
           />
 
           <InfoRow
@@ -119,13 +141,7 @@ function EventModal({ event, onClose }) {
             value={formatFullDate(event.date)}
           />
 
-          <InfoRow
-            icon={FaClock}
-            label="Time"
-            value={`${formatTime(event.startTime)} - ${formatTime(
-              event.endTime,
-            )}`}
-          />
+          <InfoRow icon={FaClock} label="Time" value={eventTime} />
 
           <InfoRow icon={FaTag} label="Event Type" value={config.label} />
 
@@ -139,12 +155,12 @@ function EventModal({ event, onClose }) {
         {/* Footer */}
 
         <div className="modalFooter">
-          <button type="button" className="editBtn">
+          <button type="button" className="editBtn" onClick={handleEdit}>
             <FaEdit />
             Edit
           </button>
 
-          <button type="button" className="deleteBtn">
+          <button type="button" className="deleteBtn" onClick={handleDelete}>
             <FaTrash />
             Delete
           </button>

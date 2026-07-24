@@ -8,6 +8,8 @@ function EventBadge({
     event,
     onClick,
 }) {
+    if (!event) return null;
+
     return (
         <EventItem
             event={event}

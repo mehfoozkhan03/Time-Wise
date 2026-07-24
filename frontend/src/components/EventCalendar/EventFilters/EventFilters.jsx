@@ -6,95 +6,109 @@ import { FaSearch } from "react-icons/fa";
 import { EVENT_CONFIG } from "../../../data/eventConfig";
 
 function EventFilters({
-    filters,
-    toggleFilter,
-    searchTerm,
-    setSearchTerm,
-    selectAll,
-    clearAll,
-    events,
+  filters = {},
+  toggleFilter,
+  searchTerm,
+  setSearchTerm,
+  selectAll,
+  clearAll,
+  events = [],
 }) {
-    // Generate event counts in a single pass
-    const eventCounts = useMemo(() => {
-        const counts = {};
+  /* =========================================
+       Event Counts
+    ========================================= */
 
-        for (const event of events) {
-            counts[event.type] = (counts[event.type] || 0) + 1;
-        }
+  const eventCounts = useMemo(() => {
+    const counts = {};
 
-        return counts;
-    }, [events]);
+    events.forEach((event) => {
+      if (!event?.type) return;
 
-    // Memoize event config entries
-    const eventTypes = useMemo(
-        () => Object.entries(EVENT_CONFIG),
-        []
-    );
+      counts[event.type] = (counts[event.type] || 0) + 1;
+    });
 
-    const handleSearchChange = useCallback(
-        (e) => {
-            setSearchTerm(e.target.value);
-        },
-        [setSearchTerm]
-    );
+    return counts;
+  }, [events]);
 
-    return (
-        <div className="eventFilters">
-            <div className="searchBar">
-                <FaSearch />
+  /* =========================================
+       Event Types
+    ========================================= */
 
-                <input
-                    type="text"
-                    placeholder="Search employee or event..."
-                    aria-label="Search events"
-                    value={searchTerm}
-                    onChange={handleSearchChange}
-                />
-            </div>
+  const eventTypes = useMemo(() => {
+    return Object.entries(EVENT_CONFIG);
+  }, []);
 
-            <div className="filterActions">
-                <button
-                    type="button"
-                    onClick={selectAll}
-                >
-                    Select All
-                </button>
+  /* =========================================
+       Search
+    ========================================= */
 
-                <button
-                    type="button"
-                    onClick={clearAll}
-                >
-                    Clear All
-                </button>
-            </div>
+  const handleSearchChange = useCallback(
+    (e) => {
+      setSearchTerm(e.target.value);
+    },
+    [setSearchTerm],
+  );
 
-            <div className="filterList">
-                {eventTypes.map(([type, config]) => (
-                    <button
-                        key={type}
-                        type="button"
-                        onClick={() => toggleFilter(type)}
-                        className={`filterChip ${
-                            filters[type] ? "active" : ""
-                        }`}
-                        aria-pressed={filters[type]}
-                    >
-                        <span className="chipIcon">
-                            {config.icon}
-                        </span>
+  /* =========================================
+       Toggle Filter
+    ========================================= */
 
-                        <span>
-                            {config.label}
-                        </span>
+  const handleToggleFilter = useCallback(
+    (type) => {
+      toggleFilter(type);
+    },
+    [toggleFilter],
+  );
 
-                        <span className="count">
-                            {eventCounts[type] ?? 0}
-                        </span>
-                    </button>
-                ))}
-            </div>
-        </div>
-    );
+  return (
+    <div className="eventFilters">
+      {/* Search */}
+
+      <div className="searchBar">
+        <FaSearch />
+
+        <input
+          type="text"
+          placeholder="Search employee or event..."
+          aria-label="Search events"
+          value={searchTerm}
+          onChange={handleSearchChange}
+        />
+      </div>
+
+      {/* Actions */}
+
+      <div className="filterActions">
+        <button type="button" onClick={selectAll}>
+          Select All
+        </button>
+
+        <button type="button" onClick={clearAll}>
+          Clear All
+        </button>
+      </div>
+
+      {/* Filters */}
+
+      <div className="filterList">
+        {eventTypes.map(([type, config]) => (
+          <button
+            key={type}
+            type="button"
+            onClick={() => handleToggleFilter(type)}
+            className={`filterChip ${filters[type] ? "active" : ""}`}
+            aria-pressed={!!filters[type]}
+          >
+            <span className="chipIcon">{config.icon}</span>
+
+            <span>{config.label}</span>
+
+            <span className="count">{eventCounts[type] ?? 0}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
 }
 
 export default memo(EventFilters);

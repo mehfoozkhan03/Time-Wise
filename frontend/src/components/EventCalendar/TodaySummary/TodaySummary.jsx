@@ -10,11 +10,14 @@ import EmptyState from "../../Common/EmptyState/EmptyState";
 import { EVENT_CONFIG } from "../../../data/eventConfig";
 import { getTodaySummary } from "../../../utils/eventUtils";
 
-function TodaySummary({ events }) {
-  const summaryData = useMemo(
-    () => getTodaySummary(events, EVENT_CONFIG),
-    [events],
-  );
+function TodaySummary({ events = [] }) {
+  /* =========================================
+       Today's Summary
+    ========================================= */
+
+  const summaryData = useMemo(() => {
+    return getTodaySummary(events, EVENT_CONFIG);
+  }, [events]);
 
   return (
     <Card title="Today's Summary" icon={<FaChartPie />} className="summaryCard">

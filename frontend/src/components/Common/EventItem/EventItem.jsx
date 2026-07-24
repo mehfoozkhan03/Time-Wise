@@ -16,23 +16,53 @@ function EventItem({
   showType = true,
   onClick,
 }) {
+  if (!event) return null;
+
+  /* =========================================
+       Event Config
+    ========================================= */
+
   const config = useMemo(() => EVENT_CONFIG[event.type], [event.type]);
 
   if (!config) return null;
 
   const Icon = config.icon;
 
+  /* =========================================
+       Employee Name
+    ========================================= */
+
+  const employeeName = useMemo(
+    () => event.employeeName ?? event.employee ?? "",
+    [event],
+  );
+
+  /* =========================================
+       Avatar
+    ========================================= */
+
   const avatarColor = useMemo(
-    () => getAvatarColor(event.employee),
-    [event.employee],
+    () => getAvatarColor(employeeName),
+    [employeeName],
   );
 
-  const initials = useMemo(() => getInitials(event.employee), [event.employee]);
+  const initials = useMemo(() => getInitials(employeeName), [employeeName]);
 
-  const formattedTime = useMemo(
-    () => (event.startTime ? formatTime(event.startTime) : ""),
-    [event.startTime],
-  );
+  /* =========================================
+       Time
+    ========================================= */
+
+  const formattedTime = useMemo(() => {
+    if (event.isAllDay) {
+      return "All Day";
+    }
+
+    return event.startTime ? formatTime(event.startTime) : "";
+  }, [event.startTime, event.isAllDay]);
+
+  /* =========================================
+       Click
+    ========================================= */
 
   const handleClick = useCallback(
     (e) => {
@@ -63,7 +93,7 @@ function EventItem({
       role={onClick ? "button" : undefined}
       tabIndex={onClick ? 0 : undefined}
     >
-      {showAvatar && (
+      {showAvatar && employeeName && (
         <div
           className="eventItemAvatar"
           style={{

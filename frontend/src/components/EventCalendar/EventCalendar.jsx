@@ -2,10 +2,13 @@ import "./EventCalendar.css";
 
 import { useMemo, useState, useCallback, useEffect } from "react";
 
+import { useDispatch, useSelector } from "react-redux";
+
 import useCalendar from "../../hooks/useCalendar";
 import useEventFilter from "../../hooks/useEventFilter";
 
-import { events } from "../../data/events";
+import { fetchEvents } from "../../store/calendarSlice";
+
 import { holidayData } from "../../data/holidays";
 
 import CalendarHeader from "./CalendarHeader/CalendarHeader";
@@ -13,106 +16,145 @@ import CalendarGrid from "./CalendarGrid/CalendarGrid";
 import CalendarSidebar from "./CalendarSidebar/CalendarSidebar";
 import EventFilters from "./EventFilters/EventFilters";
 import EventModal from "./EventModal/EventModal";
-// import CalendarSkeleton from "../Common/CalendarSkeleton/CalendarSkeleton";
+import CalendarSkeleton from "../Common/CalendarSkeleton/CalendarSkeleton";
 
 export default function EventCalendar() {
-    /* ---------------- Calendar Skeleton ---------------- */
-    // const { events, loading } = useSelector(
-    //     state => state.calendar
-    // );
-    
-    /* ---------------- Calendar ---------------- */
+  /* =========================================
+       Redux
+    ========================================= */
 
-    const {
-        currentDate,
-        selectedDate,
-        selectDate,
-        nextMonth,
-        previousMonth,
-        goToToday,
-    } = useCalendar();
+  const dispatch = useDispatch();
 
-    /* ---------------- Events ---------------- */
+  const {
+    events = [],
+    loading,
+    error,
+  } = useSelector((state) => state.calendar);
 
-    const allEvents = useMemo(
-        () => [...events, ...holidayData],
-        []
-    );
+  /* =========================================
+       Fetch Events
+    ========================================= */
 
-    /* ---------------- Modal ---------------- */
+  useEffect(() => {
+    dispatch(fetchEvents());
+  }, [dispatch]);
 
-    const [selectedEvent, setSelectedEvent] = useState(null);
+  /* =========================================
+       Calendar
+    ========================================= */
 
-    const handleEventClick = useCallback((event) => {
-        setSelectedEvent(event);
-    }, []);
+  const {
+    currentDate,
+    selectedDate,
+    selectDate,
+    nextMonth,
+    previousMonth,
+    goToToday,
+  } = useCalendar();
 
-    const handleCloseModal = useCallback(() => {
-        setSelectedEvent(null);
-    }, []);
+  /* =========================================
+       Merge Events
+       (MongoDB + Local Holidays)
+    ========================================= */
 
-    /* ---------------- Filters ---------------- */
+  const allEvents = useMemo(() => {
+    return [...events, ...holidayData];
+  }, [events]);
 
-    const {
-        filters,
-        searchTerm,
-        setSearchTerm,
-        toggleFilter,
-        selectAll,
-        clearAll,
-        filteredEvents,
-    } = useEventFilter(allEvents);
+  /* =========================================
+       Event Modal
+    ========================================= */
 
-            // if (loading) {
-            //      return <CalendarSkeleton />;
-            // }
+  const [selectedEvent, setSelectedEvent] = useState(null);
+
+  const handleEventClick = useCallback((event) => {
+    setSelectedEvent(event);
+  }, []);
+
+  const handleCloseModal = useCallback(() => {
+    setSelectedEvent(null);
+  }, []);
+
+  /* =========================================
+       Filters
+    ========================================= */
+
+  const {
+    filters,
+    searchTerm,
+    setSearchTerm,
+    toggleFilter,
+    selectAll,
+    clearAll,
+    filteredEvents,
+  } = useEventFilter(allEvents);
+
+  /* =========================================
+       Loading
+    ========================================= */
+
+  if (loading) {
+    return <CalendarSkeleton />;
+  }
+
+  /* =========================================
+       Error
+    ========================================= */
+
+  if (error) {
     return (
-        <section className="eventCalendar">
-            <CalendarHeader
-                currentDate={currentDate}
-                previousMonth={previousMonth}
-                nextMonth={nextMonth}
-                goToToday={goToToday}
-            />
+      <section className="eventCalendar">
+        <div className="calendarError">
+          <h3>Failed to load calendar</h3>
 
-            <EventFilters
-                filters={filters}
-                toggleFilter={toggleFilter}
-                searchTerm={searchTerm}
-                setSearchTerm={setSearchTerm}
-                selectAll={selectAll}
-                clearAll={clearAll}
-                events={allEvents}
-            />
-
-            <div className="calendarBody">
-                <CalendarGrid
-                    currentDate={currentDate}
-                    selectedDate={selectedDate}
-                    selectDate={selectDate}
-                    events={filteredEvents}
-                    onEventClick={handleEventClick}
-                />
-
-                <CalendarSidebar
-                    currentDate={currentDate}
-                    selectedDate={selectedDate}
-                    selectDate={selectDate}
-                    previousMonth={previousMonth}
-                    nextMonth={nextMonth}
-                    events={filteredEvents}
-                    filters={filters}
-                    toggleFilter={toggleFilter}
-                    onEventClick={handleEventClick}
-                />
-            </div>
-
-            <EventModal
-                event={selectedEvent}
-                onClose={handleCloseModal}
-            />
-        
-        </section>
-        
+          <p>{error}</p>
+        </div>
+      </section>
     );
+  }
+
+  return (
+    <section className="eventCalendar">
+      <CalendarHeader
+        currentDate={currentDate}
+        previousMonth={previousMonth}
+        nextMonth={nextMonth}
+        goToToday={goToToday}
+      />
+
+      <EventFilters
+        filters={filters}
+        toggleFilter={toggleFilter}
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        selectAll={selectAll}
+        clearAll={clearAll}
+        events={allEvents}
+      />
+
+      <div className="calendarBody">
+        <CalendarGrid
+          currentDate={currentDate}
+          selectedDate={selectedDate}
+          selectDate={selectDate}
+          events={filteredEvents}
+          onEventClick={handleEventClick}
+        />
+
+        <CalendarSidebar
+          currentDate={currentDate}
+          selectedDate={selectedDate}
+          selectDate={selectDate}
+          previousMonth={previousMonth}
+          nextMonth={nextMonth}
+          events={filteredEvents}
+          filters={filters}
+          toggleFilter={toggleFilter}
+          onEventClick={handleEventClick}
+        />
+      </div>
+
+      <EventModal event={selectedEvent} onClose={handleCloseModal} />
+    </section>
+  );
 }
