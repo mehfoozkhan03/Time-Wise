@@ -8,6 +8,7 @@ import RecentActivity from '../../components/employee/RecentActivity/RecentActiv
 import { Achievements } from '../../components/employee/Achievements/Achievements';
 import { LeaveSummary } from '../../components/employee/LeaveSummary/LeaveSummary';
 import { EmergencyContact } from '../../components/employee/EmergencyContact/EmergencyContact';
+import { SocialLinks } from '../../components/employee/SocialLinks/SocialLinks';
 
 export default function EmployeeProfile() {
   const { user } = useSelector((state) => state.auth);
@@ -104,6 +105,8 @@ export default function EmployeeProfile() {
         <LeaveSummary />
 
         <EmergencyContact />
+
+        <SocialLinks />
       </div>
     </main>
   );

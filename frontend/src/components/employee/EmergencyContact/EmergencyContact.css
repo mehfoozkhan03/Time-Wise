@@ -1,7 +1,11 @@
 .emergencyContact-section{
+    padding: 20px;
     display: flex;
     flex-direction: column;
     gap: 20px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    background-color: var(--surface);
 }
 .emergency-header{
     display: flex;
@@ -39,10 +43,9 @@
     border: 1px solid var(--border);
     border-radius: 20px;
     padding: 20px;
-    background-color: var(--surface);
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 20px;
 }
 
 .emergency-name>h3{
@@ -50,4 +53,49 @@
 }
 .emergency-name>span{
     font-size: 11px;
+}
+
+.emergency-phone-number,
+.emergency-email{
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    gap: 35px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+}
+
+.emergency-phone-number>div,
+.emergency-email>div{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.emergency-phone-number>div span,
+.emergency-email>div span{
+    font-size: 12px;
+    color: var(--text_secondary);
+}
+
+.emergency-phone-number>div:nth-child(2),
+.emergency-email>div:nth-child(2){
+    font-size: 14px;
+}
+
+.emergencyContact-edit{
+    padding: 15px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.emergencyContact-edit>button{
+    background-color: transparent;
+    color: var(--text_secondary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
 }
