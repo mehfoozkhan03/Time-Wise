@@ -28,7 +28,7 @@ export default function HeroSection() {
     "en",
     "hi",
     "mr",
-    "gr",
+    "gu",
     "ta",
     "te",
     "kn",
@@ -104,12 +104,12 @@ export default function HeroSection() {
   }, [charIndex, isDeleting, languageIndex, translations]);
 
   const translateGreeting = async () => {
-    const text = currentGreeting;
+    const text = `${currentGreeting},`;
 
     try {
       const translated = await Promise.all(
         languages.map(async (lang) => {
-          if (lang === "en") return text;
+          if (lang === "en") return `${text}`;
 
           const response = await fetch(
             `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${lang}&dt=t&q=${encodeURIComponent(
@@ -180,7 +180,8 @@ export default function HeroSection() {
       <div className="hero_left">
         <div id="tour-hero-greeting">
           <h1>
-            {displayText},<span className="typing-cursor">|</span>
+            {displayText}
+            <span className="typing-cursor">|</span>
           </h1>
           <h1 className="hero_name">
             {capitalize(user?.firstName) || "Employee"}.
