@@ -1,8 +1,8 @@
-import { useNavigate } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
-import Card from '../../Card/Card'
-import './FeaturedThought.css'
+import Card from '../../Card/Card';
+import './FeaturedThought.css';
 
 import {
   FaHeart,
@@ -10,12 +10,12 @@ import {
   FaBookmark,
   FaArrowRight,
   FaStar,
-} from 'react-icons/fa'
+} from 'react-icons/fa';
 
 export default function FeaturedThought() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const { featured, loading } = useSelector((state) => state.post)
+  const { featured, loading } = useSelector((state) => state.post);
 
   if (loading) {
     return (
@@ -26,7 +26,7 @@ export default function FeaturedThought() {
           <p>Loading featured thought...</p>
         </Card>
       </section>
-    )
+    );
   }
 
   if (!featured) {
@@ -38,12 +38,12 @@ export default function FeaturedThought() {
           <p>No featured thought available.</p>
         </Card>
       </section>
-    )
+    );
   }
 
-  const author = featured.createdBy
+  const author = featured.createdBy;
 
-  const initials = `${author.firstName?.[0] ?? ''}${author.lastName?.[0] ?? ''}`
+  const initials = `${author.firstName?.[0] ?? ''}${author.lastName?.[0] ?? ''}`;
 
   return (
     <section className="featured_thought_section" id="tour-thought-card">
@@ -74,7 +74,7 @@ export default function FeaturedThought() {
           <div className="action_item">
             <FaHeart />
 
-            <span>{featured.likes.length}</span>
+            <span>{featured.likes?.length}</span>
           </div>
 
           <div className="action_item">
@@ -98,5 +98,5 @@ export default function FeaturedThought() {
         </button>
       </Card>
     </section>
-  )
+  );
 }
