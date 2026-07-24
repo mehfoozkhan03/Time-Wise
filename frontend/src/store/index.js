@@ -8,7 +8,8 @@ import postReducer from "./postSlice";
 import dashboardReducer from "./dashboardSlice";
 import reportsReducer from "./reportsSlice";
 import adminAuthReducer from "./adminAuthSlice";
-import calendarReducer from "./calendarSlice"
+import calendarReducer from "./calendarSlice";
+import holidayReducer from "./holidaySlice";
 
 const store = configureStore({
   reducer: {
@@ -27,8 +28,10 @@ const store = configureStore({
     dashboard: dashboardReducer,
 
     reports: reportsReducer,
-    
-    calendar: calendarReducer, 
+
+    calendar: calendarReducer,
+
+    holiday: holidayReducer,
   },
 });
 

@@ -1,31 +1,56 @@
 import "./CalendarSkeleton.css";
 
-export default function CalendarSkeleton() {
-    return (
-        <div className="calendarSkeleton">
+import { memo } from "react";
 
-            <div className="skeletonHeader"></div>
+function CalendarSkeleton() {
+  /* =========================================
+     Skeleton Placeholders
+  ========================================= */
 
-            <div className="skeletonSearch"></div>
+  const filterPlaceholders = [...Array(8)];
 
-            <div className="skeletonFilters">
-                {[...Array(8)].map((_, i) => (
-                    <div
-                        key={i}
-                        className="skeletonFilter"
-                    />
-                ))}
-            </div>
+  const dayPlaceholders = [...Array(35)];
 
-            <div className="skeletonGrid">
-                {[...Array(35)].map((_, i) => (
-                    <div
-                        key={i}
-                        className="skeletonDay"
-                    />
-                ))}
-            </div>
+  return (
+    <div
+      className="calendarSkeleton"
+      role="status"
+      aria-live="polite"
+      aria-label="Loading calendar"
+    >
+      {/* =========================================
+          Header
+      ========================================= */}
 
-        </div>
-    );
+      <div className="skeletonHeader" aria-hidden="true" />
+
+      {/* =========================================
+          Search
+      ========================================= */}
+
+      <div className="skeletonSearch" aria-hidden="true" />
+
+      {/* =========================================
+          Filters
+      ========================================= */}
+
+      <div className="skeletonFilters">
+        {filterPlaceholders.map((_, index) => (
+          <div key={index} className="skeletonFilter" aria-hidden="true" />
+        ))}
+      </div>
+
+      {/* =========================================
+          Calendar
+      ========================================= */}
+
+      <div className="skeletonGrid">
+        {dayPlaceholders.map((_, index) => (
+          <div key={index} className="skeletonDay" aria-hidden="true" />
+        ))}
+      </div>
+    </div>
+  );
 }
+
+export default memo(CalendarSkeleton);
