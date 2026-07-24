@@ -71,6 +71,9 @@
   padding: 0;
 }
 
+.hero_name {
+  color: var(--primary)
+}
 .typing-cursor {
   display: inline-block;
   color: var(--primary);
@@ -82,6 +85,7 @@
     opacity: 0;
   }
 }
+
 @media (max-width: 900px) {
   .hero {
     grid-template-columns: 1fr;
