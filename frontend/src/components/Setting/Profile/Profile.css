@@ -168,8 +168,8 @@
 }
 .change-btn{
     padding: 8px 15px;
-    color: white;
     font-size: 15px;
     border-radius: 10px;
-    background-color: blue;
+    color: #fff !important;
+    background-color: var(--primary) !important;
 }

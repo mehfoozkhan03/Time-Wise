@@ -1,4 +1,5 @@
 import "./SettingSidebar.css";
+import { useTheme } from "../../../context/ThemeContext";
 
 import { NavLink } from "react-router-dom";
 
@@ -12,9 +13,11 @@ import { MdOutlineContactSupport } from "react-icons/md";
 import { FaCalendarAlt } from "react-icons/fa";
 import { useSelector } from "react-redux";
 
+
 export const SettingSidebar = () => {
   const { user } = useSelector((state) => state.auth);
-  console.log("🚀 ~ user:", user);
+
+  const { currentTheme } = useTheme();
   
   return (
     <>
@@ -22,7 +25,9 @@ export const SettingSidebar = () => {
         <div className="settingSidebar-content">
           <div className="settingSidebar-logo">
             <img
-              src="/Logo_N.svg"
+              src={
+                currentTheme === "dark" ? "/Logo_N.svg" : "/Logo_N_Light.svg"
+              }
               alt="logo"
             />
           </div>
@@ -44,6 +49,13 @@ export const SettingSidebar = () => {
                 <span>Attendance</span>
               </NavLink>
               <NavLink
+                to="appearance"
+                className="appearance settingSidebar-link"
+              >
+                <RiPaletteLine className="settingSidebar-icon" />
+                <span>Appearance</span>
+              </NavLink>
+              <NavLink
                 to="calendar"
                 className="settingSidebar-link"
               >
@@ -56,13 +68,6 @@ export const SettingSidebar = () => {
               >
                 <MdNotifications className="settingSidebar-icon" />
                 <span>Notifications</span>
-              </NavLink>
-              <NavLink
-                to="appearance"
-                className="appearance settingSidebar-link"
-              >
-                <RiPaletteLine className="settingSidebar-icon" />
-                <span>Appearance</span>
               </NavLink>
               <NavLink
                 to="security"

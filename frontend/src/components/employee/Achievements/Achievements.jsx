@@ -39,7 +39,7 @@ export const Achievements = () => {
         </div>
 
         {achievmentsItem.map((item, i) => (
-          <div className="achievement-list-container">
+          <div className="achievement-list-container" key={i}>
             <div className="achievements-list">
               <div className="achievements-icons">{item.icon}</div>
               <div>

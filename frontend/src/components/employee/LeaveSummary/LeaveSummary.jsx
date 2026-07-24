@@ -34,7 +34,7 @@ export const LeaveSummary = () => {
         </div>
         <div className="leaveSummary-content">
           {leaveData.map((item, i) => (
-            <div className="leaveSummary-list">
+            <div className="leaveSummary-list" key={i}>
               <div>
                 <div>
                   <p>{item.title}</p>
@@ -51,7 +51,7 @@ export const LeaveSummary = () => {
           ))}
         </div>
         <div className="pending-leave">
-            <BiSolidError style={{color: "#f8bf62"}} />
+            <BiSolidError style={{color: "#ffb965"}} />
             <p>2 leave requests pending approval from manager.</p>
         </div>
       </section>
