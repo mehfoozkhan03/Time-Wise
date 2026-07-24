@@ -101,7 +101,7 @@
 }
 .notification-preference-content>div>p{
     font-size: 14px;
-    color: #eae7e7;
+    color: var(--text_primary);
 }
 .notification-preference-switch-btn{
     background-color: #161b21;
