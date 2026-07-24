@@ -6,8 +6,6 @@ import { MdArrowRightAlt } from "react-icons/md";
 import { useSelector } from "react-redux";
 
 export const SocialLinks = () => {
-    const user = useSelector((state) => state);
-    console.log("🚀 ~ user:", user);
   const socialLinkData = [
     {
       icon: <FaGithub />,
