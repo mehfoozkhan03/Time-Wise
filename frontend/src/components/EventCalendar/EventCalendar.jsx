@@ -65,16 +65,9 @@ export default function EventCalendar() {
   ========================================= */
 
   const allEvents = useMemo(() => {
-    const mapped = mapHolidayList(holidays);
-
-    console.log("Mapped Holiday Sample:", mapped[0]);
-    console.log(
-      "Holiday Types:",
-      mapped.slice(0, 10).map((e) => e.type)
-    );
-
-    return [...events, ...mapped];
+    return [...events, ...mapHolidayList(holidays)];
   }, [events, holidays]);
+
   /* =========================================
      Selected Event
   ========================================= */

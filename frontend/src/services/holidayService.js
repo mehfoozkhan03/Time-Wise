@@ -20,7 +20,7 @@ export const holidayService = {
     getHolidays: async () => {
       const response = await API.get("/holidays");
 
-      console.log(response.data);
+      // console.log(response.data);
 
       return response;
   },
