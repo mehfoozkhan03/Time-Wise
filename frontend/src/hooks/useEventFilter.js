@@ -12,7 +12,7 @@ const EMPTY_FILTERS = Object.keys(EVENT_CONFIG).reduce((acc, key) => {
   return acc;
 }, {});
 
-export default function useEventFilter(events = []) {
+export default function useEventFilter(events = [], currentDate) {
   /* =========================================
      State
   ========================================= */
@@ -49,6 +49,28 @@ export default function useEventFilter(events = []) {
   }, []);
 
   /* =========================================
+     Current Month Events
+  ========================================= */
+
+    const monthEvents = useMemo(() => {
+      if (!currentDate) return events;
+
+      const currentMonth = currentDate.getMonth();
+      const currentYear = currentDate.getFullYear();
+
+      return events.filter((event) => {
+        if (!event?.date) return false;
+
+        const date = new Date(event.date);
+
+        return (
+          date.getFullYear() === currentYear &&
+          date.getMonth() === currentMonth
+        );
+      });
+    }, [events, currentDate]);
+
+  /* =========================================
      Filtered Events
   ========================================= */
 
@@ -59,7 +81,7 @@ export default function useEventFilter(events = []) {
       .split(/\s+/)
       .filter(Boolean);
 
-    return events.filter((event) => {
+    return monthEvents.filter((event) => {
       if (!event?.type) {
         return false;
       }
@@ -84,11 +106,9 @@ export default function useEventFilter(events = []) {
         .join(" ")
         .toLowerCase();
 
-      return keywords.every((keyword) =>
-        searchableText.includes(keyword)
-      );
+      return keywords.every((keyword) => searchableText.includes(keyword));
     });
-  }, [events, filters, searchTerm]);
+  }, [monthEvents, filters, searchTerm]);
 
   return {
     filters,
