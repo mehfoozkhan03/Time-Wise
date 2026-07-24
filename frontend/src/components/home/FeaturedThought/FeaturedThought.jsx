@@ -61,14 +61,14 @@ export default function FeaturedThought() {
 
           <div className="author_info">
             <h3>
-              {author.firstName} {author.lastName}
+              {author?.firstName} {author?.lastName}
             </h3>
 
-            <span>{author.designation || 'Employee'}</span>
+            <span>{author?.designation || 'Employee'}</span>
           </div>
         </div>
 
-        <blockquote>"{featured.content}"</blockquote>
+        <blockquote>"{featured?.content}"</blockquote>
 
         <div className="thought_actions" id="tour-thought-actions">
           <div className="action_item">
@@ -80,7 +80,7 @@ export default function FeaturedThought() {
           <div className="action_item">
             <FaComment />
 
-            <span>{featured.comments.length}</span>
+            <span>{featured.comments?.length}</span>
           </div>
 
           <div className="action_item">
