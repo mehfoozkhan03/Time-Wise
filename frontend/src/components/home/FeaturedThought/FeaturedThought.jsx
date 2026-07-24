@@ -80,7 +80,7 @@ export default function FeaturedThought() {
           <div className="action_item">
             <FaComment />
 
-            <span>{featured.comments.length}</span>
+            <span>{featured.comments?.length}</span>
           </div>
 
           <div className="action_item">
