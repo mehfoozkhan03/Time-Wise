@@ -1,4 +1,4 @@
-/* /* ==========================================================
+/* ==========================================================
    GOOGLE FONTS
 ========================================================== */
 
@@ -51,43 +51,47 @@
 
   /* Shadows */
   --shadow_sm: 0 2px 6px rgba(0, 0, 0, 0.05);
-
   --shadow_md: 0 6px 18px rgba(0, 0, 0, 0.08);
-
   --shadow_lg: 0 14px 36px rgba(0, 0, 0, 0.12);
 
   /* Transition */
-
   --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
   /* Navbar */
-
   --navbar_height: 78px;
 
   /* Sidebar */
-
   --sidebar_width: 270px;
 
+  /* Buttons */
   --button: linear-gradient(135deg, #667eea, #764ba2);
-
   --buttonhover: linear-gradient(135deg, #4f46e5, #7c3aed);
 
+  /* Heading */
   --heading: linear-gradient(135deg, #6574e3 0%, #4258be 50%, #584190 100%);
 
   /* Card */
---card: #ffffff;
---card-hover: #f8fafc;
+  --card: #ffffff;
+  --card-hover: #f8fafc;
+  --card-border: #e2e8f0;
+  --card-shadow: rgba(0, 0, 0, 0.06);
 
-/* Input */
---input-bg: #ffffff;
---input-text: #2c2f3a;
---label-color: #6e7a88;
+  /* Input */
+  --input-bg: #ffffff;
+  --input-text: #2c2f3a;
+  --label-color: #6e7a88;
 
-/* Overlay */
---overlay: rgba(255,255,255,.15);
+  /* Overlay */
+  --overlay: rgba(255, 255, 255, 0.15);
 
-/* Focus */
---focus-shadow: rgba(41,163,224,.18);
+  /* Focus */
+  --focus-shadow: rgba(41, 163, 224, 0.18);
+
+  /* Additional */
+  --text-inverse: #ffffff;
+  --divider: #e2e8f0;
+  --tag-bg: rgba(41, 163, 224, 0.1);
+  --tag-text: #29a3e0;
 }
 
 /* ==========================================================
@@ -95,49 +99,57 @@
 ========================================================== */
 
 html.dark {
-  --bg: #1f242d;
+  /* Backgrounds */
+  --bg: #0f1117;
+  --surface: #1a1d27;
+  --surface_hover: #252a36;
 
-  --surface: #2a2f3a;
-
-  --surface_hover: #353c48;
-
+  /* Brand */
   --primary: #3eb5e8;
-
   --primary_hover: #53c1f0;
-
   --secondary: #8ad5f2;
 
-  --text_primary: #e4e8ed;
+  /* Typography */
+  --text_primary: #e8ecf1;
+  --text_secondary: #9aa4b3;
 
-  --text_secondary: #a2acb8;
+  /* Borders */
+  --border: #2d3442;
 
-  --border: #3b4251;
-
+  /* Status */
   --success: #81e6c3;
-
   --warning: #ffd27f;
-
   --error: #f17c7c;
 
+  /* Buttons */
   --button: linear-gradient(135deg, #667eea, #764ba2);
-
   --buttonhover: linear-gradient(135deg, #4f46e5, #7c3aed);
+
+  /* Heading */
   --heading: linear-gradient(135deg, #6574e3 0%, #4258be 50%, #584190 100%);
 
   /* Card */
---card: #ffffff;
---card-hover: #f8fafc;
+  --card: #1a1d27;
+  --card-hover: #252a36;
+  --card-border: #2d3442;
+  --card-shadow: rgba(0, 0, 0, 0.4);
 
-/* Input */
---input-bg: #ffffff;
---input-text: #2c2f3a;
---label-color: #6e7a88;
+  /* Input */
+  --input-bg: #252a36;
+  --input-text: #e8ecf1;
+  --label-color: #9aa4b3;
 
-/* Overlay */
---overlay: rgba(255,255,255,.15);
+  /* Overlay */
+  --overlay: rgba(255, 255, 255, 0.06);
 
-/* Focus */
---focus-shadow: rgba(41,163,224,.18);
+  /* Focus */
+  --focus-shadow: rgba(62, 181, 232, 0.18);
+
+  /* Additional */
+  --text-inverse: #0f1117;
+  --divider: #2d3442;
+  --tag-bg: rgba(62, 181, 232, 0.12);
+  --tag-text: #3eb5e8;
 }
 
 /* ==========================================================
@@ -150,17 +162,10 @@ html {
 
 body {
   font-family: 'Inter', sans-serif;
-
   background: var(--bg);
-
   color: var(--text_primary);
-
-  transition:
-    background var(--transition),
-    color var(--transition);
-
+  transition: background var(--transition), color var(--transition);
   min-height: 100vh;
-
   overflow-x: hidden;
 }
 
@@ -175,15 +180,12 @@ h4,
 h5,
 h6 {
   font-family: 'Poppins', sans-serif;
-
   color: var(--text_primary);
-
   font-weight: 600;
 }
 
 p {
   color: var(--text_secondary);
-
   line-height: 1.65;
 }
 
@@ -193,7 +195,6 @@ small {
 
 a {
   text-decoration: none;
-
   color: inherit;
 }
 
@@ -204,25 +205,21 @@ ul {
 .hero_name {
   color: var(--primary);
 }
+
 /* ==========================================================
    BUTTON
 ========================================================== */
 
 button {
   font-family: inherit;
-
   cursor: pointer;
-
   border: none;
-
   outline: none;
-
   transition: var(--transition);
 }
 
 button:disabled {
   cursor: not-allowed;
-
   opacity: 0.6;
 }
 
@@ -234,15 +231,10 @@ input,
 textarea,
 select {
   font-family: inherit;
-
   outline: none;
-
   border: 1px solid var(--border);
-
-  background: var(--surface);
-
-  color: var(--text_primary);
-
+  background: var(--input-bg);
+  color: var(--input-text);
   transition: var(--transition);
 }
 
@@ -250,14 +242,12 @@ input:focus,
 textarea:focus,
 select:focus {
   border-color: var(--primary);
-
-  box-shadow: 0 0 0 4px rgba(41, 163, 224, 0.18);
+  box-shadow: 0 0 0 4px var(--focus-shadow);
 }
 
-html.dark input:focus,
-html.dark textarea:focus,
-html.dark select:focus {
-  box-shadow: 0 0 0 0 rgba(62, 181, 232, 0.18);
+input::placeholder,
+textarea::placeholder {
+  color: var(--text_secondary);
 }
 
 /* ==========================================================
@@ -283,7 +273,6 @@ img {
 
 ::-webkit-scrollbar-thumb {
   background: var(--primary);
-
   border-radius: 50px;
 }
 
@@ -340,6 +329,46 @@ img {
 }
 
 /* ==========================================================
+   CARD UTILITIES
+========================================================== */
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius_md);
+  box-shadow: var(--shadow_sm);
+  transition: all var(--transition);
+}
+
+.card:hover {
+  background: var(--card-hover);
+  box-shadow: var(--shadow_md);
+}
+
+/* ==========================================================
+   DIVIDER
+========================================================== */
+
+.divider {
+  border-top: 1px solid var(--divider);
+  margin: 1rem 0;
+}
+
+/* ==========================================================
+   TAG / BADGE
+========================================================== */
+
+.tag {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  background: var(--tag-bg);
+  color: var(--tag-text);
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+/* ==========================================================
    ANIMATIONS
 ========================================================== */
 
@@ -356,4 +385,19 @@ img {
 
 .fade_in {
   animation: fade_in 0.35s ease;
+}
+
+/* ==========================================================
+   RESPONSIVE UTILITIES
+========================================================== */
+
+@media (max-width: 768px) {
+  .container {
+    width: 95%;
+  }
+
+  :root {
+    --navbar_height: 64px;
+    --sidebar_width: 240px;
+  }
 }
