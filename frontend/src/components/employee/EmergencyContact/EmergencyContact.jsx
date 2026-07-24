@@ -37,7 +37,7 @@ export const EmergencyContact = () => {
                             <div>sarah.mitchell@gmail.com</div>
                         </div>
                         <div className="emergencyContact-edit">
-                            <button><MdEdit /> Edit</button>
+                            <button><MdEdit style={{fontSize: "17px"}} /> Edit Contact</button>
                         </div>
                     </div>
                 </div>
