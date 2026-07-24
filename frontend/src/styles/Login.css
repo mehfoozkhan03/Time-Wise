@@ -8,15 +8,13 @@
 /* ===========================
    Chrome Autofill
 =========================== */
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus,
-textarea:-webkit-autofill,
-select:-webkit-autofill {
-  -webkit-box-shadow: 0 0 0 1000px var(--text_primary) inset !important;
-  -webkit-text-fill-color: var(--surface_hover) !important;
-  caret-color: var(--surface_hover);
-  transition: background-color 9999s ease-in-out 0s;
+input:is(:-webkit-autofill, :autofill),
+textarea:is(:-webkit-autofill, :autofill),
+select:is(:-webkit-autofill, :autofill) {
+  -webkit-text-fill-color: #000 !important;
+  -webkit-box-shadow: 0 0 0px 1000px #fff inset !important;
+  box-shadow: 0 0 0px 1000px #fff inset !important;
+  transition: background-color 5000s ease-in-out 0s;
 }
 
 /* ===========================
