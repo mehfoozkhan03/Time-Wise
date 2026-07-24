@@ -1,0 +1,53 @@
+.emergencyContact-section{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.emergency-header{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.emergency-header>div{
+    border: 1px solid var(--border);
+    padding: 5px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ff3444;
+    background-color: #f4abc1;
+    font-size: 20px;
+}
+
+.emergencyContact-details{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.emergencyContact-avatar{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 30px;
+    width: 30px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+}
+
+.emergency-info{
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 20px;
+    background-color: var(--surface);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.emergency-name>h3{
+    font-size: 15px;
+}
+.emergency-name>span{
+    font-size: 11px;
+}

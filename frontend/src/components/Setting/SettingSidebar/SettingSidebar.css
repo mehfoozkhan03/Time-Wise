@@ -48,10 +48,14 @@
 }
 
 .settingSidebar-link.active{
-    background: var(--primary);
-    color: var(--text_primary);
+    background-color: var(--primary);
+    color: #fff;
+    font-weight: 600;
 }
 
+.settingSidebar-link.active .settingSidebar-icon{
+    color: #fff;
+}
 
 .settingSidebar-content {
   position: sticky;

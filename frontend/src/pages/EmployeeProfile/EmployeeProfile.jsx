@@ -7,6 +7,7 @@ import PerformanceSummary from '../../components/employee/PerformanceSummary/Per
 import RecentActivity from '../../components/employee/RecentActivity/RecentActivity';
 import { Achievements } from '../../components/employee/Achievements/Achievements';
 import { LeaveSummary } from '../../components/employee/LeaveSummary/LeaveSummary';
+import { EmergencyContact } from '../../components/employee/EmergencyContact/EmergencyContact';
 
 export default function EmployeeProfile() {
   const { user } = useSelector((state) => state.auth);
@@ -101,6 +102,8 @@ export default function EmployeeProfile() {
         <Achievements />
 
         <LeaveSummary />
+
+        <EmergencyContact />
       </div>
     </main>
   );
