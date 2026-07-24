@@ -125,7 +125,7 @@ export default function HeroSection() {
   const attendance = useCountUp(stats.attendancePercentage);
   const weeklyHours = useCountUp(stats.weeklyHours);
   const productivity = useCountUp(stats.productivity);
-
+const dayStreak = useCountUp(stats.dayStreak);
   useEffect(() => {
     dispatch(getDashboardStats());
   }, [dispatch]);
@@ -203,7 +203,7 @@ export default function HeroSection() {
         <div className="hero_stat" id="tour-hero-stat">
           <FaFire className="fire" />
           <div>
-            <h2>{stats.dayStreak}</h2>
+            <h2>{dayStreak}</h2>
             <p>Day Streak</p>
           </div>
         </div>
