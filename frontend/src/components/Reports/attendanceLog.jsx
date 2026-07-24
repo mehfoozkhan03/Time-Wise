@@ -117,7 +117,7 @@ export function AttendanceLog({
                     textAlign: "left",
                     padding: "10px 12px",
                     fontSize: 11,
-                    color: "#475569",
+                    color: "var(--text-primary)",
                     fontWeight: 600,
                     textTransform: "uppercase",
                     letterSpacing: "0.07em",
@@ -189,7 +189,7 @@ export function AttendanceLog({
                       {row.hours}h
                     </span>
                   ) : (
-                    <span style={{ color: "#334155" }}>—</span>
+                    <span style={{ color: "var(--text-primary)" }}>—</span>
                   )}
                 </td>
                 <td
@@ -215,7 +215,7 @@ export function AttendanceLog({
                       +{row.overtime}h
                     </span>
                   ) : (
-                    <span style={{ color: "#334155" }}>—</span>
+                    <span style={{ color: "var(--text-primary)" }}>—</span>
                   )}
                 </td>
                 <td style={{ padding: "12px 12px" }}>
@@ -224,7 +224,7 @@ export function AttendanceLog({
                 <td
                   style={{
                     padding: "12px 12px",
-                    color: "#475569",
+                    color: "var(--text-primary)",
                     fontSize: 12,
                   }}
                 >
@@ -239,7 +239,7 @@ export function AttendanceLog({
                   style={{
                     textAlign: "center",
                     padding: "32px",
-                    color: "#334155",
+                    color: "var(--text-primary)",
                     fontSize: 13,
                   }}
                 >
@@ -273,7 +273,7 @@ export function AttendanceLog({
         >
           <button
             style={{
-              background: "var(-primary)",
+              background: "var(--primary)",
               color: "#fff",
               borderRadius: "5px",
               padding: "5px 11px",
@@ -286,7 +286,7 @@ export function AttendanceLog({
           <button
             style={{
               padding: "5px 11px",
-              background: "var(-primary)",
+              background: "var(--primary)",
               color: "#fff",
               borderRadius: "5px",
             }}
