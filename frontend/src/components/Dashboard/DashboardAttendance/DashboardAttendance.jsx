@@ -30,7 +30,7 @@ export const DashboardAttendance = () => {
                             <div style={{color: "#4a9f91"}}>09:02</div>
                             <div>13:00–13:45</div>
                             <div>18:10</div>
-                            <div style={{color: "#fff", fontWeight: "bold"}}>8h 23m</div>
+                            <div>8h 23m</div>
                             <div className="dashboardAttendance-status">
                                 <div></div>
                                 <span>Present</span>
@@ -47,7 +47,7 @@ export const DashboardAttendance = () => {
                             <div style={{color: "#4a9f91"}}>09:02</div>
                             <div>13:00–13:45</div>
                             <div>18:10</div>
-                            <div style={{color: "#fff", fontWeight: "bold"}}>8h 23m</div>
+                            <div>8h 23m</div>
                             <div className="dashboardAttendance-status">
                                 <div></div>
                                 <span>Present</span>
@@ -64,7 +64,7 @@ export const DashboardAttendance = () => {
                             <div style={{color: "#4a9f91"}}>09:02</div>
                             <div>13:00–13:45</div>
                             <div>18:10</div>
-                            <div style={{color: "#fff", fontWeight: "bold"}}>8h 23m</div>
+                            <div>8h 23m</div>
                             <div className="dashboardAttendance-status">
                                 <div></div>
                                 <span>Present</span>

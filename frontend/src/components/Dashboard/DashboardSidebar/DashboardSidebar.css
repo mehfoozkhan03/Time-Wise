@@ -1,9 +1,9 @@
 .dashboardSidebar-container{
     position: sticky;
-    bottom: 0;
-    border: 1px solid var(--border);
+    top: 0;
     width: 270px;
     height: 89vh;
+    border: 1px solid var(--border);
 }
 .dashboard-logo{
     padding: 20px;
@@ -32,17 +32,27 @@
     gap: 15px;
     padding: 12px 20px;
     border-radius: 10px;
+    border: 1px solid transparent;
+    transition: var(--transition);
 }
-.dashboard-navlink>span{
-    font-size: 14px;
-}
+
 .dashboard-navlink:hover{
     background-color: var(--surface_hover);
     color: var(--text_primary);
 }
+
 .dashboard-navlink.active{
-    background-color: var(--primary_hover);
-    color: var(--text_primary);
+    background-color: rgba(41, 163, 224, 0.12);
+    border-color: var(--primary);
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.dashboard-navlink.active svg{
+    color: var(--primary) !important;
+}
+.dashboard-navlink>span{
+    font-size: 14px;
 }
 
 /* dashboard logout */

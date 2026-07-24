@@ -8,7 +8,8 @@ import { useTheme } from "../../../context/ThemeContext";
 
 
 export const Appearance = () => {
-    const { changeTheme } = useTheme();
+    const { currentTheme, changeTheme } = useTheme();
+    console.log("🚀 ~ theme:", currentTheme);
 
 
     return (
@@ -25,15 +26,15 @@ export const Appearance = () => {
                         <h3>Theme</h3>
                     </div>
                     <div className="theme-mode">
-                        <div className="light-mode" onClick={() => changeTheme("light")}>
+                        <div className={`light-mode ${currentTheme === "light" ? "active-theme" : ""}`} onClick={() => changeTheme("light")}>
                             <MdOutlineLightMode className="mode-icon" />
                             <p>Light</p>
                         </div>
-                        <div className="dark-mode" onClick={() => changeTheme("dark")}>
+                        <div className={`dark-mode ${currentTheme === "dark" ? "active-theme" : ""}`} onClick={() => changeTheme("dark")}>
                             <MdOutlineDarkMode className="mode-icon" />
                             <p>Dark</p>
                         </div>
-                        <div className="system-mode" onClick={() => changeTheme("system")}>
+                        <div className={`system-mode ${currentTheme === "system" ? "active-theme" : ""}`} onClick={() => changeTheme("system")}>
                             <CiLaptop className="mode-icon" />
                             <p>System</p>
                         </div>
