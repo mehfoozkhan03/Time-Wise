@@ -24,6 +24,7 @@ export default function Home() {
     dispatch(fetchFeaturedThought());
     dispatch(getDashboardStats());
   }, [dispatch]);
+  
 
   return (
     <main className="home_page">
