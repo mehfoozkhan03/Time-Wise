@@ -74,6 +74,7 @@
 .hero_name {
   color: var(--primary)
 }
+
 .typing-cursor {
   display: inline-block;
   color: var(--primary);
