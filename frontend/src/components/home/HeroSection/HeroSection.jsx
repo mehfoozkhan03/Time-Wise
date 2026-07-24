@@ -159,8 +159,7 @@ export default function HeroSection() {
       <div className="hero_left">
         <div id="tour-hero-greeting">
           <h1>
-            {displayText}
-            <span className="typing-cursor">|</span>
+            {displayText},<span className="typing-cursor">|</span>
           </h1>
           <h1 className="hero_name">
             {capitalize(user?.firstName) || "Employee"}.
