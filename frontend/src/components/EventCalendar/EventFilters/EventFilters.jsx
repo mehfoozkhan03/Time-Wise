@@ -20,26 +20,22 @@ function EventFilters({
   ========================================= */
 
   const eventCounts = useMemo(() => {
-    const counts = {};
-
-    events.forEach((event) => {
-      if (!event?.type) return;
+    return events.reduce((counts, event) => {
+      if (!event?.type) return counts;
 
       const type = String(event.type).toUpperCase();
 
       counts[type] = (counts[type] || 0) + 1;
-    });
 
-    return counts;
+      return counts;
+    }, {});
   }, [events]);
 
   /* =========================================
      Event Types
   ========================================= */
 
-  const eventTypes = useMemo(() => {
-    return Object.entries(EVENT_CONFIG);
-  }, []);
+  const eventTypes = useMemo(() => Object.entries(EVENT_CONFIG), []);
 
   /* =========================================
      Search
@@ -65,9 +61,7 @@ function EventFilters({
 
   return (
     <section className="eventFilters">
-      {/* =========================================
-          Search
-      ========================================= */}
+      {/* ================= Search ================= */}
 
       <div className="searchBar">
         <FaSearch />
@@ -81,9 +75,7 @@ function EventFilters({
         />
       </div>
 
-      {/* =========================================
-          Actions
-      ========================================= */}
+      {/* ================= Actions ================= */}
 
       <div className="filterActions">
         <button type="button" onClick={selectAll}>
@@ -95,34 +87,28 @@ function EventFilters({
         </button>
       </div>
 
-      {/* =========================================
-          Filter Chips
-      ========================================= */}
+      {/* ================= Filter Chips ================= */}
 
       <div className="filterList">
-        {eventTypes.map(([type, config]) => {
-          const count = eventCounts[type] ?? 0;
+        {eventTypes.map(([type, config]) => (
+          <button
+            key={type}
+            type="button"
+            className={`filterChip ${filters[type] ? "active" : ""}`}
+            aria-pressed={Boolean(filters[type])}
+            aria-label={`Toggle ${config.label} events`}
+            title={config.label}
+            onClick={() => handleToggleFilter(type)}
+          >
+            <span className="chipIcon">
+              <config.icon />
+            </span>
 
-          return (
-            <button
-              key={type}
-              type="button"
-              className={`filterChip ${filters[type] ? "active" : ""}`}
-              aria-pressed={Boolean(filters[type])}
-              aria-label={`Toggle ${config.label} events`}
-              title={config.label}
-              onClick={() => handleToggleFilter(type)}
-            >
-              <span className="chipIcon">
-                <config.icon />
-              </span>
+            <span>{config.label}</span>
 
-              <span>{config.label}</span>
-
-              <span className="count">{count}</span>
-            </button>
-          );
-        })}
+            <span className="count">{eventCounts[type] ?? 0}</span>
+          </button>
+        ))}
       </div>
     </section>
   );

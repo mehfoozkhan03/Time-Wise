@@ -38,8 +38,11 @@ function UpcomingEvents({ events = [], onEventClick }) {
       ) : (
         <>
           <div className="upcomingList">
-            {upcomingEvents.map((event) => (
-              <div key={event._id || event.id} className="upcomingItem">
+            {upcomingEvents.map((event, index) => (
+              <div
+                key={event._id ?? event.id ?? index}
+                className="upcomingItem"
+              >
                 <EventItem
                   event={event}
                   variant="compact"
@@ -49,7 +52,7 @@ function UpcomingEvents({ events = [], onEventClick }) {
                   onClick={onEventClick}
                 />
 
-                <time className="eventDate" dateTime={event.date || ""}>
+                <time className="eventDate" dateTime={event.date}>
                   {event.relativeDate}
                 </time>
               </div>

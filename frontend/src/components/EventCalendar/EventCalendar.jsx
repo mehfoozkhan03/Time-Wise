@@ -39,7 +39,7 @@ export default function EventCalendar() {
   } = useSelector((state) => state.holiday);
 
   /* =========================================
-     Fetch Calendar Data
+     Fetch Data
   ========================================= */
 
   useEffect(() => {
@@ -48,7 +48,7 @@ export default function EventCalendar() {
   }, [dispatch]);
 
   /* =========================================
-     Calendar State
+     Calendar
   ========================================= */
 
   const {
@@ -61,12 +61,53 @@ export default function EventCalendar() {
   } = useCalendar();
 
   /* =========================================
-     Merge Calendar Events + Holidays
+     Holiday Mapping
+  ========================================= */
+
+  const mappedHolidays = useMemo(() => {
+    return mapHolidayList(holidays);
+  }, [holidays]);
+
+  /* =========================================
+     Merge Events
   ========================================= */
 
   const allEvents = useMemo(() => {
-    return [...events, ...mapHolidayList(holidays)];
-  }, [events, holidays]);
+    return [...events, ...mappedHolidays];
+  }, [events, mappedHolidays]);
+
+  /* =========================================
+     Current Month Events
+  ========================================= */
+
+  const currentMonthEvents = useMemo(() => {
+    return allEvents.filter((event) => {
+      if (!event?.date) return false;
+
+      const date = new Date(event.date);
+
+      return (
+        date.getFullYear() === currentDate.getFullYear() &&
+        date.getMonth() === currentDate.getMonth()
+      );
+    });
+  }, [allEvents, currentDate]);
+
+  /* =========================================
+     Debug
+  ========================================= */
+
+  // useEffect(() => {
+  //   console.group("===== EVENT CALENDAR DEBUG =====");
+
+  //   console.log("Calendar Events:", events.length);
+  //   console.log("Redux Holidays:", holidays.length);
+  //   console.log("Mapped Holidays:", mappedHolidays.length);
+  //   console.log("All Events:", allEvents.length);
+  //   console.log("Current Month Events:", currentMonthEvents.length);
+
+  //   console.groupEnd();
+  // }, [events, holidays, mappedHolidays, allEvents, currentMonthEvents]);
 
   /* =========================================
      Selected Event
@@ -83,7 +124,7 @@ export default function EventCalendar() {
   }, []);
 
   /* =========================================
-     Event Filters
+     Filters
   ========================================= */
 
   const {
@@ -94,14 +135,8 @@ export default function EventCalendar() {
     selectAll,
     clearAll,
     filteredEvents,
-  } = useEventFilter(allEvents);
+  } = useEventFilter(allEvents, currentDate);
 
-  console.log(
-    allEvents.filter(
-        e =>
-            e.date.includes("2026-08")
-    )
-);
   /* =========================================
      Loading
   ========================================= */
@@ -119,7 +154,6 @@ export default function EventCalendar() {
       <section className="eventCalendar">
         <div className="calendarError">
           <h3>Failed to load calendar</h3>
-
           <p>{error || holidayError}</p>
         </div>
       </section>
@@ -146,7 +180,7 @@ export default function EventCalendar() {
         setSearchTerm={setSearchTerm}
         selectAll={selectAll}
         clearAll={clearAll}
-        events={allEvents}
+        events={currentMonthEvents}
       />
 
       <div className="calendarBody">

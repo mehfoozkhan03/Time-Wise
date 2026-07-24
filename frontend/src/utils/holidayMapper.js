@@ -9,11 +9,11 @@ export const mapHolidayToEvent = (holiday) => ({
 
   id: holiday.id,
 
-  title: holiday.title,
+  title: holiday.title ?? "Holiday",
 
   description: holiday.description ?? "",
 
-  type: holiday.type || EVENT_TYPES.HOLIDAY,
+  type: holiday.type?.toUpperCase() || EVENT_TYPES.HOLIDAY,
 
   date: holiday.date,
 
@@ -37,6 +37,8 @@ export const mapHolidayToEvent = (holiday) => ({
 
   color: "",
 
+  visibility: "PUBLIC",
+
   isHoliday: true,
 });
 
@@ -46,6 +48,7 @@ export const mapHolidayToEvent = (holiday) => ({
 
 export const mapHolidayList = (holidays = []) => {
   if (!Array.isArray(holidays)) {
+    console.warn("Holiday Mapper: Expected an array.", holidays);
     return [];
   }
 

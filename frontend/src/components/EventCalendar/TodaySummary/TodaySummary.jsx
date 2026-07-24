@@ -16,7 +16,7 @@ function TodaySummary({ events = [] }) {
   ========================================= */
 
   const summaryData = useMemo(() => {
-    return getTodaySummary(events, EVENT_CONFIG);
+    return getTodaySummary(events, EVENT_CONFIG).filter((item) => item.config);
   }, [events]);
 
   return (
@@ -30,10 +30,6 @@ function TodaySummary({ events = [] }) {
       ) : (
         <div className="summaryList">
           {summaryData.map((item) => {
-            if (!item?.config) {
-              return null;
-            }
-
             const Icon = item.config.icon;
 
             return (
