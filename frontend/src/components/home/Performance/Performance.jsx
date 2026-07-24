@@ -1,5 +1,5 @@
 import './Performance.css'
-
+import useCountUp from "../../../components/UseCount/Count";
 import { useSelector } from 'react-redux'
 
 import PerformanceCard from './PerformanceCard'
@@ -75,11 +75,16 @@ export default function Performance() {
     return '#29A3E0'
   }
 
+const attendance = useCountUp(stats.attendancePercentage);
+const productivity = useCountUp(stats.productivity);
+const weeklyHours = useCountUp(stats.weeklyHours);
+const dayStreak = useCountUp(stats.dayStreak);
+
   const performanceStats = [
     {
       title: 'Attendance',
 
-      value: `${stats.attendancePercentage}%`,
+       value: `${attendance}%`,
 
       subtitle: attendanceSubtitle(),
 
@@ -93,7 +98,7 @@ export default function Performance() {
     {
       title: 'Productivity',
 
-      value: `${stats.productivity}%`,
+          value: `${productivity}%`,
 
       subtitle: productivitySubtitle(),
 
@@ -107,7 +112,7 @@ export default function Performance() {
     {
       title: 'Weekly Hours',
 
-      value: stats.weeklyHours.toFixed(1),
+        value: weeklyHours.toFixed(1),
 
       subtitle: weeklySubtitle(),
 
@@ -121,7 +126,7 @@ export default function Performance() {
     {
       title: 'Current Streak',
 
-      value: stats.dayStreak,
+      value: dayStreak,
 
       subtitle: streakSubtitle(),
 
