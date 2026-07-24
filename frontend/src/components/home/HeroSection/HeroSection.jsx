@@ -24,7 +24,28 @@ export default function HeroSection() {
 
   const [charIndex, setCharIndex] = useState(0);
 
-  const languages = ["en", "hi", "mr", "gr", "ta", "te", "kn", "ml", "bn"];
+  const languages = [
+    "en",
+    "hi",
+    "mr",
+    "gr",
+    "ta",
+    "te",
+    "kn",
+    "ml",
+    "bn",
+    "pa",
+    "ur",
+    "ar",
+    "es",
+    "cz",
+    "ja",
+    "fr",
+    "vi",
+    "ko",
+    "it",
+    "ru",
+  ];
 
   const greeting = () => {
     const hour = time.getHours();
@@ -125,7 +146,7 @@ export default function HeroSection() {
   const attendance = useCountUp(stats.attendancePercentage);
   const weeklyHours = useCountUp(stats.weeklyHours);
   const productivity = useCountUp(stats.productivity);
-const dayStreak = useCountUp(stats.dayStreak);
+  const dayStreak = useCountUp(stats.dayStreak);
   useEffect(() => {
     dispatch(getDashboardStats());
   }, [dispatch]);
