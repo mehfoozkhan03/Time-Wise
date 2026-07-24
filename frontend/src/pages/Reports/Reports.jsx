@@ -9,18 +9,13 @@ import {
   setDashboardStats,
   setAttendanceLog,
 } from "../../store/reportsSlice";
-import { attendanceLog } from "../../components/Reports/attendanceData";
+import { AttendanceLog } from "../../components/Reports/attendanceLog";
 import { goals } from "../../components/Reports/goalsData";
 import { insights } from "../../components/Reports/insightsData";
-import {
-  chartTabs,
-  ranges,
-  summaryItems,
-} from "../../components/Reports/reportsConstants";
+import { chartTabs, ranges } from "../../components/Reports/reportsConstants";
 import { WorkSummary } from "../../components/Reports/workSummary";
 import { PerformanceInsights } from "../../components/Reports/performanceInsights";
 import { GoalsSection } from "../../components/Reports/goalsSection";
-import { AttendanceLog } from "../../components/Reports/attendanceLog";
 import { ChartsSection } from "../../components/Reports/chartsSection";
 import { sparklineData } from "../../components/Reports/chartData";
 import { ReportsHeader } from "../../components/Reports/reportsHeader";
@@ -30,34 +25,24 @@ import {
   getDashboardStats,
 } from "../../services/reportsService";
 
-// ─── Types
-
-// type DateRange = 'week' | 'month' | 'lastmonth' | 'year' | 'custom'
-// type AttendanceStatus = 'present' | 'late' | 'absent' | 'leave' | 'holiday' | 'weekend'
-
-// interface LogEntry {
-//   date: string
-//   checkin: string
-//   checkout: string
-//   hours: number
-//   breakDuration: string
-//   overtime: number
-//   status: AttendanceStatus
-//   notes: string
-// }
-
 // Main App
 
 export function Reports() {
   const dispatch = useDispatch();
 
-  const { dateRange, searchLog, statusFilter, activeTab } = useSelector(
-    (state) => state.reports,
-  );
+  const {
+    dateRange,
+    searchLog,
+    statusFilter,
+    activeTab,
+    dashboardStats,
+    attendanceLog,
+  } = useSelector((state) => state.reports);
+
+  console.log(attendanceLog[0]);
 
   useEffect(() => {
     const loadReports = async () => {
-
       try {
         const stats = await getDashboardStats();
         const history = await getAttendanceHistory();
@@ -71,19 +56,56 @@ export function Reports() {
     loadReports();
   }, [dispatch]);
 
-  const { dashboardStats } = useSelector((state) => state.reports);
+  const formatTime = (time) => {
+    if (!time) return "—";
 
-  const filteredLog = useMemo(
-    () =>
-      attendanceLog.filter((e) => {
+    return new Date(time).toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    });
+  };
+
+  const formatDate = (date) => {
+    return new Date(date).toLocaleDateString("en-GB");
+  };
+
+  const secondsToHours = (seconds) => {
+    return +(seconds / 3600).toFixed(1);
+  };
+
+  const secondsToMinutes = (seconds) => {
+    return `${Math.floor(seconds / 60)} min`;
+  };
+
+  const filteredLog = useMemo(() => {
+    return attendanceLog
+      .map((item) => {
+        const hours = secondsToHours(item.totalWorkingSeconds);
+
+        return {
+          date: formatDate(item.date),
+          checkin: formatTime(item.checkInTime),
+          checkout: formatTime(item.checkOutTime),
+          hours,
+          breakDuration: secondsToMinutes(item.totalBreakSeconds),
+          overtime: Math.max(0, +(hours - 8).toFixed(1)),
+          status: item.status,
+          notes: item.notes,
+        };
+      })
+      .filter((e) => {
         const matchSearch =
           e.date.toLowerCase().includes(searchLog.toLowerCase()) ||
           e.notes.toLowerCase().includes(searchLog.toLowerCase());
-        const matchStatus = statusFilter === "all" || e.status === statusFilter;
+
+        const matchStatus =
+          statusFilter === "all" ||
+          e.status.toLowerCase() === statusFilter.toLowerCase();
+
         return matchSearch && matchStatus;
-      }),
-    [searchLog, statusFilter],
-  );
+      });
+  }, [attendanceLog, searchLog, statusFilter]);
 
   return (
     <div
@@ -129,7 +151,7 @@ export function Reports() {
             marginBottom: 20,
           }}
         >
-          <WorkSummary summaryItems={summaryItems} />
+          <WorkSummary dashboardStats={dashboardStats} />
 
           <PerformanceInsights insights={insights} />
         </div>
