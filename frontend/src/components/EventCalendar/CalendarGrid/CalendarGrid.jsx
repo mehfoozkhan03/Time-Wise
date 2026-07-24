@@ -14,23 +14,35 @@ export default function CalendarGrid({
   currentDate,
   selectedDate,
   selectDate,
-  events,
+  events = [],
   onEventClick,
 }) {
-  const calendar = useMemo(() => generateCalendar(currentDate), [currentDate]);
+  /* =========================================
+       Generate Calendar
+    ========================================= */
+
+  const calendar = useMemo(() => {
+    return generateCalendar(currentDate);
+  }, [currentDate]);
+
+  /* =========================================
+       Group Events by Date
+    ========================================= */
 
   const eventsByDate = useMemo(() => {
     const map = new Map();
 
-    for (const event of events) {
-      const list = map.get(event.date);
+    events.forEach((event) => {
+      if (!event?.date) return;
 
-      if (list) {
-        list.push(event);
-      } else {
-        map.set(event.date, [event]);
+      const dateKey = new Date(event.date).toISOString().split("T")[0];
+
+      if (!map.has(dateKey)) {
+        map.set(dateKey, []);
       }
-    }
+
+      map.get(dateKey).push(event);
+    });
 
     return map;
   }, [events]);
