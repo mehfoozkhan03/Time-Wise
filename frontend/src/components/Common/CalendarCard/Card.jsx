@@ -1,21 +1,29 @@
 import "./Card.css";
 
-export default function Card({
-  title,
+import { memo, useMemo } from "react";
 
-  icon,
+function Card({ title, icon, children, className = "" }) {
+  /* =========================================
+     Card Title ID
+  ========================================= */
 
-  children,
+  const titleId = useMemo(() => {
+    if (!title) return undefined;
 
-  className = "",
-}) {
+    return `${title.toLowerCase().replace(/\s+/g, "-")}-card`;
+  }, [title]);
+
   return (
-    <section className={`card ${className}`}>
+    <section className={`card ${className}`.trim()} aria-labelledby={titleId}>
       {(title || icon) && (
         <div className="cardHeader">
-          {icon && <span className="cardIcon">{icon}</span>}
+          {icon && (
+            <span className="cardIcon" aria-hidden="true">
+              {icon}
+            </span>
+          )}
 
-          {title && <h3>{title}</h3>}
+          {title && <h3 id={titleId}>{title}</h3>}
         </div>
       )}
 
@@ -23,3 +31,5 @@ export default function Card({
     </section>
   );
 }
+
+export default memo(Card);

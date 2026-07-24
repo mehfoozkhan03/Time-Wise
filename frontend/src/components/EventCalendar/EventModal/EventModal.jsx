@@ -1,6 +1,6 @@
 import "./EventModal.css";
 
-import { memo, useCallback, useEffect } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef } from "react";
 
 import {
   FaTimes,
@@ -19,17 +19,25 @@ import { formatFullDate, formatTime } from "../../../utils/dateUtils";
 
 import InfoRow from "../../Common/InfoRow/InfoRow";
 
-function EventModal({ event, onClose, onEdit, onDelete }) {
+function EventModal({ event, onClose, onEdit, onDelete, canEdit = false }) {
   /* =========================================
-       ESC Close
-    ========================================= */
+     Close Button Ref
+  ========================================= */
+
+  const closeButtonRef = useRef(null);
+
+  /* =========================================
+     ESC Close + Focus
+  ========================================= */
 
   useEffect(() => {
     if (!event) return;
 
+    closeButtonRef.current?.focus();
+
     const handleKeyDown = (e) => {
       if (e.key === "Escape") {
-        onClose();
+        onClose?.();
       }
     };
 
@@ -41,12 +49,61 @@ function EventModal({ event, onClose, onEdit, onDelete }) {
   }, [event, onClose]);
 
   /* =========================================
-       Handlers
-    ========================================= */
+     Event Config
+  ========================================= */
 
-  const handleOverlayClick = useCallback(() => {
-    onClose();
-  }, [onClose]);
+  const config = useMemo(() => {
+    if (!event) return null;
+
+    return EVENT_CONFIG[event.type];
+  }, [event]);
+
+  if (!event || !config) {
+    return null;
+  }
+
+  const Icon = config.icon;
+
+  /* =========================================
+     Employee Name
+  ========================================= */
+
+  const employeeName = useMemo(() => {
+    if (event.isHoliday) {
+      return "Public Holiday";
+    }
+
+    return event.employeeName ?? event.employee ?? "N/A";
+  }, [event]);
+
+  /* =========================================
+     Event Time
+  ========================================= */
+
+  const eventTime = useMemo(() => {
+    if (event.isAllDay) {
+      return "All Day";
+    }
+
+    const start = event.startTime ? formatTime(event.startTime) : "--";
+
+    const end = event.endTime ? formatTime(event.endTime) : "--";
+
+    return `${start} - ${end}`;
+  }, [event]);
+
+  /* =========================================
+     Handlers
+  ========================================= */
+
+  const handleOverlayClick = useCallback(
+    (e) => {
+      if (e.target === e.currentTarget) {
+        onClose?.();
+      }
+    },
+    [onClose],
+  );
 
   const handleModalClick = useCallback((e) => {
     e.stopPropagation();
@@ -59,20 +116,6 @@ function EventModal({ event, onClose, onEdit, onDelete }) {
   const handleDelete = useCallback(() => {
     onDelete?.(event);
   }, [event, onDelete]);
-
-  if (!event) return null;
-
-  const config = EVENT_CONFIG[event.type];
-
-  if (!config) return null;
-
-  const Icon = config.icon;
-
-  const employeeName = event.employeeName ?? event.employee ?? "N/A";
-
-  const eventTime = event.isAllDay
-    ? "All Day"
-    : `${formatTime(event.startTime)} - ${formatTime(event.endTime)}`;
 
   return (
     <div
@@ -87,7 +130,9 @@ function EventModal({ event, onClose, onEdit, onDelete }) {
         aria-modal="true"
         aria-labelledby="event-modal-title"
       >
-        {/* Header */}
+        {/* =========================================
+            Header
+        ========================================= */}
 
         <div className="modalHeader">
           <div className="modalTitle">
@@ -115,25 +160,31 @@ function EventModal({ event, onClose, onEdit, onDelete }) {
           </div>
 
           <button
+            ref={closeButtonRef}
             type="button"
             className="closeBtn"
             onClick={onClose}
-            aria-label="Close"
+            aria-label="Close Event"
+            title="Close"
           >
             <FaTimes />
           </button>
         </div>
 
-        {/* Body */}
+        {/* =========================================
+            Body
+        ========================================= */}
 
         <div className="modalBody">
           <InfoRow icon={FaUser} label="Employee" value={employeeName} />
 
-          <InfoRow
-            icon={FaBuilding}
-            label="Department"
-            value={event.department || "N/A"}
-          />
+          {!event.isHoliday && (
+            <InfoRow
+              icon={FaBuilding}
+              label="Department"
+              value={event.department || "N/A"}
+            />
+          )}
 
           <InfoRow
             icon={FaCalendarAlt}
@@ -152,19 +203,31 @@ function EventModal({ event, onClose, onEdit, onDelete }) {
           </div>
         </div>
 
-        {/* Footer */}
+        {/* =========================================
+            Footer
+        ========================================= */}
 
-        <div className="modalFooter">
-          <button type="button" className="editBtn" onClick={handleEdit}>
-            <FaEdit />
-            Edit
-          </button>
+        {!event.isHoliday && canEdit && (
+          <div className="modalFooter">
+            {onEdit && (
+              <button type="button" className="editBtn" onClick={handleEdit}>
+                <FaEdit />
+                Edit
+              </button>
+            )}
 
-          <button type="button" className="deleteBtn" onClick={handleDelete}>
-            <FaTrash />
-            Delete
-          </button>
-        </div>
+            {onDelete && (
+              <button
+                type="button"
+                className="deleteBtn"
+                onClick={handleDelete}
+              >
+                <FaTrash />
+                Delete
+              </button>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

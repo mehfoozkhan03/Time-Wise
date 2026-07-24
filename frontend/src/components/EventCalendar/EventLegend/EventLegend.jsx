@@ -9,19 +9,21 @@ import { EVENT_CONFIG } from "../../../data/eventConfig";
 
 function EventLegend({ filters = {}, toggleFilter }) {
   /* =========================================
-       Legend Items
-    ========================================= */
+     Legend Items
+  ========================================= */
 
   const legendItems = useMemo(() => {
     return Object.entries(EVENT_CONFIG);
   }, []);
 
   /* =========================================
-       Toggle Filter
-    ========================================= */
+     Toggle Filter
+  ========================================= */
 
   const handleToggleFilter = useCallback(
     (type) => {
+      if (!toggleFilter) return;
+
       toggleFilter(type);
     },
     [toggleFilter],
@@ -33,15 +35,17 @@ function EventLegend({ filters = {}, toggleFilter }) {
         {legendItems.map(([type, config]) => {
           const Icon = config.icon;
 
-          const active = !!filters[type];
+          const active = Boolean(filters[type]);
 
           return (
             <button
               key={type}
               type="button"
               className={`legendItem ${active ? "active" : "inactive"}`}
-              onClick={() => handleToggleFilter(type)}
               aria-pressed={active}
+              aria-label={`Toggle ${config.label} filter`}
+              title={config.label}
+              onClick={() => handleToggleFilter(type)}
             >
               <div
                 className="legendIcon"

@@ -21,20 +21,34 @@ function MiniCalendar({
   nextMonth,
 }) {
   /* =========================================
-       Generate Calendar
-    ========================================= */
+     Safety Check
+  ========================================= */
+
+  if (!currentDate) {
+    return null;
+  }
+
+  /* =========================================
+     Generate Calendar
+  ========================================= */
 
   const days = useMemo(() => {
     return generateCalendar(currentDate);
   }, [currentDate]);
 
   /* =========================================
-       Select Day
-    ========================================= */
+     Week Days
+  ========================================= */
+
+  const weekDays = useMemo(() => WEEK_DAYS, []);
+
+  /* =========================================
+     Select Day
+  ========================================= */
 
   const handleSelectDay = useCallback(
     (date) => {
-      selectDate(date);
+      selectDate?.(date);
     },
     [selectDate],
   );
@@ -46,6 +60,7 @@ function MiniCalendar({
           type="button"
           onClick={previousMonth}
           aria-label="Previous Month"
+          title="Previous Month"
         >
           <FaChevronLeft />
         </button>
@@ -54,13 +69,18 @@ function MiniCalendar({
           {getMonthName(currentDate)} {currentDate.getFullYear()}
         </h3>
 
-        <button type="button" onClick={nextMonth} aria-label="Next Month">
+        <button
+          type="button"
+          onClick={nextMonth}
+          aria-label="Next Month"
+          title="Next Month"
+        >
           <FaChevronRight />
         </button>
       </div>
 
       <div className="miniWeekDays">
-        {WEEK_DAYS.map((day) => (
+        {weekDays.map((day) => (
           <span key={day}>{day.charAt(0)}</span>
         ))}
       </div>
@@ -69,20 +89,29 @@ function MiniCalendar({
         {days.map((day) => {
           const isSelected = isSameDate(day.date, selectedDate);
 
+          const className = [
+            "miniDay",
+            !day.currentMonth && "otherMonth",
+            day.isToday && "today",
+            isSelected && "selected",
+          ]
+            .filter(Boolean)
+            .join(" ");
+
+          const dayKey = [
+            day.date.getFullYear(),
+            String(day.date.getMonth() + 1).padStart(2, "0"),
+            String(day.date.getDate()).padStart(2, "0"),
+          ].join("-");
+
           return (
             <button
-              key={day.date.toISOString()}
+              key={dayKey}
               type="button"
+              className={className}
               onClick={() => handleSelectDay(day.date)}
               aria-pressed={isSelected}
-              className={[
-                "miniDay",
-                !day.currentMonth && "otherMonth",
-                day.isToday && "today",
-                isSelected && "selected",
-              ]
-                .filter(Boolean)
-                .join(" ")}
+              aria-label={`Select ${day.date.toDateString()}`}
             >
               {day.date.getDate()}
             </button>
