@@ -12,7 +12,7 @@ import { AuthProvider } from './context/AuthContext';
 
 import { Provider } from 'react-redux';
 
-import store from '../src/store/index.js';
+import store from '../src/store/store.js';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <>

@@ -1,75 +1,75 @@
+import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+
 import './PostCard.css'
 
-import { HiOutlineHeart } from 'react-icons/hi2'
-import { HiHeart } from 'react-icons/hi2'
-import { HiOutlineChatBubbleOvalLeft } from 'react-icons/hi2'
-import { HiOutlineEllipsisHorizontal } from 'react-icons/hi2'
+import { toggleLikePost } from '../../../store/postSlice'
+
+import CommentSection from '../CommentSection/CommentSection'
 
 const PostCard = ({ post }) => {
-  return (
-    <article className="post_card">
-      {/* Header */}
+  const dispatch = useDispatch()
 
-      <div className="post_header">
-        <div className="post_user">
-          <div className="post_avatar">
-            {post.author.firstName[0]}
-            {post.author.lastName[0]}
+  const [showComments, setShowComments] = useState(false)
+
+  const handleLike = () => {
+    dispatch(toggleLikePost(post._id))
+  }
+
+  const formatDate = (date) => {
+    const value = new Date(date)
+
+    return value.toLocaleString([], {
+      dateStyle: 'medium',
+      timeStyle: 'short',
+    })
+  }
+
+  return (
+    <article className="post-card fade_in">
+      <div className="post-header">
+        <div className="post-user">
+          <div className="post-avatar">
+            {post.author?.name?.charAt(0)?.toUpperCase()}
           </div>
 
           <div>
-            <h3>
-              {post.author.firstName} {post.author.lastName}
-            </h3>
+            <h4>{post.author?.name}</h4>
 
-            <span>{post.author.designation}</span>
+            <small>
+              {post.author?.designation}
 
-            <p>{post.createdAt}</p>
+              {post.author?.department && ` • ${post.author.department}`}
+            </small>
+
+            <small>{formatDate(post.createdAt)}</small>
           </div>
         </div>
-
-        <button className="post_menu_btn">
-          <HiOutlineEllipsisHorizontal />
-        </button>
       </div>
 
-      {/* Content */}
+      <div className="post-body">
+        {post.title && <h3>{post.title}</h3>}
 
-      <div className="post_content">
         <p>{post.content}</p>
 
-        {post.image && (
-          <img src={post.image} alt="Post" className="post_image" />
-        )}
+        {post.image && <img src={post.image} alt="" className="post-image" />}
       </div>
 
-      {/* Stats */}
+      <div className="post-footer">
+        <button onClick={handleLike}>
+          {post.isLiked ? '❤️' : '🤍'}
 
-      <div className="post_stats">
-        <span>
-          <HiHeart />
-          {post.likesCount} Likes
-        </span>
-
-        <span>
-          <HiOutlineChatBubbleOvalLeft />
-          {post.commentsCount} Comments
-        </span>
-      </div>
-
-      {/* Actions */}
-
-      <div className="post_actions">
-        <button className={post.isLiked ? 'liked' : ''}>
-          {post.isLiked ? <HiHeart /> : <HiOutlineHeart />}
-          Like
+          {post.likesCount || 0}
         </button>
 
-        <button>
-          <HiOutlineChatBubbleOvalLeft />
-          Comment
+        <button onClick={() => setShowComments(!showComments)}>
+          💬 {post.commentsCount || 0}
         </button>
+
+        <button>↗ Share</button>
       </div>
+
+      {showComments && <CommentSection postId={post._id} />}
     </article>
   )
 }

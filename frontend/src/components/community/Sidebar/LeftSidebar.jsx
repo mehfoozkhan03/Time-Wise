@@ -1,44 +1,77 @@
-import './LeftSidebar.css'
-
+import { NavLink } from 'react-router-dom'
 import {
-  HiOutlineMagnifyingGlass,
-  HiOutlineHome,
-  HiOutlineDocumentText,
-  HiOutlineHeart,
-} from 'react-icons/hi2'
+  FaHome,
+  FaRegNewspaper,
+  FaHeart,
+  FaBookmark,
+  FaSearch,
+} from 'react-icons/fa'
+
+import { IoTrendingUp } from 'react-icons/io5'
+
+import './LeftSidebar.css'
 
 const LeftSidebar = () => {
   return (
-    <aside className="left_sidebar">
-      {/* Search */}
-
-      <div className="sidebar_search">
-        <HiOutlineMagnifyingGlass className="search_icon" />
+    <aside className="left-sidebar card">
+      <div className="left-sidebar-search">
+        <FaSearch />
 
         <input type="text" placeholder="Search posts..." />
       </div>
 
-      {/* Navigation */}
-
-      <div className="sidebar_section">
-        <button className="sidebar_item active">
-          <HiOutlineHome />
-
+      <nav className="left-sidebar-nav">
+        <NavLink
+          end
+          to="/community"
+          className={({ isActive }) =>
+            isActive ? 'left-sidebar-link active' : 'left-sidebar-link'
+          }
+        >
+          <FaHome />
           <span>Feed</span>
-        </button>
+        </NavLink>
 
-        <button className="sidebar_item">
-          <HiOutlineDocumentText />
-
+        <NavLink
+          to="/community/my-posts"
+          className={({ isActive }) =>
+            isActive ? 'left-sidebar-link active' : 'left-sidebar-link'
+          }
+        >
+          <FaRegNewspaper />
           <span>My Posts</span>
-        </button>
+        </NavLink>
 
-        <button className="sidebar_item">
-          <HiOutlineHeart />
-
+        <NavLink
+          to="/community/liked"
+          className={({ isActive }) =>
+            isActive ? 'left-sidebar-link active' : 'left-sidebar-link'
+          }
+        >
+          <FaHeart />
           <span>Liked Posts</span>
-        </button>
-      </div>
+        </NavLink>
+
+        <NavLink
+          to="/community/saved"
+          className={({ isActive }) =>
+            isActive ? 'left-sidebar-link active' : 'left-sidebar-link'
+          }
+        >
+          <FaBookmark />
+          <span>Saved Posts</span>
+        </NavLink>
+
+        <NavLink
+          to="/community/trending"
+          className={({ isActive }) =>
+            isActive ? 'left-sidebar-link active' : 'left-sidebar-link'
+          }
+        >
+          <IoTrendingUp />
+          <span>Trending</span>
+        </NavLink>
+      </nav>
     </aside>
   )
 }

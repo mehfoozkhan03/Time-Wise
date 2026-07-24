@@ -1,82 +1,109 @@
-.community_page {
-  min-height: 100vh;
-  background: var(--bg);
-  padding: 2rem;
+.community-page{
+
+width:100%;
+
+min-height:100vh;
+
+padding:24px;
+
+background:var(--bg);
+
 }
 
-.community_container {
-  max-width: 1600px;
-  margin: 0 auto;
+.community-layout{
 
-  display: grid;
-  grid-template-columns: 280px minmax(0, 1fr) 320px;
-  gap: 2rem;
-  align-items: start;
+max-width:1600px;
+
+margin:auto;
+
+display:grid;
+
+grid-template-columns:260px minmax(650px,800px) 300px;
+
+justify-content:center;
+
+align-items:start;
+
+gap:24px;
+
 }
 
-.community_left,
-.community_right {
-  position: sticky;
-  top: 2rem;
+.community-left{
+
+position:sticky;
+
+top:calc(var(--navbar_height) + 20px);
+
 }
 
-.community_main {
-  display: flex;
-  flex-direction: column;
-  gap: 1.75rem;
-  min-width: 0;
+.community-feed{
+
+display:flex;
+
+flex-direction:column;
+
+gap:24px;
+
 }
 
-/* ---------- Laptop ---------- */
+.community-right{
 
-@media (max-width: 1300px) {
-  .community_container {
-    grid-template-columns: 240px minmax(0, 1fr) 280px;
-    gap: 1.5rem;
-  }
+position:sticky;
+
+top:calc(var(--navbar_height) + 20px);
+
+display:flex;
+
+flex-direction:column;
+
+gap:20px;
+
 }
 
-/* ---------- Tablet ---------- */
+@media (max-width:1400px){
 
-@media (max-width: 1024px) {
-  .community_page {
-    padding: 1.5rem;
-  }
+.community-layout{
 
-  .community_container {
-    grid-template-columns: 1fr;
-  }
+grid-template-columns:240px 1fr 280px;
 
-  .community_left,
-  .community_right {
-    position: static;
-  }
-
-  .community_main {
-    order: 1;
-  }
-
-  .community_left {
-    order: 2;
-  }
-
-  .community_right {
-    order: 3;
-  }
 }
 
-/* ---------- Mobile ---------- */
+}
 
-@media (max-width: 640px) {
-  .community_page {
-    padding: 1rem;
-  }
+@media (max-width:1150px){
 
-  .community_container {
-    gap: 1rem;
-  }
+.community-layout{
 
-  .community_main {
-    gap: 1rem;
-  }
+grid-template-columns:240px 1fr;
+
+}
+
+.community-right{
+
+display:none;
+
+}
+
+}
+
+@media (max-width:850px){
+
+.community-layout{
+
+grid-template-columns:1fr;
+
+}
+
+.community-left{
+
+display:none;
+
+}
+
+.community-page{
+
+padding:16px;
+
+}
+
 }
