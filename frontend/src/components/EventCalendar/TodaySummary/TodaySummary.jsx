@@ -12,8 +12,8 @@ import { getTodaySummary } from "../../../utils/eventUtils";
 
 function TodaySummary({ events = [] }) {
   /* =========================================
-       Today's Summary
-    ========================================= */
+     Today's Summary
+  ========================================= */
 
   const summaryData = useMemo(() => {
     return getTodaySummary(events, EVENT_CONFIG);
@@ -30,6 +30,10 @@ function TodaySummary({ events = [] }) {
       ) : (
         <div className="summaryList">
           {summaryData.map((item) => {
+            if (!item?.config) {
+              return null;
+            }
+
             const Icon = item.config.icon;
 
             return (
@@ -51,7 +55,7 @@ function TodaySummary({ events = [] }) {
                   </div>
                 </div>
 
-                <span className="summaryCount">{item.count}</span>
+                <strong className="summaryCount">{item.count}</strong>
               </div>
             );
           })}

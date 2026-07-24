@@ -13,11 +13,14 @@ import { getRelativeDateLabel } from "../../../utils/dateUtils";
 
 function UpcomingEvents({ events = [], onEventClick }) {
   /* =========================================
-       Upcoming Events
-    ========================================= */
+     Upcoming Events
+  ========================================= */
 
   const upcomingEvents = useMemo(() => {
-    return getUpcomingEvents(events, 4);
+    return getUpcomingEvents(events, 4).map((event) => ({
+      ...event,
+      relativeDate: getRelativeDateLabel(event.date),
+    }));
   }, [events]);
 
   return (
@@ -33,30 +36,37 @@ function UpcomingEvents({ events = [], onEventClick }) {
           description="You're all caught up."
         />
       ) : (
-        <div className="upcomingList">
-          {upcomingEvents.map((event) => (
-            <div key={event._id ?? event.id} className="upcomingItem">
-              <EventItem
-                event={event}
-                variant="compact"
-                showAvatar={false}
-                showTime={false}
-                showType={false}
-                onClick={onEventClick}
-              />
+        <>
+          <div className="upcomingList">
+            {upcomingEvents.map((event) => (
+              <div key={event._id || event.id} className="upcomingItem">
+                <EventItem
+                  event={event}
+                  variant="compact"
+                  showAvatar={false}
+                  showTime={false}
+                  showType={false}
+                  onClick={onEventClick}
+                />
 
-              <span className="eventDate">
-                {getRelativeDateLabel(event.date)}
-              </span>
-            </div>
-          ))}
-        </div>
+                <time className="eventDate" dateTime={event.date || ""}>
+                  {event.relativeDate}
+                </time>
+              </div>
+            ))}
+          </div>
+
+          <button
+            type="button"
+            className="viewAllBtn"
+            disabled
+            title="Coming Soon"
+          >
+            View All
+            <FaArrowRight />
+          </button>
+        </>
       )}
-
-      <button type="button" className="viewAllBtn">
-        View All
-        <FaArrowRight />
-      </button>
     </Card>
   );
 }

@@ -8,8 +8,9 @@ import useCalendar from "../../hooks/useCalendar";
 import useEventFilter from "../../hooks/useEventFilter";
 
 import { fetchEvents } from "../../store/calendarSlice";
+import { fetchHolidays } from "../../store/holidaySlice";
 
-import { holidayData } from "../../data/holidays";
+import { mapHolidayList } from "../../utils/holidayMapper";
 
 import CalendarHeader from "./CalendarHeader/CalendarHeader";
 import CalendarGrid from "./CalendarGrid/CalendarGrid";
@@ -20,8 +21,8 @@ import CalendarSkeleton from "../Common/CalendarSkeleton/CalendarSkeleton";
 
 export default function EventCalendar() {
   /* =========================================
-       Redux
-    ========================================= */
+     Redux
+  ========================================= */
 
   const dispatch = useDispatch();
 
@@ -31,17 +32,24 @@ export default function EventCalendar() {
     error,
   } = useSelector((state) => state.calendar);
 
+  const {
+    holidays = [],
+    status: holidayStatus,
+    error: holidayError,
+  } = useSelector((state) => state.holiday);
+
   /* =========================================
-       Fetch Events
-    ========================================= */
+     Fetch Calendar Data
+  ========================================= */
 
   useEffect(() => {
     dispatch(fetchEvents());
+    dispatch(fetchHolidays());
   }, [dispatch]);
 
   /* =========================================
-       Calendar
-    ========================================= */
+     Calendar State
+  ========================================= */
 
   const {
     currentDate,
@@ -53,17 +61,16 @@ export default function EventCalendar() {
   } = useCalendar();
 
   /* =========================================
-       Merge Events
-       (MongoDB + Local Holidays)
-    ========================================= */
+     Merge Calendar Events + Holidays
+  ========================================= */
 
   const allEvents = useMemo(() => {
-    return [...events, ...holidayData];
-  }, [events]);
+    return [...events, ...mapHolidayList(holidays)];
+  }, [events, holidays]);
 
   /* =========================================
-       Event Modal
-    ========================================= */
+     Selected Event
+  ========================================= */
 
   const [selectedEvent, setSelectedEvent] = useState(null);
 
@@ -76,8 +83,8 @@ export default function EventCalendar() {
   }, []);
 
   /* =========================================
-       Filters
-    ========================================= */
+     Event Filters
+  ========================================= */
 
   const {
     filters,
@@ -89,29 +96,39 @@ export default function EventCalendar() {
     filteredEvents,
   } = useEventFilter(allEvents);
 
+  console.log(
+    allEvents.filter(
+        e =>
+            e.date.includes("2026-08")
+    )
+);
   /* =========================================
-       Loading
-    ========================================= */
+     Loading
+  ========================================= */
 
-  if (loading) {
+  if (loading || holidayStatus === "loading") {
     return <CalendarSkeleton />;
   }
 
   /* =========================================
-       Error
-    ========================================= */
+     Error
+  ========================================= */
 
-  if (error) {
+  if (error || holidayError) {
     return (
       <section className="eventCalendar">
         <div className="calendarError">
           <h3>Failed to load calendar</h3>
 
-          <p>{error}</p>
+          <p>{error || holidayError}</p>
         </div>
       </section>
     );
   }
+
+  /* =========================================
+     Render
+  ========================================= */
 
   return (
     <section className="eventCalendar">
