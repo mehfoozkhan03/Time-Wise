@@ -162,6 +162,7 @@ export const getEventById = async (req, res) => {
 ========================================= */
 
 export const createEvent = async (req, res) => {
+
   try {
     const loggedInUser = await getLoggedInUser(req);
 
