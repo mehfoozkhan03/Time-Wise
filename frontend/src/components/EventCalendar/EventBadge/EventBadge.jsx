@@ -1,6 +1,6 @@
 import "./EventBadge.css";
 
-import { memo } from "react";
+import { memo, useCallback } from "react";
 
 import EventItem from "../../Common/EventItem/EventItem";
 
@@ -9,11 +9,19 @@ function EventBadge({ event, onClick }) {
      Validation
   ========================================= */
 
-  if (!event || !event.type) {
+  if (!event?.type) {
     return null;
   }
 
-  return <EventItem event={event} variant="compact" onClick={onClick} />;
+  /* =========================================
+     Click Handler
+  ========================================= */
+
+  const handleClick = useCallback(() => {
+    onClick?.(event);
+  }, [event, onClick]);
+
+  return <EventItem event={event} variant="compact" onClick={handleClick} />;
 }
 
 export default memo(EventBadge);

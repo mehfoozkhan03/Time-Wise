@@ -4,7 +4,6 @@ import { memo, useMemo, useCallback } from "react";
 import { FaListUl } from "react-icons/fa";
 
 import Card from "../../Common/CalendarCard/Card";
-
 import { EVENT_CONFIG } from "../../../data/eventConfig";
 
 function EventLegend({ filters = {}, toggleFilter }) {
@@ -12,9 +11,7 @@ function EventLegend({ filters = {}, toggleFilter }) {
      Legend Items
   ========================================= */
 
-  const legendItems = useMemo(() => {
-    return Object.entries(EVENT_CONFIG);
-  }, []);
+  const legendItems = useMemo(() => Object.entries(EVENT_CONFIG), []);
 
   /* =========================================
      Toggle Filter
@@ -22,9 +19,7 @@ function EventLegend({ filters = {}, toggleFilter }) {
 
   const handleToggleFilter = useCallback(
     (type) => {
-      if (!toggleFilter) return;
-
-      toggleFilter(type);
+      toggleFilter?.(type);
     },
     [toggleFilter],
   );
@@ -34,8 +29,7 @@ function EventLegend({ filters = {}, toggleFilter }) {
       <div className="legendList">
         {legendItems.map(([type, config]) => {
           const Icon = config.icon;
-
-          const active = Boolean(filters[type]);
+          const active = !!filters[type];
 
           return (
             <button
@@ -43,7 +37,7 @@ function EventLegend({ filters = {}, toggleFilter }) {
               type="button"
               className={`legendItem ${active ? "active" : "inactive"}`}
               aria-pressed={active}
-              aria-label={`Toggle ${config.label} filter`}
+              aria-label={`Toggle ${config.label}`}
               title={config.label}
               onClick={() => handleToggleFilter(type)}
             >
