@@ -1,52 +1,56 @@
-import express from 'express'
-import dotenv from 'dotenv'
-import cors from 'cors'
-import cookieParser from 'cookie-parser'
+import express from 'express';
+import dotenv from 'dotenv';
+import cors from 'cors';
+import cookieParser from 'cookie-parser';
 
-dotenv.config()
+dotenv.config();
 
-import { Connection } from './config/db.js'
-import { userRoutes } from './routes/User.routes.js'
-import  postRoutes  from './routes/Post.routes.js'
-import { attendanceRouter } from './routes/Attendance.routes.js'
-import calendarRoutes from "./routes/Calendar.routes.js";
-import { contactRoute } from './routes/Contact.routes.js'
+import { Connection } from './config/db.js';
+import { userRoutes } from './routes/User.routes.js';
+import postRoutes from './routes/Post.routes.js';
+import { attendanceRouter } from './routes/Attendance.routes.js';
+import calendarRoutes from './routes/Calendar.routes.js';
+import { contactRoute } from './routes/Contact.routes.js';
 
-const server = express()
+const server = express();
 
 /// ================= Middleware =================
 
 server.use(
   cors({
-    origin: ['http://localhost:9000','http://localhost:5173',"http://localhost:5174"],
+    origin: [
+      'http://localhost:9000',
+      'http://localhost:5173',
+      'http://localhost:5174',
+    ],
     credentials: true,
-  })
+  }),
 );
 
-server.use(express.json(),express.text(),cookieParser())
+server.use(express.json(), express.text(), cookieParser());
 
 // ================= Routes =================
 
-server.use('/user', userRoutes)
+server.use('/user', userRoutes);
 
-server.use('/posts', postRoutes)
+server.use('/posts', postRoutes);
 
-server.use('/attendance', attendanceRouter)
+server.use('/attendance', attendanceRouter);
 
-server.use("/calendar", calendarRoutes);
+server.use('/calendar', calendarRoutes);
 
-server.use("/api/contact", contactRoute);
+server.use('/api/contact', contactRoute);
 
 // ================= Server =================
 
 server.listen(process.env.Port, async () => {
   try {
-    await Connection()
-    console.log('DB Connected successfully ✅')
+    await Connection();
+    console.log('DB Connected successfully ✅');
   } catch (error) {
-    console.log(error)
-    console.log('DB Crashed! Something went wrong ❌')
+    console.log(error);
+    console.log('DB Crashed! Something went wrong ❌');
   } finally {
-    console.log(`Server running on port ${process.env.Port}`)
+    console.log(`Server running on port ${process.env.Port}`);
   }
-})
+});
