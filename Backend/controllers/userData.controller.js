@@ -173,7 +173,7 @@ export const admin_login = async (req, res) => {
       });
     }
 
-    const admin = await userModel.findOne({
+    const admin = await AdminModel.findOne({
       email: req.body.email,
       role: 'admin',
     });
