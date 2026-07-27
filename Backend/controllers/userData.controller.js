@@ -177,6 +177,7 @@ export const admin_login = async (req, res) => {
       email: req.body.email,
       role: 'admin',
     });
+    console.log(`🚀 ~ admin:`, admin);
 
     if (!admin) {
       return res.status(404).json({
