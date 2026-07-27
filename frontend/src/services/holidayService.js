@@ -4,9 +4,8 @@ import axios from "axios";
    Axios Instance
 ========================================= */
 
-export const API = axios.create({
-  baseURL: import.meta.env.VITE_HOLIDAY_API_URL,
-  timeout: 10000,
+const API = axios.create({
+  baseURL: "https://testapi-zc4z.onrender.com",
   headers: {
     "Content-Type": "application/json",
   },
@@ -17,11 +16,17 @@ export const API = axios.create({
 ========================================= */
 
 export const holidayService = {
-    getHolidays: async () => {
+  async getHolidays() {
+    try {
       const response = await API.get("/holidays");
 
-      // console.log(response.data);
+      console.log("✅ Holiday Service Response:", response.data);
 
       return response;
+    } catch (error) {
+      console.error("❌ Holiday Service Error:", error);
+
+      throw error;
+    }
   },
 };

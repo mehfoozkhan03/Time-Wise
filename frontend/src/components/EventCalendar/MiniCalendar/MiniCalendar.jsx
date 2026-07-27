@@ -24,23 +24,20 @@ function MiniCalendar({
      Safety Check
   ========================================= */
 
-  if (!currentDate) {
-    return null;
-  }
+  if (!currentDate) return null;
 
   /* =========================================
-     Generate Calendar
+     Calendar Data
   ========================================= */
 
-  const days = useMemo(() => {
-    return generateCalendar(currentDate);
-  }, [currentDate]);
-
-  /* =========================================
-     Week Days
-  ========================================= */
+  const days = useMemo(() => generateCalendar(currentDate), [currentDate]);
 
   const weekDays = useMemo(() => WEEK_DAYS, []);
+
+  const monthTitle = useMemo(
+    () => `${getMonthName(currentDate)} ${currentDate.getFullYear()}`,
+    [currentDate],
+  );
 
   /* =========================================
      Select Day
@@ -65,9 +62,7 @@ function MiniCalendar({
           <FaChevronLeft />
         </button>
 
-        <h3>
-          {getMonthName(currentDate)} {currentDate.getFullYear()}
-        </h3>
+        <h3>{monthTitle}</h3>
 
         <button
           type="button"
@@ -86,22 +81,22 @@ function MiniCalendar({
       </div>
 
       <div className="miniGrid">
-        {days.map((day) => {
-          const isSelected = isSameDate(day.date, selectedDate);
+        {days.map((item) => {
+          const isSelected = isSameDate(item.date, selectedDate);
 
           const className = [
             "miniDay",
-            !day.currentMonth && "otherMonth",
-            day.isToday && "today",
+            !item.currentMonth && "otherMonth",
+            item.isToday && "today",
             isSelected && "selected",
           ]
             .filter(Boolean)
             .join(" ");
 
           const dayKey = [
-            day.date.getFullYear(),
-            String(day.date.getMonth() + 1).padStart(2, "0"),
-            String(day.date.getDate()).padStart(2, "0"),
+            item.date.getFullYear(),
+            String(item.date.getMonth() + 1).padStart(2, "0"),
+            String(item.date.getDate()).padStart(2, "0"),
           ].join("-");
 
           return (
@@ -109,11 +104,11 @@ function MiniCalendar({
               key={dayKey}
               type="button"
               className={className}
-              onClick={() => handleSelectDay(day.date)}
+              onClick={() => handleSelectDay(item.date)}
               aria-pressed={isSelected}
-              aria-label={`Select ${day.date.toDateString()}`}
+              aria-label={`Select ${item.date.toDateString()}`}
             >
-              {day.date.getDate()}
+              {item.date.getDate()}
             </button>
           );
         })}
