@@ -1,46 +1,109 @@
 .action_card {
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  height: 245px;
   position: relative;
-  overflow: hidden;
+  transform-style: preserve-3d;
+  transition: transform 0.18s ease, box-shadow 0.25s ease;
+  will-change: transform;
+
+  --rotateX: 0deg;
+  --rotateY: 0deg;
+  --mouse-x: 50%;
+  --mouse-y: 50%;
+
+  transform: perspective(1000px) rotateX(var(--rotateX)) rotateY(var(--rotateY));
+  border: 1px solid var(--border);
+}
+
+/* ── Spotlight glow that follows cursor ── */
+.action_card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(200px circle at var(--mouse-x) var(--mouse-y),
+      rgba(62, 181, 232, 0.25),
+      transparent 70%);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Border sweep glow that follows cursor ── */
+.action_card::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: radial-gradient(180px circle at var(--mouse-x) var(--mouse-y),
+      rgba(62, 181, 232, 0.9),
+      transparent 70%);
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  padding: 1px;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.action_card:hover {
+  transform: perspective(1000px) rotateX(var(--rotateX)) rotateY(var(--rotateY)) translateY(-6px);
+  box-shadow: 0 18px 35px rgba(62, 181, 232, 0.2);
+}
+
+.action_card:hover::before,
+.action_card:hover::after {
+  opacity: 1;
+}
+
+/* ── Content sits above pseudo elements ── */
+.action_icon,
+.action_card h3,
+.action_card p,
+.action_arrow {
+  position: relative;
+  z-index: 1;
+  transform: translateZ(35px);
 }
 
 .action_card:hover .action_icon {
-  transform: rotate(10deg) scale(1.1);
+  transform: translateZ(35px) rotate(10deg) scale(1.1);
 }
 
 .action_card:hover .action_arrow {
-  transform: translateX(10px);
+  transform: translateZ(35px) translateX(10px);
 }
 
 .action_icon {
-  width:45px;
-  height:45px;
-  padding: 8px 8px;
+  width: 45px;
+  height: 45px;
+  padding: 8px;
   background: rgba(41, 163, 224, 0.12);
   border-radius: 18px;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 26px;
-  /* color: var(--primary); */
   transition: 0.35s;
 }
 
-[data-id="1"]{
-  color: #3B82F6
+[data-id="1"] {
+  color: #3B82F6;
 }
-[data-id="2"]{
-  color:#10B981
+
+[data-id="2"] {
+  color: #10B981;
 }
-[data-id="3"]{
-  color:#F59E0B
+
+[data-id="3"] {
+  color: #F59E0B;
 }
-[data-id="4"]{
-  color:#8B5CF6
+
+[data-id="4"] {
+  color: #8B5CF6;
 }
 
 .action_card h3 {
@@ -48,7 +111,7 @@
 }
 
 .action_card p {
-  color: var(--text-secondary);
+  color: var(--text_secondary);
   line-height: 1.6;
   flex: 1;
 }
@@ -59,11 +122,7 @@
   transition: 0.35s;
 }
 
-<<<<<<< HEAD
-@media (max-width: 320px) {
-=======
 @media (max-width: 840px) {
->>>>>>> 0623fba53cdf1a9ff7f23d796e88b3bf1df577de
   .action_card {
     gap: 7px;
   }
