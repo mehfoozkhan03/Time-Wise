@@ -299,7 +299,7 @@ const SignUpPage = () => {
                 <p className="error">{errors.email}</p>
               </div>
 
-              <div className="input-box password-box">
+         <div className={`input-box password-box ${errors.password ? "error-active" : ""}`}>
                 <input
                   type={showLoginPassword ? 'text' : 'password'}
                   name="password"
@@ -391,7 +391,7 @@ const SignUpPage = () => {
                 <p className="error">{errors.email}</p>
               </div>
 
-              <div className="input-box password-box">
+             <div className={`input-box password-box ${errors.password ? "error-active" : ""}`}>
                 <input
                   type={showRegisterPassword ? 'text' : 'password'}
                   name="password"
@@ -409,7 +409,7 @@ const SignUpPage = () => {
                 </span>
               </div>
 
-              <div className="input-box password-box">
+    <div className={`input-box password-box ${  errors.confirmPassword ? "error-active" : ""}`}>
                 <input
                   type={showConfirmPassword ? 'text' : 'password'}
                   name="confirmPassword"
