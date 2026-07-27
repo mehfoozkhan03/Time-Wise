@@ -1,0 +1,301 @@
+/* ==========================================================
+   SCROLL TO TOP — Glassmorphism + Fourty60-style glow pulse
+========================================================== */
+
+.scroll_top_btn {
+    position: fixed;
+    right: 28px;
+    bottom: 28px;
+    z-index: 999;
+
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    cursor: pointer;
+
+    /* ── Glassmorphism ── */
+    background: rgba(41, 163, 224, 0.12);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(41, 163, 224, 0.35);
+
+    color: #3eb5e8;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    /* ── Hidden state ── */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px) scale(0.85);
+
+    transition:
+        opacity 0.4s ease,
+        transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+        visibility 0.4s ease,
+        background 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+/* ── Visible state ── */
+.scroll_top_btn.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+
+    /* Glow pulse animation — like Fourty60 play button */
+    animation: glow_pulse 2.4s ease-in-out infinite;
+}
+
+/* ── Hover ── */
+.scroll_top_btn:hover {
+    background: rgba(41, 163, 224, 0.22);
+    border-color: rgba(41, 163, 224, 0.7);
+    transform: translateY(-6px) scale(1.1) !important;
+    animation: none;
+    /* pause pulse on hover — cleaner UX */
+    box-shadow:
+        0 0 16px rgba(41, 163, 224, 0.55),
+        0 0 36px rgba(41, 163, 224, 0.40),
+        0 0 70px rgba(41, 163, 224, 0.25),
+        0 0 120px rgba(41, 163, 224, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* ── Active / click ── */
+.scroll_top_btn:active {
+    transform: scale(0.94) !important;
+}
+
+/* ── Chevron icon ── */
+.scroll_top_btn svg {
+    transition: transform 0.3s ease;
+    filter: drop-shadow(0 0 6px rgba(41, 163, 224, 0.8));
+}
+
+.scroll_top_btn:hover svg {
+    transform: translateY(-2px);
+    filter: drop-shadow(0 0 10px rgba(41, 163, 224, 1));
+}
+
+/* ==========================================================
+   GLOW PULSE — mimics the Fourty60 play button ring effect
+========================================================== */
+
+@keyframes glow_pulse {
+
+    0%,
+    100% {
+        box-shadow:
+            0 0 10px rgba(41, 163, 224, 0.30),
+            0 0 22px rgba(41, 163, 224, 0.18),
+            0 0 45px rgba(41, 163, 224, 0.10),
+            inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    }
+
+    50% {
+        box-shadow:
+            0 0 18px rgba(41, 163, 224, 0.65),
+            0 0 40px rgba(41, 163, 224, 0.45),
+            0 0 80px rgba(41, 163, 224, 0.28),
+            0 0 130px rgba(41, 163, 224, 0.12),
+            inset 0 1px 0 rgba(255, 255, 255, 0.22);
+    }
+}
+
+/* ==========================================================
+   RIPPLE RING — extra outer ring pulse (like Fourty60)
+========================================================== */
+
+.scroll_top_btn.show::before,
+.scroll_top_btn.show::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 1.5px solid rgba(41, 163, 224, 0.5);
+    animation: ring_pulse 2.4s ease-out infinite;
+    pointer-events: none;
+}
+
+.scroll_top_btn.show::after {
+    animation-delay: 1.2s;
+    /* offset for double-ring effect */
+}
+
+@keyframes ring_pulse {
+    0% {
+        transform: scale(1);
+        opacity: 0.7;
+    }
+
+    100% {
+        transform: scale(2.2);
+        opacity: 0;
+    }
+}
+
+/* ==========================================================
+   RESPONSIVE
+========================================================== */
+
+@media (max-width: 560px) {
+    .scroll_top_btn {
+        right: 16px;
+        bottom: 16px;
+        width: 48px;
+        height: 48px;
+    }
+}
+
+/* ==========================================================
+   SCROLL TO TOP — Glassmorphism + Fourty60-style glow pulse
+========================================================== */
+
+.scroll_top_btn {
+    position: fixed;
+    right: 28px;
+    bottom: 28px;
+    z-index: 999;
+
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    cursor: pointer;
+
+    /* ── Glassmorphism ── */
+    background: rgba(41, 163, 224, 0.12);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(41, 163, 224, 0.35);
+
+    color: #3eb5e8;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    /* ── Hidden state ── */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px) scale(0.85);
+
+    transition:
+        opacity 0.4s ease,
+        transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+        visibility 0.4s ease,
+        background 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+/* ── Visible state ── */
+.scroll_top_btn.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+
+    /* Glow pulse animation — like Fourty60 play button */
+    animation: glow_pulse 2.4s ease-in-out infinite;
+}
+
+/* ── Hover ── */
+.scroll_top_btn:hover {
+    background: rgba(41, 163, 224, 0.22);
+    border-color: rgba(41, 163, 224, 0.7);
+    transform: translateY(-6px) scale(1.1) !important;
+    animation: none;
+    /* pause pulse on hover — cleaner UX */
+    box-shadow:
+        0 0 16px rgba(41, 163, 224, 0.55),
+        0 0 36px rgba(41, 163, 224, 0.40),
+        0 0 70px rgba(41, 163, 224, 0.25),
+        0 0 120px rgba(41, 163, 224, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* ── Active / click ── */
+.scroll_top_btn:active {
+    transform: scale(0.94) !important;
+}
+
+/* ── Chevron icon ── */
+.scroll_top_btn svg {
+    transition: transform 0.3s ease;
+    filter: drop-shadow(0 0 6px rgba(41, 163, 224, 0.8));
+}
+
+.scroll_top_btn:hover svg {
+    transform: translateY(-2px);
+    filter: drop-shadow(0 0 10px rgba(41, 163, 224, 1));
+}
+
+/* ==========================================================
+   GLOW PULSE — mimics the Fourty60 play button ring effect
+========================================================== */
+
+@keyframes glow_pulse {
+
+    0%,
+    100% {
+        box-shadow:
+            0 0 10px rgba(41, 163, 224, 0.30),
+            0 0 22px rgba(41, 163, 224, 0.18),
+            0 0 45px rgba(41, 163, 224, 0.10),
+            inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    }
+
+    50% {
+        box-shadow:
+            0 0 18px rgba(41, 163, 224, 0.65),
+            0 0 40px rgba(41, 163, 224, 0.45),
+            0 0 80px rgba(41, 163, 224, 0.28),
+            0 0 130px rgba(41, 163, 224, 0.12),
+            inset 0 1px 0 rgba(255, 255, 255, 0.22);
+    }
+}
+
+/* ==========================================================
+   RIPPLE RING — extra outer ring pulse (like Fourty60)
+========================================================== */
+
+.scroll_top_btn.show::before,
+.scroll_top_btn.show::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 1.5px solid rgba(41, 163, 224, 0.5);
+    animation: ring_pulse 2.4s ease-out infinite;
+    pointer-events: none;
+}
+
+.scroll_top_btn.show::after {
+    animation-delay: 1.2s;
+    /* offset for double-ring effect */
+}
+
+@keyframes ring_pulse {
+    0% {
+        transform: scale(1);
+        opacity: 0.7;
+    }
+
+    100% {
+        transform: scale(2.2);
+        opacity: 0;
+    }
+}
+
+/* ==========================================================
+   RESPONSIVE
+========================================================== */
+
+@media (max-width: 560px) {
+    .scroll_top_btn {
+        right: 16px;
+        bottom: 16px;
+        width: 48px;
+        height: 48px;
+    }
+}

@@ -1,3 +1,6 @@
+/* ==========================================================
+   CURSOR DOT
+========================================================== */
 #cursor_dot {
   width: 11px;
   height: 11px;
@@ -8,45 +11,126 @@
   background: #29a3e0;
   pointer-events: none;
   transform: translate(-50%, -50%);
-  z-index: 2147483646; /* one below ring so ring is always on top */
-  transition:
-    opacity 0.3s,
-    width 0.3s,
-    height 0.3s;
-}
-
-#cursor_ring {
-  width: 35px;
-  height: 35px;
-  border: 2px solid #29a3e0;
-  border-radius: 50%;
-  position: fixed;
-  top: 0;
-  left: 0;
-  pointer-events: none; /* was missing — caused jitter as ring blocked mouse events */
-  transform: translate(-50%, -50%);
-  z-index: 2147483647; /* max safe z-index, always on top */
-  transition:
-    width 0.25s ease,
-    height 0.25s ease,
-    background 0.25s ease,
-    border 0.25s ease,
-    box-shadow 0.25s ease;
-  /* NOTE: no transform transition — transform is set via rAF for smooth lag */
+  z-index: 2147483646;
+  transition: opacity 0.3s, width 0.3s, height 0.3s;
 }
 
 #cursor_dot.hovered {
   opacity: 0;
 }
 
+/* ==========================================================
+   CURSOR RING
+========================================================== */
+#cursor_ring {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  z-index: 2147483647;
+  border: 1.5px solid rgba(41, 163, 224, 0.5);
+  background: transparent;
+  box-shadow: none;
+  opacity: 1;
+  transition:
+    width 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+    height 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+    background 0.35s ease,
+    border 0.35s ease,
+    box-shadow 0.35s ease,
+    opacity 0.35s ease;
+}
+
+/* ── DEFAULT (no hover) — subtle ring ── */
+#cursor_ring:not(.hovered):not(.glow_out) {
+  background: transparent;
+  border: 1.5px solid rgba(41, 163, 224, 0.5);
+  box-shadow: none;
+  opacity: 1;
+  animation: none;
+}
+
+/* ── HOVER IN — glow pulses in then breathes ── */
 #cursor_ring.hovered {
   width: 55px;
   height: 55px;
   border: none;
-  background: rgba(41, 163, 225, 0.23);
-  box-shadow: 0 0 19px rgba(41, 163, 225, 0.35);
+  background: rgba(41, 163, 224, 0.15);
+  opacity: 1;
+  animation:
+    cursor_glow_in 0.35s ease forwards,
+    cursor_glow_pulse 1.6s ease-in-out 0.35s infinite;
 }
 
+/* ── HOVER OUT — glow breathes out and fades to invisible ── */
+#cursor_ring.glow_out {
+  animation: cursor_glow_out 0.45s ease forwards !important;
+}
+
+/* ==========================================================
+   ANIMATIONS
+========================================================== */
+
+/* Step 1: Glow appears */
+@keyframes cursor_glow_in {
+  0% {
+    box-shadow: none;
+    opacity: 0;
+    background: rgba(41, 163, 224, 0);
+  }
+
+  100% {
+    box-shadow:
+      0 0 10px rgba(41, 163, 224, 0.55),
+      0 0 25px rgba(41, 163, 224, 0.40),
+      0 0 50px rgba(41, 163, 224, 0.20);
+    opacity: 1;
+    background: rgba(41, 163, 224, 0.15);
+  }
+}
+
+/* Step 2: Glow breathes (loops while hovering) */
+@keyframes cursor_glow_pulse {
+
+  0%,
+  100% {
+    box-shadow:
+      0 0 6px rgba(41, 163, 224, 0.20),
+      0 0 12px rgba(41, 163, 224, 0.12),
+      0 0 22px rgba(41, 163, 224, 0.06);
+    background: rgba(41, 163, 224, 0.05);
+  }
+}
+
+/* Step 3: Glow fades out on mouse leave — back to plain ring */
+@keyframes cursor_glow_out {
+  0% {
+    box-shadow:
+      0 0 10px rgba(41, 163, 224, 0.55),
+      0 0 25px rgba(41, 163, 224, 0.40),
+      0 0 50px rgba(41, 163, 224, 0.20);
+    background: rgba(41, 163, 224, 0.15);
+    width: 55px;
+    height: 55px;
+    opacity: 1;
+  }
+
+  100% {
+    box-shadow: none;
+    background: rgba(41, 163, 224, 0);
+    width: 35px;
+    height: 35px;
+    opacity: 1;
+  }
+}
+
+/* ==========================================================
+   CLICKED
+========================================================== */
 #cursor_ring.clicked {
   transform: translate(-50%, -50%) scale(0.85);
 }
