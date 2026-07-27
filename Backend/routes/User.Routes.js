@@ -7,7 +7,7 @@ import {
   getCurrentUser,
   updateTheme,
   logout,
-} from '../controllers/userData.js';
+} from '../controllers/userData.controller.js';
 
 import { auth } from '../middleware/AuthMiddleware.js';
 
