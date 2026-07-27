@@ -9,7 +9,7 @@ import Contact from "./../pages/Contact";
 import SignUpPage from "./../pages/Login";
 
 import ProgressBar from "./../components/ProgressBar/progressBar";
-import BubbleCursor from "./../components/BubbleArrow/bubbleArrow";
+import { BubbleCursor } from "./../components/BubbleArrow/bubbleArrow";
 import RouteLoader from "./../components/RouteLoader";
 
 import Calendar from "./../components/Setting/Calendar";
