@@ -99,10 +99,10 @@ background: var(--card);
 .input-box input {
     width: 100%;
     font-size: 16px;
+    border-radius: 8px;
     height: 50px;
     padding: 8px 15px 8px;
 }
-.input-box input,
 .input-box select,
 .input-box textarea {
   width: 100%;
@@ -135,16 +135,6 @@ background: var(--card);
 =========================== */
 
 .input-box label {
-  /* position: absolute;
-  top: 15px;
-  left: 15px;
-  transform: translateY(-50%);
-   background: var(--card);
-   padding: 0 5px;
-  color: var(--label-color);
-  font-size: 16px;
-  pointer-events: none;
-  transition: .3s; */
   position: absolute;
     top: 15px;
     left: 15px;
@@ -160,10 +150,6 @@ background: var(--card);
 .input-box input:not(:placeholder-shown) + label,
 .input-box select:focus + label,
 .input-box textarea:focus + label {
-  /* top: 0;
-  transform: translateY(-50%);
-  font-size: 13px;
-  color: var(--primary); */
   transform: translateY(-50%);
    top:0px;
     font-size: 15px;
@@ -185,12 +171,15 @@ background: var(--card);
 .eye-icon {
   position: absolute;
   right: 15px;
-  top: 50%;
+  top:54%;
   transform: translateY(-50%);
   cursor: pointer;
     color: var(--label-color);
   font-size: 18px;
   transition: .3s;
+}
+.password-box.error-active .eye-icon {
+  top:27px;
 }
 
 .eye-icon:hover {
@@ -249,7 +238,7 @@ background: var(--card);
 
 .error {
   color: #ff4d4f;
-  font-size: 13px;
-  margin-top: 5px;
+  font-size: 14px;
+  margin-top:5px;
   margin-left: 2px;
 }
