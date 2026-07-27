@@ -1,6 +1,6 @@
 import "./CalendarGrid.css";
 
-import { memo, useMemo } from "react";
+import { memo, useMemo, useEffect } from "react";
 
 import CalendarDay from "../CalendarDay/CalendarDay";
 
@@ -18,22 +18,22 @@ function CalendarGrid({
   onEventClick,
 }) {
   /* =========================================
-       Generate Calendar
-    ========================================= */
+     Generate Calendar
+  ========================================= */
 
   const calendar = useMemo(() => {
     return generateCalendar(currentDate);
   }, [currentDate]);
 
   /* =========================================
-       Week Header
-    ========================================= */
+     Week Header
+  ========================================= */
 
   const weekDays = useMemo(() => WEEK_DAYS, []);
 
   /* =========================================
-       Group Events By Date
-    ========================================= */
+     Group Events By Date
+  ========================================= */
 
   const eventsByDate = useMemo(() => {
     const map = new Map();
@@ -41,21 +41,18 @@ function CalendarGrid({
     events.forEach((event) => {
       if (!event?.date) return;
 
-      let dateKey;
+      const eventDate = new Date(event.date);
 
-      if (typeof event.date === "string") {
-        dateKey = event.date;
-      } else {
-        const eventDate = new Date(event.date);
-
-        if (Number.isNaN(eventDate.getTime())) return;
-
-        dateKey = [
-          eventDate.getFullYear(),
-          String(eventDate.getMonth() + 1).padStart(2, "0"),
-          String(eventDate.getDate()).padStart(2, "0"),
-        ].join("-");
+      if (Number.isNaN(eventDate.getTime())) {
+        console.warn("Invalid Event:", event);
+        return;
       }
+
+      const dateKey = [
+        eventDate.getFullYear(),
+        String(eventDate.getMonth() + 1).padStart(2, "0"),
+        String(eventDate.getDate()).padStart(2, "0"),
+      ].join("-");
 
       if (!map.has(dateKey)) {
         map.set(dateKey, []);
@@ -66,6 +63,30 @@ function CalendarGrid({
 
     return map;
   }, [events]);
+
+  /* =========================================
+     Debug
+  ========================================= */
+
+  // useEffect(() => {
+  //   console.group("===== CALENDAR GRID =====");
+
+  //   console.log("Current Month:", currentDate);
+
+  //   console.log("Events Received:", events.length);
+
+  //   console.log("Grouped Days:", eventsByDate.size);
+
+  //   eventsByDate.forEach((value, key) => {
+  //     console.log(`${key} -> ${value.length} event(s)`, value);
+  //   });
+
+  //   console.groupEnd();
+  // }, [currentDate, events, eventsByDate]);
+
+  /* =========================================
+     Render
+  ========================================= */
 
   return (
     <section className="calendarWrapper">
@@ -85,7 +106,7 @@ function CalendarGrid({
             String(item.date.getDate()).padStart(2, "0"),
           ].join("-");
 
-          const dayEvents = eventsByDate.get(dateKey) ?? [];
+          const dayEvents = eventsByDate.get(dateKey) || [];
 
           return (
             <CalendarDay

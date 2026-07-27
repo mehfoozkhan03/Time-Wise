@@ -17,18 +17,14 @@ function CalendarDay({
      Visible Events
   ========================================= */
 
-  const visibleEvents = useMemo(() => {
-    return events.slice(0, 2);
-  }, [events]);
+  const visibleEvents = useMemo(() => events.slice(0, 2), [events]);
 
   /* =========================================
      Select Date
   ========================================= */
 
   const handleSelectDate = useCallback(() => {
-    if (!onSelectDate) return;
-
-    onSelectDate(day);
+    onSelectDate?.(day);
   }, [day, onSelectDate]);
 
   /* =========================================
@@ -46,7 +42,7 @@ function CalendarDay({
   );
 
   /* =========================================
-     Stop Event Propagation
+     Stop Propagation
   ========================================= */
 
   const stopPropagation = useCallback((e) => {
@@ -67,25 +63,20 @@ function CalendarDay({
       aria-label={`Select ${day.toDateString()}`}
       aria-pressed={isSelected}
     >
-      {/* =========================================
-          Day Number
-      ========================================= */}
-
       <div className="dayHeader">
         <span className="dayNumber">{day.getDate()}</span>
       </div>
-
-      {/* =========================================
-          Events
-      ========================================= */}
 
       <div className="dayEvents">
         {visibleEvents.length === 0 ? (
           <div className="emptyEvents" />
         ) : (
           <>
-            {visibleEvents.map((event) => (
-              <div key={event._id || event.id} onClick={stopPropagation}>
+            {visibleEvents.map((event, index) => (
+              <div
+                key={event._id ?? event.id ?? `${event.title}-${index}`}
+                onClick={stopPropagation}
+              >
                 <EventBadge event={event} onClick={onEventClick} />
               </div>
             ))}
