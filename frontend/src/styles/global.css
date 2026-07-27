@@ -129,28 +129,29 @@ html.dark {
   --heading: linear-gradient(135deg, #6574e3 0%, #4258be 50%, #584190 100%);
 
   /* Card */
-  --card: #1a1d27;
-  --card-hover: #252a36;
-  --card-border: #2d3442;
-  --card-shadow: rgba(0, 0, 0, 0.4);
+  --card: #ffffff;
+  --card-hover: #f8fafc;
+  --card-border: #e2e8f0;
+  --card-shadow: rgba(0, 0, 0, 0.06);
 
   /* Input */
-  --input-bg: #252a36;
-  --input-text: #e8ecf1;
-  --label-color: #9aa4b3;
+  --input-bg: #ffffff;
+  --input-text: #2c2f3a;
+  --label-color: #6e7a88;
 
   /* Overlay */
-  --overlay: rgba(255, 255, 255, 0.06);
+  --overlay: rgba(255, 255, 255, 0.15);
 
   /* Focus */
-  --focus-shadow: rgba(62, 181, 232, 0.18);
+  --focus-shadow: rgba(41, 163, 224, 0.18);
 
   /* Additional */
-  --text-inverse: #0f1117;
-  --divider: #2d3442;
-  --tag-bg: rgba(62, 181, 232, 0.12);
-  --tag-text: #3eb5e8;
+  --text-inverse: #ffffff;
+  --divider: #e2e8f0;
+  --tag-bg: rgba(41, 163, 224, 0.1);
+  --tag-text: #29a3e0;
 }
+
 
 /* ==========================================================
    HTML
