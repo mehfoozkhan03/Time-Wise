@@ -197,7 +197,7 @@ export const admin_login = async (req, res) => {
 
     const token = jwt.sign(
       {
-        userID: admin._id,
+        adminID: admin._id,
       },
       process.env.PrivateKey,
       {
