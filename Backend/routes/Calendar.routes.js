@@ -1,6 +1,6 @@
-import express from "express";
+import express from 'express';
 
-import { auth } from "../middleware/AuthMiddleware.js";
+import { auth } from '../middleware/AuthMiddleware.js';
 
 import {
   getAllEvents,
@@ -8,7 +8,7 @@ import {
   createEvent,
   updateEvent,
   deleteEvent,
-} from "../controllers/calendarController.js";
+} from '../controllers/calendar.controller.js';
 
 const router = express.Router();
 
@@ -24,18 +24,18 @@ router.use(auth);
 ========================================= */
 
 // Get all events
-router.get("/", getAllEvents);
+router.get('/', getAllEvents);
 
 // Get single event
-router.get("/:id", getEventById);
+router.get('/:id', getEventById);
 
 // Create event
-router.post("/", createEvent);
+router.post('/', createEvent);
 
 // Update event
-router.put("/:id", updateEvent);
+router.put('/:id', updateEvent);
 
 // Delete event
-router.delete("/:id", deleteEvent);
+router.delete('/:id', deleteEvent);
 
 export default router;

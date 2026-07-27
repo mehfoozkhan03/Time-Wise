@@ -1,8 +1,8 @@
-import express from "express";
-import { createContact } from "../controllers/contactController.js";
+import express from 'express';
+import { createContact } from '../controllers/contact.controller.js';
 
 const contactRoute = express.Router();
 
-contactRoute.post("/", createContact);
+contactRoute.post('/', createContact);
 
 export { contactRoute };
