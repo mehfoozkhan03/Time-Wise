@@ -15,10 +15,6 @@
   transition: opacity 0.3s, width 0.3s, height 0.3s;
 }
 
-#cursor_dot.hovered {
-  opacity: 0;
-}
-
 /* ==========================================================
    CURSOR RING
 ========================================================== */
@@ -45,87 +41,10 @@
     opacity 0.35s ease;
 }
 
-/* ── DEFAULT (no hover) — subtle ring ── */
-#cursor_ring:not(.hovered):not(.glow_out) {
-  background: transparent;
-  border: 1.5px solid rgba(41, 163, 224, 0.5);
-  box-shadow: none;
-  opacity: 1;
-  animation: none;
-}
-
-/* ── HOVER IN — glow pulses in then breathes ── */
-#cursor_ring.hovered {
-  width: 55px;
-  height: 55px;
-  border: none;
-  background: rgba(41, 163, 224, 0.15);
-  opacity: 1;
-  animation:
-    cursor_glow_in 0.35s ease forwards,
-    cursor_glow_pulse 1.6s ease-in-out 0.35s infinite;
-}
-
-/* ── HOVER OUT — glow breathes out and fades to invisible ── */
-#cursor_ring.glow_out {
-  animation: cursor_glow_out 0.45s ease forwards !important;
-}
-
-/* ==========================================================
-   ANIMATIONS
-========================================================== */
-
-/* Step 1: Glow appears */
-@keyframes cursor_glow_in {
-  0% {
-    box-shadow: none;
-    opacity: 0;
-    background: rgba(41, 163, 224, 0);
-  }
-
-  100% {
-    box-shadow:
-      0 0 10px rgba(41, 163, 224, 0.55),
-      0 0 25px rgba(41, 163, 224, 0.40),
-      0 0 50px rgba(41, 163, 224, 0.20);
-    opacity: 1;
-    background: rgba(41, 163, 224, 0.15);
-  }
-}
-
-/* Step 2: Glow breathes (loops while hovering) */
-@keyframes cursor_glow_pulse {
-
-  0%,
-  100% {
-    box-shadow:
-      0 0 6px rgba(41, 163, 224, 0.20),
-      0 0 12px rgba(41, 163, 224, 0.12),
-      0 0 22px rgba(41, 163, 224, 0.06);
-    background: rgba(41, 163, 224, 0.05);
-  }
-}
-
-/* Step 3: Glow fades out on mouse leave — back to plain ring */
-@keyframes cursor_glow_out {
-  0% {
-    box-shadow:
-      0 0 10px rgba(41, 163, 224, 0.55),
-      0 0 25px rgba(41, 163, 224, 0.40),
-      0 0 50px rgba(41, 163, 224, 0.20);
-    background: rgba(41, 163, 224, 0.15);
-    width: 55px;
-    height: 55px;
-    opacity: 1;
-  }
-
-  100% {
-    box-shadow: none;
-    background: rgba(41, 163, 224, 0);
-    width: 35px;
-    height: 35px;
-    opacity: 1;
-  }
+#cursor_ring.hovered,
+#cursor_dot.hovered {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0);
 }
 
 /* ==========================================================

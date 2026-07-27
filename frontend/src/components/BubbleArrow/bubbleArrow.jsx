@@ -1,13 +1,15 @@
 import { useEffect } from "react";
+
 import "./bubbleArrow.css";
 
-export default function BubbleCursor() {
+export function BubbleCursor() {
   useEffect(() => {
     const dot = document.getElementById("cursor_dot");
     const ring = document.getElementById("cursor_ring");
 
     let mouseX = 0,
       mouseY = 0;
+
     let ringX = 0,
       ringY = 0;
 
@@ -19,7 +21,6 @@ export default function BubbleCursor() {
     };
 
     let isHovering = false;
-    let glowOutTimer = null;
 
     const onMouseOver = (e) => {
       if (
@@ -29,23 +30,12 @@ export default function BubbleCursor() {
       ) {
         isHovering = true;
 
-        // Cancel any pending cleanup from a previous glow_out
-        if (glowOutTimer) {
-          clearTimeout(glowOutTimer);
-          glowOutTimer = null;
-        }
-
-        // Snap ring position to cursor before animating in
+        // Snap ring to cursor
         ringX = mouseX;
         ringY = mouseY;
+
         ring.style.left = ringX + "px";
         ring.style.top = ringY + "px";
-
-        // Remove glow_out first so the pulse-in restarts cleanly
-        ring.classList.remove("glow_out");
-
-        // Force a reflow so the animation restarts from scratch
-        void ring.offsetWidth;
 
         dot.classList.add("hovered");
         ring.classList.add("hovered");
@@ -61,18 +51,7 @@ export default function BubbleCursor() {
         isHovering = false;
 
         dot.classList.remove("hovered");
-
-        // Switch from pulse → fade-out animation
-        ring.classList.add("glow_out");
         ring.classList.remove("hovered");
-
-        // Clean up glow_out after animation finishes
-        glowOutTimer = setTimeout(() => {
-          if (!isHovering) {
-            ring.classList.remove("glow_out");
-          }
-          glowOutTimer = null;
-        }, 450); // match cursor_glow_out duration
       }
     };
 
@@ -81,23 +60,28 @@ export default function BubbleCursor() {
     document.addEventListener("mouseout", onMouseOut);
 
     let animId;
+
     function animateRing() {
       if (!isHovering) {
-        ringX += (mouseX - ringX) * 1;
-        ringY += (mouseY - ringY) * 1;
+        const ease = 1;
+        ringX += (mouseX - ringX) * ease;
+        ringY += (mouseY - ringY) * ease;
+
         ring.style.left = ringX + "px";
         ring.style.top = ringY + "px";
       }
+
       animId = requestAnimationFrame(animateRing);
     }
+
     animateRing();
 
+    // Cleanup when component unmounts
     return () => {
       document.removeEventListener("mousemove", onMouseMove);
       document.removeEventListener("mouseover", onMouseOver);
       document.removeEventListener("mouseout", onMouseOut);
       cancelAnimationFrame(animId);
-      if (glowOutTimer) clearTimeout(glowOutTimer);
     };
   }, []);
 
