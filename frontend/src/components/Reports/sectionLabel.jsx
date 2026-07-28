@@ -13,7 +13,7 @@ export function SectionLabel({ children }) {
           width: 4,
           height: 20,
           borderRadius: 99,
-          background: "linear-gradient(180deg, #6366f1, #8b5cf6)",
+          background: "var(--primary)",
           boxShadow: "0 0 12px rgba(99,102,241,0.35)",
         }}
       />
