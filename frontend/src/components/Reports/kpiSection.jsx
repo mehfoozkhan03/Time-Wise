@@ -1,6 +1,10 @@
 import { KPICard } from "./kpiCard";
 
-export function KPISection({ sparklineData, dashboardStats = {} }) {
+export function KPISection({
+  sparklineData,
+  dashboardStats = {},
+  kpiMetrics = {},
+}) {
   return (
     <div
       className="stagger"
@@ -49,7 +53,7 @@ export function KPISection({ sparklineData, dashboardStats = {} }) {
       <KPICard
         icon="⏱"
         label="Avg Daily Hours"
-        value="8.4"
+        value={kpiMetrics.averageDailyHours ?? 0}
         unit="h/day"
         trend={0.3}
         trendSuffix="h"
@@ -61,7 +65,7 @@ export function KPISection({ sparklineData, dashboardStats = {} }) {
       <KPICard
         icon="💪"
         label="Overtime Hours"
-        value="4.5"
+        value={kpiMetrics.overtimeHours ?? 0}
         unit="h"
         trend={1.2}
         trendSuffix="h"
@@ -84,7 +88,7 @@ export function KPISection({ sparklineData, dashboardStats = {} }) {
       <KPICard
         icon="🌴"
         label="Leaves Taken"
-        value="5"
+        value={kpiMetrics.leavesTaken ?? 0}
         unit="days"
         trend={-1}
         sparkData={sparklineData.leaves}

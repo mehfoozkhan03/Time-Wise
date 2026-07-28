@@ -15,7 +15,6 @@ import { WorkSummary } from "../../components/Reports/workSummary";
 import { PerformanceInsights } from "../../components/Reports/performanceInsights";
 import { GoalsSection } from "../../components/Reports/goalsSection";
 import { ChartsSection } from "../../components/Reports/chartsSection";
-import { sparklineData } from "../../components/Reports/chartData";
 import { ReportsHeader } from "../../components/Reports/reportsHeader";
 import { KPISection } from "../../components/Reports/kpiSection";
 import {
@@ -105,6 +104,129 @@ export function Reports() {
       });
   }, [attendanceLog, searchLog, statusFilter]);
 
+  const sparklineData = useMemo(() => {
+    const history = [...attendanceLog]
+      .sort((a, b) => new Date(a.date) - new Date(b.date))
+      .slice(-14); // Last 14 records
+
+    return {
+      attendance: history.map((item) => {
+        switch (item.status) {
+          case "Present":
+          case "Late":
+            return 1;
+
+          case "Half Day":
+            return 0.5;
+
+          default:
+            return 0;
+        }
+      }),
+
+      hours: history.map(
+        (item) => +(item.totalWorkingSeconds / 3600).toFixed(1),
+      ),
+
+      daily: history.map(
+        (item) => +(item.totalWorkingSeconds / 3600).toFixed(1),
+      ),
+
+      overtime: history.map((item) =>
+        Math.max(0, +(item.totalWorkingSeconds / 3600 - 8).toFixed(1)),
+      ),
+
+      productivity: history.map((item) =>
+        Math.min(
+          100,
+          Math.round((item.totalWorkingSeconds / (8 * 3600)) * 100),
+        ),
+      ),
+
+      leaves: (() => {
+        let count = 0;
+
+        return history.map((item) => {
+          if (item.status === "Leave") count++;
+          return count;
+        });
+      })(),
+
+      checkin: history.map((item) => {
+        if (!item.checkInTime) return 0;
+
+        const d = new Date(item.checkInTime);
+
+        return d.getHours() * 60 + d.getMinutes();
+      }),
+
+      streak: (() => {
+        let streak = 0;
+
+        return history.map((item) => {
+          if (item.status === "Present" || item.status === "Late") {
+            streak++;
+          } else {
+            streak = 0;
+          }
+
+          return streak;
+        });
+      })(),
+    };
+  }, [attendanceLog]);
+
+  const kpiMetrics = useMemo(() => {
+    const history = attendanceLog;
+
+    if (!history.length) {
+      return {
+        averageDailyHours: 0,
+        overtimeHours: 0,
+        leavesTaken: 0,
+        attendanceTrend: 0,
+        streakTrend: 0,
+        monthlyHoursTrend: 0,
+        productivityTrend: 0,
+        overtimeTrend: 0,
+        checkInTrend: 0,
+        leaveTrend: 0,
+      };
+    }
+
+    const totalHours = history.reduce(
+      (sum, item) => sum + item.totalWorkingSeconds / 3600,
+      0,
+    );
+
+    const averageDailyHours = +(totalHours / history.length).toFixed(1);
+
+    const overtimeHours = +history
+      .reduce((sum, item) => {
+        const hrs = item.totalWorkingSeconds / 3600;
+        return sum + Math.max(0, hrs - 8);
+      }, 0)
+      .toFixed(1);
+
+    const leavesTaken = history.filter(
+      (item) => item.status === "Leave",
+    ).length;
+
+    return {
+      averageDailyHours,
+      overtimeHours,
+      leavesTaken,
+
+      attendanceTrend: dashboardStats.attendancePercentage,
+      streakTrend: dashboardStats.dayStreak,
+      monthlyHoursTrend: dashboardStats.monthlyHours,
+      productivityTrend: dashboardStats.productivity,
+      overtimeTrend: overtimeHours,
+      checkInTrend: dashboardStats.averageCheckIn ?? 0,
+      leaveTrend: leavesTaken,
+    };
+  }, [attendanceLog, dashboardStats]);
+
   const dynamicInsights = [
     {
       icon: dashboardStats.attendancePercentage >= 90 ? "📈" : "⚠️",
@@ -192,6 +314,7 @@ export function Reports() {
         <KPISection
           sparklineData={sparklineData}
           dashboardStats={dashboardStats}
+          kpiMetrics={kpiMetrics}
         />
         {/* ── Two-column: Work Summary + Performance Insights ── */}
         <div
@@ -206,7 +329,6 @@ export function Reports() {
 
           <PerformanceInsights insights={dynamicInsights} />
         </div>
-
         <ChartsSection
           activeTab={activeTab}
           chartTabs={chartTabs}
@@ -214,7 +336,6 @@ export function Reports() {
           attendanceLog={attendanceLog}
           dashboardStats={dashboardStats}
         />
-
         {/* ── Goals & Badges ── */}
         <div
           style={{
@@ -223,7 +344,6 @@ export function Reports() {
         >
           <GoalsSection dashboardStats={dashboardStats} />
         </div>
-
         <AttendanceLog
           attendanceLog={attendanceLog}
           filteredLog={filteredLog}
