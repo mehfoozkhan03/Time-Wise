@@ -44,9 +44,6 @@ const getVisibility = (type) => {
    Logged In User Helper
 ========================================= */
 
-// const getLoggedInUser = async (req) => {
-//     return await userModel.findById(req.user.userID);
-// };
 const getLoggedInUser = async (req) => {
     console.log("JWT User ID:", req.user.userID);
 
