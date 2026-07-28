@@ -1,6 +1,11 @@
 import { KPICard } from "./kpiCard";
+import useCountUp from "../../components/UseCount/Count";
 
 export function KPISection({ sparklineData, dashboardStats = {} }) {
+  const attendance = useCountUp(dashboardStats?.attendancePercentage || 0);
+  const dayStreak = useCountUp(dashboardStats?.dayStreak || 0);
+  const monthlyHours = useCountUp(dashboardStats?.monthlyHours || 0);
+  const productivity = useCountUp(dashboardStats?.productivity || 0);
   return (
     <div
       className="stagger"
@@ -14,7 +19,7 @@ export function KPISection({ sparklineData, dashboardStats = {} }) {
       <KPICard
         icon="📅"
         label="Attendance Rate"
-        value={dashboardStats?.attendancePercentage ?? "Loading..."}
+        value={attendance}
         unit="%"
         trend={2.1}
         sparkData={sparklineData.attendance}
@@ -25,7 +30,7 @@ export function KPISection({ sparklineData, dashboardStats = {} }) {
       <KPICard
         icon="🔥"
         label="Current Streak"
-        value={dashboardStats?.dayStreak ?? "Loading..."}
+        value={dayStreak}
         unit="days"
         trend={4}
         trendSuffix=" days"
@@ -37,7 +42,7 @@ export function KPISection({ sparklineData, dashboardStats = {} }) {
       <KPICard
         icon="🕐"
         label="Total Working hrs"
-        value={dashboardStats.monthlyHours}
+        value={monthlyHours.toFixed(1)}
         unit="h"
         trend={5.8}
         trendSuffix="h"
@@ -69,11 +74,10 @@ export function KPISection({ sparklineData, dashboardStats = {} }) {
         sparkColor="#8b5cf6"
         sub="This month"
       />
-
       <KPICard
         icon="⚡"
         label="Productivity Score"
-        value={dashboardStats.productivity}
+        value={productivity}
         unit="%"
         trend={7}
         sparkData={sparklineData.productivity}
