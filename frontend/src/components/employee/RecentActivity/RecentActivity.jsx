@@ -1,24 +1,51 @@
-import './RecentActivity.css'
+import useAttendance from "../../../hooks/useAttendance";
+import "./RecentActivity.css";
 
 export default function RecentActivity() {
+  const { attendance } = useAttendance();
+
+  const checkInTime = () => {
+    return attendance?.checkInTime
+      ? new Date(attendance.checkInTime).toLocaleTimeString()
+      : "--:--";
+  };
+
+  const breakStart = () => {
+    return attendance?.breaks?.[0]?.breakStart
+      ? new Date(attendance.breaks[0].breakStart).toLocaleTimeString()
+      : "--:--";
+  };
+  
+  const breakEnd = () => {
+    return attendance?.breaks?.[0]?.breakEnd
+      ? new Date(attendance.breaks[0].breakEnd).toLocaleTimeString()
+      : "--:--";
+  };
+
+  const checkOut = () => {
+    return attendance?.checkOutTime
+      ? new Date(attendance.checkOutTime).toLocaleTimeString()
+      : "--:--";
+  };
+
   const activities = [
     {
-      title: 'Checked In',
-      time: '09:04 AM',
+      title: "Checked In",
+      time: checkInTime(),
     },
     {
-      title: 'Break Started',
-      time: '01:01 PM',
+      title: "Break Started",
+      time: breakStart(),
     },
     {
-      title: 'Break Ended',
-      time: '01:29 PM',
+      title: "Break Ended",
+      time: breakEnd(),
     },
     {
-      title: 'Checked Out',
-      time: '06:08 PM',
+      title: "Checked Out",
+      time: checkOut(),
     },
-  ]
+  ];
 
   return (
     <section className="recent_activity">
@@ -28,7 +55,10 @@ export default function RecentActivity() {
 
       <div className="activity_list">
         {activities.map((activity, index) => (
-          <div className="activity_item" key={index}>
+          <div
+            className="activity_item"
+            key={index}
+          >
             <div className="activity_dot" />
 
             <div className="activity_content">
@@ -40,5 +70,5 @@ export default function RecentActivity() {
         ))}
       </div>
     </section>
-  )
+  );
 }
