@@ -2,7 +2,7 @@ import { useEffect } from "react";
 
 import "./bubbleArrow.css";
 
-export default function BubbleCursor() {
+export function BubbleCursor() {
   useEffect(() => {
     const dot = document.getElementById("cursor_dot");
     const ring = document.getElementById("cursor_ring");
