@@ -20,7 +20,7 @@ export function KPISection({
         label="Attendance Rate"
         value={dashboardStats?.attendancePercentage ?? "Loading..."}
         unit="%"
-        trend={2.1}
+        trend={kpiMetrics?.attendanceTrend ?? 0}
         sparkData={sparklineData.attendance}
         sparkColor="#10b981"
         sub={`${dashboardStats.attendancePercentage}% attendance`}
@@ -31,7 +31,7 @@ export function KPISection({
         label="Current Streak"
         value={dashboardStats?.dayStreak ?? "Loading..."}
         unit="days"
-        trend={4}
+        trend={kpiMetrics?.streakTrend ?? 0}
         trendSuffix=" days"
         sparkData={sparklineData.streak}
         sparkColor="#f59e0b"
@@ -43,7 +43,7 @@ export function KPISection({
         label="Total Working hrs"
         value={dashboardStats.monthlyHours}
         unit="h"
-        trend={5.8}
+        trend={kpiMetrics?.monthlyHoursTrend ?? 0}
         trendSuffix="h"
         sparkData={sparklineData.hours}
         sparkColor="#6366f1"
@@ -55,7 +55,7 @@ export function KPISection({
         label="Avg Daily Hours"
         value={kpiMetrics.averageDailyHours ?? 0}
         unit="h/day"
-        trend={0.3}
+        trend={kpiMetrics?.monthlyHoursTrend ?? 0}
         trendSuffix="h"
         sparkData={sparklineData.daily}
         sparkColor="#22d3ee"
@@ -67,7 +67,7 @@ export function KPISection({
         label="Overtime Hours"
         value={kpiMetrics.overtimeHours ?? 0}
         unit="h"
-        trend={1.2}
+        trend={kpiMetrics?.overtimeTrend ?? 0}
         trendSuffix="h"
         sparkData={sparklineData.overtime}
         sparkColor="#8b5cf6"
@@ -79,7 +79,7 @@ export function KPISection({
         label="Productivity Score"
         value={dashboardStats.productivity}
         unit="%"
-        trend={7}
+        trend={kpiMetrics?.productivityTrend ?? 0}
         sparkData={sparklineData.productivity}
         sparkColor="#6366f1"
         sub={`${dashboardStats.punctuality}% punctuality`}
@@ -90,7 +90,7 @@ export function KPISection({
         label="Leaves Taken"
         value={kpiMetrics.leavesTaken ?? 0}
         unit="days"
-        trend={-1}
+        trend={kpiMetrics?.leaveTrend ?? 0}
         sparkData={sparklineData.leaves}
         sparkColor="#ef4444"
         sub="8 days remaining"
@@ -100,7 +100,7 @@ export function KPISection({
         icon="🕗"
         label="Avg Check-in Time"
         value={dashboardStats.averageCheckIn}
-        trend={-12}
+        trend={kpiMetrics?.checkInTrend ?? 0}
         trendSuffix=" min"
         sparkData={sparklineData.checkin}
         sparkColor="#22d3ee"

@@ -177,13 +177,16 @@ export function Reports() {
   }, [attendanceLog]);
 
   const kpiMetrics = useMemo(() => {
-    const history = attendanceLog;
+    const history = [...attendanceLog].sort(
+      (a, b) => new Date(a.date) - new Date(b.date),
+    );
 
     if (!history.length) {
       return {
         averageDailyHours: 0,
         overtimeHours: 0,
         leavesTaken: 0,
+
         attendanceTrend: 0,
         streakTrend: 0,
         monthlyHoursTrend: 0,
@@ -194,6 +197,7 @@ export function Reports() {
       };
     }
 
+    // Overall KPI values
     const totalHours = history.reduce(
       (sum, item) => sum + item.totalWorkingSeconds / 3600,
       0,
@@ -212,18 +216,89 @@ export function Reports() {
       (item) => item.status === "Leave",
     ).length;
 
+    // Last 7 vs Previous 7
+    const current = history.slice(-7);
+    const previous = history.slice(-14, -7);
+
+    const avg = (arr, fn) =>
+      arr.length ? arr.reduce((s, i) => s + fn(i), 0) / arr.length : 0;
+
+    const attendanceCurrent =
+      avg(current, (i) =>
+        i.status === "Present" || i.status === "Late"
+          ? 1
+          : i.status === "Half Day"
+            ? 0.5
+            : 0,
+      ) * 100;
+
+    const attendancePrevious =
+      avg(previous, (i) =>
+        i.status === "Present" || i.status === "Late"
+          ? 1
+          : i.status === "Half Day"
+            ? 0.5
+            : 0,
+      ) * 100;
+
+    const hoursCurrent = avg(current, (i) => i.totalWorkingSeconds / 3600);
+
+    const hoursPrevious = avg(previous, (i) => i.totalWorkingSeconds / 3600);
+
+    const productivityCurrent = avg(
+      current,
+      (i) => (i.totalWorkingSeconds / (8 * 3600)) * 100,
+    );
+
+    const productivityPrevious = avg(
+      previous,
+      (i) => (i.totalWorkingSeconds / (8 * 3600)) * 100,
+    );
+
+    const overtimeCurrent = current.reduce((sum, i) => {
+      const h = i.totalWorkingSeconds / 3600;
+      return sum + Math.max(0, h - 8);
+    }, 0);
+
+    const overtimePrevious = previous.reduce((sum, i) => {
+      const h = i.totalWorkingSeconds / 3600;
+      return sum + Math.max(0, h - 8);
+    }, 0);
+
+    const checkInCurrent = avg(current, (i) => {
+      if (!i.checkInTime) return 0;
+      const d = new Date(i.checkInTime);
+      return d.getHours() * 60 + d.getMinutes();
+    });
+
+    const checkInPrevious = avg(previous, (i) => {
+      if (!i.checkInTime) return 0;
+      const d = new Date(i.checkInTime);
+      return d.getHours() * 60 + d.getMinutes();
+    });
+
     return {
       averageDailyHours,
       overtimeHours,
       leavesTaken,
 
-      attendanceTrend: dashboardStats.attendancePercentage,
+      attendanceTrend: +(attendanceCurrent - attendancePrevious).toFixed(1),
+
       streakTrend: dashboardStats.dayStreak,
-      monthlyHoursTrend: dashboardStats.monthlyHours,
-      productivityTrend: dashboardStats.productivity,
-      overtimeTrend: overtimeHours,
-      checkInTrend: dashboardStats.averageCheckIn ?? 0,
-      leaveTrend: leavesTaken,
+
+      monthlyHoursTrend: +(hoursCurrent - hoursPrevious).toFixed(1),
+
+      productivityTrend: +(productivityCurrent - productivityPrevious).toFixed(
+        1,
+      ),
+
+      overtimeTrend: +(overtimeCurrent - overtimePrevious).toFixed(1),
+
+      checkInTrend: +(checkInPrevious - checkInCurrent).toFixed(0),
+
+      leaveTrend:
+        current.filter((i) => i.status === "Leave").length -
+        previous.filter((i) => i.status === "Leave").length,
     };
   }, [attendanceLog, dashboardStats]);
 
