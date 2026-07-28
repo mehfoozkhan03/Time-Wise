@@ -250,7 +250,7 @@ export function ChartsSection({
               fontWeight: activeTab === tab.id ? 600 : 400,
               borderBottom:
                 activeTab === tab.id
-                  ? "2px solid #6366f1"
+                  ? "2px solid var(--primary)"
                   : "2px solid transparent",
               marginBottom: -1,
               whiteSpace: "nowrap",

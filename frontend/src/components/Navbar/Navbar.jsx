@@ -4,8 +4,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { FaBell, FaBars, FaTimes, FaChevronDown } from "react-icons/fa";
 
 import "./Navbar.css";
-// import { useTour } from "../../hooks/useTour";
-// import { tourSteps } from "../../tour/tourSteps";
 import { logout } from "../../store/authSlice";
 import { authService } from "../../services/authService";
 import { useTheme } from "../../context/ThemeContext";
@@ -14,7 +12,7 @@ export default function Navbar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { currentTheme } = useTheme();
+  const { resolvedTheme } = useTheme();
 
   const location = useLocation();
   const { user } = useSelector((state) => state.auth);
@@ -24,8 +22,6 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [notificationOpen, setNotificationOpen] = useState(false);
-
-  // const { triggerTour } = useTour(tourSteps());
 
   const notificationRef = useRef(null);
   const profileRef = useRef(null);
@@ -82,7 +78,7 @@ export default function Navbar() {
           <div className="logo_text">
             <img
               src={
-                currentTheme === "dark" ? "/Logo_N.svg" : "/Logo_N_Light.svg"
+                resolvedTheme === "dark" ? "/Logo_N.svg" : "/Logo_N_Light.svg"
               }
               alt="Logo"
             />
@@ -204,18 +200,6 @@ export default function Navbar() {
             </div>
           )}
         </div>
-
-        {/* Show Demo */}
-
-        {/* {isHome && (
-          <button
-            id="tour-trigger-btn"
-            className="tour_trigger_btn"
-            onClick={triggerTour}
-          >
-            Show Demo
-          </button>
-        )} */}
 
         {/* Mobile Menu */}
 
