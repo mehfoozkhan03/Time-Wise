@@ -120,6 +120,8 @@
 .frequency-time>select{
     padding: 10px 20px;
     border-radius: 10px;
+    background-color: transparent;
+    color: var(--text_primary);
 }
 
 /* Save changes */

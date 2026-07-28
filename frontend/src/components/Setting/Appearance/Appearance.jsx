@@ -9,8 +9,6 @@ import { useTheme } from "../../../context/ThemeContext";
 
 export const Appearance = () => {
     const { currentTheme, changeTheme } = useTheme();
-    console.log("🚀 ~ theme:", currentTheme);
-
 
     return (
         <>
@@ -41,19 +39,6 @@ export const Appearance = () => {
                     </div>
                 </div>
 
-                {/* Accent color */}
-                {/* <div className="accent-color-container">
-                    <div className="accent-heading">
-                        <h3>Accent color</h3>
-                    </div>
-                    <div className="accent-color">
-                        <div className="blue-violet"></div>
-                        <div className="blue"></div>
-                        <div className="teal"></div>
-                        <div className="rose"></div>
-                        <div className="amber"></div>
-                    </div>
-                </div> */}
 
                 {/* Layout & Localization */}
                 <div className="layout-localization">

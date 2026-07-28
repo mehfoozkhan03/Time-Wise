@@ -116,6 +116,8 @@
     border-radius: 10px;
     display: flex;
     justify-content: space-between;
+    background-color: transparent;
+    color: var(--text_primary);
 }
 
 /* Save changes */
