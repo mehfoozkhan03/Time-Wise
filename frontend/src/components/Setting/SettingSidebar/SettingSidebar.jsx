@@ -13,12 +13,11 @@ import { MdOutlineContactSupport } from "react-icons/md";
 import { FaCalendarAlt } from "react-icons/fa";
 import { useSelector } from "react-redux";
 
-
 export const SettingSidebar = () => {
   const { user } = useSelector((state) => state.auth);
 
-  const { currentTheme } = useTheme();
-  
+  const { resolvedTheme } = useTheme();
+
   return (
     <>
       <div className="settingSidebar-container">
@@ -26,9 +25,9 @@ export const SettingSidebar = () => {
           <div className="settingSidebar-logo">
             <img
               src={
-                currentTheme === "dark" ? "/Logo_N.svg" : "/Logo_N_Light.svg"
+                resolvedTheme === "dark" ? "/Logo_N.svg" : "/Logo_N_Light.svg"
               }
-              alt="logo"
+              alt="Logo"
             />
           </div>
           <div className="settingSidebar-list">
@@ -55,10 +54,7 @@ export const SettingSidebar = () => {
                 <RiPaletteLine className="settingSidebar-icon" />
                 <span>Appearance</span>
               </NavLink>
-              <NavLink
-                to="calendar"
-                className="settingSidebar-link"
-              >
+              <NavLink to="calendar" className="settingSidebar-link">
                 <FaCalendarAlt className="settingSidebar-icon" />
                 <span>Calendar</span>
               </NavLink>
@@ -69,10 +65,7 @@ export const SettingSidebar = () => {
                 <MdNotifications className="settingSidebar-icon" />
                 <span>Notifications</span>
               </NavLink>
-              <NavLink
-                to="security"
-                className="security settingSidebar-link"
-              >
+              <NavLink to="security" className="security settingSidebar-link">
                 <FaLock className="settingSidebar-icon" />
                 <span>Security</span>
               </NavLink>
@@ -99,14 +92,16 @@ export const SettingSidebar = () => {
                 : "U"}
             </div>
             <div className="user_details">
-              <p>{user
+              <p>
+                {user
                   ? `${user.firstName
                       ?.charAt(0)
                       .toUpperCase()}${user.firstName?.slice(1)} ${
                       user.lastName?.charAt(0).toUpperCase() +
                       user.lastName?.slice(1)
                     }`
-                  : "User"}</p>
+                  : "User"}
+              </p>
               <p>{user?.email ?? "No email available"}</p>
             </div>
           </div>

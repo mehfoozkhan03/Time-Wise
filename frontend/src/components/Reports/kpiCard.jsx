@@ -13,10 +13,50 @@ export function KPICard(props) {
     sparkColor,
     sub,
   } = props;
+
+  const handleMouseMove = (e) => {
+    const card = e.currentTarget;
+
+    const rect = card.getBoundingClientRect();
+
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    const rotateX = -((y - rect.height / 2) / (rect.height / 2)) * 5;
+    const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 5;
+
+    requestAnimationFrame(() => {
+      card.style.transform = `
+      perspective(1000px)
+      rotateX(${rotateX}deg)
+      rotateY(${rotateY}deg)
+    `;
+
+      card.style.setProperty("--mouse-x", `${x}px`);
+      card.style.setProperty("--mouse-y", `${y}px`);
+    });
+  };
+
+  const handleMouseLeave = (e) => {
+    const card = e.currentTarget;
+
+    card.style.transition = "transform .25s ease";
+
+    card.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg)";
+
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        card.style.transition = "";
+      }, 250);
+    });
+  };
+
   {
     return (
       <div
-        className="glass-card card-hover"
+        className="glass-card card-hover kpi-tilt-card"
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
         style={{
           padding: "20px 20px 16px",
           display: "flex",
