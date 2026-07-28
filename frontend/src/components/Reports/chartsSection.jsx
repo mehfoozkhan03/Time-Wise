@@ -20,14 +20,18 @@ import {
 import { SectionLabel } from "./sectionLabel";
 import { CustomTooltip } from "./CustomTooltip";
 import { AttendanceHeatmap } from "./attendanceHeatmap";
+import useCountUp from "../../components/UseCount/Count";
 
 export function ChartsSection({
+  
   activeTab,
   chartTabs,
   setTab,
   attendanceLog,
   dashboardStats,
 }) {
+
+  const productivity = useCountUp(dashboardStats?.productivity ?? 0);
   // console.log("Attendance Log:", attendanceLog);
 
   const filtered = (attendanceLog ?? []).filter(
@@ -532,12 +536,8 @@ export function ChartsSection({
                     strokeLinecap="round"
                     strokeDasharray={2 * Math.PI * 90}
                     strokeDashoffset={
-                      (2 *
-                        Math.PI *
-                        90 *
-                        (100 - dashboardStats?.productivity ?? 0)) /
-                      100
-                    }
+  (2 * Math.PI * 90 * (100 - productivity)) / 100
+}
                     transform="rotate(-90 110 110)"
                     style={{
                       transition: "stroke-dashoffset .6s ease",
@@ -561,7 +561,7 @@ export function ChartsSection({
                       fontWeight: 700,
                     }}
                   >
-                    {dashboardStats?.productivity ?? 0}%
+                    {productivity}%
                   </div>
 
                   <div

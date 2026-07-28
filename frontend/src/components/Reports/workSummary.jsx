@@ -1,45 +1,56 @@
 import { SectionLabel } from "./sectionLabel";
+import useCountUp from "../../components/UseCount/Count";
 
 export function WorkSummary({ dashboardStats }) {
+
+const weeklyHours = useCountUp(dashboardStats.weeklyHours);
+const monthlyHours = useCountUp(dashboardStats.monthlyHours);
+const productivity = useCountUp(dashboardStats.productivity);
+const punctuality = useCountUp(dashboardStats.punctuality);
+const dayStreak = useCountUp(dashboardStats.dayStreak);
+const longestStreak = useCountUp(dashboardStats.longestStreak);
+const averageBreakDuration = useCountUp(dashboardStats.averageBreakDuration);
+const weeklyGoalPercentage = useCountUp(dashboardStats.weeklyGoalPercentage);
+
   const dynamicSummaryItems = [
     {
       label: "Weekly Hours",
-      value: `${dashboardStats.weeklyHours}h`,
+       value: `${weeklyHours}h`,
       icon: "📅",
     },
     {
       label: "Monthly Hours",
-      value: `${dashboardStats.monthlyHours}h`,
+      value: `${monthlyHours}h`,
       icon: "🕐",
     },
     {
       label: "Productivity",
-      value: `${dashboardStats.productivity}%`,
+      value: `${productivity}%`,
       icon: "💡",
     },
     {
       label: "Punctuality",
-      value: `${dashboardStats.punctuality}%`,
+      value: `${punctuality}%`,
       icon: "⏰",
     },
     {
       label: "Current Streak",
-      value: `${dashboardStats.dayStreak} days`,
+      value: `${dayStreak} days`,
       icon: "🔥",
     },
     {
       label: "Longest Streak",
-      value: `${dashboardStats.longestStreak} days`,
+      value: `${longestStreak} days`,
       icon: "🏆",
     },
     {
       label: "Avg Break",
-      value: `${dashboardStats.averageBreakDuration} min`,
+      value: `${averageBreakDuration} min`,
       icon: "☕",
     },
     {
       label: "Weekly Goal",
-      value: `${dashboardStats.weeklyGoalPercentage}%`,
+      value: `${weeklyGoalPercentage}%`,
       icon: "🎯",
     },
   ];
