@@ -15,7 +15,6 @@ import { WorkSummary } from "../../components/Reports/workSummary";
 import { PerformanceInsights } from "../../components/Reports/performanceInsights";
 import { GoalsSection } from "../../components/Reports/goalsSection";
 import { ChartsSection } from "../../components/Reports/chartsSection";
-import { sparklineData } from "../../components/Reports/chartData";
 import { ReportsHeader } from "../../components/Reports/reportsHeader";
 import { KPISection } from "../../components/Reports/kpiSection";
 import {
@@ -105,6 +104,204 @@ export function Reports() {
       });
   }, [attendanceLog, searchLog, statusFilter]);
 
+  const sparklineData = useMemo(() => {
+    const history = [...attendanceLog]
+      .sort((a, b) => new Date(a.date) - new Date(b.date))
+      .slice(-14); // Last 14 records
+
+    return {
+      attendance: history.map((item) => {
+        switch (item.status) {
+          case "Present":
+          case "Late":
+            return 1;
+
+          case "Half Day":
+            return 0.5;
+
+          default:
+            return 0;
+        }
+      }),
+
+      hours: history.map(
+        (item) => +(item.totalWorkingSeconds / 3600).toFixed(1),
+      ),
+
+      daily: history.map(
+        (item) => +(item.totalWorkingSeconds / 3600).toFixed(1),
+      ),
+
+      overtime: history.map((item) =>
+        Math.max(0, +(item.totalWorkingSeconds / 3600 - 8).toFixed(1)),
+      ),
+
+      productivity: history.map((item) =>
+        Math.min(
+          100,
+          Math.round((item.totalWorkingSeconds / (8 * 3600)) * 100),
+        ),
+      ),
+
+      leaves: (() => {
+        let count = 0;
+
+        return history.map((item) => {
+          if (item.status === "Leave") count++;
+          return count;
+        });
+      })(),
+
+      checkin: history.map((item) => {
+        if (!item.checkInTime) return 0;
+
+        const d = new Date(item.checkInTime);
+
+        return d.getHours() * 60 + d.getMinutes();
+      }),
+
+      streak: (() => {
+        let streak = 0;
+
+        return history.map((item) => {
+          if (item.status === "Present" || item.status === "Late") {
+            streak++;
+          } else {
+            streak = 0;
+          }
+
+          return streak;
+        });
+      })(),
+    };
+  }, [attendanceLog]);
+
+  const kpiMetrics = useMemo(() => {
+    const history = [...attendanceLog].sort(
+      (a, b) => new Date(a.date) - new Date(b.date),
+    );
+
+    if (!history.length) {
+      return {
+        averageDailyHours: 0,
+        overtimeHours: 0,
+        leavesTaken: 0,
+
+        attendanceTrend: 0,
+        streakTrend: 0,
+        monthlyHoursTrend: 0,
+        productivityTrend: 0,
+        overtimeTrend: 0,
+        checkInTrend: 0,
+        leaveTrend: 0,
+      };
+    }
+
+    // Overall KPI values
+    const totalHours = history.reduce(
+      (sum, item) => sum + item.totalWorkingSeconds / 3600,
+      0,
+    );
+
+    const averageDailyHours = +(totalHours / history.length).toFixed(1);
+
+    const overtimeHours = +history
+      .reduce((sum, item) => {
+        const hrs = item.totalWorkingSeconds / 3600;
+        return sum + Math.max(0, hrs - 8);
+      }, 0)
+      .toFixed(1);
+
+    const leavesTaken = history.filter(
+      (item) => item.status === "Leave",
+    ).length;
+
+    // Last 7 vs Previous 7
+    const current = history.slice(-7);
+    const previous = history.slice(-14, -7);
+
+    const avg = (arr, fn) =>
+      arr.length ? arr.reduce((s, i) => s + fn(i), 0) / arr.length : 0;
+
+    const attendanceCurrent =
+      avg(current, (i) =>
+        i.status === "Present" || i.status === "Late"
+          ? 1
+          : i.status === "Half Day"
+            ? 0.5
+            : 0,
+      ) * 100;
+
+    const attendancePrevious =
+      avg(previous, (i) =>
+        i.status === "Present" || i.status === "Late"
+          ? 1
+          : i.status === "Half Day"
+            ? 0.5
+            : 0,
+      ) * 100;
+
+    const hoursCurrent = avg(current, (i) => i.totalWorkingSeconds / 3600);
+
+    const hoursPrevious = avg(previous, (i) => i.totalWorkingSeconds / 3600);
+
+    const productivityCurrent = avg(
+      current,
+      (i) => (i.totalWorkingSeconds / (8 * 3600)) * 100,
+    );
+
+    const productivityPrevious = avg(
+      previous,
+      (i) => (i.totalWorkingSeconds / (8 * 3600)) * 100,
+    );
+
+    const overtimeCurrent = current.reduce((sum, i) => {
+      const h = i.totalWorkingSeconds / 3600;
+      return sum + Math.max(0, h - 8);
+    }, 0);
+
+    const overtimePrevious = previous.reduce((sum, i) => {
+      const h = i.totalWorkingSeconds / 3600;
+      return sum + Math.max(0, h - 8);
+    }, 0);
+
+    const checkInCurrent = avg(current, (i) => {
+      if (!i.checkInTime) return 0;
+      const d = new Date(i.checkInTime);
+      return d.getHours() * 60 + d.getMinutes();
+    });
+
+    const checkInPrevious = avg(previous, (i) => {
+      if (!i.checkInTime) return 0;
+      const d = new Date(i.checkInTime);
+      return d.getHours() * 60 + d.getMinutes();
+    });
+
+    return {
+      averageDailyHours,
+      overtimeHours,
+      leavesTaken,
+
+      attendanceTrend: +(attendanceCurrent - attendancePrevious).toFixed(1),
+
+      streakTrend: dashboardStats.dayStreak,
+
+      monthlyHoursTrend: +(hoursCurrent - hoursPrevious).toFixed(1),
+
+      productivityTrend: +(productivityCurrent - productivityPrevious).toFixed(
+        1,
+      ),
+
+      overtimeTrend: +(overtimeCurrent - overtimePrevious).toFixed(1),
+
+      checkInTrend: +(checkInPrevious - checkInCurrent).toFixed(0),
+
+      leaveTrend:
+        current.filter((i) => i.status === "Leave").length -
+        previous.filter((i) => i.status === "Leave").length,
+    };
+  }, [attendanceLog, dashboardStats]);
+
   const dynamicInsights = [
     {
       icon: dashboardStats.attendancePercentage >= 90 ? "📈" : "⚠️",
@@ -192,6 +389,7 @@ export function Reports() {
         <KPISection
           sparklineData={sparklineData}
           dashboardStats={dashboardStats}
+          kpiMetrics={kpiMetrics}
         />
         {/* ── Two-column: Work Summary + Performance Insights ── */}
         <div
@@ -206,7 +404,6 @@ export function Reports() {
 
           <PerformanceInsights insights={dynamicInsights} />
         </div>
-
         <ChartsSection
           activeTab={activeTab}
           chartTabs={chartTabs}
@@ -214,7 +411,6 @@ export function Reports() {
           attendanceLog={attendanceLog}
           dashboardStats={dashboardStats}
         />
-
         {/* ── Goals & Badges ── */}
         <div
           style={{
@@ -223,7 +419,6 @@ export function Reports() {
         >
           <GoalsSection dashboardStats={dashboardStats} />
         </div>
-
         <AttendanceLog
           attendanceLog={attendanceLog}
           filteredLog={filteredLog}
