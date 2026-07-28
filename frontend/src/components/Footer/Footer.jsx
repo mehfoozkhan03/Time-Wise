@@ -8,14 +8,14 @@ import { useTheme } from "../../context/ThemeContext";
 export default function Footer() {
   const year = new Date().getFullYear();
 
-  const { currentTheme } = useTheme();
+  const { resolvedTheme } = useTheme();
 
   return (
     <footer className="footer">
       <div className="footer_top">
         <div className="footer_brand">
           <img
-            src={currentTheme === "dark" ? "/Logo_F.svg" : "/Logo_F_Light.svg"}
+            src={resolvedTheme === "dark" ? "/Logo_F.svg" : "/Logo_F_Light.svg"}
             alt="Logo"
             className="footer_logo"
           />
