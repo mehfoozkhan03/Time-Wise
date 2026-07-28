@@ -12,7 +12,7 @@ import {
   FaStar,
 } from "react-icons/fa";
 
-export default function FeaturedThought() {
+export default function   FeaturedThought() {
   const navigate = useNavigate();
 
   const { featured, loading } = useSelector((state) => state.post);

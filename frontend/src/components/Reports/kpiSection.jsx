@@ -1,16 +1,21 @@
-import { KPICard } from "./kpiCard";
+import { KPICard } from './kpiCard';
+import useCountUp from '../../components/UseCount/Count';
 
 export function KPISection({
   sparklineData,
   dashboardStats = {},
   kpiMetrics = {},
 }) {
+  const attendance = useCountUp(dashboardStats?.attendancePercentage || 0);
+  const dayStreak = useCountUp(dashboardStats?.dayStreak || 0);
+  const monthlyHours = useCountUp(dashboardStats?.monthlyHours || 0);
+  const productivity = useCountUp(dashboardStats?.productivity || 0);
   return (
     <div
       className="stagger"
       style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(4,1fr)",
+        display: 'grid',
+        gridTemplateColumns: 'repeat(4,1fr)',
         gap: 14,
         marginBottom: 28,
       }}
@@ -18,7 +23,7 @@ export function KPISection({
       <KPICard
         icon="📅"
         label="Attendance Rate"
-        value={dashboardStats?.attendancePercentage ?? "Loading..."}
+        value={attendance}
         unit="%"
         trend={kpiMetrics?.attendanceTrend ?? 0}
         sparkData={sparklineData.attendance}
@@ -29,7 +34,7 @@ export function KPISection({
       <KPICard
         icon="🔥"
         label="Current Streak"
-        value={dashboardStats?.dayStreak ?? "Loading..."}
+        value={dayStreak}
         unit="days"
         trend={kpiMetrics?.streakTrend ?? 0}
         trendSuffix=" days"
@@ -41,7 +46,7 @@ export function KPISection({
       <KPICard
         icon="🕐"
         label="Total Working hrs"
-        value={dashboardStats.monthlyHours}
+        value={monthlyHours.toFixed(1)}
         unit="h"
         trend={kpiMetrics?.monthlyHoursTrend ?? 0}
         trendSuffix="h"
@@ -73,11 +78,10 @@ export function KPISection({
         sparkColor="#8b5cf6"
         sub="This month"
       />
-
       <KPICard
         icon="⚡"
         label="Productivity Score"
-        value={dashboardStats.productivity}
+        value={productivity}
         unit="%"
         trend={kpiMetrics?.productivityTrend ?? 0}
         sparkData={sparklineData.productivity}
