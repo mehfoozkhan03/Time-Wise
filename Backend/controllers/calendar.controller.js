@@ -44,8 +44,17 @@ const getVisibility = (type) => {
    Logged In User Helper
 ========================================= */
 
+// const getLoggedInUser = async (req) => {
+//     return await userModel.findById(req.user.userID);
+// };
 const getLoggedInUser = async (req) => {
-    return await userModel.findById(req.user.userID);
+    console.log("JWT User ID:", req.user.userID);
+
+    const user = await userModel.findById(req.user.userID);
+
+    console.log(user);
+
+    return user;
 };
 
 /* =========================================
@@ -112,6 +121,8 @@ export const getEventById = async (req, res) => {
     try {
 
         const loggedInUser = await getLoggedInUser(req);
+                console.log("Logged User:", loggedInUser.email);
+                console.log("Role:", loggedInUser.role);
 
         if (!loggedInUser) {
             return res.status(404).json({
