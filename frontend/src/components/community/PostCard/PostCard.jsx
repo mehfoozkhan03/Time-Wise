@@ -1,72 +1,101 @@
 import { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import {
+  HiOutlineHeart,
+  HiHeart,
+  HiOutlineChatBubbleLeft,
+  HiOutlineShare,
+  HiOutlineEllipsisHorizontal,
+} from 'react-icons/hi2'
+
+import { toggleLikePost } from '../../../store/postSlice'
+import CommentSection from '../CommentSection/CommentSection'
 
 import './PostCard.css'
 
-import { toggleLikePost } from '../../../store/postSlice'
-
-import CommentSection from '../CommentSection/CommentSection'
-
 const PostCard = ({ post }) => {
   const dispatch = useDispatch()
+  const { user } = useSelector((state) => state.auth)
 
   const [showComments, setShowComments] = useState(false)
+  const [loading, setLoading] = useState(false)
 
-  const handleLike = () => {
-    dispatch(toggleLikePost(post._id))
-  }
+  const liked =
+    post.likes?.some(
+      (like) =>
+        like === user?._id ||
+        like?._id === user?._id ||
+        like?.user === user?._id,
+    ) || false
 
-  const formatDate = (date) => {
-    const value = new Date(date)
+  const likeCount = post.likes?.length || 0
+  const commentCount = post.comments?.length || 0
 
-    return value.toLocaleString([], {
-      dateStyle: 'medium',
-      timeStyle: 'short',
-    })
+  const initials =
+    `${post.author?.firstName?.[0] || ''}${post.author?.lastName?.[0] || ''}`.toUpperCase()
+
+  const authorName =
+    `${post.author?.firstName || ''} ${post.author?.lastName || ''}`.trim() ||
+    'Unknown User'
+
+  const designation = post.author?.designation || 'Employee'
+
+  const createdAt = new Date(post.createdAt).toLocaleString()
+
+  const handleLike = async () => {
+    if (loading) return
+
+    try {
+      setLoading(true)
+      await toggleLikePost(dispatch, post._id)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
-    <article className="post-card fade_in">
+    <article className="post-card">
       <div className="post-header">
         <div className="post-user">
-          <div className="post-avatar">
-            {post.author?.name?.charAt(0)?.toUpperCase()}
-          </div>
+          <div className="post-avatar">{initials || 'U'}</div>
 
-          <div>
-            <h4>{post.author?.name}</h4>
-
-            <small>
-              {post.author?.designation}
-
-              {post.author?.department && ` • ${post.author.department}`}
-            </small>
-
-            <small>{formatDate(post.createdAt)}</small>
+          <div className="post-user-info">
+            <h3>{authorName}</h3>
+            <p>{designation}</p>
+            <small>{createdAt}</small>
           </div>
         </div>
+
+        <button className="post-menu">
+          <HiOutlineEllipsisHorizontal />
+        </button>
       </div>
 
-      <div className="post-body">
-        {post.title && <h3>{post.title}</h3>}
-
+      <div className="post-content">
         <p>{post.content}</p>
 
-        {post.image && <img src={post.image} alt="" className="post-image" />}
+        {post.image && (
+          <img src={post.image} alt="Post" className="post-image" />
+        )}
       </div>
 
-      <div className="post-footer">
+      <div className="post-actions">
         <button onClick={handleLike}>
-          {post.isLiked ? '❤️' : '🤍'}
-
-          {post.likesCount || 0}
+          {liked ? <HiHeart /> : <HiOutlineHeart />}
+          Like
+          {likeCount > 0 && <span>{likeCount}</span>}
         </button>
 
         <button onClick={() => setShowComments(!showComments)}>
-          💬 {post.commentsCount || 0}
+          <HiOutlineChatBubbleLeft />
+          Comment
+          {commentCount > 0 && <span>{commentCount}</span>}
         </button>
 
-        <button>↗ Share</button>
+        <button>
+          <HiOutlineShare />
+          Share
+        </button>
       </div>
 
       {showComments && <CommentSection postId={post._id} />}
