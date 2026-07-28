@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 
 export const auth = (req, res, next) => {
   try {
-    const token = req.cookies.token || req.cookies.admintoken;
+    const token = req.cookies.token || req.cookies.adminToken;
 
     if (!token) {
       return res.status(401).json({
@@ -20,6 +20,7 @@ export const auth = (req, res, next) => {
       }
 
       req.user = decoded;
+      console.log("Decoded Token:", decoded);
 
       next();
     });
