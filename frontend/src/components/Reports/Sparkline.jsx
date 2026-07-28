@@ -1,4 +1,8 @@
 export function Sparkline({ data, color = "#6366f1", height = 36 }) {
+  if (!data || data.length === 0) {
+    return null;
+  }
+
   const min = Math.min(...data);
   const max = Math.max(...data);
   const range = max - min || 1;
@@ -7,13 +11,15 @@ export function Sparkline({ data, color = "#6366f1", height = 36 }) {
   const h = height;
 
   const pts = data.map((v, i) => {
-    const x = (i / (data.length - 1)) * w;
+    const x = data.length === 1 ? w / 2 : (i / (data.length - 1)) * w;
     const y = h - ((v - min) / range) * h;
     return `${x},${y}`;
   });
 
   const path = `M ${pts.join(" L ")}`;
   const areaPath = `M ${pts[0]} L ${pts.join(" L ")} L ${w},${h} L 0,${h} Z`;
+
+  const lastPoint = pts.at(-1)?.split(",") || [0, h];
 
   return (
     <svg width={w} height={h} style={{ overflow: "visible" }}>
@@ -41,12 +47,7 @@ export function Sparkline({ data, color = "#6366f1", height = 36 }) {
         strokeLinejoin="round"
       />
 
-      <circle
-        cx={pts[pts.length - 1].split(",")[0]}
-        cy={pts[pts.length - 1].split(",")[1]}
-        r="2.5"
-        fill={color}
-      />
+      <circle cx={lastPoint[0]} cy={lastPoint[1]} r="2.5" fill={color} />
     </svg>
   );
 }

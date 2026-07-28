@@ -2,7 +2,7 @@ import { SectionLabel } from "./sectionLabel";
 import { GoalProgress } from "./goalProgress";
 
 export function GoalsSection({ dashboardStats }) {
-  console.log("Goals dashboardStats:", dashboardStats);
+  // console.log("Goals dashboardStats:", dashboardStats);
 
   const goals = [
     {

@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-
 import initialState from "./initialState";
 
 const reportsSlice = createSlice({
