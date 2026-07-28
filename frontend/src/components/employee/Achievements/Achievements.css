@@ -5,7 +5,7 @@
     border-radius: 20px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 30px;
 }
 .achievement-header{
     display: flex;
@@ -22,6 +22,12 @@
 }
 .achievement-header>h3{
     font-size: 16px;
+}
+
+.achievement-content{
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
 }
 
 .achievement-list-container{

@@ -38,18 +38,20 @@ export const Achievements = () => {
           <h3>Achievements</h3>
         </div>
 
-        {achievmentsItem.map((item, i) => (
-          <div className="achievement-list-container" key={i}>
-            <div className="achievements-list">
-              <div className="achievements-icons">{item.icon}</div>
-              <div>
-                <h3>{item.title}</h3>
-                <span>{item.value}</span>
+        <div className="achievement-content">
+            {achievmentsItem.map((item, i) => (
+              <div className="achievement-list-container" key={i}>
+                <div className="achievements-list">
+                  <div className="achievements-icons">{item.icon}</div>
+                  <div>
+                    <h3>{item.title}</h3>
+                    <span>{item.value}</span>
+                  </div>
+                </div>
+                <div>Unlocked</div>
               </div>
-            </div>
-            <div>Unlocked</div>
-          </div>
-        ))}
+            ))}
+        </div>
       </section>
     </>
   );

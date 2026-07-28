@@ -155,6 +155,8 @@
     padding: 10px;
     border-radius: 10px;
     resize: none;
+    background-color: transparent;
+    color: var(--text_secondary);
 }
 
 .save_changes{
