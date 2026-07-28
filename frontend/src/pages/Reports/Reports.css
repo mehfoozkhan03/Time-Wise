@@ -75,6 +75,11 @@
   color: var(--text_primary);
 }
 
+.chartDiv button:hover {
+  background: var(--primary);
+  color: var(--primary);
+}
+
 /* Card glass effect */
 .glass-card,
 .workDiv {

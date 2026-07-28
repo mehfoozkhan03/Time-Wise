@@ -86,11 +86,19 @@ export function ThemeProvider({ children }) {
 
   const currentTheme = user?.theme || "light";
 
+  const resolvedTheme =
+    currentTheme === "system"
+      ? window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? "dark"
+        : "light"
+      : currentTheme;
+
   return (
     <ThemeContext.Provider
       value={{
         changeTheme,
         currentTheme,
+        resolvedTheme,
       }}
     >
       {children}
