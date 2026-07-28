@@ -5,6 +5,7 @@
     gap: 25px;
     border: 1px solid var(--border);
     border-radius: 20px;
+    background-color: var(--surface);
 }
 
 .socialLink-header{
