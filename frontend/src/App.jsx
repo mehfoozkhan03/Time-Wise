@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 
 import { AppRoutes } from "./routes/AppRoutes";
 import { fetchCurrentUser } from "./store/authSlice";
+import { ScrollTop } from "./components/ScrollTop/ScrollTop";
 
 export default function App() {
   const dispatch = useDispatch();
@@ -14,6 +15,7 @@ export default function App() {
 
   return (
     <BrowserRouter>
+      <ScrollTop />
       <AppRoutes />
     </BrowserRouter>
   );

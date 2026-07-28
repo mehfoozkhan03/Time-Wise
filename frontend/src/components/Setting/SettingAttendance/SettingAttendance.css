@@ -46,10 +46,13 @@
     padding: 10px;
     border-radius: 10px;
     color: var(--text_primary) !important;
+    background-color: transparent;
 }
 .work-days>select{
     padding: 10px;
     border-radius: 10px;
+    background-color: transparent;
+    color: var(--text_primary);
 }
 
 .smart-attendance{
