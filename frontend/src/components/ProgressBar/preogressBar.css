@@ -5,19 +5,21 @@
   width: 100%;
   height: 3px;
   z-index: 999999;
+  pointer-events: none;
 }
 
 .scroll_progress_bar {
+  width: 0;
   height: 100%;
-  width: 0%;
-  transition: width 0.1s ease;
-  border-radius: 0 5px 5px 0;
-}
+  background: linear-gradient(90deg,
+      #1a7fb8,
+      #29a3e0,
+      #00d4ff);
 
-/* Dark mode */
-/* body.dark .scroll_progress {
-  background: #2d2d2d;
+  box-shadow:
+    0 0 8px rgba(41, 163, 224, 0.6),
+    0 0 16px rgba(41, 163, 224, 0.3);
+
+  transform-origin: left center;
+  transition: width 40ms linear;
 }
-body.dark .scroll_progress_bar {
-  background: #3eb5e8;
-} */
