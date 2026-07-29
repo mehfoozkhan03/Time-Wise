@@ -7,8 +7,10 @@ import "./Navbar.css";
 import { logout } from "../../store/authSlice";
 import { authService } from "../../services/authService";
 import { useTheme } from "../../context/ThemeContext";
+import { fetchNotifications } from ".././../store/notificationSlice";
 
 export default function Navbar() {
+  const { notifications, loading } = useSelector((state) => state.notification);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -67,6 +69,11 @@ export default function Navbar() {
     };
   }, []);
 
+  // Notification
+  useEffect(() => {
+    dispatch(fetchNotifications());
+  }, [dispatch]);
+
   return (
     <header className="navbar">
       {/* =======================
@@ -121,10 +128,10 @@ export default function Navbar() {
             }}
           >
             <FaBell />
-            <span className="notification_count">3</span>
+            <span className="notification_count">{notifications.length}</span>
           </button>
 
-          {notificationOpen && (
+          {/* {notificationOpen && (
             <div className="notification_dropdown">
               <h4>Notifications</h4>
 
@@ -140,7 +147,38 @@ export default function Navbar() {
 
               <button className="view_all_btn">View All</button>
             </div>
-          )}
+          )} */}
+
+          {notificationOpen && (
+  <div className="notification_dropdown">
+    <h4>Notifications</h4>
+
+    {loading ? (
+      <div className="notification_item">
+        Loading...
+      </div>
+    ) : notifications.length === 0 ? (
+      <div className="notification_item">
+        No notifications found.
+      </div>
+    ) : (
+      notifications.map((notification) => (
+        <div
+          key={notification._id}
+          className="notification_item"
+        >
+          <strong>{notification.title}</strong>
+
+          <p>{notification.message}</p>
+        </div>
+      ))
+    )}
+
+    <button className="view_all_btn">
+      View All
+    </button>
+  </div>
+)}
         </div>
 
         {/* Profile */}
