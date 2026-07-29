@@ -2,6 +2,7 @@ import { useMemo, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import "./reports.css";
+import "../../styles/global.css";
 import {
   setSearchLog,
   setStatusFilter,
