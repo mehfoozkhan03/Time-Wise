@@ -1,39 +1,39 @@
-import { useEffect } from "react";
-
+import { useEffect, useRef } from "react";
 import "./preogressBar.css";
 
 export default function ScrollProgressBar() {
+  const barRef = useRef(null);
+
   useEffect(() => {
-    const bar = document.getElementById("scroll_progress_bar");
+    const updateProgress = () => {
+      const scrollTop =
+        window.pageYOffset || document.documentElement.scrollTop;
 
-const onScroll = () => {
-  const scrolled = window.scrollY
-  const total    = document.documentElement.scrollHeight - window.innerHeight
-  const progress = (scrolled / total) * 100
+      const scrollHeight =
+        document.documentElement.scrollHeight -
+        document.documentElement.clientHeight;
 
-  // Bar width = full progress
-  bar.style.width      = `${progress}%`
-  bar.style.transform  = 'none'   // remove any leftover transform
+      const progress = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
 
-  // First 50% of bar = transparent, second 50% = colored
-  // These % are always relative to the bar's own width
-  bar.style.background = `linear-gradient(
-    to right,
-    transparent 0%,
-    transparent 50%,
-    #29A3E0 100%
-  )`
-}
-    window.addEventListener("scroll", onScroll);
+      if (barRef.current) {
+        barRef.current.style.width = `${progress}%`;
+      }
+    };
+
+    updateProgress(); // Set initial width
+
+    window.addEventListener("scroll", updateProgress, { passive: true });
+    window.addEventListener("resize", updateProgress);
 
     return () => {
-      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("scroll", updateProgress);
+      window.removeEventListener("resize", updateProgress);
     };
   }, []);
 
   return (
-    <div className="scroll_progress" id="tour-progress-bar">
-      <div className="scroll_progress_bar" id="scroll_progress_bar"></div>
+    <div className="scroll_progress">
+      <div ref={barRef} className="scroll_progress_bar" />
     </div>
   );
 }
