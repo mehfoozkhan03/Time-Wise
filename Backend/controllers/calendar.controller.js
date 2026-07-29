@@ -265,7 +265,7 @@ export const createEvent = async (req, res) => {
       });
     }
 
-    const employee = await userModel.findById(employeeId);
+    const employee = await AdminModel.findById(employeeId);
 
     if (!employee) {
       return res.status(404).json({
@@ -411,7 +411,7 @@ export const updateEvent = async (req, res) => {
     }
 
     if (req.body.employeeId) {
-      const employee = await userModel.findById(req.body.employeeId);
+      const employee = await AdminModel.findById(req.body.employeeId);
 
       if (!employee) {
         return res.status(404).json({

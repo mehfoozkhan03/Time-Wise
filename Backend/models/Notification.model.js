@@ -48,7 +48,7 @@ const notificationSchema = new mongoose.Schema(
       default: false,
     },
     // To know who has posted thought
-    postID: {
+    postId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Post",
     }
