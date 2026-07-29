@@ -285,10 +285,12 @@ export const createEvent = async (req, res) => {
       employeeId: employee._id,
 
       employeeName:
-        employee.name || `${employee.firstName} ${employee.lastName}`,
+        employee.name ||
+        `${employee.firstName} ${employee.lastName}` ||
+        'no name given',
 
-      department: employee.department,
-      designation: employee.designation,
+      department: employee.department || 'not assigned',
+      designation: employee.designation || 'untitled',
 
       location,
       priority,
