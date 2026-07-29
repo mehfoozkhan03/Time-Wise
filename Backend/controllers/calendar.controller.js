@@ -249,7 +249,9 @@ export const createEvent = async (req, res) => {
 
         visibility: getVisibility(type),
 
+        // createdBy: employee._id,
         createdBy: employee._id,
+        createdByModel: "User",
       });
 
       return res.status(201).json({
@@ -304,6 +306,7 @@ export const createEvent = async (req, res) => {
 
       // Logged in admin
       createdBy: auth.account._id,
+      createdByModel: "Admin",
     });
 
     return res.status(201).json({
