@@ -178,6 +178,16 @@
 
 }
 
+.publish_btn:disabled {
+
+    opacity: .55;
+
+    cursor: not-allowed;
+
+    transform: none;
+
+}
+
 .publish_btn:hover {
 
     background: var(--primary_hover);

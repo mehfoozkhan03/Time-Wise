@@ -386,9 +386,23 @@ const postSlice = createSlice({
         const { postId, comment } = action.payload
 
         if (state.comments[postId]) {
-          state.comments[postId].unshift(comment)
+          state.comments[postId].push(comment)
         } else {
           state.comments[postId] = [comment]
+        }
+
+        const post = state.posts.find((post) => post._id === postId)
+
+        if (post) {
+          post.commentsCount += 1
+        }
+
+        if (state.selectedPost && state.selectedPost._id === postId) {
+          state.selectedPost.commentsCount += 1
+        }
+
+        if (state.featured && state.featured._id === postId) {
+          state.featured.commentsCount += 1
         }
       })
 
@@ -403,6 +417,28 @@ const postSlice = createSlice({
           state.comments[postId] = state.comments[postId].filter(
             (comment) => comment._id !== commentId,
           )
+        }
+
+        const post = state.posts.find((post) => post._id === postId)
+
+        if (post && post.commentsCount > 0) {
+          post.commentsCount -= 1
+        }
+
+        if (
+          state.selectedPost &&
+          state.selectedPost._id === postId &&
+          state.selectedPost.commentsCount > 0
+        ) {
+          state.selectedPost.commentsCount -= 1
+        }
+
+        if (
+          state.featured &&
+          state.featured._id === postId &&
+          state.featured.commentsCount > 0
+        ) {
+          state.featured.commentsCount -= 1
         }
       })
 

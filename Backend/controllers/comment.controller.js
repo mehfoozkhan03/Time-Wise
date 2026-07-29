@@ -2,6 +2,7 @@ import mongoose from 'mongoose'
 
 import { commentModel } from '../models/Comment.model.js'
 import { postModel } from '../models/Post.model.js'
+import { likeModel } from '../models/Like.model.js'
 
 // =======================================================
 // Create Comment
@@ -77,7 +78,10 @@ export const createComment = async (req, res) => {
     return res.status(201).json({
       success: true,
       message: 'Comment added successfully.',
-      comment: populatedComment,
+      comment: {
+        ...populatedComment.toObject(),
+        isLiked: false,
+      },
     })
   } catch (error) {
     await session.abortTransaction()
@@ -101,8 +105,8 @@ export const getComments = async (req, res) => {
   try {
     const { id } = req.params
 
-    const page = Number(req.query.page) || 1
-    const limit = Number(req.query.limit) || 10
+    const page = Math.max(parseInt(req.query.page) || 1, 1)
+    const limit = Math.max(parseInt(req.query.limit) || 10, 1)
 
     const skip = (page - 1) * limit
 
@@ -126,12 +130,30 @@ export const getComments = async (req, res) => {
       .skip(skip)
       .limit(limit)
 
+    // Find all comments liked by the current user
+    const likedComments = await likeModel.find({
+      user: req.user.userID,
+      targetType: 'comment',
+      targetId: {
+        $in: comments.map((comment) => comment._id),
+      },
+    })
+
+    const likedSet = new Set(
+      likedComments.map((like) => like.targetId.toString()),
+    )
+
+    const formattedComments = comments.map((comment) => ({
+      ...comment.toObject(),
+      isLiked: likedSet.has(comment._id.toString()),
+    }))
+
     return res.status(200).json({
       success: true,
       page,
       totalComments,
       totalPages: Math.ceil(totalComments / limit),
-      comments,
+      comments: formattedComments,
     })
   } catch (error) {
     console.error('Get Comments Error:', error)
@@ -151,6 +173,13 @@ export const updateComment = async (req, res) => {
   try {
     const { commentId } = req.params
     const { text } = req.body
+
+    if (!text || !text.trim()) {
+      return res.status(400).json({
+        success: false,
+        message: 'Comment cannot be empty.',
+      })
+    }
 
     const comment = await commentModel.findById(commentId)
 
@@ -174,10 +203,26 @@ export const updateComment = async (req, res) => {
 
     await comment.save()
 
+    const populatedComment = await commentModel
+      .findById(comment._id)
+      .populate(
+        'createdBy',
+        'firstName lastName profileImage designation department',
+      )
+
+    const liked = await likeModel.exists({
+      user: req.user.userID,
+      targetType: 'comment',
+      targetId: comment._id,
+    })
+
     return res.status(200).json({
       success: true,
       message: 'Comment updated successfully.',
-      comment,
+      comment: {
+        ...populatedComment.toObject(),
+        isLiked: !!liked,
+      },
     })
   } catch (error) {
     console.error('Update Comment Error:', error)
@@ -236,6 +281,14 @@ export const deleteComment = async (req, res) => {
       {
         session,
       },
+
+      await likeModel.deleteMany(
+        {
+          targetType: 'comment',
+          targetId: comment._id,
+        },
+        { session },
+      ),
     )
 
     await session.commitTransaction()
