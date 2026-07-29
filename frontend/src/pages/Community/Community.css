@@ -38,12 +38,20 @@ top:calc(var(--navbar_height) + 20px);
 
 .community-feed{
 
-display:flex;
+display:block;
 
-flex-direction:column;
+/* flex-direction:column; */
 
-gap:24px;
+/* gap:24px; */
 
+width: 100%;
+
+min-width: 0;
+
+}
+
+.community-feed > *{
+  width: 100%;
 }
 
 .community-right{
