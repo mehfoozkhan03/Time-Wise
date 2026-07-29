@@ -1,10 +1,14 @@
 .feed{
-
-display:flex;
-flex-direction:column;
-gap:20px;
-
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    gap:24px;
+    margin-top: 20px;
 }
+
+/* .feed > *{
+    width:100%;
+} */
 
 .feed-loading,
 .feed-error,
@@ -12,24 +16,18 @@ gap:20px;
 .feed-loading-more,
 .feed-end{
 
-background:var(--bg);
-border-radius:12px;
-padding:30px;
-text-align:center;
-font-size:15px;
-font-weight:500;
-box-shadow:0 2px 8px rgba(0,0,0,.08);
+    width:100%;
 
-}
+    background:var(--card);
 
-.feed-error{
+    border:1px solid var(--border);
 
-color:var(--error);
+    border-radius:var(--radius_md);
 
-}
+    padding:30px;
 
-.feed-end{
+    text-align:center;
 
-color:var(--text_secondary);
+    box-shadow:var(--shadow_sm);
 
 }
