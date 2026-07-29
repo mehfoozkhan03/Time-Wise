@@ -5,9 +5,9 @@ import './Community.css'
 
 import { fetchPosts, fetchFeaturedThought } from '../../store/postSlice'
 
-import CreatePost from '../../components/Community/CreatePost/CreatePost'
-import Feed from '../../components/Community/Feed/Feed'
-import LeftSidebar from '../../components/Community/Sidebar/LeftSidebar'
+import CreatePost from '../../components/community/CreatePost/CreatePost'
+import Feed from '../../components/community/Feed/Feed'
+import LeftSidebar from '../../components/community/Sidebar/LeftSidebar'
 import RightSidebar from '../../components/community/Sidebar/RightSidebar'
 
 const Community = () => {

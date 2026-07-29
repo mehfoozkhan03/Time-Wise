@@ -5,7 +5,7 @@ import './Feed.css'
 
 import { fetchPosts } from '../../../store/postSlice'
 
-import PostCard from '../PostCard/PostCard'
+  import PostCard from '../PostCard/PostCard'
 
 const Feed = () => {
   const dispatch = useDispatch()
