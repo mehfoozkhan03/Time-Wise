@@ -14,6 +14,11 @@ const ADMIN_EVENT_TYPES = [
   'FESTIVAL',
   'SPECIAL_EVENT',
   'WORK_EVENT',
+  'MEETING',
+  'DEADLINE',
+  'CLIENT_MEETING',
+  'TRAINING',
+  'REVIEW',
 ];
 
 const EMPLOYEE_EVENT_TYPES = ['PERSONAL', 'MEETING', 'BIRTHDAY'];
@@ -23,11 +28,11 @@ const EMPLOYEE_EVENT_TYPES = ['PERSONAL', 'MEETING', 'BIRTHDAY'];
 ========================================= */
 
 const PUBLIC_EVENT_TYPES = [
-  'HOLIDAY',
-  'GOVERNMENT_HOLIDAY',
-  'FESTIVAL',
-  'SPECIAL_EVENT',
-  'MEETING',
+  "HOLIDAY",
+  "GOVERNMENT_HOLIDAY",
+  "FESTIVAL",
+  "SPECIAL_EVENT",
+  "CLIENT_MEETING",
 ];
 
 const getVisibility = (type) => {
