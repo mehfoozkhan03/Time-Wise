@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const notificationSchema = new mongoose.Schema(
   {
-    userId: {
+    receiverId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
@@ -37,15 +37,21 @@ const notificationSchema = new mongoose.Schema(
       default: false,
     },
 
-    sender: {
+    senderId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Admin",
+      // ref: "Admin",
+      ref: "User"
     },
 
     deleted: {
       type: Boolean,
       default: false,
     },
+    // To know who has posted thought
+    postID: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Post",
+    }
   },
   {
     timestamps: true,
@@ -53,5 +59,4 @@ const notificationSchema = new mongoose.Schema(
   }
 );
 
-export const notificationModel =
-  mongoose.model("Notification", notificationSchema);
+export const notificationModel = mongoose.model("Notification", notificationSchema);

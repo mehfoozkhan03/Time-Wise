@@ -11,6 +11,7 @@ import postRoutes from './routes/Post.routes.js';
 import { attendanceRouter } from './routes/Attendance.routes.js';
 import calendarRoutes from './routes/Calendar.routes.js';
 import { contactRoute } from './routes/Contact.routes.js';
+import notificationRoutes from './routes/Notification.routes.js';
 
 const server = express();
 
@@ -40,6 +41,8 @@ server.use('/attendance', attendanceRouter);
 server.use('/calendar', calendarRoutes);
 
 server.use('/api/contact', contactRoute);
+
+server.use("/notifications", notificationRoutes);
 
 // ================= Server =================
 
