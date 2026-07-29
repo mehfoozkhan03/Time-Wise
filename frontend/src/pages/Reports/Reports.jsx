@@ -399,6 +399,7 @@ export function Reports() {
             gap: 16,
             marginBottom: 20,
           }}
+          className="report_2_div"
         >
           <WorkSummary dashboardStats={dashboardStats} />
 
