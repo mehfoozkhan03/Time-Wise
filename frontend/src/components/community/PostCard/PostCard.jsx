@@ -20,25 +20,20 @@ const PostCard = ({ post }) => {
   const [showComments, setShowComments] = useState(false)
   const [loading, setLoading] = useState(false)
 
-  const liked =
-    post.likes?.some(
-      (like) =>
-        like === user?._id ||
-        like?._id === user?._id ||
-        like?.user === user?._id,
-    ) || false
+  const liked = post.isLiked || false
 
-  const likeCount = post.likes?.length || 0
-  const commentCount = post.comments?.length || 0
+  const likeCount = post.likesCount || 0
+
+  const commentCount = post.commentsCount || 0
 
   const initials =
-    `${post.author?.firstName?.[0] || ''}${post.author?.lastName?.[0] || ''}`.toUpperCase()
+    `${post.createdBy?.firstName?.[0] || ''}${post.createdBy?.lastName?.[0] || ''}`.toUpperCase()
 
   const authorName =
-    `${post.author?.firstName || ''} ${post.author?.lastName || ''}`.trim() ||
+    `${post.createdBy?.firstName || ''} ${post.createdBy?.lastName || ''}`.trim() ||
     'Unknown User'
 
-  const designation = post.author?.designation || 'Employee'
+  const designation = post.createdBy?.designation || 'Employee'
 
   const createdAt = new Date(post.createdAt).toLocaleString()
 
@@ -47,7 +42,7 @@ const PostCard = ({ post }) => {
 
     try {
       setLoading(true)
-      await toggleLikePost(dispatch, post._id)
+      await dispatch(toggleLikePost(post._id))
     } finally {
       setLoading(false)
     }
@@ -86,7 +81,7 @@ const PostCard = ({ post }) => {
           {likeCount > 0 && <span>{likeCount}</span>}
         </button>
 
-        <button onClick={() => setShowComments(!showComments)}>
+        <button onClick={() => setShowComments((prev) => !prev)}>
           <HiOutlineChatBubbleLeft />
           Comment
           {commentCount > 0 && <span>{commentCount}</span>}
