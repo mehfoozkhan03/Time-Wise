@@ -217,3 +217,18 @@
 .recharts-tooltip-wrapper {
   outline: none !important;
 }
+@media (max-width:430px) {
+  .stagger {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .report_2_div {
+    display: flex !important;
+    flex-direction: column;
+  }
+
+  .chartDiv {
+    overflow-y: scroll;
+    scrollbar-width: none;
+  }
+}
