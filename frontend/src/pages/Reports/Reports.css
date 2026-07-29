@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=JetBrains+Mono:wght@400;500;600&display=swap');
-
 /* @theme inline {
   --color-background: #080c14;
   --color-foreground: #e8edf5;
@@ -20,26 +18,11 @@
   --radius-card: 14px;
 }
  */
+
 *,
 *::before,
 *::after {
   box-sizing: border-box;
-}
-
-/* body {
-  margin: 0;
-  background-color: var(-bg);
-  color: #e8edf5;
-  font-family: 'DM Sans', sans-serif;
-  -webkit-font-smoothing: antialiased;
-} */
-
-.font-display {
-  font-family: 'Outfit', sans-serif;
-}
-
-.font-mono {
-  font-family: 'JetBrains Mono', monospace;
 }
 
 /* .stagger,
@@ -217,6 +200,7 @@
 .recharts-tooltip-wrapper {
   outline: none !important;
 }
+
 @media (max-width:430px) {
   .stagger {
     grid-template-columns: repeat(2, 1fr) !important;
