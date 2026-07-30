@@ -53,7 +53,7 @@ export default function Navbar() {
 
     if (today >= 1 && today <= 4) {
       return {
-        title: `Goodbye, ${firstName}! `,
+        title: `Goodbye, ${firstName}! 👋`,
         message:
           "That's a wrap for today! Great work. Take some time to relax and recharge — We'll be ready for another productive day tomorrow.",
         button: "Logout & Relax",
