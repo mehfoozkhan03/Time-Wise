@@ -38,7 +38,7 @@ function CalendarDay({
         handleSelectDate();
       }
     },
-    [handleSelectDate],
+    [handleSelectDate]
   );
 
   /* =========================================
@@ -47,6 +47,17 @@ function CalendarDay({
 
   const stopPropagation = useCallback((e) => {
     e.stopPropagation();
+  }, []);
+
+  /* =========================================
+     More Events
+  ========================================= */
+
+  const handleMoreEvents = useCallback((e) => {
+    e.stopPropagation();
+
+    // Future enhancement:
+    // Open modal / popover showing all events for the day.
   }, []);
 
   return (
@@ -72,12 +83,19 @@ function CalendarDay({
           <div className="emptyEvents" />
         ) : (
           <>
-            {visibleEvents.map((event, index) => (
+            {visibleEvents.map((event) => (
               <div
-                key={event._id ?? event.id ?? `${event.title}-${index}`}
+                key={
+                  event._id ??
+                  event.id ??
+                  `${event.date}-${event.title}`
+                }
                 onClick={stopPropagation}
               >
-                <EventBadge event={event} onClick={onEventClick} />
+                <EventBadge
+                  event={event}
+                  onClick={onEventClick}
+                />
               </div>
             ))}
 
@@ -85,7 +103,7 @@ function CalendarDay({
               <button
                 type="button"
                 className="moreEvents"
-                onClick={stopPropagation}
+                onClick={handleMoreEvents}
                 aria-label={`View ${events.length - 2} more events`}
               >
                 +{events.length - 2} More

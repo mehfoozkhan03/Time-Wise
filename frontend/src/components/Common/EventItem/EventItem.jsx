@@ -1,10 +1,6 @@
 import "./EventItem.css";
 
-import {
-  memo,
-  useCallback,
-  useMemo,
-} from "react";
+import { memo, useCallback, useMemo } from "react";
 
 import { EVENT_CONFIG } from "../../../data/eventConfig";
 
@@ -107,7 +103,7 @@ function EventItem({
 
       e.stopPropagation();
 
-      onClick(event);
+      onClick?.(event);
     },
     [event, onClick]
   );
@@ -119,7 +115,7 @@ function EventItem({
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
 
-        onClick(event);
+        onClick?.(event);
       }
     },
     [event, onClick]
@@ -135,7 +131,11 @@ function EventItem({
       onKeyDown={onClick ? handleKeyDown : undefined}
       role={onClick ? "button" : undefined}
       tabIndex={onClick ? 0 : undefined}
-      aria-label={onClick ? event.title || config.label : undefined}
+      aria-label={
+        onClick
+          ? `${event.title || config.label} (${config.label})`
+          : undefined
+      }
     >
       {showAvatar &&
         (employeeName || event.isHoliday) && (
@@ -144,6 +144,7 @@ function EventItem({
             style={{
               background: avatarColor,
             }}
+            aria-hidden="true"
           >
             {initials}
           </div>
@@ -173,5 +174,7 @@ function EventItem({
     </div>
   );
 }
+
+EventItem.displayName = "EventItem";
 
 export default memo(EventItem);

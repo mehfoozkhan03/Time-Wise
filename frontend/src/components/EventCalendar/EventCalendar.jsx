@@ -69,11 +69,19 @@ export default function EventCalendar() {
   }, [holidays]);
 
   /* =========================================
-     Merge Events
+     Merge & Sort Events
   ========================================= */
 
   const allEvents = useMemo(() => {
-    return [...events, ...mappedHolidays];
+    return [...events, ...mappedHolidays].sort((a, b) => {
+      const dateDiff = new Date(a.date) - new Date(b.date);
+
+      if (dateDiff !== 0) {
+        return dateDiff;
+      }
+
+      return (a.startTime || "").localeCompare(b.startTime || "");
+    });
   }, [events, mappedHolidays]);
 
   /* =========================================
@@ -99,13 +107,11 @@ export default function EventCalendar() {
 
   // useEffect(() => {
   //   console.group("===== EVENT CALENDAR DEBUG =====");
-
   //   console.log("Calendar Events:", events.length);
   //   console.log("Redux Holidays:", holidays.length);
   //   console.log("Mapped Holidays:", mappedHolidays.length);
   //   console.log("All Events:", allEvents.length);
   //   console.log("Current Month Events:", currentMonthEvents.length);
-
   //   console.groupEnd();
   // }, [events, holidays, mappedHolidays, allEvents, currentMonthEvents]);
 
@@ -138,10 +144,17 @@ export default function EventCalendar() {
   } = useEventFilter(allEvents, currentDate);
 
   /* =========================================
+     UI State
+  ========================================= */
+
+  const isLoading = loading || holidayStatus === "loading";
+  const hasError = error || holidayError;
+
+  /* =========================================
      Loading
   ========================================= */
 
-  if (loading || holidayStatus === "loading") {
+  if (isLoading) {
     return <CalendarSkeleton />;
   }
 
@@ -149,12 +162,12 @@ export default function EventCalendar() {
      Error
   ========================================= */
 
-  if (error || holidayError) {
+  if (hasError) {
     return (
       <section className="eventCalendar">
         <div className="calendarError">
           <h3>Failed to load calendar</h3>
-          <p>{error || holidayError}</p>
+          <p>{hasError}</p>
         </div>
       </section>
     );

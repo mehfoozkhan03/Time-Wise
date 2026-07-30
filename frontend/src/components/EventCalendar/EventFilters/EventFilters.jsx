@@ -43,9 +43,9 @@ function EventFilters({
 
   const handleSearchChange = useCallback(
     (e) => {
-      setSearchTerm(e.target.value);
+      setSearchTerm?.(e.target.value);
     },
-    [setSearchTerm],
+    [setSearchTerm]
   );
 
   /* =========================================
@@ -54,10 +54,22 @@ function EventFilters({
 
   const handleToggleFilter = useCallback(
     (type) => {
-      toggleFilter(type);
+      toggleFilter?.(type);
     },
-    [toggleFilter],
+    [toggleFilter]
   );
+
+  /* =========================================
+     Actions
+  ========================================= */
+
+  const handleSelectAll = useCallback(() => {
+    selectAll?.();
+  }, [selectAll]);
+
+  const handleClearAll = useCallback(() => {
+    clearAll?.();
+  }, [clearAll]);
 
   return (
     <section className="eventFilters">
@@ -78,11 +90,11 @@ function EventFilters({
       {/* ================= Actions ================= */}
 
       <div className="filterActions">
-        <button type="button" onClick={selectAll}>
+        <button type="button" onClick={handleSelectAll}>
           Select All
         </button>
 
-        <button type="button" onClick={clearAll}>
+        <button type="button" onClick={handleClearAll}>
           Clear All
         </button>
       </div>
@@ -94,7 +106,9 @@ function EventFilters({
           <button
             key={type}
             type="button"
-            className={`filterChip ${filters[type] ? "active" : ""}`}
+            className={`filterChip ${
+              Boolean(filters[type]) ? "active" : ""
+            }`}
             aria-pressed={Boolean(filters[type])}
             aria-label={`Toggle ${config.label} events`}
             title={config.label}
@@ -106,12 +120,16 @@ function EventFilters({
 
             <span>{config.label}</span>
 
-            <span className="count">{eventCounts[type] ?? 0}</span>
+            <span className="count">
+              {eventCounts[type] ?? 0}
+            </span>
           </button>
         ))}
       </div>
     </section>
   );
 }
+
+EventFilters.displayName = "EventFilters";
 
 export default memo(EventFilters);

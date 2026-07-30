@@ -1,6 +1,6 @@
 import "./CalendarSidebar.css";
 
-import { memo } from "react";
+import { memo, useMemo } from "react";
 
 import MiniCalendar from "../MiniCalendar/MiniCalendar";
 import UpcomingEvents from "../UpcomingEvents/UpcomingEvents";
@@ -18,8 +18,17 @@ function CalendarSidebar({
   toggleFilter,
   onEventClick,
 }) {
+  /* =========================================
+     Stable Filters
+  ========================================= */
+
+  const sidebarFilters = useMemo(() => filters, [filters]);
+
   return (
-    <aside className="calendarSidebar" aria-label="Calendar Sidebar">
+    <aside
+      className="calendarSidebar"
+      aria-label="Calendar Sidebar"
+    >
       <MiniCalendar
         currentDate={currentDate}
         selectedDate={selectedDate}
@@ -28,9 +37,15 @@ function CalendarSidebar({
         nextMonth={nextMonth}
       />
 
-      <UpcomingEvents events={events} onEventClick={onEventClick} />
+      <UpcomingEvents
+        events={events}
+        onEventClick={onEventClick}
+      />
 
-      <EventLegend filters={filters} toggleFilter={toggleFilter} />
+      <EventLegend
+        filters={sidebarFilters}
+        toggleFilter={toggleFilter}
+      />
 
       <TodaySummary events={events} />
     </aside>

@@ -1,12 +1,21 @@
 import "./CalendarHeader.css";
 
-import { memo, useMemo } from "react";
+import { memo, useCallback, useMemo } from "react";
 
-import { FaChevronLeft, FaChevronRight, FaCalendarDay } from "react-icons/fa";
+import {
+  FaChevronLeft,
+  FaChevronRight,
+  FaCalendarDay,
+} from "react-icons/fa";
 
 import { getMonthName } from "../../../utils/calendarUtils";
 
-function CalendarHeader({ currentDate, previousMonth, nextMonth, goToToday }) {
+function CalendarHeader({
+  currentDate,
+  previousMonth,
+  nextMonth,
+  goToToday,
+}) {
   /* =========================================
      Safety Check
   ========================================= */
@@ -21,6 +30,22 @@ function CalendarHeader({ currentDate, previousMonth, nextMonth, goToToday }) {
     return `${getMonthName(currentDate)} ${currentDate.getFullYear()}`;
   }, [currentDate]);
 
+  /* =========================================
+     Handlers
+  ========================================= */
+
+  const handlePreviousMonth = useCallback(() => {
+    previousMonth?.();
+  }, [previousMonth]);
+
+  const handleNextMonth = useCallback(() => {
+    nextMonth?.();
+  }, [nextMonth]);
+
+  const handleToday = useCallback(() => {
+    goToToday?.();
+  }, [goToToday]);
+
   return (
     <header className="calendarHeader">
       <div className="headerTitle">
@@ -31,7 +56,7 @@ function CalendarHeader({ currentDate, previousMonth, nextMonth, goToToday }) {
         <button
           type="button"
           className="navBtn"
-          onClick={previousMonth}
+          onClick={handlePreviousMonth}
           aria-label="Previous month"
           title="Previous Month"
         >
@@ -41,7 +66,7 @@ function CalendarHeader({ currentDate, previousMonth, nextMonth, goToToday }) {
         <button
           type="button"
           className="todayBtn"
-          onClick={goToToday}
+          onClick={handleToday}
           aria-label="Go to today"
           title="Go to Today"
         >
@@ -52,7 +77,7 @@ function CalendarHeader({ currentDate, previousMonth, nextMonth, goToToday }) {
         <button
           type="button"
           className="navBtn"
-          onClick={nextMonth}
+          onClick={handleNextMonth}
           aria-label="Next month"
           title="Next Month"
         >
