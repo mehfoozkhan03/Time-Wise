@@ -1,10 +1,10 @@
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
 dotenv.config();
 
-import { userModel } from "../models/User.model.js";
-import { AdminModel } from "../models/Admin.model.js";
+import { userModel } from '../models/User.model.js';
+import { AdminModel } from '../models/Admin.model.js';
 
 // ================= Validation =================
 
@@ -28,7 +28,7 @@ export const signup = async (req, res) => {
     if (!validateSignup(req.body)) {
       return res.status(400).json({
         success: false,
-        message: "Please fill all required fields.",
+        message: 'Please fill all required fields.',
       });
     }
 
@@ -39,7 +39,7 @@ export const signup = async (req, res) => {
     if (existingUser) {
       return res.status(409).json({
         success: false,
-        message: "User already exists. Please login.",
+        message: 'User already exists. Please login.',
       });
     }
 
@@ -61,7 +61,7 @@ export const signup = async (req, res) => {
 
       gender: req.body.gender || null,
 
-      role: req.body.role || "employee",
+      role: req.body.role || 'employee',
 
       department: req.body.department || null,
 
@@ -69,7 +69,7 @@ export const signup = async (req, res) => {
 
       profileImage: req.body.profileImage || null,
 
-      theme: req.body.theme || "system",
+      theme: req.body.theme || 'system',
 
       adminID: admins[0]?._id ?? null,
     });
@@ -80,15 +80,15 @@ export const signup = async (req, res) => {
 
     return res.status(201).json({
       success: true,
-      message: "User created successfully.",
+      message: 'User created successfully.',
       user,
     });
   } catch (error) {
-    console.error("Signup Error:", error);
+    console.error('Signup Error:', error);
 
     return res.status(500).json({
       success: false,
-      message: "Internal Server Error.",
+      message: 'Internal Server Error.',
     });
   }
 };
@@ -100,7 +100,7 @@ export const login = async (req, res) => {
     if (!validateLogin(req.body)) {
       return res.status(400).json({
         success: false,
-        message: "Email and password are required.",
+        message: 'Email and password are required.',
       });
     }
 
@@ -111,7 +111,7 @@ export const login = async (req, res) => {
     if (!userData) {
       return res.status(404).json({
         success: false,
-        message: "User not found.",
+        message: 'User not found.',
       });
     }
 
@@ -120,7 +120,7 @@ export const login = async (req, res) => {
     if (!isMatch) {
       return res.status(401).json({
         success: false,
-        message: "Incorrect password.",
+        message: 'Incorrect password.',
       });
     }
 
@@ -130,14 +130,14 @@ export const login = async (req, res) => {
       },
       process.env.PrivateKey,
       {
-        expiresIn: "1d",
+        expiresIn: '1d',
       },
     );
 
-    res.cookie("token", token, {
+    res.cookie('token', token, {
       httpOnly: false,
       secure: false,
-      sameSite: "Lax",
+      sameSite: 'Lax',
       maxAge: 24 * 60 * 60 * 1000,
     });
 
@@ -147,15 +147,15 @@ export const login = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      message: "Login successful.",
+      message: 'Login successful.',
       user,
     });
   } catch (error) {
-    console.error("Login Error:", error);
+    console.error('Login Error:', error);
 
     return res.status(500).json({
       success: false,
-      message: "Internal Server Error.",
+      message: 'Internal Server Error.',
     });
   }
 };
@@ -169,20 +169,20 @@ export const admin_login = async (req, res) => {
     if (!validateLogin(req.body)) {
       return res.status(400).json({
         success: false,
-        message: "Email and password are required.",
+        message: 'Email and password are required.',
       });
     }
 
     const admin = await AdminModel.findOne({
       email: req.body.email,
-      role: "admin",
+      role: 'admin',
     });
     console.log(`🚀 ~ admin:`, admin);
 
     if (!admin) {
       return res.status(404).json({
         success: false,
-        message: "Admin not found.",
+        message: 'Admin not found.',
       });
     }
 
@@ -191,7 +191,7 @@ export const admin_login = async (req, res) => {
     if (!isMatch) {
       return res.status(401).json({
         success: false,
-        message: "Incorrect password.",
+        message: 'Incorrect password.',
       });
     }
 
@@ -201,14 +201,14 @@ export const admin_login = async (req, res) => {
       },
       process.env.PrivateKey,
       {
-        expiresIn: "1d",
+        expiresIn: '1d',
       },
     );
 
-    res.cookie("adminToken", token, {
+    res.cookie('adminToken', token, {
       httpOnly: false,
       secure: false,
-      sameSite: "Lax",
+      sameSite: 'Lax',
       maxAge: 24 * 60 * 60 * 1000,
     });
 
@@ -218,15 +218,15 @@ export const admin_login = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      message: "Admin login successful.",
+      message: 'Admin login successful.',
       user,
     });
   } catch (error) {
-    console.error("Admin Login Error:", error);
+    console.error('Admin Login Error:', error);
 
     return res.status(500).json({
       success: false,
-      message: "Internal Server Error.",
+      message: 'Internal Server Error.',
     });
   }
 };
@@ -235,12 +235,12 @@ export const admin_login = async (req, res) => {
 
 export const getCurrentUser = async (req, res) => {
   try {
-    const user = await userModel.findById(req.user.userID).select("-password");
+    const user = await userModel.findById(req.user.userID).select('-password');
 
     if (!user) {
       return res.status(404).json({
         success: false,
-        message: "User not found.",
+        message: 'User not found.',
       });
     }
 
@@ -249,11 +249,11 @@ export const getCurrentUser = async (req, res) => {
       user,
     });
   } catch (error) {
-    console.error("Get Current User Error:", error);
+    console.error('Get Current User Error:', error);
 
     return res.status(500).json({
       success: false,
-      message: "Internal Server Error.",
+      message: 'Internal Server Error.',
     });
   }
 };
@@ -266,12 +266,12 @@ export const updateTheme = async (req, res) => {
     const { theme } = req.body;
 
     // Validate theme
-    const allowedThemes = ["light", "dark", "system"];
+    const allowedThemes = ['light', 'dark', 'system'];
 
     if (!allowedThemes.includes(theme)) {
       return res.status(400).json({
         success: false,
-        message: "Invalid theme",
+        message: 'Invalid theme',
       });
     }
 
@@ -279,7 +279,7 @@ export const updateTheme = async (req, res) => {
       req.user.userID,
       { theme },
       {
-        returnDocument: "after", // Replaces new: true
+        returnDocument: 'after', // Replaces new: true
         runValidators: true,
       },
     );
@@ -287,21 +287,21 @@ export const updateTheme = async (req, res) => {
     if (!updatedUser) {
       return res.status(404).json({
         success: false,
-        message: "User not found",
+        message: 'User not found',
       });
     }
 
     return res.status(200).json({
       success: true,
-      message: "Theme updated successfully.",
+      message: 'Theme updated successfully.',
       theme: updatedUser.theme,
     });
   } catch (error) {
-    console.error("Update Theme Error:", error);
+    console.error('Update Theme Error:', error);
 
     return res.status(500).json({
       success: false,
-      message: "Internal Server Error",
+      message: 'Internal Server Error',
     });
   }
 };
@@ -310,22 +310,22 @@ export const updateTheme = async (req, res) => {
 
 export const logout = async (req, res) => {
   try {
-    res.clearCookie("token", {
+    res.clearCookie('token', {
       httpOnly: false,
       secure: false,
-      sameSite: "Lax",
+      sameSite: 'Lax',
     });
 
     return res.status(200).json({
       success: true,
-      message: "Logout successful",
+      message: 'Logout successful',
     });
   } catch (error) {
-    console.error("Logout Error:", error);
+    console.error('Logout Error:', error);
 
     return res.status(500).json({
       success: false,
-      message: "Internal Server Error",
+      message: 'Internal Server Error',
     });
   }
 };
