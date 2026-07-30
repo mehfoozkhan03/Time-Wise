@@ -2,22 +2,40 @@ import "./InfoRow.css";
 
 import { memo } from "react";
 
-function InfoRow({ icon: Icon, label, value }) {
+function InfoRow({
+  icon: Icon,
+  label,
+  value,
+}) {
+  const displayValue = value || "--";
+
   return (
     <div className="infoRow">
       {Icon && (
-        <div className="infoIcon" aria-hidden="true">
+        <div
+          className="infoIcon"
+          aria-hidden="true"
+        >
           <Icon />
         </div>
       )}
 
       <div className="infoContent">
-        <span className="infoLabel">{label}</span>
+        <span className="infoLabel">
+          {label}
+        </span>
 
-        <p className="infoValue">{value || "--"}</p>
+        <p
+          className="infoValue"
+          title={displayValue}
+        >
+          {displayValue}
+        </p>
       </div>
     </div>
   );
 }
+
+InfoRow.displayName = "InfoRow";
 
 export default memo(InfoRow);

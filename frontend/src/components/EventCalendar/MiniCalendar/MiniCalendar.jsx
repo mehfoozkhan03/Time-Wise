@@ -9,6 +9,7 @@ import Card from "../../Common/CalendarCard/Card";
 import {
   WEEK_DAYS,
   generateCalendar,
+  getDateKey,
   getMonthName,
   isSameDate,
 } from "../../../utils/calendarUtils";
@@ -36,26 +37,34 @@ function MiniCalendar({
 
   const monthTitle = useMemo(
     () => `${getMonthName(currentDate)} ${currentDate.getFullYear()}`,
-    [currentDate],
+    [currentDate]
   );
 
   /* =========================================
-     Select Day
+     Handlers
   ========================================= */
 
   const handleSelectDay = useCallback(
     (date) => {
       selectDate?.(date);
     },
-    [selectDate],
+    [selectDate]
   );
+
+  const handlePreviousMonth = useCallback(() => {
+    previousMonth?.();
+  }, [previousMonth]);
+
+  const handleNextMonth = useCallback(() => {
+    nextMonth?.();
+  }, [nextMonth]);
 
   return (
     <Card className="miniCalendarCard">
       <div className="miniHeader">
         <button
           type="button"
-          onClick={previousMonth}
+          onClick={handlePreviousMonth}
           aria-label="Previous Month"
           title="Previous Month"
         >
@@ -66,7 +75,7 @@ function MiniCalendar({
 
         <button
           type="button"
-          onClick={nextMonth}
+          onClick={handleNextMonth}
           aria-label="Next Month"
           title="Next Month"
         >
@@ -93,15 +102,9 @@ function MiniCalendar({
             .filter(Boolean)
             .join(" ");
 
-          const dayKey = [
-            item.date.getFullYear(),
-            String(item.date.getMonth() + 1).padStart(2, "0"),
-            String(item.date.getDate()).padStart(2, "0"),
-          ].join("-");
-
           return (
             <button
-              key={dayKey}
+              key={getDateKey(item.date)}
               type="button"
               className={className}
               onClick={() => handleSelectDay(item.date)}
@@ -116,5 +119,7 @@ function MiniCalendar({
     </Card>
   );
 }
+
+MiniCalendar.displayName = "MiniCalendar";
 
 export default memo(MiniCalendar);

@@ -1,8 +1,12 @@
 import "./UpcomingEvents.css";
 
-import { memo, useMemo } from "react";
+import { memo, useMemo, useCallback } from "react";
 
-import { FaCalendarAlt, FaArrowRight, FaCalendarTimes } from "react-icons/fa";
+import {
+  FaCalendarAlt,
+  FaArrowRight,
+  FaCalendarTimes,
+} from "react-icons/fa";
 
 import Card from "../../Common/CalendarCard/Card";
 import EventItem from "../../Common/EventItem/EventItem";
@@ -23,6 +27,15 @@ function UpcomingEvents({ events = [], onEventClick }) {
     }));
   }, [events]);
 
+  /* =========================================
+     View All
+  ========================================= */
+
+  const handleViewAll = useCallback(() => {
+    // Future enhancement:
+    // Navigate to all upcoming events
+  }, []);
+
   return (
     <Card
       title="Upcoming Events"
@@ -38,9 +51,13 @@ function UpcomingEvents({ events = [], onEventClick }) {
       ) : (
         <>
           <div className="upcomingList">
-            {upcomingEvents.map((event, index) => (
+            {upcomingEvents.map((event) => (
               <div
-                key={event._id ?? event.id ?? index}
+                key={
+                  event._id ??
+                  event.id ??
+                  `${event.date}-${event.title}`
+                }
                 className="upcomingItem"
               >
                 <EventItem
@@ -52,7 +69,10 @@ function UpcomingEvents({ events = [], onEventClick }) {
                   onClick={onEventClick}
                 />
 
-                <time className="eventDate" dateTime={event.date}>
+                <time
+                  className="eventDate"
+                  dateTime={event.date}
+                >
                   {event.relativeDate}
                 </time>
               </div>
@@ -62,6 +82,7 @@ function UpcomingEvents({ events = [], onEventClick }) {
           <button
             type="button"
             className="viewAllBtn"
+            onClick={handleViewAll}
             disabled
             title="Coming Soon"
           >
@@ -73,5 +94,7 @@ function UpcomingEvents({ events = [], onEventClick }) {
     </Card>
   );
 }
+
+UpcomingEvents.displayName = "UpcomingEvents";
 
 export default memo(UpcomingEvents);

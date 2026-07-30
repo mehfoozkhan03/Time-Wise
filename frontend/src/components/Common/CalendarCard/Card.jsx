@@ -2,7 +2,12 @@ import "./Card.css";
 
 import { memo, useMemo } from "react";
 
-function Card({ title, icon, children, className = "" }) {
+function Card({
+  title,
+  icon,
+  children,
+  className = "",
+}) {
   /* =========================================
      Card Title ID
   ========================================= */
@@ -10,26 +15,50 @@ function Card({ title, icon, children, className = "" }) {
   const titleId = useMemo(() => {
     if (!title) return undefined;
 
-    return `${title.toLowerCase().replace(/\s+/g, "-")}-card`;
+    return `${title
+      .toLowerCase()
+      .replace(/\s+/g, "-")}-card`;
   }, [title]);
 
+  /* =========================================
+     Card Class
+  ========================================= */
+
+  const cardClassName = useMemo(() => {
+    return `card ${className}`.trim();
+  }, [className]);
+
   return (
-    <section className={`card ${className}`.trim()} aria-labelledby={titleId}>
+    <section
+      className={cardClassName}
+      aria-labelledby={titleId}
+    >
       {(title || icon) && (
         <div className="cardHeader">
           {icon && (
-            <span className="cardIcon" aria-hidden="true">
+            <span
+              className="cardIcon"
+              aria-hidden="true"
+            >
               {icon}
             </span>
           )}
 
-          {title && <h3 id={titleId}>{title}</h3>}
+          {title && (
+            <h3 id={titleId}>
+              {title}
+            </h3>
+          )}
         </div>
       )}
 
-      <div className="cardBody">{children}</div>
+      <div className="cardBody">
+        {children}
+      </div>
     </section>
   );
 }
+
+Card.displayName = "Card";
 
 export default memo(Card);
