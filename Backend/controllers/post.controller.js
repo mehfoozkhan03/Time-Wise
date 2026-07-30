@@ -1,7 +1,8 @@
 import { postModel } from "../models/Post.model.js";
 import { userModel } from "../models/User.model.js";
 import { likeModel } from "../models/Like.model.js";
-import { notificationModel } from "../models/Notification.model.js";
+// import { notificationModel } from "../models/Notification.model.js";
+import { createNotification } from "../services/notification.service.js";
 
 // =======================================================
 // Create Post
@@ -27,24 +28,15 @@ export const createPost = async (req, res) => {
       visibility: visibility || "public",
     });
 
-    // Get current logged-in user
     const currentUser = await userModel.findById(req.user.userID);
 
-    // Get all users except the logged-in user
-    const users = await userModel.find({
-      _id: { $ne: req.user.userID },
-    });
-
-    const notifications = users.map((user) => ({
-      receiverId: user._id,
+    await createNotification({
+      sender: req.user.userID,
       title: "New Post",
       message: `${currentUser.firstName} ${currentUser.lastName} created a new post.`,
       type: "post",
-      senderId: req.user.userID,
-      postId: post._id,
-    }));
-
-    await notificationModel.insertMany(notifications);
+      referenceId: post._id,
+    });
 
     const populatedPost = await postModel
       .findById(post._id)

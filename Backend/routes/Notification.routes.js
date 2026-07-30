@@ -1,9 +1,24 @@
+// import express from "express";
+// import { auth } from "../middleware/AuthMiddleware.js";
+// import { getNotifications } from "../controllers/Notification.controller.js";
+
+// const notificationRoutes = express.Router();
+
+// notificationRoutes.get("/", auth, getNotifications);
+
+// export default notificationRoutes;
+
+
 import express from "express";
 import { auth } from "../middleware/AuthMiddleware.js";
-import { getNotifications } from "../controllers/Notification.controller.js";
+import { deleteNotification, getNotifications, markNotificationAsRead } from "../controllers/notification.controller.js";
 
-const notificationRoutes = express.Router();
+const notificationRoute = express.Router();
 
-notificationRoutes.get("/", auth, getNotifications);
+notificationRoute.get("/", auth, getNotifications);
 
-export default notificationRoutes;
+notificationRoute.patch("/:id/read", auth, markNotificationAsRead);
+
+notificationRoute.delete("/:id", auth, deleteNotification);
+
+export default notificationRoute;
