@@ -54,13 +54,13 @@
 
 /* ── Icon circle ───────────────────────────────────────── */
 .feedback_icon {
-  width: 80px;
-  height: 80px;
+  width: 81px;
+  height: 81px;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 36px;
+  font-size: 37px;
 }
 
 .feedback_icon--success {
@@ -71,6 +71,12 @@
 .feedback_icon--error {
   background: rgba(239, 68, 68, 0.12);
   color: #ef4444;
+}
+
+/* ── Logout Icon ───────────────────────────────────────── */
+
+.feedback_icon--logout {
+  color: var(--primary);
 }
 
 /* ── Typography ────────────────────────────────────────── */
@@ -88,7 +94,18 @@
   margin: 0;
 }
 
+/* ── Logout Wave Emoji ─────────────────────────────────── */
+
+.feedback_wave {
+  display: inline-block;
+  font-size: 45px;
+  transform-origin: 70% 70%;
+  animation: feedback_wave 1.4s ease-in-out infinite;
+  user-select: none;
+}
+
 /* ── Reason box (error only) ───────────────────────────── */
+
 .feedback_reason {
   width: 100%;
   background: rgba(239, 68, 68, 0.08);
@@ -118,6 +135,7 @@
 }
 
 /* ── Action button ─────────────────────────────────────── */
+
 .feedback_button {
   width: 100%;
   padding: 16px;
@@ -146,12 +164,45 @@
   background: #ef4444;
 }
 
+/* ── Logout Buttons ────────────────────────────────────── */
+
+.feedback_actions {
+  width: 100%;
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.feedback_button--cancel {
+  flex: 1;
+  background: var(--surface_hover);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+}
+
+.feedback_button--logout {
+  flex: 1;
+  background: var(--primary);
+  color: #fff;
+}
+
+.feedback_button--cancel:hover {
+  background: var(--primary);
+}
+
+.feedback_button--logout:hover {
+  border: 1px solid var(--border);
+  background: var(--surface_hover);
+}
+
 /* ── Animations ────────────────────────────────────────── */
+
 @keyframes feedback_popup {
   from {
     opacity: 0;
     transform: scale(0.9);
   }
+
   to {
     opacity: 1;
     transform: scale(1);
@@ -162,7 +213,42 @@
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
+  }
+}
+
+@keyframes feedback_wave {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  10% {
+    transform: rotate(14deg);
+  }
+
+  20% {
+    transform: rotate(-8deg);
+  }
+
+  30% {
+    transform: rotate(14deg);
+  }
+
+  40% {
+    transform: rotate(-4deg);
+  }
+
+  50% {
+    transform: rotate(10deg);
+  }
+
+  60% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(0deg);
   }
 }

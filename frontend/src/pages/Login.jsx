@@ -193,7 +193,7 @@ const SignUpPage = () => {
     const isValid = isRegister ? validateSignup() : validateLogin();
     if (!isValid) {
       iziToast.warning({
-        position: "topRight",
+        position: "bottomLeft",
         timeout: 3000,
         title: "Warning",
         message: "Please fill all fields",
@@ -213,7 +213,7 @@ const SignUpPage = () => {
           setIsRegister(false);
 
           iziToast.success({
-            position: "topRight",
+            position: "bottomLeft",
             timeout: 3000,
             title: "Success",
             message: "Registration Successful",
@@ -229,7 +229,7 @@ const SignUpPage = () => {
           );
         } else {
           iziToast.error({
-            position: "topRight",
+            position: "bottomLeft",
             timeout: 3000,
             title: "Error",
             message: "Invalid email or password",
@@ -274,7 +274,7 @@ const SignUpPage = () => {
             navigate("/dashboard");
           } else {
             iziToast.success({
-              position: "topRight",
+              position: "bottomLeft",
               timeout: 3000,
               title: "Success",
               message: "Login Successful",
@@ -292,7 +292,7 @@ const SignUpPage = () => {
           }
         } else {
           iziToast.error({
-            position: "topRight",
+            position: "bottomLeft",
             timeout: 3000,
             title: "Error",
             message: "Invalid email or password",

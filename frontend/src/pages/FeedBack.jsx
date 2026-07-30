@@ -6,28 +6,34 @@ import { FaCheckCircle, FaTimesCircle, FaTimes } from "react-icons/fa";
  *
  * Props:
  *   isOpen   {boolean}  — controls visibility
- *   type     {string}   — "success" | "error"
+ *   variant     {string}   — "success" | "error"
  *   title    {string}   — heading text
  *   message  {string}   — body text
  *   reason   {string}   — (optional) specific error detail shown in a highlight box
  *   onClose  {function} — called when the user dismisses the modal
  */
+
 export function Feedback({
   isOpen,
-  type = "success",
+  variant = "success",
   title,
   message,
   reason,
   onClose,
+  onConfirm,
+  confirmText = "Continue",
+  cancelText = "Cancel",
 }) {
   if (!isOpen) return null;
 
-  const isSuccess = type === "success";
+  const isSuccess = variant === "success";
+  const isError = variant === "error";
+  const isLogout = variant === "logout";
 
   return (
     <div className="feedback_overlay" onClick={onClose}>
       <div
-        className={`feedback_modal feedback_modal--${type}`}
+        className={`feedback_modal feedback_modal--${variant}`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close button */}
@@ -36,8 +42,16 @@ export function Feedback({
         </button>
 
         {/* Icon */}
-        <div className={`feedback_icon feedback_icon--${type}`}>
-          {isSuccess ? <FaCheckCircle /> : <FaTimesCircle />}
+        <div className={`feedback_icon feedback_icon--${variant}`}>
+          {isSuccess && <FaCheckCircle />}
+
+          {isError && <FaTimesCircle />}
+
+          {isLogout && (
+            <span className="feedback_wave" role="img" aria-label="Goodbye">
+              👋
+            </span>
+          )}
         </div>
 
         {/* Title */}
@@ -47,7 +61,7 @@ export function Feedback({
         <p className="feedback_message">{message}</p>
 
         {/* ── Reason box — only shown on error when reason is provided ── */}
-        {!isSuccess && reason && (
+        {isError && reason && (
           <div className="feedback_reason">
             <span className="feedback_reason_label">Reason</span>
             <span className="feedback_reason_text">{reason}</span>
@@ -55,12 +69,30 @@ export function Feedback({
         )}
 
         {/* Action button */}
-        <button
-          className={`feedback_button feedback_button--${type}`}
-          onClick={onClose}
-        >
-          {isSuccess ? "Continue" : "Try Again"}
-        </button>
+        {isLogout ? (
+          <div className="feedback_actions">
+            <button
+              className="feedback_button feedback_button--cancel"
+              onClick={onClose}
+            >
+              {cancelText}
+            </button>
+
+            <button
+              className="feedback_button feedback_button--logout"
+              onClick={onConfirm}
+            >
+              {confirmText}
+            </button>
+          </div>
+        ) : (
+          <button
+            className={`feedback_button feedback_button--${variant}`}
+            onClick={onClose}
+          >
+            {isSuccess ? "Continue" : "Try Again"}
+          </button>
+        )}
       </div>
     </div>
   );
