@@ -16,49 +16,76 @@ function TodaySummary({ events = [] }) {
   ========================================= */
 
   const summaryData = useMemo(() => {
-    return getTodaySummary(events, EVENT_CONFIG).filter((item) => item.config);
+    return getTodaySummary(events, EVENT_CONFIG).filter(
+      (item) => item.config
+    );
   }, [events]);
 
-  return (
-    <Card title="Today's Summary" icon={<FaChartPie />} className="summaryCard">
-      {summaryData.length === 0 ? (
+  /* =========================================
+     Summary Content
+  ========================================= */
+
+  const summaryContent = useMemo(() => {
+    if (summaryData.length === 0) {
+      return (
         <EmptyState
           icon={<FaRegCalendarCheck />}
           title="No Events Today"
           description="No scheduled events for today."
         />
-      ) : (
-        <div className="summaryList">
-          {summaryData.map((item) => {
-            const Icon = item.config.icon;
+      );
+    }
 
-            return (
-              <div key={item.type} className="summaryItem">
-                <div className="summaryLeft">
-                  <div
-                    className="summaryIcon"
-                    style={{
-                      "--summary-color": item.config.color,
-                    }}
-                  >
-                    <Icon />
-                  </div>
+    return (
+      <div className="summaryList">
+        {summaryData.map((item) => {
+          const Icon = item.config.icon;
 
-                  <div className="summaryContent">
-                    <span className="summaryTitle">{item.config.label}</span>
-
-                    <small>Today's Events</small>
-                  </div>
+          return (
+            <div
+              key={item.type}
+              className="summaryItem"
+            >
+              <div className="summaryLeft">
+                <div
+                  className="summaryIcon"
+                  style={{
+                    "--summary-color": item.config.color,
+                  }}
+                >
+                  <Icon />
                 </div>
 
-                <strong className="summaryCount">{item.count}</strong>
+                <div className="summaryContent">
+                  <span className="summaryTitle">
+                    {item.config.label}
+                  </span>
+
+                  <small>Today's Events</small>
+                </div>
               </div>
-            );
-          })}
-        </div>
-      )}
+
+              <strong className="summaryCount">
+                {item.count}
+              </strong>
+            </div>
+          );
+        })}
+      </div>
+    );
+  }, [summaryData]);
+
+  return (
+    <Card
+      title="Today's Summary"
+      icon={<FaChartPie />}
+      className="summaryCard"
+    >
+      {summaryContent}
     </Card>
   );
 }
+
+TodaySummary.displayName = "TodaySummary";
 
 export default memo(TodaySummary);
