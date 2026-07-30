@@ -113,7 +113,6 @@
 
   /* Focus */
   --focus-shadow: rgba(41, 163, 224, 0.18);
-
 }
 
 
@@ -246,8 +245,6 @@ html.dark {
 
   /* Focus */
   --focus-shadow: rgba(41, 163, 224, 0.18);
-
-  
 }
 
 
