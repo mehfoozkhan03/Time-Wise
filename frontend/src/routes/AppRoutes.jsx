@@ -1,47 +1,47 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes } from 'react-router-dom';
 
-import MainLayout from "../layouts/MainLayout";
-import Home from "./../pages/Home";
-import AdminDashboard from "./../pages/AdminDashboard";
-import Community from "./../pages/Community/Community";
-import About from "./../pages/About";
-import Contact from "./../pages/Contact";
-import SignUpPage from "./../pages/Login";
+import MainLayout from '../layouts/MainLayout';
+import Home from './../pages/Home';
+import AdminDashboard from './../pages/AdminDashboard';
+import Community from './../pages/Community/Community';
+import About from './../pages/About';
+import Contact from './../pages/Contact';
+import SignUpPage from './../pages/Login';
 
-import ProgressBar from "./../components/ProgressBar/progressBar";
-import { BubbleCursor } from "./../components/BubbleArrow/bubbleArrow";
-import RouteLoader from "./../components/RouteLoader";
+import ProgressBar from './../components/ProgressBar/progressBar';
+import { BubbleCursor } from './../components/BubbleArrow/bubbleArrow';
+import RouteLoader from './../components/RouteLoader';
 
-import Calendar from "./../components/Setting/Calendar";
+import Calendar from './../components/Setting/Calendar';
 
-import EmployeeTable from "../pages/EmployeeTable";
-import EmployeeDetails from "../pages/EmployeeDetails";
-import EmployeeProfile from "./../pages/EmployeeProfile/EmployeeProfile";
+import EmployeeTable from '../pages/EmployeeTable';
+import EmployeeDetails from '../pages/EmployeeDetails';
+import EmployeeProfile from './../pages/EmployeeProfile/EmployeeProfile';
 
-import { Error } from "../components/Error/Error";
-import { PrivateRoutes } from "../components/PrivateRoutes";
+import { Error } from '../components/Error/Error';
+import { PrivateRoutes } from '../components/PrivateRoutes';
 
-import Attendance from "../pages/Attendance/Attendance";
-import { Reports } from "./../pages/Reports/Reports";
+import Attendance from '../pages/Attendance/Attendance';
+import { Reports } from './../pages/Reports/Reports';
 
-import { Settings } from "../pages/Settings";
-import { Profile } from "./../components/Setting/Profile/Profile";
-import { SettingAttendance } from "./../components/Setting/SettingAttendance/SettingAttendance";
-import { Appearance } from "./../components/Setting/Appearance/Appearance";
-import { Notification } from "./../components/Setting/Notification/Notifications";
-import { Security } from "./../components/Setting/Security/Security";
-import { DataExport } from "./../components/Setting/DataExport/DataExport";
-import { HelpSupport } from "./../components/Setting/HelpSupport/HelpSupport";
+import { Settings } from '../pages/Settings';
+import { Profile } from './../components/Setting/Profile/Profile';
+import { SettingAttendance } from './../components/Setting/SettingAttendance/SettingAttendance';
+import { Appearance } from './../components/Setting/Appearance/Appearance';
+import { Notification } from './../components/Setting/Notification/Notifications';
+import { Security } from './../components/Setting/Security/Security';
+import { DataExport } from './../components/Setting/DataExport/DataExport';
+import { HelpSupport } from './../components/Setting/HelpSupport/HelpSupport';
 
-import { DashboardEmployee } from "./../components/Dashboard/DashboardEmployee/DashboardEmployee";
-import { DashboardHome } from "./../components/Dashboard/DashboardHome/DashboardHome";
-import { DashboardAttendance } from "./../components/Dashboard/DashboardAttendance/DashboardAttendance";
-import { DashboardThuoght } from "./../components/Dashboard/DashboardThought/DashboardThought";
-import { DashboardNotification } from "./../components/Dashboard/DashboardNotification/DashboardNotification";
-import { DashboardAnnouncement } from "./../components/Dashboard/DashboardAnnouncement/DashboardAnnouncement";
-import { DashboardReport } from "./../components/Dashboard/DashboardReport/DashboardReport";
-import { DashboardSetting } from "./../components/Dashboard/DashboardSetting/DashboardSetting";
-import { ScrollToTopButton } from "../components/ScrollToTop/scrollToTop";
+import { DashboardEmployee } from './../components/Dashboard/DashboardEmployee/DashboardEmployee';
+import { DashboardHome } from './../components/Dashboard/DashboardHome/DashboardHome';
+import { DashboardAttendance } from './../components/Dashboard/DashboardAttendance/DashboardAttendance';
+import { DashboardThuoght } from './../components/Dashboard/DashboardThought/DashboardThought';
+import { DashboardNotification } from './../components/Dashboard/DashboardNotification/DashboardNotification';
+import { DashboardAnnouncement } from './../components/Dashboard/DashboardAnnouncement/DashboardAnnouncement';
+import { DashboardReport } from './../components/Dashboard/DashboardReport/DashboardReport';
+import { DashboardSetting } from './../components/Dashboard/DashboardSetting/DashboardSetting';
+import { ScrollToTopButton } from '../components/ScrollToTop/scrollToTop';
 
 export const AppRoutes = () => {
   return (
@@ -99,9 +99,9 @@ export const AppRoutes = () => {
 
           {/* ================= ADMIN DASHBOARD ================= */}
 
-          <Route path="/dashboard" element={<AdminDashboard />}>
+          {/* <Route path="/adminDashboard" element={<AdminDashboard />}>
             <Route index element={<DashboardHome />} />
-            <Route path="/dashboard/" element={<DashboardHome />} />
+            <Route path="/dashboard" element={<DashboardHome />} />
             <Route path="employee" element={<DashboardEmployee />} />
             <Route path="attendance" element={<DashboardAttendance />} />
             <Route path="thought" element={<DashboardThuoght />} />
@@ -109,7 +109,7 @@ export const AppRoutes = () => {
             <Route path="announcement" element={<DashboardAnnouncement />} />
             <Route path="report" element={<DashboardReport />} />
             <Route path="setting" element={<DashboardSetting />} />
-          </Route>
+          </Route> */}
 
           {/* ================= PUBLIC PAGES ================= */}
 
