@@ -31,7 +31,11 @@ export function ChartsSection({
   dashboardStats,
 }) {
 
-  const productivity = useCountUp(dashboardStats?.productivity ?? 0);
+  const productivity = useCountUp(
+  activeTab === "productivity"
+    ? dashboardStats?.productivity ?? 0
+    : 0
+);
   // console.log("Attendance Log:", attendanceLog);
 
   const filtered = (attendanceLog ?? []).filter(

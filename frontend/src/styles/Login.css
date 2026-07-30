@@ -37,7 +37,7 @@ select:is(:-webkit-autofill, :autofill) {
 .login-page {
   width: 400px;
   padding: 35px 40px;
-  background: var(--card);
+  background: var(--card_login);
   border: 1px solid var(--border);
   border-radius: 15px;
   backdrop-filter: blur(12px);
