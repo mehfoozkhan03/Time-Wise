@@ -60,12 +60,20 @@ export const isToday = (date) => {
   return isSameDate(date, new Date());
 };
 
+// Date Key (YYYY-MM-DD)
+export const getDateKey = (date) => {
+  return [
+    date.getFullYear(),
+    String(date.getMonth() + 1).padStart(2, "0"),
+    String(date.getDate()).padStart(2, "0"),
+  ].join("-");
+};
+
 /**
  * Generate 42 Calendar Cells
  * (6 rows × 7 columns)
  */
 export const generateCalendar = (currentDate) => {
-
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
 
@@ -78,53 +86,34 @@ export const generateCalendar = (currentDate) => {
 
   // Previous Month
   for (let i = firstDay - 1; i >= 0; i--) {
-
     calendar.push({
-
       date: new Date(year, month - 1, prevMonthDays - i),
-
       currentMonth: false,
-
       isToday: false,
-
     });
-
   }
 
   // Current Month
   for (let i = 1; i <= totalDays; i++) {
-
     const date = new Date(year, month, i);
 
     calendar.push({
-
       date,
-
       currentMonth: true,
-
       isToday: isToday(date),
-
     });
-
   }
 
   // Next Month
   while (calendar.length < 42) {
-
     const nextDate = calendar.length - (firstDay + totalDays) + 1;
 
     calendar.push({
-
       date: new Date(year, month + 1, nextDate),
-
       currentMonth: false,
-
       isToday: false,
-
     });
-
   }
 
   return calendar;
-
 };

@@ -1,12 +1,13 @@
 import "./CalendarGrid.css";
 
-import { memo, useMemo, useEffect } from "react";
+import { memo, useMemo } from "react";
 
 import CalendarDay from "../CalendarDay/CalendarDay";
 
 import {
   WEEK_DAYS,
   generateCalendar,
+  getDateKey,
   isSameDate,
 } from "../../../utils/calendarUtils";
 
@@ -48,11 +49,7 @@ function CalendarGrid({
         return;
       }
 
-      const dateKey = [
-        eventDate.getFullYear(),
-        String(eventDate.getMonth() + 1).padStart(2, "0"),
-        String(eventDate.getDate()).padStart(2, "0"),
-      ].join("-");
+      const dateKey = getDateKey(eventDate);
 
       if (!map.has(dateKey)) {
         map.set(dateKey, []);
@@ -72,9 +69,7 @@ function CalendarGrid({
   //   console.group("===== CALENDAR GRID =====");
 
   //   console.log("Current Month:", currentDate);
-
   //   console.log("Events Received:", events.length);
-
   //   console.log("Grouped Days:", eventsByDate.size);
 
   //   eventsByDate.forEach((value, key) => {
@@ -100,11 +95,7 @@ function CalendarGrid({
 
       <div className="calendarGrid">
         {calendar.map((item) => {
-          const dateKey = [
-            item.date.getFullYear(),
-            String(item.date.getMonth() + 1).padStart(2, "0"),
-            String(item.date.getDate()).padStart(2, "0"),
-          ].join("-");
+          const dateKey = getDateKey(item.date);
 
           const dayEvents = eventsByDate.get(dateKey) || [];
 

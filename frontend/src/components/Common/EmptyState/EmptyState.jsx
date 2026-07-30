@@ -9,7 +9,11 @@ function EmptyState({
   className = "",
 }) {
   return (
-    <section className={`emptyState ${className}`} role="status">
+    <section
+      className={`emptyState ${className}`.trim()}
+      role="status"
+      aria-live="polite"
+    >
       {icon && (
         <div className="emptyIcon" aria-hidden="true">
           {icon}
@@ -22,5 +26,7 @@ function EmptyState({
     </section>
   );
 }
+
+EmptyState.displayName = "EmptyState";
 
 export default memo(EmptyState);
