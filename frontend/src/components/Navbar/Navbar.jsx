@@ -1,13 +1,13 @@
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import { useState, useEffect, useRef } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { FaBell, FaBars, FaTimes, FaChevronDown } from "react-icons/fa";
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { useState, useEffect, useRef } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { FaBell, FaBars, FaTimes, FaChevronDown } from 'react-icons/fa';
 
-import "./Navbar.css";
-import { logout } from "../../store/authSlice";
-import { authService } from "../../services/authService";
-import { useTheme } from "../../context/ThemeContext";
-import { fetchNotifications } from ".././../store/notificationSlice";
+import './Navbar.css';
+import { logout } from '../../store/authSlice';
+import { authService } from '../../services/authService';
+import { useTheme } from '../../context/ThemeContext';
+import { fetchNotifications } from '.././../store/notificationSlice';
 
 export default function Navbar() {
   const { notifications, loading } = useSelector((state) => state.notification);
@@ -19,7 +19,7 @@ export default function Navbar() {
   const location = useLocation();
   const { user } = useSelector((state) => state.auth);
 
-  const isHome = location.pathname === "/";
+  const isHome = location.pathname === '/';
 
   const [mobileOpen, setMobileOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
@@ -34,7 +34,7 @@ export default function Navbar() {
 
       dispatch(logout());
 
-      navigate("/signup");
+      navigate('/signup');
     } catch (error) {
       console.log(error);
     }
@@ -62,10 +62,10 @@ export default function Navbar() {
       }
     }
 
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
 
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
 
@@ -85,7 +85,7 @@ export default function Navbar() {
           <div className="logo_text">
             <img
               src={
-                resolvedTheme === "dark" ? "/Logo_N.svg" : "/Logo_N_Light.svg"
+                resolvedTheme === 'dark' ? '/Logo_N.svg' : '/Logo_N_Light.svg'
               }
               alt="Logo"
             />
@@ -98,11 +98,10 @@ export default function Navbar() {
       ======================= */}
 
       <nav
-        className={`navbar_links ${mobileOpen ? "active" : ""}`}
+        className={`navbar_links ${mobileOpen ? 'active' : ''}`}
         id="tour-nav-links"
       >
         <NavLink to="/">Home</NavLink>
-        <NavLink to="/dashboard">Dashboard</NavLink>
         <NavLink to="/community">Community</NavLink>
         <NavLink to="/about">About</NavLink>
         <NavLink to="/contact">Contact</NavLink>
@@ -150,35 +149,26 @@ export default function Navbar() {
           )} */}
 
           {notificationOpen && (
-  <div className="notification_dropdown">
-    <h4>Notifications</h4>
+            <div className="notification_dropdown">
+              <h4>Notifications</h4>
 
-    {loading ? (
-      <div className="notification_item">
-        Loading...
-      </div>
-    ) : notifications.length === 0 ? (
-      <div className="notification_item">
-        No notifications found.
-      </div>
-    ) : (
-      notifications.map((notification) => (
-        <div
-          key={notification._id}
-          className="notification_item"
-        >
-          <strong>{notification.title}</strong>
+              {loading ? (
+                <div className="notification_item">Loading...</div>
+              ) : notifications.length === 0 ? (
+                <div className="notification_item">No notifications found.</div>
+              ) : (
+                notifications.map((notification) => (
+                  <div key={notification._id} className="notification_item">
+                    <strong>{notification.title}</strong>
 
-          <p>{notification.message}</p>
-        </div>
-      ))
-    )}
+                    <p>{notification.message}</p>
+                  </div>
+                ))
+              )}
 
-    <button className="view_all_btn">
-      View All
-    </button>
-  </div>
-)}
+              <button className="view_all_btn">View All</button>
+            </div>
+          )}
         </div>
 
         {/* Profile */}
@@ -193,8 +183,8 @@ export default function Navbar() {
           >
             <div className="avatar">
               {user
-                ? `${user.firstName?.[0] ?? ""}${user.lastName?.[0] ?? ""}`.toUpperCase()
-                : "U"}
+                ? `${user.firstName?.[0] ?? ''}${user.lastName?.[0] ?? ''}`.toUpperCase()
+                : 'U'}
             </div>
 
             <div className="profile_info">
@@ -206,14 +196,14 @@ export default function Navbar() {
                       user.lastName?.charAt(0).toUpperCase() +
                       user.lastName?.slice(1)
                     }`
-                  : "User"}
+                  : 'User'}
               </h4>
 
               <span>Frontend Developer</span>
             </div>
 
             <FaChevronDown
-              className={`profile_arrow ${profileOpen ? "rotate" : ""}`}
+              className={`profile_arrow ${profileOpen ? 'rotate' : ''}`}
             />
           </button>
 
