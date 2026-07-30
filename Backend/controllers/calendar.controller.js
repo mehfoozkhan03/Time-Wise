@@ -392,6 +392,7 @@ export const updateEvent = async (req, res) => {
       }
 
       event.updatedBy = employee._id;
+      event.updatedByModel = "User";
 
       await event.save();
 
@@ -447,6 +448,7 @@ export const updateEvent = async (req, res) => {
 
     // Logged-in admin
     event.updatedBy = auth.account._id;
+    event.updatedByModel = "Admin";
 
     await event.save();
 
@@ -512,6 +514,7 @@ export const deleteEvent = async (req, res) => {
 
       event.isActive = false;
       event.updatedBy = employee._id;
+      event.updatedByModel = "User";
 
       await event.save();
 
@@ -527,6 +530,7 @@ export const deleteEvent = async (req, res) => {
 
     event.isActive = false;
     event.updatedBy = auth.account._id;
+    event.updatedByModel = "Admin";
 
     await event.save();
 
