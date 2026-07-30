@@ -36,6 +36,7 @@ function EventModal({
 
   const config = useMemo(() => {
     if (!event) return null;
+
     return EVENT_CONFIG[event.type];
   }, [event]);
 
@@ -93,7 +94,10 @@ function EventModal({
     document.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener(
+        "keydown",
+        handleKeyDown
+      );
     };
   }, [event, onClose]);
 
@@ -111,13 +115,17 @@ function EventModal({
      Handlers
   ========================================= */
 
+  const handleClose = useCallback(() => {
+    onClose?.();
+  }, [onClose]);
+
   const handleOverlayClick = useCallback(
     (e) => {
       if (e.target === e.currentTarget) {
-        onClose?.();
+        handleClose();
       }
     },
-    [onClose]
+    [handleClose]
   );
 
   const handleModalClick = useCallback((e) => {
@@ -176,7 +184,7 @@ function EventModal({
             ref={closeButtonRef}
             type="button"
             className="closeBtn"
-            onClick={onClose}
+            onClick={handleClose}
             aria-label="Close Event"
           >
             <FaTimes />
@@ -255,5 +263,7 @@ function EventModal({
     </div>
   );
 }
+
+EventModal.displayName = "EventModal";
 
 export default memo(EventModal);
