@@ -18,10 +18,20 @@ function EventBadge({ event, onClick }) {
   ========================================= */
 
   const handleClick = useCallback(() => {
-    onClick?.(event);
+    if (typeof onClick === "function") {
+      onClick(event);
+    }
   }, [event, onClick]);
 
-  return <EventItem event={event} variant="compact" onClick={handleClick} />;
+  return (
+    <EventItem
+      event={event}
+      variant="compact"
+      onClick={handleClick}
+    />
+  );
 }
+
+EventBadge.displayName = "EventBadge";
 
 export default memo(EventBadge);

@@ -21,21 +21,27 @@ function EventLegend({ filters = {}, toggleFilter }) {
     (type) => {
       toggleFilter?.(type);
     },
-    [toggleFilter],
+    [toggleFilter]
   );
 
   return (
-    <Card title="Event Legend" icon={<FaListUl />} className="legendCard">
+    <Card
+      title="Event Legend"
+      icon={<FaListUl />}
+      className="legendCard"
+    >
       <div className="legendList">
         {legendItems.map(([type, config]) => {
           const Icon = config.icon;
-          const active = !!filters[type];
+          const active = Boolean(filters[type]);
 
           return (
             <button
               key={type}
               type="button"
-              className={`legendItem ${active ? "active" : "inactive"}`}
+              className={`legendItem ${
+                active ? "active" : "inactive"
+              }`}
               aria-pressed={active}
               aria-label={`Toggle ${config.label}`}
               title={config.label}
@@ -51,9 +57,13 @@ function EventLegend({ filters = {}, toggleFilter }) {
               </div>
 
               <div className="legendContent">
-                <span className="legendTitle">{config.label}</span>
+                <span className="legendTitle">
+                  {config.label}
+                </span>
 
-                <small>{active ? "Visible" : "Hidden"}</small>
+                <small>
+                  {active ? "Visible" : "Hidden"}
+                </small>
               </div>
             </button>
           );
@@ -62,5 +72,7 @@ function EventLegend({ filters = {}, toggleFilter }) {
     </Card>
   );
 }
+
+EventLegend.displayName = "EventLegend";
 
 export default memo(EventLegend);
