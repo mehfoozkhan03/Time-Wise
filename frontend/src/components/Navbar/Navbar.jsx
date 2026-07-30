@@ -9,10 +9,32 @@ import { authService } from "../../services/authService";
 import { useTheme } from "../../context/ThemeContext";
 import { fetchNotifications } from ".././../store/notificationSlice";
 
+import { markNotificationAsRead } from "../../services/notificationServices";
+
 export default function Navbar() {
   const { notifications, loading } = useSelector((state) => state.notification);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const handleNotificationClick = async (notification) => {
+  try {
+    // Agar pehle se read hai to API call ki zarurat nahi
+    if (!notification.read) {
+      await markNotificationAsRead(notification._id);
+
+      // Notification list refresh
+      dispatch(fetchNotifications());
+    }
+
+    setNotificationOpen(false);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const unreadCount = notifications.filter(
+  (notification) => !notification.read
+).length;
 
   const { resolvedTheme } = useTheme();
 
@@ -80,7 +102,10 @@ export default function Navbar() {
             Logo
       ======================= */}
 
-      <div className="navbar_logo" id="tour-logo">
+      <div
+        className="navbar_logo"
+        id="tour-logo"
+      >
         <NavLink to="/">
           <div className="logo_text">
             <img
@@ -128,7 +153,7 @@ export default function Navbar() {
             }}
           >
             <FaBell />
-            <span className="notification_count">{notifications.length}</span>
+            <span className="notification_count">{unreadCount}</span>
           </button>
 
           {/* {notificationOpen && (
@@ -150,40 +175,41 @@ export default function Navbar() {
           )} */}
 
           {notificationOpen && (
-  <div className="notification_dropdown">
-    <h4>Notifications</h4>
+            <div className="notification_dropdown">
+              <h4>Notifications</h4>
 
-    {loading ? (
-      <div className="notification_item">
-        Loading...
-      </div>
-    ) : notifications.length === 0 ? (
-      <div className="notification_item">
-        No notifications found.
-      </div>
-    ) : (
-      notifications.map((notification) => (
-        <div
-          key={notification._id}
-          className="notification_item"
-        >
-          <strong>{notification.title}</strong>
+              {loading ? (
+                <div className="notification_item">Loading...</div>
+              ) : notifications.length === 0 ? (
+                <div className="notification_item">No notifications found.</div>
+              ) : (
+                notifications.map((notification) => (
+                  <div
+                    key={notification._id}
+                    className={`notification_item ${
+                      !notification.read ? "unread" : ""
+                    }`}
+                    onClick={() => handleNotificationClick(notification)}
+                  >
+                    <strong>{notification.title}</strong>
 
-          <p>{notification.message}</p>
-        </div>
-      ))
-    )}
+                    <p>{notification.message}</p>
+                  </div>
+                ))
+              )}
 
-    <button className="view_all_btn">
-      View All
-    </button>
-  </div>
-)}
+              <button className="view_all_btn">View All</button>
+            </div>
+          )}
         </div>
 
         {/* Profile */}
 
-        <div className="profile_container" id="tour-profile" ref={profileRef}>
+        <div
+          className="profile_container"
+          id="tour-profile"
+          ref={profileRef}
+        >
           <button
             className="profile_btn"
             onClick={() => {
@@ -219,11 +245,17 @@ export default function Navbar() {
 
           {profileOpen && (
             <div className="profile_dropdown">
-              <NavLink to="/employee" onClick={() => setProfileOpen(false)}>
+              <NavLink
+                to="/employee"
+                onClick={() => setProfileOpen(false)}
+              >
                 My Profile
               </NavLink>
 
-              <NavLink to="/settings" onClick={() => setProfileOpen(false)}>
+              <NavLink
+                to="/settings"
+                onClick={() => setProfileOpen(false)}
+              >
                 Settings
               </NavLink>
 
