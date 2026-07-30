@@ -7,6 +7,11 @@ import {
   FaUmbrellaBeach,
   FaCalendarAlt,
   FaFlag,
+  FaUsers,
+  FaClipboardCheck,
+  FaHourglassEnd,
+  FaChalkboardTeacher,
+  FaHandshake,
 } from "react-icons/fa";
 
 import { EVENT_TYPES } from "./eventTypes";
@@ -73,5 +78,40 @@ export const EVENT_CONFIG = Object.freeze({
     color: "#eab308",
     icon: FaFlag,
     isHoliday: true,
+  },
+
+  [EVENT_TYPES.MEETING]: {
+    label: "Meeting",
+    color: "#0ea5e9",
+    icon: FaUsers,
+    isHoliday: false,
+  },
+
+  [EVENT_TYPES.REVIEW]: {
+    label: "Review",
+    color: "#8b5cf6",
+    icon: FaClipboardCheck,
+    isHoliday: false,
+  },
+
+  [EVENT_TYPES.DEADLINE]: {
+    label: "Deadline",
+    color: "#dc2626",
+    icon: FaHourglassEnd,
+    isHoliday: false,
+  },
+
+  [EVENT_TYPES.TRAINING]: {
+    label: "Training",
+    color: "#14b8a6",
+    icon: FaChalkboardTeacher,
+    isHoliday: false,
+  },
+
+  [EVENT_TYPES.CLIENT_MEETING]: {
+    label: "Client Meeting",
+    color: "#f59e0b",
+    icon: FaHandshake,
+    isHoliday: false,
   },
 });
