@@ -22,7 +22,7 @@
     height: 170px;
     background:
         linear-gradient(135deg,
-                var(--primary),
+            var(--primary),
             var(--primary_hover));
 }
 
@@ -44,16 +44,16 @@
     border: 6px solid var(--surface);
     background:
         linear-gradient(135deg,
-                var(--primary),
+            var(--primary),
             var(--primary_hover));
-                color: white;
-                font-size: 3rem;
-                font-weight: 700;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                overflow: hidden;
-                flex-shrink: 0;
+    color: white;
+    font-size: 3rem;
+    font-weight: 700;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    flex-shrink: 0;
 }
 
 .profile_avatar img {
@@ -140,10 +140,10 @@
         opacity: .8;
     }
 
-                                                                100% {
-                                                                    transform: scale(3.2);
-                                                                    opacity: 0;
-                                                                }
+    100% {
+        transform: scale(3.2);
+        opacity: 0;
+    }
 }
 
 .profile_information {
@@ -333,42 +333,42 @@
 @media (max-width:1200px) {
 
     .profile_stats {
-            grid-template-columns: repeat(2, 1fr);
-        }
+        grid-template-columns: repeat(2, 1fr);
+    }
 
-                                                                .profile_grid {
-                                                                    grid-template-columns: 1fr;
-                                                                }
+    .profile_grid {
+        grid-template-columns: 1fr;
+    }
 
-                                                                .profile_information {
-                                                                    grid-template-columns: repeat(2, 1fr);
-                                                                }
+    .profile_information {
+        grid-template-columns: repeat(2, 1fr);
+    }
 
 }
 
 @media (max-width:900px) {
 
     .profile_header {
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-        }
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
 
-                                                                .profile_text {
-                                                                    padding: 0;
-                                                                }
+    .profile_text {
+        padding: 0;
+    }
 
-                                                                .status_badge {
-                                                                    margin: 0;
-                                                                }
+    .status_badge {
+        margin: 0;
+    }
 
-                                                                .profile_information {
-                                                                    grid-template-columns: 1fr;
-                                                                }
+    .profile_information {
+        grid-template-columns: 1fr;
+    }
 
-                                                                .performance_grid {
-                                                                    grid-template-columns: 1fr;
-                                                                }
+    .performance_grid {
+        grid-template-columns: 1fr;
+    }
 
 }
 
@@ -378,26 +378,26 @@
         margin: 1rem auto;
     }
 
-                                                                .profile_banner {
-                                                                    height: 120px;
-                                                                }
+    .profile_banner {
+        height: 120px;
+    }
 
-                                                                .profile_content {
-                                                                    padding: 0 1rem 1.5rem;
-                                                                    margin-top: -55px;
-                                                                }
+    .profile_content {
+        padding: 0 1rem 1.5rem;
+        margin-top: -55px;
+    }
 
-                                                                .profile_avatar {
-                                                                    width: 110px;
-                                                                    height: 110px;
-                                                                    font-size: 2.3rem;
-                                                                }
+    .profile_avatar {
+        width: 110px;
+        height: 110px;
+        font-size: 2.3rem;
+    }
 
-                                                                .profile_text h1 {
-                                                                    font-size: 1.8rem;
-                                                                }
+    .profile_text h1 {
+        font-size: 1.8rem;
+    }
 
-                                                                .profile_stats {
-                                                                    grid-template-columns: 1fr;
-                                                                }
+    .profile_stats {
+        grid-template-columns: 1fr;
+    }
 }
