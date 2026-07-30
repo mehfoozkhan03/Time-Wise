@@ -1,6 +1,6 @@
 import "./EventModal.css";
 
-import { memo, useCallback, useEffect, useMemo, useRef } from "react";
+import { memo, useEffect, useMemo, useRef } from "react";
 
 import {
   FaTimes,
@@ -102,6 +102,32 @@ function EventModal({
   }, [event, onClose]);
 
   /* =========================================
+     Handlers
+  ========================================= */
+
+  const handleClose = () => {
+    onClose?.();
+  };
+
+  const handleOverlayClick = (e) => {
+    if (e.target === e.currentTarget) {
+      handleClose();
+    }
+  };
+
+  const handleModalClick = (e) => {
+    e.stopPropagation();
+  };
+
+  const handleEdit = () => {
+    onEdit?.(event);
+  };
+
+  const handleDelete = () => {
+    onDelete?.(event);
+  };
+
+  /* =========================================
      Validation
   ========================================= */
 
@@ -110,35 +136,6 @@ function EventModal({
   }
 
   const Icon = config.icon;
-
-  /* =========================================
-     Handlers
-  ========================================= */
-
-  const handleClose = useCallback(() => {
-    onClose?.();
-  }, [onClose]);
-
-  const handleOverlayClick = useCallback(
-    (e) => {
-      if (e.target === e.currentTarget) {
-        handleClose();
-      }
-    },
-    [handleClose]
-  );
-
-  const handleModalClick = useCallback((e) => {
-    e.stopPropagation();
-  }, []);
-
-  const handleEdit = useCallback(() => {
-    onEdit?.(event);
-  }, [event, onEdit]);
-
-  const handleDelete = useCallback(() => {
-    onDelete?.(event);
-  }, [event, onDelete]);
 
   return (
     <div
