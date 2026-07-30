@@ -20,7 +20,7 @@ export const auth = (req, res, next) => {
       }
 
       req.user = decoded;
-      // console.log("Decoded Token:", decoded);
+
 
       next();
     });
