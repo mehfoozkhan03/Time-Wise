@@ -1,13 +1,13 @@
-import './TodayWork.css'
+import "./TodayWork.css";
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from "react";
 
-import Card from '../../Card/Card'
-import BreakModal from './BreakModal'
+import Card from "../../Card/Card";
+import BreakModal from "./BreakModal";
 
-import useAttendance from '../../../hooks/useAttendance'
+import useAttendance from "../../../hooks/useAttendance";
 
-import { FaCircle, FaClock, FaCoffee, FaSignInAlt } from 'react-icons/fa'
+import { FaCircle, FaClock, FaCoffee, FaSignInAlt } from "react-icons/fa";
 
 export default function TodayWork() {
   const {
@@ -22,44 +22,44 @@ export default function TodayWork() {
     workingTime,
     breakTime,
     breakSeconds,
-  } = useAttendance()
+  } = useAttendance();
 
-  const [showBreakModal, setShowBreakModal] = useState(false)
+  const [showBreakModal, setShowBreakModal] = useState(false);
 
   useEffect(() => {
-    setShowBreakModal(status === 'break')
-  }, [status])
+    setShowBreakModal(status === "break");
+  }, [status]);
 
   const handleBreak = async () => {
-    await startBreak()
-  }
+    await startBreak();
+  };
 
   const handleResume = async () => {
-    await endBreak()
-  }
+    await endBreak();
+  };
 
   const getStatus = () => {
     switch (status) {
-      case 'idle':
-        return 'Not Checked In'
+      case "idle":
+        return "Not Checked In";
 
-      case 'working':
-        return 'Working'
+      case "working":
+        return "Working";
 
-      case 'break':
-        return 'On Break'
+      case "break":
+        return "On Break";
 
-      case 'checkedout':
-        return 'Checked Out'
+      case "checkedout":
+        return "Checked Out";
 
       default:
-        return 'Not Checked In'
+        return "Not Checked In";
     }
-  }
+  };
 
   const renderButton = () => {
     switch (status) {
-      case 'idle':
+      case "idle":
         return (
           <button
             className="today_primary_button"
@@ -68,9 +68,9 @@ export default function TodayWork() {
           >
             Check In
           </button>
-        )
+        );
 
-      case 'working':
+      case "working":
         return (
           <>
             <button
@@ -89,9 +89,9 @@ export default function TodayWork() {
               Check Out
             </button>
           </>
-        )
+        );
 
-      case 'break':
+      case "break":
         return (
           <button
             className="today_primary_button resume"
@@ -100,19 +100,19 @@ export default function TodayWork() {
           >
             Resume Work
           </button>
-        )
+        );
 
-      case 'checkedout':
+      case "checkedout":
         return (
           <button className="today_primary_button finished" disabled>
             Work Completed
           </button>
-        )
+        );
 
       default:
-        return null
+        return null;
     }
-  }
+  };
 
   return (
     <>
@@ -125,7 +125,7 @@ export default function TodayWork() {
           </div>
 
           <div className={`today_status ${status}`}>
-            <FaCircle />
+            <FaCircle className="status_dot" />
             {getStatus()}
           </div>
         </div>
@@ -140,7 +140,7 @@ export default function TodayWork() {
               <strong>
                 {attendance?.checkInTime
                   ? new Date(attendance.checkInTime).toLocaleTimeString()
-                  : '--:--'}
+                  : "--:--"}
               </strong>
             </div>
           </div>
@@ -185,5 +185,5 @@ export default function TodayWork() {
         breakSeconds={breakSeconds}
       />
     </>
-  )
+  );
 }
