@@ -244,6 +244,11 @@
     background: var(--primary);
 }
 
+.notification_item.unread{
+    background:#eef6ff;
+    border-left:4px solid #3b82f6;
+}
+
 .view_all_btn {
   width: 100%;
   padding: 0.9rem;
