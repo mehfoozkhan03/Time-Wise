@@ -41,7 +41,8 @@
 
 
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { notificationService } from "../services/notificationServices";
+// import { notificationService } from "../services/notificationServices";
+import { getNotifications } from "../services/notificationServices";
 
 // ======================================================
 // THUNK
@@ -51,7 +52,7 @@ export const fetchNotifications = createAsyncThunk(
   "notification/fetchNotifications",
   async (_, thunkAPI) => {
     try {
-      const { data } = await notificationService.getNotifications();
+      const { data } = await getNotifications();
       return data.notifications;
     } catch (error) {
       return thunkAPI.rejectWithValue(
