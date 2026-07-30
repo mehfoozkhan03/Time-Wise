@@ -5,11 +5,13 @@
 .calendarSidebar {
   display: flex;
   flex-direction: column;
-
+  overflow-y: scroll;
   width: 100%;
-  height: 100%;
+  height:650px;
   max-height: 100%;
-
+ scrollbar-width: none;
+ padding:5px 0px;
+ padding-right:10px;
   gap: 16px;
 
   overflow-y: auto;
@@ -26,7 +28,6 @@
 .calendarSidebar .card {
   width: 100%;
   min-height: 370px;
-
   transition:
     background var(--transition),
     border-color var(--transition),
@@ -51,7 +52,7 @@
    Responsive
 ========================================== */
 
-@media (max-width: 1200px) {
+/* @media (max-width: 1200px) {
   .calendarSidebar {
     margin-top: 24px;
   }
@@ -66,4 +67,4 @@
   .calendarSidebar .card {
     min-height: auto;
   }
-}
+} */

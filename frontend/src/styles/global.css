@@ -93,7 +93,28 @@
   --divider: #e2e8f0;
   --tag-bg: rgba(41, 163, 224, 0.1);
   --tag-text: #29a3e0;
+  
+  /* login */
+
+  --card_login: #ffffff;
+  --card_login-hover: #f8fafc;
+  --card_login-border: #e2e8f0;
+  --glass: rgba(255,255,255,.03);
+  --card_login-shadow: rgba(0, 0, 0, 0.06);
+
+
+  /* Input */
+  --input-bg: #ffffff;
+  --input-text: #2c2f3a;
+  --label-color: #6e7a88;
+
+  /* Overlay */
+  --overlay: rgba(255, 255, 255, 0.15);
+
+  /* Focus */
+  --focus-shadow: rgba(41, 163, 224, 0.18);
 }
+
 
 /* ==========================================================
    DARK MODE
@@ -205,6 +226,25 @@ html.dark {
   --tag-bg: rgba(61,183,243,.12);
   --tag-text: #5bc5ff;
 
+   /* Login */
+  
+  --card_login: #ffffff;
+  --card_login-hover: #f8fafc;
+  --card_login-border: #e2e8f0;
+  --glass: rgba(255,255,255,.03);
+  --card_login-shadow: rgba(0, 0, 0, 0.06);
+
+
+  /* Input */
+  --input-bg: #ffffff;
+  --input-text: #2c2f3a;
+  --label-color: #6e7a88;
+
+  /* Overlay */
+  --overlay: rgba(255, 255, 255, 0.15);
+
+  /* Focus */
+  --focus-shadow: rgba(41, 163, 224, 0.18);
 }
 
 
