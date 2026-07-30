@@ -244,7 +244,9 @@ export const createEvent = async (req, res) => {
 
         visibility: getVisibility(type),
 
+        // createdBy: employee._id,
         createdBy: employee._id,
+        createdByModel: "User",
       });
 
       return res.status(201).json({
@@ -285,10 +287,12 @@ export const createEvent = async (req, res) => {
       employeeId: employee._id,
 
       employeeName:
-        employee.name || `${employee.firstName} ${employee.lastName}`,
+        employee.name ||
+        `${employee.firstName} ${employee.lastName}` ||
+        'no name given',
 
-      department: employee.department,
-      designation: employee.designation,
+      department: employee.department || 'not assigned',
+      designation: employee.designation || 'untitled',
 
       location,
       priority,
@@ -299,6 +303,7 @@ export const createEvent = async (req, res) => {
 
       // Logged in admin
       createdBy: auth.account._id,
+      createdByModel: "Admin",
     });
 
     return res.status(201).json({
@@ -384,6 +389,7 @@ export const updateEvent = async (req, res) => {
       }
 
       event.updatedBy = employee._id;
+      event.updatedByModel = "User";
 
       await event.save();
 
@@ -439,6 +445,7 @@ export const updateEvent = async (req, res) => {
 
     // Logged-in admin
     event.updatedBy = auth.account._id;
+    event.updatedByModel = "Admin";
 
     await event.save();
 
@@ -504,6 +511,7 @@ export const deleteEvent = async (req, res) => {
 
       event.isActive = false;
       event.updatedBy = employee._id;
+      event.updatedByModel = "User";
 
       await event.save();
 
@@ -519,6 +527,7 @@ export const deleteEvent = async (req, res) => {
 
     event.isActive = false;
     event.updatedBy = auth.account._id;
+    event.updatedByModel = "Admin";
 
     await event.save();
 
