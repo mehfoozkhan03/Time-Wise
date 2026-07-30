@@ -125,18 +125,28 @@ const calendarSchema = new mongoose.Schema(
     },
 
     /* ==========================
-       Access Control
+      Access Control
     ========================== */
 
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      required: true,
+    },
+
+    createdByModel: {
+      type: String,
+      enum: ["User", "Admin"],
       required: true,
     },
 
     updatedBy: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      default: null,
+    },
+
+    updatedByModel: {
+      type: String,
+      enum: ["User", "Admin"],
       default: null,
     },
 
