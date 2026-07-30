@@ -230,111 +230,72 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Profile */}
+      {/* Profile */}
 
-        <div className="profile_container" id="tour-profile" ref={profileRef}>
-          <button
-            className="profile_btn"
-            onClick={() => {
-              setNotificationOpen(false);
-              setProfileOpen((prev) => !prev);
-            }}
-          >
-            <div className="avatar">
+      <div className="profile_container" id="tour-profile" ref={profileRef}>
+        <button
+          className="profile_btn"
+          onClick={() => {
+            setNotificationOpen(false);
+            setProfileOpen((prev) => !prev);
+          }}
+        >
+          <div className="avatar">
+            {user
+              ? `${user.firstName?.[0] ?? ''}${user.lastName?.[0] ?? ''}`.toUpperCase()
+              : 'U'}
+          </div>
+
+          <div className="profile_info">
+            <h4>
               {user
-                ? `${user.firstName?.[0] ?? ''}${user.lastName?.[0] ?? ''}`.toUpperCase()
-                : 'U'}
-            </div>
+                ? `${user.firstName?.charAt(0).toUpperCase()}${user.firstName?.slice(
+                    1,
+                  )} ${user.lastName?.charAt(0).toUpperCase()}${user.lastName?.slice(
+                    1,
+                  )}`
+                : 'User'}
+            </h4>
 
-            <div className="profile_info">
-              <h4>
-                {user
-                  ? `${user.firstName
-                      ?.charAt(0)
-                      .toUpperCase()}${user.firstName?.slice(1)} ${
-                      user.lastName?.charAt(0).toUpperCase() +
-                      user.lastName?.slice(1)
-                    }`
-                  : 'User'}
-              </h4>
-              <div
-                className="profile_container"
-                id="tour-profile"
-                ref={profileRef}
-              >
-                <button
-                  className="profile_btn"
-                  onClick={() => {
-                    setNotificationOpen(false);
-                    setProfileOpen((prev) => !prev);
-                  }}
-                >
-                  <div className="avatar">
-                    {user
-                      ? `${user.firstName?.[0] ?? ''}${user.lastName?.[0] ?? ''}`.toUpperCase()
-                      : 'U'}
-                  </div>
+            <span>Frontend Developer</span>
+          </div>
 
-                  <div className="profile_info">
-                    <h4>
-                      {user
-                        ? `${user.firstName
-                            ?.charAt(0)
-                            .toUpperCase()}${user.firstName?.slice(1)} ${
-                            user.lastName?.charAt(0).toUpperCase() +
-                            user.lastName?.slice(1)
-                          }`
-                        : 'User'}
-                    </h4>
+          <FaChevronDown
+            className={`profile_arrow ${profileOpen ? 'rotate' : ''}`}
+          />
+        </button>
 
-                    <span>Frontend Developer</span>
-                  </div>
+        {profileOpen && (
+          <div className="profile_dropdown">
+            <NavLink to="/employee" onClick={() => setProfileOpen(false)}>
+              My Profile
+            </NavLink>
 
-                  <FaChevronDown
-                    className={`profile_arrow ${profileOpen ? 'rotate' : ''}`}
-                  />
-                </button>
+            <NavLink to="/settings" onClick={() => setProfileOpen(false)}>
+              Settings
+            </NavLink>
 
-                {profileOpen && (
-                  <div className="profile_dropdown">
-                    <NavLink
-                      to="/employee"
-                      onClick={() => setProfileOpen(false)}
-                    >
-                      My Profile
-                    </NavLink>
+            <button
+              onClick={() => {
+                setProfileOpen(false);
+                setLogoutOpen(true);
+              }}
+            >
+              Logout
+            </button>
+          </div>
+        )}
+      </div>
 
-                    <NavLink
-                      to="/settings"
-                      onClick={() => setProfileOpen(false)}
-                    >
-                      Settings
-                    </NavLink>
+      {/* Mobile Menu */}
 
-                    <button
-                      onClick={() => {
-                        setProfileOpen(false);
-                        setLogoutOpen(true);
-                      }}
-                    >
-                      Logout
-                    </button>
-                  </div>
-                )}
-              </div>
-
-              {/* Mobile Menu */}
-
-              <button
-                id="tour-mobile-btn"
-                className="mobile_btn"
-                onClick={() => setMobileOpen((prev) => !prev)}
-              >
-                {mobileOpen ? <FaTimes /> : <FaBars />}
-              </button>
-            </div>
-          </button>
-        </div>
+      <button
+        id="tour-mobile-btn"
+        className="mobile_btn"
+        onClick={() => setMobileOpen((prev) => !prev)}
+      >
+        {mobileOpen ? <FaTimes /> : <FaBars />}
+      </button>
       </header>
 
       <Feedback
