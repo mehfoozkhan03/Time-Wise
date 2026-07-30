@@ -52,23 +52,23 @@ export default function useEventFilter(events = [], currentDate) {
      Current Month Events
   ========================================= */
 
-    const monthEvents = useMemo(() => {
-      if (!currentDate) return events;
+  const monthEvents = useMemo(() => {
+    if (!currentDate) return events;
 
-      const currentMonth = currentDate.getMonth();
-      const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth();
+    const currentYear = currentDate.getFullYear();
 
-      return events.filter((event) => {
-        if (!event?.date) return false;
+    return events.filter((event) => {
+      if (!event?.date) return false;
 
-        const date = new Date(event.date);
+      const date = new Date(event.date);
 
-        return (
-          date.getFullYear() === currentYear &&
-          date.getMonth() === currentMonth
-        );
-      });
-    }, [events, currentDate]);
+      return (
+        date.getFullYear() === currentYear &&
+        date.getMonth() === currentMonth
+      );
+    });
+  }, [events, currentDate]);
 
   /* =========================================
      Filtered Events
@@ -97,16 +97,18 @@ export default function useEventFilter(events = [], currentDate) {
       const searchableText = [
         event.title,
         event.description,
-        event.employee,
         event.employeeName,
         event.department,
+        event.designation,
         EVENT_CONFIG[event.type]?.label,
       ]
         .filter(Boolean)
         .join(" ")
         .toLowerCase();
 
-      return keywords.every((keyword) => searchableText.includes(keyword));
+      return keywords.every((keyword) =>
+        searchableText.includes(keyword)
+      );
     });
   }, [monthEvents, filters, searchTerm]);
 
