@@ -220,12 +220,6 @@
 
 /* ================= PERFORMANCE ================= */
 
-.performance_grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
-}
-
 .performance_item {
   background: var(--bg);
   border: 1px solid var(--border);
@@ -296,6 +290,13 @@
 
 /* ================= RESPONSIVE ================= */
 
+@media (max-width: 430px) {
+  .profile_grid {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
 @media (max-width:1200px) {
 
   .profile_stats {
@@ -318,6 +319,7 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
+    gap: 11px;
   }
 
   .profile_text {
@@ -332,40 +334,36 @@
     grid-template-columns: 1fr;
   }
 
-  .performance_grid {
-    grid-template-columns: 1fr;
+
+  @media (max-width:650px) {
+
+    .employee_profile {
+      width: 95%;
+      margin: 1rem auto;
+    }
+
+    .profile_banner {
+      height: 120px;
+    }
+
+    .profile_content {
+      padding: 0 1rem 1.5rem;
+      margin-top: -55px;
+    }
+
+    .profile_avatar {
+      width: 110px;
+      height: 110px;
+      font-size: 2.3rem;
+    }
+
+    .profile_text h1 {
+      font-size: 1.8rem;
+    }
+
+    .profile_stats {
+      grid-template-columns: 1fr;
+
+    }
   }
-
-}
-
-@media (max-width:650px) {
-
-  .employee_profile {
-    width: 95%;
-    margin: 1rem auto;
-  }
-
-  .profile_banner {
-    height: 120px;
-  }
-
-  .profile_content {
-    padding: 0 1rem 1.5rem;
-    margin-top: -55px;
-  }
-
-  .profile_avatar {
-    width: 110px;
-    height: 110px;
-    font-size: 2.3rem;
-  }
-
-  .profile_text h1 {
-    font-size: 1.8rem;
-  }
-
-  .profile_stats {
-    grid-template-columns: 1fr;
-  }
-
 }
