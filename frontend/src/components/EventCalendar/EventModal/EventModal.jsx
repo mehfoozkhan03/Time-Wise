@@ -41,18 +41,26 @@ function EventModal({
   }, [event]);
 
   /* =========================================
-     Employee Name
+     Event Type
   ========================================= */
 
-  const employeeName = useMemo(() => {
-    if (!event) return "";
+  const isHoliday = useMemo(() => {
+    return Boolean(event?.isHoliday);
+  }, [event]);
 
-    if (event.isHoliday) {
-      return "Public Holiday";
+  /* =========================================
+     Display Name
+  ========================================= */
+
+  const displayName = useMemo(() => {
+    if (!event || !config) return "";
+
+    if (isHoliday) {
+      return config.label;
     }
 
     return event.employeeName ?? event.employee ?? "N/A";
-  }, [event]);
+  }, [event, config, isHoliday]);
 
   /* =========================================
      Event Time
@@ -191,11 +199,11 @@ function EventModal({
         <div className="modalBody">
           <InfoRow
             icon={FaUser}
-            label="Employee"
-            value={employeeName}
+            label={isHoliday ? "Category" : "Employee"}
+            value={displayName}
           />
 
-          {!event.isHoliday && (
+          {!isHoliday && (
             <InfoRow
               icon={FaBuilding}
               label="Department"
@@ -231,7 +239,7 @@ function EventModal({
           </div>
         </div>
 
-        {!event.isHoliday && canEdit && (
+        {!isHoliday && canEdit && (
           <div className="modalFooter">
             {onEdit && (
               <button

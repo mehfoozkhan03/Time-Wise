@@ -3,7 +3,6 @@ import "./EventItem.css";
 import { memo, useCallback, useMemo } from "react";
 
 import { EVENT_CONFIG } from "../../../data/eventConfig";
-
 import { formatTime } from "../../../utils/dateUtils";
 
 import {
@@ -38,12 +37,20 @@ function EventItem({
   const Icon = config.icon;
 
   /* =========================================
-     Employee Name
+     Event Type
   ========================================= */
 
-  const employeeName = useMemo(() => {
-    if (event.isHoliday) {
-      return "Public Holiday";
+  const isHoliday = useMemo(() => {
+    return Boolean(event.isHoliday);
+  }, [event.isHoliday]);
+
+  /* =========================================
+     Display Name
+  ========================================= */
+
+  const displayName = useMemo(() => {
+    if (isHoliday) {
+      return config.label;
     }
 
     return (
@@ -52,9 +59,10 @@ function EventItem({
       ""
     );
   }, [
+    config.label,
     event.employee,
     event.employeeName,
-    event.isHoliday,
+    isHoliday,
   ]);
 
   /* =========================================
@@ -62,18 +70,22 @@ function EventItem({
   ========================================= */
 
   const avatarColor = useMemo(() => {
-    return getAvatarColor(employeeName);
-  }, [employeeName]);
+    return getAvatarColor(displayName);
+  }, [displayName]);
 
   const initials = useMemo(() => {
-    if (event.isHoliday) {
-      return "PH";
+    if (isHoliday) {
+      return getInitials(
+        event.title || config.label
+      );
     }
 
-    return getInitials(employeeName);
+    return getInitials(displayName);
   }, [
-    employeeName,
-    event.isHoliday,
+    config.label,
+    displayName,
+    event.title,
+    isHoliday,
   ]);
 
   /* =========================================
@@ -103,7 +115,7 @@ function EventItem({
 
       e.stopPropagation();
 
-      onClick?.(event);
+      onClick(event);
     },
     [event, onClick]
   );
@@ -115,7 +127,7 @@ function EventItem({
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
 
-        onClick?.(event);
+        onClick(event);
       }
     },
     [event, onClick]
@@ -138,7 +150,7 @@ function EventItem({
       }
     >
       {showAvatar &&
-        (employeeName || event.isHoliday) && (
+        (displayName || isHoliday) && (
           <div
             className="eventItemAvatar"
             style={{
