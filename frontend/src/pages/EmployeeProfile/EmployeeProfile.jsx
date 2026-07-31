@@ -1,7 +1,6 @@
-import "./EmployeeProfile.css";
-
 import { useSelector } from "react-redux";
 
+import "./EmployeeProfile.css";
 import QuickStats from "../../components/employee/QuickStats/QuickStats";
 import PerformanceSummary from "../../components/employee/PerformanceSummary/PerformanceSummary";
 import RecentActivity from "../../components/employee/RecentActivity/RecentActivity";

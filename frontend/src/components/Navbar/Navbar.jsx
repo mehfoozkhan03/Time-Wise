@@ -284,17 +284,17 @@ export default function Navbar() {
               </div>
             )}
           </div>
+
+          {/* Mobile Menu */}
+
+          <button
+            id="tour-mobile-btn"
+            className="mobile_btn"
+            onClick={() => setMobileOpen((prev) => !prev)}
+          >
+            {mobileOpen ? <FaTimes /> : <FaBars />}
+          </button>
         </div>
-
-        {/* Mobile Menu */}
-
-        <button
-          id="tour-mobile-btn"
-          className="mobile_btn"
-          onClick={() => setMobileOpen((prev) => !prev)}
-        >
-          {mobileOpen ? <FaTimes /> : <FaBars />}
-        </button>
       </header>
 
       <Feedback
