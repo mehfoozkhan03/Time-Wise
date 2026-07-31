@@ -1,18 +1,19 @@
 import "./EventLegend.css";
 
-import { memo, useMemo, useCallback } from "react";
+import { memo, useCallback } from "react";
+
 import { FaListUl } from "react-icons/fa";
 
 import Card from "../../Common/CalendarCard/Card";
+
 import { EVENT_CONFIG } from "../../../data/eventConfig";
 
-function EventLegend({ filters = {}, toggleFilter }) {
-  /* =========================================
-     Legend Items
-  ========================================= */
+const legendItems = Object.entries(EVENT_CONFIG);
 
-  const legendItems = useMemo(() => Object.entries(EVENT_CONFIG), []);
-
+function EventLegend({
+  filters = {},
+  toggleFilter,
+}) {
   /* =========================================
      Toggle Filter
   ========================================= */
@@ -33,24 +34,34 @@ function EventLegend({ filters = {}, toggleFilter }) {
       <div className="legendList">
         {legendItems.map(([type, config]) => {
           const Icon = config.icon;
+
           const active = Boolean(filters[type]);
+
+          const className = [
+            "legendItem",
+            active ? "active" : "inactive",
+          ].join(" ");
+
+          const statusId = `legend-status-${type}`;
 
           return (
             <button
               key={type}
               type="button"
-              className={`legendItem ${
-                active ? "active" : "inactive"
-              }`}
+              className={className}
               aria-pressed={active}
               aria-label={`Toggle ${config.label}`}
+              aria-describedby={statusId}
               title={config.label}
-              onClick={() => handleToggleFilter(type)}
+              onClick={() =>
+                handleToggleFilter(type)
+              }
             >
               <div
                 className="legendIcon"
                 style={{
-                  "--legend-color": config.color,
+                  "--legend-color":
+                    config.color,
                 }}
               >
                 <Icon />
@@ -61,8 +72,10 @@ function EventLegend({ filters = {}, toggleFilter }) {
                   {config.label}
                 </span>
 
-                <small>
-                  {active ? "Visible" : "Hidden"}
+                <small id={statusId}>
+                  {active
+                    ? "Visible"
+                    : "Hidden"}
                 </small>
               </div>
             </button>
@@ -73,6 +86,7 @@ function EventLegend({ filters = {}, toggleFilter }) {
   );
 }
 
-EventLegend.displayName = "EventLegend";
+EventLegend.displayName =
+  "EventLegend";
 
 export default memo(EventLegend);

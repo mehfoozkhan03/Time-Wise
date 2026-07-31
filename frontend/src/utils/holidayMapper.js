@@ -5,9 +5,9 @@ import { EVENT_TYPES } from "../data/eventTypes";
 ========================================= */
 
 export const mapHolidayToEvent = (holiday) => ({
-  _id: `holiday-${holiday.id}`,
+  _id: `holiday-${holiday._id}`,
 
-  id: holiday.id,
+  id: holiday._id,
 
   title: holiday.title ?? "Holiday",
 
@@ -35,7 +35,8 @@ export const mapHolidayToEvent = (holiday) => ({
 
   priority: "MEDIUM",
 
-  color: "",
+  // Color and icon will come from eventConfig.js
+  color: null,
 
   visibility: "PUBLIC",
 
