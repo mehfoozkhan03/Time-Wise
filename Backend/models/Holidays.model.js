@@ -29,6 +29,7 @@ const holidaySchema = new mongoose.Schema(
         "FESTIVAL",
         "COMPANY_HOLIDAY",
         "OPTIONAL_HOLIDAY",
+        "OBSERVANCE",
       ],
     },
 
