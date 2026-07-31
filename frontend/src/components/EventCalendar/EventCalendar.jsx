@@ -73,7 +73,12 @@ export default function EventCalendar() {
   ========================================= */
 
   const allEvents = useMemo(() => {
-    return [...events, ...mappedHolidays].sort((a, b) => {
+    const calendarEvents = Array.isArray(events) ? events : [];
+    const holidayEvents = Array.isArray(mappedHolidays)
+      ? mappedHolidays
+      : [];
+
+    return [...calendarEvents, ...holidayEvents].sort((a, b) => {
       const dateDiff = new Date(a.date) - new Date(b.date);
 
       if (dateDiff !== 0) {
@@ -100,20 +105,6 @@ export default function EventCalendar() {
       );
     });
   }, [allEvents, currentDate]);
-
-  /* =========================================
-     Debug
-  ========================================= */
-
-  // useEffect(() => {
-  //   console.group("===== EVENT CALENDAR DEBUG =====");
-  //   console.log("Calendar Events:", events.length);
-  //   console.log("Redux Holidays:", holidays.length);
-  //   console.log("Mapped Holidays:", mappedHolidays.length);
-  //   console.log("All Events:", allEvents.length);
-  //   console.log("Current Month Events:", currentMonthEvents.length);
-  //   console.groupEnd();
-  // }, [events, holidays, mappedHolidays, allEvents, currentMonthEvents]);
 
   /* =========================================
      Selected Event
@@ -218,7 +209,10 @@ export default function EventCalendar() {
         />
       </div>
 
-      <EventModal event={selectedEvent} onClose={handleCloseModal} />
+      <EventModal
+        event={selectedEvent}
+        onClose={handleCloseModal}
+      />
     </section>
   );
 }
