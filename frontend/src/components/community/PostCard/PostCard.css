@@ -199,6 +199,54 @@
     border-right: 1px solid var(--divider);
 }
 
+.post-dropdown {
+    position: absolute;
+
+    top: 48px;
+    right: 0;
+
+    width: 180px;
+
+    background: var(--card);
+
+    border: 1px solid var(--card-border);
+
+    border-radius: var(--radius_md);
+
+    box-shadow: var(--shadow_md);
+
+    overflow: hidden;
+
+    z-index: 100;
+}
+
+.post-dropdown button {
+    width: 100%;
+
+    padding: 14px 16px;
+
+    border: none;
+
+    background: transparent;
+
+    text-align: left;
+
+    color: var(--text_primary);
+
+    cursor: pointer;
+
+    transition: var(--transition);
+}
+
+.post-dropdown button:hover {
+    background: var(--surface);
+}
+
+.delete-btn:hover {
+    color: #ef4444;
+}
+
+
 @media (max-width: 768px) {
 
     .post-header {

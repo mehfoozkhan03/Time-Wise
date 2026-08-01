@@ -1,5 +1,7 @@
 import { useSelector } from 'react-redux'
+
 import { FaLightbulb, FaHeart, FaUserFriends } from 'react-icons/fa'
+
 import { IoTrendingUp } from 'react-icons/io5'
 
 import './RightSidebar.css'
@@ -11,16 +13,16 @@ const RightSidebar = () => {
     .sort((a, b) => (b.likesCount || 0) - (a.likesCount || 0))
     .slice(0, 5)
 
-  const contributors = [...posts]
-    .map((post) => post.author)
-    .filter(
-      (author, index, self) =>
-        author && self.findIndex((item) => item?._id === author?._id) === index,
-    )
-    .slice(0, 5)
+  const contributors = [
+    ...new Map(
+      posts.map((post) => [post.createdBy?._id, post.createdBy]),
+    ).values(),
+  ].slice(0, 5)
 
   return (
     <aside className="right-sidebar">
+      {/* Featured Thought */}
+
       <section className="card right-sidebar-card">
         <div className="right-sidebar-title">
           <FaLightbulb />
@@ -30,16 +32,18 @@ const RightSidebar = () => {
 
         {featured ? (
           <>
-            <h4>{featured.title}</h4>
-
             <p>{featured.content}</p>
 
-            <small>— {featured.author?.name}</small>
+            <small>
+              — {featured.createdBy?.firstName} {featured.createdBy?.lastName}
+            </small>
           </>
         ) : (
           <p>No featured thought today.</p>
         )}
       </section>
+
+      {/* Trending */}
 
       <section className="card right-sidebar-card">
         <div className="right-sidebar-title">
@@ -55,9 +59,15 @@ const RightSidebar = () => {
             trendingPosts.map((post) => (
               <div key={post._id} className="trending-item">
                 <div>
-                  <strong>{post.author?.name}</strong>
+                  <strong>
+                    {post.createdBy?.firstName} {post.createdBy?.lastName}
+                  </strong>
 
-                  <small>{post.title || 'Community Post'}</small>
+                  <small>
+                    {post.content.length > 25
+                      ? `${post.content.slice(0, 25)}...`
+                      : post.content}
+                  </small>
                 </div>
 
                 <span>
@@ -71,6 +81,8 @@ const RightSidebar = () => {
         </div>
       </section>
 
+      {/* Contributors */}
+
       <section className="card right-sidebar-card">
         <div className="right-sidebar-title">
           <FaUserFriends />
@@ -82,16 +94,20 @@ const RightSidebar = () => {
           {contributors.length === 0 ? (
             <small>No contributors yet.</small>
           ) : (
-            contributors.map((user) => (
-              <div key={user._id} className="contributor-item">
+            contributors.map((person) => (
+              <div key={person._id} className="contributor-item">
                 <div className="contributor-avatar">
-                  {user.name?.charAt(0).toUpperCase()}
+                  {`${person.firstName?.[0] || ''}${
+                    person.lastName?.[0] || ''
+                  }`.toUpperCase()}
                 </div>
 
                 <div className="contributor-info">
-                  <strong>{user.name}</strong>
+                  <strong>
+                    {person.firstName} {person.lastName}
+                  </strong>
 
-                  <small>{user.designation}</small>
+                  <small>{person.designation || 'Employee'}</small>
                 </div>
               </div>
             ))
