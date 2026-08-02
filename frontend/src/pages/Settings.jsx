@@ -1,4 +1,3 @@
-import "../styles/Setting.css"
 import { useLocation, Outlet } from "react-router-dom";
 
 import { FaRegUser } from "react-icons/fa";
@@ -10,6 +9,7 @@ import { RiPaletteLine } from "react-icons/ri";
 import { FaLock } from "react-icons/fa";
 import { GoDatabase } from "react-icons/go";
 import { MdOutlineContactSupport } from "react-icons/md";
+import "../styles/Setting.css"
 
 export const Settings = () => {
   const location = useLocation();
