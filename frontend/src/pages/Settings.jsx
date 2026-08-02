@@ -1,16 +1,15 @@
 import "../styles/Setting.css"
-import { SettingSidebar } from "../components/Setting/SettingSidebar/SettingSidebar";
-
 import { useLocation, Outlet } from "react-router-dom";
 
 import { FaRegUser } from "react-icons/fa";
+import { FaCalendarAlt } from "react-icons/fa";
+import { SettingSidebar } from "../components/Setting/SettingSidebar/SettingSidebar";
 import { MdOutlineWatchLater } from "react-icons/md";
 import { MdNotifications } from "react-icons/md";
 import { RiPaletteLine } from "react-icons/ri";
 import { FaLock } from "react-icons/fa";
 import { GoDatabase } from "react-icons/go";
 import { MdOutlineContactSupport } from "react-icons/md";
-import { FaCalendarAlt } from "react-icons/fa";
 
 export const Settings = () => {
   const location = useLocation();
