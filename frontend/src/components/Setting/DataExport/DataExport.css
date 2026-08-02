@@ -1,21 +1,21 @@
-.dataexport-container{
+.dataexport-container {
     padding: 20px;
     display: flex;
     flex-direction: column;
     gap: 25px;
 }
-.dataexport-heading{
+.dataexport-heading {
     padding-top: 20px;
 }
-.dataexport-heading>h2{
+.dataexport-heading>h2 {
     font-size: 18px;
 }
-.dataexport-heading>p{
+.dataexport-heading>p {
     font-size: 14px;
 }
 
 /* Export attendance data */
-.export-attendance-data{
+.export-attendance-data {
     padding: 20px;
     display: flex;
     flex-direction: column;
@@ -24,37 +24,38 @@
     background-color: var(--surface);
     box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
 }
-.attendance-export-heading{
+.attendance-export-heading {
     border-bottom: 1px solid var(--border);
     padding-bottom: 20px;
 }
-.attendance-export-heading>h3{
+.attendance-export-heading>h3 {
     font-size: 16px;
 }
-.attendance-range-format{
+.attendance-range-format {
     padding-top: 10px;
     display: flex;
     justify-content: space-between;
 }
-.date-range{
+.date-range {
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
+
 .data-range-selection,
-.file-format{
+.file-format {
     display: flex;
     flex-direction: column;
     gap: 7px;
 }
-.attendance-range-format select{
+.attendance-range-format select {
     padding: 10px;
     width: 200px;
     border-radius: 10px;
     background-color: transparent;
     color: var(--text_primary);
 }
-.download-attendance{
+.download-attendance {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -63,11 +64,11 @@
     padding: 12px;
     border-radius: 10px;
 }
-.download-icon{
+.download-icon {
     color: white;
     font-size: 18px;
 }
-.download-attendance>button{
+.download-attendance>button {
     background-color: transparent;
     color: white;
     font-weight: 600;
@@ -75,7 +76,7 @@
 }
 
 /* Recent export */
-.recent-export{
+.recent-export {
     padding: 20px;
     display: flex;
     flex-direction: column;
@@ -84,58 +85,61 @@
     background-color: var(--surface);
     box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
 }
-.recent-heading{
+.recent-heading {
     border-bottom: 1px solid var(--border);
     padding-bottom: 20px;
 }
-.recent-heading>h3{
+.recent-heading>h3 {
     font-size: 16px;
 }
-.recent-export-content{
+.recent-export-content {
     display: flex;
     flex-direction: column;
     gap: 15px;
 }
-.recent-export-content>div{
+.recent-export-content>div {
     padding-top: 5px;
     padding-bottom: 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
+
 .attendance-report>div>h3,
 .monthly-summary>div>h3,
-.leave-balance-report>div>h3{
+.leave-balance-report>div>h3 {
     font-size: 14px;
 }
+
 .attendance-report>div>p,
 .monthly-summary>div>p,
-.leave-balance-report>div>p{
+.leave-balance-report>div>p {
     font-size: 12px;
 }
+
 .attendance-report,
-.monthly-summary{
+.monthly-summary {
     border-bottom: 1px solid var(--border);
 }
-.download-container{
+.download-container {
     display: flex;
     align-items: center;
     gap: 7px;
 }
-.fidownload{
+.fidownload {
     color: blue;
 }
-.download-container>button{
+.download-container>button {
     color: blue;
     background-color: transparent;
     font-size: 13px;
 }
-.download-container>button:hover{
+.download-container>button:hover {
     text-decoration: underline;
 }
 
 /* Data retention */
-.data-retention{
+.data-retention {
     padding: 20px;
     display: flex;
     flex-direction: column;
@@ -144,16 +148,34 @@
     background-color: var(--surface);
     box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
 }
-.retention-heading{
+.retention-heading {
     border-bottom: 1px solid var(--border);
     padding-bottom: 20px;
 }
-.retention-heading>h3{
+.retention-heading>h3 {
     font-size: 14px;
 }
-.retention-content{
+.retention-content {
     padding-top: 5px;
 }
-.retention-content>p{
+.retention-content>p {
     font-size: 14px;
+}
+@media (max-width: 430px) {
+    .dataexport-container {
+        padding: 13px 20px;
+    }
+
+    .dataexport-heading {
+        padding: 0;
+    }
+
+    .attendance-range-format {
+        flex-direction: column-reverse;
+        gap: 17px;
+    }
+
+    .date-range {
+        gap: 15px;
+    }
 }

@@ -1,6 +1,7 @@
-import "./Notification.css"
-import { SwitchBtn } from "../../SwichBtn/SwitchBtn";
 import { useSelector } from "react-redux";
+
+import { SwitchBtn } from "../../SwichBtn/SwitchBtn";
+import "./Notification.css"
 
 export const Notification = () => {
 

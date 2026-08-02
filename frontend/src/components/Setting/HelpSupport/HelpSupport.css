@@ -1,75 +1,89 @@
-.helpSupport-container{
+.helpSupport-container {
     padding: 20px;
     display: flex;
     flex-direction: column;
     gap: 25px;
 }
-.helpSupport-header>h3{
+
+.helpSupport-header>h3 {
     font-size: 20px;
     color: var(--text_primary);
 }
-.helpSupport-header>span{
+
+.helpSupport-header>span {
     font-size: 12px;
     color: var(--text_secondary);
 }
-.helpSupport-content{
+
+.helpSupport-content {
     width: 900px;
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
-.helpSupport-FAQ{
+
+.helpSupport-FAQ {
     border-radius: 20px;
     border: 1px solid var(--border);
     background-color: var(--surface);
 }
-.helpSupport-FAQ-heading{
+
+.helpSupport-FAQ-heading {
     padding: 20px;
     border-bottom: 1px solid var(--border);
 }
-.helpSupport-FAQ-heading>h3{
+
+.helpSupport-FAQ-heading>h3 {
     font-size: 16px;
     color: var(--text_primary);
 }
-.helpSupport-FAQ-content{
+
+.helpSupport-FAQ-content {
     padding: 20px 20px 0px 20px;
     display: flex;
     flex-direction: column;
     border-bottom: 1px solid var(--border);
 }
-.helpSupport-FAQ-content>div{
+
+.helpSupport-FAQ-content>div {
     padding-bottom: 10px;
 }
-.helpSupport-FAQ-question{
+
+.helpSupport-FAQ-question {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
-.helpSupport-FAQ-answer{
+
+.helpSupport-FAQ-answer {
     font-size: 14px;
     color: var(--text_secondary);
 }
 
 /* help support contact */
-.helpSupport-contact{
+.helpSupport-contact {
     border-radius: 20px;
     border: 1px solid var(--border);
     background-color: var(--surface);
 }
-.helpSupport-contact-heading{
+
+.helpSupport-contact-heading {
     padding: 20px;
     border-bottom: 1px solid var(--border);
 }
-.helpSupport-contact-heading>h3{
+
+.helpSupport-contact-heading>h3 {
     font-size: 16px;
 }
-.helpSupport-contact-content{
+
+.helpSupport-contact-content {
     padding: 20px 30px;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 15px;
 }
-.helpSupport-contact-content>div{
+
+.helpSupport-contact-content>div {
     padding: 20px;
     border-radius: 10px;
     display: flex;
@@ -77,32 +91,38 @@
     gap: 15px;
     border: 1px solid var(--border);
 }
-.helpSupport-contact-content>div:hover{
+
+.helpSupport-contact-content>div:hover {
     border: 1px solid var(--secondary);
 }
-.helpSupport-contact-request{
+
+.helpSupport-contact-request {
     display: flex;
     align-items: center;
 }
-.helpSupport-contact-title{
+
+.helpSupport-contact-title {
     display: flex;
     flex-direction: column;
 }
-.helpSupport-contact-title>p{
+
+.helpSupport-contact-title>p {
     font-size: 15px;
     color: var(--text_primary);
 }
-.helpSupport-contact-title>span{
+
+.helpSupport-contact-title>span {
     font-size: 12px;
     color: var(--text_secondary);
 }
-.helpSupport-contact-request>p{
+
+.helpSupport-contact-request>p {
     color: var(--primary);
     font-size: 13px;
 }
 
 /* App version */
-.helpSupport-appVersion{
+.helpSupport-appVersion {
     padding: 20px;
     border: 1px solid var(--border);
     border-radius: 20px;
@@ -110,23 +130,159 @@
     justify-content: space-between;
     align-items: center;
 }
-.appVersion-heading{
+
+.appVersion-heading {
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
-.appVersion-heading>span{
+
+.appVersion-heading>span {
     font-size: 13px;
     color: var(--text_secondary);
 }
-.appVersion-heading>p{
+
+.appVersion-heading>p {
     font-size: 16px;
     color: var(--text_primary);
 }
-.up-to-date{
+
+.up-to-date {
     color: #1dce90;
     background-color: #073424;
     padding: 5px 10px;
     border-radius: 10px;
     font-size: 13px;
+}
+
+/* Mobile Media Query */
+@media (max-width: 430px) {
+    .helpSupport-container {
+        padding: 12px;
+        gap: 15px;
+    }
+
+    .helpSupport-header>h3 {
+        font-size: 16px;
+    }
+
+    .helpSupport-header>span {
+        font-size: 11px;
+    }
+
+    .helpSupport-content {
+        width: 100%;
+        gap: 15px;
+    }
+
+    .helpSupport-FAQ {
+        border-radius: 12px;
+    }
+
+    .helpSupport-FAQ-heading {
+        padding: 12px 15px;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .helpSupport-FAQ-heading>h3 {
+        font-size: 14px;
+    }
+
+    .helpSupport-FAQ-content {
+        padding: 12px 15px 0px 15px;
+    }
+
+    .helpSupport-FAQ-content>div {
+        padding-bottom: 8px;
+    }
+
+    .helpSupport-FAQ-question {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .helpSupport-FAQ-question>p {
+        font-size: 13px;
+    }
+
+    .helpSupport-FAQ-question svg {
+        font-size: 18px;
+        flex-shrink: 0;
+    }
+
+    .helpSupport-FAQ-answer {
+        font-size: 12px;
+        padding: 8px 0;
+    }
+
+    /* help support contact */
+    .helpSupport-contact {
+        border-radius: 12px;
+    }
+
+    .helpSupport-contact-heading {
+        padding: 12px 15px;
+    }
+
+    .helpSupport-contact-heading>h3 {
+        font-size: 14px;
+    }
+
+    .helpSupport-contact-content {
+        padding: 12px;
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+        gap: 10px;
+    }
+
+    .helpSupport-contact-content>div {
+        padding: 12px;
+        border-radius: 8px;
+        gap: 10px;
+    }
+
+    .helpSupport-contact-title>p {
+        font-size: 13px;
+    }
+
+    .helpSupport-contact-title>span {
+        font-size: 11px;
+    }
+
+    .helpSupport-contact-request>p {
+        font-size: 12px;
+    }
+
+    .helpSupport-contact-request svg {
+        font-size: 16px;
+    }
+
+    /* App version */
+    .helpSupport-appVersion {
+        padding: 12px 15px;
+        border-radius: 12px;
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+    }
+
+    .appVersion-heading {
+        gap: 5px;
+    }
+
+    .appVersion-heading>span {
+        font-size: 11px;
+    }
+
+    .appVersion-heading>p {
+        font-size: 14px;
+    }
+
+    .up-to-date {
+        padding: 6px 12px;
+        border-radius: 8px;
+        font-size: 12px;
+    }
 }
