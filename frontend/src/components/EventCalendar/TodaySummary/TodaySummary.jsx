@@ -2,7 +2,10 @@ import "./TodaySummary.css";
 
 import { memo, useMemo } from "react";
 
-import { FaChartPie, FaRegCalendarCheck } from "react-icons/fa";
+import {
+  FaChartPie,
+  FaRegCalendarCheck,
+} from "react-icons/fa";
 
 import Card from "../../Common/CalendarCard/Card";
 import EmptyState from "../../Common/EmptyState/EmptyState";
@@ -16,64 +19,11 @@ function TodaySummary({ events = [] }) {
   ========================================= */
 
   const summaryData = useMemo(() => {
-    return getTodaySummary(events, EVENT_CONFIG).filter(
-      (item) => item.config
-    );
+    return getTodaySummary(
+      events,
+      EVENT_CONFIG
+    ).filter((item) => item.config);
   }, [events]);
-
-  /* =========================================
-     Summary Content
-  ========================================= */
-
-  const summaryContent = useMemo(() => {
-    if (summaryData.length === 0) {
-      return (
-        <EmptyState
-          icon={<FaRegCalendarCheck />}
-          title="No Events Today"
-          description="No scheduled events for today."
-        />
-      );
-    }
-
-    return (
-      <div className="summaryList">
-        {summaryData.map((item) => {
-          const Icon = item.config.icon;
-
-          return (
-            <div
-              key={item.type}
-              className="summaryItem"
-            >
-              <div className="summaryLeft">
-                <div
-                  className="summaryIcon"
-                  style={{
-                    "--summary-color": item.config.color,
-                  }}
-                >
-                  <Icon />
-                </div>
-
-                <div className="summaryContent">
-                  <span className="summaryTitle">
-                    {item.config.label}
-                  </span>
-
-                  <small>Today's Events</small>
-                </div>
-              </div>
-
-              <strong className="summaryCount">
-                {item.count}
-              </strong>
-            </div>
-          );
-        })}
-      </div>
-    );
-  }, [summaryData]);
 
   return (
     <Card
@@ -81,11 +31,57 @@ function TodaySummary({ events = [] }) {
       icon={<FaChartPie />}
       className="summaryCard"
     >
-      {summaryContent}
+      {summaryData.length === 0 ? (
+        <EmptyState
+          icon={<FaRegCalendarCheck />}
+          title="No Events Today"
+          description="No scheduled events for today."
+        />
+      ) : (
+        <div className="summaryList">
+          {summaryData.map((item) => {
+            const Icon = item.config.icon;
+
+            return (
+              <div
+                key={item.type}
+                className="summaryItem"
+              >
+                <div className="summaryLeft">
+                  <div
+                    className="summaryIcon"
+                    style={{
+                      "--summary-color":
+                        item.config.color,
+                    }}
+                  >
+                    <Icon />
+                  </div>
+
+                  <div className="summaryContent">
+                    <span className="summaryTitle">
+                      {item.config.label}
+                    </span>
+
+                    <small>
+                      Today's Events
+                    </small>
+                  </div>
+                </div>
+
+                <strong className="summaryCount">
+                  {item.count}
+                </strong>
+              </div>
+            );
+          })}
+        </div>
+      )}
     </Card>
   );
 }
 
-TodaySummary.displayName = "TodaySummary";
+TodaySummary.displayName =
+  "TodaySummary";
 
 export default memo(TodaySummary);

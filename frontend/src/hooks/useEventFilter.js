@@ -2,15 +2,17 @@ import { useMemo, useState, useCallback } from "react";
 
 import { EVENT_CONFIG } from "../data/eventConfig";
 
-const DEFAULT_FILTERS = Object.keys(EVENT_CONFIG).reduce((acc, key) => {
-  acc[key] = true;
-  return acc;
-}, {});
+/* =========================================
+   Default Filters
+========================================= */
 
-const EMPTY_FILTERS = Object.keys(EVENT_CONFIG).reduce((acc, key) => {
-  acc[key] = false;
-  return acc;
-}, {});
+const DEFAULT_FILTERS = Object.fromEntries(
+  Object.keys(EVENT_CONFIG).map((key) => [key, true]),
+);
+
+const EMPTY_FILTERS = Object.fromEntries(
+  Object.keys(EVENT_CONFIG).map((key) => [key, false]),
+);
 
 export default function useEventFilter(events = [], currentDate) {
   /* =========================================
@@ -56,6 +58,7 @@ export default function useEventFilter(events = [], currentDate) {
     if (!currentDate) return events;
 
     const currentMonth = currentDate.getMonth();
+
     const currentYear = currentDate.getFullYear();
 
     return events.filter((event) => {
@@ -63,9 +66,12 @@ export default function useEventFilter(events = [], currentDate) {
 
       const date = new Date(event.date);
 
+      if (Number.isNaN(date.getTime())) {
+        return false;
+      }
+
       return (
-        date.getFullYear() === currentYear &&
-        date.getMonth() === currentMonth
+        date.getFullYear() === currentYear && date.getMonth() === currentMonth
       );
     });
   }, [events, currentDate]);
@@ -82,11 +88,13 @@ export default function useEventFilter(events = [], currentDate) {
       .filter(Boolean);
 
     return monthEvents.filter((event) => {
-      if (!event?.type) {
+      const eventType = String(event?.type ?? "").toUpperCase();
+
+      if (!eventType) {
         return false;
       }
 
-      if (!filters[event.type]) {
+      if (!filters[eventType]) {
         return false;
       }
 
@@ -96,19 +104,19 @@ export default function useEventFilter(events = [], currentDate) {
 
       const searchableText = [
         event.title,
+        event.displayName,
         event.description,
         event.employeeName,
         event.department,
         event.designation,
-        EVENT_CONFIG[event.type]?.label,
+        event.location,
+        EVENT_CONFIG[eventType]?.label,
       ]
         .filter(Boolean)
         .join(" ")
         .toLowerCase();
 
-      return keywords.every((keyword) =>
-        searchableText.includes(keyword)
-      );
+      return keywords.every((keyword) => searchableText.includes(keyword));
     });
   }, [monthEvents, filters, searchTerm]);
 
