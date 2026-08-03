@@ -1,0 +1,53 @@
+.modal-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  background: rgba(0, 0, 0, 0.6);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  z-index: 1000;
+}
+
+.modal-card {
+  width: 550px;
+
+  padding: 24px;
+
+  background: var(--card);
+
+  border-radius: 18px;
+
+  border: 1px solid var(--card-border);
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 18px;
+}
+
+.modal-card textarea {
+  min-height: 180px;
+
+  resize: none;
+
+  border: 1px solid var(--border);
+
+  background: var(--surface);
+
+  color: var(--text_primary);
+
+  border-radius: 12px;
+
+  padding: 16px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+
+  gap: 12px;
+}
