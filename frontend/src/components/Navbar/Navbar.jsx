@@ -195,24 +195,6 @@ export default function Navbar() {
               )}
             </button>
 
-            {/* {notificationOpen && (
-            <div className="notification_dropdown">
-              <h4>Notifications</h4>
-
-              <div className="notification_item">
-                Manager approved your leave.
-              </div>
-
-              <div className="notification_item">John liked your thought.</div>
-
-              <div className="notification_item">
-                Performance review available.
-              </div>
-
-              <button className="view_all_btn">View All</button>
-            </div>
-          )} */}
-
             {notificationOpen && (
               <div className="notification_dropdown">
                 <h4>Notifications</h4>
