@@ -35,7 +35,9 @@ export const createPost = async (req, res) => {
       title: "New Post",
       message: `${currentUser.firstName} ${currentUser.lastName} created a new post.`,
       type: "post",
+      referenceModel: "Post",
       referenceId: post._id,
+      audienceType: "all",
     });
 
     const populatedPost = await postModel

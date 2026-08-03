@@ -81,12 +81,12 @@ const userSchema = new mongoose.Schema(
       default: null,
     },
 
-    notifications: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Notification',
-      },
-    ],
+    // notifications: [
+    //   {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: 'Notification',
+    //   },
+    // ],
 
     attendance: [
       {
