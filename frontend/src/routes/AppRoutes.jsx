@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, Navigate } from 'react-router-dom';
 
 import MainLayout from '../layouts/MainLayout';
 import Home from './../pages/Home';
@@ -42,6 +42,7 @@ import { DashboardAnnouncement } from './../components/Dashboard/DashboardAnnoun
 import { DashboardReport } from './../components/Dashboard/DashboardReport/DashboardReport';
 import { DashboardSetting } from './../components/Dashboard/DashboardSetting/DashboardSetting';
 import { ScrollToTopButton } from '../components/ScrollToTop/scrollToTop';
+import { SinglePost } from '../pages/SinglePost/SinglePost';
 
 export const AppRoutes = () => {
   return (
@@ -114,10 +115,18 @@ export const AppRoutes = () => {
           {/* ================= PUBLIC PAGES ================= */}
 
           <Route
-            path="/community"
+            path="/community/:filter?"
             element={
               <PrivateRoutes>
                 <Community />
+              </PrivateRoutes>
+            }
+          />
+          <Route
+            path="/community/post/:id"
+            element={
+              <PrivateRoutes>
+                <SinglePost />
               </PrivateRoutes>
             }
           />
@@ -134,7 +143,7 @@ export const AppRoutes = () => {
           {/* ================= SETTINGS ================= */}
 
           <Route path="/settings" element={<Settings />}>
-            <Route index element={<Profile />} />
+            <Route index element={<Navigate to="profile" replace />} />
             <Route path="profile" element={<Profile />} />
             <Route path="attendance" element={<SettingAttendance />} />
             <Route path="calendar" element={<Calendar />} />

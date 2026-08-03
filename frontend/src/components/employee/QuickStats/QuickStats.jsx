@@ -1,40 +1,38 @@
-import './QuickStats.css'
+import { useSelector } from "react-redux";
+import { FaCalendarCheck, FaBullseye, FaFire, FaClock } from "react-icons/fa";
 
-import { useSelector } from 'react-redux'
-
-import Card from '../../Card/Card'
-
-import { FaCalendarCheck, FaBullseye, FaFire, FaClock } from 'react-icons/fa'
+import "./QuickStats.css";
+import Card from "../../Card/Card";
 
 export default function QuickStats() {
-  const { stats } = useSelector((state) => state.dashboard)
+  const { stats } = useSelector((state) => state.dashboard);
 
   const quickStats = [
     {
-      title: 'Attendance',
+      title: "Attendance",
       value: `${stats.attendancePercentage}%`,
       icon: <FaCalendarCheck />,
-      color: '#22c55e',
+      color: "#22c55e",
     },
     {
-      title: 'Work Efficiency',
+      title: "Work Efficiency",
       value: `${stats.productivity}%`,
       icon: <FaBullseye />,
-      color: '#29A3E0',
+      color: "#29A3E0",
     },
     {
-      title: 'Monthly Hours',
+      title: "Monthly Hours",
       value: `${stats.monthlyHours}h`,
       icon: <FaClock />,
-      color: '#8b5cf6',
+      color: "#8b5cf6",
     },
     {
-      title: 'Current Streak',
+      title: "Current Streak",
       value: `${stats.dayStreak} Days`,
       icon: <FaFire />,
-      color: '#f59e0b',
+      color: "#f59e0b",
     },
-  ]
+  ];
 
   return (
     <section className="profile_stats">
@@ -58,5 +56,5 @@ export default function QuickStats() {
         </Card>
       ))}
     </section>
-  )
+  );
 }
