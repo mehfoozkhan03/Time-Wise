@@ -1,40 +1,25 @@
-// import axios from "axios";
+import api from "./api";
 
-// const API = import.meta.env.VITE_API_URL;
+// ======================================================
+// Get All Notifications
+// ======================================================
 
-// export const notificationService = {
-//   getNotifications() {
-//     return axios.get(`${API}/notifications`, {
-//       withCredentials: true,
-//     });
-//   },
-// };
-
-import axios from "axios";
-
-const API = import.meta.env.VITE_API_URL;
-
-export const getNotifications = async () => {
-    return axios.get(`${API}/notifications`, {
-        withCredentials: true,
-    });
+export const getNotifications = () => {
+  return api.get("/notifications");
 };
 
-export const markNotificationAsRead = async (id) => {
-    return axios.patch(
-        `${API}/notifications/${id}/read`,
-        {},
-        {
-            withCredentials: true,
-        }
-    );
+// ======================================================
+// Mark Notification As Read
+// ======================================================
+
+export const markNotificationAsRead = (id) => {
+  return api.patch(`/notifications/${id}/read`);
 };
 
-export const deleteNotification = async (id) => {
-    return axios.delete(
-        `${API}/notifications/${id}`,
-        {
-            withCredentials: true,
-        }
-    );
+// ======================================================
+// Delete Notification
+// ======================================================
+
+export const deleteNotification = (id) => {
+  return api.delete(`/notifications/${id}`);
 };
