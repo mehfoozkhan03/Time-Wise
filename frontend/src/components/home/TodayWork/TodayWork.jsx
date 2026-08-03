@@ -1,13 +1,11 @@
-import "./TodayWork.css";
-
 import { useEffect, useState } from "react";
+import { FaCircle, FaClock, FaCoffee, FaSignInAlt } from "react-icons/fa";
 
+import "./TodayWork.css";
 import Card from "../../Card/Card";
 import BreakModal from "./BreakModal";
-
 import useAttendance from "../../../hooks/useAttendance";
-
-import { FaCircle, FaClock, FaCoffee, FaSignInAlt } from "react-icons/fa";
+import { PulseDot } from "../../PulseDot/pulseDot";
 
 export default function TodayWork() {
   const {
@@ -125,7 +123,7 @@ export default function TodayWork() {
           </div>
 
           <div className={`today_status ${status}`}>
-            <FaCircle className="status_dot" />
+            <PulseDot />
             {getStatus()}
           </div>
         </div>

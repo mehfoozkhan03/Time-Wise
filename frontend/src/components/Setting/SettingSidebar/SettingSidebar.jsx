@@ -1,8 +1,8 @@
-import "./SettingSidebar.css";
 import { useTheme } from "../../../context/ThemeContext";
-
+import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 
+import "./SettingSidebar.css";
 import { FaRegUser } from "react-icons/fa";
 import { MdOutlineWatchLater } from "react-icons/md";
 import { MdNotifications } from "react-icons/md";
@@ -11,7 +11,6 @@ import { FaLock } from "react-icons/fa";
 import { GoDatabase } from "react-icons/go";
 import { MdOutlineContactSupport } from "react-icons/md";
 import { FaCalendarAlt } from "react-icons/fa";
-import { useSelector } from "react-redux";
 
 export const SettingSidebar = () => {
   const { user } = useSelector((state) => state.auth);
