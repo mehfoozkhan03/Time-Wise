@@ -1,8 +1,8 @@
-import "./HelpSupport.css";
+import { useState } from "react";
 
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { IoIosArrowRoundForward } from "react-icons/io";
-import { useState } from "react";
+import "./HelpSupport.css";
 
 export const HelpSupport = () => {
   const [openIndex, setOpenIndex] = useState(null);

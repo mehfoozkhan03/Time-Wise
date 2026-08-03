@@ -1,10 +1,10 @@
-import "./Profile.css";
+import { useSelector } from 'react-redux';
 
 import { CiUser } from "react-icons/ci";
 import { MdOutlineEmail } from "react-icons/md";
 import { FaPhoneAlt } from "react-icons/fa";
 import { MdLocationOn } from "react-icons/md";
-import { useSelector } from 'react-redux';
+import "./Profile.css";
 
 export const Profile = () => {
   const { user } = useSelector((state) => state.auth);

@@ -1,10 +1,9 @@
-import "./Appearance.css";
-
+import { useTheme } from "../../../context/ThemeContext";
 
 import { MdOutlineLightMode } from "react-icons/md";
 import { MdOutlineDarkMode } from "react-icons/md";
 import { CiLaptop } from "react-icons/ci";
-import { useTheme } from "../../../context/ThemeContext";
+import "./Appearance.css";
 
 
 export const Appearance = () => {
