@@ -9,9 +9,11 @@ import {
   HiOutlineChatBubbleLeft,
   HiOutlineShare,
   HiOutlineEllipsisHorizontal,
+  HiOutlineBookmark,
+  HiBookmark,
 } from 'react-icons/hi2'
 
-import { toggleLikePost } from '../../../store/postSlice'
+import { toggleLikePost, toggleSavePost } from '../../../store/postSlice'
 
 import CommentSection from '../CommentSection/CommentSection'
 import PostMenu from '../PostMenu/PostMenu'
@@ -29,7 +31,9 @@ const PostCard = ({ post }) => {
   const [showMenu, setShowMenu] = useState(false)
   const [showEditModal, setShowEditModal] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
-  const [loading, setLoading] = useState(false)
+
+  const [likeLoading, setLikeLoading] = useState(false)
+  const [saveLoading, setSaveLoading] = useState(false)
 
   const menuRef = useRef(null)
 
@@ -48,6 +52,7 @@ const PostCard = ({ post }) => {
   }, [])
 
   const liked = post.isLiked || false
+  const saved = post.isSaved || false
 
   const likeCount = post.likesCount || 0
   const commentCount = post.commentsCount || 0
@@ -70,16 +75,30 @@ const PostCard = ({ post }) => {
   const isOwner = post.createdBy?._id === user?._id
 
   const handleLike = async () => {
-    if (loading) return
+    if (likeLoading) return
 
     try {
-      setLoading(true)
+      setLikeLoading(true)
 
       await dispatch(toggleLikePost(post._id)).unwrap()
     } catch (error) {
       console.error(error)
     } finally {
-      setLoading(false)
+      setLikeLoading(false)
+    }
+  }
+
+  const handleSave = async () => {
+    if (saveLoading) return
+
+    try {
+      setSaveLoading(true)
+
+      await dispatch(toggleSavePost(post._id)).unwrap()
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setSaveLoading(false)
     }
   }
 
@@ -98,8 +117,6 @@ const PostCard = ({ post }) => {
   return (
     <>
       <article className="post-card">
-        {/* Header */}
-
         <div className="post-header">
           <div className="post-user">
             <div className="post-avatar">{initials || 'U'}</div>
@@ -118,12 +135,7 @@ const PostCard = ({ post }) => {
           </div>
 
           {isOwner && (
-            <div
-              ref={menuRef}
-              style={{
-                position: 'relative',
-              }}
-            >
+            <div ref={menuRef} style={{ position: 'relative' }}>
               <button
                 className="post-menu"
                 onClick={() => setShowMenu((prev) => !prev)}
@@ -147,8 +159,6 @@ const PostCard = ({ post }) => {
           )}
         </div>
 
-        {/* Content */}
-
         <div className="post-content">
           <p>{post.content}</p>
 
@@ -157,10 +167,8 @@ const PostCard = ({ post }) => {
           )}
         </div>
 
-        {/* Actions */}
-
         <div className="post-actions">
-          <button onClick={handleLike} disabled={loading}>
+          <button onClick={handleLike} disabled={likeLoading}>
             {liked ? <HiHeart /> : <HiOutlineHeart />}
             Like
             {likeCount > 0 && <span>{likeCount}</span>}
@@ -172,24 +180,23 @@ const PostCard = ({ post }) => {
             {commentCount > 0 && <span>{commentCount}</span>}
           </button>
 
+          <button onClick={handleSave} disabled={saveLoading}>
+            {saved ? <HiBookmark /> : <HiOutlineBookmark />}
+            Save
+          </button>
+
           <button onClick={handleShare}>
             <HiOutlineShare />
             Share
           </button>
         </div>
 
-        {/* Comments */}
-
         {showComments && <CommentSection postId={post._id} />}
       </article>
-
-      {/* Edit Modal */}
 
       {showEditModal && (
         <EditPostModal post={post} onClose={() => setShowEditModal(false)} />
       )}
-
-      {/* Delete Modal */}
 
       {showDeleteModal && (
         <DeletePostModal
