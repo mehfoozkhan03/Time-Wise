@@ -1,108 +1,108 @@
-.setting-profile-container{
+.setting-profile-container {
     display: flex;
     flex-direction: column;
     gap: 25px;
     padding: 20px;
 }
-.setting-profile_heading{
+.setting-profile_heading {
     padding-top: 20px;
 }
-.setting-profile_heading>p{
+.setting-profile_heading>p {
     font-size: 14px;
 }
 
-.setting-avtar-main-container{
+.setting-avtar-main-container {
     border-radius: 10px;
     height: 200px;
     box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
     background-color: var(--surface);
 }
-.setting-avatar-heading{
+.setting-avatar-heading {
     height: 30%;
     padding: 20px;
     border-bottom: 1px solid var(--border);
 }
-.setting-avatar-heading>h2{
+.setting-avatar-heading>h2 {
     font-size: 16px;
 }
 
-.setting-profile-card{
+.setting-profile-card {
     height: 70%;
-    display:flex;
-    align-items:center;
-    gap:20px;
+    display: flex;
+        align-items: center;
+        gap: 20px;
     padding: 20px 0;
 }
 
-.setting-avatar-container{
+.setting-avatar-container {
     padding: 20px;
-    position:relative;
+    position: relative;
 }
 
-.setting-avatar{
-    width:70px;
-    height:70px;
-    border-radius:50%;
-    background:#6C63FF;
-    color:#fff;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-size:30px;
-    font-weight:bold;
+.setting-avatar {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: #6C63FF;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+    font-weight: bold;
 }
 
-.setting-camera-btn{
-    position:absolute;
-    bottom:0;
-    right:-2px;
-    width:26px;
-    height:26px;
-    border-radius:50%;
-    background:#4F46E5;
-    color:#fff;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    cursor:pointer;
-    border:2px solid #fff;
-    font-size:14px;
+.setting-camera-btn {
+    position: absolute;
+    bottom: 13px;
+    right: 13px;
+    width: 27px;
+    height: 27px;
+    border-radius: 50%;
+    background: #4F46E5;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    padding: 0 2px;
+    cursor: pointer;
+    border: 2px solid #fff;
+    font-size: 15px;
 }
 
-.setting-profile-info h2{
-    font-size:16px;
+.setting-profile-info h2 {
+    font-size: 16px;
 }
 
-.setting-profile-info p{
-    color:#666;
-    margin-bottom:12px;
+.setting-profile-info p {
+    color: #666;
+    margin-bottom: 12px;
     font-size: 12px;
 }
 
-.setting-upload-link{
-    color:#4F46E5;
-    cursor:pointer;
-    font-weight:600;
+.setting-upload-link {
+    color: #4F46E5;
+    cursor: pointer;
+    font-weight: 600;
 }
 
-.setting-upload-link:hover{
-    text-decoration:underline;
+.setting-upload-link:hover {
+    text-decoration: underline;
 }
 
 /* Personal Information */
-.personal-information-container{
+.personal-information-container {
     border-radius: 10px;
     box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
     background-color: var(--surface);
 }
-.personal-information-heading{
+.personal-information-heading {
     padding: 20px;
     border-bottom: 1px solid var(--border);
 }
-.personal-information-heading>h2{
+.personal-information-heading>h2 {
     font-size: 16px;
 }
-.personal-information-form{
+.personal-information-form {
     padding: 20px;
     width: 100%;
     padding-top: 15px;
@@ -110,28 +110,28 @@
     flex-direction: column;
     gap: 25px;
 }
-.top-data{
+.top-data {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
 }
-.top-data input{
+.top-data input {
     width: 100%;
 }
-.top-data>div{
+.top-data>div {
     padding: 7px;
     display: flex;
     flex-direction: column;
     gap: 7px;
 }
-.top-data>div>div{
+.top-data>div>div {
     padding-left: 10px;
     display: flex;
     align-items: center;
     border: 1px solid var(--border);
     border-radius: 10px;
 }
-.top-data>div>div>input{
+.top-data>div>div>input {
     padding: 10px;
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
@@ -140,17 +140,17 @@
     outline: none;
     color: var(--text_secondary) !important;
 }
-.top-data>div>div>input::placeholder{
+.top-data>div>div>input::placeholder {
     color: var(--text_secondary);
 }
-.bio{
+.bio {
     width: 100%;
     padding: 10px;
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
-.bio>textarea{
+.bio>textarea {
     width: 100%;
     padding: 10px;
     border-radius: 10px;
@@ -159,7 +159,7 @@
     color: var(--text_secondary);
 }
 
-.save_changes{
+.save_changes {
     padding: 20px 20px;
     display: flex;
     justify-content: space-between;
@@ -168,10 +168,168 @@
     box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
     background-color: var(--surface) !important;
 }
-.change-btn{
+.change-btn {
     padding: 8px 15px;
     font-size: 15px;
     border-radius: 10px;
     color: #fff !important;
     background-color: var(--primary) !important;
+}
+
+/* Mobile Media Query */
+@media (max-width: 430px) {
+    .setting-profile-container {
+        gap: 15px;
+        padding: 12px;
+    }
+
+    .setting-profile_heading {
+        padding-top: 10px;
+    }
+
+    .setting-profile_heading>h3 {
+        font-size: 18px;
+    }
+
+    .setting-profile_heading>p {
+        font-size: 12px;
+    }
+
+    .setting-avtar-main-container {
+        height: auto;
+        border-radius: 8px;
+    }
+
+    .setting-avatar-heading {
+        height: auto;
+        padding: 12px 15px;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .setting-avatar-heading>h2 {
+        font-size: 14px;
+    }
+
+    .setting-profile-card {
+        height: auto;
+        gap: 25px;
+        padding: 15px 11px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .setting-avatar-container {
+        padding: 0 15px;
+    }
+
+    .setting-avatar {
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+    }
+
+    .setting-camera-btn {
+        width: 23px;
+        height: 23px;
+        font-size: 13px;
+        padding: 0;
+        right: 3px;
+        bottom: -2px;
+    }
+
+    .setting-profile-info {
+        flex: 1;
+        width: 100%;
+    }
+
+    .setting-profile-info h2 {
+        font-size: 14px;
+    }
+
+    .setting-profile-info p {
+        font-size: 11px;
+        margin-bottom: 8px;
+    }
+
+    /* Personal Information */
+    .personal-information-container {
+        border-radius: 8px;
+    }
+
+    .personal-information-heading {
+        padding: 12px 15px;
+    }
+
+    .personal-information-heading>h2 {
+        font-size: 14px;
+    }
+
+    .personal-information-form {
+        padding: 12px 15px;
+        gap: 15px;
+    }
+
+    .top-data {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+        gap: 8px;
+    }
+
+    .top-data>div {
+        padding: 5px;
+        gap: 5px;
+    }
+
+    .top-data>div>div {
+        padding-left: 9px;
+        border-radius: 9px;
+        width: 100%;
+    }
+
+    .top-data>div>div input {
+        padding: 9px;
+        border-top-right-radius: 9px;
+        border-bottom-right-radius: 9px;
+        font-size: 15px;
+        min-width: 0;
+    }
+
+    .top-data>div label {
+        font-size: 13px;
+    }
+
+    .bio {
+        padding: 0;
+        gap: 9px;
+    }
+
+    .bio label {
+        font-size: 13px;
+    }
+
+    .bio>textarea {
+        padding: 9px;
+        border-radius: 9px;
+        font-size: 15px;
+        min-height: 100px;
+    }
+
+    .save_changes {
+        padding: 13px 15px;
+        flex-direction: column;
+        gap: 13px;
+        border-radius: 9px;
+        text-align: center;
+    }
+
+    .save_changes p {
+        font-size: 13px;
+    }
+
+    .change-btn {
+        padding: 9px 13px;
+        font-size: 13px;
+        width: 100%;
+        min-height: 45px;
+    }
 }

@@ -1,14 +1,14 @@
-import './EmployeeProfile.css';
+import { useSelector } from "react-redux";
 
-import { useSelector } from 'react-redux';
-
-import QuickStats from '../../components/employee/QuickStats/QuickStats';
-import PerformanceSummary from '../../components/employee/PerformanceSummary/PerformanceSummary';
-import RecentActivity from '../../components/employee/RecentActivity/RecentActivity';
-import { Achievements } from '../../components/employee/Achievements/Achievements';
-import { LeaveSummary } from '../../components/employee/LeaveSummary/LeaveSummary';
-import { EmergencyContact } from '../../components/employee/EmergencyContact/EmergencyContact';
-import { SocialLinks } from '../../components/employee/SocialLinks/SocialLinks';
+import "./EmployeeProfile.css";
+import QuickStats from "../../components/employee/QuickStats/QuickStats";
+import PerformanceSummary from "../../components/employee/PerformanceSummary/PerformanceSummary";
+import RecentActivity from "../../components/employee/RecentActivity/RecentActivity";
+import { Achievements } from "../../components/employee/Achievements/Achievements";
+import { LeaveSummary } from "../../components/employee/LeaveSummary/LeaveSummary";
+import { EmergencyContact } from "../../components/employee/EmergencyContact/EmergencyContact";
+import { SocialLinks } from "../../components/employee/SocialLinks/SocialLinks";
+import { PulseDot } from "../../components/PulseDot/pulseDot";
 
 export default function EmployeeProfile() {
   const { user } = useSelector((state) => state.auth);
@@ -22,14 +22,14 @@ export default function EmployeeProfile() {
   }
 
   const initials =
-    `${user.firstName?.[0] ?? ''}${user.lastName?.[0] ?? ''}`.toUpperCase();
+    `${user.firstName?.[0] ?? ""}${user.lastName?.[0] ?? ""}`.toUpperCase();
 
   const fullName = `${user.firstName} ${user.lastName}`;
 
-  const joinedDate = new Date(user.createdAt).toLocaleDateString('en-IN', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
+  const joinedDate = new Date(user.createdAt).toLocaleDateString("en-IN", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
   });
 
   return (
@@ -52,15 +52,15 @@ export default function EmployeeProfile() {
 
               <h1>{fullName}</h1>
 
-              <p>{user.designation || 'Employee'}</p>
+              <p>{user.designation || "Employee"}</p>
 
               <span className="profile_department">
-                {user.department || 'General'}
+                {user.department || "General"}
               </span>
             </div>
 
             <div className="status_badge">
-              <span className="status_dot" />
+              <PulseDot />
               Active
             </div>
           </div>
@@ -81,7 +81,7 @@ export default function EmployeeProfile() {
             <div className="profile_information_card">
               <span>Department</span>
 
-              <h4>{user.department || 'General'}</h4>
+              <h4>{user.department || "General"}</h4>
             </div>
 
             <div className="profile_information_card">

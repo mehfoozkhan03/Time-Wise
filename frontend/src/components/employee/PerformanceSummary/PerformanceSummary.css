@@ -1,71 +1,82 @@
-.performance_summary{
-    background:var(--surface);
-    border:1px solid var(--border);
-    border-radius:24px;
-    padding:28px;
-    box-shadow:var(--shadow_md);
+.performance_summary {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 28px;
+    box-shadow: var(--shadow_md);
 }
 
-.section_header{
-    margin-bottom:22px;
+.section_header {
+    margin-bottom: 22px;
 }
 
-.section_header h2{
-    color:var(--text_primary);
-    font-size:1.3rem;
+.section_header h2 {
+    color: var(--text_primary);
+    font-size: 1.3rem;
 }
 
-.performance_grid{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:18px;
+.performance_grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
 }
 
-.performance_item{
-    display:flex;
-    align-items:center;
-    gap:16px;
+.performance_item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
 
-    padding:18px;
+    padding: 18px;
 
-    border-radius:18px;
+    border-radius: 18px;
 
-    background:var(--surface);
+    background: var(--surface);
 
-    transition:.3s;
+    transition: .3s;
 }
 
-.performance_item:hover{
-    transform:translateY(-4px);
+.performance_item:hover {
+    transform: translateY(-4px);
 }
 
-.performance_item>div:nth-child(2) span{
+.performance_item>div:nth-child(2) span {
     color: var(--text_primary);
 }
 
-.performance_icon{
-    width:54px;
-    height:54px;
+.performance_icon {
+    width: 54px;
+    height: 54px;
 
-    border-radius:16px;
+    border-radius: 16px;
 
-    background:var(--primary);
+    background: var(--primary);
 
-    color:white;
+    color: white;
 
-    display:flex;
-    justify-content:center;
-    align-items:center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-    font-size:1.2rem;
+    font-size: 1.2rem;
 }
 
-.performance_item span{
-    color:var(--text_secondary);
-    font-size:.85rem;
+.performance_item span {
+    color: var(--text_secondary);
+    font-size: .85rem;
 }
 
-.performance_item h3{
-    margin-top:6px;
-    color:var(--text_primary);
+.performance_item h3 {
+    margin-top: 6px;
+    color: var(--text_primary);
+}
+
+@media (max-width: 430px) {
+    .performance_grid {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .section_header h2 {
+        font-size: 1.1rem;
+    }
 }

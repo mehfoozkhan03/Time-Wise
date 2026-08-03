@@ -1,110 +1,89 @@
-// import mongoose from "mongoose";
-
-// const notificationSchema = new mongoose.Schema(
-//   {
-//     receiverId: {
-//       type: mongoose.Schema.Types.ObjectId,
-//       ref: "User",
-//       required: true,
-//     },
-
-//     title: {
-//       type: String,
-//       required: true,
-//       trim: true,
-//     },
-
-//     message: {
-//       type: String,
-//       required: true,
-//       trim: true,
-//     },
-
-//     type: {
-//       type: String,
-//       enum: [
-//         "attendance",
-//         "post",
-//         "announcement",
-//         "leave",
-//         "system",
-//       ],
-//       default: "system",
-//     },
-
-//     read: {
-//       type: Boolean,
-//       default: false,
-//     },
-
-//     senderId: {
-//       type: mongoose.Schema.Types.ObjectId,
-//       // ref: "Admin",
-//       ref: "User"
-//     },
-
-//     deleted: {
-//       type: Boolean,
-//       default: false,
-//     },
-//     // To know who has posted thought
-//     postId: {
-//       type: mongoose.Schema.Types.ObjectId,
-//       ref: "Post",
-//     }
-//   },
-//   {
-//     timestamps: true,
-//     versionKey: false,
-//   }
-// );
-
-// export const notificationModel = mongoose.model("Notification", notificationSchema);
-
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const notificationSchema = new mongoose.Schema(
   {
+    // ================= Sender =================
+
     sender: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true
+      ref: 'User',
+      required: true,
+      index: true,
     },
+
+    // ================= Notification =================
 
     title: {
       type: String,
       required: true,
-      trim: true
+      trim: true,
     },
 
     message: {
       type: String,
       required: true,
-      trim: true
+      trim: true,
     },
 
     type: {
       type: String,
-      enum: ["attendance", "post", "announcement", "leave", "system"],
-      default: "system"
+      enum: ['attendance', 'post', 'announcement', 'leave', 'system'],
+      required: true,
+    },
+
+    // ================= Reference =================
+
+    referenceModel: {
+      type: String,
+      enum: ['Post', 'Attendance', 'Leave', 'Announcement'],
+      default: null,
     },
 
     referenceId: {
       type: mongoose.Schema.Types.ObjectId,
-      default: null
+      refPath: 'referenceModel',
+      default: null,
     },
 
-    deleted: {
+    // ================= Audience =================
+
+    audienceType: {
+      type: String,
+      enum: ['all', 'department', 'specific'],
+      default: 'all',
+    },
+
+    targetUsers: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+      },
+    ],
+
+    // Future use
+    targetDepartment: {
+      type: String,
+      default: null,
+    },
+
+    // ================= Admin Control =================
+
+    isArchived: {
       type: Boolean,
-      default: false
+      default: false,
     },
   },
-
   {
     timestamps: true,
     versionKey: false,
-  }
-)
+  },
+);
 
+notificationSchema.index({
+  createdAt: -1,
+});
 
-export const notificationModel = mongoose.model("Notification", notificationSchema)
+export const notificationModel = mongoose.model(
+  'Notification',
+  notificationSchema,
+);

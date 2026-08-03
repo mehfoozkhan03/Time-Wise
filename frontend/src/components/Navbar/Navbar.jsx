@@ -18,17 +18,23 @@ export default function Navbar() {
 
   const handleNotificationClick = async (notification) => {
     try {
-      // Agar pehle se read hai to API call ki zarurat nahi
+      // Mark as read only if unread
       if (!notification.read) {
         await markNotificationAsRead(notification._id);
 
-        // Notification list refresh
+        // Refresh notifications
         dispatch(fetchNotifications());
       }
 
+      // Close notification dropdown
       setNotificationOpen(false);
+
+      // Navigate based on notification type
+      if (notification.referenceModel === "Post" && notification.referenceId) {
+        navigate(`/community/post/${notification.referenceId}`);
+      }
     } catch (error) {
-      console.log(error);
+      console.error("Notification Click Error:", error);
     }
   };
 
@@ -177,26 +183,11 @@ export default function Navbar() {
               }}
             >
               <FaBell />
-              <span className="notification_count">{notifications.length}</span>
+
+              {unreadCount > 0 && (
+                <span className="notification_count">{unreadCount}</span>
+              )}
             </button>
-
-            {/* {notificationOpen && (
-            <div className="notification_dropdown">
-              <h4>Notifications</h4>
-
-              <div className="notification_item">
-                Manager approved your leave.
-              </div>
-
-              <div className="notification_item">John liked your thought.</div>
-
-              <div className="notification_item">
-                Performance review available.
-              </div>
-
-              <button className="view_all_btn">View All</button>
-            </div>
-          )} */}
 
             {notificationOpen && (
               <div className="notification_dropdown">
@@ -224,10 +215,19 @@ export default function Navbar() {
                   ))
                 )}
 
-                <button className="view_all_btn">View All</button>
+                <button
+                  className="view_all_btn"
+                  onClick={() => {
+                    setNotificationOpen(false);
+                    navigate("/notifications");
+                  }}
+                >
+                  View All
+                </button>
               </div>
             )}
           </div>
+
           {/* Profile */}
 
           <div className="profile_container" id="tour-profile" ref={profileRef}>
