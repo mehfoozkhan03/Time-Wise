@@ -1,4 +1,3 @@
-import "./PerformanceSummary.css";
 import { useSelector } from "react-redux";
 
 import {
@@ -7,6 +6,7 @@ import {
   FaBullseye,
   FaTrophy,
 } from "react-icons/fa";
+import "./PerformanceSummary.css";
 
 export default function PerformanceSummary() {
   const { stats } = useSelector((state) => state.dashboard);
