@@ -2,7 +2,10 @@ import "./MiniCalendar.css";
 
 import { memo, useMemo, useCallback } from "react";
 
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import {
+  FaChevronLeft,
+  FaChevronRight,
+} from "react-icons/fa";
 
 import Card from "../../Common/CalendarCard/Card";
 
@@ -31,12 +34,14 @@ function MiniCalendar({
      Calendar Data
   ========================================= */
 
-  const days = useMemo(() => generateCalendar(currentDate), [currentDate]);
-
-  const weekDays = useMemo(() => WEEK_DAYS, []);
+  const days = useMemo(
+    () => generateCalendar(currentDate),
+    [currentDate]
+  );
 
   const monthTitle = useMemo(
-    () => `${getMonthName(currentDate)} ${currentDate.getFullYear()}`,
+    () =>
+      `${getMonthName(currentDate)} ${currentDate.getFullYear()}`,
     [currentDate]
   );
 
@@ -84,18 +89,24 @@ function MiniCalendar({
       </div>
 
       <div className="miniWeekDays">
-        {weekDays.map((day) => (
-          <span key={day}>{day.charAt(0)}</span>
+        {WEEK_DAYS.map((day) => (
+          <span key={day}>
+            {day.charAt(0)}
+          </span>
         ))}
       </div>
 
       <div className="miniGrid">
         {days.map((item) => {
-          const isSelected = isSameDate(item.date, selectedDate);
+          const isSelected = isSameDate(
+            item.date,
+            selectedDate
+          );
 
           const className = [
             "miniDay",
-            !item.currentMonth && "otherMonth",
+            !item.currentMonth &&
+              "otherMonth",
             item.isToday && "today",
             isSelected && "selected",
           ]
@@ -107,9 +118,15 @@ function MiniCalendar({
               key={getDateKey(item.date)}
               type="button"
               className={className}
-              onClick={() => handleSelectDay(item.date)}
+              onClick={() =>
+                handleSelectDay(item.date)
+              }
               aria-pressed={isSelected}
+              aria-current={
+                item.isToday ? "date" : undefined
+              }
               aria-label={`Select ${item.date.toDateString()}`}
+              title={item.date.toDateString()}
             >
               {item.date.getDate()}
             </button>
@@ -120,6 +137,7 @@ function MiniCalendar({
   );
 }
 
-MiniCalendar.displayName = "MiniCalendar";
+MiniCalendar.displayName =
+  "MiniCalendar";
 
 export default memo(MiniCalendar);

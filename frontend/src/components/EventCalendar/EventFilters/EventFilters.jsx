@@ -1,10 +1,19 @@
 import "./EventFilters.css";
 
-import { memo, useMemo, useCallback } from "react";
+import {
+  memo,
+  useMemo,
+  useCallback,
+} from "react";
 
-import { FaSearch } from "react-icons/fa";
+import {
+  FaSearch,
+  FaTimes,
+} from "react-icons/fa";
 
 import { EVENT_CONFIG } from "../../../data/eventConfig";
+
+const eventTypes = Object.entries(EVENT_CONFIG);
 
 function EventFilters({
   filters = {},
@@ -32,21 +41,19 @@ function EventFilters({
   }, [events]);
 
   /* =========================================
-     Event Types
-  ========================================= */
-
-  const eventTypes = useMemo(() => Object.entries(EVENT_CONFIG), []);
-
-  /* =========================================
      Search
   ========================================= */
 
   const handleSearchChange = useCallback(
     (e) => {
-      setSearchTerm?.(e.target.value);
+      setSearchTerm?.(e.target.value.trimStart());
     },
     [setSearchTerm]
   );
+
+  const handleClearSearch = useCallback(() => {
+    setSearchTerm?.("");
+  }, [setSearchTerm]);
 
   /* =========================================
      Filter Toggle
@@ -75,26 +82,57 @@ function EventFilters({
     <section className="eventFilters">
       {/* ================= Search ================= */}
 
-      <div className="searchBar">
-        <FaSearch />
+      <label
+        htmlFor="calendar-search"
+        className="sr-only"
+      >
+        Search calendar events
+      </label>
+
+      <div
+        className="searchBar"
+        role="search"
+      >
+        <FaSearch aria-hidden="true" />
 
         <input
+          id="calendar-search"
           type="text"
           placeholder="Search by title, employee or event type..."
           aria-label="Search calendar events"
+          aria-controls="calendar-grid"
+          autoComplete="off"
+          spellCheck={false}
           value={searchTerm}
           onChange={handleSearchChange}
         />
+
+        {searchTerm && (
+          <button
+            type="button"
+            className="clearSearchBtn"
+            aria-label="Clear search"
+            onClick={handleClearSearch}
+          >
+            <FaTimes />
+          </button>
+        )}
       </div>
 
       {/* ================= Actions ================= */}
 
       <div className="filterActions">
-        <button type="button" onClick={handleSelectAll}>
+        <button
+          type="button"
+          onClick={handleSelectAll}
+        >
           Select All
         </button>
 
-        <button type="button" onClick={handleClearAll}>
+        <button
+          type="button"
+          onClick={handleClearAll}
+        >
           Clear All
         </button>
       </div>
@@ -102,34 +140,48 @@ function EventFilters({
       {/* ================= Filter Chips ================= */}
 
       <div className="filterList">
-        {eventTypes.map(([type, config]) => (
-          <button
-            key={type}
-            type="button"
-            className={`filterChip ${
-              Boolean(filters[type]) ? "active" : ""
-            }`}
-            aria-pressed={Boolean(filters[type])}
-            aria-label={`Toggle ${config.label} events`}
-            title={config.label}
-            onClick={() => handleToggleFilter(type)}
-          >
-            <span className="chipIcon">
-              <config.icon />
-            </span>
+        {eventTypes.map(([type, config]) => {
+          const active = Boolean(filters[type]);
 
-            <span>{config.label}</span>
+          const className = [
+            "filterChip",
+            active && "active",
+          ]
+            .filter(Boolean)
+            .join(" ");
 
-            <span className="count">
-              {eventCounts[type] ?? 0}
-            </span>
-          </button>
-        ))}
+          const Icon = config.icon;
+
+          return (
+            <button
+              key={type}
+              type="button"
+              className={className}
+              aria-pressed={active}
+              aria-label={`Toggle ${config.label} events`}
+              title={config.label}
+              onClick={() =>
+                handleToggleFilter(type)
+              }
+            >
+              <span className="chipIcon">
+                <Icon />
+              </span>
+
+              <span>{config.label}</span>
+
+              <span className="count">
+                {eventCounts[type] ?? 0}
+              </span>
+            </button>
+          );
+        })}
       </div>
     </section>
   );
 }
 
-EventFilters.displayName = "EventFilters";
+EventFilters.displayName =
+  "EventFilters";
 
 export default memo(EventFilters);
