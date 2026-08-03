@@ -99,7 +99,7 @@
 // }
 
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import "./FeedBack.css";
 import { FaCheckCircle, FaTimesCircle, FaTimes } from "react-icons/fa";
 
@@ -117,28 +117,54 @@ export function Feedback({
   const [showLoader, setShowLoader] = useState(false);
   const [showCelebration, setShowCelebration] = useState(false);
 
+   // 🔊 Audio
+  const audioRef = useRef(null);
+
+  if (audioRef.current === null) {
+    audioRef.current = new Audio("/Video/u_jspnqv1glx-1gift-confetti-447240.mp3");
+  }
+
+
   if (!isOpen) return null;
 
   const isSuccess = variant === "success";
   const isError = variant === "error";
   const isLogout = variant === "logout";
 
-  const handleLogoutAnimation = () => {
-    setShowLoader(true);
+const handleLogoutAnimation = () => {
+  setShowLoader(true);
 
-    setTimeout(() => {
-      setShowLoader(false);
-      setShowCelebration(true);
+  setTimeout(() => {
+    setShowLoader(false);
+    setShowCelebration(true);
+
+    const audio = audioRef.current;
+
+    audio.pause();
+    audio.currentTime = 0;
+    audio.volume = 0.8;
+
+    const startTime = Date.now();
+
+    audio.play().catch(() => {
+      setTimeout(() => {
+        setShowCelebration(false);
+        onConfirm?.();
+      }, 2500);
+    });
+
+    audio.onended = () => {
+      const elapsed = Date.now() - startTime;
+      const remaining = Math.max(2500 - elapsed, 0);
 
       setTimeout(() => {
         setShowCelebration(false);
+        onConfirm?.();
+      }, remaining);
+    };
 
-        if (onConfirm) {
-          onConfirm();
-        }
-      }, 2500);
-    }, 2000);
-  };
+  }, 2000);
+};
 
   const colors = [
     "#FFD700",
