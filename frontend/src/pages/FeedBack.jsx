@@ -1,26 +1,35 @@
-import { useState } from "react";
-import "./FeedBack.css";
-import { FaCheckCircle, FaTimesCircle, FaTimes } from "react-icons/fa";
+import { useState, useRef } from 'react';
+import './FeedBack.css';
+import { FaCheckCircle, FaTimesCircle, FaTimes } from 'react-icons/fa';
 
 export function Feedback({
   isOpen,
-  variant = "success",
+  variant = 'success',
   title,
   message,
   reason,
   onClose,
   onConfirm,
-  confirmText = "Continue",
-  cancelText = "Cancel",
+  confirmText = 'Continue',
+  cancelText = 'Cancel',
 }) {
   const [showLoader, setShowLoader] = useState(false);
   const [showCelebration, setShowCelebration] = useState(false);
 
+  // 🔊 Audio
+  const audioRef = useRef(null);
+
+  if (audioRef.current === null) {
+    audioRef.current = new Audio(
+      '/Video/u_jspnqv1glx-1gift-confetti-447240.mp3',
+    );
+  }
+
   if (!isOpen) return null;
 
-  const isSuccess = variant === "success";
-  const isError = variant === "error";
-  const isLogout = variant === "logout";
+  const isSuccess = variant === 'success';
+  const isError = variant === 'error';
+  const isLogout = variant === 'logout';
 
   const handleLogoutAnimation = () => {
     setShowLoader(true);
@@ -29,25 +38,42 @@ export function Feedback({
       setShowLoader(false);
       setShowCelebration(true);
 
-      setTimeout(() => {
-        setShowCelebration(false);
+      const audio = audioRef.current;
 
-        if (onConfirm) {
-          onConfirm();
-        }
-      }, 2500);
+      audio.pause();
+      audio.currentTime = 0;
+      audio.volume = 0.8;
+
+      const startTime = Date.now();
+
+      audio.play().catch(() => {
+        setTimeout(() => {
+          setShowCelebration(false);
+          onConfirm?.();
+        }, 2500);
+      });
+
+      audio.onended = () => {
+        const elapsed = Date.now() - startTime;
+        const remaining = Math.max(2500 - elapsed, 0);
+
+        setTimeout(() => {
+          setShowCelebration(false);
+          onConfirm?.();
+        }, remaining);
+      };
     }, 2000);
   };
 
   const colors = [
-    "#FFD700",
-    "#FF6B6B",
-    "#00E5FF",
-    "#7C4DFF",
-    "#00FF95",
-    "#FF4FD8",
-    "#FFFFFF",
-    "#FF9800",
+    '#FFD700',
+    '#FF6B6B',
+    '#00E5FF',
+    '#7C4DFF',
+    '#00FF95',
+    '#FF4FD8',
+    '#FFFFFF',
+    '#FF9800',
   ];
 
   return (
@@ -69,19 +95,19 @@ export function Feedback({
           <div className="party_left">
             🎉
             {[...Array(350)].map((_, i) => {
-              const types = ["dot", "star", "sparkle", "ring"];
+              const types = ['dot', 'star', 'sparkle', 'ring'];
 
               return (
                 <span
                   key={`left-${i}`}
                   className={`particle ${types[i % types.length]}`}
                   style={{
-                    "--x": `${(Math.random() - 0.5) * 2600}px`,
-                    "--y": `${(Math.random() - 1) * 1800}px`,
-                    "--delay": `${Math.random() * 0.25}s`,
-                    "--size": `${6 + Math.random() * 18}px`,
-                    "--rotate": `${Math.random() * 360}deg`,
-                    "--color":
+                    '--x': `${(Math.random() - 0.5) * 2600}px`,
+                    '--y': `${(Math.random() - 1) * 1800}px`,
+                    '--delay': `${Math.random() * 0.25}s`,
+                    '--size': `${6 + Math.random() * 18}px`,
+                    '--rotate': `${Math.random() * 360}deg`,
+                    '--color':
                       colors[Math.floor(Math.random() * colors.length)],
                   }}
                 />
@@ -92,19 +118,19 @@ export function Feedback({
           <div className="party_right">
             🎉
             {[...Array(350)].map((_, i) => {
-              const types = ["dot", "star", "sparkle", "ring"];
+              const types = ['dot', 'star', 'sparkle', 'ring'];
 
               return (
                 <span
                   key={`right-${i}`}
                   className={`particle ${types[i % types.length]}`}
                   style={{
-                    "--x": `${(Math.random() - 0.5) * 2600}px`,
-                    "--y": `${(Math.random() - 1) * 1800}px`,
-                    "--delay": `${Math.random() * 0.25}s`,
-                    "--size": `${6 + Math.random() * 18}px`,
-                    "--rotate": `${Math.random() * 360}deg`,
-                    "--color":
+                    '--x': `${(Math.random() - 0.5) * 2600}px`,
+                    '--y': `${(Math.random() - 1) * 1800}px`,
+                    '--delay': `${Math.random() * 0.25}s`,
+                    '--size': `${6 + Math.random() * 18}px`,
+                    '--rotate': `${Math.random() * 360}deg`,
+                    '--color':
                       colors[Math.floor(Math.random() * colors.length)],
                   }}
                 />
@@ -177,7 +203,7 @@ export function Feedback({
               className={`feedback_button feedback_button--${variant}`}
               onClick={onClose}
             >
-              {isSuccess ? "Continue" : "Try Again"}
+              {isSuccess ? 'Continue' : 'Try Again'}
             </button>
           )}
         </div>
