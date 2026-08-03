@@ -1,0 +1,16 @@
+.single-post-page{
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.back-btn{
+    width: 100px;
+    padding: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background-color: var(--primary);
+    color: var(--text_primary);
+}
