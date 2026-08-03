@@ -114,4 +114,17 @@ export const EVENT_CONFIG = Object.freeze({
     icon: FaHandshake,
     isHoliday: false,
   },
+  [EVENT_TYPES.OPTIONAL_HOLIDAY]: {
+  label: "Optional Holiday",
+  color: "#8b5cf6",
+  icon: FaUmbrellaBeach,
+  isHoliday: true,
+  },
+
+  [EVENT_TYPES.OBSERVANCE]: {
+    label: "Observance",
+    color: "#6366f1",
+    icon: FaCalendarAlt,
+    isHoliday: true,
+  },
 });

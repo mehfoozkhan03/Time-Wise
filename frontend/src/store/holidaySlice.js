@@ -23,6 +23,69 @@ export const fetchHolidays = createAsyncThunk(
 );
 
 /* =========================================
+   CREATE HOLIDAY
+========================================= */
+
+export const createHoliday = createAsyncThunk(
+  "holiday/createHoliday",
+  async (holidayData, thunkAPI) => {
+    try {
+      const response = await holidayService.createHoliday(holidayData);
+
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message ||
+          error.message ||
+          "Failed to create holiday.",
+      );
+    }
+  },
+);
+
+/* =========================================
+   UPDATE HOLIDAY
+========================================= */
+
+export const updateHoliday = createAsyncThunk(
+  "holiday/updateHoliday",
+  async ({ id, holidayData }, thunkAPI) => {
+    try {
+      const response = await holidayService.updateHoliday(id, holidayData);
+
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message ||
+          error.message ||
+          "Failed to update holiday.",
+      );
+    }
+  },
+);
+
+/* =========================================
+   DELETE HOLIDAY
+========================================= */
+
+export const deleteHoliday = createAsyncThunk(
+  "holiday/deleteHoliday",
+  async (id, thunkAPI) => {
+    try {
+      await holidayService.deleteHoliday(id);
+
+      return id;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message ||
+          error.message ||
+          "Failed to delete holiday.",
+      );
+    }
+  },
+);
+
+/* =========================================
    INITIAL STATE
 ========================================= */
 
@@ -46,6 +109,10 @@ const holidaySlice = createSlice({
   extraReducers: (builder) => {
     builder
 
+      /* =========================================
+         FETCH HOLIDAYS
+      ========================================= */
+
       .addCase(fetchHolidays.pending, (state) => {
         state.status = "loading";
         state.error = null;
@@ -56,7 +123,7 @@ const holidaySlice = createSlice({
 
         state.status = "succeeded";
         state.error = null;
-        state.holidays = action.payload;
+        state.holidays = action.payload.data;
       })
 
       .addCase(fetchHolidays.rejected, (state, action) => {
@@ -64,6 +131,40 @@ const holidaySlice = createSlice({
 
         state.status = "failed";
         state.error = action.payload;
+      })
+
+      /* =========================================
+         CREATE HOLIDAY
+      ========================================= */
+
+      .addCase(createHoliday.fulfilled, (state, action) => {
+        state.holidays.push(action.payload.data);
+      })
+
+      /* =========================================
+         UPDATE HOLIDAY
+      ========================================= */
+
+      .addCase(updateHoliday.fulfilled, (state, action) => {
+        const updatedHoliday = action.payload.data;
+
+        const index = state.holidays.findIndex(
+          (holiday) => holiday._id === updatedHoliday._id,
+        );
+
+        if (index !== -1) {
+          state.holidays[index] = updatedHoliday;
+        }
+      })
+
+      /* =========================================
+         DELETE HOLIDAY
+      ========================================= */
+
+      .addCase(deleteHoliday.fulfilled, (state, action) => {
+        state.holidays = state.holidays.filter(
+          (holiday) => holiday._id !== action.payload,
+        );
       });
   },
 });
