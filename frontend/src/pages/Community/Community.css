@@ -34,6 +34,8 @@ position:sticky;
 
 top:calc(var(--navbar_height) + 20px);
 
+align-self: flex-start;
+
 }
 
 .community-feed{
@@ -54,19 +56,38 @@ min-width: 0;
   width: 100%;
 }
 
-.community-right{
-
-position:sticky;
-
-top:calc(var(--navbar_height) + 20px);
-
-display:flex;
-
-flex-direction:column;
-
-gap:20px;
-
+.community-right {
+  position: sticky;
+  top: calc(var(--navbar_height) + 20px);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-self: flex-start;
+  max-height: calc(100vh - var(--navbar_height) - 40px); /* Adjust based on your navbar height */
+  overflow-y: auto; /* Changed from overflow-inline to overflow-y */
+  scrollbar-width: none; /* For Firefox */
 }
+
+/* Optional: Style the scrollbar for better visibility */
+/* For community right sidebar scrolling */
+/* .community-right::-webkit-scrollbar {
+  width: 6px;
+}
+
+.community-right::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+  border-radius: 3px;
+  visibility: hidden;
+}
+
+.community-right::-webkit-scrollbar-thumb {
+  background: var(--secondary);
+  border-radius: 3px;
+}
+
+.community-right::-webkit-scrollbar-thumb:hover {
+  background: var(--border);
+} */
 
 @media (max-width:1400px){
 
