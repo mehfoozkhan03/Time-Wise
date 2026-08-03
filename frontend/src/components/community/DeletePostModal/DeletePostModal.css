@@ -1,0 +1,22 @@
+.delete-modal {
+  width: 420px;
+
+  padding: 24px;
+
+  background: var(--card);
+
+  border-radius: 18px;
+
+  border: 1px solid var(--card-border);
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 18px;
+}
+
+.danger-btn {
+  background: #ef4444 !important;
+
+  color: white !important;
+}

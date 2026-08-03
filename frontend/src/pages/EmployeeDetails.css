@@ -58,8 +58,8 @@ margin-left:10px;
 }
 
 .card {
-  width: 130px;
-  height: 140px;
+  /* width: 130px; */
+  /* height: 140px; */
   border-radius: 15px;
   display: flex;
   flex-direction: column;

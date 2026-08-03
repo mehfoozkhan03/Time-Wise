@@ -1,4 +1,4 @@
-.achievement-section{
+.achievement-section {
     background-color: var(--surface);
     border: 1px solid var(--border);
     padding: 20px;
@@ -7,36 +7,40 @@
     flex-direction: column;
     gap: 30px;
 }
-.achievement-header{
+
+.achievement-header {
     display: flex;
     align-items: center;
     gap: 10px;
 }
-.achievement-header>div{
+
+.achievement-header>div {
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 5px;
-    border-radius: 10px;border: 1px solid var(--border);
+    border-radius: 10px;
+    border: 1px solid var(--border);
 
 }
-.achievement-header>h3{
+
+.achievement-header>h3 {
     font-size: 16px;
 }
 
-.achievement-content{
+.achievement-content {
     display: flex;
     flex-direction: column;
     gap: 30px;
 }
 
-.achievement-list-container{
+.achievement-list-container {
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
-.achievement-list-container>div:nth-child(2){
+.achievement-list-container>div:nth-child(2) {
     color: var(--text-primary);
     padding: 5px 10px;
     font-size: 13px;
@@ -44,13 +48,13 @@
     border: 1px solid var(--border);
 }
 
-.achievements-list{
+.achievements-list {
     display: flex;
     align-items: center;
     gap: 20px;
 }
 
-.achievements-icons{
+.achievements-icons {
     padding: 10px;
     display: flex;
     align-items: center;
@@ -58,10 +62,12 @@
     border-radius: 10px;
     border: 1px solid var(--border);
 }
-.achievements-list h3{
+
+.achievements-list h3 {
     font-size: 14px;
 }
-.achievements-list span{
+
+.achievements-list span {
     font-size: 12px;
     color: var(--text_secondary);
 }

@@ -1,21 +1,24 @@
-.appearance-container{
+.appearance-container {
     padding: 20px;
     display: flex;
     flex-direction: column;
     gap: 25px;
 }
-.appearance-heading{
+
+.appearance-heading {
     padding-top: 20px;
 }
-.appearance-heading>h2{
+
+.appearance-heading>h2 {
     font-size: 18px;
 }
-.appearance-heading>p{
+
+.appearance-heading>p {
     font-size: 12px;
 }
 
 /* Theme */
-.theme-container{
+.theme-container {
     padding: 20px;
     display: flex;
     flex-direction: column;
@@ -24,19 +27,23 @@
     background-color: var(--surface);
     box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
 }
-.theme-heading{
+
+.theme-heading {
     padding-bottom: 10px;
 }
-.theme-heading>h3{
+
+.theme-heading>h3 {
     font-size: 16px;
 }
-.theme-mode{
+
+.theme-mode {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
     align-content: center;
 }
-.theme-mode>div{
+
+.theme-mode>div {
     height: 110px;
     display: flex;
     flex-direction: column;
@@ -46,10 +53,12 @@
     border: 1px solid var(--border);
     border-radius: 15px;
 }
-.theme-mode>div>p{
+
+.theme-mode>div>p {
     font-size: 13px;
 }
-.mode-icon{
+
+.mode-icon {
     font-size: 20px;
 }
 
@@ -73,7 +82,7 @@
 }
 
 /* Layout & Localization */
-.layout-localization{
+.layout-localization {
     padding: 20px;
     display: flex;
     flex-direction: column;
@@ -82,35 +91,43 @@
     background-color: var(--surface);
     box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
 }
-.layout-heading{
+
+.layout-heading {
     padding-bottom: 20px;
     border-bottom: 1px solid var(--border);
 }
-.layout-heading>h3{
+
+.layout-heading>h3 {
     font-size: 16px;
 }
-.layout{
+
+.layout {
     display: flex;
     flex-direction: column;
     gap: 15px;
 }
-.layout>div{
+
+.layout>div {
     display: flex;
     justify-content: space-between;
     padding-bottom: 15px;
     padding-top: 5px;
 }
+
 .display-density,
-.language{
+.language {
     border-bottom: 1px solid var(--border);
 }
-.layout>div>div>h3{
+
+.layout>div>div>h3 {
     font-size: 14px;
 }
-.layout>div>div>p{
+
+.layout>div>div>p {
     font-size: 12px;
 }
-.layout-select>select{
+
+.layout-select>select {
     width: 150px;
     padding: 10px;
     border-radius: 10px;
@@ -121,7 +138,7 @@
 }
 
 /* Save changes */
-.save_changes{
+.save_changes {
     padding: 20px 20px;
     display: flex;
     justify-content: space-between;
@@ -129,10 +146,39 @@
     border-radius: 10px;
     box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
 }
-.change-btn{
+
+.change-btn {
     padding: 8px 15px;
     color: var(--text_primary);
     font-size: 15px;
     border-radius: 10px;
     background-color: blue;
+}
+
+@media (max-width: 430px) {
+    .appearance-container {
+        padding: 13px 21px;
+    }
+
+    .appearance-heading {
+        padding: 0;
+    }
+
+    .theme-container {
+        padding: 21px 11px;
+    }
+
+    .theme-mode {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 11px;
+        width: 100%;
+    }
+
+    .theme-mode>div {
+        height: 51px;
+        flex-direction: row;
+        width: 100%;
+    }
 }

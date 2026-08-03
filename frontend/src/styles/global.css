@@ -91,9 +91,9 @@
   /* Additional */
   --text-inverse: #ffffff;
   --divider: #e2e8f0;
-  --tag-bg: rgba(41, 163, 224, 0.1);
+  --tag-bg: rgba(41, 163, 224, 0.18);
   --tag-text: #29a3e0;
-  
+
   /* login */
 
   --card_login: #ffffff;
@@ -227,7 +227,7 @@ html.dark {
   --tag-text: #5bc5ff;
 
    /* Login */
-  
+
   --card_login: #ffffff;
   --card_login-hover: #f8fafc;
   --card_login-border: #e2e8f0;
