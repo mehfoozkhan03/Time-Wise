@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 
 import {
   FaHome,
@@ -10,12 +11,15 @@ import {
 
 import { IoTrendingUp } from 'react-icons/io5'
 
-import { useSelector } from 'react-redux'
+import { setSearchQuery } from '../../../store/postSlice'
 
 import './LeftSidebar.css'
 
 const LeftSidebar = () => {
-  const { posts } = useSelector((state) => state.post)
+  const dispatch = useDispatch()
+
+  const { posts, searchQuery } = useSelector((state) => state.post)
+
   const { user } = useSelector((state) => state.auth)
 
   const myPostsCount =
@@ -23,14 +27,19 @@ const LeftSidebar = () => {
 
   const likedPostsCount = posts?.filter((post) => post.isLiked).length || 0
 
-  const savedPostsCount = 0
+  const savedPostsCount = posts.filter((post) => post.isSaved).length
 
   return (
     <aside className="left-sidebar card">
       <div className="left-sidebar-search">
         <FaSearch />
 
-        <input type="text" placeholder="Search posts..." />
+        <input
+          type="text"
+          placeholder="Search posts..."
+          value={searchQuery}
+          onChange={(e) => dispatch(setSearchQuery(e.target.value))}
+        />
       </div>
 
       <nav className="left-sidebar-nav">

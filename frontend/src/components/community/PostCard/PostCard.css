@@ -149,7 +149,7 @@
 
 .post-actions {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
 
     border-top: 1px solid var(--divider);
 
@@ -157,7 +157,7 @@
 }
 
 .post-actions button {
-    height: 54px;
+    height: 56px;
 
     display: flex;
     justify-content: center;
@@ -177,6 +177,10 @@
     cursor: pointer;
 
     transition: var(--transition);
+}
+
+.post-actions button:not(:last-child) {
+    border-right: 1px solid #2a2f3a;
 }
 
 .post-actions button:hover {

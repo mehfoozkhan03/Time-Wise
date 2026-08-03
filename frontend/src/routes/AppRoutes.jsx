@@ -114,7 +114,7 @@ export const AppRoutes = () => {
           {/* ================= PUBLIC PAGES ================= */}
 
           <Route
-            path="/community"
+            path="/community/:filter?"
             element={
               <PrivateRoutes>
                 <Community />
@@ -151,5 +151,5 @@ export const AppRoutes = () => {
         </Route>
       </Routes>
     </>
-  );
+  )
 };
