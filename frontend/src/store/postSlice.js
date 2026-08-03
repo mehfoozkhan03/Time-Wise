@@ -94,6 +94,28 @@ export const toggleLikePost = createAsyncThunk(
   },
 )
 
+// ======================================================
+// SAVE POST THUNK - MOVED HERE BEFORE SLICE
+// ======================================================
+
+export const toggleSavePost = createAsyncThunk(
+  'post/toggleSavePost',
+  async (id, thunkAPI) => {
+    try {
+      const { data } = await postService.toggleSavedPost(id)
+
+      return {
+        id,
+        saved: data.saved,
+      }
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || 'Unable to save post',
+      )
+    }
+  },
+)
+
 export const fetchFeaturedThought = createAsyncThunk(
   'post/fetchFeaturedThought',
   async (_, thunkAPI) => {
@@ -197,6 +219,8 @@ const initialState = {
 
   comments: {},
 
+  searchQuery: '',
+
   loading: false,
   commentLoading: false,
 
@@ -227,10 +251,15 @@ const postSlice = createSlice({
       state.loading = false
       state.isError = false
       state.errorMessage = ''
+      state.searchQuery = ''
     },
 
     clearSelectedPost(state) {
       state.selectedPost = null
+    },
+
+    setSearchQuery(state, action) {
+      state.searchQuery = action.payload
     },
   },
 
@@ -360,6 +389,35 @@ const postSlice = createSlice({
       })
 
       // ======================================================
+      // Toggle Save Post - FIXED TO UPDATE ALL LOCATIONS
+      // ======================================================
+
+      .addCase(toggleSavePost.fulfilled, (state, action) => {
+        // Update in posts array
+        const post = state.posts.find((p) => p._id === action.payload.id)
+
+        if (post) {
+          post.isSaved = action.payload.saved
+        }
+
+        // Update selectedPost if it matches
+        if (
+          state.selectedPost &&
+          state.selectedPost._id === action.payload.id
+        ) {
+          state.selectedPost.isSaved = action.payload.saved
+        }
+
+        // Update featured if it matches
+        if (
+          state.featured &&
+          state.featured._id === action.payload.id
+        ) {
+          state.featured.isSaved = action.payload.saved
+        }
+      })
+
+      // ======================================================
       // Fetch Comments
       // ======================================================
 
@@ -482,6 +540,7 @@ const postSlice = createSlice({
   },
 })
 
-export const { clearPosts, clearSelectedPost } = postSlice.actions
+export const { clearPosts, clearSelectedPost, setSearchQuery } =
+  postSlice.actions
 
 export default postSlice.reducer

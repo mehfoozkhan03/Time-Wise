@@ -9,8 +9,6 @@ import {
   updatePost,
 } from '../controllers/post.controller.js'
 
-// import { getTopContributors } from '../controllers/contributor.controller.js'
-
 import {
   togglePostLike,
   toggleCommentLike,
@@ -23,9 +21,17 @@ import {
   updateComment,
 } from '../controllers/comment.controller.js'
 
+import { toggleSavedPost } from '../controllers/savedPost.controller.js'
+
 import { auth } from '../middleware/AuthMiddleware.js'
 
 const router = express.Router()
+
+router.get('/test-save', (req, res) => {
+  res.json({
+    message: 'Save route is working',
+  })
+})
 
 router.use(auth)
 
@@ -48,6 +54,12 @@ router.get('/:id', getPost)
 router.patch('/:id', updatePost)
 
 router.delete('/:id', deletePost)
+
+// =======================================================
+// Save Post
+// =======================================================
+
+router.post('/:postId/save', toggleSavedPost)
 
 // =======================================================
 // Post Likes
