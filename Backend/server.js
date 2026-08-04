@@ -2,6 +2,8 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import http from "http";
+import { initializeSocket } from "./socket/socket.js";
 
 dotenv.config();
 
@@ -16,6 +18,11 @@ import { contactRoute } from './routes/Contact.routes.js';
 import notificationRoute from './routes/Notification.routes.js';
 
 const server = express();
+
+const httpServer = http.createServer(server);
+
+// Initialize Socket.IO
+initializeSocket(httpServer);
 
 /// ================= Middleware =================
 
@@ -51,13 +58,25 @@ server.use("/notifications", notificationRoute);
 
 // ================= Server =================
 
-server.listen(process.env.Port, async () => {
+// server.listen(process.env.Port, async () => {
+//   try {
+//     await Connection();
+//     console.log('DB Connected successfully ✅');
+//   } catch (error) {
+//     console.log(error);
+//     console.log('DB Crashed! Something went wrong ❌');
+//   } finally {
+//     console.log(`Server running on port ${process.env.Port}`);
+//   }
+// });
+
+httpServer.listen(process.env.Port, async () => {
   try {
     await Connection();
-    console.log('DB Connected successfully ✅');
+    console.log("DB Connected successfully ✅");
   } catch (error) {
     console.log(error);
-    console.log('DB Crashed! Something went wrong ❌');
+    console.log("DB Crashed! Something went wrong ❌");
   } finally {
     console.log(`Server running on port ${process.env.Port}`);
   }
