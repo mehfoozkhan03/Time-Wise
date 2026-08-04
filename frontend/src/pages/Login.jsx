@@ -32,7 +32,9 @@ const nameRegex = /^[A-Za-z ]{2,50}$/;
 const SignUpPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isLoading, isError } = useSelector((store) => store.auth);
+  const { isLoading, isError, errorMessage } = useSelector(
+    (store) => store.auth,
+  );
 
   const [isRegister, setIsRegister] = useState(false);
 
@@ -46,8 +48,6 @@ const SignUpPage = () => {
   //admin login
   const location = useLocation();
   const isAdminLogin = location.pathname === "/admin/login";
-  // console.log('pathname:', location.pathname);
-  // console.log('isAdminLogin:', isAdminLogin);
 
   // ── Modal state ──────────────────────────────────────────────────────────────
   const [modal, setModal] = useState({
@@ -55,25 +55,27 @@ const SignUpPage = () => {
     variant: "",
     title: "",
     message: "",
-    reason: "", // ← specific error detail
+    description: "",
+    reason: "",
     onCloseCb: null,
   });
 
-  const showModal = (
-    type,
+  const showModal = ({
+    variant,
     title,
     message,
-    reasonOrCb = null,
+    description = "",
+    reason = "",
     onCloseCb = null,
-  ) => {
-    const isCallback = typeof reasonOrCb === "function";
+  }) => {
     setModal({
       open: true,
-      type,
+      variant,
       title,
       message,
-      reason: isCallback ? "" : reasonOrCb || "",
-      onCloseCb: isCallback ? reasonOrCb : onCloseCb,
+      description,
+      reason,
+      onCloseCb,
     });
   };
 
@@ -81,8 +83,8 @@ const SignUpPage = () => {
     const cb = modal.onCloseCb;
     setModal({
       open: false,
-      type: "",
-      title: "",
+      variant: "",
+      description: "",
       message: "",
       reason: "",
       onCloseCb: null,
@@ -222,33 +224,34 @@ const SignUpPage = () => {
               .trim(),
           });
 
-          showModal(
-            "success",
-            "Registration Successful",
-            "Your account has been created successfully.",
-          );
+          showModal({
+            variant: "success",
+            title: result.payload.title,
+            message: result.payload.message,
+            description: result.payload.description,
+            reason: result.payload.reason,
+          });
         } else {
+          // Signup error from backend
           iziToast.error({
             position: "bottomLeft",
             timeout: 3000,
             title: "Error",
-            message: "Invalid email or password",
+            message: result.payload?.message || "Registration failed",
             iconColor: getComputedStyle(document.documentElement)
               .getPropertyValue("--primary")
               .trim(),
           });
 
-          showModal(
-            "error",
-            "Registration Failed",
-            "We could not create your account.",
-            result.payload || "An unexpected error occurred.",
-          );
+          showModal({
+            variant: "error",
+            title: result.payload?.title || "Registration Failed",
+            message: result.payload?.message || "An error occurred",
+            reason: result.payload?.reason || "Please try again.",
+          });
         }
       } else {
-        //code change
         // User Login / Admin Login
-
         const result = isAdminLogin
           ? await dispatch(
               loginAdmin({
@@ -262,64 +265,84 @@ const SignUpPage = () => {
                 password: formData.password,
               }),
             );
-        //
-        const isSuccess = isAdminLogin
-          ? loginAdmin.fulfilled.match(result)
-          : loginUser.fulfilled.match(result);
 
-        if (isSuccess) {
+        if (
+          loginUser.fulfilled.match(result) ||
+          (isAdminLogin && result.payload?.success)
+        ) {
           resetForm();
 
-          if (isAdminLogin) {
-            navigate("/dashboard");
-          } else {
-            iziToast.success({
-              position: "bottomLeft",
-              timeout: 3000,
-              title: "Success",
-              message: "Login Successful",
-              iconColor: getComputedStyle(document.documentElement)
-                .getPropertyValue("--primary")
-                .trim(),
-            });
-
-            showModal(
-              "success",
-              "Login Successful",
-              result.payload.message || "Welcome back!",
-              () => navigate("/"),
-            );
-          }
-        } else {
-          iziToast.error({
+          iziToast.success({
             position: "bottomLeft",
             timeout: 3000,
-            title: "Error",
-            message: "Invalid email or password",
+            title: "Success",
+            message: "Login Successful",
             iconColor: getComputedStyle(document.documentElement)
               .getPropertyValue("--primary")
               .trim(),
           });
 
-          showModal(
-            "error",
-            "Login Failed",
-            "We could not sign you in.",
-            result.payload || "Invalid email or password.",
-          );
+          showModal({
+            variant: "success",
+            title: result.payload?.title || "Welcome!",
+            message: result.payload?.message || "Login successful",
+            description: result.payload?.description,
+            reason: result.payload?.reason,
+            onCloseCb: () => {
+              setTimeout(
+                () =>
+                  navigate(isAdminLogin ? "/admin/dashboard" : "/"),
+                300,
+              );
+            },
+          });
+        } else {
+          // Login error from backend
+          iziToast.error({
+            position: "bottomLeft",
+            timeout: 3000,
+            title: "Error",
+            message: result.payload?.message || "Login failed",
+            iconColor: getComputedStyle(document.documentElement)
+              .getPropertyValue("--primary")
+              .trim(),
+          });
+
+          showModal({
+            variant: "error",
+            title: result.payload?.title || "Login Failed",
+            message: result.payload?.message || "An error occurred",
+            reason: result.payload?.reason || "Please try again.",
+          });
         }
       }
     } catch (error) {
-      console.error(error);
+      console.error("Form submission error:", error);
 
-      showModal(
-        "error",
-        "Oops!",
-        "Something went wrong on our end.",
-        error.message || "Please try again later.",
-      );
+      // Fallback for unexpected errors
+      const errorTitle = isRegister ? "Registration Failed" : "Login Failed";
+      const errorMessage = error.message || "An unexpected error occurred";
+      const errorReason = "Please check your connection and try again.";
+
+      iziToast.error({
+        position: "bottomLeft",
+        timeout: 3000,
+        title: "Error",
+        message: errorMessage,
+        iconColor: getComputedStyle(document.documentElement)
+          .getPropertyValue("--primary")
+          .trim(),
+      });
+
+      showModal({
+        variant: "error",
+        title: errorTitle,
+        message: errorMessage,
+        reason: errorReason,
+      });
     }
   };
+
   // ── Render ────────────────────────────────────────────────────────────────────
 
   return (
@@ -336,8 +359,6 @@ const SignUpPage = () => {
               exit={{ opacity: 0, y: -30 }}
               transition={{ duration: 0.25 }}
             >
-              {/* <h2>Login</h2> */}
-
               <h2>{isAdminLogin ? "ADMIN LOGIN PAGE" : "Login"}</h2>
 
               <div className="input-box">
@@ -380,8 +401,6 @@ const SignUpPage = () => {
                     : "Login"}
               </button>
 
-              {/* code change */}
-
               {!isAdminLogin && (
                 <p className="message">
                   {" "}
@@ -396,7 +415,6 @@ const SignUpPage = () => {
                   </span>
                 </p>
               )}
-              {/*  */}
             </motion.form>
           ) : (
             <motion.form
@@ -533,10 +551,11 @@ const SignUpPage = () => {
 
       <Feedback
         isOpen={modal.open}
-        variant={modal.type}
+        variant={modal.variant}
         title={modal.title}
         message={modal.message}
         reason={modal.reason}
+        description={modal.description}
         onClose={closeModal}
       />
     </div>
@@ -544,6 +563,3 @@ const SignUpPage = () => {
 };
 
 export default SignUpPage;
-
-///admin/login
-// http://localhost:5174/admin/login
