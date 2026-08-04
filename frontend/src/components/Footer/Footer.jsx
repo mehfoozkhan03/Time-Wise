@@ -51,7 +51,7 @@ export default function Footer() {
               <span>support@timewise.com</span>
             </p>
 
-            <p>Mon – Fri • 9:00 AM – 6:00 PM</p>
+            <p>Mon - Fri • 9:00 AM - 6:00 PM</p>
 
             <p>Version 1.0.0</p>
           </div>
