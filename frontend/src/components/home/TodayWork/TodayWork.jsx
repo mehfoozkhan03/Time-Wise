@@ -123,7 +123,17 @@ export default function TodayWork() {
           </div>
 
           <div className={`today_status ${status}`}>
-            <PulseDot />
+            <PulseDot
+              color={
+                status === "idle"
+                  ? "#ef4444"
+                  : status === "working"
+                    ? "#22c55e"
+                    : status === "break"
+                      ? "#f59e0b"
+                      : "#3b82f6"
+              }
+            />
             {getStatus()}
           </div>
         </div>
