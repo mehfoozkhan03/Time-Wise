@@ -68,26 +68,58 @@ min-width: 0;
   scrollbar-width: none; /* For Firefox */
 }
 
-/* Optional: Style the scrollbar for better visibility */
-/* For community right sidebar scrolling */
-/* .community-right::-webkit-scrollbar {
-  width: 6px;
+.community-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin: 20px 0;
+  padding: 16px 20px;
+
+  background: var(--card);
+
+  border: 1px solid var(--card-border);
+  border-radius: 18px;
+
+  box-shadow: var(--shadow_sm);
 }
 
-.community-right::-webkit-scrollbar-track {
-  background: var(--bg-secondary);
-  border-radius: 3px;
-  visibility: hidden;
+.community-toolbar h2 {
+  margin: 0;
+  color: var(--text_primary);
+  font-size: 1.2rem;
 }
 
-.community-right::-webkit-scrollbar-thumb {
-  background: var(--secondary);
-  border-radius: 3px;
+.community-filters {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
-.community-right::-webkit-scrollbar-thumb:hover {
-  background: var(--border);
-} */
+.community-filters button {
+  padding: 10px 16px;
+
+  border: 1px solid var(--card-border);
+  border-radius: 999px;
+
+  background: var(--card);
+  color: var(--text_secondary);
+
+  cursor: pointer;
+
+  transition: all 0.25s ease;
+}
+
+.community-filters button:hover {
+  background: var(--surface);
+  color: var(--primary);
+}
+
+.community-filters button.active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
 
 @media (max-width:1400px){
 

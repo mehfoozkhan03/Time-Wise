@@ -3,6 +3,9 @@
   padding: 20px;
   display: flex;
   flex-direction: column;
+  position: sticky;
+  top: 90px;
+  align-self: flex-start;
   gap: 16px;
   background: var(--card);
   border: 1px solid var(--card-border);
