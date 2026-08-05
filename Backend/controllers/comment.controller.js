@@ -3,6 +3,8 @@ import mongoose from 'mongoose'
 import { commentModel } from '../models/Comment.model.js'
 import { postModel } from '../models/Post.model.js'
 import { likeModel } from '../models/Like.model.js'
+import { userModel } from '../models/User.model.js'
+import { createNotification } from '../services/notification.service.js'
 
 // =======================================================
 // Create Comment
@@ -65,6 +67,37 @@ export const createComment = async (req, res) => {
     post.commentsCount += 1
 
     await post.save({ session })
+
+    // =======================================================
+// Create Comment Notification
+// =======================================================
+
+// Don't notify if user comments on own post
+if (post.createdBy.toString() !== req.user.userID.toString()) {
+  const currentUser = await userModel
+    .findById(req.user.userID)
+    .select("firstName lastName");
+
+  if (currentUser) {
+    await createNotification({
+      sender: req.user.userID,
+
+      title: "New Comment",
+
+      message: `${currentUser.firstName} ${currentUser.lastName} commented on your post.`,
+
+      type: "post",
+
+      referenceModel: "Post",
+
+      referenceId: post._id,
+
+      audienceType: "specific",
+
+      targetUsers: [post.createdBy],
+    });
+  }
+}
 
     await session.commitTransaction()
 
