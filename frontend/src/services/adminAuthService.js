@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios';
 
 const API = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
@@ -6,7 +6,7 @@ const API = axios.create({
 });
 
 export const adminAuthService = {
-  login: (data) => API.post("/admin/login", data),
+  login: (data) => API.post('/user/adminlogin', data),
 
   // getCurrentAdmin: () => API.get("/admin/me"),
 };
