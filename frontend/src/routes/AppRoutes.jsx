@@ -43,6 +43,7 @@ import { DashboardReport } from './../components/Dashboard/DashboardReport/Dashb
 import { DashboardSetting } from './../components/Dashboard/DashboardSetting/DashboardSetting';
 import { ScrollToTopButton } from '../components/ScrollToTop/scrollToTop';
 import { SinglePost } from '../pages/SinglePost/SinglePost';
+import { NotificationPage } from '../pages/NotificationPage/NotificationPage';
 
 export const AppRoutes = () => {
   return (
@@ -134,6 +135,8 @@ export const AppRoutes = () => {
           <Route path="/contact" element={<Contact />} />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/admin/login" element={<SignUpPage />} />
+
+          <Route path="/notifications" element={<PrivateRoutes><NotificationPage /></PrivateRoutes>}/>
 
           {/* ================= EMPLOYEES ================= */}
 
