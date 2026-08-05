@@ -1,17 +1,8 @@
 import "./UpcomingEvents.css";
 
-import {
-  memo,
-  useMemo,
-  useCallback,
-  useState,
-} from "react";
+import { memo, useMemo, useCallback, useState } from "react";
 
-import {
-  FaCalendarAlt,
-  FaArrowRight,
-  FaCalendarTimes,
-} from "react-icons/fa";
+import { FaCalendarAlt, FaArrowRight, FaCalendarTimes } from "react-icons/fa";
 
 import Card from "../../Common/CalendarCard/Card";
 import EventItem from "../../Common/EventItem/EventItem";
@@ -22,39 +13,34 @@ import AllUpcomingEventsModal from "./AllUpcomingEventsModal/AllUpcomingEventsMo
 import { getUpcomingEvents } from "../../../utils/eventUtils";
 import { getRelativeDateLabel } from "../../../utils/dateUtils";
 
-function UpcomingEvents({
-  events = [],
-  onEventClick,
-}) {
+function UpcomingEvents({ events = [], onEventClick }) {
   /* =========================================
      Modal State
   ========================================= */
 
-  const [isModalOpen, setIsModalOpen] =
-    useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   /* =========================================
      All Upcoming Events
   ========================================= */
 
   const allUpcomingEvents = useMemo(() => {
-    return getUpcomingEvents(events).map(
-      (event) => ({
-        ...event,
-        relativeDate: getRelativeDateLabel(
-          event.date
-        ),
-      })
-    );
+    return getUpcomingEvents(events).map((event) => ({
+      ...event,
+      relativeDate: getRelativeDateLabel(event.date),
+    }));
   }, [events]);
 
   /* =========================================
-     Card Events (First 2)
+     Sidebar Events (First 2)
   ========================================= */
 
   const upcomingEvents = useMemo(() => {
-    return allUpcomingEvents.slice(0, 2);
-  }, [allUpcomingEvents]);
+    return getUpcomingEvents(events, 2).map((event) => ({
+      ...event,
+      relativeDate: getRelativeDateLabel(event.date),
+    }));
+  }, [events]);
 
   /* =========================================
      Handlers
@@ -73,14 +59,14 @@ function UpcomingEvents({
       onEventClick?.(event);
       setIsModalOpen(false);
     },
-    [onEventClick]
+    [onEventClick],
   );
 
   return (
     <>
       <Card
         title="Upcoming Events"
-        icon={<FaCalendarAlt />}
+        icon={<FaCalendarAlt aria-hidden="true" />}
         className="upcomingCard"
       >
         {upcomingEvents.length === 0 ? (
@@ -91,15 +77,16 @@ function UpcomingEvents({
           />
         ) : (
           <>
-            <div className="upcomingList">
+            <div
+              className="upcomingList"
+              role="list"
+              aria-label="Upcoming Events"
+            >
               {upcomingEvents.map((event) => (
                 <div
-                  key={
-                    event._id ??
-                    event.id ??
-                    `${event.date}-${event.title}`
-                  }
+                  key={event._id ?? event.id ?? `${event.date}-${event.title}`}
                   className="upcomingItem"
+                  role="listitem"
                 >
                   <EventItem
                     event={event}
@@ -107,12 +94,14 @@ function UpcomingEvents({
                     showAvatar={false}
                     showTime={false}
                     showType={false}
-                    onClick={onEventClick}
+                    onClick={handleEventClick}
                   />
 
                   <time
                     className="eventDate"
-                    dateTime={event.date}
+                    dateTime={
+                      event.date ? new Date(event.date).toISOString() : ""
+                    }
                   >
                     {event.relativeDate}
                   </time>
@@ -120,14 +109,19 @@ function UpcomingEvents({
               ))}
             </div>
 
-            <button
-              type="button"
-              className="viewAllBtn"
-              onClick={handleViewAll}
-            >
-              View All
-              <FaArrowRight />
-            </button>
+            {allUpcomingEvents.length > 2 && (
+              <button
+                type="button"
+                className="viewAllBtn"
+                onClick={handleViewAll}
+                title="View All Upcoming Events"
+                aria-label={`View all ${allUpcomingEvents.length} upcoming events`}
+              >
+                <span>View All</span>
+
+                <FaArrowRight aria-hidden="true" />
+              </button>
+            )}
           </>
         )}
       </Card>
@@ -143,7 +137,6 @@ function UpcomingEvents({
   );
 }
 
-UpcomingEvents.displayName =
-  "UpcomingEvents";
+UpcomingEvents.displayName = "UpcomingEvents";
 
 export default memo(UpcomingEvents);
