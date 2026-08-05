@@ -101,9 +101,9 @@ export const AppRoutes = () => {
 
           {/* ================= ADMIN DASHBOARD ================= */}
 
-          {/* <Route path="/adminDashboard" element={<AdminDashboard />}>
+          <Route path="/adminDashboard" element={<AdminDashboard />}>
             <Route index element={<DashboardHome />} />
-            <Route path="/dashboard" element={<DashboardHome />} />
+            <Route path="dashboard" element={<DashboardHome />} />
             <Route path="employee" element={<DashboardEmployee />} />
             <Route path="attendance" element={<DashboardAttendance />} />
             <Route path="thought" element={<DashboardThuoght />} />
@@ -111,7 +111,7 @@ export const AppRoutes = () => {
             <Route path="announcement" element={<DashboardAnnouncement />} />
             <Route path="report" element={<DashboardReport />} />
             <Route path="setting" element={<DashboardSetting />} />
-          </Route> */}
+          </Route>
 
           {/* ================= PUBLIC PAGES ================= */}
 
