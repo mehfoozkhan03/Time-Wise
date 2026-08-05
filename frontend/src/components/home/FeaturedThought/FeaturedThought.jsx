@@ -101,24 +101,17 @@
 //   );
 // }
 
-
-
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+
+import { FaHeart, FaComment, FaBookmark, FaArrowRight } from "react-icons/fa";
 import Skeleton from "../../../components/Skeleton/Skeleton";
 import Card from "../../Card/Card";
 import "./FeaturedThought.css";
-import { useEffect, useState } from "react";
+import { Star } from "../../Star/star";
 
-import {
-  FaHeart,
-  FaComment,
-  FaBookmark,
-  FaArrowRight,
-  FaStar,
-} from "react-icons/fa";
-
-export default function   FeaturedThought() {
+export default function FeaturedThought() {
   const navigate = useNavigate();
 
   const { featured, loading } = useSelector((state) => state.post);
@@ -126,72 +119,72 @@ export default function   FeaturedThought() {
   //Skeleton//
 
   useEffect(() => {
-  const timer = setTimeout(() => {
-    setShowSkeleton(false);
-  }, 1500);
+    const timer = setTimeout(() => {
+      setShowSkeleton(false);
+    }, 1500);
 
-  return () => clearTimeout(timer);
-}, []);
+    return () => clearTimeout(timer);
+  }, []);
 
-if (showSkeleton) {
-  return (
-    <section className="featured_thought_section" >
-      <Skeleton width="180px" height="30px" />
+  if (showSkeleton) {
+    return (
+      <section className="featured_thought_section">
+        <Skeleton width="180px" height="30px" />
 
-      <Card className="featured_thought_card">
-        <div style={{ marginBottom: "20px" }}>
-          <Skeleton width="150px" height="28px" radius="20px" />
-        </div>
+        <Card className="featured_thought_card">
+          <div style={{ marginBottom: "20px" }}>
+            <Skeleton width="150px" height="28px" radius="20px" />
+          </div>
 
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "12px",
-            marginBottom: "20px",
-          }}
-        >
-          <Skeleton width="55px" height="55px" radius="50%" />
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "12px",
+              marginBottom: "20px",
+            }}
+          >
+            <Skeleton width="55px" height="55px" radius="50%" />
 
-          <div>
-            <Skeleton width="150px" height="18px" />
-            <div style={{ marginTop: "8px" }}>
-              <Skeleton width="100px" height="14px" />
+            <div>
+              <Skeleton width="150px" height="18px" />
+              <div style={{ marginTop: "8px" }}>
+                <Skeleton width="100px" height="14px" />
+              </div>
             </div>
           </div>
-        </div>
 
-        <div style={{ marginBottom: "10px" }}>
-          <Skeleton width="100%" height="16px" />
-        </div>
+          <div style={{ marginBottom: "10px" }}>
+            <Skeleton width="100%" height="16px" />
+          </div>
 
-        <div style={{ marginBottom: "10px" }}>
-          <Skeleton width="90%" height="16px" />
-        </div>
+          <div style={{ marginBottom: "10px" }}>
+            <Skeleton width="90%" height="16px" />
+          </div>
 
-        <div style={{ marginBottom: "20px" }}>
-          <Skeleton width="70%" height="16px" />
-        </div>
+          <div style={{ marginBottom: "20px" }}>
+            <Skeleton width="70%" height="16px" />
+          </div>
 
-        <div
-          style={{
-            display: "flex",
-            gap: "20px",
-            marginBottom: "25px",
-          }}
-        >
-          <Skeleton width="40px" height="20px" />
-          <Skeleton width="40px" height="20px" />
-          <Skeleton width="40px" height="20px" />
-        </div>
+          <div
+            style={{
+              display: "flex",
+              gap: "20px",
+              marginBottom: "25px",
+            }}
+          >
+            <Skeleton width="40px" height="20px" />
+            <Skeleton width="40px" height="20px" />
+            <Skeleton width="40px" height="20px" />
+          </div>
 
-        <Skeleton width="170px" height="45px" radius="10px" />
-      </Card>
-    </section>
-  );
-}
+          <Skeleton width="170px" height="45px" radius="10px" />
+        </Card>
+      </section>
+    );
+  }
 
-//Skeleton//
+  //Skeleton//
 
   if (!featured) {
     return (
@@ -215,7 +208,7 @@ if (showSkeleton) {
 
       <Card className="featured_thought_card">
         <div className="featured_badge">
-          <FaStar />
+          <Star />
 
           <span>Thought of the Day</span>
         </div>
@@ -228,7 +221,7 @@ if (showSkeleton) {
               {author?.firstName} {author?.lastName}
             </h3>
 
-            <span>{author?.designation || 'Employee'}</span>
+            <span>{author?.designation || "Employee"}</span>
           </div>
         </div>
 
