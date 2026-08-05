@@ -12,11 +12,17 @@ import {
   FaHourglassEnd,
   FaChalkboardTeacher,
   FaHandshake,
+  FaBuilding,
+  FaUser,
 } from "react-icons/fa";
 
 import { EVENT_TYPES } from "./eventTypes";
 
 export const EVENT_CONFIG = Object.freeze({
+  /* =========================================
+     Employee Events
+  ========================================= */
+
   [EVENT_TYPES.PRESENT]: {
     label: "Present",
     color: "#22c55e",
@@ -52,6 +58,17 @@ export const EVENT_CONFIG = Object.freeze({
     isHoliday: false,
   },
 
+  [EVENT_TYPES.PERSONAL]: {
+    label: "Personal",
+    color: "#6366f1",
+    icon: FaUser,
+    isHoliday: false,
+  },
+
+  /* =========================================
+     Holidays
+  ========================================= */
+
   [EVENT_TYPES.HOLIDAY]: {
     label: "Holiday",
     color: "#06b6d4",
@@ -79,6 +96,31 @@ export const EVENT_CONFIG = Object.freeze({
     icon: FaFlag,
     isHoliday: true,
   },
+
+  [EVENT_TYPES.COMPANY_HOLIDAY]: {
+    label: "Company Holiday",
+    color: "#10b981",
+    icon: FaBuilding,
+    isHoliday: true,
+  },
+
+  [EVENT_TYPES.OPTIONAL_HOLIDAY]: {
+    label: "Optional Holiday",
+    color: "#8b5cf6",
+    icon: FaUmbrellaBeach,
+    isHoliday: true,
+  },
+
+  [EVENT_TYPES.OBSERVANCE]: {
+    label: "Observance",
+    color: "#6366f1",
+    icon: FaCalendarAlt,
+    isHoliday: true,
+  },
+
+  /* =========================================
+     Office Events
+  ========================================= */
 
   [EVENT_TYPES.MEETING]: {
     label: "Meeting",
@@ -113,18 +155,5 @@ export const EVENT_CONFIG = Object.freeze({
     color: "#f59e0b",
     icon: FaHandshake,
     isHoliday: false,
-  },
-  [EVENT_TYPES.OPTIONAL_HOLIDAY]: {
-  label: "Optional Holiday",
-  color: "#8b5cf6",
-  icon: FaUmbrellaBeach,
-  isHoliday: true,
-  },
-
-  [EVENT_TYPES.OBSERVANCE]: {
-    label: "Observance",
-    color: "#6366f1",
-    icon: FaCalendarAlt,
-    isHoliday: true,
   },
 });
