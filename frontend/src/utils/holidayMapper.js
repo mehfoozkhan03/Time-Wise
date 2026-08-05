@@ -4,44 +4,87 @@ import { EVENT_TYPES } from "../data/eventTypes";
    Holiday -> Calendar Event Mapper
 ========================================= */
 
-export const mapHolidayToEvent = (holiday) => ({
-  _id: `holiday-${holiday._id}`,
+const VALID_HOLIDAY_TYPES = new Set(Object.values(EVENT_TYPES));
 
-  id: holiday._id,
+/* =========================================
+   Map Single Holiday
+========================================= */
 
-  title: holiday.title ?? "Holiday",
+export const mapHolidayToEvent = (holiday = {}) => {
+  const holidayType = String(holiday.type ?? EVENT_TYPES.HOLIDAY).toUpperCase();
 
-  description: holiday.description ?? "",
+  return {
+    /* =========================================
+       IDs
+    ========================================= */
 
-  type: holiday.type?.toUpperCase() || EVENT_TYPES.HOLIDAY,
+    _id: `holiday-${holiday._id}`,
 
-  date: holiday.date,
+    id: holiday._id,
 
-  startTime: "",
+    holidayId: holiday._id,
 
-  endTime: "",
+    /* =========================================
+       Event Information
+    ========================================= */
 
-  isAllDay: true,
+    title: holiday.title ?? "Holiday",
 
-  employeeId: null,
+    description: holiday.description ?? "",
 
-  employeeName: "",
+    type: VALID_HOLIDAY_TYPES.has(holidayType)
+      ? holidayType
+      : EVENT_TYPES.HOLIDAY,
 
-  department: "",
+    date: holiday.date ?? null,
 
-  designation: "",
+    startTime: "",
 
-  location: "",
+    endTime: "",
 
-  priority: "MEDIUM",
+    isAllDay: true,
 
-  // Color and icon will come from eventConfig.js
-  color: null,
+    /* =========================================
+       Employee Fields
+    ========================================= */
 
-  visibility: "PUBLIC",
+    employeeId: null,
 
-  isHoliday: true,
-});
+    employeeName: "",
+
+    department: "",
+
+    designation: "",
+
+    location: "",
+
+    /* =========================================
+       Display
+    ========================================= */
+
+    priority: "MEDIUM",
+
+    color: null,
+
+    visibility: "PUBLIC",
+
+    isHoliday: true,
+
+    /* =========================================
+       Backend Metadata
+    ========================================= */
+
+    createdAt: holiday.createdAt ?? null,
+
+    updatedAt: holiday.updatedAt ?? null,
+
+    createdBy: holiday.createdBy ?? null,
+
+    updatedBy: holiday.updatedBy ?? null,
+
+    isActive: holiday.isActive !== false,
+  };
+};
 
 /* =========================================
    Map Holiday List
@@ -50,8 +93,9 @@ export const mapHolidayToEvent = (holiday) => ({
 export const mapHolidayList = (holidays = []) => {
   if (!Array.isArray(holidays)) {
     console.warn("Holiday Mapper: Expected an array.", holidays);
+
     return [];
   }
 
-  return holidays.map(mapHolidayToEvent);
+  return holidays.filter(Boolean).map(mapHolidayToEvent);
 };
