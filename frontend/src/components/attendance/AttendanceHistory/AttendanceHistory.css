@@ -449,3 +449,22 @@
 .close_modal_btn:hover{
     background:#ef4444;
 }
+/* sleketon */
+.attendance_history_skeleton {
+  margin-top: 12px;
+}
+
+.attendance_table td .skeleton,
+.attendance_table th .skeleton {
+  margin: 4px 0;
+}
+
+.attendance_header {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.attendance_heading_skeleton {
+  margin: 0;
+}
