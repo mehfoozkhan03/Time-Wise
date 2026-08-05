@@ -9,7 +9,7 @@ function RouteLoader() {
   const { isLoading } = useSelector((state) => {
     return state.auth;
   });
-  console.log(`🚀 ~ isLoading:`, isLoading);
+  // console.log(`🚀 ~ isLoading:`, isLoading);
 
   if (isLoading) {
     return <Loader />;

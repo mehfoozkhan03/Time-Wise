@@ -24,8 +24,10 @@ export const loginAdmin = createAsyncThunk(
   async (credentials, thunkAPI) => {
     try {
       const { data } = await adminAuthService.login(credentials);
+      console.log(`🚀 ~ data:`, data);
       return data;
     } catch (error) {
+      console.log(`🚀 ~ error:`, error);
       return thunkAPI.rejectWithValue(
         error.response?.data?.message || 'Admin Login Failed',
       );
