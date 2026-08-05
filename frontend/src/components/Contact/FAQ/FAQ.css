@@ -26,6 +26,19 @@
   gap: 20px;
 }
 
+.faqSkeletonGrid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+}
+
+
+.faqSkeletonGrid .faqColumn{
+  display:flex;
+  flex-direction:column;
+  gap:15px;
+}
+
 @media (max-width: 768px) {
   .faqContainer {
     width: 95%;
