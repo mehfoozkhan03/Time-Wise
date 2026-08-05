@@ -4,8 +4,13 @@ import api from "./api";
 // Get All Notifications
 // ======================================================
 
-export const getNotifications = () => {
-  return api.get("/notifications");
+export const getNotifications = (page = 1, limit = 5) => {
+  return api.get("/notifications", {
+    params: {
+      page,
+      limit,
+    },
+  });
 };
 
 // ======================================================
