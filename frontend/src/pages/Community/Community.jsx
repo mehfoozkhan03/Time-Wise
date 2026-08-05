@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
 
@@ -15,6 +15,8 @@ const Community = () => {
   const dispatch = useDispatch()
 
   const { filter } = useParams()
+
+  const [sortBy, setSortBy] = useState('latest')
 
   useEffect(() => {
     dispatch(fetchPosts())
@@ -50,7 +52,40 @@ const Community = () => {
         <main className="community-feed">
           <CreatePost />
 
-          <Feed type={getFeedType()} />
+          <div className="community-toolbar">
+            <h2>Community Feed</h2>
+            <div className="community-filters">
+              <button
+                className={sortBy === 'latest' ? 'active' : ''}
+                onClick={() => setSortBy('latest')}
+              >
+                Latest
+              </button>
+
+              <button
+                className={sortBy === 'oldest' ? 'active' : ''}
+                onClick={() => setSortBy('oldest')}
+              >
+                Oldest
+              </button>
+
+              <button
+                className={sortBy === 'likes' ? 'active' : ''}
+                onClick={() => setSortBy('likes')}
+              >
+                Most Liked
+              </button>
+
+              <button
+                className={sortBy === 'comments' ? 'active' : ''}
+                onClick={() => setSortBy('comments')}
+              >
+                Most Commented
+              </button>
+            </div>
+          </div>
+
+          <Feed type={getFeedType()} sortBy={sortBy} />
         </main>
 
         <aside className="community-right">
