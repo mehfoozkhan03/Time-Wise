@@ -92,7 +92,16 @@
   background: var(--primary);
   color: white;
 }
+.contactFormSkeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
 
+.contactFormSkeleton .inputs {
+  display: flex;
+  gap: 20px;
+}
 @media (max-width: 840px) {
   .inputs {
     flex-direction: column;
