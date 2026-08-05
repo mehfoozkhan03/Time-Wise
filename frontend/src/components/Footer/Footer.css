@@ -1,13 +1,11 @@
 .footer {
-  /* width: min(1400px, 92%); */
-  /* padding: 0; */
   padding: 21px 51px;
   animation: fade_in 0.5s ease;
 }
 
 .footer_top {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
   align-items: start;
   padding: 37px 0;
   border-top: 1px solid var(--border);
