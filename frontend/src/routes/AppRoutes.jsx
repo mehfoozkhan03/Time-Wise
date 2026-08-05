@@ -1,48 +1,49 @@
-import { Route, Routes, Navigate } from 'react-router-dom';
+import { Route, Routes, Navigate } from 'react-router-dom'
 
-import MainLayout from '../layouts/MainLayout';
-import Home from './../pages/Home';
-import AdminDashboard from './../pages/AdminDashboard';
-import Community from './../pages/Community/Community';
-import About from './../pages/About';
-import Contact from './../pages/Contact';
-import SignUpPage from './../pages/Login';
+import MainLayout from '../layouts/MainLayout'
+import Home from './../pages/Home'
+import AdminDashboard from './../pages/AdminDashboard'
+import Community from './../pages/Community/Community'
+import About from './../pages/About'
+import Contact from './../pages/Contact'
+import SignUpPage from './../pages/Login'
 
-import ProgressBar from './../components/ProgressBar/progressBar';
-import { BubbleCursor } from './../components/BubbleArrow/bubbleArrow';
-import RouteLoader from './../components/RouteLoader';
 
-import Calendar from './../components/Setting/Calendar';
+import ProgressBar from './../components/ProgressBar/progressBar'
+import { BubbleCursor } from './../components/BubbleArrow/bubbleArrow'
+import RouteLoader from './../components/RouteLoader'
 
-import EmployeeTable from '../pages/EmployeeTable';
-import EmployeeDetails from '../pages/EmployeeDetails';
-import EmployeeProfile from './../pages/EmployeeProfile/EmployeeProfile';
+import Calendar from './../components/Setting/Calendar'
 
-import { Error } from '../components/Error/Error';
-import { PrivateRoutes } from '../components/PrivateRoutes';
+import EmployeeTable from '../pages/EmployeeTable'
+import EmployeeDetails from '../pages/EmployeeDetails'
+import EmployeeProfile from './../pages/EmployeeProfile/EmployeeProfile'
 
-import Attendance from '../pages/Attendance/Attendance';
-import { Reports } from './../pages/Reports/Reports';
+import { Error } from '../components/Error/Error'
+import { PrivateRoutes } from '../components/PrivateRoutes'
 
-import { Settings } from '../pages/Settings';
-import { Profile } from './../components/Setting/Profile/Profile';
-import { SettingAttendance } from './../components/Setting/SettingAttendance/SettingAttendance';
-import { Appearance } from './../components/Setting/Appearance/Appearance';
-import { Notification } from './../components/Setting/Notification/Notifications';
-import { Security } from './../components/Setting/Security/Security';
-import { DataExport } from './../components/Setting/DataExport/DataExport';
-import { HelpSupport } from './../components/Setting/HelpSupport/HelpSupport';
+import Attendance from '../pages/Attendance/Attendance'
+import { Reports } from './../pages/Reports/Reports'
 
-import { DashboardEmployee } from './../components/Dashboard/DashboardEmployee/DashboardEmployee';
-import { DashboardHome } from './../components/Dashboard/DashboardHome/DashboardHome';
-import { DashboardAttendance } from './../components/Dashboard/DashboardAttendance/DashboardAttendance';
-import { DashboardThuoght } from './../components/Dashboard/DashboardThought/DashboardThought';
-import { DashboardNotification } from './../components/Dashboard/DashboardNotification/DashboardNotification';
-import { DashboardAnnouncement } from './../components/Dashboard/DashboardAnnouncement/DashboardAnnouncement';
-import { DashboardReport } from './../components/Dashboard/DashboardReport/DashboardReport';
-import { DashboardSetting } from './../components/Dashboard/DashboardSetting/DashboardSetting';
-import { ScrollToTopButton } from '../components/ScrollToTop/scrollToTop';
-import { SinglePost } from '../pages/SinglePost/SinglePost';
+import { Settings } from '../pages/Settings'
+import { Profile } from './../components/Setting/Profile/Profile'
+import { SettingAttendance } from './../components/Setting/SettingAttendance/SettingAttendance'
+import { Appearance } from './../components/Setting/Appearance/Appearance'
+import { Notification } from './../components/Setting/Notification/Notifications'
+import { Security } from './../components/Setting/Security/Security'
+import { DataExport } from './../components/Setting/DataExport/DataExport'
+import { HelpSupport } from './../components/Setting/HelpSupport/HelpSupport'
+
+import { DashboardEmployee } from './../components/Dashboard/DashboardEmployee/DashboardEmployee'
+import { DashboardHome } from './../components/Dashboard/DashboardHome/DashboardHome'
+import { DashboardAttendance } from './../components/Dashboard/DashboardAttendance/DashboardAttendance'
+import { DashboardThuoght } from './../components/Dashboard/DashboardThought/DashboardThought'
+import { DashboardNotification } from './../components/Dashboard/DashboardNotification/DashboardNotification'
+import { DashboardAnnouncement } from './../components/Dashboard/DashboardAnnouncement/DashboardAnnouncement'
+import { DashboardReport } from './../components/Dashboard/DashboardReport/DashboardReport'
+import { DashboardSetting } from './../components/Dashboard/DashboardSetting/DashboardSetting'
+import { ScrollToTopButton } from '../components/ScrollToTop/scrollToTop'
+import { SinglePost } from '../pages/SinglePost/SinglePost'
 
 export const AppRoutes = () => {
   return (
@@ -130,6 +131,24 @@ export const AppRoutes = () => {
               </PrivateRoutes>
             }
           />
+
+          <Route
+            path="/community/profile/:userId"
+            element={
+              <PrivateRoutes>
+                <CommunityProfile />
+              </PrivateRoutes>
+            }
+          />
+
+          <Route
+            path="/community/post/:postId"
+            element={
+              <PrivateRoutes>
+                <SinglePost />
+              </PrivateRoutes>
+            }
+          />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/signup" element={<SignUpPage />} />
@@ -160,5 +179,5 @@ export const AppRoutes = () => {
         </Route>
       </Routes>
     </>
-  );
-};
+  )
+}

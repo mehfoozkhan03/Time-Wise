@@ -6,10 +6,6 @@
     margin-top: 20px;
 }
 
-/* .feed > *{
-    width:100%;
-} */
-
 .feed-loading,
 .feed-error,
 .feed-empty,
@@ -20,14 +16,38 @@
 
     background:var(--card);
 
-    border:1px solid var(--border);
+    border:1px solid var(--card-border);
 
     border-radius:var(--radius_md);
 
-    padding:30px;
+    padding:50px 30px;
 
     text-align:center;
 
     box-shadow:var(--shadow_sm);
 
+}
+
+
+.empty-state {
+  background: var(--card);
+
+  border: 1px solid var(--card-border);
+
+  border-radius: 20px;
+
+  padding: 50px 30px;
+
+  text-align: center;
+
+  box-shadow: var(--shadow_sm);
+}
+
+.empty-state h2 {
+  margin-bottom: 12px;
+  color: var(--text_primary);
+}
+
+.empty-state p {
+  color: var(--text_secondary);
 }
