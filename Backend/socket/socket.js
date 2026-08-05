@@ -42,3 +42,7 @@ export const getIO = () => io;
 export const getUserSocket = (userId) => {
   return onlineUsers.get(userId.toString());
 };
+
+export const getOnlineUsers = () => {
+  return onlineUsers;
+};
