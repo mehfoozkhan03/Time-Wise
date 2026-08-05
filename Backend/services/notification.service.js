@@ -1,5 +1,5 @@
 import { notificationModel } from "../models/Notification.model.js";
-import { getIO, getUserSocket } from "../socket/socket.js";
+import { getIO, getOnlineUsers, getUserSocket } from "../socket/socket.js";
 
 export const createNotification = async ({
   sender,
@@ -13,21 +13,20 @@ export const createNotification = async ({
   targetDepartment = null,
 }) => {
   const notification = await notificationModel.create({
-  sender,
-  title,
-  message,
-  type,
-  referenceModel,
-  referenceId,
-  audienceType,
-  targetUsers,
-  targetDepartment,
-  
-});
+    sender,
+    title,
+    message,
+    type,
+    referenceModel,
+    referenceId,
+    audienceType,
+    targetUsers,
+    targetDepartment,
+  });
 
-const populatedNotification = await notificationModel
-  .findById(notification._id)
-  .populate("sender", "firstName lastName profileImage");
+  const populatedNotification = await notificationModel
+    .findById(notification._id)
+    .populate("sender", "firstName lastName profileImage");
 
   // ======================================================
   // Real-time Notification
@@ -38,7 +37,14 @@ const populatedNotification = await notificationModel
   if (io) {
     // Broadcast notification
     if (audienceType === "all") {
-      io.emit("new-notification", populatedNotification);
+      const users = getOnlineUsers();
+
+      for (const [userId, socketId] of users.entries()) {
+        // Don't send notification to sender
+        if (userId !== sender.toString()) {
+          io.to(socketId).emit("new-notification", populatedNotification);
+        }
+      }
     }
 
     // Targeted notification
