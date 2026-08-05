@@ -2,10 +2,6 @@ import mongoose from "mongoose";
 
 const holidaySchema = new mongoose.Schema(
   {
-    /* ==========================
-       Holiday Information
-    ========================== */
-
     title: {
       type: String,
       required: true,
@@ -32,10 +28,6 @@ const holidaySchema = new mongoose.Schema(
         "OBSERVANCE",
       ],
     },
-
-    /* ==========================
-       Holiday Date
-    ========================== */
 
     date: {
       type: Date,

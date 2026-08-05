@@ -41,10 +41,6 @@ const calendarSchema = new mongoose.Schema(
       ],
     },
 
-    /* ==========================
-       Date & Time
-    ========================== */
-
     date: {
       type: Date,
       required: true,
@@ -75,7 +71,6 @@ const calendarSchema = new mongoose.Schema(
       required: true,
     },
 
-    // Snapshot values for fast UI & history
     employeeName: {
       type: String,
       required: true,
@@ -91,10 +86,6 @@ const calendarSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
-
-    /* ==========================
-       Extra Information
-    ========================== */
 
     location: {
       type: String,
