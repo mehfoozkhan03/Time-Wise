@@ -41,7 +41,6 @@ const getLoggedInAccount = async (req) => {
 /* =========================================
    GET ALL HOLIDAYS
 ========================================= */
-
 export const getAllHolidays = async (req, res) => {
   try {
     const auth = await getLoggedInAccount(req);
@@ -79,7 +78,6 @@ export const getAllHolidays = async (req, res) => {
 /* =========================================
    GET HOLIDAY BY ID
 ========================================= */
-
 export const getHolidayById = async (req, res) => {
   try {
     const auth = await getLoggedInAccount(req);
@@ -113,10 +111,6 @@ export const getHolidayById = async (req, res) => {
     });
   }
 };
-
-/* =========================================
-   CREATE HOLIDAY
-========================================= */
 
 export const createHoliday = async (req, res) => {
   try {
@@ -179,7 +173,6 @@ export const createHoliday = async (req, res) => {
 /* =========================================
    UPDATE HOLIDAY
 ========================================= */
-
 export const updateHoliday = async (req, res) => {
   try {
     const auth = await getLoggedInAccount(req);
@@ -259,7 +252,6 @@ export const updateHoliday = async (req, res) => {
 /* =========================================
    DELETE HOLIDAY
 ========================================= */
-
 export const deleteHoliday = async (req, res) => {
   try {
     const auth = await getLoggedInAccount(req);

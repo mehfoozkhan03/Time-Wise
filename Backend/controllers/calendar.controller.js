@@ -1,44 +1,38 @@
-import { calendarModel } from '../models/Calendar.model.js';
-import { userModel } from '../models/User.model.js';
-import { AdminModel } from '../models/Admin.model.js';
+import { calendarModel } from "../models/Calendar.model.js";
+import { userModel } from "../models/User.model.js";
+import { AdminModel } from "../models/Admin.model.js";
 
 /* =========================================
    Event Permissions
 ========================================= */
-
 const ADMIN_EVENT_TYPES = [
-  'PRESENT',
-  'LEAVE',
-  'HOLIDAY',
-  'GOVERNMENT_HOLIDAY',
-  'FESTIVAL',
-  'SPECIAL_EVENT',
-  'WORK_EVENT',
+  "PRESENT",
+  "LEAVE",
+  "HOLIDAY",
+  "GOVERNMENT_HOLIDAY",
+  "FESTIVAL",
+  "SPECIAL_EVENT",
+  "WORK_EVENT",
 ];
 
-const EMPLOYEE_EVENT_TYPES = ['PERSONAL', 'MEETING', 'BIRTHDAY'];
+const EMPLOYEE_EVENT_TYPES = ["PERSONAL", "MEETING", "BIRTHDAY"];
 
 /* =========================================
    Event Visibility
 ========================================= */
-
 const PUBLIC_EVENT_TYPES = [
-  'HOLIDAY',
-  'GOVERNMENT_HOLIDAY',
-  'FESTIVAL',
-  'SPECIAL_EVENT',
-  'MEETING',
+  "HOLIDAY",
+  "GOVERNMENT_HOLIDAY",
+  "FESTIVAL",
+  "SPECIAL_EVENT",
+  "MEETING",
 ];
-
 const getVisibility = (type) => {
   if (PUBLIC_EVENT_TYPES.includes(type)) {
-    return 'PUBLIC';
+    return "PUBLIC";
   }
-  return 'PRIVATE';
+  return "PRIVATE";
 };
-/* =========================================
-   Logged In User Helper
-========================================= */
 
 const getLoggedInAccount = async (req) => {
   // Employee Login
@@ -49,7 +43,7 @@ const getLoggedInAccount = async (req) => {
 
     return {
       account: employee,
-      accountType: 'employee',
+      accountType: "employee",
       isEmployee: true,
       isAdmin: false,
     };
@@ -63,7 +57,7 @@ const getLoggedInAccount = async (req) => {
 
     return {
       account: admin,
-      accountType: 'admin',
+      accountType: "admin",
       isEmployee: false,
       isAdmin: true,
     };
@@ -75,7 +69,6 @@ const getLoggedInAccount = async (req) => {
 /* =========================================
    GET ALL EVENTS
 ========================================= */
-
 export const getAllEvents = async (req, res) => {
   try {
     const auth = await getLoggedInAccount(req);
@@ -83,7 +76,7 @@ export const getAllEvents = async (req, res) => {
     if (!auth) {
       return res.status(404).json({
         success: false,
-        message: 'Account not found.',
+        message: "Account not found.",
       });
     }
 
@@ -97,7 +90,7 @@ export const getAllEvents = async (req, res) => {
         isActive: true,
         $or: [
           {
-            visibility: 'PUBLIC',
+            visibility: "PUBLIC",
           },
           {
             employeeId: auth.account._id,
@@ -107,7 +100,6 @@ export const getAllEvents = async (req, res) => {
     }
 
     // Admins can see all active events
-
     const events = await calendarModel.find(query).sort({ date: 1 });
 
     return res.status(200).json({
@@ -116,18 +108,14 @@ export const getAllEvents = async (req, res) => {
       data: events,
     });
   } catch (error) {
-    console.error('Get Events Error:', error);
+    console.error("Get Events Error:", error);
 
     return res.status(500).json({
       success: false,
-      message: 'Failed to fetch calendar events.',
+      message: "Failed to fetch calendar events.",
     });
   }
 };
-
-/* =========================================
-   GET EVENT BY ID
-========================================= */
 
 export const getEventById = async (req, res) => {
   try {
@@ -136,31 +124,31 @@ export const getEventById = async (req, res) => {
     if (!auth) {
       return res.status(404).json({
         success: false,
-        message: 'Account not found.',
+        message: "Account not found.",
       });
     }
 
-    console.log('Logged Account:', auth.account.email);
-    console.log('Account Type:', auth.accountType);
+    console.log("Logged Account:", auth.account.email);
+    console.log("Account Type:", auth.accountType);
 
     const event = await calendarModel.findById(req.params.id);
 
     if (!event || !event.isActive) {
       return res.status(404).json({
         success: false,
-        message: 'Event not found.',
+        message: "Event not found.",
       });
     }
 
     // Employees can only view their own private events
     if (
       !auth.isAdmin &&
-      event.visibility === 'PRIVATE' &&
+      event.visibility === "PRIVATE" &&
       event.employeeId.toString() !== auth.account._id.toString()
     ) {
       return res.status(403).json({
         success: false,
-        message: 'Access denied.',
+        message: "Access denied.",
       });
     }
 
@@ -169,18 +157,14 @@ export const getEventById = async (req, res) => {
       data: event,
     });
   } catch (error) {
-    console.error('Get Event Error:', error);
+    console.error("Get Event Error:", error);
 
     return res.status(500).json({
       success: false,
-      message: 'Failed to fetch event.',
+      message: "Failed to fetch event.",
     });
   }
 };
-
-/* =========================================
-   CREATE EVENT
-========================================= */
 
 export const createEvent = async (req, res) => {
   try {
@@ -189,7 +173,7 @@ export const createEvent = async (req, res) => {
     if (!auth) {
       return res.status(404).json({
         success: false,
-        message: 'Account not found.',
+        message: "Account not found.",
       });
     }
 
@@ -210,12 +194,11 @@ export const createEvent = async (req, res) => {
     /* =========================================
        Employee Create Event
     ========================================= */
-
     if (auth.isEmployee) {
       if (!EMPLOYEE_EVENT_TYPES.includes(type)) {
         return res.status(403).json({
           success: false,
-          message: 'You cannot create this type of event.',
+          message: "You cannot create this type of event.",
         });
       }
 
@@ -244,14 +227,13 @@ export const createEvent = async (req, res) => {
 
         visibility: getVisibility(type),
 
-        // createdBy: employee._id,
         createdBy: employee._id,
         createdByModel: "User",
       });
 
       return res.status(201).json({
         success: true,
-        message: 'Event created successfully.',
+        message: "Event created successfully.",
         data: event,
       });
     }
@@ -259,11 +241,10 @@ export const createEvent = async (req, res) => {
     /* =========================================
        Admin Create Event
     ========================================= */
-
     if (!ADMIN_EVENT_TYPES.includes(type)) {
       return res.status(403).json({
         success: false,
-        message: 'Invalid event type.',
+        message: "Invalid event type.",
       });
     }
 
@@ -272,7 +253,7 @@ export const createEvent = async (req, res) => {
     if (!employee) {
       return res.status(404).json({
         success: false,
-        message: 'Employee not found.',
+        message: "Employee not found.",
       });
     }
 
@@ -289,10 +270,10 @@ export const createEvent = async (req, res) => {
       employeeName:
         employee.name ||
         `${employee.firstName} ${employee.lastName}` ||
-        'no name given',
+        "no name given",
 
-      department: employee.department || 'not assigned',
-      designation: employee.designation || 'untitled',
+      department: employee.department || "not assigned",
+      designation: employee.designation || "untitled",
 
       location,
       priority,
@@ -308,22 +289,18 @@ export const createEvent = async (req, res) => {
 
     return res.status(201).json({
       success: true,
-      message: 'Event created successfully.',
+      message: "Event created successfully.",
       data: event,
     });
   } catch (error) {
-    console.error('Create Event Error:', error);
+    console.error("Create Event Error:", error);
 
     return res.status(500).json({
       success: false,
-      message: 'Failed to create event.',
+      message: "Failed to create event.",
     });
   }
 };
-
-/* =========================================
-   UPDATE EVENT
-========================================= */
 
 export const updateEvent = async (req, res) => {
   try {
@@ -332,7 +309,7 @@ export const updateEvent = async (req, res) => {
     if (!auth) {
       return res.status(404).json({
         success: false,
-        message: 'Account not found.',
+        message: "Account not found.",
       });
     }
 
@@ -341,7 +318,7 @@ export const updateEvent = async (req, res) => {
     if (!event || !event.isActive) {
       return res.status(404).json({
         success: false,
-        message: 'Event not found.',
+        message: "Event not found.",
       });
     }
 
@@ -355,14 +332,14 @@ export const updateEvent = async (req, res) => {
       if (event.employeeId.toString() !== employee._id.toString()) {
         return res.status(403).json({
           success: false,
-          message: 'You can only update your own events.',
+          message: "You can only update your own events.",
         });
       }
 
       if (!EMPLOYEE_EVENT_TYPES.includes(event.type)) {
         return res.status(403).json({
           success: false,
-          message: 'You cannot update this event.',
+          message: "You cannot update this event.",
         });
       }
 
@@ -380,7 +357,7 @@ export const updateEvent = async (req, res) => {
         if (!EMPLOYEE_EVENT_TYPES.includes(req.body.type)) {
           return res.status(403).json({
             success: false,
-            message: 'Invalid event type.',
+            message: "Invalid event type.",
           });
         }
 
@@ -395,7 +372,7 @@ export const updateEvent = async (req, res) => {
 
       return res.status(200).json({
         success: true,
-        message: 'Event updated successfully.',
+        message: "Event updated successfully.",
         data: event,
       });
     }
@@ -403,12 +380,11 @@ export const updateEvent = async (req, res) => {
     /* =========================================
        Admin Update
     ========================================= */
-
     if (req.body.type) {
       if (!ADMIN_EVENT_TYPES.includes(req.body.type)) {
         return res.status(403).json({
           success: false,
-          message: 'Invalid event type.',
+          message: "Invalid event type.",
         });
       }
 
@@ -422,7 +398,7 @@ export const updateEvent = async (req, res) => {
       if (!employee) {
         return res.status(404).json({
           success: false,
-          message: 'Employee not found.',
+          message: "Employee not found.",
         });
       }
 
@@ -451,15 +427,15 @@ export const updateEvent = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      message: 'Event updated successfully.',
+      message: "Event updated successfully.",
       data: event,
     });
   } catch (error) {
-    console.error('Update Event Error:', error);
+    console.error("Update Event Error:", error);
 
     return res.status(500).json({
       success: false,
-      message: 'Failed to update event.',
+      message: "Failed to update event.",
     });
   }
 };
@@ -467,7 +443,6 @@ export const updateEvent = async (req, res) => {
 /* =========================================
    DELETE EVENT
 ========================================= */
-
 export const deleteEvent = async (req, res) => {
   try {
     const auth = await getLoggedInAccount(req);
@@ -475,7 +450,7 @@ export const deleteEvent = async (req, res) => {
     if (!auth) {
       return res.status(404).json({
         success: false,
-        message: 'Account not found.',
+        message: "Account not found.",
       });
     }
 
@@ -484,28 +459,27 @@ export const deleteEvent = async (req, res) => {
     if (!event || !event.isActive) {
       return res.status(404).json({
         success: false,
-        message: 'Event not found.',
+        message: "Event not found.",
       });
     }
 
     /* =========================================
        Employee Delete
     ========================================= */
-
     if (auth.isEmployee) {
       const employee = auth.account;
 
       if (event.employeeId.toString() !== employee._id.toString()) {
         return res.status(403).json({
           success: false,
-          message: 'You can only delete your own events.',
+          message: "You can only delete your own events.",
         });
       }
 
       if (!EMPLOYEE_EVENT_TYPES.includes(event.type)) {
         return res.status(403).json({
           success: false,
-          message: 'You cannot delete this event.',
+          message: "You cannot delete this event.",
         });
       }
 
@@ -517,14 +491,12 @@ export const deleteEvent = async (req, res) => {
 
       return res.status(200).json({
         success: true,
-        message: 'Event deleted successfully.',
+        message: "Event deleted successfully.",
       });
     }
-
     /* =========================================
        Admin Delete
     ========================================= */
-
     event.isActive = false;
     event.updatedBy = auth.account._id;
     event.updatedByModel = "Admin";
@@ -533,14 +505,14 @@ export const deleteEvent = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      message: 'Event deleted successfully.',
+      message: "Event deleted successfully.",
     });
   } catch (error) {
-    console.error('Delete Event Error:', error);
+    console.error("Delete Event Error:", error);
 
     return res.status(500).json({
       success: false,
-      message: 'Failed to delete event.',
+      message: "Failed to delete event.",
     });
   }
 };
