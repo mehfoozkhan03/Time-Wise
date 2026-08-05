@@ -12,10 +12,6 @@ import {
 
 const holidayRouter = express.Router();
 
-/* =========================================
-   Holiday Routes
-========================================= */
-
 // Employee + Admin
 holidayRouter.get("/", auth, getAllHolidays);
 holidayRouter.get("/:id", auth, getHolidayById);

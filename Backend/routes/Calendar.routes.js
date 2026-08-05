@@ -12,16 +12,7 @@ import {
 
 const router = express.Router();
 
-/* =========================================
-   Authentication
-   Every Calendar route requires login
-========================================= */
-
 router.use(auth);
-
-/* =========================================
-   Calendar Routes
-========================================= */
 
 // Get all events
 router.get('/', getAllEvents);
