@@ -7,16 +7,17 @@ import { getNotifications } from "../services/notificationServices";
 
 export const fetchNotifications = createAsyncThunk(
   "notification/fetchNotifications",
-  async (_, thunkAPI) => {
+  async ({ page = 1, limit = 10 } = {}, thunkAPI) => {
     try {
-      const { data } = await getNotifications();
-      return data.notifications;
+      const { data } = await getNotifications(page, limit);
+
+      return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(
-        error.response?.data?.message || "Unable to fetch notifications"
+        error.response?.data?.message || "Unable to fetch notifications",
       );
     }
-  }
+  },
 );
 
 // ======================================================
@@ -25,6 +26,11 @@ export const fetchNotifications = createAsyncThunk(
 
 const initialState = {
   notifications: [],
+
+  page: 1,
+  totalPages: 1,
+  hasMore: true,
+
   loading: false,
   isError: false,
   errorMessage: "",
@@ -39,7 +45,16 @@ const notificationSlice = createSlice({
 
   initialState,
 
-  reducers: {},
+  reducers: {
+    addNotification: (state, action) => {
+      state.notifications.unshift(action.payload);
+
+      // Dropdown me sirf latest 10 notifications rakho
+      if (state.notifications.length > 10) {
+        state.notifications.pop();
+      }
+    },
+  },
 
   extraReducers: (builder) => {
     builder
@@ -54,7 +69,14 @@ const notificationSlice = createSlice({
 
       .addCase(fetchNotifications.fulfilled, (state, action) => {
         state.loading = false;
-        state.notifications = action.payload;
+
+        state.notifications = action.payload.notifications;
+
+        state.page = action.payload.page;
+
+        state.totalPages = action.payload.totalPages;
+
+        state.hasMore = action.payload.hasMore;
       })
 
       .addCase(fetchNotifications.rejected, (state, action) => {
@@ -64,5 +86,7 @@ const notificationSlice = createSlice({
       });
   },
 });
+
+export const { addNotification } = notificationSlice.actions;
 
 export default notificationSlice.reducer;

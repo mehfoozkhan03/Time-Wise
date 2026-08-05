@@ -6,6 +6,10 @@ import { notificationStatusModel } from "../models/NotificationStatus.model.js";
 // ======================================================
 
 export const getNotifications = async (req, res) => {
+  const page = Number(req.query.page) || 1;
+  const limit = Number(req.query.limit) || 10;
+
+  const skip = (page - 1) * limit;
   try {
     const notifications = await notificationModel
       .find({
@@ -29,10 +33,30 @@ export const getNotifications = async (req, res) => {
       .populate("sender", "firstName lastName profileImage")
       .sort({
         createdAt: -1,
-      });
+      })
+      .skip(skip)
+      .limit(limit);
 
     const statuses = await notificationStatusModel.find({
       userId: req.user.userID,
+    });
+
+    const totalNotifications = await notificationModel.countDocuments({
+      isArchived: false,
+
+      sender: {
+        $ne: req.user.userID,
+      },
+
+      $or: [
+        {
+          audienceType: "all",
+        },
+        {
+          audienceType: "specific",
+          targetUsers: req.user.userID,
+        },
+      ],
     });
 
     const statusMap = new Map();
@@ -59,7 +83,18 @@ export const getNotifications = async (req, res) => {
 
     return res.status(200).json({
       success: true,
+
       notifications: finalNotifications,
+
+      page,
+
+      limit,
+
+      totalNotifications,
+
+      totalPages: Math.ceil(totalNotifications / limit),
+
+      hasMore: skip + finalNotifications.length < totalNotifications,
     });
   } catch (error) {
     console.error("Get Notifications Error:", error);
@@ -93,7 +128,7 @@ export const markNotificationAsRead = async (req, res) => {
         upsert: true,
         returnDocument: "after",
         setDefaultsOnInsert: true,
-      }
+      },
     );
 
     return res.status(200).json({
@@ -132,7 +167,7 @@ export const deleteNotification = async (req, res) => {
         upsert: true,
         returnDocument: "after",
         setDefaultsOnInsert: true,
-      }
+      },
     );
 
     return res.status(200).json({
@@ -148,7 +183,6 @@ export const deleteNotification = async (req, res) => {
     });
   }
 };
-
 
 // ======================================================
 // Get Unread Notification Count
@@ -172,17 +206,14 @@ export const getUnreadNotificationCount = async (req, res) => {
     });
 
     const notificationIds = notifications.map(
-      (notification) => notification._id
+      (notification) => notification._id,
     );
 
     // Read OR Deleted notifications
     const statuses = await notificationStatusModel.find({
       userId: req.user.userID,
       notificationId: { $in: notificationIds },
-      $or: [
-        { read: true },
-        { deleted: true },
-      ],
+      $or: [{ read: true }, { deleted: true }],
     });
 
     const unreadCount = notificationIds.length - statuses.length;

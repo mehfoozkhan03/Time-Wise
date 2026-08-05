@@ -1,25 +1,5 @@
-// import { notificationModel } from "../models/Notification.model.js";
-
-// export const createNotification = async ({
-//     sender,
-//     title,
-//     message,
-//     type,
-//     referenceId = null,
-// }) => {
-
-//     return await notificationModel.create({
-//         sender,
-//         title,
-//         message,
-//         type,
-//         referenceId,
-//     });
-
-// };
-
-
 import { notificationModel } from "../models/Notification.model.js";
+import { getIO, getOnlineUsers, getUserSocket } from "../socket/socket.js";
 
 export const createNotification = async ({
   sender,
@@ -44,5 +24,40 @@ export const createNotification = async ({
     targetDepartment,
   });
 
-  return notification;
+  const populatedNotification = await notificationModel
+    .findById(notification._id)
+    .populate("sender", "firstName lastName profileImage");
+
+  // ======================================================
+  // Real-time Notification
+  // ======================================================
+
+  const io = getIO();
+
+  if (io) {
+    // Broadcast notification
+    if (audienceType === "all") {
+      const users = getOnlineUsers();
+
+      for (const [userId, socketId] of users.entries()) {
+        // Don't send notification to sender
+        if (userId !== sender.toString()) {
+          io.to(socketId).emit("new-notification", populatedNotification);
+        }
+      }
+    }
+
+    // Targeted notification
+    if (audienceType === "specific") {
+      for (const userId of targetUsers) {
+        const socketId = getUserSocket(userId);
+
+        if (socketId) {
+          io.to(socketId).emit("new-notification", populatedNotification);
+        }
+      }
+    }
+  }
+
+  return populatedNotification;
 };
