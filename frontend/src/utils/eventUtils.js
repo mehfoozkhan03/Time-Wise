@@ -1,48 +1,61 @@
 import { getToday, isToday } from "./dateUtils";
 
 /* =========================================
+   Sort Events By Date & Time
+========================================= */
+
+const sortEvents = (events = []) => {
+  return [...events].sort((a, b) => {
+    const dateDiff = new Date(a.date) - new Date(b.date);
+
+    if (dateDiff !== 0) {
+      return dateDiff;
+    }
+
+    if (!a.startTime && !b.startTime) {
+      return 0;
+    }
+
+    if (!a.startTime) {
+      return 1;
+    }
+
+    if (!b.startTime) {
+      return -1;
+    }
+
+    return a.startTime.localeCompare(b.startTime);
+  });
+};
+
+/* =========================================
    Get Upcoming Events
 ========================================= */
 
-export const getUpcomingEvents = (events = [], limit = 5) => {
+export const getUpcomingEvents = (events = [], limit = null) => {
   const today = getToday();
 
-  return events
-    .filter((event) => {
-      if (!event?.date) {
-        return false;
-      }
+  const upcomingEvents = events.filter((event) => {
+    if (!event?.date) {
+      return false;
+    }
 
-      const eventDate = new Date(event.date);
+    const eventDate = new Date(event.date);
 
-      if (Number.isNaN(eventDate.getTime())) {
-        return false;
-      }
+    if (Number.isNaN(eventDate.getTime())) {
+      return false;
+    }
 
-      return eventDate >= today;
-    })
-    .sort((a, b) => {
-      const dateDiff = new Date(a.date) - new Date(b.date);
+    return eventDate >= today;
+  });
 
-      if (dateDiff !== 0) {
-        return dateDiff;
-      }
+  const sortedEvents = sortEvents(upcomingEvents);
 
-      if (!a.startTime && !b.startTime) {
-        return 0;
-      }
+  if (typeof limit === "number" && limit > 0) {
+    return sortedEvents.slice(0, limit);
+  }
 
-      if (!a.startTime) {
-        return 1;
-      }
-
-      if (!b.startTime) {
-        return -1;
-      }
-
-      return a.startTime.localeCompare(b.startTime);
-    })
-    .slice(0, limit);
+  return sortedEvents;
 };
 
 /* =========================================
@@ -50,10 +63,6 @@ export const getUpcomingEvents = (events = [], limit = 5) => {
 ========================================= */
 
 export const getTodaySummary = (events = [], eventConfig = {}) => {
-  /* =========================================
-     Count Today's Events
-  ========================================= */
-
   const counts = events.reduce((acc, event) => {
     if (!event?.date || !event?.type) {
       return acc;
@@ -69,10 +78,6 @@ export const getTodaySummary = (events = [], eventConfig = {}) => {
 
     return acc;
   }, {});
-
-  /* =========================================
-     Build Summary
-  ========================================= */
 
   return Object.entries(eventConfig)
     .map(([type, config]) => ({
