@@ -18,18 +18,19 @@ export default function Navbar() {
 
   const handleNotificationClick = async (notification) => {
     try {
-      // Mark as read only if unread
       if (!notification.read) {
         await markNotificationAsRead(notification._id);
 
-        // Refresh notifications
-        dispatch(fetchNotifications());
+        dispatch(
+          fetchNotifications({
+            page: 1,
+            limit: 5,
+          }),
+        );
       }
 
-      // Close notification dropdown
       setNotificationOpen(false);
 
-      // Navigate based on notification type
       if (notification.referenceModel === "Post" && notification.referenceId) {
         navigate(`/community/post/${notification.referenceId}`);
       }
@@ -126,7 +127,12 @@ export default function Navbar() {
 
   // Notification
   useEffect(() => {
-    dispatch(fetchNotifications());
+    dispatch(
+      fetchNotifications({
+        page: 1,
+        limit: 5,
+      }),
+    );
   }, [dispatch]);
 
   return (
@@ -136,7 +142,10 @@ export default function Navbar() {
               Logo
         ======================= */}
 
-        <div className="navbar_logo" id="tour-logo">
+        <div
+          className="navbar_logo"
+          id="tour-logo"
+        >
           <NavLink to="/">
             <div className="logo_text">
               <img
@@ -230,7 +239,11 @@ export default function Navbar() {
 
           {/* Profile */}
 
-          <div className="profile_container" id="tour-profile" ref={profileRef}>
+          <div
+            className="profile_container"
+            id="tour-profile"
+            ref={profileRef}
+          >
             <button
               className="profile_btn"
               onClick={() => {
@@ -265,11 +278,17 @@ export default function Navbar() {
 
             {profileOpen && (
               <div className="profile_dropdown">
-                <NavLink to="/employee" onClick={() => setProfileOpen(false)}>
+                <NavLink
+                  to="/employee"
+                  onClick={() => setProfileOpen(false)}
+                >
                   My Profile
                 </NavLink>
 
-                <NavLink to="/settings" onClick={() => setProfileOpen(false)}>
+                <NavLink
+                  to="/settings"
+                  onClick={() => setProfileOpen(false)}
+                >
                   Settings
                 </NavLink>
 
