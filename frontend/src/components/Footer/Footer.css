@@ -252,6 +252,22 @@
   }
 }
 
+@media (max-width: 320px) {
+
+  .footer_links h3,
+  .footer_contact h3 {
+    font-size: small;
+  }
+
+  .footer_contact p {
+    font-size: small;
+  }
+
+  .footer_contact p span {
+    font-size: x-small;
+    letter-spacing: 0.3px;
+  }
+}
 @media (min-width:431px) and (max-width:840px) {
   .footer_brand {
     flex-direction: row;
