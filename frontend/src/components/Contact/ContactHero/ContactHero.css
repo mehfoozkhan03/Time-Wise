@@ -1,4 +1,4 @@
-.contactHero {
+/* .contactHero {
   background-image: url("https://raw.githubusercontent.com/hetuk2005/webDevelopment/refs/heads/main/Utils/Contact.jpg");
   background-size: cover;
   background-position: center;
@@ -19,6 +19,14 @@
   width: 700px;
   color: #ddd;
 }
+.contact-skeleton-text {
+    margin-top: 20px;
+}
+
+
+.contactHero .skeleton {
+    margin: 10px auto;
+}
 
 @media (max-width: 840px) {
   .contactHero{
@@ -28,4 +36,80 @@
     padding: 15px;
     width: fit-content;
   }
+}
+ */
+
+
+ .contactHero {
+
+  background-image: url("https://raw.githubusercontent.com/hetuk2005/webDevelopment/refs/heads/main/Utils/Contact.jpg");
+
+  background-size: cover;
+  background-position: center;
+
+  height: 450px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  text-align: center;
+
+  transition: background-image 0.5s ease;
+}
+
+
+/* Image loading time */
+
+.contactHero.loading {
+
+  background-image: none;
+
+  background: var(--surface_hover);
+
+}
+
+
+.contactHero h1 {
+
+  color: white;
+  font-size: 44px;
+
+}
+
+
+.contactHero p {
+
+  width: 700px;
+  color: #ddd;
+
+}
+
+
+
+.contactHero .skeleton {
+
+  margin: 10px auto;
+
+}
+
+
+
+@media (max-width: 840px) {
+
+  .contactHero{
+
+    height:300px;
+
+  }
+
+
+  .contactHero p {
+
+    padding:15px;
+    width:fit-content;
+
+  }
+
 }
