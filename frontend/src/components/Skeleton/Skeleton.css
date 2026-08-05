@@ -1,0 +1,32 @@
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+
+  background: var(--surface_hover);
+  border: 1px solid var(--border);
+}
+
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.08) 45%,
+    rgba(255, 255, 255, 0.18) 50%,
+    rgba(255, 255, 255, 0.08) 55%,
+    transparent 100%
+  );
+
+  transform: translateX(-100%);
+  animation: skeleton-loading 1.3s linear infinite;
+}
+
+@keyframes skeleton-loading {
+  100% {
+    transform: translateX(100%);
+  }
+}

@@ -2,6 +2,9 @@
   width: 100%;
   display: flex;
   flex-direction: column;
+  position: sticky;
+  top: 90px;
+  align-self: flex-start;
   gap: 20px;
 }
 

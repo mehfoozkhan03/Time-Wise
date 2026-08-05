@@ -43,6 +43,7 @@ import { DashboardReport } from './../components/Dashboard/DashboardReport/Dashb
 import { DashboardSetting } from './../components/Dashboard/DashboardSetting/DashboardSetting';
 import { ScrollToTopButton } from '../components/ScrollToTop/scrollToTop';
 import { SinglePost } from '../pages/SinglePost/SinglePost';
+import { NotificationPage } from '../pages/NotificationPage/NotificationPage';
 
 export const AppRoutes = () => {
   return (
@@ -100,9 +101,9 @@ export const AppRoutes = () => {
 
           {/* ================= ADMIN DASHBOARD ================= */}
 
-          {/* <Route path="/adminDashboard" element={<AdminDashboard />}>
+          <Route path="/adminDashboard" element={<AdminDashboard />}>
             <Route index element={<DashboardHome />} />
-            <Route path="/dashboard" element={<DashboardHome />} />
+            <Route path="dashboard" element={<DashboardHome />} />
             <Route path="employee" element={<DashboardEmployee />} />
             <Route path="attendance" element={<DashboardAttendance />} />
             <Route path="thought" element={<DashboardThuoght />} />
@@ -110,7 +111,7 @@ export const AppRoutes = () => {
             <Route path="announcement" element={<DashboardAnnouncement />} />
             <Route path="report" element={<DashboardReport />} />
             <Route path="setting" element={<DashboardSetting />} />
-          </Route> */}
+          </Route>
 
           {/* ================= PUBLIC PAGES ================= */}
 
@@ -130,10 +131,37 @@ export const AppRoutes = () => {
               </PrivateRoutes>
             }
           />
+
+          {/* <Route
+            path="/community/profile/:userId"
+            element={
+              <PrivateRoutes>
+                <CommunityProfile />
+              </PrivateRoutes>
+            }
+          /> */}
+
+          <Route
+            path="/community/post/:postId"
+            element={
+              <PrivateRoutes>
+                <SinglePost />
+              </PrivateRoutes>
+            }
+          />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/admin/login" element={<SignUpPage />} />
+
+          <Route
+            path="/notifications"
+            element={
+              <PrivateRoutes>
+                <NotificationPage />
+              </PrivateRoutes>
+            }
+          />
 
           {/* ================= EMPLOYEES ================= */}
 

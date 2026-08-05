@@ -7,7 +7,7 @@ function InfoRow({
   label,
   value,
 }) {
-  const displayValue = value || "--";
+  const displayValue = value ?? "--";
 
   return (
     <div className="infoRow">
@@ -27,7 +27,7 @@ function InfoRow({
 
         <p
           className="infoValue"
-          title={displayValue}
+          title={String(displayValue)}
         >
           {displayValue}
         </p>

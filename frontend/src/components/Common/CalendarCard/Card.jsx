@@ -20,9 +20,6 @@ function Card({
       .replace(/\s+/g, "-")}-card`;
   }, [title]);
 
-  /* =========================================
-     Card Class
-  ========================================= */
 
   const cardClassName = useMemo(() => {
     return `card ${className}`.trim();

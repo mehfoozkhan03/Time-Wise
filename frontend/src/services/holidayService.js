@@ -5,28 +5,51 @@ import axios from "axios";
 ========================================= */
 
 const API = axios.create({
-  baseURL: "https://testapi-zc4z.onrender.com",
-  headers: {
-    "Content-Type": "application/json",
-  },
+  baseURL: import.meta.env.VITE_API_URL,
+  withCredentials: true,
 });
+
+/* =========================================
+   API Endpoints
+========================================= */
+
+const BASE_URL = "/holiday";
 
 /* =========================================
    Holiday Service
 ========================================= */
 
 export const holidayService = {
-  async getHolidays() {
-    try {
-      const response = await API.get("/holidays");
+  /* =========================================
+     Get All Holidays
+  ========================================= */
 
-      console.log("✅ Holiday Service Response:", response.data);
+  getHolidays: (params = {}) =>
+    API.get(BASE_URL, {
+      params,
+    }),
 
-      return response;
-    } catch (error) {
-      console.error("❌ Holiday Service Error:", error);
+  /* =========================================
+     Get Single Holiday
+  ========================================= */
 
-      throw error;
-    }
-  },
+  getHolidayById: (id) => API.get(`${BASE_URL}/${id}`),
+
+  /* =========================================
+     Create Holiday
+  ========================================= */
+
+  createHoliday: (data) => API.post(BASE_URL, data),
+
+  /* =========================================
+     Update Holiday
+  ========================================= */
+
+  updateHoliday: (id, data) => API.put(`${BASE_URL}/${id}`, data),
+
+  /* =========================================
+     Delete Holiday
+  ========================================= */
+
+  deleteHoliday: (id) => API.delete(`${BASE_URL}/${id}`),
 };

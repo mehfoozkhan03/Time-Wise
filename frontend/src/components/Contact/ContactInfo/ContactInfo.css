@@ -35,6 +35,21 @@
   display: block;
 }
 
+.infoItem .skeleton {
+  margin:10px 0px;
+}
+.contactInfo .head {
+  display: flex;
+  flex-direction: column;
+  align-items:start;
+  gap: 15px;
+}
+
+
+/* Skeleton spacing */
+.contactInfo .head .skeleton {
+  margin: 0;
+}
 /* ── 431px – 840px: horizontal row of cards ────────────── */
 @media (min-width: 431px) and (max-width: 840px) {
   .contactInfo {
