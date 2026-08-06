@@ -3,6 +3,8 @@ import mongoose from 'mongoose'
 import { likeModel } from '../models/Like.model.js'
 import { postModel } from '../models/Post.model.js'
 import { commentModel } from '../models/Comment.model.js'
+import { createNotification } from './../services/notification.service.js';
+import { userModel } from './../models/User.model.js';
 
 // =======================================================
 // Toggle Post Like
@@ -81,6 +83,37 @@ export const togglePostLike = async (req, res) => {
     post.likesCount += 1
 
     await post.save({ session });
+
+    // =======================================================
+// Create Like Notification
+// =======================================================
+
+// Don't notify if user likes own post
+if (post.createdBy.toString() !== userId.toString()) {
+  const currentUser = await userModel
+    .findById(userId)
+    .select("firstName lastName");
+
+  if (currentUser) {
+    await createNotification({
+      sender: userId,
+
+      title: "New Like",
+
+      message: `${currentUser.firstName} ${currentUser.lastName} liked your post.`,
+
+      type: "post",
+
+      referenceModel: "Post",
+
+      referenceId: post._id,
+
+      audienceType: "specific",
+
+      targetUsers: [post.createdBy],
+    });
+  }
+}
 
     await session.commitTransaction()
 
@@ -180,6 +213,38 @@ export const toggleCommentLike = async (req, res) => {
     comment.likesCount += 1
 
     await comment.save({ session })
+
+    // =======================================================
+// Create Comment Like Notification
+// =======================================================
+
+// Don't notify if user likes own comment
+if (comment.createdBy.toString() !== userId.toString()) {
+  const currentUser = await userModel
+    .findById(userId)
+    .select("firstName lastName");
+
+  if (currentUser) {
+    await createNotification({
+      sender: userId,
+
+      title: "Comment Like",
+
+      message: `${currentUser.firstName} ${currentUser.lastName} liked your comment.`,
+
+      type: "post",
+
+      referenceModel: "Post",
+
+      // Comment belongs to a post, so open that post
+      referenceId: comment.post,
+
+      audienceType: "specific",
+
+      targetUsers: [comment.createdBy],
+    });
+  }
+}
 
     await session.commitTransaction()
 
