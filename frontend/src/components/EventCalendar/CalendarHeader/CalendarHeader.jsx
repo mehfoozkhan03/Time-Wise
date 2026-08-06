@@ -6,6 +6,7 @@ import {
   FaChevronLeft,
   FaChevronRight,
   FaCalendarDay,
+  FaPlus,
 } from "react-icons/fa";
 
 import { getMonthName } from "../../../utils/calendarUtils";
@@ -15,12 +16,16 @@ function CalendarHeader({
   previousMonth,
   nextMonth,
   goToToday,
+  onCreateEvent,
+  canCreate = false,
 }) {
   /* =========================================
      Safety Check
   ========================================= */
 
-  if (!currentDate) return null;
+  if (!currentDate) {
+    return null;
+  }
 
   /* =========================================
      Month Title
@@ -45,6 +50,10 @@ function CalendarHeader({
   const handleToday = useCallback(() => {
     goToToday?.();
   }, [goToToday]);
+
+  const handleCreateEvent = useCallback(() => {
+    onCreateEvent?.();
+  }, [onCreateEvent]);
 
   return (
     <header className="calendarHeader">
@@ -83,9 +92,24 @@ function CalendarHeader({
         >
           <FaChevronRight />
         </button>
+
+        {canCreate && (
+          <button
+            type="button"
+            className="createEventBtn"
+            onClick={handleCreateEvent}
+            aria-label="Create Event"
+            title="Create Event"
+          >
+            <FaPlus />
+            <span>Add Event</span>
+          </button>
+        )}
       </div>
     </header>
   );
 }
+
+CalendarHeader.displayName = "CalendarHeader";
 
 export default memo(CalendarHeader);

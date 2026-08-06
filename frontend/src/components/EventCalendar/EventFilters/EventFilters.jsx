@@ -1,15 +1,8 @@
 import "./EventFilters.css";
 
-import {
-  memo,
-  useMemo,
-  useCallback,
-} from "react";
+import { memo, useMemo, useCallback } from "react";
 
-import {
-  FaSearch,
-  FaTimes,
-} from "react-icons/fa";
+import { FaSearch, FaTimes } from "react-icons/fa";
 
 import { EVENT_CONFIG } from "../../../data/eventConfig";
 
@@ -30,7 +23,9 @@ function EventFilters({
 
   const eventCounts = useMemo(() => {
     return events.reduce((counts, event) => {
-      if (!event?.type) return counts;
+      if (!event?.type) {
+        return counts;
+      }
 
       const type = String(event.type).toUpperCase();
 
@@ -48,7 +43,7 @@ function EventFilters({
     (e) => {
       setSearchTerm?.(e.target.value.trimStart());
     },
-    [setSearchTerm]
+    [setSearchTerm],
   );
 
   const handleClearSearch = useCallback(() => {
@@ -63,7 +58,7 @@ function EventFilters({
     (type) => {
       toggleFilter?.(type);
     },
-    [toggleFilter]
+    [toggleFilter],
   );
 
   /* =========================================
@@ -82,22 +77,16 @@ function EventFilters({
     <section className="eventFilters">
       {/* ================= Search ================= */}
 
-      <label
-        htmlFor="calendar-search"
-        className="sr-only"
-      >
+      <label htmlFor="calendar-search" className="sr-only">
         Search calendar events
       </label>
 
-      <div
-        className="searchBar"
-        role="search"
-      >
+      <div className="searchBar" role="search">
         <FaSearch aria-hidden="true" />
 
         <input
           id="calendar-search"
-          type="text"
+          type="search"
           placeholder="Search by title, employee or event type..."
           aria-label="Search calendar events"
           aria-controls="calendar-grid"
@@ -112,6 +101,7 @@ function EventFilters({
             type="button"
             className="clearSearchBtn"
             aria-label="Clear search"
+            title="Clear Search"
             onClick={handleClearSearch}
           >
             <FaTimes />
@@ -122,31 +112,22 @@ function EventFilters({
       {/* ================= Actions ================= */}
 
       <div className="filterActions">
-        <button
-          type="button"
-          onClick={handleSelectAll}
-        >
+        <button type="button" onClick={handleSelectAll}>
           Select All
         </button>
 
-        <button
-          type="button"
-          onClick={handleClearAll}
-        >
+        <button type="button" onClick={handleClearAll}>
           Clear All
         </button>
       </div>
 
       {/* ================= Filter Chips ================= */}
 
-      <div className="filterList">
+      <div className="filterList" role="group" aria-label="Event Filters">
         {eventTypes.map(([type, config]) => {
           const active = Boolean(filters[type]);
 
-          const className = [
-            "filterChip",
-            active && "active",
-          ]
+          const className = ["filterChip", active && "active"]
             .filter(Boolean)
             .join(" ");
 
@@ -160,9 +141,7 @@ function EventFilters({
               aria-pressed={active}
               aria-label={`Toggle ${config.label} events`}
               title={config.label}
-              onClick={() =>
-                handleToggleFilter(type)
-              }
+              onClick={() => handleToggleFilter(type)}
             >
               <span className="chipIcon">
                 <Icon />
@@ -170,9 +149,7 @@ function EventFilters({
 
               <span>{config.label}</span>
 
-              <span className="count">
-                {eventCounts[type] ?? 0}
-              </span>
+              <span className="count">{eventCounts[type] ?? 0}</span>
             </button>
           );
         })}
@@ -181,7 +158,6 @@ function EventFilters({
   );
 }
 
-EventFilters.displayName =
-  "EventFilters";
+EventFilters.displayName = "EventFilters";
 
 export default memo(EventFilters);
