@@ -69,7 +69,19 @@ function FAQ() {
 
   return (
     <div className="faqContainer">
-      <h1>Frequently Asked Questions</h1>
+      {loading ? (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginBottom: "30px",
+          }}
+        >
+          <Skeleton width="550px" height="45px" radius="8px" />
+        </div>
+      ) : (
+        <h1>Frequently Asked Questions</h1>
+      )}
       {loading ? (
         <div className="faqSkeletonGrid">
           <div className="faqColumn">
