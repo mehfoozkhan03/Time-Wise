@@ -1,14 +1,12 @@
 import "./EventItem.css";
 
-import { memo, useCallback, useMemo } from "react";
+import { memo, useMemo, useCallback } from "react";
 
 import { EVENT_CONFIG } from "../../../data/eventConfig";
+
 import { formatTime } from "../../../utils/dateUtils";
 
-import {
-  getAvatarColor,
-  getInitials,
-} from "../../../utils/stringUtils";
+import { getAvatarColor, getInitials } from "../../../utils/stringUtils";
 
 function EventItem({
   event,
@@ -18,7 +16,11 @@ function EventItem({
   showType = true,
   onClick,
 }) {
-  if (!event) {
+  /* =========================================
+     Validation
+  ========================================= */
+
+  if (!event?.type) {
     return null;
   }
 
@@ -26,9 +28,9 @@ function EventItem({
      Event Config
   ========================================= */
 
-  const config = useMemo(() => {
-    return EVENT_CONFIG[event.type];
-  }, [event.type]);
+  const eventType = String(event.type).toUpperCase();
+
+  const config = EVENT_CONFIG[eventType];
 
   if (!config) {
     return null;
@@ -40,9 +42,7 @@ function EventItem({
      Event Type
   ========================================= */
 
-  const isHoliday = useMemo(() => {
-    return Boolean(event.isHoliday);
-  }, [event.isHoliday]);
+  const isHoliday = Boolean(event.isHoliday || config.isHoliday);
 
   /* =========================================
      Display Name
@@ -53,15 +53,12 @@ function EventItem({
       return config.label;
     }
 
-    return (
-      event.employeeName ??
-      event.employee ??
-      ""
-    );
+    return event.employeeName || event.employee || event.displayName || "";
   }, [
-    config.label,
-    event.employee,
     event.employeeName,
+    event.employee,
+    event.displayName,
+    config.label,
     isHoliday,
   ]);
 
@@ -74,19 +71,8 @@ function EventItem({
   }, [displayName]);
 
   const initials = useMemo(() => {
-    if (isHoliday) {
-      return getInitials(
-        event.title || config.label
-      );
-    }
-
-    return getInitials(displayName);
-  }, [
-    config.label,
-    displayName,
-    event.title,
-    isHoliday,
-  ]);
+    return getInitials(isHoliday ? event.title || config.label : displayName);
+  }, [displayName, event.title, config.label, isHoliday]);
 
   /* =========================================
      Time
@@ -97,13 +83,8 @@ function EventItem({
       return "All Day";
     }
 
-    return event.startTime
-      ? formatTime(event.startTime)
-      : "";
-  }, [
-    event.startTime,
-    event.isAllDay,
-  ]);
+    return event.startTime ? formatTime(event.startTime) : "";
+  }, [event.isAllDay, event.startTime]);
 
   /* =========================================
      Click
@@ -111,18 +92,22 @@ function EventItem({
 
   const handleClick = useCallback(
     (e) => {
-      if (!onClick) return;
+      if (!onClick) {
+        return;
+      }
 
       e.stopPropagation();
 
       onClick(event);
     },
-    [event, onClick]
+    [event, onClick],
   );
 
   const handleKeyDown = useCallback(
     (e) => {
-      if (!onClick) return;
+      if (!onClick) {
+        return;
+      }
 
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
@@ -130,12 +115,22 @@ function EventItem({
         onClick(event);
       }
     },
-    [event, onClick]
+    [event, onClick],
   );
+
+  /* =========================================
+     Class Name
+  ========================================= */
+
+  const className = useMemo(() => {
+    return ["eventItem", variant, isHoliday && "holiday"]
+      .filter(Boolean)
+      .join(" ");
+  }, [variant, isHoliday]);
 
   return (
     <div
-      className={`eventItem ${variant}`}
+      className={className}
       style={{
         "--event-color": config.color,
       }}
@@ -144,23 +139,20 @@ function EventItem({
       role={onClick ? "button" : undefined}
       tabIndex={onClick ? 0 : undefined}
       aria-label={
-        onClick
-          ? `${event.title || config.label} (${config.label})`
-          : undefined
+        onClick ? `${event.title || config.label} (${config.label})` : undefined
       }
     >
-      {showAvatar &&
-        (displayName || isHoliday) && (
-          <div
-            className="eventItemAvatar"
-            style={{
-              background: avatarColor,
-            }}
-            aria-hidden="true"
-          >
-            {initials}
-          </div>
-        )}
+      {showAvatar && (displayName || isHoliday) && (
+        <div
+          className="eventItemAvatar"
+          style={{
+            background: avatarColor,
+          }}
+          aria-hidden="true"
+        >
+          {initials}
+        </div>
+      )}
 
       <div className="eventItemContent">
         <h5 title={event.title || config.label}>
@@ -169,18 +161,12 @@ function EventItem({
 
         <div className="eventItemMeta">
           {showType && (
-            <span
-              className="eventItemIcon"
-              aria-hidden="true"
-            >
+            <span className="eventItemIcon" aria-hidden="true">
               <Icon />
             </span>
           )}
 
-          {showTime &&
-            formattedTime && (
-              <span>{formattedTime}</span>
-            )}
+          {showTime && formattedTime && <span>{formattedTime}</span>}
         </div>
       </div>
     </div>

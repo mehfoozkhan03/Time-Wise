@@ -4,7 +4,11 @@ import { memo, useCallback } from "react";
 
 import EventItem from "../../Common/EventItem/EventItem";
 
-function EventBadge({ event, onClick }) {
+function EventBadge({
+  event,
+  onClick,
+  ...props
+}) {
   /* =========================================
      Validation
   ========================================= */
@@ -18,9 +22,11 @@ function EventBadge({ event, onClick }) {
   ========================================= */
 
   const handleClick = useCallback(() => {
-    if (typeof onClick === "function") {
-      onClick(event);
+    if (!onClick) {
+      return;
     }
+
+    onClick(event);
   }, [event, onClick]);
 
   return (
@@ -28,6 +34,7 @@ function EventBadge({ event, onClick }) {
       event={event}
       variant="compact"
       onClick={handleClick}
+      {...props}
     />
   );
 }
