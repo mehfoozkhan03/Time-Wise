@@ -58,7 +58,19 @@ function HolidayForm({
 
   useEffect(() => {
     if (mode === "EDIT" && initialData) {
-      setFormData(initialData);
+      setFormData({
+        ...INITIAL_FORM,
+        title: initialData.title || "",
+        description: initialData.description || "",
+        type: initialData.type || EVENT_TYPES.HOLIDAY,
+        date: initialData.date || "",
+        priority: initialData.priority || "MEDIUM",
+        visibility: initialData.visibility || "PUBLIC",
+        isActive:
+          typeof initialData.isActive === "boolean"
+            ? initialData.isActive
+            : true,
+      });
     } else {
       setFormData(INITIAL_FORM);
     }
@@ -105,18 +117,26 @@ function HolidayForm({
     (event) => {
       event.preventDefault();
 
+      if (isSubmitting) {
+        return;
+      }
+
       if (!validateForm()) {
         return;
       }
 
-      onSubmit?.(formData);
+      onSubmit?.({
+        ...formData,
+      });
     },
-    [formData, onSubmit, validateForm],
+    [formData, isSubmitting, onSubmit, validateForm],
   );
 
   const handleCancel = useCallback(() => {
-    onCancel?.();
-  }, [onCancel]);
+    if (!isSubmitting) {
+      onCancel?.();
+    }
+  }, [isSubmitting, onCancel]);
 
   return (
     <form className="holidayForm" onSubmit={handleSubmit} noValidate>
@@ -131,6 +151,7 @@ function HolidayForm({
           onChange={handleChange}
           placeholder="Enter holiday title"
           disabled={isSubmitting}
+          required
         />
 
         {errors.title && <small className="errorText">{errors.title}</small>}
@@ -179,6 +200,7 @@ function HolidayForm({
             value={formData.date}
             onChange={handleChange}
             disabled={isSubmitting}
+            required
           />
 
           {errors.date && <small className="errorText">{errors.date}</small>}

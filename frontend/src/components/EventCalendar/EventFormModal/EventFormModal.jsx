@@ -35,13 +35,21 @@ function EventFormModal({
     };
   }, [onClose, isSubmitting]);
 
+  const handleClose = useCallback(() => {
+    if (isSubmitting) {
+      return;
+    }
+
+    onClose?.();
+  }, [onClose, isSubmitting]);
+
   const handleOverlayClick = useCallback(
     (event) => {
-      if (event.target === event.currentTarget && !isSubmitting) {
-        onClose?.();
+      if (event.target === event.currentTarget) {
+        handleClose();
       }
     },
-    [onClose, isSubmitting],
+    [handleClose],
   );
 
   const handleModalClick = useCallback((event) => {
@@ -89,7 +97,7 @@ function EventFormModal({
             ref={closeButtonRef}
             type="button"
             className="closeBtn"
-            onClick={onClose}
+            onClick={handleClose}
             disabled={isSubmitting}
             aria-label="Close Event Form"
           >
@@ -105,7 +113,7 @@ function EventFormModal({
             isAdmin={isAdmin}
             isSubmitting={isSubmitting}
             onSubmit={handleSubmit}
-            onCancel={onClose}
+            onCancel={handleClose}
           />
         </div>
       </div>

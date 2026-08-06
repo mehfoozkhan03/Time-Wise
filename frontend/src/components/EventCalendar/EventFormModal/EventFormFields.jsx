@@ -1,6 +1,6 @@
 import "./EventForm.css";
 
-import { memo, useMemo } from "react";
+import { memo } from "react";
 
 import { EVENT_TYPES } from "../../../data/eventTypes";
 
@@ -53,15 +53,11 @@ function EventFormFields({
   isAdmin = false,
   isSubmitting = false,
 }) {
-  const eventOptions = useMemo(() => EVENT_OPTIONS, []);
-
-  const priorityOptions = useMemo(() => PRIORITY_OPTIONS, []);
-
   return (
     <>
       {isAdmin && (
         <div className="formGroup">
-          <label htmlFor="employeeId">Employee</label>
+          <label htmlFor="employeeId">Assign Employee *</label>
 
           <select
             id="employeeId"
@@ -69,8 +65,11 @@ function EventFormFields({
             value={formData.employeeId}
             onChange={onChange}
             disabled={isSubmitting}
+            required={isAdmin}
           >
-            <option value="">Select Employee</option>
+            <option value="">
+              {employees.length ? "Select Employee" : "No Employees Found"}
+            </option>
 
             {employees.map((employee) => (
               <option key={employee._id} value={employee._id}>
@@ -96,6 +95,7 @@ function EventFormFields({
           onChange={onChange}
           placeholder="Enter title"
           disabled={isSubmitting}
+          required
         />
 
         {errors.title && <small className="errorText">{errors.title}</small>}
@@ -125,7 +125,7 @@ function EventFormFields({
           onChange={onChange}
           disabled={isSubmitting}
         >
-          {eventOptions.map((option) => (
+          {EVENT_OPTIONS.map((option) => (
             <option key={option.value} value={option.value}>
               {option.label}
             </option>
@@ -144,6 +144,7 @@ function EventFormFields({
             value={formData.date}
             onChange={onChange}
             disabled={isSubmitting}
+            required
           />
 
           {errors.date && <small className="errorText">{errors.date}</small>}
@@ -217,7 +218,7 @@ function EventFormFields({
           onChange={onChange}
           disabled={isSubmitting}
         >
-          {priorityOptions.map((priority) => (
+          {PRIORITY_OPTIONS.map((priority) => (
             <option key={priority} value={priority}>
               {priority}
             </option>
