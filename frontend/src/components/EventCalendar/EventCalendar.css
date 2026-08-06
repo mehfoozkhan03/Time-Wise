@@ -10,6 +10,7 @@
   flex-direction: column;
   gap: 24px;
   width: 100%;
+  min-width: 0;
 }
 
 @media (max-width: 1200px) {
@@ -18,9 +19,35 @@
   }
 }
 
-@media (max-width: 768px) {
+
+@media (max-width: 760px) {
+  .calendarBody {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
   .eventCalendar {
     gap: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .calendarBody {
+    gap: 12px;
+  }
+
+  .eventCalendar {
+    gap: 16px;
+  }
+}
+
+@media (max-width: 320px) {
+  .calendarBody {
+    gap: 10px;
+  }
+
+  .eventCalendar {
+    gap: 14px;
   }
 }
 

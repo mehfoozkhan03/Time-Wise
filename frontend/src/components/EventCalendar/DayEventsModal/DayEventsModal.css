@@ -1,0 +1,220 @@
+.dayEventsOverlay {
+  position: fixed;
+  inset: 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 20px;
+
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(6px);
+
+  z-index: 1100;
+
+  animation: fadeIn 0.25s ease;
+}
+
+.dayEventsModal {
+  width: 100%;
+  max-width: 540px;
+  max-height: 80vh;
+
+  display: flex;
+  flex-direction: column;
+
+  background: var(--surface);
+
+  border: 1px solid var(--border);
+  border-radius: var(--radius_lg);
+
+  box-shadow: var(--shadow_lg);
+
+  overflow: hidden;
+
+  animation: fadeIn 0.25s ease;
+}
+
+.dayEventsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 18px 22px;
+
+  border-bottom: 1px solid var(--border);
+}
+
+.dayEventsTitle {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.dayEventsTitle svg {
+  font-size: 22px;
+  color: var(--primary);
+}
+
+.dayEventsTitle h2 {
+  margin: 0;
+
+  color: var(--text_primary);
+
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.dayEventsTitle span {
+  display: block;
+  margin-top: 2px;
+
+  color: var(--text_secondary);
+
+  font-size: 13px;
+}
+
+.dayEventsHeader .closeBtn {
+  width: 38px;
+  height: 38px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border: 1px solid var(--border);
+  border-radius: 50%;
+
+  background: transparent;
+
+  color: var(--text_secondary);
+
+  cursor: pointer;
+
+  transition: var(--transition);
+}
+
+.dayEventsHeader .closeBtn:hover {
+  background: var(--surface_hover);
+
+  color: var(--primary);
+
+  border-color: var(--primary);
+}
+
+.dayEventsBody {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  padding: 20px;
+
+  overflow-y: auto;
+}
+
+.dayEventsBody::-webkit-scrollbar {
+  width: 8px;
+}
+
+.dayEventsBody::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 10px;
+}
+
+.dayEventsBody::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+/* ===============================
+   760px
+================================ */
+
+@media (max-width: 760px) {
+  .dayEventsOverlay {
+    padding: 16px;
+  }
+
+  .dayEventsModal {
+    max-width: 100%;
+    max-height: 85vh;
+  }
+
+  .dayEventsHeader {
+    padding: 16px;
+  }
+
+  .dayEventsBody {
+    padding: 16px;
+  }
+
+  .dayEventsTitle h2 {
+    font-size: 17px;
+  }
+}
+
+/* ===============================
+   480px
+================================ */
+
+@media (max-width: 480px) {
+  .dayEventsOverlay {
+    padding: 10px;
+    align-items: flex-end;
+  }
+
+  .dayEventsModal {
+    max-height: 90vh;
+
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  .dayEventsHeader {
+    padding: 14px;
+  }
+
+  .dayEventsBody {
+    padding: 14px;
+    gap: 10px;
+  }
+
+  .dayEventsTitle {
+    gap: 10px;
+  }
+
+  .dayEventsTitle svg {
+    font-size: 18px;
+  }
+
+  .dayEventsTitle h2 {
+    font-size: 16px;
+  }
+
+  .dayEventsTitle span {
+    font-size: 12px;
+  }
+}
+
+/* ===============================
+   320px
+================================ */
+
+@media (max-width: 320px) {
+  .dayEventsHeader {
+    padding: 12px;
+  }
+
+  .dayEventsBody {
+    padding: 12px;
+  }
+
+  .dayEventsTitle h2 {
+    font-size: 15px;
+  }
+
+  .dayEventsHeader .closeBtn {
+    width: 34px;
+    height: 34px;
+  }
+}

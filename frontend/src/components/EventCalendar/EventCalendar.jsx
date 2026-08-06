@@ -30,6 +30,7 @@ import EventModal from "./EventModal/EventModal";
 import EventFormModal from "./EventFormModal/EventFormModal";
 import HolidayFormModal from "./HolidayFormModal/HolidayFormModal";
 import DeleteModal from "./DeleteModal/DeleteModal";
+import DayEventsModal from "./DayEventsModal/DayEventsModal"
 
 import CalendarSkeleton from "../Common/CalendarSkeleton/CalendarSkeleton";
 
@@ -103,6 +104,9 @@ export default function EventCalendar() {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [selectedHoliday, setSelectedHoliday] = useState(null);
 
+  const [dayEvents, setDayEvents] = useState([]);
+  const [dayEventsModalOpen, setDayEventsModalOpen] = useState(false);
+
   const [formMode, setFormMode] = useState("CREATE");
 
   const [eventFormOpen, setEventFormOpen] = useState(false);
@@ -113,6 +117,11 @@ export default function EventCalendar() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+
+  const handleMoreEvents = useCallback((day, events) => {
+    setDayEvents(events);
+    setDayEventsModalOpen(true);
+  }, []);
 
   const handleEventClick = useCallback((event) => {
     setSelectedEvent(event);
@@ -342,6 +351,7 @@ export default function EventCalendar() {
           selectDate={selectDate}
           events={filteredEvents}
           onEventClick={handleEventClick}
+          onMoreEvents={handleMoreEvents}
         />
 
         <CalendarSidebar
@@ -398,6 +408,14 @@ export default function EventCalendar() {
           onConfirm={handleConfirmDelete}
           isDeleting={isDeleting}
         />
+      )}
+
+      {dayEventsModalOpen && (
+      <DayEventsModal
+        events={dayEvents}
+        onClose={() => setDayEventsModalOpen(false)}
+        onEventClick={handleEventClick}
+      />
       )}
     </section>
   );
