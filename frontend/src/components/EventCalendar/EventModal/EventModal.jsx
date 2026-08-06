@@ -21,7 +21,15 @@ import { formatFullDate, formatTime } from "../../../utils/dateUtils";
 
 import InfoRow from "../../Common/InfoRow/InfoRow";
 
-function EventModal({ event, onClose, onEdit, onDelete, canEdit = false }) {
+function EventModal({
+  event,
+  onClose,
+  onEdit,
+  onDelete,
+  canEdit = false,
+  canDelete = false,
+  isLoading = false,
+}) {
   const closeButtonRef = useRef(null);
 
   const config = useMemo(() => {
@@ -45,7 +53,15 @@ function EventModal({ event, onClose, onEdit, onDelete, canEdit = false }) {
       return config.label;
     }
 
-    return event.employeeName || "N/A";
+    if (event.employeeName) {
+      return event.employeeName;
+    }
+
+    if (typeof event.employeeId === "object") {
+      return event.employeeId?.name || "N/A";
+    }
+
+    return "N/A";
   }, [event, config, isHoliday]);
 
   const eventTime = useMemo(() => {
@@ -83,7 +99,7 @@ function EventModal({ event, onClose, onEdit, onDelete, canEdit = false }) {
     closeButtonRef.current?.focus();
 
     const handleKeyDown = (e) => {
-      if (e.key === "Escape") {
+      if (e.key === "Escape" && !isLoading) {
         onClose?.();
       }
     };
@@ -93,19 +109,27 @@ function EventModal({ event, onClose, onEdit, onDelete, canEdit = false }) {
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [event, onClose]);
+  }, [event, onClose, isLoading]);
 
   const handleClose = useCallback(() => {
+    if (isLoading) {
+      return;
+    }
+
     onClose?.();
-  }, [onClose]);
+  }, [onClose, isLoading]);
 
   const handleOverlayClick = useCallback(
     (e) => {
+      if (isLoading) {
+        return;
+      }
+
       if (e.target === e.currentTarget) {
         handleClose();
       }
     },
-    [handleClose],
+    [handleClose, isLoading],
   );
 
   const handleModalClick = useCallback((e) => {
@@ -113,14 +137,22 @@ function EventModal({ event, onClose, onEdit, onDelete, canEdit = false }) {
   }, []);
 
   const handleEdit = useCallback(() => {
+    if (isLoading) {
+      return;
+    }
+
     onClose?.();
     onEdit?.(event);
-  }, [event, onEdit, onClose]);
+  }, [event, onEdit, onClose, isLoading]);
 
   const handleDelete = useCallback(() => {
+    if (isLoading) {
+      return;
+    }
+
     onClose?.();
     onDelete?.(event);
-  }, [event, onDelete, onClose]);
+  }, [event, onDelete, onClose, isLoading]);
 
   if (!event || !config) {
     return null;
@@ -173,6 +205,7 @@ function EventModal({ event, onClose, onEdit, onDelete, canEdit = false }) {
             type="button"
             className="closeBtn"
             onClick={handleClose}
+            disabled={isLoading}
             aria-label="Close Event"
           >
             <FaTimes />
@@ -231,23 +264,29 @@ function EventModal({ event, onClose, onEdit, onDelete, canEdit = false }) {
           </div>
         </div>
 
-        {canEdit && (
+        {(canEdit || canDelete) && (
           <div className="modalFooter">
-            {onEdit && (
-              <button type="button" className="editBtn" onClick={handleEdit}>
+            {canEdit && onEdit && (
+              <button
+                type="button"
+                className="editBtn"
+                onClick={handleEdit}
+                disabled={isLoading}
+              >
                 <FaEdit />
                 Edit
               </button>
             )}
 
-            {onDelete && (
+            {canDelete && onDelete && (
               <button
                 type="button"
                 className="deleteBtn"
                 onClick={handleDelete}
+                disabled={isLoading}
               >
                 <FaTrash />
-                Delete
+                {isLoading ? "Deleting..." : "Delete"}
               </button>
             )}
           </div>

@@ -30,7 +30,7 @@ function CalendarGrid({
      Week Header
   ========================================= */
 
-  const weekDays = useMemo(() => WEEK_DAYS, []);
+  const weekDays = WEEK_DAYS;
 
   /* =========================================
      Group Events By Date
@@ -40,12 +40,13 @@ function CalendarGrid({
     const map = new Map();
 
     events.forEach((event) => {
-      if (!event?.date) return;
+      if (!event?.date) {
+        return;
+      }
 
       const eventDate = new Date(event.date);
 
       if (Number.isNaN(eventDate.getTime())) {
-        console.warn("Invalid Event:", event);
         return;
       }
 
@@ -60,28 +61,6 @@ function CalendarGrid({
 
     return map;
   }, [events]);
-
-  /* =========================================
-     Debug
-  ========================================= */
-
-  // useEffect(() => {
-  //   console.group("===== CALENDAR GRID =====");
-
-  //   console.log("Current Month:", currentDate);
-  //   console.log("Events Received:", events.length);
-  //   console.log("Grouped Days:", eventsByDate.size);
-
-  //   eventsByDate.forEach((value, key) => {
-  //     console.log(`${key} -> ${value.length} event(s)`, value);
-  //   });
-
-  //   console.groupEnd();
-  // }, [currentDate, events, eventsByDate]);
-
-  /* =========================================
-     Render
-  ========================================= */
 
   return (
     <section className="calendarWrapper">
@@ -116,5 +95,7 @@ function CalendarGrid({
     </section>
   );
 }
+
+CalendarGrid.displayName = "CalendarGrid";
 
 export default memo(CalendarGrid);

@@ -1,6 +1,6 @@
 import "./CalendarDay.css";
 
-import { memo, useCallback, useMemo } from "react";
+import { memo, useCallback } from "react";
 
 import EventBadge from "../EventBadge/EventBadge";
 
@@ -18,24 +18,20 @@ function CalendarDay({
      Visible Events
   ========================================= */
 
-  const visibleEvents = useMemo(() => {
-    return events.slice(0, 2);
-  }, [events]);
+  const visibleEvents = events.slice(0, 2);
 
   /* =========================================
      Class Names
   ========================================= */
 
-  const className = useMemo(() => {
-    return [
-      "calendarDay",
-      !isCurrentMonth && "otherMonth",
-      isToday && "today",
-      isSelected && "selected",
-    ]
-      .filter(Boolean)
-      .join(" ");
-  }, [isCurrentMonth, isToday, isSelected]);
+  const className = [
+    "calendarDay",
+    !isCurrentMonth && "otherMonth",
+    isToday && "today",
+    isSelected && "selected",
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   /* =========================================
      Select Date
@@ -50,9 +46,9 @@ function CalendarDay({
   ========================================= */
 
   const handleKeyDown = useCallback(
-    (e) => {
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
+    (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
         handleSelectDate();
       }
     },
@@ -63,8 +59,8 @@ function CalendarDay({
      Stop Propagation
   ========================================= */
 
-  const stopPropagation = useCallback((e) => {
-    e.stopPropagation();
+  const stopPropagation = useCallback((event) => {
+    event.stopPropagation();
   }, []);
 
   /* =========================================
@@ -72,8 +68,8 @@ function CalendarDay({
   ========================================= */
 
   const handleMoreEvents = useCallback(
-    (e) => {
-      e.stopPropagation();
+    (event) => {
+      event.stopPropagation();
 
       onMoreEvents?.(day, events);
     },
@@ -95,31 +91,28 @@ function CalendarDay({
       </div>
 
       <div className="dayEvents">
-        {visibleEvents.length === 0 ? (
-          <div className="emptyEvents" />
-        ) : (
-          <>
-            {visibleEvents.map((event) => (
-              <div
-                key={event._id ?? event.id ?? `${event.date}-${event.title}`}
-                onClick={stopPropagation}
-              >
-                <EventBadge event={event} onClick={onEventClick} />
-              </div>
-            ))}
+        {visibleEvents.length > 0 &&
+          visibleEvents.map((event) => (
+            <div
+              key={event._id ?? event.id ?? `${event.date}-${event.title}`}
+              onClick={stopPropagation}
+            >
+              <EventBadge event={event} onClick={onEventClick} />
+            </div>
+          ))}
 
-            {events.length > 2 && (
-              <button
-                type="button"
-                className="moreEvents"
-                onClick={handleMoreEvents}
-                aria-label={`View ${events.length - 2} more events`}
-              >
-                +{events.length - 2} More
-              </button>
-            )}
-          </>
+        {events.length > 2 && (
+          <button
+            type="button"
+            className="moreEvents"
+            onClick={handleMoreEvents}
+            aria-label={`View ${events.length - 2} more events`}
+          >
+            +{events.length - 2} More
+          </button>
         )}
+
+        {events.length === 0 && <div className="emptyEvents" />}
       </div>
     </div>
   );

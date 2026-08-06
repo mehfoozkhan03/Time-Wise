@@ -1,6 +1,6 @@
 import "./CalendarHeader.css";
 
-import { memo, useCallback, useMemo } from "react";
+import { memo, useCallback } from "react";
 
 import {
   FaChevronLeft,
@@ -26,9 +26,7 @@ function CalendarHeader({
     return null;
   }
 
-  const monthTitle = useMemo(() => {
-    return `${getMonthName(currentDate)} ${currentDate.getFullYear()}`;
-  }, [currentDate]);
+  const monthTitle = `${getMonthName(currentDate)} ${currentDate.getFullYear()}`;
 
   const handlePreviousMonth = useCallback(() => {
     previousMonth?.();
@@ -61,6 +59,7 @@ function CalendarHeader({
           type="button"
           className="navBtn"
           onClick={handlePreviousMonth}
+          disabled={!previousMonth}
           aria-label="Previous month"
           title="Previous Month"
         >
@@ -71,6 +70,7 @@ function CalendarHeader({
           type="button"
           className="todayBtn"
           onClick={handleToday}
+          disabled={!goToToday}
           aria-label="Go to today"
           title="Go to Today"
         >
@@ -82,6 +82,7 @@ function CalendarHeader({
           type="button"
           className="navBtn"
           onClick={handleNextMonth}
+          disabled={!nextMonth}
           aria-label="Next month"
           title="Next Month"
         >
@@ -93,6 +94,7 @@ function CalendarHeader({
             type="button"
             className="createEventBtn"
             onClick={handleCreateEvent}
+            disabled={!onCreateEvent}
             aria-label="Create Event"
             title="Create Event"
           >
@@ -106,6 +108,7 @@ function CalendarHeader({
             type="button"
             className="createHolidayBtn"
             onClick={handleCreateHoliday}
+            disabled={!onCreateHoliday}
             aria-label="Create Holiday"
             title="Create Holiday"
           >
