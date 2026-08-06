@@ -1,51 +1,89 @@
-import { getToday } from "./dateUtils";
+import { getToday, isToday } from "./dateUtils";
+
+/* =========================================
+   Sort Events By Date & Time
+========================================= */
+
+const sortEvents = (events = []) => {
+  return [...events].sort((a, b) => {
+    const dateDiff = new Date(a.date) - new Date(b.date);
+
+    if (dateDiff !== 0) {
+      return dateDiff;
+    }
+
+    if (!a.startTime && !b.startTime) {
+      return 0;
+    }
+
+    if (!a.startTime) {
+      return 1;
+    }
+
+    if (!b.startTime) {
+      return -1;
+    }
+
+    return a.startTime.localeCompare(b.startTime);
+  });
+};
 
 /* =========================================
    Get Upcoming Events
 ========================================= */
 
-export const getUpcomingEvents = (events = [], limit = 5) => {
+export const getUpcomingEvents = (events = [], limit = null) => {
   const today = getToday();
 
-  return events
-    .filter((event) => {
-      if (!event?.date) return false;
+  const upcomingEvents = events.filter((event) => {
+    if (!event?.date) {
+      return false;
+    }
 
-      return new Date(event.date) >= today;
-    })
-    .sort((a, b) => {
-      const dateDiff = new Date(a.date) - new Date(b.date);
+    const eventDate = new Date(event.date);
 
-      if (dateDiff !== 0) {
-        return dateDiff;
-      }
+    if (Number.isNaN(eventDate.getTime())) {
+      return false;
+    }
 
-      if (!a.startTime) return 1;
-      if (!b.startTime) return -1;
+    return eventDate >= today;
+  });
 
-      return a.startTime.localeCompare(b.startTime);
-    })
-    .slice(0, limit);
+  const sortedEvents = sortEvents(upcomingEvents);
+
+  if (typeof limit === "number" && limit > 0) {
+    return sortedEvents.slice(0, limit);
+  }
+
+  return sortedEvents;
 };
 
 /* =========================================
    Get Today's Summary
 ========================================= */
 
-export const getTodaySummary = (events = [], eventConfig) => {
-  const today = getToday().toISOString().split("T")[0];
+export const getTodaySummary = (events = [], eventConfig = {}) => {
+  const counts = events.reduce((acc, event) => {
+    if (!event?.date || !event?.type) {
+      return acc;
+    }
 
-  const todayEvents = events.filter((event) => {
-    if (!event?.date) return false;
+    if (!isToday(event.date)) {
+      return acc;
+    }
 
-    return new Date(event.date).toISOString().split("T")[0] === today;
-  });
+    const type = String(event.type).toUpperCase();
+
+    acc[type] = (acc[type] || 0) + 1;
+
+    return acc;
+  }, {});
 
   return Object.entries(eventConfig)
     .map(([type, config]) => ({
       type,
       config,
-      count: todayEvents.filter((event) => event.type === type).length,
+      count: counts[type] || 0,
     }))
     .filter((item) => item.count > 0);
 };

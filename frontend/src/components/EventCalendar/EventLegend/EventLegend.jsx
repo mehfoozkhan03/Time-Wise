@@ -10,10 +10,7 @@ import { EVENT_CONFIG } from "../../../data/eventConfig";
 
 const legendItems = Object.entries(EVENT_CONFIG);
 
-function EventLegend({
-  filters = {},
-  toggleFilter,
-}) {
+function EventLegend({ filters = {}, toggleFilter }) {
   /* =========================================
      Toggle Filter
   ========================================= */
@@ -22,25 +19,20 @@ function EventLegend({
     (type) => {
       toggleFilter?.(type);
     },
-    [toggleFilter]
+    [toggleFilter],
   );
 
   return (
-    <Card
-      title="Event Legend"
-      icon={<FaListUl />}
-      className="legendCard"
-    >
-      <div className="legendList">
+    <Card title="Event Legend" icon={<FaListUl />} className="legendCard">
+      <div className="legendList" role="group" aria-label="Event Legend">
         {legendItems.map(([type, config]) => {
           const Icon = config.icon;
 
           const active = Boolean(filters[type]);
 
-          const className = [
-            "legendItem",
-            active ? "active" : "inactive",
-          ].join(" ");
+          const className = ["legendItem", active ? "active" : "inactive"].join(
+            " ",
+          );
 
           const statusId = `legend-status-${type}`;
 
@@ -53,30 +45,22 @@ function EventLegend({
               aria-label={`Toggle ${config.label}`}
               aria-describedby={statusId}
               title={config.label}
-              onClick={() =>
-                handleToggleFilter(type)
-              }
+              onClick={() => handleToggleFilter(type)}
             >
               <div
                 className="legendIcon"
                 style={{
-                  "--legend-color":
-                    config.color,
+                  "--legend-color": config.color,
                 }}
+                aria-hidden="true"
               >
                 <Icon />
               </div>
 
               <div className="legendContent">
-                <span className="legendTitle">
-                  {config.label}
-                </span>
+                <span className="legendTitle">{config.label}</span>
 
-                <small id={statusId}>
-                  {active
-                    ? "Visible"
-                    : "Hidden"}
-                </small>
+                <small id={statusId}>{active ? "Visible" : "Hidden"}</small>
               </div>
             </button>
           );
@@ -86,7 +70,6 @@ function EventLegend({
   );
 }
 
-EventLegend.displayName =
-  "EventLegend";
+EventLegend.displayName = "EventLegend";
 
 export default memo(EventLegend);
