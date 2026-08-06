@@ -246,16 +246,16 @@ function HolidayForm({
       </div>
 
       <div className="checkboxGroup">
-        <label>
-          <input
-            type="checkbox"
-            name="isActive"
-            checked={formData.isActive}
-            onChange={handleChange}
-            disabled={isSubmitting}
-          />
-          Active Holiday
-        </label>
+        <input
+          id="isActive"
+          type="checkbox"
+          name="isActive"
+          checked={formData.isActive}
+          onChange={handleChange}
+          disabled={isSubmitting}
+        />
+
+        <label htmlFor="isActive">Active Holiday</label>
       </div>
 
       <div className="formActions">

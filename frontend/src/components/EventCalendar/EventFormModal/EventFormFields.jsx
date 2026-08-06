@@ -5,42 +5,15 @@ import { memo } from "react";
 import { EVENT_TYPES } from "../../../data/eventTypes";
 
 const EVENT_OPTIONS = [
-  {
-    value: EVENT_TYPES.LEAVE,
-    label: "Leave",
-  },
-  {
-    value: EVENT_TYPES.WORK_EVENT,
-    label: "Work Event",
-  },
-  {
-    value: EVENT_TYPES.SPECIAL_EVENT,
-    label: "Special Event",
-  },
-  {
-    value: EVENT_TYPES.PERSONAL,
-    label: "Personal",
-  },
-  {
-    value: EVENT_TYPES.MEETING,
-    label: "Meeting",
-  },
-  {
-    value: EVENT_TYPES.REVIEW,
-    label: "Review",
-  },
-  {
-    value: EVENT_TYPES.DEADLINE,
-    label: "Deadline",
-  },
-  {
-    value: EVENT_TYPES.TRAINING,
-    label: "Training",
-  },
-  {
-    value: EVENT_TYPES.CLIENT_MEETING,
-    label: "Client Meeting",
-  },
+  { value: EVENT_TYPES.LEAVE, label: "Leave" },
+  { value: EVENT_TYPES.WORK_EVENT, label: "Work Event" },
+  { value: EVENT_TYPES.SPECIAL_EVENT, label: "Special Event" },
+  { value: EVENT_TYPES.PERSONAL, label: "Personal" },
+  { value: EVENT_TYPES.MEETING, label: "Meeting" },
+  { value: EVENT_TYPES.REVIEW, label: "Review" },
+  { value: EVENT_TYPES.DEADLINE, label: "Deadline" },
+  { value: EVENT_TYPES.TRAINING, label: "Training" },
+  { value: EVENT_TYPES.CLIENT_MEETING, label: "Client Meeting" },
 ];
 
 const PRIORITY_OPTIONS = ["LOW", "MEDIUM", "HIGH"];
@@ -133,7 +106,8 @@ function EventFormFields({
         </select>
       </div>
 
-      <div className="formRow">
+      {/* Date + All Day */}
+      <div className="formRow dateRow">
         <div className="formGroup">
           <label htmlFor="date">Date *</label>
 
@@ -150,17 +124,17 @@ function EventFormFields({
           {errors.date && <small className="errorText">{errors.date}</small>}
         </div>
 
-        <div className="formGroup checkboxGroup">
-          <label>
-            <input
-              type="checkbox"
-              name="isAllDay"
-              checked={formData.isAllDay}
-              onChange={onChange}
-              disabled={isSubmitting}
-            />
-            All Day
-          </label>
+        <div className="checkboxGroup">
+          <input
+            id="isAllDay"
+            type="checkbox"
+            name="isAllDay"
+            checked={formData.isAllDay}
+            onChange={onChange}
+            disabled={isSubmitting}
+          />
+
+          <label htmlFor="isAllDay">All Day</label>
         </div>
       </div>
 
@@ -190,6 +164,10 @@ function EventFormFields({
               onChange={onChange}
               disabled={isSubmitting}
             />
+
+            {errors.endTime && (
+              <small className="errorText">{errors.endTime}</small>
+            )}
           </div>
         </div>
       )}
