@@ -170,6 +170,24 @@ export const createNewComment = createAsyncThunk(
   },
 )
 
+export const updateExistingComment = createAsyncThunk(
+  'post/updateExistingComment',
+  async ({ postId, commentId, text }, thunkAPI) => {
+    try {
+      const { data } = await postService.updateComment(commentId, text)
+
+      return {
+        postId,
+        comment: data.comment,
+      }
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || 'Unable to update comment',
+      )
+    }
+  },
+)
+
 export const deleteExistingComment = createAsyncThunk(
   'post/deleteExistingComment',
   async ({ postId, commentId }, thunkAPI) => {
@@ -409,10 +427,7 @@ const postSlice = createSlice({
         }
 
         // Update featured if it matches
-        if (
-          state.featured &&
-          state.featured._id === action.payload.id
-        ) {
+        if (state.featured && state.featured._id === action.payload.id) {
           state.featured.isSaved = action.payload.saved
         }
       })
@@ -461,6 +476,20 @@ const postSlice = createSlice({
 
         if (state.featured && state.featured._id === postId) {
           state.featured.commentsCount += 1
+        }
+      })
+
+      .addCase(updateExistingComment.fulfilled, (state, action) => {
+        const { postId, comment } = action.payload
+
+        if (state.comments[postId]) {
+          const index = state.comments[postId].findIndex(
+            (c) => c._id === comment._id,
+          )
+
+          if (index !== -1) {
+            state.comments[postId][index] = comment
+          }
         }
       })
 
