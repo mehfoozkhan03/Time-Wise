@@ -66,7 +66,7 @@ export const postService = {
     })
   },
 
-  updateComment(commentId, text) {
+  nt(commentId, text) {
     return api.patch(`/posts/comments/${commentId}`, {
       text,
     })
