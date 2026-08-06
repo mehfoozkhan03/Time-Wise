@@ -1,43 +1,54 @@
 .calendarSkeleton {
   display: flex;
   flex-direction: column;
+
   gap: 18px;
 }
 
 .skeletonHeader {
   height: 62px;
+
   border-radius: var(--radius_md);
+
   background: var(--surface);
 }
 
 .skeletonSearch {
   height: 46px;
+
   border-radius: var(--radius_md);
+
   background: var(--surface);
 }
 
 .skeletonFilters {
   display: flex;
   flex-wrap: wrap;
+
   gap: 10px;
 }
 
 .skeletonFilter {
   width: 110px;
   height: 36px;
+
   border-radius: 999px;
+
   background: var(--surface);
 }
 
 .skeletonGrid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
+
   gap: 12px;
 }
 
 .skeletonDay {
   height: 140px;
+
   border-radius: var(--radius_md);
+
   background: var(--surface);
 }
 
@@ -46,6 +57,7 @@
 .skeletonFilter,
 .skeletonDay {
   position: relative;
+
   overflow: hidden;
 }
 
@@ -54,8 +66,10 @@
 .skeletonFilter::after,
 .skeletonDay::after {
   content: "";
+
   position: absolute;
   inset: 0;
+
   transform: translateX(-100%);
 
   background: linear-gradient(
@@ -83,5 +97,120 @@ html.dark .skeletonDay::after {
 @keyframes skeletonLoading {
   to {
     transform: translateX(100%);
+  }
+}
+
+/* ==========================================
+   1024px
+========================================== */
+
+@media (max-width: 1024px) {
+  .skeletonGrid {
+    gap: 10px;
+  }
+
+  .skeletonDay {
+    height: 125px;
+  }
+}
+
+/* ==========================================
+   768px
+========================================== */
+
+@media (max-width: 768px) {
+  .calendarSkeleton {
+    gap: 16px;
+  }
+
+  .skeletonHeader {
+    height: 56px;
+  }
+
+  .skeletonSearch {
+    height: 42px;
+  }
+
+  .skeletonFilters {
+    gap: 8px;
+  }
+
+  .skeletonFilter {
+    width: 96px;
+    height: 34px;
+  }
+
+  .skeletonGrid {
+    gap: 8px;
+  }
+
+  .skeletonDay {
+    height: 110px;
+  }
+}
+
+/* ==========================================
+   480px
+========================================== */
+
+@media (max-width: 480px) {
+  .calendarSkeleton {
+    gap: 14px;
+  }
+
+  .skeletonHeader {
+    height: 52px;
+  }
+
+  .skeletonSearch {
+    height: 40px;
+  }
+
+  .skeletonFilters {
+    gap: 6px;
+  }
+
+  .skeletonFilter {
+    width: 82px;
+    height: 30px;
+  }
+
+  .skeletonGrid {
+    gap: 6px;
+  }
+
+  .skeletonDay {
+    height: 88px;
+  }
+}
+
+/* ==========================================
+   320px
+========================================== */
+
+@media (max-width: 320px) {
+  .calendarSkeleton {
+    gap: 12px;
+  }
+
+  .skeletonHeader {
+    height: 48px;
+  }
+
+  .skeletonSearch {
+    height: 36px;
+  }
+
+  .skeletonFilter {
+    width: 72px;
+    height: 28px;
+  }
+
+  .skeletonGrid {
+    gap: 5px;
+  }
+
+  .skeletonDay {
+    height: 72px;
   }
 }

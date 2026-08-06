@@ -18,7 +18,7 @@ function CalendarDay({
      Visible Events
   ========================================= */
 
-  const visibleEvents = events.slice(0, 2);
+  const visibleEvents = events.slice(0, 1);
 
   /* =========================================
      Class Names
@@ -101,14 +101,14 @@ function CalendarDay({
             </div>
           ))}
 
-        {events.length > 2 && (
+        {events.length > 1 && (
           <button
             type="button"
             className="moreEvents"
             onClick={handleMoreEvents}
-            aria-label={`View ${events.length - 2} more events`}
+            aria-label={`View ${events.length - 1} more events`}
           >
-            +{events.length - 2} More
+            +{events.length - 1} More
           </button>
         )}
 

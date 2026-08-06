@@ -6,11 +6,11 @@
   justify-content: center;
   align-items: center;
 
-  padding: 20px;
+  padding: 36px 20px;
 
   background: rgba(0, 0, 0, 0.65);
 
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(6px);
 
   z-index: 999;
 
@@ -18,12 +18,15 @@
 }
 
 .eventModal {
-  width: min(680px, 100%);
+  width: min(720px, 100%);
+  max-height: 82vh;
+
+  display: flex;
+  flex-direction: column;
 
   background: var(--surface);
 
   border: 1px solid var(--border);
-
   border-radius: var(--radius_lg);
 
   box-shadow: var(--shadow_lg);
@@ -42,31 +45,44 @@
 ========================================== */
 
 .modalHeader {
+  position: sticky;
+  top: 0;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
 
   gap: 20px;
 
-  padding: 22px;
+  padding: 22px 24px;
+
+  background: var(--surface);
 
   border-bottom: 1px solid var(--border);
+
+  z-index: 5;
 }
 
 .modalTitle {
   display: flex;
   align-items: center;
 
-  gap: 18px;
+  gap: 16px;
+
+  min-width: 0;
+
+  flex: 1;
 }
 
 .eventIcon {
+  width: 56px;
+  height: 56px;
+
   display: flex;
   justify-content: center;
   align-items: center;
 
-  width: 56px;
-  height: 56px;
+  flex-shrink: 0;
 
   border-radius: 50%;
 
@@ -78,9 +94,14 @@
 }
 
 .modalTitle h2 {
+  margin: 0 0 6px;
+
   color: var(--text_primary);
 
-  margin-bottom: 6px;
+  font-size: 1.55rem;
+  font-weight: 700;
+
+  line-height: 1.2;
 }
 
 .eventType {
@@ -100,15 +121,16 @@
 }
 
 .closeBtn {
+  width: 42px;
+  height: 42px;
+
   display: flex;
   justify-content: center;
   align-items: center;
 
-  width: 42px;
-  height: 42px;
+  flex-shrink: 0;
 
   border: 1px solid var(--border);
-
   border-radius: 50%;
 
   background: var(--bg);
@@ -139,21 +161,26 @@
 ========================================== */
 
 .modalBody {
+  flex: 1;
+
   display: flex;
   flex-direction: column;
 
-  gap: 18px;
+  gap: 14px;
+
+  min-height: 0;
 
   padding: 24px;
+
+  overflow-y: auto;
 }
 
 .descriptionCard {
-  padding: 18px;
+  padding: 16px;
 
   background: var(--bg);
 
   border: 1px solid var(--border);
-
   border-radius: var(--radius_md);
 
   transition:
@@ -162,9 +189,11 @@
 }
 
 .descriptionCard h3 {
+  margin-bottom: 10px;
+
   color: var(--text_primary);
 
-  margin-bottom: 12px;
+  font-size: 17px;
 }
 
 .descriptionCard p {
@@ -178,30 +207,36 @@
 ========================================== */
 
 .modalFooter {
+  position: sticky;
+  bottom: 0;
+
   display: flex;
   justify-content: flex-end;
 
   gap: 12px;
 
-  padding: 20px 24px;
+  padding: 18px 22px;
+
+  background: var(--surface);
 
   border-top: 1px solid var(--border);
+
+  z-index: 5;
 }
 
 .editBtn,
 .deleteBtn {
+  min-width: 120px;
+
   display: flex;
   justify-content: center;
   align-items: center;
 
   gap: 8px;
 
-  min-width: 120px;
-
   padding: 12px 20px;
 
   border: none;
-
   border-radius: var(--radius_sm);
 
   color: #fff;
@@ -246,6 +281,28 @@
 }
 
 /* ==========================================
+   Scrollbar
+========================================== */
+
+.modalBody::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modalBody::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.modalBody::-webkit-scrollbar-thumb {
+  background: var(--border);
+
+  border-radius: 999px;
+}
+
+.modalBody::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+/* ==========================================
    Animations
 ========================================== */
 
@@ -272,11 +329,18 @@
 }
 
 /* ==========================================
-   Responsive
+   760px
 ========================================== */
 
-@media (max-width: 768px) {
+@media (max-width: 760px) {
+  .eventModalOverlay {
+    padding: 18px;
+  }
+
   .eventModal {
+    width: 100%;
+    max-height: 88vh;
+
     border-radius: var(--radius_md);
   }
 
@@ -284,18 +348,157 @@
     padding: 18px;
   }
 
+  .modalTitle {
+    gap: 14px;
+  }
+
+  .eventIcon {
+    width: 48px;
+    height: 48px;
+
+    font-size: 19px;
+  }
+
+  .modalTitle h2 {
+    font-size: 1.3rem;
+  }
+
   .modalBody {
     padding: 18px;
+    gap: 12px;
+  }
+
+  .descriptionCard {
+    padding: 14px;
   }
 
   .modalFooter {
-    flex-direction: column;
-
     padding: 18px;
+
+    flex-direction: column;
   }
 
   .editBtn,
   .deleteBtn {
     width: 100%;
+  }
+}
+
+/* ==========================================
+   480px
+========================================== */
+
+@media (max-width: 480px) {
+  .eventModalOverlay {
+    padding: 10px;
+
+    align-items: flex-end;
+  }
+
+  .eventModal {
+    width: 100%;
+    max-height: 94vh;
+
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  .modalHeader {
+    padding: 16px;
+
+    gap: 12px;
+  }
+
+  .modalTitle {
+    gap: 12px;
+  }
+
+  .eventIcon {
+    width: 42px;
+    height: 42px;
+
+    font-size: 17px;
+  }
+
+  .modalTitle h2 {
+    font-size: 1.1rem;
+  }
+
+  .eventType {
+    padding: 4px 10px;
+
+    font-size: 11px;
+  }
+
+  .closeBtn {
+    width: 38px;
+    height: 38px;
+  }
+
+  .modalBody {
+    padding: 16px;
+
+    gap: 10px;
+  }
+
+  .descriptionCard {
+    padding: 14px;
+  }
+
+  .descriptionCard h3 {
+    font-size: 16px;
+  }
+
+  .modalFooter {
+    padding: 16px;
+  }
+}
+
+/* ==========================================
+   320px
+========================================== */
+
+@media (max-width: 320px) {
+  .modalHeader {
+    padding: 14px;
+  }
+
+  .eventIcon {
+    width: 38px;
+    height: 38px;
+
+    font-size: 15px;
+  }
+
+  .modalTitle h2 {
+    font-size: 1rem;
+  }
+
+  .eventType {
+    font-size: 10px;
+  }
+
+  .closeBtn {
+    width: 34px;
+    height: 34px;
+  }
+
+  .modalBody {
+    padding: 14px;
+  }
+
+  .descriptionCard {
+    padding: 12px;
+  }
+
+  .modalFooter {
+    padding: 14px;
+  }
+
+  .editBtn,
+  .deleteBtn {
+    padding: 11px 16px;
+
+    font-size: 13px;
   }
 }
