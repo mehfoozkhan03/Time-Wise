@@ -9,17 +9,9 @@ import Card from "../../Common/CalendarCard/Card";
 import { EVENT_CONFIG } from "../../../data/eventConfig";
 
 function EventLegend({ filters = {}, toggleFilter }) {
-  /* =========================================
-     Legend Items
-  ========================================= */
-
   const legendItems = useMemo(() => {
     return Object.entries(EVENT_CONFIG);
   }, []);
-
-  /* =========================================
-     Toggle Filter
-  ========================================= */
 
   const handleToggleFilter = useCallback(
     (type) => {
@@ -36,14 +28,16 @@ function EventLegend({ filters = {}, toggleFilter }) {
   );
 
   return (
-    <Card title="Event Legend" icon={<FaListUl />} className="legendCard">
+    <Card
+      title={`Event Legend (${legendItems.length})`}
+      icon={<FaListUl />}
+      className="legendCard"
+    >
       <div className="legendList" role="group" aria-label="Event Legend">
         {legendItems.map(([type, config]) => {
           const Icon = config.icon;
 
           const active = Boolean(filters[type]);
-
-          const statusId = `legend-status-${type}`;
 
           const className = ["legendItem", active ? "active" : "inactive"].join(
             " ",
@@ -57,7 +51,6 @@ function EventLegend({ filters = {}, toggleFilter }) {
               onClick={createToggleHandler(type)}
               aria-pressed={active}
               aria-label={`Toggle ${config.label}`}
-              aria-describedby={statusId}
               title={config.label}
             >
               <div
@@ -72,8 +65,6 @@ function EventLegend({ filters = {}, toggleFilter }) {
 
               <div className="legendContent">
                 <span className="legendTitle">{config.label}</span>
-
-                <small id={statusId}>{active ? "Visible" : "Hidden"}</small>
               </div>
             </button>
           );

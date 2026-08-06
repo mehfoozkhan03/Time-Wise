@@ -17,6 +17,7 @@ function CalendarGrid({
   selectDate,
   events = [],
   onEventClick,
+  onMoreEvents,
 }) {
   /* =========================================
      Generate Calendar
@@ -25,12 +26,6 @@ function CalendarGrid({
   const calendar = useMemo(() => {
     return generateCalendar(currentDate);
   }, [currentDate]);
-
-  /* =========================================
-     Week Header
-  ========================================= */
-
-  const weekDays = WEEK_DAYS;
 
   /* =========================================
      Group Events By Date
@@ -62,32 +57,39 @@ function CalendarGrid({
     return map;
   }, [events]);
 
+  /* =========================================
+     Render
+  ========================================= */
+
   return (
-    <section className="calendarWrapper">
-      <div className="weekHeader">
-        {weekDays.map((day) => (
+    <section
+      id="calendar-grid"
+      className="calendarWrapper"
+      aria-label="Calendar"
+    >
+      <div className="weekHeader" role="row">
+        {WEEK_DAYS.map((day) => (
           <div key={day} role="columnheader">
             {day}
           </div>
         ))}
       </div>
 
-      <div className="calendarGrid">
+      <div className="calendarGrid" role="grid">
         {calendar.map((item) => {
           const dateKey = getDateKey(item.date);
-
-          const dayEvents = eventsByDate.get(dateKey) || [];
 
           return (
             <CalendarDay
               key={dateKey}
               day={item.date}
-              events={dayEvents}
+              events={eventsByDate.get(dateKey) || []}
               isCurrentMonth={item.currentMonth}
               isToday={item.isToday}
               isSelected={isSameDate(item.date, selectedDate)}
               onSelectDate={selectDate}
               onEventClick={onEventClick}
+              onMoreEvents={onMoreEvents}
             />
           );
         })}
