@@ -1,0 +1,109 @@
+.eventForm{
+    display:flex;
+    flex-direction:column;
+    gap:24px;
+}
+
+.formGrid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:18px;
+}
+
+.formGroup{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+.formGroup.fullWidth{
+    grid-column:1/-1;
+}
+
+.formGroup label{
+    font-size:.92rem;
+    font-weight:600;
+    color:var(--text_primary);
+}
+
+.formGroup input,
+.formGroup select,
+.formGroup textarea{
+    width:100%;
+    padding:12px 14px;
+    border-radius:12px;
+    font-size:.95rem;
+}
+
+.formGroup textarea{
+    resize:vertical;
+    min-height:120px;
+}
+
+.checkboxGroup{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.checkboxGroup input{
+    width:18px;
+    height:18px;
+}
+
+.errorText{
+    font-size:.82rem;
+    color:#ef4444;
+}
+
+.formActions{
+    display:flex;
+    justify-content:flex-end;
+    gap:12px;
+    padding-top:12px;
+    border-top:1px solid var(--border);
+}
+
+.cancelBtn,
+.saveBtn{
+    min-width:130px;
+    padding:12px 18px;
+    border-radius:12px;
+    font-weight:600;
+}
+
+.cancelBtn{
+    background:transparent;
+    color:var(--text_primary);
+    border:1px solid var(--border);
+}
+
+.cancelBtn:hover{
+    background:var(--surface_hover);
+}
+
+.saveBtn{
+    color:#fff;
+    background:var(--button);
+}
+
+.saveBtn:hover{
+    background:var(--buttonhover);
+}
+
+@media(max-width:768px){
+
+    .formGrid{
+        grid-template-columns:1fr;
+    }
+
+    .formActions{
+        flex-direction:column-reverse;
+    }
+
+    .cancelBtn,
+    .saveBtn{
+        width:100%;
+    }
+
+}

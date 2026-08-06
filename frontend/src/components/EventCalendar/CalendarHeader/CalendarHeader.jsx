@@ -7,6 +7,7 @@ import {
   FaChevronRight,
   FaCalendarDay,
   FaPlus,
+  FaUmbrellaBeach,
 } from "react-icons/fa";
 
 import { getMonthName } from "../../../utils/calendarUtils";
@@ -17,27 +18,17 @@ function CalendarHeader({
   nextMonth,
   goToToday,
   onCreateEvent,
+  onCreateHoliday,
   canCreate = false,
+  canManageHoliday = false,
 }) {
-  /* =========================================
-     Safety Check
-  ========================================= */
-
   if (!currentDate) {
     return null;
   }
 
-  /* =========================================
-     Month Title
-  ========================================= */
-
   const monthTitle = useMemo(() => {
     return `${getMonthName(currentDate)} ${currentDate.getFullYear()}`;
   }, [currentDate]);
-
-  /* =========================================
-     Handlers
-  ========================================= */
 
   const handlePreviousMonth = useCallback(() => {
     previousMonth?.();
@@ -54,6 +45,10 @@ function CalendarHeader({
   const handleCreateEvent = useCallback(() => {
     onCreateEvent?.();
   }, [onCreateEvent]);
+
+  const handleCreateHoliday = useCallback(() => {
+    onCreateHoliday?.();
+  }, [onCreateHoliday]);
 
   return (
     <header className="calendarHeader">
@@ -103,6 +98,19 @@ function CalendarHeader({
           >
             <FaPlus />
             <span>Add Event</span>
+          </button>
+        )}
+
+        {canManageHoliday && (
+          <button
+            type="button"
+            className="createHolidayBtn"
+            onClick={handleCreateHoliday}
+            aria-label="Create Holiday"
+            title="Create Holiday"
+          >
+            <FaUmbrellaBeach />
+            <span>Add Holiday</span>
           </button>
         )}
       </div>
