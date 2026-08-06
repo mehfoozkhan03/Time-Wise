@@ -132,14 +132,14 @@ export const AppRoutes = () => {
             }
           />
 
-          <Route
+          {/* <Route
             path="/community/profile/:userId"
             element={
               <PrivateRoutes>
                 <CommunityProfile />
               </PrivateRoutes>
             }
-          />
+          /> */}
 
           <Route
             path="/community/post/:postId"
