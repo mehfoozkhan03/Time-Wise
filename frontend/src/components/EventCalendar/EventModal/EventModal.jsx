@@ -22,15 +22,7 @@ import { formatFullDate, formatTime } from "../../../utils/dateUtils";
 import InfoRow from "../../Common/InfoRow/InfoRow";
 
 function EventModal({ event, onClose, onEdit, onDelete, canEdit = false }) {
-  /* =========================================
-     Close Button Ref
-  ========================================= */
-
   const closeButtonRef = useRef(null);
-
-  /* =========================================
-     Event Config
-  ========================================= */
 
   const config = useMemo(() => {
     if (!event) {
@@ -40,17 +32,9 @@ function EventModal({ event, onClose, onEdit, onDelete, canEdit = false }) {
     return EVENT_CONFIG[String(event.type).toUpperCase()];
   }, [event]);
 
-  /* =========================================
-     Holiday Check
-  ========================================= */
-
   const isHoliday = useMemo(() => {
     return Boolean(event?.isHoliday);
   }, [event]);
-
-  /* =========================================
-     Display Name
-  ========================================= */
 
   const displayName = useMemo(() => {
     if (!event || !config) {
@@ -64,10 +48,6 @@ function EventModal({ event, onClose, onEdit, onDelete, canEdit = false }) {
     return event.employeeName || "N/A";
   }, [event, config, isHoliday]);
 
-  /* =========================================
-     Event Time
-  ========================================= */
-
   const eventTime = useMemo(() => {
     if (!event) {
       return "--";
@@ -78,7 +58,6 @@ function EventModal({ event, onClose, onEdit, onDelete, canEdit = false }) {
     }
 
     const start = event.startTime ? formatTime(event.startTime) : "";
-
     const end = event.endTime ? formatTime(event.endTime) : "";
 
     if (start && end) {
@@ -95,10 +74,6 @@ function EventModal({ event, onClose, onEdit, onDelete, canEdit = false }) {
 
     return "--";
   }, [event]);
-
-  /* =========================================
-     Focus + ESC Close
-  ========================================= */
 
   useEffect(() => {
     if (!event) {
@@ -120,10 +95,6 @@ function EventModal({ event, onClose, onEdit, onDelete, canEdit = false }) {
     };
   }, [event, onClose]);
 
-  /* =========================================
-     Handlers
-  ========================================= */
-
   const handleClose = useCallback(() => {
     onClose?.();
   }, [onClose]);
@@ -142,16 +113,14 @@ function EventModal({ event, onClose, onEdit, onDelete, canEdit = false }) {
   }, []);
 
   const handleEdit = useCallback(() => {
+    onClose?.();
     onEdit?.(event);
-  }, [event, onEdit]);
+  }, [event, onEdit, onClose]);
 
   const handleDelete = useCallback(() => {
+    onClose?.();
     onDelete?.(event);
-  }, [event, onDelete]);
-
-  /* =========================================
-     Validation
-  ========================================= */
+  }, [event, onDelete, onClose]);
 
   if (!event || !config) {
     return null;
@@ -173,10 +142,6 @@ function EventModal({ event, onClose, onEdit, onDelete, canEdit = false }) {
         aria-labelledby="event-modal-title"
         aria-describedby="event-modal-description"
       >
-        {/* =========================================
-            Header
-        ========================================= */}
-
         <div className="modalHeader">
           <div className="modalTitle">
             <div
@@ -213,10 +178,6 @@ function EventModal({ event, onClose, onEdit, onDelete, canEdit = false }) {
             <FaTimes />
           </button>
         </div>
-
-        {/* =========================================
-            Body
-        ========================================= */}
 
         <div className="modalBody">
           <InfoRow
@@ -270,11 +231,7 @@ function EventModal({ event, onClose, onEdit, onDelete, canEdit = false }) {
           </div>
         </div>
 
-        {/* =========================================
-            Footer
-        ========================================= */}
-
-        {!isHoliday && canEdit && (
+        {canEdit && (
           <div className="modalFooter">
             {onEdit && (
               <button type="button" className="editBtn" onClick={handleEdit}>
