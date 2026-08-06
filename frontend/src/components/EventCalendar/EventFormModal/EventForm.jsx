@@ -34,7 +34,22 @@ function EventForm({
 
   useEffect(() => {
     if (mode === "EDIT" && initialData) {
-      setFormData(initialData);
+      setFormData({
+        ...INITIAL_FORM,
+        title: initialData.title || "",
+        description: initialData.description || "",
+        type: initialData.type || EVENT_TYPES.WORK_EVENT,
+        date: initialData.date || "",
+        startTime: initialData.startTime || "",
+        endTime: initialData.endTime || "",
+        isAllDay: initialData.isAllDay || false,
+        location: initialData.location || "",
+        priority: initialData.priority || "MEDIUM",
+        employeeId:
+          typeof initialData.employeeId === "object"
+            ? initialData.employeeId?._id || ""
+            : initialData.employeeId || "",
+      });
     } else {
       setFormData(INITIAL_FORM);
     }
@@ -46,10 +61,19 @@ function EventForm({
     (event) => {
       const { name, value, type, checked } = event.target;
 
-      setFormData((previous) => ({
-        ...previous,
-        [name]: type === "checkbox" ? checked : value,
-      }));
+      setFormData((previous) => {
+        const updatedData = {
+          ...previous,
+          [name]: type === "checkbox" ? checked : value,
+        };
+
+        if (name === "isAllDay" && checked) {
+          updatedData.startTime = "";
+          updatedData.endTime = "";
+        }
+
+        return updatedData;
+      });
 
       if (errors[name]) {
         setErrors((previous) => ({
@@ -76,6 +100,15 @@ function EventForm({
       validationErrors.employeeId = "Employee is required.";
     }
 
+    if (
+      !formData.isAllDay &&
+      formData.startTime &&
+      formData.endTime &&
+      formData.endTime <= formData.startTime
+    ) {
+      validationErrors.endTime = "End time must be later than start time.";
+    }
+
     setErrors(validationErrors);
 
     return Object.keys(validationErrors).length === 0;
@@ -85,18 +118,33 @@ function EventForm({
     (event) => {
       event.preventDefault();
 
+      if (isSubmitting) {
+        return;
+      }
+
       if (!validateForm()) {
         return;
       }
 
-      onSubmit?.(formData);
+      const payload = {
+        ...formData,
+      };
+
+      if (payload.isAllDay) {
+        payload.startTime = "";
+        payload.endTime = "";
+      }
+
+      onSubmit?.(payload);
     },
-    [formData, onSubmit, validateForm],
+    [formData, isSubmitting, onSubmit, validateForm],
   );
 
   const handleCancel = useCallback(() => {
-    onCancel?.();
-  }, [onCancel]);
+    if (!isSubmitting) {
+      onCancel?.();
+    }
+  }, [isSubmitting, onCancel]);
 
   return (
     <form className="eventForm" onSubmit={handleSubmit} noValidate>

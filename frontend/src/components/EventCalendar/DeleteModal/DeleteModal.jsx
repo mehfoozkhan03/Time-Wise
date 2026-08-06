@@ -30,22 +30,32 @@ function DeleteModal({
     };
   }, [onCancel, isDeleting]);
 
+  const handleClose = useCallback(() => {
+    if (isDeleting) {
+      return;
+    }
+
+    onCancel?.();
+  }, [isDeleting, onCancel]);
+
   const handleOverlayClick = useCallback(
     (event) => {
-      if (isDeleting) {
-        return;
-      }
-
       if (event.target === event.currentTarget) {
-        onCancel?.();
+        handleClose();
       }
     },
-    [isDeleting, onCancel],
+    [handleClose],
   );
 
   const handleModalClick = useCallback((event) => {
     event.stopPropagation();
   }, []);
+
+  const handleConfirm = useCallback(() => {
+    if (!isDeleting) {
+      onConfirm?.();
+    }
+  }, [isDeleting, onConfirm]);
 
   return (
     <div
@@ -69,7 +79,7 @@ function DeleteModal({
             ref={closeButtonRef}
             type="button"
             className="closeBtn"
-            onClick={onCancel}
+            onClick={handleClose}
             disabled={isDeleting}
             aria-label="Close Delete Dialog"
           >
@@ -87,7 +97,7 @@ function DeleteModal({
           <button
             type="button"
             className="cancelBtn"
-            onClick={onCancel}
+            onClick={handleClose}
             disabled={isDeleting}
           >
             Cancel
@@ -96,7 +106,7 @@ function DeleteModal({
           <button
             type="button"
             className="deleteBtn"
-            onClick={onConfirm}
+            onClick={handleConfirm}
             disabled={isDeleting}
           >
             <FaTrash />

@@ -33,13 +33,21 @@ function HolidayFormModal({
     };
   }, [onClose, isSubmitting]);
 
+  const handleClose = useCallback(() => {
+    if (isSubmitting) {
+      return;
+    }
+
+    onClose?.();
+  }, [onClose, isSubmitting]);
+
   const handleOverlayClick = useCallback(
     (event) => {
-      if (event.target === event.currentTarget && !isSubmitting) {
-        onClose?.();
+      if (event.target === event.currentTarget) {
+        handleClose();
       }
     },
-    [onClose, isSubmitting],
+    [handleClose],
   );
 
   const handleModalClick = useCallback((event) => {
@@ -89,7 +97,7 @@ function HolidayFormModal({
             ref={closeButtonRef}
             type="button"
             className="closeBtn"
-            onClick={onClose}
+            onClick={handleClose}
             disabled={isSubmitting}
             aria-label="Close Holiday Form"
           >
@@ -103,7 +111,7 @@ function HolidayFormModal({
             initialData={holiday}
             isSubmitting={isSubmitting}
             onSubmit={handleSubmit}
-            onCancel={onClose}
+            onCancel={handleClose}
           />
         </div>
       </div>

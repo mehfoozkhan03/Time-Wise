@@ -175,6 +175,37 @@
   font-weight: 700;
 }
 
+.showMoreBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  height: 40px;
+  padding: 0 18px;
+
+  border-radius: 999px;
+  border: 1px solid var(--primary-color);
+
+  background: rgba(var(--primary-rgb), 0.08);
+  color: var(--primary-color);
+
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+
+  transition: all 0.25s ease;
+}
+
+.showMoreBtn:hover {
+  background: var(--primary-color);
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.showMoreBtn:active {
+  transform: translateY(0);
+}
 /* ==========================================
    Responsive
 ========================================== */
