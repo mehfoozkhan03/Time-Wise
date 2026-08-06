@@ -1,19 +1,31 @@
 .eventForm{
     display:flex;
     flex-direction:column;
-    gap:24px;
+    gap:28px;
 }
 
-.formGrid{
+/* ==========================================
+   Form Rows
+========================================== */
+
+.formRow{
     display:grid;
     grid-template-columns:repeat(2,minmax(0,1fr));
-    gap:18px;
+    gap:20px;
 }
+
+.formRow.dateRow{
+    align-items:end;
+}
+
+/* ==========================================
+   Form Group
+========================================== */
 
 .formGroup{
     display:flex;
     flex-direction:column;
-    gap:8px;
+    gap:10px;
 }
 
 .formGroup.fullWidth{
@@ -21,55 +33,276 @@
 }
 
 .formGroup label{
-    font-size:.92rem;
+    font-size:.9rem;
     font-weight:600;
+    letter-spacing:.2px;
     color:var(--text_primary);
 }
 
-.formGroup input,
-.formGroup select,
-.formGroup textarea{
+/* ==========================================
+   Inputs (Override Global.css)
+========================================== */
+
+.eventForm .formGroup input,
+.eventForm .formGroup select,
+.eventForm .formGroup textarea{
     width:100%;
-    padding:12px 14px;
+
+    padding:13px 15px;
+
+    border:1px solid var(--border) !important;
     border-radius:12px;
+
+    background:var(--surface) !important;
+    color:var(--text_primary) !important;
+
     font-size:.95rem;
+    font-family:inherit;
+
+    box-sizing:border-box;
+
+    transition:
+        background var(--transition),
+        border-color var(--transition),
+        box-shadow var(--transition),
+        color var(--transition);
 }
 
-.formGroup textarea{
-    resize:vertical;
-    min-height:120px;
+/* Force dark mode colors */
+
+html.dark .eventForm .formGroup input,
+html.dark .eventForm .formGroup select,
+html.dark .eventForm .formGroup textarea{
+    background:#1b2029 !important;
+    color:#eef3f8 !important;
+    border-color:#303846 !important;
 }
+
+/* Force light mode colors */
+
+html:not(.dark) .eventForm .formGroup input,
+html:not(.dark) .eventForm .formGroup select,
+html:not(.dark) .eventForm .formGroup textarea{
+    background:#ffffff !important;
+    color:#2c2f3a !important;
+    border-color:#d9dee6 !important;
+}
+
+/* Placeholder */
+
+.eventForm .formGroup input::placeholder,
+.eventForm .formGroup textarea::placeholder{
+    color:var(--text_secondary);
+}
+
+/* Focus */
+
+.eventForm .formGroup input:focus,
+.eventForm .formGroup select:focus,
+.eventForm .formGroup textarea:focus{
+    outline:none;
+
+    border-color:var(--primary) !important;
+
+    box-shadow:0 0 0 3px rgba(41,163,224,.15);
+}
+
+/* Textarea */
+
+.eventForm .formGroup textarea{
+    resize:vertical;
+    min-height:130px;
+    line-height:1.6;
+}
+
+/* ==========================================
+   Native Date & Time
+========================================== */
+
+.eventForm input[type="date"],
+.eventForm input[type="time"]{
+    color-scheme:dark;
+}
+
+html:not(.dark) .eventForm input[type="date"],
+html:not(.dark) .eventForm input[type="time"]{
+    color-scheme:light;
+}
+
+.eventForm input[type="date"]::-webkit-calendar-picker-indicator,
+.eventForm input[type="time"]::-webkit-calendar-picker-indicator{
+    cursor:pointer;
+    opacity:.9;
+}
+
+/* ==========================================
+   Select
+========================================== */
+
+.eventForm select{
+    appearance:auto;
+    -webkit-appearance:menulist;
+}
+
+/* ==========================================
+   Checkbox
+========================================== */
 
 .checkboxGroup{
     display:flex;
+    justify-content:center;
+    align-items:center;
+
+    height:46px;
+}
+
+.checkboxGroup input[type="checkbox"]{
+    position:absolute;
+
+    width:1px;
+    height:1px;
+
+    margin:-1px;
+    padding:0;
+
+    overflow:hidden;
+
+    clip:rect(0 0 0 0);
+    clip-path:inset(50%);
+
+    border:0;
+}
+
+.checkboxGroup label{
+    display:flex;
     align-items:center;
     gap:10px;
+
+    margin:0;
+
+    cursor:pointer;
+    user-select:none;
+
+    color:var(--text_primary);
+
+    font-size:.95rem;
+    font-weight:600;
 }
 
-.checkboxGroup input{
+/* Custom Checkbox */
+
+.checkboxGroup label::before{
+    content:"";
+
     width:18px;
     height:18px;
+
+    flex-shrink:0;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    background:var(--surface);
+
+    border:2px solid var(--border);
+
+    border-radius:5px;
+
+    transition:
+        background .2s ease,
+        border-color .2s ease,
+        color .2s ease,
+        box-shadow .2s ease;
 }
 
+/* Hover */
+
+.checkboxGroup label:hover::before{
+    border-color:var(--primary);
+}
+
+/* Checked */
+
+.checkboxGroup input[type="checkbox"]:checked + label::before{
+    content:"✓";
+
+    background:var(--primary);
+
+    border-color:var(--primary);
+
+    color:#fff;
+
+    font-size:12px;
+    font-weight:700;
+}
+
+/* Focus */
+
+.checkboxGroup input[type="checkbox"]:focus-visible + label::before{
+    box-shadow:0 0 0 3px rgba(41,163,224,.18);
+}
+
+/* Disabled */
+
+.checkboxGroup input[type="checkbox"]:disabled + label{
+    opacity:.6;
+    cursor:not-allowed;
+}
+
+.checkboxGroup input[type="checkbox"]:disabled + label::before{
+    background:var(--surface_hover);
+}
+
+/* ==========================================
+   Error
+========================================== */
+
 .errorText{
+    margin-top:2px;
     font-size:.82rem;
+    font-weight:500;
     color:#ef4444;
 }
+
+/* ==========================================
+   Actions
+========================================== */
 
 .formActions{
     display:flex;
     justify-content:flex-end;
+
     gap:12px;
-    padding-top:12px;
+
+    padding-top:18px;
+
     border-top:1px solid var(--border);
 }
 
 .cancelBtn,
 .saveBtn{
-    min-width:130px;
-    padding:12px 18px;
+    min-width:140px;
+    height:46px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    padding:0 20px;
+
     border-radius:12px;
+
     font-weight:600;
+
+    cursor:pointer;
+
+    transition:
+        background var(--transition),
+        color var(--transition),
+        border-color var(--transition),
+        transform var(--transition),
+        box-shadow var(--transition);
 }
 
 .cancelBtn{
@@ -80,30 +313,132 @@
 
 .cancelBtn:hover{
     background:var(--surface_hover);
+    border-color:var(--primary);
+    transform:translateY(-2px);
 }
 
 .saveBtn{
-    color:#fff;
+    border:none;
     background:var(--button);
+    color:#fff;
 }
 
 .saveBtn:hover{
     background:var(--buttonhover);
+    box-shadow:var(--shadow_sm);
+    transform:translateY(-2px);
 }
 
-@media(max-width:768px){
+.cancelBtn:active,
+.saveBtn:active{
+    transform:scale(.98);
+}
 
-    .formGrid{
+/* ==========================================
+   Tablet
+========================================== */
+
+@media (max-width:768px){
+
+    .eventForm{
+        gap:24px;
+    }
+
+    .formRow{
         grid-template-columns:1fr;
+        gap:18px;
+    }
+
+    .checkboxGroup{
+        justify-content:flex-start;
+        height:auto;
+        margin:0;
+    }
+
+    .formGroup textarea{
+        min-height:120px;
     }
 
     .formActions{
         flex-direction:column-reverse;
+        gap:10px;
+        padding-top:16px;
     }
 
     .cancelBtn,
     .saveBtn{
         width:100%;
     }
+}
 
+/* ==========================================
+   Mobile
+========================================== */
+
+@media (max-width:480px){
+
+    .eventForm{
+        gap:20px;
+    }
+
+    .formRow{
+        gap:16px;
+    }
+
+    .formGroup label{
+        font-size:.85rem;
+    }
+
+    .eventForm .formGroup input,
+    .eventForm .formGroup select,
+    .eventForm .formGroup textarea{
+        padding:12px;
+        font-size:.9rem;
+    }
+
+    .formGroup textarea{
+        min-height:110px;
+    }
+
+    .checkboxGroup span{
+        font-size:.9rem;
+    }
+
+    .cancelBtn,
+    .saveBtn{
+        width:100%;
+        height:44px;
+        font-size:.9rem;
+    }
+}
+
+/* ==========================================
+   Small Mobile
+========================================== */
+
+@media (max-width:320px){
+
+    .eventForm{
+        gap:18px;
+    }
+
+    .formRow{
+        gap:14px;
+    }
+
+    .eventForm .formGroup input,
+    .eventForm .formGroup select,
+    .eventForm .formGroup textarea{
+        padding:11px;
+    }
+
+    .formGroup textarea{
+        min-height:100px;
+    }
+
+    .cancelBtn,
+    .saveBtn{
+        height:42px;
+        font-size:.85rem;
+    }
 }
