@@ -44,6 +44,8 @@ import { DashboardSetting } from './../components/Dashboard/DashboardSetting/Das
 import { ScrollToTopButton } from '../components/ScrollToTop/scrollToTop';
 import { SinglePost } from '../pages/SinglePost/SinglePost';
 import { NotificationPage } from '../pages/NotificationPage/NotificationPage';
+import { AuthLayout } from '../layouts/AuthLayout';
+import { AdminLayout } from '../layouts/AdminLayout';
 
 export const AppRoutes = () => {
   return (
@@ -99,19 +101,7 @@ export const AppRoutes = () => {
             }
           />
 
-          {/* ================= ADMIN DASHBOARD ================= */}
-
-          <Route path="/adminDashboard" element={<AdminDashboard />}>
-            <Route index element={<DashboardHome />} />
-            <Route path="dashboard" element={<DashboardHome />} />
-            <Route path="employee" element={<DashboardEmployee />} />
-            <Route path="attendance" element={<DashboardAttendance />} />
-            <Route path="thought" element={<DashboardThuoght />} />
-            <Route path="notification" element={<DashboardNotification />} />
-            <Route path="announcement" element={<DashboardAnnouncement />} />
-            <Route path="report" element={<DashboardReport />} />
-            <Route path="setting" element={<DashboardSetting />} />
-          </Route>
+          
 
           {/* ================= PUBLIC PAGES ================= */}
 
@@ -151,8 +141,6 @@ export const AppRoutes = () => {
           />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/signup" element={<SignUpPage />} />
-          <Route path="/admin/login" element={<SignUpPage />} />
 
           <Route
             path="/notifications"
@@ -185,6 +173,30 @@ export const AppRoutes = () => {
           {/* ================= 404 ================= */}
 
           <Route path="*" element={<Error />} />
+        </Route>
+
+        {/* ================= Auth Layout ================= */}
+        <Route element={<AuthLayout />}>
+            <Route path="/signup" element={<SignUpPage />} />
+        </Route>
+
+        {/* ================= Admin Layout ================= */}
+        <Route element={<AdminLayout />}>
+
+            <Route path="/admin/login" element={<SignUpPage />} />
+
+            {/* ================= ADMIN DASHBOARD ================= */}
+          <Route path="/adminDashboard" element={<AdminDashboard />}>
+            <Route index element={<DashboardHome />} />
+            <Route path="dashboard" element={<DashboardHome />} />
+            <Route path="employee" element={<DashboardEmployee />} />
+            <Route path="attendance" element={<DashboardAttendance />} />
+            <Route path="thought" element={<DashboardThuoght />} />
+            <Route path="notification" element={<DashboardNotification />} />
+            <Route path="announcement" element={<DashboardAnnouncement />} />
+            <Route path="report" element={<DashboardReport />} />
+            <Route path="setting" element={<DashboardSetting />} />
+          </Route>
         </Route>
       </Routes>
     </>

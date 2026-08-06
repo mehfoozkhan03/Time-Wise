@@ -12,12 +12,30 @@ function CalendarDay({
   isSelected,
   onSelectDate,
   onEventClick,
+  onMoreEvents,
 }) {
   /* =========================================
      Visible Events
   ========================================= */
 
-  const visibleEvents = useMemo(() => events.slice(0, 2), [events]);
+  const visibleEvents = useMemo(() => {
+    return events.slice(0, 2);
+  }, [events]);
+
+  /* =========================================
+     Class Names
+  ========================================= */
+
+  const className = useMemo(() => {
+    return [
+      "calendarDay",
+      !isCurrentMonth && "otherMonth",
+      isToday && "today",
+      isSelected && "selected",
+    ]
+      .filter(Boolean)
+      .join(" ");
+  }, [isCurrentMonth, isToday, isSelected]);
 
   /* =========================================
      Select Date
@@ -38,7 +56,7 @@ function CalendarDay({
         handleSelectDate();
       }
     },
-    [handleSelectDate]
+    [handleSelectDate],
   );
 
   /* =========================================
@@ -53,20 +71,18 @@ function CalendarDay({
      More Events
   ========================================= */
 
-  const handleMoreEvents = useCallback((e) => {
-    e.stopPropagation();
+  const handleMoreEvents = useCallback(
+    (e) => {
+      e.stopPropagation();
 
-    // Future enhancement:
-    // Open modal / popover showing all events for the day.
-  }, []);
+      onMoreEvents?.(day, events);
+    },
+    [day, events, onMoreEvents],
+  );
 
   return (
     <div
-      className={`calendarDay
-        ${!isCurrentMonth ? "otherMonth" : ""}
-        ${isToday ? "today" : ""}
-        ${isSelected ? "selected" : ""}
-      `}
+      className={className}
       onClick={handleSelectDate}
       onKeyDown={handleKeyDown}
       role="button"
@@ -85,17 +101,10 @@ function CalendarDay({
           <>
             {visibleEvents.map((event) => (
               <div
-                key={
-                  event._id ??
-                  event.id ??
-                  `${event.date}-${event.title}`
-                }
+                key={event._id ?? event.id ?? `${event.date}-${event.title}`}
                 onClick={stopPropagation}
               >
-                <EventBadge
-                  event={event}
-                  onClick={onEventClick}
-                />
+                <EventBadge event={event} onClick={onEventClick} />
               </div>
             ))}
 
@@ -115,5 +124,7 @@ function CalendarDay({
     </div>
   );
 }
+
+CalendarDay.displayName = "CalendarDay";
 
 export default memo(CalendarDay);

@@ -237,14 +237,22 @@
   color: var(--text_primary);
   cursor: pointer;
   transition: var(--transition);
+  color: var(--text_primary);
+  font-size: 12px;
+}
+.notification_item>strong{
+  font-size: 14px;
+}
+.notification_item>p{
+  font-size: 12px;
 }
 
 .notification_item:hover {
-  color: #fff;
-    background: var(--primary);
+  background: var(--surface_hover);
 }
 
 .notification_item.unread{
+    color: #2c2f3a;
     background:#eef6ff;
     border-left:4px solid #3b82f6;
 }

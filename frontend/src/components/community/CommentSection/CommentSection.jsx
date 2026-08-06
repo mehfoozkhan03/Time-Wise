@@ -5,6 +5,7 @@ import {
   fetchComments,
   createNewComment,
   deleteExistingComment,
+  updateExistingComment,
   toggleLikeComment,
 } from '../../../store/postSlice'
 
@@ -21,6 +22,9 @@ const CommentSection = ({ postId }) => {
 
   const [text, setText] = useState('')
   const [posting, setPosting] = useState(false)
+  const [editingCommentId, setEditingCommentId] = useState(null)
+  const [editText, setEditText] = useState('')
+  const [updating, setUpdating] = useState(false)
 
   useEffect(() => {
     if (!comments.length) {
@@ -75,6 +79,39 @@ const CommentSection = ({ postId }) => {
     } catch (error) {
       console.error(error)
     }
+
+    const handleEditStart = (comment) => {
+      setEditingCommentId(comment._id)
+      setEditText(comment.text)
+    }
+
+    const handleEditCancel = () => {
+      setEditingCommentId(null)
+      setEditText('')
+    }
+
+    const handleEditSave = async () => {
+      if (!editText.trim() || updating) return
+
+      try {
+        setUpdating(true)
+
+        await dispatch(
+          updateExistingComment({
+            postId,
+            commentId: editingCommentId,
+            text: editText.trim(),
+          }),
+        ).unwrap()
+
+        setEditingCommentId(null)
+        setEditText('')
+      } catch (error) {
+        console.error(error)
+      } finally {
+        setUpdating(false)
+      }
+    }
   }
 
   return (
@@ -87,9 +124,13 @@ const CommentSection = ({ postId }) => {
           onChange={(e) => setText(e.target.value)}
         />
 
-        <button type="submit" disabled={!text.trim() || posting}>
-          {posting ? 'Posting...' : 'Comment'}
-        </button>
+        <div className="comment-form-footer">
+          <span className="comment-count">{text.length}/500</span>
+
+          <button type="submit" disabled={!text.trim() || posting}>
+            {posting ? 'Posting...' : 'Comment'}
+          </button>
+        </div>
       </form>
 
       {loading && comments.length === 0 ? (
@@ -141,7 +182,29 @@ const CommentSection = ({ postId }) => {
                 </small>
               </div>
 
-              <p>{comment.text}</p>
+              {editingCommentId === comment._id ? (
+                <div className="comment-edit-box">
+                  <textarea
+                    value={editText}
+                    maxLength={500}
+                    onChange={(e) => setEditText(e.target.value)}
+                  />
+
+                  <div className="comment-edit-actions">
+                    <span className="comment-count">{editText.length}/500</span>
+
+                    <div className="comment-edit-buttons">
+                      <button onClick={handleEditSave}>
+                        {updating ? 'Saving...' : 'Save'}
+                      </button>
+
+                      <button onClick={handleEditCancel}>Cancel</button>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <p>{comment.text}</p>
+              )}
 
               <div className="comment-actions">
                 <button onClick={() => handleLike(comment._id)}>
@@ -149,9 +212,15 @@ const CommentSection = ({ postId }) => {
                 </button>
 
                 {isOwner && (
-                  <button onClick={() => handleDelete(comment._id)}>
-                    Delete
-                  </button>
+                  <>
+                    <button onClick={() => handleEditStart(comment)}>
+                      ✏️ Edit
+                    </button>
+
+                    <button onClick={() => handleDelete(comment._id)}>
+                      🗑️ Delete
+                    </button>
+                  </>
                 )}
               </div>
             </div>

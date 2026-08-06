@@ -19,10 +19,7 @@ function CalendarSidebar({
   onEventClick,
 }) {
   return (
-    <aside
-      className="calendarSidebar"
-      aria-label="Calendar Sidebar"
-    >
+    <aside className="calendarSidebar" aria-label="Calendar Sidebar">
       <MiniCalendar
         currentDate={currentDate}
         selectedDate={selectedDate}
@@ -31,24 +28,15 @@ function CalendarSidebar({
         nextMonth={nextMonth}
       />
 
-      <UpcomingEvents
-        events={events}
-        onEventClick={onEventClick}
-      />
+      <UpcomingEvents events={events} onEventClick={onEventClick} />
 
-      <EventLegend
-        filters={filters}
-        toggleFilter={toggleFilter}
-      />
+      <EventLegend filters={filters} toggleFilter={toggleFilter} />
 
-      <TodaySummary
-        events={events}
-      />
+      <TodaySummary events={events} />
     </aside>
   );
 }
 
-CalendarSidebar.displayName =
-  "CalendarSidebar";
+CalendarSidebar.displayName = "CalendarSidebar";
 
 export default memo(CalendarSidebar);
