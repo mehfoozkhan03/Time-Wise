@@ -60,6 +60,7 @@ const weeklyGoalPercentage = useCountUp(dashboardStats.weeklyGoalPercentage);
       <SectionLabel>Work Summary</SectionLabel>
 
       <div
+        className="work_summary_div"
         style={{
           display: "grid",
           gridTemplateColumns: "1fr 1fr",
