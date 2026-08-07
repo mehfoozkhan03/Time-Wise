@@ -91,7 +91,7 @@ export function AttendanceLog({
           </select>
         </div>
       </div>
-      <div style={{ overflowX: "auto" }}>
+      <div style={{ overflowX: "scroll", scrollbarWidth: "none" }}>
         <table
           style={{
             width: "100%",

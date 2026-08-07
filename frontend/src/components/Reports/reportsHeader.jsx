@@ -80,6 +80,7 @@ export function ReportsHeader({ dateRange, ranges }) {
             padding: 3,
             gap: 5,
           }}
+          className="reports_button_flex"
         >
           {ranges.map((r) => (
             <button
