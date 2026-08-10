@@ -14,7 +14,6 @@ import { attendanceRouter } from './routes/Attendance.routes.js';
 import calendarRoutes from './routes/Calendar.routes.js';
 import holidayRouter from "./routes/Holiday.routes.js";
 import { contactRoute } from './routes/Contact.routes.js';
-// import notificationRoutes from './routes/Notification.routes.js';
 import notificationRoute from './routes/Notification.routes.js';
 
 const server = express();
@@ -29,7 +28,7 @@ initializeSocket(httpServer);
 server.use(
   cors({
     origin: [
-      'http://localhost:9000',
+      'http://localhost:8000',
       'http://localhost:5173',
       'http://localhost:5174',
     ],
@@ -53,7 +52,6 @@ server.use("/holiday", holidayRouter);
 
 server.use('/api/contact', contactRoute);
 
-// server.use("/notifications", notificationRoutes);
 server.use("/notifications", notificationRoute);
 
 // ================= Server =================
