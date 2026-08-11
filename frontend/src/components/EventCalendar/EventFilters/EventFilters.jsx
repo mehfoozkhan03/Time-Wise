@@ -1,12 +1,14 @@
 import "./EventFilters.css";
 
-import { memo, useMemo, useCallback } from "react";
+import { memo, useMemo, useCallback, useState } from "react";
 
 import { FaSearch, FaTimes } from "react-icons/fa";
 
 import { EVENT_CONFIG } from "../../../data/eventConfig";
 
 const eventTypes = Object.entries(EVENT_CONFIG);
+
+const INITIAL_VISIBLE_FILTERS = 6;
 
 function EventFilters({
   filters = {},
@@ -17,6 +19,8 @@ function EventFilters({
   clearAll,
   events = [],
 }) {
+  const [showAllFilters, setShowAllFilters] = useState(false);
+
   /* =========================================
      Event Counts
   ========================================= */
@@ -36,12 +40,26 @@ function EventFilters({
   }, [events]);
 
   /* =========================================
+     Visible Filters
+  ========================================= */
+
+  const visibleFilters = useMemo(() => {
+    return showAllFilters
+      ? eventTypes
+      : eventTypes.slice(0, INITIAL_VISIBLE_FILTERS);
+  }, [showAllFilters]);
+
+  const remainingFilters = useMemo(() => {
+    return Math.max(eventTypes.length - INITIAL_VISIBLE_FILTERS, 0);
+  }, []);
+
+  /* =========================================
      Search
   ========================================= */
 
   const handleSearchChange = useCallback(
-    (e) => {
-      setSearchTerm?.(e.target.value.trimStart());
+    (event) => {
+      setSearchTerm?.(event.target.value.trimStart());
     },
     [setSearchTerm],
   );
@@ -73,6 +91,10 @@ function EventFilters({
     clearAll?.();
   }, [clearAll]);
 
+  const handleToggleShowAll = useCallback(() => {
+    setShowAllFilters((previous) => !previous);
+  }, []);
+
   return (
     <section className="eventFilters">
       {/* ================= Search ================= */}
@@ -100,9 +122,9 @@ function EventFilters({
           <button
             type="button"
             className="clearSearchBtn"
-            aria-label="Clear search"
-            title="Clear Search"
             onClick={handleClearSearch}
+            aria-label="Clear Search"
+            title="Clear Search"
           >
             <FaTimes />
           </button>
@@ -124,7 +146,7 @@ function EventFilters({
       {/* ================= Filter Chips ================= */}
 
       <div className="filterList" role="group" aria-label="Event Filters">
-        {eventTypes.map(([type, config]) => {
+        {visibleFilters.map(([type, config]) => {
           const active = Boolean(filters[type]);
 
           const className = ["filterChip", active && "active"]
@@ -139,7 +161,7 @@ function EventFilters({
               type="button"
               className={className}
               aria-pressed={active}
-              aria-label={`Toggle ${config.label} events`}
+              aria-label={`Toggle ${config.label}`}
               title={config.label}
               onClick={() => handleToggleFilter(type)}
             >
@@ -153,6 +175,17 @@ function EventFilters({
             </button>
           );
         })}
+
+        {remainingFilters > 0 && (
+          <button
+            type="button"
+            className="showMoreBtn"
+            onClick={handleToggleShowAll}
+            aria-expanded={showAllFilters}
+          >
+            {showAllFilters ? "Show Less" : `+${remainingFilters} More`}
+          </button>
+        )}
       </div>
     </section>
   );
