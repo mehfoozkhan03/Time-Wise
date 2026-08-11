@@ -12,14 +12,12 @@
   position: absolute;
   inset: 0;
 
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.08) 45%,
-    rgba(255, 255, 255, 0.18) 50%,
-    rgba(255, 255, 255, 0.08) 55%,
-    transparent 100%
-  );
+  background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.08) 45%,
+      rgba(255, 255, 255, 0.18) 50%,
+      rgba(255, 255, 255, 0.08) 55%,
+      transparent 100%);
 
   transform: translateX(-100%);
   animation: skeleton-loading 1.3s linear infinite;
@@ -29,4 +27,10 @@
   100% {
     transform: translateX(100%);
   }
+}
+
+/* Light theme skeleton */
+html.light .skeleton {
+  background: #b9e7f8;
+  border-color: #9edcf3;
 }
