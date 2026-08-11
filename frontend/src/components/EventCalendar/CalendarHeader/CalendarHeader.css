@@ -1,113 +1,247 @@
-.calendarHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.calendarHeader{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
 
-  gap: 20px;
+    gap:20px;
 
-  padding: 20px 24px;
+    padding:20px 24px;
 
-  background: var(--surface);
+    background:var(--surface);
 
-  border: 1px solid var(--border);
+    border:1px solid var(--border);
+    border-radius:var(--radius_lg);
 
-  border-radius: var(--radius_lg);
+    box-shadow:var(--shadow_sm);
 
-  box-shadow: var(--shadow_sm);
-
-  transition:
-    background var(--transition),
-    border-color var(--transition),
-    box-shadow var(--transition);
+    transition:
+        background var(--transition),
+        border-color var(--transition),
+        box-shadow var(--transition);
 }
 
-.headerTitle {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+/* ==========================================
+   Title
+========================================== */
+
+.headerTitle{
+    display:flex;
+    flex-direction:column;
+
+    gap:4px;
+
+    min-width:0;
 }
 
-.headerTitle h2 {
-  color: var(--text_primary);
+.headerTitle h2{
+    margin:0;
 
-  font-size: 28px;
-  font-weight: 700;
-  line-height: 1.2;
+    color:var(--text_primary);
+
+    font-size:28px;
+    font-weight:700;
+    line-height:1.2;
 }
 
-.headerActions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+/* ==========================================
+   Actions
+========================================== */
 
-  flex-wrap: wrap;
+.headerActions{
+    display:flex;
+    align-items:center;
+    justify-content:flex-end;
+
+    gap:12px;
+
+    flex-wrap:wrap;
 }
+
+/* ==========================================
+   Shared Button Style
+========================================== */
 
 .navBtn,
-.todayBtn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
+.todayBtn,
+.createEventBtn,
+.createHolidayBtn{
+    display:inline-flex;
+    justify-content:center;
+    align-items:center;
 
-  min-width: 46px;
-  height: 44px;
+    gap:8px;
 
-  padding: 0 18px;
+    min-width:46px;
+    height:44px;
 
-  border: 1px solid var(--border);
+    padding:0 18px;
 
-  border-radius: var(--radius_sm);
+    border:1px solid var(--border);
+    border-radius:12px;
 
-  background: var(--bg);
+    background:var(--bg);
 
-  color: var(--text_primary);
+    color:var(--text_primary);
 
-  cursor: pointer;
+    font-size:.92rem;
+    font-weight:600;
+    font-family:inherit;
 
-  transition:
-    background var(--transition),
-    border-color var(--transition),
-    color var(--transition),
-    transform var(--transition),
-    box-shadow var(--transition);
+    cursor:pointer;
+
+    text-decoration:none;
+    white-space:nowrap;
+
+    transition:
+        background var(--transition),
+        border-color var(--transition),
+        color var(--transition),
+        transform var(--transition),
+        box-shadow var(--transition);
 }
+
+/* ==========================================
+   Hover
+========================================== */
 
 .navBtn:hover,
-.todayBtn:hover {
-  background: var(--primary);
+.todayBtn:hover,
+.createEventBtn:hover,
+.createHolidayBtn:hover{
+    background:var(--primary);
 
-  color: #fff;
+    color:#fff;
 
-  border-color: var(--primary);
+    border-color:var(--primary);
 
-  box-shadow: var(--shadow_sm);
+    box-shadow:var(--shadow_sm);
 
-  transform: translateY(-2px);
+    transform:translateY(-2px);
 }
+
+/* ==========================================
+   Active
+========================================== */
 
 .navBtn:active,
-.todayBtn:active {
-  transform: scale(0.97);
+.todayBtn:active,
+.createEventBtn:active,
+.createHolidayBtn:active{
+    transform:scale(.97);
 }
+
+/* ==========================================
+   Focus
+========================================== */
 
 .navBtn:focus-visible,
-.todayBtn:focus-visible {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
+.todayBtn:focus-visible,
+.createEventBtn:focus-visible,
+.createHolidayBtn:focus-visible{
+    outline:2px solid var(--primary);
+    outline-offset:2px;
 }
 
-@media (max-width: 768px) {
-  .calendarHeader {
-    flex-direction: column;
-    align-items: stretch;
-  }
+/* ==========================================
+   Disabled
+========================================== */
 
-  .headerTitle {
-    text-align: center;
-  }
+.navBtn:disabled,
+.todayBtn:disabled,
+.createEventBtn:disabled,
+.createHolidayBtn:disabled{
+    opacity:.55;
+    cursor:not-allowed;
+}
 
-  .headerActions {
-    justify-content: center;
-  }
+/* ==========================================
+   Responsive
+========================================== */
+
+@media (max-width:760px){
+
+    .calendarHeader{
+        flex-direction:column;
+        align-items:stretch;
+
+        gap:18px;
+
+        padding:18px;
+    }
+
+    .headerTitle{
+        text-align:center;
+    }
+
+    .headerTitle h2{
+        font-size:24px;
+    }
+
+    .headerActions{
+        justify-content:center;
+        gap:10px;
+    }
+
+    .navBtn,
+    .todayBtn,
+    .createEventBtn,
+    .createHolidayBtn{
+        height:42px;
+        padding:0 16px;
+    }
+}
+
+@media (max-width:480px){
+
+    .calendarHeader{
+        gap:16px;
+        padding:16px;
+    }
+
+    .headerTitle h2{
+        font-size:21px;
+    }
+
+    .headerActions{
+        display:grid;
+        grid-template-columns:repeat(2,1fr);
+
+        gap:8px;
+    }
+
+    .navBtn,
+    .todayBtn,
+    .createEventBtn,
+    .createHolidayBtn{
+        width:100%;
+        height:40px;
+
+        padding:0 12px;
+
+        font-size:13px;
+    }
+}
+
+@media (max-width:320px){
+
+    .calendarHeader{
+        padding:12px;
+    }
+
+    .headerTitle h2{
+        font-size:18px;
+    }
+
+    .headerActions{
+        grid-template-columns:1fr;
+    }
+
+    .navBtn,
+    .todayBtn,
+    .createEventBtn,
+    .createHolidayBtn{
+        height:38px;
+
+        font-size:12px;
+    }
 }
