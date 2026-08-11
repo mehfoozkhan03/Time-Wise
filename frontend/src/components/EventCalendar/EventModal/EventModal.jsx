@@ -21,16 +21,16 @@ import { formatFullDate, formatTime } from "../../../utils/dateUtils";
 
 import InfoRow from "../../Common/InfoRow/InfoRow";
 
-function EventModal({ event, onClose, onEdit, onDelete, canEdit = false }) {
-  /* =========================================
-     Close Button Ref
-  ========================================= */
-
+function EventModal({
+  event,
+  onClose,
+  onEdit,
+  onDelete,
+  canEdit = false,
+  canDelete = false,
+  isLoading = false,
+}) {
   const closeButtonRef = useRef(null);
-
-  /* =========================================
-     Event Config
-  ========================================= */
 
   const config = useMemo(() => {
     if (!event) {
@@ -40,17 +40,9 @@ function EventModal({ event, onClose, onEdit, onDelete, canEdit = false }) {
     return EVENT_CONFIG[String(event.type).toUpperCase()];
   }, [event]);
 
-  /* =========================================
-     Holiday Check
-  ========================================= */
-
   const isHoliday = useMemo(() => {
     return Boolean(event?.isHoliday);
   }, [event]);
-
-  /* =========================================
-     Display Name
-  ========================================= */
 
   const displayName = useMemo(() => {
     if (!event || !config) {
@@ -61,12 +53,16 @@ function EventModal({ event, onClose, onEdit, onDelete, canEdit = false }) {
       return config.label;
     }
 
-    return event.employeeName || "N/A";
-  }, [event, config, isHoliday]);
+    if (event.employeeName) {
+      return event.employeeName;
+    }
 
-  /* =========================================
-     Event Time
-  ========================================= */
+    if (typeof event.employeeId === "object") {
+      return event.employeeId?.name || "N/A";
+    }
+
+    return "N/A";
+  }, [event, config, isHoliday]);
 
   const eventTime = useMemo(() => {
     if (!event) {
@@ -78,7 +74,6 @@ function EventModal({ event, onClose, onEdit, onDelete, canEdit = false }) {
     }
 
     const start = event.startTime ? formatTime(event.startTime) : "";
-
     const end = event.endTime ? formatTime(event.endTime) : "";
 
     if (start && end) {
@@ -96,10 +91,6 @@ function EventModal({ event, onClose, onEdit, onDelete, canEdit = false }) {
     return "--";
   }, [event]);
 
-  /* =========================================
-     Focus + ESC Close
-  ========================================= */
-
   useEffect(() => {
     if (!event) {
       return;
@@ -108,7 +99,7 @@ function EventModal({ event, onClose, onEdit, onDelete, canEdit = false }) {
     closeButtonRef.current?.focus();
 
     const handleKeyDown = (e) => {
-      if (e.key === "Escape") {
+      if (e.key === "Escape" && !isLoading) {
         onClose?.();
       }
     };
@@ -118,23 +109,27 @@ function EventModal({ event, onClose, onEdit, onDelete, canEdit = false }) {
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [event, onClose]);
-
-  /* =========================================
-     Handlers
-  ========================================= */
+  }, [event, onClose, isLoading]);
 
   const handleClose = useCallback(() => {
+    if (isLoading) {
+      return;
+    }
+
     onClose?.();
-  }, [onClose]);
+  }, [onClose, isLoading]);
 
   const handleOverlayClick = useCallback(
     (e) => {
+      if (isLoading) {
+        return;
+      }
+
       if (e.target === e.currentTarget) {
         handleClose();
       }
     },
-    [handleClose],
+    [handleClose, isLoading],
   );
 
   const handleModalClick = useCallback((e) => {
@@ -142,16 +137,22 @@ function EventModal({ event, onClose, onEdit, onDelete, canEdit = false }) {
   }, []);
 
   const handleEdit = useCallback(() => {
+    if (isLoading) {
+      return;
+    }
+
+    onClose?.();
     onEdit?.(event);
-  }, [event, onEdit]);
+  }, [event, onEdit, onClose, isLoading]);
 
   const handleDelete = useCallback(() => {
-    onDelete?.(event);
-  }, [event, onDelete]);
+    if (isLoading) {
+      return;
+    }
 
-  /* =========================================
-     Validation
-  ========================================= */
+    onClose?.();
+    onDelete?.(event);
+  }, [event, onDelete, onClose, isLoading]);
 
   if (!event || !config) {
     return null;
@@ -173,10 +174,6 @@ function EventModal({ event, onClose, onEdit, onDelete, canEdit = false }) {
         aria-labelledby="event-modal-title"
         aria-describedby="event-modal-description"
       >
-        {/* =========================================
-            Header
-        ========================================= */}
-
         <div className="modalHeader">
           <div className="modalTitle">
             <div
@@ -208,15 +205,12 @@ function EventModal({ event, onClose, onEdit, onDelete, canEdit = false }) {
             type="button"
             className="closeBtn"
             onClick={handleClose}
+            disabled={isLoading}
             aria-label="Close Event"
           >
             <FaTimes />
           </button>
         </div>
-
-        {/* =========================================
-            Body
-        ========================================= */}
 
         <div className="modalBody">
           <InfoRow
@@ -270,27 +264,29 @@ function EventModal({ event, onClose, onEdit, onDelete, canEdit = false }) {
           </div>
         </div>
 
-        {/* =========================================
-            Footer
-        ========================================= */}
-
-        {!isHoliday && canEdit && (
+        {(canEdit || canDelete) && (
           <div className="modalFooter">
-            {onEdit && (
-              <button type="button" className="editBtn" onClick={handleEdit}>
+            {canEdit && onEdit && (
+              <button
+                type="button"
+                className="editBtn"
+                onClick={handleEdit}
+                disabled={isLoading}
+              >
                 <FaEdit />
                 Edit
               </button>
             )}
 
-            {onDelete && (
+            {canDelete && onDelete && (
               <button
                 type="button"
                 className="deleteBtn"
                 onClick={handleDelete}
+                disabled={isLoading}
               >
                 <FaTrash />
-                Delete
+                {isLoading ? "Deleting..." : "Delete"}
               </button>
             )}
           </div>

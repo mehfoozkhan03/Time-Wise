@@ -38,6 +38,10 @@ function MiniCalendar({
     return generateCalendar(currentDate);
   }, [currentDate]);
 
+  const weekDays = useMemo(() => {
+    return WEEK_DAYS;
+  }, []);
+
   const monthTitle = useMemo(() => {
     return `${getMonthName(currentDate)} ${currentDate.getFullYear()}`;
   }, [currentDate]);
@@ -53,6 +57,13 @@ function MiniCalendar({
     [selectDate],
   );
 
+  const createSelectHandler = useCallback(
+    (date) => () => {
+      handleSelectDay(date);
+    },
+    [handleSelectDay],
+  );
+
   const handlePreviousMonth = useCallback(() => {
     previousMonth?.();
     onMonthChange?.("previous");
@@ -62,6 +73,17 @@ function MiniCalendar({
     nextMonth?.();
     onMonthChange?.("next");
   }, [nextMonth, onMonthChange]);
+
+  const getDayClassName = useCallback((item, isSelected) => {
+    return [
+      "miniDay",
+      !item.currentMonth && "otherMonth",
+      item.isToday && "today",
+      isSelected && "selected",
+    ]
+      .filter(Boolean)
+      .join(" ");
+  }, []);
 
   return (
     <Card className="miniCalendarCard">
@@ -87,33 +109,24 @@ function MiniCalendar({
         </button>
       </div>
 
-      <div className="miniWeekDays" role="row">
-        {WEEK_DAYS.map((day) => (
+      <div className="miniWeekDays" role="rowgroup">
+        {weekDays.map((day) => (
           <span key={day} role="columnheader">
             {day.charAt(0)}
           </span>
         ))}
       </div>
 
-      <div className="miniGrid" role="grid">
+      <div className="miniGrid" role="grid" aria-label="Mini Calendar">
         {days.map((item) => {
           const isSelected = isSameDate(item.date, selectedDate);
-
-          const className = [
-            "miniDay",
-            !item.currentMonth && "otherMonth",
-            item.isToday && "today",
-            isSelected && "selected",
-          ]
-            .filter(Boolean)
-            .join(" ");
 
           return (
             <button
               key={getDateKey(item.date)}
               type="button"
-              className={className}
-              onClick={() => handleSelectDay(item.date)}
+              className={getDayClassName(item, isSelected)}
+              onClick={createSelectHandler(item.date)}
               aria-pressed={isSelected}
               aria-current={item.isToday ? "date" : undefined}
               aria-label={`Select ${item.date.toDateString()}`}
