@@ -103,7 +103,7 @@ html.dark .emptyIcon {
 }
 
 /* ==========================================
-   Tablet
+   768px
 ========================================== */
 
 @media (max-width: 768px) {
@@ -132,7 +132,7 @@ html.dark .emptyIcon {
 }
 
 /* ==========================================
-   Mobile
+   480px
 ========================================== */
 
 @media (max-width: 480px) {
@@ -140,6 +140,8 @@ html.dark .emptyIcon {
     min-height: 110px;
 
     padding: 18px 14px;
+
+    gap: 8px;
   }
 
   .emptyIcon {
@@ -147,5 +149,48 @@ html.dark .emptyIcon {
     height: 42px;
 
     font-size: 18px;
+  }
+
+  .emptyState h3 {
+    font-size: 13px;
+  }
+
+  .emptyState p {
+    max-width: 200px;
+
+    font-size: 10px;
+  }
+}
+
+/* ==========================================
+   320px
+========================================== */
+
+@media (max-width: 320px) {
+  .emptyState {
+    min-height: 100px;
+
+    padding: 16px 12px;
+
+    gap: 6px;
+  }
+
+  .emptyIcon {
+    width: 36px;
+    height: 36px;
+
+    font-size: 16px;
+  }
+
+  .emptyState h3 {
+    font-size: 12px;
+  }
+
+  .emptyState p {
+    max-width: 170px;
+
+    font-size: 9px;
+
+    line-height: 1.5;
   }
 }

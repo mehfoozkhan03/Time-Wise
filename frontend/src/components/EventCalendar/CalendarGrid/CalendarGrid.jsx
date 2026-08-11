@@ -17,6 +17,7 @@ function CalendarGrid({
   selectDate,
   events = [],
   onEventClick,
+  onMoreEvents,
 }) {
   /* =========================================
      Generate Calendar
@@ -27,12 +28,6 @@ function CalendarGrid({
   }, [currentDate]);
 
   /* =========================================
-     Week Header
-  ========================================= */
-
-  const weekDays = useMemo(() => WEEK_DAYS, []);
-
-  /* =========================================
      Group Events By Date
   ========================================= */
 
@@ -40,12 +35,13 @@ function CalendarGrid({
     const map = new Map();
 
     events.forEach((event) => {
-      if (!event?.date) return;
+      if (!event?.date) {
+        return;
+      }
 
       const eventDate = new Date(event.date);
 
       if (Number.isNaN(eventDate.getTime())) {
-        console.warn("Invalid Event:", event);
         return;
       }
 
@@ -62,53 +58,38 @@ function CalendarGrid({
   }, [events]);
 
   /* =========================================
-     Debug
-  ========================================= */
-
-  // useEffect(() => {
-  //   console.group("===== CALENDAR GRID =====");
-
-  //   console.log("Current Month:", currentDate);
-  //   console.log("Events Received:", events.length);
-  //   console.log("Grouped Days:", eventsByDate.size);
-
-  //   eventsByDate.forEach((value, key) => {
-  //     console.log(`${key} -> ${value.length} event(s)`, value);
-  //   });
-
-  //   console.groupEnd();
-  // }, [currentDate, events, eventsByDate]);
-
-  /* =========================================
      Render
   ========================================= */
 
   return (
-    <section className="calendarWrapper">
-      <div className="weekHeader">
-        {weekDays.map((day) => (
+    <section
+      id="calendar-grid"
+      className="calendarWrapper"
+      aria-label="Calendar"
+    >
+      <div className="weekHeader" role="row">
+        {WEEK_DAYS.map((day) => (
           <div key={day} role="columnheader">
             {day}
           </div>
         ))}
       </div>
 
-      <div className="calendarGrid">
+      <div className="calendarGrid" role="grid">
         {calendar.map((item) => {
           const dateKey = getDateKey(item.date);
-
-          const dayEvents = eventsByDate.get(dateKey) || [];
 
           return (
             <CalendarDay
               key={dateKey}
               day={item.date}
-              events={dayEvents}
+              events={eventsByDate.get(dateKey) || []}
               isCurrentMonth={item.currentMonth}
               isToday={item.isToday}
               isSelected={isSameDate(item.date, selectedDate)}
               onSelectDate={selectDate}
               onEventClick={onEventClick}
+              onMoreEvents={onMoreEvents}
             />
           );
         })}
@@ -116,5 +97,7 @@ function CalendarGrid({
     </section>
   );
 }
+
+CalendarGrid.displayName = "CalendarGrid";
 
 export default memo(CalendarGrid);
