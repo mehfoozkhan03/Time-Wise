@@ -126,10 +126,6 @@
   background: var(--primary);
 }
 
-/* ===============================
-   760px
-================================ */
-
 @media (max-width: 760px) {
   .dayEventsOverlay {
     padding: 16px;
@@ -152,10 +148,6 @@
     font-size: 17px;
   }
 }
-
-/* ===============================
-   480px
-================================ */
 
 @media (max-width: 480px) {
   .dayEventsOverlay {
@@ -195,10 +187,6 @@
     font-size: 12px;
   }
 }
-
-/* ===============================
-   320px
-================================ */
 
 @media (max-width: 320px) {
   .dayEventsHeader {
