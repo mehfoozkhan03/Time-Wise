@@ -14,15 +14,8 @@ function CalendarDay({
   onEventClick,
   onMoreEvents,
 }) {
-  /* =========================================
-     Visible Events
-  ========================================= */
 
   const visibleEvents = events.slice(0, 1);
-
-  /* =========================================
-     Class Names
-  ========================================= */
 
   const className = [
     "calendarDay",
@@ -33,17 +26,9 @@ function CalendarDay({
     .filter(Boolean)
     .join(" ");
 
-  /* =========================================
-     Select Date
-  ========================================= */
-
   const handleSelectDate = useCallback(() => {
     onSelectDate?.(day);
   }, [day, onSelectDate]);
-
-  /* =========================================
-     Keyboard Support
-  ========================================= */
 
   const handleKeyDown = useCallback(
     (event) => {
@@ -55,17 +40,9 @@ function CalendarDay({
     [handleSelectDate],
   );
 
-  /* =========================================
-     Stop Propagation
-  ========================================= */
-
   const stopPropagation = useCallback((event) => {
     event.stopPropagation();
   }, []);
-
-  /* =========================================
-     More Events
-  ========================================= */
 
   const handleMoreEvents = useCallback(
     (event) => {

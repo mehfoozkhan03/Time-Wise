@@ -412,6 +412,7 @@ export default function EventCalendar() {
 
       {dayEventsModalOpen && (
       <DayEventsModal
+        date={selectedDate}
         events={dayEvents}
         onClose={() => setDayEventsModalOpen(false)}
         onEventClick={handleEventClick}

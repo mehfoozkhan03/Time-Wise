@@ -19,17 +19,10 @@ function CalendarGrid({
   onEventClick,
   onMoreEvents,
 }) {
-  /* =========================================
-     Generate Calendar
-  ========================================= */
 
   const calendar = useMemo(() => {
     return generateCalendar(currentDate);
   }, [currentDate]);
-
-  /* =========================================
-     Group Events By Date
-  ========================================= */
 
   const eventsByDate = useMemo(() => {
     const map = new Map();
@@ -56,10 +49,6 @@ function CalendarGrid({
 
     return map;
   }, [events]);
-
-  /* =========================================
-     Render
-  ========================================= */
 
   return (
     <section
