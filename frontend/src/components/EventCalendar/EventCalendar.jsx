@@ -1,6 +1,11 @@
 import "./EventCalendar.css";
+
 import { useMemo, useState, useCallback, useEffect } from "react";
+
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
+import { FaLock, FaArrowLeft } from "react-icons/fa";
 
 import useCalendar from "../../hooks/useCalendar";
 import useEventFilter from "../../hooks/useEventFilter";
@@ -30,12 +35,13 @@ import EventModal from "./EventModal/EventModal";
 import EventFormModal from "./EventFormModal/EventFormModal";
 import HolidayFormModal from "./HolidayFormModal/HolidayFormModal";
 import DeleteModal from "./DeleteModal/DeleteModal";
-import DayEventsModal from "./DayEventsModal/DayEventsModal"
+import DayEventsModal from "./DayEventsModal/DayEventsModal";
 
 import CalendarSkeleton from "../Common/CalendarSkeleton/CalendarSkeleton";
 
 export default function EventCalendar() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const {
     events = [],
@@ -51,7 +57,9 @@ export default function EventCalendar() {
 
   const { user } = useSelector((state) => state.auth);
 
-  const { isAuthenticated: isAdmin } = useSelector((state) => state.adminAuth);
+  const { isAuthenticated: isAdmin } = useSelector(
+    (state) => state.adminAuth,
+  );
 
   useEffect(() => {
     dispatch(fetchEvents());
@@ -73,7 +81,9 @@ export default function EventCalendar() {
 
   const allEvents = useMemo(() => {
     const calendarEvents = Array.isArray(events) ? events : [];
-    const holidayEvents = Array.isArray(mappedHolidays) ? mappedHolidays : [];
+    const holidayEvents = Array.isArray(mappedHolidays)
+      ? mappedHolidays
+      : [];
 
     return [...calendarEvents, ...holidayEvents].sort((a, b) => {
       const dateDiff = new Date(a.date) - new Date(b.date);
@@ -307,6 +317,10 @@ export default function EventCalendar() {
 
   const { canEdit, canDelete } = checkPermissions(selectedEvent);
 
+  const handleGoBack = useCallback(() => {
+    navigate("/settings");
+  }, [navigate]);
+
   if (isLoading) {
     return <CalendarSkeleton />;
   }
@@ -314,13 +328,32 @@ export default function EventCalendar() {
   if (hasError) {
     return (
       <section className="eventCalendar">
-        <div className="calendarError">
-          <h3>Failed to load calendar</h3>
-          <p>{hasError}</p>
+        <div className="calendarAccessRestricted">
+          <div className="calendarAccessIcon">
+            <FaLock />
+          </div>
+
+          <h2>Calendar Access Restricted</h2>
+
+          <p>
+            You don't have permission to create or manage
+            <br />
+            this type of calendar event.
+          </p>
+
+          <button
+            type="button"
+            className="calendarAccessBackBtn"
+            onClick={handleGoBack}
+          >
+            <FaArrowLeft />
+            <span>Go Back</span>
+          </button>
         </div>
       </section>
     );
   }
+
   return (
     <section className="eventCalendar">
       <CalendarHeader
@@ -411,12 +444,12 @@ export default function EventCalendar() {
       )}
 
       {dayEventsModalOpen && (
-      <DayEventsModal
-        date={selectedDate}
-        events={dayEvents}
-        onClose={() => setDayEventsModalOpen(false)}
-        onEventClick={handleEventClick}
-      />
+        <DayEventsModal
+          date={selectedDate}
+          events={dayEvents}
+          onClose={() => setDayEventsModalOpen(false)}
+          onEventClick={handleEventClick}
+        />
       )}
     </section>
   );
