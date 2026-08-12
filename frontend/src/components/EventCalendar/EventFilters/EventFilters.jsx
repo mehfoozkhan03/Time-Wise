@@ -21,10 +21,6 @@ function EventFilters({
 }) {
   const [showAllFilters, setShowAllFilters] = useState(false);
 
-  /* =========================================
-     Event Counts
-  ========================================= */
-
   const eventCounts = useMemo(() => {
     return events.reduce((counts, event) => {
       if (!event?.type) {
@@ -39,10 +35,6 @@ function EventFilters({
     }, {});
   }, [events]);
 
-  /* =========================================
-     Visible Filters
-  ========================================= */
-
   const visibleFilters = useMemo(() => {
     return showAllFilters
       ? eventTypes
@@ -52,10 +44,6 @@ function EventFilters({
   const remainingFilters = useMemo(() => {
     return Math.max(eventTypes.length - INITIAL_VISIBLE_FILTERS, 0);
   }, []);
-
-  /* =========================================
-     Search
-  ========================================= */
 
   const handleSearchChange = useCallback(
     (event) => {
@@ -68,20 +56,16 @@ function EventFilters({
     setSearchTerm?.("");
   }, [setSearchTerm]);
 
-  /* =========================================
-     Filter Toggle
-  ========================================= */
-
   const handleToggleFilter = useCallback(
     (type) => {
+      if (!eventCounts[type]) {
+        return;
+      }
+
       toggleFilter?.(type);
     },
-    [toggleFilter],
+    [eventCounts, toggleFilter],
   );
-
-  /* =========================================
-     Actions
-  ========================================= */
 
   const handleSelectAll = useCallback(() => {
     selectAll?.();
@@ -97,8 +81,6 @@ function EventFilters({
 
   return (
     <section className="eventFilters">
-      {/* ================= Search ================= */}
-
       <label htmlFor="calendar-search" className="sr-only">
         Search calendar events
       </label>
@@ -108,7 +90,7 @@ function EventFilters({
 
         <input
           id="calendar-search"
-          type="search"
+          type="text"
           placeholder="Search by title, employee or event type..."
           aria-label="Search calendar events"
           aria-controls="calendar-grid"
@@ -131,8 +113,6 @@ function EventFilters({
         )}
       </div>
 
-      {/* ================= Actions ================= */}
-
       <div className="filterActions">
         <button type="button" onClick={handleSelectAll}>
           Select All
@@ -143,13 +123,17 @@ function EventFilters({
         </button>
       </div>
 
-      {/* ================= Filter Chips ================= */}
-
       <div className="filterList" role="group" aria-label="Event Filters">
         {visibleFilters.map(([type, config]) => {
-          const active = Boolean(filters[type]);
+          const count = eventCounts[type] ?? 0;
+          const hasEvents = count > 0;
+          const active = hasEvents && Boolean(filters[type]);
 
-          const className = ["filterChip", active && "active"]
+          const className = [
+            "filterChip",
+            active && "active",
+            !hasEvents && "disabled",
+          ]
             .filter(Boolean)
             .join(" ");
 
@@ -161,8 +145,18 @@ function EventFilters({
               type="button"
               className={className}
               aria-pressed={active}
-              aria-label={`Toggle ${config.label}`}
-              title={config.label}
+              aria-disabled={!hasEvents}
+              aria-label={
+                hasEvents
+                  ? `Toggle ${config.label}`
+                  : `${config.label}, no events`
+              }
+              title={
+                hasEvents
+                  ? config.label
+                  : `No ${config.label.toLowerCase()} events`
+              }
+              disabled={!hasEvents}
               onClick={() => handleToggleFilter(type)}
             >
               <span className="chipIcon">
@@ -171,7 +165,7 @@ function EventFilters({
 
               <span>{config.label}</span>
 
-              <span className="count">{eventCounts[type] ?? 0}</span>
+              <span className="count">{count}</span>
             </button>
           );
         })}
