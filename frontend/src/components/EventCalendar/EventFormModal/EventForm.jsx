@@ -19,6 +19,26 @@ const INITIAL_FORM = {
   employeeId: "",
 };
 
+const normalizeDate = (date) => {
+  if (!date) {
+    return "";
+  }
+
+  if (typeof date === "string") {
+    return date.includes("T") ? date.split("T")[0] : date;
+  }
+
+  if (date instanceof Date && !Number.isNaN(date.getTime())) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+  }
+
+  return "";
+};
+
 function EventForm({
   mode = "CREATE",
   initialData = null,
@@ -36,15 +56,28 @@ function EventForm({
     if (mode === "EDIT" && initialData) {
       setFormData({
         ...INITIAL_FORM,
+
         title: initialData.title || "",
+
         description: initialData.description || "",
+
         type: initialData.type || EVENT_TYPES.WORK_EVENT,
-        date: initialData.date || "",
+
+        date: normalizeDate(initialData.date),
+
         startTime: initialData.startTime || "",
+
         endTime: initialData.endTime || "",
-        isAllDay: initialData.isAllDay || false,
+
+        isAllDay:
+          typeof initialData.isAllDay === "boolean"
+            ? initialData.isAllDay
+            : false,
+
         location: initialData.location || "",
+
         priority: initialData.priority || "MEDIUM",
+
         employeeId:
           typeof initialData.employeeId === "object"
             ? initialData.employeeId?._id || ""
@@ -64,6 +97,7 @@ function EventForm({
       setFormData((previous) => {
         const updatedData = {
           ...previous,
+
           [name]: type === "checkbox" ? checked : value,
         };
 

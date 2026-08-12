@@ -4,10 +4,6 @@
     gap:28px;
 }
 
-/* ==========================================
-   Form Rows
-========================================== */
-
 .formRow{
     display:grid;
     grid-template-columns:repeat(2,minmax(0,1fr));
@@ -17,10 +13,6 @@
 .formRow.dateRow{
     align-items:end;
 }
-
-/* ==========================================
-   Form Group
-========================================== */
 
 .formGroup{
     display:flex;
@@ -38,10 +30,6 @@
     letter-spacing:.2px;
     color:var(--text_primary);
 }
-
-/* ==========================================
-   Inputs (Override Global.css)
-========================================== */
 
 .eventForm .formGroup input,
 .eventForm .formGroup select,
@@ -68,8 +56,6 @@
         color var(--transition);
 }
 
-/* Force dark mode colors */
-
 html.dark .eventForm .formGroup input,
 html.dark .eventForm .formGroup select,
 html.dark .eventForm .formGroup textarea{
@@ -77,8 +63,6 @@ html.dark .eventForm .formGroup textarea{
     color:#eef3f8 !important;
     border-color:#303846 !important;
 }
-
-/* Force light mode colors */
 
 html:not(.dark) .eventForm .formGroup input,
 html:not(.dark) .eventForm .formGroup select,
@@ -88,14 +72,11 @@ html:not(.dark) .eventForm .formGroup textarea{
     border-color:#d9dee6 !important;
 }
 
-/* Placeholder */
 
 .eventForm .formGroup input::placeholder,
 .eventForm .formGroup textarea::placeholder{
     color:var(--text_secondary);
 }
-
-/* Focus */
 
 .eventForm .formGroup input:focus,
 .eventForm .formGroup select:focus,
@@ -107,17 +88,12 @@ html:not(.dark) .eventForm .formGroup textarea{
     box-shadow:0 0 0 3px rgba(41,163,224,.15);
 }
 
-/* Textarea */
 
 .eventForm .formGroup textarea{
     resize:vertical;
     min-height:130px;
     line-height:1.6;
 }
-
-/* ==========================================
-   Native Date & Time
-========================================== */
 
 .eventForm input[type="date"],
 .eventForm input[type="time"]{
@@ -135,18 +111,10 @@ html:not(.dark) .eventForm input[type="time"]{
     opacity:.9;
 }
 
-/* ==========================================
-   Select
-========================================== */
-
 .eventForm select{
     appearance:auto;
     -webkit-appearance:menulist;
 }
-
-/* ==========================================
-   Checkbox
-========================================== */
 
 .checkboxGroup{
     display:flex;
@@ -189,8 +157,6 @@ html:not(.dark) .eventForm input[type="time"]{
     font-weight:600;
 }
 
-/* Custom Checkbox */
-
 .checkboxGroup label::before{
     content:"";
 
@@ -216,13 +182,11 @@ html:not(.dark) .eventForm input[type="time"]{
         box-shadow .2s ease;
 }
 
-/* Hover */
 
 .checkboxGroup label:hover::before{
     border-color:var(--primary);
 }
 
-/* Checked */
 
 .checkboxGroup input[type="checkbox"]:checked + label::before{
     content:"✓";
@@ -237,13 +201,9 @@ html:not(.dark) .eventForm input[type="time"]{
     font-weight:700;
 }
 
-/* Focus */
-
 .checkboxGroup input[type="checkbox"]:focus-visible + label::before{
     box-shadow:0 0 0 3px rgba(41,163,224,.18);
 }
-
-/* Disabled */
 
 .checkboxGroup input[type="checkbox"]:disabled + label{
     opacity:.6;
@@ -254,20 +214,12 @@ html:not(.dark) .eventForm input[type="time"]{
     background:var(--surface_hover);
 }
 
-/* ==========================================
-   Error
-========================================== */
-
 .errorText{
     margin-top:2px;
     font-size:.82rem;
     font-weight:500;
     color:#ef4444;
 }
-
-/* ==========================================
-   Actions
-========================================== */
 
 .formActions{
     display:flex;
@@ -334,10 +286,6 @@ html:not(.dark) .eventForm input[type="time"]{
     transform:scale(.98);
 }
 
-/* ==========================================
-   Tablet
-========================================== */
-
 @media (max-width:768px){
 
     .eventForm{
@@ -370,10 +318,6 @@ html:not(.dark) .eventForm input[type="time"]{
         width:100%;
     }
 }
-
-/* ==========================================
-   Mobile
-========================================== */
 
 @media (max-width:480px){
 
@@ -411,10 +355,6 @@ html:not(.dark) .eventForm input[type="time"]{
         font-size:.9rem;
     }
 }
-
-/* ==========================================
-   Small Mobile
-========================================== */
 
 @media (max-width:320px){
 
