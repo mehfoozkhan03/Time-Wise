@@ -1,32 +1,16 @@
 import { EVENT_TYPES } from "../data/eventTypes";
 
-/* =========================================
-   Holiday -> Calendar Event Mapper
-========================================= */
-
 const VALID_HOLIDAY_TYPES = new Set(Object.values(EVENT_TYPES));
-
-/* =========================================
-   Map Single Holiday
-========================================= */
 
 export const mapHolidayToEvent = (holiday = {}) => {
   const holidayType = String(holiday.type ?? EVENT_TYPES.HOLIDAY).toUpperCase();
 
   return {
-    /* =========================================
-       IDs
-    ========================================= */
-
     _id: `holiday-${holiday._id}`,
 
     id: holiday._id,
 
     holidayId: holiday._id,
-
-    /* =========================================
-       Event Information
-    ========================================= */
 
     title: holiday.title ?? "Holiday",
 
@@ -44,10 +28,6 @@ export const mapHolidayToEvent = (holiday = {}) => {
 
     isAllDay: true,
 
-    /* =========================================
-       Employee Fields
-    ========================================= */
-
     employeeId: null,
 
     employeeName: "",
@@ -58,10 +38,6 @@ export const mapHolidayToEvent = (holiday = {}) => {
 
     location: "",
 
-    /* =========================================
-       Display
-    ========================================= */
-
     priority: "MEDIUM",
 
     color: null,
@@ -69,10 +45,6 @@ export const mapHolidayToEvent = (holiday = {}) => {
     visibility: "PUBLIC",
 
     isHoliday: true,
-
-    /* =========================================
-       Backend Metadata
-    ========================================= */
 
     createdAt: holiday.createdAt ?? null,
 
@@ -85,10 +57,6 @@ export const mapHolidayToEvent = (holiday = {}) => {
     isActive: holiday.isActive !== false,
   };
 };
-
-/* =========================================
-   Map Holiday List
-========================================= */
 
 export const mapHolidayList = (holidays = []) => {
   if (!Array.isArray(holidays)) {

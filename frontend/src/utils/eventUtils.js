@@ -1,9 +1,5 @@
 import { getToday, isToday } from "./dateUtils";
 
-/* =========================================
-   Sort Events By Date & Time
-========================================= */
-
 const sortEvents = (events = []) => {
   return [...events].sort((a, b) => {
     const dateDiff = new Date(a.date) - new Date(b.date);
@@ -27,10 +23,6 @@ const sortEvents = (events = []) => {
     return a.startTime.localeCompare(b.startTime);
   });
 };
-
-/* =========================================
-   Get Upcoming Events
-========================================= */
 
 export const getUpcomingEvents = (events = [], limit = null) => {
   const today = getToday();
@@ -57,10 +49,6 @@ export const getUpcomingEvents = (events = [], limit = null) => {
 
   return sortedEvents;
 };
-
-/* =========================================
-   Get Today's Summary
-========================================= */
 
 export const getTodaySummary = (events = [], eventConfig = {}) => {
   const counts = events.reduce((acc, event) => {

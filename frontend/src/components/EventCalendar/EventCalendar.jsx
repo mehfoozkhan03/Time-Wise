@@ -1,9 +1,16 @@
 import "./EventCalendar.css";
+
 import { useMemo, useState, useCallback, useEffect } from "react";
+
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
+import { FaLock, FaArrowLeft } from "react-icons/fa";
 
 import useCalendar from "../../hooks/useCalendar";
 import useEventFilter from "../../hooks/useEventFilter";
+
+import { EVENT_TYPES } from "../../data/eventTypes";
 
 import {
   fetchEvents,
@@ -30,12 +37,13 @@ import EventModal from "./EventModal/EventModal";
 import EventFormModal from "./EventFormModal/EventFormModal";
 import HolidayFormModal from "./HolidayFormModal/HolidayFormModal";
 import DeleteModal from "./DeleteModal/DeleteModal";
-import DayEventsModal from "./DayEventsModal/DayEventsModal"
+import DayEventsModal from "./DayEventsModal/DayEventsModal";
 
 import CalendarSkeleton from "../Common/CalendarSkeleton/CalendarSkeleton";
 
 export default function EventCalendar() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const {
     events = [],
@@ -73,6 +81,7 @@ export default function EventCalendar() {
 
   const allEvents = useMemo(() => {
     const calendarEvents = Array.isArray(events) ? events : [];
+
     const holidayEvents = Array.isArray(mappedHolidays) ? mappedHolidays : [];
 
     return [...calendarEvents, ...holidayEvents].sort((a, b) => {
@@ -100,6 +109,27 @@ export default function EventCalendar() {
       );
     });
   }, [allEvents, currentDate]);
+
+  const weekendCount = useMemo(() => {
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    let count = 0;
+
+    for (let day = 1; day <= daysInMonth; day += 1) {
+      const date = new Date(year, month, day);
+
+      const dayOfWeek = date.getDay();
+
+      if (dayOfWeek === 0 || dayOfWeek === 6) {
+        count += 1;
+      }
+    }
+
+    return count;
+  }, [currentDate]);
 
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [selectedHoliday, setSelectedHoliday] = useState(null);
@@ -307,6 +337,10 @@ export default function EventCalendar() {
 
   const { canEdit, canDelete } = checkPermissions(selectedEvent);
 
+  const handleGoBack = useCallback(() => {
+    navigate("/settings");
+  }, [navigate]);
+
   if (isLoading) {
     return <CalendarSkeleton />;
   }
@@ -314,13 +348,32 @@ export default function EventCalendar() {
   if (hasError) {
     return (
       <section className="eventCalendar">
-        <div className="calendarError">
-          <h3>Failed to load calendar</h3>
-          <p>{hasError}</p>
+        <div className="calendarAccessRestricted">
+          <div className="calendarAccessIcon">
+            <FaLock />
+          </div>
+
+          <h2>Calendar Access Restricted</h2>
+
+          <p>
+            You don't have permission to create or manage
+            <br />
+            this type of calendar event.
+          </p>
+
+          <button
+            type="button"
+            className="calendarAccessBackBtn"
+            onClick={handleGoBack}
+          >
+            <FaArrowLeft />
+            <span>Go Back</span>
+          </button>
         </div>
       </section>
     );
   }
+
   return (
     <section className="eventCalendar">
       <CalendarHeader
@@ -342,6 +395,7 @@ export default function EventCalendar() {
         selectAll={selectAll}
         clearAll={clearAll}
         events={currentMonthEvents}
+        weekendCount={weekendCount}
       />
 
       <div className="calendarBody">
@@ -350,6 +404,7 @@ export default function EventCalendar() {
           selectedDate={selectedDate}
           selectDate={selectDate}
           events={filteredEvents}
+          showWeekends={Boolean(filters[EVENT_TYPES.WEEKEND])}
           onEventClick={handleEventClick}
           onMoreEvents={handleMoreEvents}
         />
@@ -411,11 +466,12 @@ export default function EventCalendar() {
       )}
 
       {dayEventsModalOpen && (
-      <DayEventsModal
-        events={dayEvents}
-        onClose={() => setDayEventsModalOpen(false)}
-        onEventClick={handleEventClick}
-      />
+        <DayEventsModal
+          date={selectedDate}
+          events={dayEvents}
+          onClose={() => setDayEventsModalOpen(false)}
+          onEventClick={handleEventClick}
+        />
       )}
     </section>
   );

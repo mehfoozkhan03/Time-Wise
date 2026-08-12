@@ -4,6 +4,8 @@ import { memo, useState, useEffect, useCallback } from "react";
 
 import { EVENT_TYPES } from "../../../data/eventTypes";
 
+import CustomSelect from "../../Common/CustomSelect/CustomSelect";
+
 const INITIAL_FORM = {
   title: "",
   description: "",
@@ -41,9 +43,31 @@ const HOLIDAY_TYPES = [
   },
 ];
 
-const PRIORITIES = ["LOW", "MEDIUM", "HIGH"];
+const PRIORITIES = [
+  {
+    value: "LOW",
+    label: "Low",
+  },
+  {
+    value: "MEDIUM",
+    label: "Medium",
+  },
+  {
+    value: "HIGH",
+    label: "High",
+  },
+];
 
-const VISIBILITY = ["PUBLIC", "PRIVATE"];
+const VISIBILITY = [
+  {
+    value: "PUBLIC",
+    label: "Public",
+  },
+  {
+    value: "PRIVATE",
+    label: "Private",
+  },
+];
 
 function HolidayForm({
   mode = "CREATE",
@@ -53,7 +77,6 @@ function HolidayForm({
   onCancel,
 }) {
   const [formData, setFormData] = useState(INITIAL_FORM);
-
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
@@ -154,7 +177,9 @@ function HolidayForm({
           required
         />
 
-        {errors.title && <small className="errorText">{errors.title}</small>}
+        {errors.title && (
+          <small className="errorText">{errors.title}</small>
+        )}
       </div>
 
       <div className="formGroup">
@@ -175,19 +200,15 @@ function HolidayForm({
         <div className="formGroup">
           <label htmlFor="type">Holiday Type</label>
 
-          <select
+          <CustomSelect
             id="type"
             name="type"
             value={formData.type}
+            options={HOLIDAY_TYPES}
             onChange={handleChange}
             disabled={isSubmitting}
-          >
-            {HOLIDAY_TYPES.map((type) => (
-              <option key={type.value} value={type.value}>
-                {type.label}
-              </option>
-            ))}
-          </select>
+            placeholder="Select holiday type"
+          />
         </div>
 
         <div className="formGroup">
@@ -203,7 +224,9 @@ function HolidayForm({
             required
           />
 
-          {errors.date && <small className="errorText">{errors.date}</small>}
+          {errors.date && (
+            <small className="errorText">{errors.date}</small>
+          )}
         </div>
       </div>
 
@@ -211,37 +234,29 @@ function HolidayForm({
         <div className="formGroup">
           <label htmlFor="priority">Priority</label>
 
-          <select
+          <CustomSelect
             id="priority"
             name="priority"
             value={formData.priority}
+            options={PRIORITIES}
             onChange={handleChange}
             disabled={isSubmitting}
-          >
-            {PRIORITIES.map((priority) => (
-              <option key={priority} value={priority}>
-                {priority}
-              </option>
-            ))}
-          </select>
+            placeholder="Select priority"
+          />
         </div>
 
         <div className="formGroup">
           <label htmlFor="visibility">Visibility</label>
 
-          <select
+          <CustomSelect
             id="visibility"
             name="visibility"
             value={formData.visibility}
+            options={VISIBILITY}
             onChange={handleChange}
             disabled={isSubmitting}
-          >
-            {VISIBILITY.map((item) => (
-              <option key={item} value={item}>
-                {item}
-              </option>
-            ))}
-          </select>
+            placeholder="Select visibility"
+          />
         </div>
       </div>
 

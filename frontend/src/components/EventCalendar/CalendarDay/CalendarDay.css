@@ -3,7 +3,6 @@
   flex-direction: column;
 
   min-height: 92px;
-
   padding: 8px;
 
   background: var(--surface);
@@ -37,6 +36,40 @@
   outline-offset: 3px;
 }
 
+.calendarDay.weekend {
+  background: var(--surface);
+  border-color: var(--border);
+}
+
+.calendarDay.weekend:hover {
+  background: var(--surface_hover);
+  border-color: var(--primary);
+}
+
+.calendarDay.sunday {
+  background: color-mix(
+    in srgb,
+    var(--primary) 20%,
+    var(--surface)
+  );
+
+  border-color: color-mix(
+    in srgb,
+    var(--primary) 25%,
+    var(--border)
+  );
+}
+
+.calendarDay.sunday:hover {
+  background: color-mix(
+    in srgb,
+    var(--primary) 15%,
+    var(--surface)
+  );
+
+  border-color: var(--primary);
+}
+
 .dayHeader {
   display: flex;
   justify-content: flex-end;
@@ -59,21 +92,53 @@
   font-size: 13px;
   font-weight: 600;
 
-  transition: var(--transition);
+  transition:
+    background var(--transition),
+    color var(--transition),
+    box-shadow var(--transition);
 }
 
-.today .dayNumber {
+.calendarDay.sunday .dayNumber {
+  color: var(--primary);
+}
+
+.calendarDay.today .dayNumber {
   background: var(--primary);
   color: #fff;
+
+  box-shadow:
+    0 2px 8px rgba(41, 163, 224, 0.25);
 }
 
-.selected {
+.calendarDay.sunday.today .dayNumber {
+  background: var(--primary);
+  color: #fff;
+
+  box-shadow:
+    0 0 0 2px var(--surface),
+    0 0 0 4px var(--primary),
+    0 2px 8px rgba(41, 163, 224, 0.25);
+}
+
+.calendarDay.selected {
   border-color: var(--primary);
 
-  box-shadow: 0 0 0 3px rgba(41, 163, 224, 0.2);
+  box-shadow:
+    0 0 0 2px rgba(41, 163, 224, 0.18),
+    var(--shadow_sm);
 }
 
-.otherMonth {
+.calendarDay.sunday.selected {
+  background: color-mix(
+    in srgb,
+    var(--primary) 13%,
+    var(--surface)
+  );
+
+  border-color: var(--primary);
+}
+
+.calendarDay.otherMonth {
   opacity: 0.45;
 }
 
@@ -86,7 +151,6 @@
   gap: 4px;
 
   flex: 1;
-
   min-height: 30px;
 }
 
@@ -113,11 +177,17 @@
 
   cursor: pointer;
 
-  transition: var(--transition);
+  transition:
+    background var(--transition),
+    color var(--transition);
 }
 
 .moreEvents:hover {
-  background: rgba(41, 163, 224, 0.08);
+  background: color-mix(
+    in srgb,
+    var(--primary) 8%,
+    transparent
+  );
 }
 
 .moreEvents:focus-visible {
@@ -125,14 +195,13 @@
   outline-offset: 2px;
 }
 
-/* ==========================================
-   760px
-========================================== */
+.calendarDay.sunday .moreEvents {
+  color: var(--primary);
+}
 
 @media (max-width: 760px) {
   .calendarDay {
     min-height: 84px;
-
     padding: 6px;
   }
 
@@ -143,31 +212,23 @@
   .dayNumber {
     width: 26px;
     height: 26px;
-
     font-size: 11px;
   }
 
   .dayEvents {
     gap: 2px;
-
     min-height: 24px;
   }
 
   .moreEvents {
     font-size: 10px;
-
     padding: 2px 4px;
   }
 }
 
-/* ==========================================
-   480px
-========================================== */
-
 @media (max-width: 480px) {
   .calendarDay {
     min-height: 72px;
-
     padding: 5px;
   }
 
@@ -178,7 +239,6 @@
   .dayNumber {
     width: 22px;
     height: 22px;
-
     font-size: 10px;
   }
 
@@ -188,26 +248,19 @@
 
   .moreEvents {
     font-size: 9px;
-
     padding: 2px;
   }
 }
 
-/* ==========================================
-   320px
-========================================== */
-
 @media (max-width: 320px) {
   .calendarDay {
     min-height: 64px;
-
     padding: 4px;
   }
 
   .dayNumber {
     width: 20px;
     height: 20px;
-
     font-size: 9px;
   }
 

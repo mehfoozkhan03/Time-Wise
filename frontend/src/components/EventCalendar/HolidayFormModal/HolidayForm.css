@@ -1,79 +1,45 @@
-/* ==========================================
-   Holiday Form
-========================================== */
-
 .holidayForm {
     display: flex;
     flex-direction: column;
-
     gap: 24px;
-
     width: 100%;
 }
-
-
-/* ==========================================
-   Form Grid
-========================================== */
 
 .holidayForm .formGrid {
     display: grid;
-
     grid-template-columns: repeat(2, minmax(0, 1fr));
-
     gap: 18px;
-
     width: 100%;
 }
-
-
-/* ==========================================
-   Form Group
-========================================== */
 
 .holidayForm .formGroup {
     display: flex;
     flex-direction: column;
-
     gap: 8px;
-
     min-width: 0;
 }
-
 
 .holidayForm .formGroup.fullWidth {
     grid-column: 1 / -1;
 }
 
-
 .holidayForm .formGroup label {
     color: var(--text_primary);
-
     font-size: .92rem;
     font-weight: 600;
-
     line-height: 1.3;
 }
 
-
-/* ==========================================
-   Inputs / Select / Textarea
-========================================== */
-
 .holidayForm .formGroup input:not([type="checkbox"]),
-.holidayForm .formGroup select,
 .holidayForm .formGroup textarea {
     width: 100%;
-
     padding: 12px 14px;
-
     box-sizing: border-box;
 
     border: 1px solid var(--border) !important;
     border-radius: 12px;
 
     background: var(--surface) !important;
-
     color: var(--text_primary) !important;
 
     font-family: inherit;
@@ -86,149 +52,72 @@
         box-shadow var(--transition);
 }
 
-
-/* ==========================================
-   Dark Mode Inputs
-========================================== */
-
 html.dark .holidayForm .formGroup input:not([type="checkbox"]),
-html.dark .holidayForm .formGroup select,
 html.dark .holidayForm .formGroup textarea {
     background: #1b2029 !important;
-
     color: #eef3f8 !important;
-
     border-color: #303846 !important;
 }
 
-
-/* ==========================================
-   Light Mode Inputs
-========================================== */
-
 html:not(.dark) .holidayForm .formGroup input:not([type="checkbox"]),
-html:not(.dark) .holidayForm .formGroup select,
 html:not(.dark) .holidayForm .formGroup textarea {
     background: #ffffff !important;
-
     color: #2c2f3a !important;
-
     border-color: #d9dee6 !important;
 }
-
-
-/* ==========================================
-   Placeholder
-========================================== */
 
 .holidayForm .formGroup input::placeholder,
 .holidayForm .formGroup textarea::placeholder {
     color: var(--text_secondary);
-
     opacity: 1;
 }
 
-
-/* ==========================================
-   Focus
-========================================== */
-
 .holidayForm .formGroup input:not([type="checkbox"]):focus,
-.holidayForm .formGroup select:focus,
 .holidayForm .formGroup textarea:focus {
     outline: none;
-
     border-color: var(--primary) !important;
-
     box-shadow: 0 0 0 3px rgba(41, 163, 224, .15);
 }
 
-
-/* ==========================================
-   Disabled Fields
-========================================== */
-
 .holidayForm .formGroup input:disabled,
-.holidayForm .formGroup select:disabled,
 .holidayForm .formGroup textarea:disabled {
     cursor: not-allowed;
-
     opacity: .65;
 }
 
-
-/* ==========================================
-   Textarea
-========================================== */
-
 .holidayForm .formGroup textarea {
     min-height: 120px;
-
     resize: vertical;
-
     line-height: 1.6;
 }
-
-
-/* ==========================================
-   Select
-========================================== */
-
-.holidayForm .formGroup select {
-    appearance: auto;
-    -webkit-appearance: menulist;
-
-    cursor: pointer;
-}
-
-
-/* ==========================================
-   Date Input
-========================================== */
 
 .holidayForm .formGroup input[type="date"] {
     color-scheme: dark;
 }
 
-
 html:not(.dark) .holidayForm .formGroup input[type="date"] {
     color-scheme: light;
 }
-
 
 .holidayForm
 .formGroup
 input[type="date"]::-webkit-calendar-picker-indicator {
     cursor: pointer;
-
     opacity: .9;
 }
-
-
-/* ==========================================
-   Checkbox Container
-========================================== */
 
 .holidayForm .checkboxGroup {
     display: flex;
     align-items: center;
     justify-content: center;
-
     gap: 10px;
 
     width: 100%;
-
     min-height: 38px;
 
     margin: 0;
-
     padding: 2px 0;
 }
-
-
-/* ==========================================
-   Hide Native Checkbox
-========================================== */
 
 .holidayForm .checkboxGroup input[type="checkbox"] {
     position: absolute;
@@ -240,16 +129,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     padding: 0;
 
     overflow: hidden;
-
     opacity: 0;
-
     pointer-events: none;
 }
-
-
-/* ==========================================
-   Checkbox Label
-========================================== */
 
 .holidayForm .checkboxGroup label {
     display: inline-flex;
@@ -257,25 +139,17 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     justify-content: center;
 
     gap: 10px;
-
     margin: 0;
 
     color: var(--text_primary);
 
     font-size: .92rem;
     font-weight: 600;
-
     line-height: 1;
 
     cursor: pointer;
-
     user-select: none;
 }
-
-
-/* ==========================================
-   Custom Checkbox
-========================================== */
 
 .holidayForm .checkboxGroup label::before {
     content: "";
@@ -288,7 +162,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     justify-content: center;
 
     flex-shrink: 0;
-
     box-sizing: border-box;
 
     border: 1px solid var(--border);
@@ -303,32 +176,15 @@ input[type="date"]::-webkit-calendar-picker-indicator {
         transform var(--transition);
 }
 
-
-/* ==========================================
-   Dark Mode Checkbox
-========================================== */
-
 html.dark .holidayForm .checkboxGroup label::before {
     background: #1b2029;
-
     border-color: #3a4555;
 }
 
-
-/* ==========================================
-   Light Mode Checkbox
-========================================== */
-
 html:not(.dark) .holidayForm .checkboxGroup label::before {
     background: #ffffff;
-
     border-color: #cbd2dc;
 }
-
-
-/* ==========================================
-   Checked Checkbox
-========================================== */
 
 .holidayForm
 .checkboxGroup
@@ -337,63 +193,38 @@ input[type="checkbox"]:checked
     content: "✓";
 
     background: var(--primary);
-
     border-color: var(--primary);
 
     color: #ffffff;
 
     font-size: 13px;
     font-weight: 700;
-
     line-height: 1;
 }
-
-
-/* ==========================================
-   Checkbox Hover
-========================================== */
 
 .holidayForm .checkboxGroup label:hover::before {
     border-color: var(--primary);
 }
-
-
-/* ==========================================
-   Checkbox Focus
-========================================== */
 
 .holidayForm
 .checkboxGroup
 input[type="checkbox"]:focus-visible
 + label::before {
     border-color: var(--primary);
-
     box-shadow: 0 0 0 3px rgba(41, 163, 224, .15);
 }
-
-
-/* ==========================================
-   Checkbox Active
-========================================== */
 
 .holidayForm .checkboxGroup label:active::before {
     transform: scale(.94);
 }
-
-
-/* ==========================================
-   Disabled Checkbox
-========================================== */
 
 .holidayForm
 .checkboxGroup
 input[type="checkbox"]:disabled
 + label {
     cursor: not-allowed;
-
     opacity: .6;
 }
-
 
 .holidayForm
 .checkboxGroup
@@ -401,11 +232,6 @@ input[type="checkbox"]:disabled
 + label::before {
     cursor: not-allowed;
 }
-
-
-/* ==========================================
-   Error Text
-========================================== */
 
 .holidayForm .errorText {
     margin-top: 2px;
@@ -414,14 +240,8 @@ input[type="checkbox"]:disabled
 
     font-size: .82rem;
     font-weight: 500;
-
     line-height: 1.4;
 }
-
-
-/* ==========================================
-   Form Actions
-========================================== */
 
 .holidayForm .formActions {
     display: flex;
@@ -429,16 +249,10 @@ input[type="checkbox"]:disabled
     justify-content: flex-end;
 
     gap: 12px;
-
     padding-top: 20px;
 
     border-top: 1px solid var(--border);
 }
-
-
-/* ==========================================
-   Buttons
-========================================== */
 
 .holidayForm .cancelBtn,
 .holidayForm .saveBtn {
@@ -467,213 +281,134 @@ input[type="checkbox"]:disabled
         transform var(--transition);
 }
 
-
-/* ==========================================
-   Cancel Button
-========================================== */
-
 .holidayForm .cancelBtn {
     background: transparent;
-
     border: 1px solid var(--border);
-
     color: var(--text_primary);
 }
 
-
 .holidayForm .cancelBtn:hover:not(:disabled) {
     background: var(--surface_hover);
-
     border-color: var(--primary);
-
     transform: translateY(-2px);
 }
-
-
-/* ==========================================
-   Save Button
-========================================== */
 
 .holidayForm .saveBtn {
     border: none;
-
     background: var(--button);
-
     color: #ffffff;
 }
 
-
 .holidayForm .saveBtn:hover:not(:disabled) {
     background: var(--buttonhover);
-
     box-shadow: var(--shadow_sm);
-
     transform: translateY(-2px);
 }
-
-
-/* ==========================================
-   Button Active
-========================================== */
 
 .holidayForm .cancelBtn:active:not(:disabled),
 .holidayForm .saveBtn:active:not(:disabled) {
     transform: scale(.98);
 }
 
-
-/* ==========================================
-   Disabled Buttons
-========================================== */
-
 .holidayForm .cancelBtn:disabled,
 .holidayForm .saveBtn:disabled {
     cursor: not-allowed;
-
     opacity: .6;
-
     transform: none;
 }
 
-
-/* ==========================================
-   Tablet
-========================================== */
-
 @media (max-width: 768px) {
-
     .holidayForm {
         gap: 22px;
     }
 
-
     .holidayForm .formGrid {
         grid-template-columns: 1fr;
-
         gap: 16px;
     }
 
-
     .holidayForm .checkboxGroup {
         justify-content: flex-start;
-
         min-height: auto;
-
         padding: 4px 0;
     }
 
-
     .holidayForm .formActions {
         flex-direction: column-reverse;
-
         gap: 10px;
-
         padding-top: 16px;
     }
-
 
     .holidayForm .cancelBtn,
     .holidayForm .saveBtn {
         width: 100%;
     }
-
 }
 
-
-/* ==========================================
-   Mobile
-========================================== */
-
 @media (max-width: 480px) {
-
     .holidayForm {
         gap: 20px;
     }
-
 
     .holidayForm .formGrid {
         gap: 14px;
     }
 
-
     .holidayForm .formGroup {
         gap: 7px;
     }
-
 
     .holidayForm .formGroup label {
         font-size: .85rem;
     }
 
-
     .holidayForm .formGroup input:not([type="checkbox"]),
-    .holidayForm .formGroup select,
     .holidayForm .formGroup textarea {
         padding: 12px;
-
         font-size: .9rem;
     }
-
 
     .holidayForm .formGroup textarea {
         min-height: 110px;
     }
 
-
     .holidayForm .checkboxGroup label {
         font-size: .9rem;
     }
-
 
     .holidayForm .checkboxGroup label::before {
         width: 17px;
         height: 17px;
     }
 
-
     .holidayForm .cancelBtn,
     .holidayForm .saveBtn {
         height: 44px;
-
         font-size: .9rem;
     }
-
 }
 
-
-/* ==========================================
-   Small Mobile
-========================================== */
-
 @media (max-width: 320px) {
-
     .holidayForm {
         gap: 18px;
     }
-
 
     .holidayForm .formGrid {
         gap: 12px;
     }
 
-
     .holidayForm .formGroup input:not([type="checkbox"]),
-    .holidayForm .formGroup select,
     .holidayForm .formGroup textarea {
         padding: 11px;
     }
-
 
     .holidayForm .formGroup textarea {
         min-height: 100px;
     }
 
-
     .holidayForm .cancelBtn,
     .holidayForm .saveBtn {
         height: 42px;
-
         font-size: .85rem;
     }
-
 }

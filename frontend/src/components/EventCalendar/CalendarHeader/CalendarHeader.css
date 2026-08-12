@@ -20,10 +20,6 @@
         box-shadow var(--transition);
 }
 
-/* ==========================================
-   Title
-========================================== */
-
 .headerTitle{
     display:flex;
     flex-direction:column;
@@ -43,10 +39,6 @@
     line-height:1.2;
 }
 
-/* ==========================================
-   Actions
-========================================== */
-
 .headerActions{
     display:flex;
     align-items:center;
@@ -56,10 +48,6 @@
 
     flex-wrap:wrap;
 }
-
-/* ==========================================
-   Shared Button Style
-========================================== */
 
 .navBtn,
 .todayBtn,
@@ -100,10 +88,6 @@
         box-shadow var(--transition);
 }
 
-/* ==========================================
-   Hover
-========================================== */
-
 .navBtn:hover,
 .todayBtn:hover,
 .createEventBtn:hover,
@@ -119,20 +103,12 @@
     transform:translateY(-2px);
 }
 
-/* ==========================================
-   Active
-========================================== */
-
 .navBtn:active,
 .todayBtn:active,
 .createEventBtn:active,
 .createHolidayBtn:active{
     transform:scale(.97);
 }
-
-/* ==========================================
-   Focus
-========================================== */
 
 .navBtn:focus-visible,
 .todayBtn:focus-visible,
@@ -142,10 +118,6 @@
     outline-offset:2px;
 }
 
-/* ==========================================
-   Disabled
-========================================== */
-
 .navBtn:disabled,
 .todayBtn:disabled,
 .createEventBtn:disabled,
@@ -153,10 +125,6 @@
     opacity:.55;
     cursor:not-allowed;
 }
-
-/* ==========================================
-   Responsive
-========================================== */
 
 @media (max-width:760px){
 

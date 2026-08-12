@@ -1,4 +1,3 @@
-// Week Days
 export const WEEK_DAYS = [
   "Sun",
   "Mon",
@@ -8,24 +7,20 @@ export const WEEK_DAYS = [
   "Fri",
   "Sat",
 ];
-
 // Month Name
 export const getMonthName = (date) => {
   return date.toLocaleString("default", {
     month: "long",
   });
 };
-
 // Days in Month
 export const getDaysInMonth = (year, month) => {
   return new Date(year, month + 1, 0).getDate();
 };
-
 // First Day of Month
 export const getFirstDayOfMonth = (year, month) => {
   return new Date(year, month, 1).getDay();
 };
-
 // Previous Month
 export const getPreviousMonth = (date) => {
   return new Date(
@@ -34,7 +29,6 @@ export const getPreviousMonth = (date) => {
     1
   );
 };
-
 // Next Month
 export const getNextMonth = (date) => {
   return new Date(
@@ -43,7 +37,6 @@ export const getNextMonth = (date) => {
     1
   );
 };
-
 // Compare Dates
 export const isSameDate = (date1, date2) => {
   if (!date1 || !date2) return false;
@@ -54,12 +47,10 @@ export const isSameDate = (date1, date2) => {
     date1.getFullYear() === date2.getFullYear()
   );
 };
-
 // Today Check
 export const isToday = (date) => {
   return isSameDate(date, new Date());
 };
-
 // Date Key (YYYY-MM-DD)
 export const getDateKey = (date) => {
   return [
@@ -68,7 +59,6 @@ export const getDateKey = (date) => {
     String(date.getDate()).padStart(2, "0"),
   ].join("-");
 };
-
 /**
  * Generate 42 Calendar Cells
  * (6 rows × 7 columns)

@@ -4,6 +4,8 @@ import { memo } from "react";
 
 import { EVENT_TYPES } from "../../../data/eventTypes";
 
+import CustomSelect from "../../Common/CustomSelect/CustomSelect";
+
 const EVENT_OPTIONS = [
   { value: EVENT_TYPES.LEAVE, label: "Leave" },
   { value: EVENT_TYPES.WORK_EVENT, label: "Work Event" },
@@ -16,7 +18,11 @@ const EVENT_OPTIONS = [
   { value: EVENT_TYPES.CLIENT_MEETING, label: "Client Meeting" },
 ];
 
-const PRIORITY_OPTIONS = ["LOW", "MEDIUM", "HIGH"];
+const PRIORITY_OPTIONS = [
+  { value: "LOW", label: "LOW" },
+  { value: "MEDIUM", label: "MEDIUM" },
+  { value: "HIGH", label: "HIGH" },
+];
 
 function EventFormFields({
   formData,
@@ -26,30 +32,30 @@ function EventFormFields({
   isAdmin = false,
   isSubmitting = false,
 }) {
+  const employeeOptions = employees.map((employee) => ({
+    value: employee._id,
+    label: employee.name,
+  }));
+
   return (
     <>
       {isAdmin && (
         <div className="formGroup">
           <label htmlFor="employeeId">Assign Employee *</label>
 
-          <select
+          <CustomSelect
             id="employeeId"
             name="employeeId"
             value={formData.employeeId}
+            options={employeeOptions}
             onChange={onChange}
             disabled={isSubmitting}
-            required={isAdmin}
-          >
-            <option value="">
-              {employees.length ? "Select Employee" : "No Employees Found"}
-            </option>
-
-            {employees.map((employee) => (
-              <option key={employee._id} value={employee._id}>
-                {employee.name}
-              </option>
-            ))}
-          </select>
+            placeholder={
+              employees.length
+                ? "Select Employee"
+                : "No Employees Found"
+            }
+          />
 
           {errors.employeeId && (
             <small className="errorText">{errors.employeeId}</small>
@@ -71,7 +77,9 @@ function EventFormFields({
           required
         />
 
-        {errors.title && <small className="errorText">{errors.title}</small>}
+        {errors.title && (
+          <small className="errorText">{errors.title}</small>
+        )}
       </div>
 
       <div className="formGroup">
@@ -91,22 +99,17 @@ function EventFormFields({
       <div className="formGroup">
         <label htmlFor="type">Event Type</label>
 
-        <select
+        <CustomSelect
           id="type"
           name="type"
           value={formData.type}
+          options={EVENT_OPTIONS}
           onChange={onChange}
           disabled={isSubmitting}
-        >
-          {EVENT_OPTIONS.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
+          placeholder="Select Event Type"
+        />
       </div>
 
-      {/* Date + All Day */}
       <div className="formRow dateRow">
         <div className="formGroup">
           <label htmlFor="date">Date *</label>
@@ -121,10 +124,12 @@ function EventFormFields({
             required
           />
 
-          {errors.date && <small className="errorText">{errors.date}</small>}
+          {errors.date && (
+            <small className="errorText">{errors.date}</small>
+          )}
         </div>
 
-        <div className="checkboxGroup">
+        <label htmlFor="isAllDay" className="checkboxGroup">
           <input
             id="isAllDay"
             type="checkbox"
@@ -134,8 +139,8 @@ function EventFormFields({
             disabled={isSubmitting}
           />
 
-          <label htmlFor="isAllDay">All Day</label>
-        </div>
+          <span>All Day</span>
+        </label>
       </div>
 
       {!formData.isAllDay && (
@@ -189,19 +194,15 @@ function EventFormFields({
       <div className="formGroup">
         <label htmlFor="priority">Priority</label>
 
-        <select
+        <CustomSelect
           id="priority"
           name="priority"
           value={formData.priority}
+          options={PRIORITY_OPTIONS}
           onChange={onChange}
           disabled={isSubmitting}
-        >
-          {PRIORITY_OPTIONS.map((priority) => (
-            <option key={priority} value={priority}>
-              {priority}
-            </option>
-          ))}
-        </select>
+          placeholder="Select Priority"
+        />
       </div>
     </>
   );
