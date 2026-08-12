@@ -18,9 +18,6 @@ function CalendarSidebar({
   toggleFilter,
   onEventClick,
 }) {
-  /* =========================================
-     Handlers
-  ========================================= */
 
   const handleEventClick = useCallback(
     (event) => {
