@@ -41,7 +41,6 @@ import { DashboardNotification } from './../components/Dashboard/DashboardNotifi
 import { DashboardAnnouncement } from './../components/Dashboard/DashboardAnnouncement/DashboardAnnouncement';
 import { DashboardReport } from './../components/Dashboard/DashboardReport/DashboardReport';
 import { DashboardSetting } from './../components/Dashboard/DashboardSetting/DashboardSetting';
-import { ScrollToTopButton } from '../components/ScrollToTop/scrollToTop';
 import { SinglePost } from '../pages/SinglePost/SinglePost';
 import { NotificationPage } from '../pages/NotificationPage/NotificationPage';
 import { AuthLayout } from '../layouts/AuthLayout';
@@ -53,7 +52,6 @@ export const AppRoutes = () => {
       <RouteLoader />
       <BubbleCursor />
       <ProgressBar />
-      <ScrollToTopButton />
 
       <Routes>
         <Route element={<MainLayout />}>
