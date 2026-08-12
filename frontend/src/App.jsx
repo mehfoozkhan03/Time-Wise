@@ -1,14 +1,14 @@
-import { BrowserRouter } from "react-router-dom";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { BrowserRouter } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { AppRoutes } from "./routes/AppRoutes";
-import { fetchCurrentUser } from "./store/authSlice";
-import { ScrollTop } from "./components/ScrollTop/ScrollTop";
-import { Chatbot } from "./components/ChatBot/chatBot";
-import { socket } from "./socket/socket";
-import { addNotification } from "./store/notificationSlice";
-import { ScrollToTopButton } from "./components/ScrollToTop/scrollToTop";
+import { AppRoutes } from './routes/AppRoutes';
+import { fetchCurrentUser } from './store/authSlice';
+import { ScrollTop } from './components/ScrollTop/ScrollTop';
+import { Chatbot } from './components/ChatBot/chatBot';
+import { socket } from './socket/socket';
+import { addNotification } from './store/notificationSlice';
+import { ScrollToTopButton } from './components/ScrollToTop/scrollToTop';
 
 export default function App() {
   const dispatch = useDispatch();
@@ -25,20 +25,20 @@ export default function App() {
       socket.connect();
     }
 
-    socket.emit("register", user._id);
+    socket.emit('register', user._id);
 
-  return () => {
-    socket.off();
-  };
-}, [user?._id]);
+    return () => {
+      socket.off();
+    };
+  }, [user?._id]);
 
   useEffect(() => {
-    socket.on("new-notification", (notification) => {
+    socket.on('new-notification', (notification) => {
       dispatch(addNotification(notification));
     });
 
     return () => {
-      socket.off("new-notification");
+      socket.off('new-notification');
     };
   }, [dispatch]);
 
