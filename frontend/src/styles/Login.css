@@ -148,10 +148,10 @@ select:is(:-webkit-autofill, :autofill) {
   padding: 0 5px;
 }
 
-.input-box input:focus + label,
-.input-box input:not(:placeholder-shown) + label,
-.input-box select:focus + label,
-.input-box textarea:focus + label {
+.input-box input:focus+label,
+.input-box input:not(:placeholder-shown)+label,
+.input-box select:focus+label,
+.input-box textarea:focus+label {
   transform: translateY(-50%);
   top: 0px;
   font-size: 15px;
@@ -246,6 +246,36 @@ select:is(:-webkit-autofill, :autofill) {
 }
 
 /* ===========================
+   LOGIN / REGISTER SKELETON
+=========================== */
+
+.login-skeleton-heading {
+  display: block;
+  margin: 0 auto 30px;
+}
+
+.login-skeleton-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 15px;
+}
+
+.login-skeleton-field {
+  width: 100%;
+}
+
+.login-skeleton-field .skeleton {
+  width: 100%;
+}
+
+.login-skeleton-bottom {
+  display: flex;
+  justify-content: center;
+  margin-top: 2px;
+}
+
+/* ===========================
    IZI TOAST — TIMEWISE THEME
 =========================== */
 
@@ -291,7 +321,7 @@ select:is(:-webkit-autofill, :autofill) {
 }
 
 /* Progress Bar */
-.iziToast-progressbar > div {
+.iziToast-progressbar>div {
   background: var(--primary) !important;
 }
 
@@ -311,13 +341,11 @@ select:is(:-webkit-autofill, :autofill) {
 .iziToast-icon.ico-warning,
 .iziToast-icon.ico-info,
 .iziToast-close {
-  filter: invert(55%) sepia(80%) saturate(400%) hue-rotate(170deg)
-    brightness(100%) !important;
+  filter: invert(55%) sepia(80%) saturate(400%) hue-rotate(170deg) brightness(100%) !important;
   opacity: 1 !important;
 }
 
 .iziToast-close:hover {
-  filter: invert(40%) sepia(90%) saturate(500%) hue-rotate(170deg)
-    brightness(85%) !important;
+  filter: invert(40%) sepia(90%) saturate(500%) hue-rotate(170deg) brightness(85%) !important;
   transform: scale(1.5) !important;
 }
