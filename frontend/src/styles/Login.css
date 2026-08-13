@@ -148,10 +148,17 @@ select:is(:-webkit-autofill, :autofill) {
   padding: 0 5px;
 }
 
+<<<<<<< HEAD
 .input-box input:focus+label,
 .input-box input:not(:placeholder-shown)+label,
 .input-box select:focus+label,
 .input-box textarea:focus+label {
+=======
+.input-box input:focus + label,
+.input-box input:not(:placeholder-shown) + label,
+.input-box select:focus + label,
+.input-box textarea:focus + label {
+>>>>>>> 2f5cb8235e940a7bee02d98a2a0eaab4a4b9edaf
   transform: translateY(-50%);
   top: 0px;
   font-size: 15px;
@@ -180,7 +187,10 @@ select:is(:-webkit-autofill, :autofill) {
   font-size: 18px;
   transition: 0.3s;
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2f5cb8235e940a7bee02d98a2a0eaab4a4b9edaf
 .password-box.error-active .eye-icon {
   top: 27px;
 }
@@ -247,6 +257,7 @@ select:is(:-webkit-autofill, :autofill) {
 }
 
 /* ===========================
+<<<<<<< HEAD
    LOGIN / REGISTER SKELETON
 =========================== */
 
@@ -317,12 +328,58 @@ select:is(:-webkit-autofill, :autofill) {
   opacity: 1 !important;
 }
 
+=======
+   IZI TOAST — TIMEWISE THEME
+=========================== */
+
+.iziToast {
+  background: var(--surface) !important;
+  border: 1px solid var(--primary) !important;
+  border-radius: var(--radius_md) !important;
+  box-shadow: var(--shadow_lg) !important;
+  color: var(--primary) !important;
+  font-family: 'Inter', sans-serif !important;
+}
+
+/* Title */
+.iziToast-title {
+  color: var(--primary) !important;
+  font-family: 'Poppins', sans-serif !important;
+  font-weight: 700 !important;
+}
+
+/* Message */
+.iziToast-message {
+  color: var(--primary) !important;
+  opacity: 0.85;
+}
+
+/* Success / Error / Warning Icons */
+.iziToast-icon,
+.iziToast-icon-success,
+.iziToast-icon-error,
+.iziToast-icon-warning,
+.iziToast-icon-info {
+  color: var(--primary) !important;
+}
+
+/* Close button */
+.iziToast-close {
+  filter: none !important;
+  opacity: 1 !important;
+}
+
+>>>>>>> 2f5cb8235e940a7bee02d98a2a0eaab4a4b9edaf
 .iziToast-close::before {
   color: var(--primary) !important;
 }
 
 /* Progress Bar */
+<<<<<<< HEAD
 .iziToast-progressbar>div {
+=======
+.iziToast-progressbar > div {
+>>>>>>> 2f5cb8235e940a7bee02d98a2a0eaab4a4b9edaf
   background: var(--primary) !important;
 }
 
@@ -342,11 +399,23 @@ select:is(:-webkit-autofill, :autofill) {
 .iziToast-icon.ico-warning,
 .iziToast-icon.ico-info,
 .iziToast-close {
+<<<<<<< HEAD
   filter: invert(55%) sepia(80%) saturate(400%) hue-rotate(170deg) brightness(100%) !important;
+=======
+  filter: invert(55%) sepia(80%) saturate(400%) hue-rotate(170deg)
+    brightness(100%) !important;
+>>>>>>> 2f5cb8235e940a7bee02d98a2a0eaab4a4b9edaf
   opacity: 1 !important;
 }
 
 .iziToast-close:hover {
+<<<<<<< HEAD
   filter: invert(40%) sepia(90%) saturate(500%) hue-rotate(170deg) brightness(85%) !important;
   transform: scale(1.5) !important;
 }
+=======
+  filter: invert(40%) sepia(90%) saturate(500%) hue-rotate(170deg)
+    brightness(85%) !important;
+  transform: scale(1.5) !important;
+}
+>>>>>>> 2f5cb8235e940a7bee02d98a2a0eaab4a4b9edaf
