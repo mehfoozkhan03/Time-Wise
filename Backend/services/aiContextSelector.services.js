@@ -112,5 +112,50 @@ export const getRequestedContext = (message, userContext) => {
     context.averageBreakDuration = userContext.work.averageBreakDuration;
   }
 
+  // ---------- Overall Performance ----------
+
+  const overallPerformanceKeywords = [
+    "how am i doing",
+    "how am i performing",
+    "how is my performance",
+    "overall performance",
+    "overall stats",
+    "overall statistics",
+    "overall summary",
+    "performance summary",
+    "give me a summary",
+    "summarize my performance",
+    "am i doing well",
+    "how am i doing overall",
+    "my overall performance",
+    "my performance overall",
+    "what should i improve",
+    "where should i improve",
+  ];
+
+  const isOverallPerformanceQuestion = overallPerformanceKeywords.some(
+    (keyword) => question.includes(keyword),
+  );
+
+  if (isOverallPerformanceQuestion) {
+    context.overallPerformance = {
+      attendance: userContext.attendance.percentage,
+
+      productivity: userContext.productivity.percentage,
+
+      punctuality: userContext.productivity.punctuality,
+
+      weeklyGoalPercentage: userContext.goals.weeklyGoalPercentage,
+
+      weeklyHours: userContext.attendance.weeklyHours,
+
+      weeklyTarget: userContext.goals.weeklyTarget,
+
+      weeklyHoursRemaining: userContext.goals.weeklyHoursRemaining,
+
+      currentStreak: userContext.streak.current,
+    };
+  }
+
   return context;
 };
