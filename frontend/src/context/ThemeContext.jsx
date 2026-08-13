@@ -60,16 +60,11 @@ export function ThemeProvider({ children }) {
   };
 
   useEffect(() => {
-<<<<<<< HEAD
     // if (!user) return;
-=======
-    if (!user) return;
->>>>>>> 2f5cb8235e940a7bee02d98a2a0eaab4a4b9edaf
 
     const media = window.matchMedia("(prefers-color-scheme: dark)");
 
     const applyTheme = () => {
-<<<<<<< HEAD
       /*
        * If user is logged in:
        * use their saved theme.
@@ -86,12 +81,6 @@ export function ThemeProvider({ children }) {
         finalTheme = media.matches ? "dark" : "light";
       } else {
         finalTheme = selectedTheme;
-=======
-      let finalTheme = user.theme;
-
-      if (user.theme === "system") {
-        finalTheme = media.matches ? "dark" : "light";
->>>>>>> 2f5cb8235e940a7bee02d98a2a0eaab4a4b9edaf
       }
 
       document.documentElement.classList.remove("light", "dark");
@@ -107,11 +96,7 @@ export function ThemeProvider({ children }) {
     };
   }, [user]);
 
-<<<<<<< HEAD
   const currentTheme = user?.theme || "system";
-=======
-  const currentTheme = user?.theme || "light";
->>>>>>> 2f5cb8235e940a7bee02d98a2a0eaab4a4b9edaf
 
   const resolvedTheme =
     currentTheme === "system"
