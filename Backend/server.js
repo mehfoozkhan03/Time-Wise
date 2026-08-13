@@ -8,7 +8,6 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
->>>>>>> 2f5cb8235e940a7bee02d98a2a0eaab4a4b9edaf
 import http from "http";
 import { initializeSocket } from "./socket/socket.js";
 
