@@ -12,12 +12,23 @@
   position: absolute;
   inset: 0;
 
+<<<<<<< HEAD
   background: linear-gradient(90deg,
         transparent 0%,
         rgba(255, 255, 255, 0.08) 45%,
         rgba(255, 255, 255, 0.18) 50%,
         rgba(255, 255, 255, 0.08) 55%,
     transparent 100%);
+=======
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.08) 45%,
+    rgba(255, 255, 255, 0.18) 50%,
+    rgba(255, 255, 255, 0.08) 55%,
+    transparent 100%
+  );
+>>>>>>> 2f5cb8235e940a7bee02d98a2a0eaab4a4b9edaf
 
   transform: translateX(-100%);
   animation: skeleton-loading 1.3s linear infinite;
@@ -27,10 +38,13 @@
   100% {
     transform: translateX(100%);
   }
+<<<<<<< HEAD
 }
 
 /* Light theme skeleton */
 html.light .skeleton {
   background: #b9e7f8;
   border-color: #9edcf3;
+=======
+>>>>>>> 2f5cb8235e940a7bee02d98a2a0eaab4a4b9edaf
 }
