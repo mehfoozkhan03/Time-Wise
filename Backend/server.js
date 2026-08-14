@@ -47,7 +47,7 @@ server.use("/posts", postRoutes);
 
 server.use("/attendance", attendanceRouter);
 
-server.use("/calendar", calendarRoutes);
+server.use('/calendar', calendarRoutes);
 
 server.use("/holiday", holidayRouter);
 
