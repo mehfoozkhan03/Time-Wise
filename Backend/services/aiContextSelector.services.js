@@ -157,5 +157,28 @@ export const getRequestedContext = (message, userContext) => {
     };
   }
 
+  // ---------- Follow-up Questions ----------
+
+  const followUpKeywords = [
+    "is that good",
+    "is that bad",
+    "is this good",
+    "is this bad",
+    "how can i improve it",
+    "how can i improve that",
+    "how do i improve it",
+    "how do i improve that",
+    "what about it",
+    "tell me more about it",
+  ];
+
+  const isFollowUpQuestion = followUpKeywords.some((keyword) =>
+    question.includes(keyword),
+  );
+
+  if (isFollowUpQuestion && Object.keys(context).length === 0) {
+    context.followUp = true;
+  }
+
   return context;
 };

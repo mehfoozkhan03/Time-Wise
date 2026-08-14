@@ -1,6 +1,10 @@
 import { askTimeWiseAI } from "../services/ai.services.js";
 import { getAIUserContext } from "../services/aiContext.services.js";
 import { getRequestedContext } from "../services/aiContextSelector.services.js";
+import {
+  addConversationMessage,
+  getConversation,
+} from "../services/aiConversation.service.js";
 
 export const askAI = async (req, res) => {
   try {
@@ -15,11 +19,21 @@ export const askAI = async (req, res) => {
 
     const userID = req.user.userID;
 
+    const conversation = getConversation(userID);
+
     const userContext = await getAIUserContext(userID);
 
     const requestedContext = getRequestedContext(message.trim(), userContext);
 
-    const answer = await askTimeWiseAI(message.trim(), requestedContext);
+    const answer = await askTimeWiseAI(
+      message.trim(),
+      requestedContext,
+      conversation,
+    );
+
+    addConversationMessage(userID, "user", message.trim());
+
+    addConversationMessage(userID, "assistant", answer);
 
     return res.status(200).json({
       success: true,

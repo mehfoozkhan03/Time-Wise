@@ -5,7 +5,11 @@ const ai = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY,
 });
 
-export const askTimeWiseAI = async (message, requestedContext) => {
+export const askTimeWiseAI = async (
+  message,
+  requestedContext,
+  conversation,
+) => {
   const response = await ai.models.generateContent({
     model: "gemini-3.6-flash",
 
@@ -15,6 +19,10 @@ ${TIMEWISE_KNOWLEDGE}
 REQUESTED TIMEWISE DATA:
 
 ${JSON.stringify(requestedContext, null, 2)}
+
+RECENT CONVERSATION:
+
+${JSON.stringify(conversation, null, 2)}
 
 IMPORTANT RULES:
 
