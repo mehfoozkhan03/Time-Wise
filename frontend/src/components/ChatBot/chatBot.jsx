@@ -10,18 +10,20 @@ export function Chatbot() {
 
   const chatBodyRef = useRef(null);
 
-  const [messages, setMessages] = useState([
+  const initialMessages = [
     {
-      id: 1,
+      id: "welcome-1",
       type: "bot",
       text: "Hi! 👋 I'm WiseBot.",
     },
     {
-      id: 2,
+      id: "welcome-2",
       type: "bot",
       text: "I can help you with TimeWise features, attendance, reports, settings and navigation. 😊",
     },
-  ]);
+  ];
+
+  const [messages, setMessages] = useState(initialMessages);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -89,6 +91,34 @@ export function Chatbot() {
       behavior: "smooth",
     });
   }, [messages, isLoading]);
+
+  useEffect(() => {
+    const loadConversation = async () => {
+      try {
+        const response = await api.get("/ai/chat");
+
+        if (
+          response.data?.success &&
+          Array.isArray(response.data.conversation) &&
+          response.data.conversation.length > 0
+        ) {
+          const restoredMessages = response.data.conversation.map(
+            (chatMessage, index) => ({
+              id: `restored-${index}`,
+              type: chatMessage.role === "user" ? "user" : "bot",
+              text: chatMessage.content,
+            }),
+          );
+
+          setMessages([...initialMessages, ...restoredMessages]);
+        }
+      } catch (error) {
+        console.error("Failed to load AI conversation:", error);
+      }
+    };
+
+    loadConversation();
+  }, []);
 
   return (
     <div className={`ai_assistant ${isOpen ? "open" : ""}`}>
@@ -194,9 +224,7 @@ export function Chatbot() {
               }
             }}
             placeholder={
-              isLoading
-                ? "WiseBot Assistant is thinking..."
-                : "Ask WiseBot..."
+              isLoading ? "WiseBot Assistant is thinking..." : "Ask WiseBot..."
             }
             aria-label="Ask TimeWise Assistant"
             disabled={isLoading}

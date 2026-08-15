@@ -1,8 +1,8 @@
-import { GoogleGenAI } from "@google/genai";
+import Groq from "groq-sdk";
 import { TIMEWISE_KNOWLEDGE } from "../utils/aiKnowledge.js";
 
-const ai = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY,
+const groq = new Groq({
+  apiKey: process.env.GROQ_API_KEY,
 });
 
 export const askTimeWiseAI = async (
@@ -10,10 +10,13 @@ export const askTimeWiseAI = async (
   requestedContext,
   conversation,
 ) => {
-  const response = await ai.models.generateContent({
-    model: "gemini-3.6-flash",
+  const response = await groq.chat.completions.create({
+    model: "llama-3.1-8b-instant",
 
-    contents: `
+    messages: [
+      {
+        role: "system",
+        content: `
 ${TIMEWISE_KNOWLEDGE}
 
 REQUESTED TIMEWISE DATA:
@@ -66,12 +69,14 @@ IMPORTANT RULES:
     provides that threshold.
 
 12. Keep responses concise and easy to read.
-
-USER QUESTION:
-
-${message}
 `,
+      },
+      {
+        role: "user",
+        content: message,
+      },
+    ],
   });
 
-  return response.text;
+  return response.choices[0]?.message?.content || "";
 };

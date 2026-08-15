@@ -1,4 +1,8 @@
-export const getRequestedContext = (message, userContext) => {
+export const getRequestedContext = (
+  message,
+  userContext,
+  conversation = [],
+) => {
   const question = message.toLowerCase();
 
   const context = {};
@@ -177,7 +181,28 @@ export const getRequestedContext = (message, userContext) => {
   );
 
   if (isFollowUpQuestion && Object.keys(context).length === 0) {
-    context.followUp = true;
+    for (let i = conversation.length - 1; i >= 0; i--) {
+      const previousMessage = conversation[i];
+
+      if (previousMessage.role !== "user") {
+        continue;
+      }
+
+      const previousContext = getRequestedContext(
+        previousMessage.content,
+        userContext,
+        [],
+      );
+
+      if (Object.keys(previousContext).length > 0) {
+        Object.assign(context, previousContext);
+        break;
+      }
+    }
+
+    if (Object.keys(context).length === 0) {
+      context.followUp = true;
+    }
   }
 
   return context;

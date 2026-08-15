@@ -48,7 +48,8 @@ export default function App() {
       <ScrollTop />
       <ScrollToTopButton />
       <AppRoutes />
-      <Chatbot />
+
+      {user && <Chatbot />}
     </BrowserRouter>
   );
 }

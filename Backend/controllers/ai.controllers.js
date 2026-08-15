@@ -4,6 +4,7 @@ import { getRequestedContext } from "../services/aiContextSelector.services.js";
 import {
   addConversationMessage,
   getConversation,
+  clearConversation,
 } from "../services/aiConversation.service.js";
 
 export const askAI = async (req, res) => {
@@ -23,7 +24,11 @@ export const askAI = async (req, res) => {
 
     const userContext = await getAIUserContext(userID);
 
-    const requestedContext = getRequestedContext(message.trim(), userContext);
+    const requestedContext = getRequestedContext(
+      message.trim(),
+      userContext,
+      conversation,
+    );
 
     const answer = await askTimeWiseAI(
       message.trim(),
@@ -45,6 +50,46 @@ export const askAI = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Unable to connect to the TimeWise Assistant.",
+    });
+  }
+};
+
+export const clearAIConversation = async (req, res) => {
+  try {
+    const userID = req.user.userID;
+
+    clearConversation(userID);
+
+    return res.status(200).json({
+      success: true,
+      message: "AI conversation cleared successfully.",
+    });
+  } catch (error) {
+    console.error("Clear AI Conversation Error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Unable to clear the AI conversation.",
+    });
+  }
+};
+
+export const getAIConversation = async (req, res) => {
+  try {
+    const userID = req.user.userID;
+
+    const conversation = getConversation(userID);
+
+    return res.status(200).json({
+      success: true,
+      conversation,
+    });
+  } catch (error) {
+    console.error("Get AI Conversation Error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Unable to load the AI conversation.",
     });
   }
 };
