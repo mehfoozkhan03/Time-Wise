@@ -49,7 +49,7 @@
 .calendarDay.sunday {
   background: color-mix(
     in srgb,
-    var(--primary) 10%,
+    var(--primary) 20%,
     var(--surface)
   );
 
