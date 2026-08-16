@@ -506,6 +506,43 @@ body.feedback-open .ai_assistant {
 }
 
 /* ==========================================================
+   HEADER ACTIONS
+========================================================== */
+
+.ai_header_actions {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.ai_clear_btn {
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-radius: 9px;
+    background: transparent;
+    color: var(--text_secondary);
+    cursor: pointer;
+    transition:
+        background 0.3s ease,
+        color 0.3s ease;
+}
+
+.ai_clear_btn:hover:not(:disabled) {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+}
+
+.ai_clear_btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+
+/* ==========================================================
    MOBILE
 ========================================================== */
 

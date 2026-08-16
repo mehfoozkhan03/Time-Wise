@@ -30,6 +30,15 @@ export const askAI = async (req, res) => {
       conversation,
     );
 
+    // console.log("USER MESSAGE:", message.trim());
+
+    // console.log("CONVERSATION:", JSON.stringify(conversation, null, 2));
+
+    // console.log(
+    //   "REQUESTED CONTEXT:",
+    //   JSON.stringify(requestedContext, null, 2),
+    // );
+
     const answer = await askTimeWiseAI(
       message.trim(),
       requestedContext,

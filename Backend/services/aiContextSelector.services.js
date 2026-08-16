@@ -163,22 +163,36 @@ export const getRequestedContext = (
 
   // ---------- Follow-up Questions ----------
 
-  const followUpKeywords = [
+  const evaluationKeywords = [
     "is that good",
     "is that bad",
     "is this good",
     "is this bad",
+  ];
+
+  const improvementKeywords = [
     "how can i improve it",
     "how can i improve that",
     "how do i improve it",
     "how do i improve that",
-    "what about it",
-    "tell me more about it",
   ];
 
-  const isFollowUpQuestion = followUpKeywords.some((keyword) =>
+  const detailKeywords = ["what about it", "tell me more about it"];
+
+  const isEvaluationFollowUp = evaluationKeywords.some((keyword) =>
     question.includes(keyword),
   );
+
+  const isImprovementFollowUp = improvementKeywords.some((keyword) =>
+    question.includes(keyword),
+  );
+
+  const isDetailFollowUp = detailKeywords.some((keyword) =>
+    question.includes(keyword),
+  );
+
+  const isFollowUpQuestion =
+    isEvaluationFollowUp || isImprovementFollowUp || isDetailFollowUp;
 
   if (isFollowUpQuestion && Object.keys(context).length === 0) {
     for (let i = conversation.length - 1; i >= 0; i--) {
@@ -195,13 +209,83 @@ export const getRequestedContext = (
       );
 
       if (Object.keys(previousContext).length > 0) {
-        Object.assign(context, previousContext);
-        break;
+        if (previousContext.attendance) {
+          context.followUp = {
+            metric: "attendance",
+            value: previousContext.attendance.percentage,
+          };
+        } else if (previousContext.productivity) {
+          context.followUp = {
+            metric: "productivity",
+            value: previousContext.productivity.percentage,
+          };
+        } else if (previousContext.weeklyHours !== undefined) {
+          context.followUp = {
+            metric: "weeklyHours",
+            value: previousContext.weeklyHours,
+          };
+        } else if (previousContext.monthlyHours !== undefined) {
+          context.followUp = {
+            metric: "monthlyHours",
+            value: previousContext.monthlyHours,
+          };
+        } else if (previousContext.currentStreak !== undefined) {
+          context.followUp = {
+            metric: "currentStreak",
+            value: previousContext.currentStreak,
+          };
+        } else if (previousContext.longestStreak !== undefined) {
+          context.followUp = {
+            metric: "longestStreak",
+            value: previousContext.longestStreak,
+          };
+        } else if (previousContext.punctuality !== undefined) {
+          context.followUp = {
+            metric: "punctuality",
+            value: previousContext.punctuality,
+          };
+        } else if (previousContext.breakScore !== undefined) {
+          context.followUp = {
+            metric: "breakScore",
+            value: previousContext.breakScore,
+          };
+        } else if (previousContext.weeklyGoal) {
+          context.followUp = {
+            metric: "weeklyGoal",
+            value: previousContext.weeklyGoal,
+          };
+        } else if (previousContext.averageCheckIn !== undefined) {
+          context.followUp = {
+            metric: "averageCheckIn",
+            value: previousContext.averageCheckIn,
+          };
+        } else if (previousContext.averageBreakDuration !== undefined) {
+          context.followUp = {
+            metric: "averageBreakDuration",
+            value: previousContext.averageBreakDuration,
+          };
+        }
+
+        if (context.followUp) {
+          if (isEvaluationFollowUp) {
+            context.followUp.type = "evaluation";
+          } else if (isImprovementFollowUp) {
+            context.followUp.type = "improvement";
+          } else if (isDetailFollowUp) {
+            context.followUp.type = "details";
+          }
+
+          break;
+        }
       }
     }
 
-    if (Object.keys(context).length === 0) {
-      context.followUp = true;
+    if (!context.followUp) {
+      context.followUp = {
+        type: "unknown",
+        metric: null,
+        value: null,
+      };
     }
   }
 

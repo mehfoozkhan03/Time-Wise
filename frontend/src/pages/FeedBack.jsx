@@ -12,6 +12,7 @@ export function Feedback({
   onConfirm,
   confirmText = "Continue",
   cancelText = "Cancel",
+  showActions = false,
 }) {
   const [showLoader, setShowLoader] = useState(false);
   const [showCelebration, setShowCelebration] = useState(false);
@@ -194,7 +195,7 @@ export function Feedback({
           )}
 
           {/* Buttons */}
-          {isLogout ? (
+          {isLogout || showActions ? (
             <div className="feedback_actions">
               <button
                 className="feedback_button feedback_button--cancel"
@@ -204,8 +205,12 @@ export function Feedback({
               </button>
 
               <button
-                className="feedback_button feedback_button--logout"
-                onClick={handleLogoutAnimation}
+                className={`feedback_button ${
+                  isLogout
+                    ? "feedback_button--logout"
+                    : "feedback_button--error"
+                }`}
+                onClick={isLogout ? handleLogoutAnimation : onConfirm}
               >
                 {confirmText}
               </button>
