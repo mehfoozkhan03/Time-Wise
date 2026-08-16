@@ -10,16 +10,24 @@ function CalendarDay({
   isCurrentMonth,
   isToday,
   isSelected,
+  isWeekend,
+  showWeekend = true,
   onSelectDate,
   onEventClick,
   onMoreEvents,
 }) {
-
   const visibleEvents = events.slice(0, 1);
+
+  const isSunday = day.getDay() === 0;
+
+  const showSundayStyle =
+    isWeekend && isSunday && showWeekend;
 
   const className = [
     "calendarDay",
     !isCurrentMonth && "otherMonth",
+    isWeekend && "weekend",
+    showSundayStyle && "sunday",
     isToday && "today",
     isSelected && "selected",
   ]
@@ -71,10 +79,17 @@ function CalendarDay({
         {visibleEvents.length > 0 &&
           visibleEvents.map((event) => (
             <div
-              key={event._id ?? event.id ?? `${event.date}-${event.title}`}
+              key={
+                event._id ??
+                event.id ??
+                `${event.date}-${event.title}`
+              }
               onClick={stopPropagation}
             >
-              <EventBadge event={event} onClick={onEventClick} />
+              <EventBadge
+                event={event}
+                onClick={onEventClick}
+              />
             </div>
           ))}
 
@@ -83,13 +98,17 @@ function CalendarDay({
             type="button"
             className="moreEvents"
             onClick={handleMoreEvents}
-            aria-label={`View ${events.length - 1} more events`}
+            aria-label={`View ${
+              events.length - 1
+            } more events`}
           >
             +{events.length - 1} More
           </button>
         )}
 
-        {events.length === 0 && <div className="emptyEvents" />}
+        {events.length === 0 && (
+          <div className="emptyEvents" />
+        )}
       </div>
     </div>
   );

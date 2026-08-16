@@ -1,10 +1,16 @@
 import "./EventFilters.css";
 
-import { memo, useMemo, useCallback, useState } from "react";
+import {
+  memo,
+  useMemo,
+  useCallback,
+  useState,
+} from "react";
 
 import { FaSearch, FaTimes } from "react-icons/fa";
 
 import { EVENT_CONFIG } from "../../../data/eventConfig";
+import { EVENT_TYPES } from "../../../data/eventTypes";
 
 const eventTypes = Object.entries(EVENT_CONFIG);
 
@@ -18,8 +24,10 @@ function EventFilters({
   selectAll,
   clearAll,
   events = [],
+  weekendCount = 0,
 }) {
-  const [showAllFilters, setShowAllFilters] = useState(false);
+  const [showAllFilters, setShowAllFilters] =
+    useState(false);
 
   const eventCounts = useMemo(() => {
     return events.reduce((counts, event) => {
@@ -42,12 +50,17 @@ function EventFilters({
   }, [showAllFilters]);
 
   const remainingFilters = useMemo(() => {
-    return Math.max(eventTypes.length - INITIAL_VISIBLE_FILTERS, 0);
+    return Math.max(
+      eventTypes.length - INITIAL_VISIBLE_FILTERS,
+      0,
+    );
   }, []);
 
   const handleSearchChange = useCallback(
     (event) => {
-      setSearchTerm?.(event.target.value.trimStart());
+      setSearchTerm?.(
+        event.target.value.trimStart(),
+      );
     },
     [setSearchTerm],
   );
@@ -58,13 +71,9 @@ function EventFilters({
 
   const handleToggleFilter = useCallback(
     (type) => {
-      if (!eventCounts[type]) {
-        return;
-      }
-
       toggleFilter?.(type);
     },
-    [eventCounts, toggleFilter],
+    [toggleFilter],
   );
 
   const handleSelectAll = useCallback(() => {
@@ -76,12 +85,17 @@ function EventFilters({
   }, [clearAll]);
 
   const handleToggleShowAll = useCallback(() => {
-    setShowAllFilters((previous) => !previous);
+    setShowAllFilters(
+      (previous) => !previous,
+    );
   }, []);
 
   return (
     <section className="eventFilters">
-      <label htmlFor="calendar-search" className="sr-only">
+      <label
+        htmlFor="calendar-search"
+        className="sr-only"
+      >
         Search calendar events
       </label>
 
@@ -114,20 +128,38 @@ function EventFilters({
       </div>
 
       <div className="filterActions">
-        <button type="button" onClick={handleSelectAll}>
+        <button
+          type="button"
+          onClick={handleSelectAll}
+        >
           Select All
         </button>
 
-        <button type="button" onClick={handleClearAll}>
+        <button
+          type="button"
+          onClick={handleClearAll}
+        >
           Clear All
         </button>
       </div>
 
-      <div className="filterList" role="group" aria-label="Event Filters">
+      <div
+        className="filterList"
+        role="group"
+        aria-label="Event Filters"
+      >
         {visibleFilters.map(([type, config]) => {
-          const count = eventCounts[type] ?? 0;
+          const isWeekend =
+            type === EVENT_TYPES.WEEKEND;
+
+          const count = isWeekend
+            ? weekendCount
+            : eventCounts[type] ?? 0;
+
           const hasEvents = count > 0;
-          const active = hasEvents && Boolean(filters[type]);
+
+          const active =
+            hasEvents && Boolean(filters[type]);
 
           const className = [
             "filterChip",
@@ -149,15 +181,17 @@ function EventFilters({
               aria-label={
                 hasEvents
                   ? `Toggle ${config.label}`
-                  : `${config.label}, no events`
+                  : `${config.label}, no available dates`
               }
               title={
                 hasEvents
                   ? config.label
-                  : `No ${config.label.toLowerCase()} events`
+                  : `No ${config.label.toLowerCase()} available`
               }
               disabled={!hasEvents}
-              onClick={() => handleToggleFilter(type)}
+              onClick={() =>
+                handleToggleFilter(type)
+              }
             >
               <span className="chipIcon">
                 <Icon />
@@ -165,7 +199,9 @@ function EventFilters({
 
               <span>{config.label}</span>
 
-              <span className="count">{count}</span>
+              <span className="count">
+                {count}
+              </span>
             </button>
           );
         })}
@@ -177,7 +213,9 @@ function EventFilters({
             onClick={handleToggleShowAll}
             aria-expanded={showAllFilters}
           >
-            {showAllFilters ? "Show Less" : `+${remainingFilters} More`}
+            {showAllFilters
+              ? "Show Less"
+              : `+${remainingFilters} More`}
           </button>
         )}
       </div>

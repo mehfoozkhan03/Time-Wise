@@ -16,10 +16,10 @@ function CalendarGrid({
   selectedDate,
   selectDate,
   events = [],
+  showWeekends = true,
   onEventClick,
   onMoreEvents,
 }) {
-
   const calendar = useMemo(() => {
     return generateCalendar(currentDate);
   }, [currentDate]);
@@ -67,6 +67,10 @@ function CalendarGrid({
       <div className="calendarGrid" role="grid">
         {calendar.map((item) => {
           const dateKey = getDateKey(item.date);
+          const dayOfWeek = item.date.getDay();
+
+          const isWeekend =
+            dayOfWeek === 0 || dayOfWeek === 6;
 
           return (
             <CalendarDay
@@ -76,6 +80,8 @@ function CalendarGrid({
               isCurrentMonth={item.currentMonth}
               isToday={item.isToday}
               isSelected={isSameDate(item.date, selectedDate)}
+              isWeekend={isWeekend}
+              showWeekend={showWeekends}
               onSelectDate={selectDate}
               onEventClick={onEventClick}
               onMoreEvents={onMoreEvents}

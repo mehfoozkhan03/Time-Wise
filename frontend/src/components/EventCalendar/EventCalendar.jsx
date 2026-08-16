@@ -10,6 +10,8 @@ import { FaLock, FaArrowLeft } from "react-icons/fa";
 import useCalendar from "../../hooks/useCalendar";
 import useEventFilter from "../../hooks/useEventFilter";
 
+import { EVENT_TYPES } from "../../data/eventTypes";
+
 import {
   fetchEvents,
   createEvent,
@@ -57,9 +59,7 @@ export default function EventCalendar() {
 
   const { user } = useSelector((state) => state.auth);
 
-  const { isAuthenticated: isAdmin } = useSelector(
-    (state) => state.adminAuth,
-  );
+  const { isAuthenticated: isAdmin } = useSelector((state) => state.adminAuth);
 
   useEffect(() => {
     dispatch(fetchEvents());
@@ -81,9 +81,8 @@ export default function EventCalendar() {
 
   const allEvents = useMemo(() => {
     const calendarEvents = Array.isArray(events) ? events : [];
-    const holidayEvents = Array.isArray(mappedHolidays)
-      ? mappedHolidays
-      : [];
+
+    const holidayEvents = Array.isArray(mappedHolidays) ? mappedHolidays : [];
 
     return [...calendarEvents, ...holidayEvents].sort((a, b) => {
       const dateDiff = new Date(a.date) - new Date(b.date);
@@ -110,6 +109,27 @@ export default function EventCalendar() {
       );
     });
   }, [allEvents, currentDate]);
+
+  const weekendCount = useMemo(() => {
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    let count = 0;
+
+    for (let day = 1; day <= daysInMonth; day += 1) {
+      const date = new Date(year, month, day);
+
+      const dayOfWeek = date.getDay();
+
+      if (dayOfWeek === 0 || dayOfWeek === 6) {
+        count += 1;
+      }
+    }
+
+    return count;
+  }, [currentDate]);
 
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [selectedHoliday, setSelectedHoliday] = useState(null);
@@ -375,6 +395,7 @@ export default function EventCalendar() {
         selectAll={selectAll}
         clearAll={clearAll}
         events={currentMonthEvents}
+        weekendCount={weekendCount}
       />
 
       <div className="calendarBody">
@@ -383,6 +404,7 @@ export default function EventCalendar() {
           selectedDate={selectedDate}
           selectDate={selectDate}
           events={filteredEvents}
+          showWeekends={Boolean(filters[EVENT_TYPES.WEEKEND])}
           onEventClick={handleEventClick}
           onMoreEvents={handleMoreEvents}
         />
