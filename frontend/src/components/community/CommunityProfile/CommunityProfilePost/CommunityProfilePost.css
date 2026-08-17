@@ -1,421 +1,377 @@
-/* =========================================
-   POSTS SECTION
-========================================= */
+/* =========== POSTS SECTION ============ */
 
 .community-posts {
   width: 75%;
 }
 
+/* =========== POSTS HEADER =========== */
 
-/* =========================================
-   POSTS HEADER
-========================================= */
-
-.community-posts__header {
+.community-posts-header {
   width: 100%;
-
   display: flex;
   align-items: center;
   justify-content: space-between;
-
   margin-bottom: 18px;
 }
 
-
-.community-posts__title {
+.community-posts-title {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-
-.community-posts__title h2 {
+.community-posts-title h3 {
   margin: 0;
-
-  color: #f5f7fb;
-
-  font-size: 21px;
+  color: var(--text_primary);
+  font-size: 16px;
   line-height: 1;
-
-  font-weight: 750;
+  font-weight: 700;
 }
 
-
-.community-posts__title span {
-  color: #9ab0c9;
-
-  font-size: 16px;
+.community-posts-title span {
+  color: var(--text_secondary);
+  font-size: 13px;
   font-weight: 500;
 }
 
+/* ========== FILTER WRAPPER ========== */
 
-/* =========================================
-   FILTER BUTTON
-========================================= */
+.community-posts-filter-wrapper {
+  position: relative;
+}
 
-.community-posts__filter {
-  height: 44px;
+/* =========== FILTER BUTTON ============ */
 
+.community-posts-filter {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 10px;
-
-  padding: 0 15px;
-
-  border: 1px solid #2c384b;
-  border-radius: 11px;
-
-  background: #151b25;
-
-  color: #edf2f8;
-
-  font-size: 14px;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--text_primary);
+  font-size: 13px;
   font-weight: 600;
-
   cursor: pointer;
-
   transition:
     background-color 0.2s ease,
     border-color 0.2s ease;
 }
 
+.community-posts-filter:hover,
+.community-posts-filter--active {
+  background: var(--surface_hover);
+}
 
-.community-posts__filter:hover {
-  background: #1b2330;
-  border-color: #3a485e;
+.community-posts-chevron {
+  font-size: 16px;
+  color: var(--text_secondary);
+  transition: transform 0.2s ease;
+}
+
+.community-posts-chevron-open {
+  transform: rotate(180deg);
 }
 
 
-.community-posts__filter svg {
-  color: #9eb1c7;
+/* =========== DROPDOWN ============ */
+
+.community-posts-dropdown {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  z-index: 50;
+  width: 160px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  box-shadow:
+    0 15px 35px rgba(0, 0, 0, 0.35);
+  }
+
+
+/* ============ DROPDOWN ITEM ============ */
+
+.community-posts-dropdown-item {
+  position: relative;
+  width: 100%;
+  padding: 10px;
+  padding-left: 35px;
+  display: flex;
+  align-items: center;
+  background: transparent;
+  color: var(--text_primary);
+  font-size: 13px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.community-posts-dropdown-item:hover {
+  background: var(--surface_hover);
+  color: var(--tag-text);
+}
+
+.community-posts-dropdown-item>span{
+  font-size: 13px;
+}
+
+/* =========== SELECTED ITEM =========== */
+
+.community-posts-dropdown-item-selected {
+  color: #20a9ed;
+}
+
+.community-posts-dropdown-item-selected:hover {
+  color: #20a9ed;
 }
 
 
-/* =========================================
-   POSTS LIST
-========================================= */
+/* ========== CHECK ICON =========== */
 
-.community-posts__list {
+.community-posts-check {
+  position: absolute;
+  left: 16px;
+  color: #20a9ed;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+
+/* =========== POSTS LIST ============= */
+
+.community-posts-list {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-
-/* =========================================
-   POST CARD
-========================================= */
-
+/* =========== POST CARD
+============= */
 .community-post {
   overflow: hidden;
-
-  border: 1px solid #293548;
+  border: 1px solid var(--border);
   border-radius: 24px;
-
-  background: #171d27;
+  background: var(--surface);
 }
 
 
-/* =========================================
-   POST HEADER
-========================================= */
+/* ============= POST HEADER ============== */
 
-.community-post__header {
+.community-post-header {
   min-height: 80px;
-
   padding: 25px 25px 12px;
-
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
 }
 
-
-.community-post__author {
+.community-post-author {
   display: flex;
   align-items: center;
   gap: 15px;
 }
 
-
-.community-post__avatar {
+.community-post-avatar {
   width: 52px;
   height: 52px;
-
   flex-shrink: 0;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   overflow: hidden;
-
   border-radius: 50%;
-
   background: linear-gradient(
     135deg,
     #3ca8ed,
     #5861ef
   );
-
   color: #ffffff;
-
   font-size: 17px;
   font-weight: 700;
 }
 
-
-.community-post__avatar img {
+.community-post-avatar img {
   width: 100%;
   height: 100%;
-
   object-fit: cover;
 }
 
+/* =========== AUTHOR INFO ============ */
 
-/* =========================================
-   AUTHOR INFO
-========================================= */
-
-.community-post__author-info h3 {
+.community-post-author-info h3 {
   margin: 0 0 5px;
-
   color: #f5f7fb;
-
   font-size: 17px;
   line-height: 1.2;
-
   font-weight: 700;
 }
 
-
-.community-post__meta {
+.community-post-meta {
   display: flex;
   align-items: center;
   gap: 7px;
-
   color: #9bb1ca;
-
   font-size: 14px;
 }
 
-
-.community-post__dot {
+.community-post-dot {
   color: #61748d;
 }
 
-
-.community-post__edited {
+.community-post-edited {
   padding: 3px 8px;
-
   border: 1px solid #34445a;
   border-radius: 999px;
-
   color: #9fb3ca;
-
   font-size: 11px;
 }
 
 
-/* =========================================
-   MORE BUTTON
-========================================= */
+/* =========== MORE BUTTON ============ */
 
-.community-post__more {
+.community-post-more {
   width: 38px;
   height: 38px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   border: 0;
   border-radius: 9px;
-
   background: transparent;
-
   color: #93a6bd;
-
   font-size: 21px;
-
   cursor: pointer;
-
   transition: background-color 0.2s ease;
 }
 
-
-.community-post__more:hover {
+.community-post-more:hover {
   background: #202835;
 }
 
 
-/* =========================================
-   POST CONTENT
-========================================= */
+/* ============ POST CONTENT =========== */
 
-.community-post__content {
+.community-post-content {
   padding: 0 25px 17px;
 }
 
-
-.community-post__content p {
+.community-post-content p {
   margin: 10px 0 22px;
-
   color: #f0f3f7;
-
   font-size: 17px;
   line-height: 1.65;
-
   font-weight: 450;
 }
 
-
-.community-post__image {
+.community-post-image {
   width: 100%;
   max-height: 500px;
-
   display: block;
-
   margin-bottom: 20px;
-
   object-fit: cover;
-
   border-radius: 14px;
 }
 
 
-/* =========================================
-   TAGS
-========================================= */
+/* ========== TAGS =========== */
 
-.community-post__tags {
+.community-post-tags {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-
   gap: 8px;
 }
 
-
-.community-post__tags span {
+.community-post-tags span {
   padding: 6px 12px;
-
   border: 1px solid #185b80;
   border-radius: 999px;
-
   background: rgba(16, 108, 151, 0.15);
-
   color: #25a9ed;
-
   font-size: 12px;
   font-weight: 600;
 }
 
 
-/* =========================================
-   ACTIONS
-========================================= */
+/* =========== ACTIONS ========= */
 
-.community-post__actions {
+.community-post-actions {
   min-height: 79px;
-
   padding: 0 25px;
-
   display: flex;
   align-items: center;
   justify-content: space-between;
-
   border-top: 1px solid #293548;
 }
 
-
-.community-post__left-actions {
+.community-post-left-actions {
   display: flex;
   align-items: center;
   gap: 25px;
 }
 
-
-.community-post__actions button {
+.community-post-actions button {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-
   padding: 0;
-
   border: 0;
-
   background: transparent;
-
   color: #9db1c8;
-
   font-size: 15px;
   font-weight: 500;
-
   cursor: pointer;
-
   transition:
     color 0.2s ease,
     transform 0.2s ease;
 }
 
-
-.community-post__actions button:hover {
+.community-post-actions button:hover {
   color: #e8edf4;
 }
 
-
-.community-post__actions button:active {
+.community-post-actions button:active {
   transform: scale(0.96);
 }
 
-
-.community-post__actions svg {
+.community-post-actions svg {
   font-size: 20px;
 }
 
-
-.community-post__share {
+.community-post-share {
   margin-left: auto;
 }
 
+/* ========= EMPTY STATE ========== */
 
-/* =========================================
-   EMPTY STATE
-========================================= */
-
-.community-posts__empty {
+.community-posts-empty {
   min-height: 220px;
-
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
   padding: 30px;
-
-  border: 1px solid #293548;
+  border: 1px solid var(--border);
   border-radius: 22px;
-
-  background: #171d27;
-
+  background: var(--bg);
   text-align: center;
 }
 
-
-.community-posts__empty h3 {
+.community-posts-empty h3 {
   margin: 0 0 8px;
-
-  color: #f5f7fb;
-
+  color: var(--text_primary);
   font-size: 18px;
 }
 
-
-.community-posts__empty p {
+.community-posts-empty p {
   margin: 0;
-
-  color: #8fa5be;
-
+  color: var(--text_secondary);
   font-size: 14px;
 }

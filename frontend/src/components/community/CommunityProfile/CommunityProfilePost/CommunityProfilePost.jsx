@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react";
 import "./CommunityProfilePost.css";
 
 import {
@@ -7,65 +8,106 @@ import {
   HiBookmark,
   HiOutlineShare,
   HiOutlineEllipsisHorizontal,
+  HiOutlineChevronDown,
 } from "react-icons/hi2";
 
-
 export const CommunityProfilePosts = ({ posts = [] }) => {
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [selectedFilter, setSelectedFilter] = useState("All Posts");
+
+  const dropdownRef = useRef(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const filterOptions = [
+    "All Posts",
+    "Most Recent",
+    "Most Liked",
+    "Most Discussed",
+  ];
+
+  const handleFilterChange = (filter) => {
+    setSelectedFilter(filter);
+    setShowDropdown(false);
+  };
+
   return (
     <section className="community-posts">
-
       {/* ================= HEADER ================= */}
 
-      <div className="community-posts__header">
-
-        <div className="community-posts__title">
-          <h2>Posts</h2>
+      <div className="community-posts-header">
+        <div className="community-posts-title">
+          <h3>Posts</h3>
           <span>({posts.length})</span>
         </div>
 
-        <button className="community-posts__filter">
-          <span>All Posts</span>
+        {/* ================= DROPDOWN ================= */}
 
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
+        <div
+          className="community-posts-filter-wrapper"
+          ref={dropdownRef}
+        >
+          <button
+            className={`community-posts-filter ${
+              showDropdown ? "community-posts-filter-active" : ""
+            }`}
+            onClick={() => setShowDropdown((prev) => !prev)}
           >
-            <path
-              d="M6 9L12 15L18 9"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
+            <span>{selectedFilter}</span>
+
+            <HiOutlineChevronDown
+              className={
+                showDropdown
+                  ? "community-posts-chevron community-posts-chevron-open"
+                  : "community-posts-chevron"
+              }
             />
-          </svg>
-        </button>
+          </button>
 
+          {showDropdown && (
+            <div className="community-posts-dropdown">
+              {filterOptions.map((option) => (
+                <button key={option} className={`community-posts-dropdown-item ${selectedFilter === option ? "community-posts-dropdown-item-selected" : ""}`} onClick={() => handleFilterChange(option)}>
+                  {selectedFilter === option && (
+                    <span className="community-posts-check">✓</span>
+                  )}
+
+                  <span>{option}</span>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
-
+      {/* </div> */}
 
       {/* ================= POSTS ================= */}
 
-      <div className="community-posts__list">
-
+      <div className="community-posts-list">
         {posts.length > 0 ? (
-
           posts.map((post) => (
-
             <article
               className="community-post"
               key={post._id}
             >
-
               {/* ================= POST HEADER ================= */}
 
-              <div className="community-post__header">
-
-                <div className="community-post__author">
-
-                  <div className="community-post__avatar">
-
+              <div className="community-post-header">
+                <div className="community-post-author">
+                  <div className="community-post-avatar">
                     {post.createdBy?.profileImage ? (
                       <img
                         src={post.createdBy.profileImage}
@@ -76,162 +118,98 @@ export const CommunityProfilePosts = ({ posts = [] }) => {
                         post.createdBy?.lastName?.[0] || ""
                       }`.toUpperCase()
                     )}
-
                   </div>
 
-
-                  <div className="community-post__author-info">
-
+                  <div className="community-post-author-info">
                     <h3>
-                      {post.createdBy?.firstName}{" "}
-                      {post.createdBy?.lastName}
+                      {post.createdBy?.firstName} {post.createdBy?.lastName}
                     </h3>
 
-                    <div className="community-post__meta">
+                    <div className="community-post-meta">
+                      <span>{post.createdBy?.designation || "Employee"}</span>
 
-                      <span>
-                        {post.createdBy?.designation || "Employee"}
-                      </span>
+                      <span className="community-post-dot">•</span>
 
-                      <span className="community-post__dot">
-                        •
-                      </span>
-
-                      <span>
-                        {post.timeAgo || "Recently"}
-                      </span>
+                      <span>{post.timeAgo || "Recently"}</span>
 
                       {post.isEdited && (
                         <>
-                          <span className="community-post__dot">
-                            •
-                          </span>
+                          <span className="community-post-dot">•</span>
 
-                          <span className="community-post__edited">
-                            Edited
-                          </span>
+                          <span className="community-post-edited">Edited</span>
                         </>
                       )}
-
                     </div>
-
                   </div>
-
                 </div>
 
-
-                <button className="community-post__more">
+                <button className="community-post-more">
                   <HiOutlineEllipsisHorizontal />
                 </button>
-
               </div>
-
 
               {/* ================= POST CONTENT ================= */}
 
-              <div className="community-post__content">
-
-                <p>
-                  {post.content}
-                </p>
-
+              <div className="community-post-content">
+                <p>{post.content}</p>
 
                 {post.image && (
                   <img
                     src={post.image}
                     alt="Post"
-                    className="community-post__image"
+                    className="community-post-image"
                   />
                 )}
-
 
                 {/* Tags */}
 
                 {post.tags?.length > 0 && (
-                  <div className="community-post__tags">
-
+                  <div className="community-post-tags">
                     {post.tags.map((tag, index) => (
-                      <span key={index}>
-                        #{tag}
-                      </span>
+                      <span key={index}>#{tag}</span>
                     ))}
-
                   </div>
                 )}
-
               </div>
-
 
               {/* ================= POST ACTIONS ================= */}
 
-              <div className="community-post__actions">
-
-                <div className="community-post__left-actions">
-
+              <div className="community-post-actions">
+                <div className="community-post-left-actions">
                   <button>
                     <HiOutlineHeart />
 
-                    <span>
-                      {post.likesCount || 0}
-                    </span>
+                    <span>{post.likesCount || 0}</span>
                   </button>
-
 
                   <button>
                     <HiOutlineChatBubbleLeft />
 
-                    <span>
-                      {post.commentsCount || 0}
-                    </span>
+                    <span>{post.commentsCount || 0}</span>
                   </button>
-
 
                   <button>
+                    {post.isSaved ? <HiBookmark /> : <HiOutlineBookmark />}
 
-                    {post.isSaved ? (
-                      <HiBookmark />
-                    ) : (
-                      <HiOutlineBookmark />
-                    )}
-
-                    <span>
-                      Save
-                    </span>
-
+                    <span>Save</span>
                   </button>
-
                 </div>
 
-
-                <button className="community-post__share">
-
+                <button className="community-post-share">
                   <HiOutlineShare />
 
-                  <span>
-                    Share
-                  </span>
-
+                  <span>Share</span>
                 </button>
-
               </div>
-
             </article>
-
           ))
-
         ) : (
-
-          <div className="community-posts__empty">
+          <div className="community-posts-empty">
             <h3>No posts yet</h3>
-            <p>
-              This user hasn't shared anything with the community yet.
-            </p>
+            <p>This user hasn't shared anything with the community yet.</p>
           </div>
-
         )}
-
       </div>
-
     </section>
   );
 };

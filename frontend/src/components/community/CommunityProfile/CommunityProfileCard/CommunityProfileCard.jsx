@@ -22,6 +22,26 @@ export const CommunityProfileCard = () => {
     (state) => state.communityProfile,
   );
 
+  // Post, Like and Comment Count
+  const { posts } = useSelector((state) => state.post);
+
+  const profilePostCount =
+    posts?.filter((post) => post.createdBy?._id === userId).length || [];
+
+  const profilePosts =
+    posts?.filter((post) => String(post.createdBy?._id) === String(userId)) ||
+    [];
+
+  const totalLikesReceived = profilePosts.reduce(
+    (total, post) => total + (post.likesCount || 0),
+    0,
+  );
+
+  const totalComments = profilePosts.reduce(
+    (total, post) => total + (post.commentsCount || 0),
+    0,
+  );
+
   // ================= Fetch Profile =================
 
   useEffect(() => {
@@ -92,15 +112,15 @@ export const CommunityProfileCard = () => {
   // Stat data
   const statData = [
     {
-      statCount: "0",
+      statCount: profilePostCount,
       statName: "POSTS",
     },
     {
-      statCount: "0",
+      statCount: totalLikesReceived,
       statName: "LIKES RECEIVED",
     },
     {
-      statCount: "0",
+      statCount: totalComments,
       statName: "COMMENTS",
     },
     {
