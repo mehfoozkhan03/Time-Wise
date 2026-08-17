@@ -1,0 +1,421 @@
+/* =========================================
+   POSTS SECTION
+========================================= */
+
+.community-posts {
+  width: 75%;
+}
+
+
+/* =========================================
+   POSTS HEADER
+========================================= */
+
+.community-posts__header {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 18px;
+}
+
+
+.community-posts__title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+
+.community-posts__title h2 {
+  margin: 0;
+
+  color: #f5f7fb;
+
+  font-size: 21px;
+  line-height: 1;
+
+  font-weight: 750;
+}
+
+
+.community-posts__title span {
+  color: #9ab0c9;
+
+  font-size: 16px;
+  font-weight: 500;
+}
+
+
+/* =========================================
+   FILTER BUTTON
+========================================= */
+
+.community-posts__filter {
+  height: 44px;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 0 15px;
+
+  border: 1px solid #2c384b;
+  border-radius: 11px;
+
+  background: #151b25;
+
+  color: #edf2f8;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+
+.community-posts__filter:hover {
+  background: #1b2330;
+  border-color: #3a485e;
+}
+
+
+.community-posts__filter svg {
+  color: #9eb1c7;
+}
+
+
+/* =========================================
+   POSTS LIST
+========================================= */
+
+.community-posts__list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+
+/* =========================================
+   POST CARD
+========================================= */
+
+.community-post {
+  overflow: hidden;
+
+  border: 1px solid #293548;
+  border-radius: 24px;
+
+  background: #171d27;
+}
+
+
+/* =========================================
+   POST HEADER
+========================================= */
+
+.community-post__header {
+  min-height: 80px;
+
+  padding: 25px 25px 12px;
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+
+.community-post__author {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+
+.community-post__avatar {
+  width: 52px;
+  height: 52px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+
+  border-radius: 50%;
+
+  background: linear-gradient(
+    135deg,
+    #3ca8ed,
+    #5861ef
+  );
+
+  color: #ffffff;
+
+  font-size: 17px;
+  font-weight: 700;
+}
+
+
+.community-post__avatar img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+}
+
+
+/* =========================================
+   AUTHOR INFO
+========================================= */
+
+.community-post__author-info h3 {
+  margin: 0 0 5px;
+
+  color: #f5f7fb;
+
+  font-size: 17px;
+  line-height: 1.2;
+
+  font-weight: 700;
+}
+
+
+.community-post__meta {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+
+  color: #9bb1ca;
+
+  font-size: 14px;
+}
+
+
+.community-post__dot {
+  color: #61748d;
+}
+
+
+.community-post__edited {
+  padding: 3px 8px;
+
+  border: 1px solid #34445a;
+  border-radius: 999px;
+
+  color: #9fb3ca;
+
+  font-size: 11px;
+}
+
+
+/* =========================================
+   MORE BUTTON
+========================================= */
+
+.community-post__more {
+  width: 38px;
+  height: 38px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 0;
+  border-radius: 9px;
+
+  background: transparent;
+
+  color: #93a6bd;
+
+  font-size: 21px;
+
+  cursor: pointer;
+
+  transition: background-color 0.2s ease;
+}
+
+
+.community-post__more:hover {
+  background: #202835;
+}
+
+
+/* =========================================
+   POST CONTENT
+========================================= */
+
+.community-post__content {
+  padding: 0 25px 17px;
+}
+
+
+.community-post__content p {
+  margin: 10px 0 22px;
+
+  color: #f0f3f7;
+
+  font-size: 17px;
+  line-height: 1.65;
+
+  font-weight: 450;
+}
+
+
+.community-post__image {
+  width: 100%;
+  max-height: 500px;
+
+  display: block;
+
+  margin-bottom: 20px;
+
+  object-fit: cover;
+
+  border-radius: 14px;
+}
+
+
+/* =========================================
+   TAGS
+========================================= */
+
+.community-post__tags {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+
+  gap: 8px;
+}
+
+
+.community-post__tags span {
+  padding: 6px 12px;
+
+  border: 1px solid #185b80;
+  border-radius: 999px;
+
+  background: rgba(16, 108, 151, 0.15);
+
+  color: #25a9ed;
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+
+/* =========================================
+   ACTIONS
+========================================= */
+
+.community-post__actions {
+  min-height: 79px;
+
+  padding: 0 25px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  border-top: 1px solid #293548;
+}
+
+
+.community-post__left-actions {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+
+
+.community-post__actions button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 0;
+
+  border: 0;
+
+  background: transparent;
+
+  color: #9db1c8;
+
+  font-size: 15px;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+
+.community-post__actions button:hover {
+  color: #e8edf4;
+}
+
+
+.community-post__actions button:active {
+  transform: scale(0.96);
+}
+
+
+.community-post__actions svg {
+  font-size: 20px;
+}
+
+
+.community-post__share {
+  margin-left: auto;
+}
+
+
+/* =========================================
+   EMPTY STATE
+========================================= */
+
+.community-posts__empty {
+  min-height: 220px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  padding: 30px;
+
+  border: 1px solid #293548;
+  border-radius: 22px;
+
+  background: #171d27;
+
+  text-align: center;
+}
+
+
+.community-posts__empty h3 {
+  margin: 0 0 8px;
+
+  color: #f5f7fb;
+
+  font-size: 18px;
+}
+
+
+.community-posts__empty p {
+  margin: 0;
+
+  color: #8fa5be;
+
+  font-size: 14px;
+}

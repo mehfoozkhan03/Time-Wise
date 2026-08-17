@@ -1,0 +1,43 @@
+.community-profile {
+  padding: 1rem 10rem;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+
+/* =========== TOP BAR =========== */
+.community-profile-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.community-profile-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: transparent;
+  color: var(--text_secondary);
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.community-profile-back svg {
+  font-size: 20px;
+}
+
+.community-profile-back:hover {
+  color: var(--text_primary);
+}
+
+
+/* community-profile-content */
+.communityProfile-content{
+    width: 100%;
+    display: flex;
+    gap: 30px;
+    justify-content: start;
+}

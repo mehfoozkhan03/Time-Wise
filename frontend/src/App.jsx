@@ -26,7 +26,6 @@ export default function App() {
   socket.emit("register", user._id);
 
   return () => {
-    // Sirf logout ya app unmount par disconnect karenge
     socket.off();
   };
 }, [user?._id]);
