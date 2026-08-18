@@ -5,6 +5,10 @@ const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY,
 });
 
+const models = await groq.models.list();
+
+console.log(models.data.map((model) => model.id));
+
 export const askTimeWiseAI = async (
   message,
   requestedContext,
@@ -32,7 +36,7 @@ IMPORTANT:
   }
 
   const response = await groq.chat.completions.create({
-    model: "llama-3.1-8b-instant",
+    model: "groq/compound",
 
     messages: [
       {
