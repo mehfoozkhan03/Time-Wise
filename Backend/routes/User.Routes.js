@@ -7,6 +7,7 @@ import {
   getCurrentUser,
   updateTheme,
   logout,
+  getUserProfile,
 } from '../controllers/userData.controller.js';
 
 import { auth } from '../middleware/AuthMiddleware.js';
@@ -28,6 +29,8 @@ userRoutes.post('/signup', signup);
 userRoutes.post('/logout', logout);
 
 userRoutes.get('/me', auth, getCurrentUser);
+
+userRoutes.get('/profile/:userId', auth, getUserProfile);
 
 userRoutes.patch('/theme', auth, updateTheme);
 
