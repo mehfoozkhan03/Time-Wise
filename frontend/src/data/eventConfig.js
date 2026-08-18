@@ -19,9 +19,6 @@ import {
 import { EVENT_TYPES } from "./eventTypes";
 
 export const EVENT_CONFIG = Object.freeze({
-  /* =========================================
-     Employee Events
-  ========================================= */
 
   [EVENT_TYPES.PRESENT]: {
     label: "Present",
@@ -64,10 +61,6 @@ export const EVENT_CONFIG = Object.freeze({
     icon: FaUser,
     isHoliday: false,
   },
-
-  /* =========================================
-     Holidays
-  ========================================= */
 
   [EVENT_TYPES.HOLIDAY]: {
     label: "Holiday",
@@ -117,10 +110,6 @@ export const EVENT_CONFIG = Object.freeze({
     icon: FaCalendarAlt,
     isHoliday: true,
   },
-
-  /* =========================================
-     Office Events
-  ========================================= */
 
   [EVENT_TYPES.MEETING]: {
     label: "Meeting",
