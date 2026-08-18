@@ -6,8 +6,7 @@
   border: 1px solid var(--border);
   border-radius: 20px;
   background: var(--bg);
-  box-shadow:
-    0 20px 50px rgba(0, 0, 0, 0.2);
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
 
 
@@ -48,6 +47,7 @@
   font-size: 32px;
   font-weight: 700;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+  color: #fff;
 }
 
 

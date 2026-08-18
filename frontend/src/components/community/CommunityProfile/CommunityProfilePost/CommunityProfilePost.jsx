@@ -10,8 +10,10 @@ import {
   HiOutlineEllipsisHorizontal,
   HiOutlineChevronDown,
 } from "react-icons/hi2";
+import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 
-export const CommunityProfilePosts = ({ posts = [] }) => {
+export const CommunityProfilePosts = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState("All Posts");
 
@@ -44,6 +46,15 @@ export const CommunityProfilePosts = ({ posts = [] }) => {
     setShowDropdown(false);
   };
 
+  // All POSTS
+  const { userId } = useParams();
+
+  const { posts } = useSelector((state) => state.post);
+
+  const profilePosts =
+    posts?.filter((post) => String(post.createdBy?._id) === String(userId)) ||
+    [];
+
   return (
     <section className="community-posts">
       {/* ================= HEADER ================= */}
@@ -51,7 +62,7 @@ export const CommunityProfilePosts = ({ posts = [] }) => {
       <div className="community-posts-header">
         <div className="community-posts-title">
           <h3>Posts</h3>
-          <span>({posts.length})</span>
+          <span>({profilePosts.length})</span>
         </div>
 
         {/* ================= DROPDOWN ================= */}
@@ -80,7 +91,11 @@ export const CommunityProfilePosts = ({ posts = [] }) => {
           {showDropdown && (
             <div className="community-posts-dropdown">
               {filterOptions.map((option) => (
-                <button key={option} className={`community-posts-dropdown-item ${selectedFilter === option ? "community-posts-dropdown-item-selected" : ""}`} onClick={() => handleFilterChange(option)}>
+                <button
+                  key={option}
+                  className={`community-posts-dropdown-item ${selectedFilter === option ? "community-posts-dropdown-item-selected" : ""}`}
+                  onClick={() => handleFilterChange(option)}
+                >
                   {selectedFilter === option && (
                     <span className="community-posts-check">✓</span>
                   )}
@@ -97,8 +112,8 @@ export const CommunityProfilePosts = ({ posts = [] }) => {
       {/* ================= POSTS ================= */}
 
       <div className="community-posts-list">
-        {posts.length > 0 ? (
-          posts.map((post) => (
+        {profilePosts.length > 0 ? (
+          profilePosts.map((post) => (
             <article
               className="community-post"
               key={post._id}

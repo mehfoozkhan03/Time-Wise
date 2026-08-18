@@ -158,7 +158,8 @@
   overflow: hidden;
   border: 1px solid var(--border);
   border-radius: 24px;
-  background: var(--surface);
+  background: var(--bg);
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
 
 
@@ -192,7 +193,7 @@
     #3ca8ed,
     #5861ef
   );
-  color: #ffffff;
+  color: #fff;
   font-size: 17px;
   font-weight: 700;
 }
@@ -207,7 +208,7 @@
 
 .community-post-author-info h3 {
   margin: 0 0 5px;
-  color: #f5f7fb;
+  color: var(--text_primary);
   font-size: 17px;
   line-height: 1.2;
   font-weight: 700;
@@ -217,19 +218,19 @@
   display: flex;
   align-items: center;
   gap: 7px;
-  color: #9bb1ca;
+  color: var(--text_secondary);
   font-size: 14px;
 }
 
 .community-post-dot {
-  color: #61748d;
+  color: var(--text_secondary);
 }
 
 .community-post-edited {
   padding: 3px 8px;
-  border: 1px solid #34445a;
+  border: 1px solid var(--border);
   border-radius: 999px;
-  color: #9fb3ca;
+  color: var(--text_secondary);
   font-size: 11px;
 }
 
@@ -245,14 +246,14 @@
   border: 0;
   border-radius: 9px;
   background: transparent;
-  color: #93a6bd;
+  color: var(--text_secondary);
   font-size: 21px;
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
 
 .community-post-more:hover {
-  background: #202835;
+  background: var(--surface_hover);
 }
 
 
@@ -264,7 +265,7 @@
 
 .community-post-content p {
   margin: 10px 0 22px;
-  color: #f0f3f7;
+  color: var(--text_primary);
   font-size: 17px;
   line-height: 1.65;
   font-weight: 450;
@@ -291,7 +292,7 @@
 
 .community-post-tags span {
   padding: 6px 12px;
-  border: 1px solid #185b80;
+  border: 1px solid var(--border);
   border-radius: 999px;
   background: rgba(16, 108, 151, 0.15);
   color: #25a9ed;
@@ -308,7 +309,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-top: 1px solid #293548;
+  border-top: 1px solid var(--border);
 }
 
 .community-post-left-actions {
@@ -324,7 +325,7 @@
   padding: 0;
   border: 0;
   background: transparent;
-  color: #9db1c8;
+  color: var(--text_primary);
   font-size: 15px;
   font-weight: 500;
   cursor: pointer;
@@ -334,7 +335,7 @@
 }
 
 .community-post-actions button:hover {
-  color: #e8edf4;
+  color: var(--text_secondary);
 }
 
 .community-post-actions button:active {

@@ -12,6 +12,7 @@
   border: 1px solid var(--border);
   background: var(--bg);
   border-radius: 20px;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
 
 /* ========== HEADING ========== */
@@ -36,7 +37,7 @@
   align-items: center;
   justify-content: center;
   border-radius: 7px;
-  background: #162f46;
+  background: var(--surface_hover);
   color: #20a9ee;
 }
 
@@ -143,11 +144,11 @@
 }
 
 .communityProfile-activity-item:nth-child(1) .communityProfile-activity-bar {
-  background: #17364b;
+  background: #52a7df;
 }
 
 .communityProfile-activity-item:nth-child(2) .communityProfile-activity-bar {
-  background: #286b8b;
+  background: #4ca5ce;
 }
 
 .communityProfile-activity-item:nth-child(3) .communityProfile-activity-bar {
