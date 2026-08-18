@@ -1,7 +1,3 @@
-/* =========================================
-   Employee Initials
-========================================= */
-
 export const getInitials = (name = "") => {
   const parts = name.trim().split(/\s+/).filter(Boolean);
 
@@ -16,9 +12,6 @@ export const getInitials = (name = "") => {
     .toUpperCase();
 };
 
-/* =========================================
-   Capitalize First Letter
-========================================= */
 
 export const capitalize = (text = "") => {
   const value = text.trim();
@@ -30,10 +23,6 @@ export const capitalize = (text = "") => {
   return value.charAt(0).toUpperCase() + value.slice(1);
 };
 
-/* =========================================
-   Truncate Long Text
-========================================= */
-
 export const truncate = (text = "", maxLength = 30) => {
   if (text.length <= maxLength) {
     return text;
@@ -41,10 +30,6 @@ export const truncate = (text = "", maxLength = 30) => {
 
   return text.slice(0, maxLength - 3) + "...";
 };
-
-/* =========================================
-   Generate Avatar Color
-========================================= */
 
 const AVATAR_COLORS = [
   "#3B82F6",
