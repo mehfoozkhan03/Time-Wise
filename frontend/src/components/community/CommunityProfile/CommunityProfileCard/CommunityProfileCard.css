@@ -1,0 +1,248 @@
+/* ================ PROFILE CARD =============== */
+
+.community-profile-card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--bg);
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+
+/* ========== COVER ========== */
+
+.community-profile-cover {
+  position: relative;
+  height: 180px;
+  overflow: hidden;
+  background: var(--primary);
+}
+
+/* ================== PROFILE CONTENT ================== */
+
+.community-profile-content {
+  position: relative;
+  padding: 0 44px;
+  display: flex;
+  align-items: center;
+}
+
+
+/* ================AVATAR ================== */
+
+.community-profile-avatar {
+  position: relative;
+  bottom: 60px;
+  z-index: 2;
+  flex-shrink: 0;
+  width: 90px;
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 4px solid var(--border);
+  border-radius: 50%;
+  background: var(--primary);
+  font-size: 32px;
+  font-weight: 700;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+  color: #fff;
+}
+
+
+/* =============== MAIN PROFILE INFO ============== */
+
+.community-profile-main {
+  width: 100%;
+  margin-left: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.community-profile-details{
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.community-profile-name {
+  color: var(--text_primary);
+  font-size: 20px;
+  line-height: 1.2;
+  font-weight: 500;
+}
+
+.community-profile-role {
+  color: var(--text_secondary);
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 14px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+}
+
+
+/* ============= BADGES =============== */
+
+.community-profile-badges {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.community-profile-badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 20px;
+  padding: 5px 14px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.community-profile-badge-category {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--tag-text);
+}
+
+.community-profile-badge-active {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: #20d36a;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.community-profile-status-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #1ed760;
+}
+
+
+/* ============== ACTION BUTTONS ============= */
+
+.community-profile-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.community-profile-button {
+  padding: 12px 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 650;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.community-profile-button svg {
+  font-size: 15px;
+}
+
+.community-profile-button :hover {
+  transform: translateY(-1px);
+}
+
+
+/* Message */
+
+.community-profile-button-message {
+  border: 1px solid #4c9eea;
+  background: var(--button);
+  color: var(--text_primary);
+  box-shadow:
+    0 8px 20px rgba(55, 112, 226, 0.25);
+}
+
+.community-profile-button-message:hover {
+  box-shadow:
+    0 10px 25px rgba(55, 112, 226, 0.35);
+}
+
+
+/* Share */
+
+.community-profile-button-share {
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text_primary);
+}
+
+.community-profile-button-share:hover {
+  background: var(--surface_hover);
+  border: 1px solid var(--border);
+}
+
+
+/* More */
+
+.community-profile-button-more {
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text_secondary);
+}
+
+.community-profile-button-more:hover {
+  background: var(--surface_hover);
+}
+
+
+/* ============= DIVIDER ============ */
+
+.community-profile-divider {
+  margin: 0 40px;
+  border-bottom: 1px solid var(--border);
+}
+
+
+/* =============== STATISTICS ============== */
+
+.community-profile-stats {
+  height: 100px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  padding: 15px 0;
+  align-items: center;
+}
+
+.community-profile-stat {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.community-profile-stats>div:not(:last-child){
+    border-right: 2px solid var(--border);
+}
+
+
+.community-profile-stat strong {
+  color: var(--text_primary);
+  font-size: 20px;
+  line-height: 1;
+  font-weight: 750;
+}
+
+.community-profile-stat span {
+  color: var(--text_secondary);
+  font-size: 12px;
+  line-height: 1.3;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}

@@ -41,11 +41,12 @@ import { DashboardNotification } from './../components/Dashboard/DashboardNotifi
 import { DashboardAnnouncement } from './../components/Dashboard/DashboardAnnouncement/DashboardAnnouncement';
 import { DashboardReport } from './../components/Dashboard/DashboardReport/DashboardReport';
 import { DashboardSetting } from './../components/Dashboard/DashboardSetting/DashboardSetting';
-import { ScrollToTopButton } from '../components/ScrollToTop/scrollToTop';
+
 import { SinglePost } from '../pages/SinglePost/SinglePost';
 import { NotificationPage } from '../pages/NotificationPage/NotificationPage';
 import { AuthLayout } from '../layouts/AuthLayout';
 import { AdminLayout } from '../layouts/AdminLayout';
+import { CommunityProfile } from '../components/community/CommunityProfile/CommunityProfile';
 
 export const AppRoutes = () => {
   return (
@@ -53,7 +54,6 @@ export const AppRoutes = () => {
       <RouteLoader />
       <BubbleCursor />
       <ProgressBar />
-      <ScrollToTopButton />
 
       <Routes>
         <Route element={<MainLayout />}>
@@ -101,8 +101,6 @@ export const AppRoutes = () => {
             }
           />
 
-          
-
           {/* ================= PUBLIC PAGES ================= */}
 
           <Route
@@ -122,14 +120,14 @@ export const AppRoutes = () => {
             }
           />
 
-          {/* <Route
+          <Route
             path="/community/profile/:userId"
             element={
               <PrivateRoutes>
                 <CommunityProfile />
               </PrivateRoutes>
             }
-          /> */}
+          />
 
           <Route
             path="/community/post/:postId"
@@ -177,15 +175,14 @@ export const AppRoutes = () => {
 
         {/* ================= Auth Layout ================= */}
         <Route element={<AuthLayout />}>
-            <Route path="/signup" element={<SignUpPage />} />
+          <Route path="/signup" element={<SignUpPage />} />
         </Route>
 
         {/* ================= Admin Layout ================= */}
         <Route element={<AdminLayout />}>
+          <Route path="/admin/login" element={<SignUpPage />} />
 
-            <Route path="/admin/login" element={<SignUpPage />} />
-
-            {/* ================= ADMIN DASHBOARD ================= */}
+          {/* ================= ADMIN DASHBOARD ================= */}
           <Route path="/adminDashboard" element={<AdminDashboard />}>
             <Route index element={<DashboardHome />} />
             <Route path="dashboard" element={<DashboardHome />} />

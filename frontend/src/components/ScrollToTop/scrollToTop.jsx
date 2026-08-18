@@ -6,13 +6,33 @@ export function ScrollToTopButton() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setVisible(window.scrollY > 300);
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    const handleScroll = () => {
+      const shouldShow = window.scrollY > 300;
+
+      setVisible(shouldShow);
+
+      document.body.classList.toggle(
+        "ai-scroll-active",
+        shouldShow
+      );
+    };
+
+    window.addEventListener("scroll", handleScroll, {
+      passive: true,
+    });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+
+      document.body.classList.remove("ai-scroll-active");
+    };
   }, []);
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   };
 
   return (
@@ -21,7 +41,7 @@ export function ScrollToTopButton() {
       onClick={scrollToTop}
       aria-label="Back to top"
     >
-      <ChevronUp size={22} strokeWidth={2.5} />
+      <ChevronUp size={23} strokeWidth={2.5} />
     </button>
   );
 }

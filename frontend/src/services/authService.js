@@ -20,6 +20,8 @@ export const authService = {
   getCurrentUser() {
     return api.get('/user/me');
   },
+  getUserProfile: (userId) =>
+    api.get(`/user/profile/${userId}`),
   updateTheme(theme) {
     return api.patch('/user/theme', { theme });
   },

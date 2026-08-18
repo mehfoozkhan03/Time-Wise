@@ -377,6 +377,46 @@ export const getCurrentUser = async (req, res) => {
   }
 };
 
+// ================= Community Profile =================
+
+export const getUserProfile = async (req, res) => {
+  try {
+    const { userId } = req.params
+
+    const user = await userModel
+      .findById(userId)
+      .select(
+        '_id firstName lastName designation department profileImage createdAt'
+      )
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        title: 'User Not Found',
+        message: 'The requested user profile was not found.',
+        reason: 'The user may have been deleted or does not exist.',
+      })
+    }
+
+    return res.status(200).json({
+      success: true,
+      title: 'Profile Loaded',
+      message: 'User profile loaded successfully.',
+      user,
+    })
+  } catch (error) {
+    console.error('Get User Profile Error:', error)
+
+    return res.status(500).json({
+      success: false,
+      title: 'Something Went Wrong',
+      message: 'Unable to load user profile.',
+      reason: error.message,
+    })
+  }
+}
+
+
 // ================= Theme Update =================
 
 export const updateTheme = async (req, res) => {

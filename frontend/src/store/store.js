@@ -10,6 +10,7 @@ import reportsReducer from "./reportsSlice";
 import adminAuthReducer from "./adminAuthSlice";
 import calendarReducer from "./calendarSlice";
 import holidayReducer from "./holidaySlice";
+import communityProfileReducer from './communityProfileSlice';
 
 const store = configureStore({
   reducer: {
@@ -32,6 +33,8 @@ const store = configureStore({
     calendar: calendarReducer,
 
     holiday: holidayReducer,
+
+    communityProfile: communityProfileReducer,
   },
 });
 

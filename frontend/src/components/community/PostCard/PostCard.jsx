@@ -21,6 +21,7 @@ import EditPostModal from '../EditPostModal/EditPostModal'
 import DeletePostModal from '../DeletePostModal/DeletePostModal'
 
 import './PostCard.css'
+import { NavLink } from 'react-router-dom'
 
 const PostCard = ({ post }) => {
   const dispatch = useDispatch()
@@ -119,10 +120,14 @@ const PostCard = ({ post }) => {
       <article className="post-card">
         <div className="post-header">
           <div className="post-user">
-            <div className="post-avatar">{initials || 'U'}</div>
+            <NavLink to={`/community/profile/${post.createdBy?._id}`} className="post-avatar-link">
+              <div className="post-avatar">{initials || 'U'}</div>
+            </NavLink>
 
             <div className="post-user-info">
-              <h3>{authorName}</h3>
+              <NavLink to={`/community/profile/${post.createdBy?._id}`}>
+                <h3>{authorName}</h3>
+              </NavLink>
 
               <p>{designation}</p>
 
