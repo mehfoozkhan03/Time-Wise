@@ -47,6 +47,17 @@ export const getAttendanceStats = async (userID) => {
 
   const monthlyHours = formatWorkingHours(totalMonthlySeconds);
 
+  // ---------- Average Daily Working Hours ----------
+
+  const workingDayRecords = monthlyAttendance.filter(
+    (record) => isWorkingDay(record.date) && record.totalWorkingSeconds > 0,
+  );
+
+  const averageDailyHours =
+    workingDayRecords.length === 0
+      ? 0
+      : formatWorkingHours(totalMonthlySeconds / workingDayRecords.length);
+
   // ---------- Average Check-in Time ----------
 
   const checkInRecords = monthlyAttendance.filter(
@@ -85,6 +96,29 @@ export const getAttendanceStats = async (userID) => {
             checkInRecords.length /
             60,
         );
+
+  // ---------- Leaves Taken ----------
+
+  const leavesTaken = monthlyAttendance.filter(
+    (record) => record.status === "Leave",
+  ).length;
+
+  // ---------- Overtime Hours ----------
+
+  const requiredDailySeconds = attendanceConfig.requiredDailyHours * 60 * 60;
+
+  const totalOvertimeSeconds = monthlyAttendance.reduce((total, record) => {
+    if (
+      !isWorkingDay(record.date) ||
+      record.totalWorkingSeconds <= requiredDailySeconds
+    ) {
+      return total;
+    }
+
+    return total + (record.totalWorkingSeconds - requiredDailySeconds);
+  }, 0);
+
+  const overtimeHours = formatWorkingHours(totalOvertimeSeconds);
 
   // ---------- Attendance Percentage ----------
 
@@ -186,6 +220,15 @@ export const getAttendanceStats = async (userID) => {
       date: -1,
     });
 
+  // ---------- Total Working Hours (All Time) ----------
+
+  const totalWorkingSeconds = attendanceRecords.reduce(
+    (sum, record) => sum + record.totalWorkingSeconds,
+    0,
+  );
+
+  const totalWorkingHours = formatWorkingHours(totalWorkingSeconds);
+
   let dayStreak = 0;
 
   const cursor = new Date(now);
@@ -275,9 +318,13 @@ export const getAttendanceStats = async (userID) => {
 
     weeklyHours,
     monthlyHours,
+    totalWorkingHours,
+    averageDailyHours,
+
+    leavesTaken,
+    overtimeHours,
 
     productivity,
-
     punctuality,
     breakScore,
     weeklyGoalScore,
