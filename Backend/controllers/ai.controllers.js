@@ -30,6 +30,17 @@ export const askAI = async (req, res) => {
       conversation,
     );
 
+    // console.log("========== AI CONTEXT DEBUG ==========");
+
+    // console.log("USER MESSAGE:", message.trim());
+
+    // console.log(
+    //   "REQUESTED CONTEXT:",
+    //   JSON.stringify(requestedContext, null, 2),
+    // );
+
+    // console.log("=======================================");
+
     // console.log("USER MESSAGE:", message.trim());
 
     // console.log("CONVERSATION:", JSON.stringify(conversation, null, 2));

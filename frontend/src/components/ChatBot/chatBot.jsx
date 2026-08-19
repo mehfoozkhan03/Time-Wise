@@ -10,6 +10,7 @@ export function Chatbot() {
   const [message, setMessage] = useState("");
   const [showClearModal, setShowClearModal] = useState(false);
   const [isClearing, setIsClearing] = useState(false);
+  const [showWelcomeTooltip, setShowWelcomeTooltip] = useState(true);
 
   const chatBodyRef = useRef(null);
 
@@ -112,6 +113,14 @@ export function Chatbot() {
       behavior: "smooth",
     });
   }, [messages, isLoading]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowWelcomeTooltip(false);
+    }, 7000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     const loadConversation = async () => {
@@ -279,11 +288,30 @@ export function Chatbot() {
           </div>
         </div>
 
+        {/* Welcome Tooltip */}
+        {showWelcomeTooltip && !isOpen && (
+          <div className="ai_welcome_tooltip">
+            <div className="ai_welcome_tooltip_content">
+              <span className="ai_welcome_tooltip_icon">👋</span>
+
+              <div>
+                <strong>Hi! I'm WiseBot.</strong>
+                <p>Your TimeWise AI assistant is here to help.</p>
+              </div>
+            </div>
+
+            <span className="ai_welcome_tooltip_arrow"></span>
+          </div>
+        )}
+
         {/* Floating AI Button */}
         <button
           type="button"
           className="ai_assistant_btn"
-          onClick={() => setIsOpen((prev) => !prev)}
+          onClick={() => {
+            setShowWelcomeTooltip(false);
+            setIsOpen((prev) => !prev);
+          }}
           aria-label={
             isOpen ? "Close TimeWise Assistant" : "Open TimeWise Assistant"
           }

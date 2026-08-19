@@ -4,10 +4,169 @@ export const getRequestedContext = (
   conversation = [],
 ) => {
   const question = message.toLowerCase();
+  const lower = message.toLowerCase();
 
   const context = {};
 
-  // ---------- Attendance ----------
+  // ==================================================
+  // Helper: Check whether a value actually exists
+  // ==================================================
+
+  const hasValue = (value) => typeof value === "number" && value > 0;
+
+  // ==================================================
+  // WORKING HOURS CLARIFICATION FOLLOW-UP
+  // ==================================================
+
+  const todayHours = Number(userContext.attendance?.todayHours ?? 0);
+
+  const weeklyHours = Number(userContext.attendance?.weeklyHours ?? 0);
+
+  const monthlyHours = Number(userContext.attendance?.monthlyHours ?? 0);
+
+  const totalWorkingHours = Number(
+    userContext.attendance?.totalWorkingHours ?? 0,
+  );
+
+  // ==================================================
+  // Direct Period Selection
+  // ==================================================
+  //
+  // These are the choices WiseBot gives after:
+  // "Do you want to know your working hours
+  //  for this week, this month, or your total
+  //  working hours?"
+  //
+  // We handle them directly so they don't depend
+  // on conversation-history detection.
+  // ==================================================
+
+  if (lower === "today" || lower === "for today") {
+    return {
+      attendance: {
+        workingHoursPeriod: "today",
+        workingHours: todayHours,
+      },
+    };
+  }
+
+  if (lower === "week" || lower === "this week" || lower === "weekly") {
+    return {
+      attendance: {
+        workingHoursPeriod: "week",
+        workingHours: weeklyHours,
+      },
+    };
+  }
+
+  if (
+    lower === "month" ||
+    lower === "this month" ||
+    lower === "monthly" ||
+    lower === "this month's"
+  ) {
+    return {
+      attendance: {
+        workingHoursPeriod: "month",
+        workingHours: monthlyHours,
+      },
+    };
+  }
+
+  if (
+    lower === "total" ||
+    lower === "total hours" ||
+    lower === "total working hours" ||
+    lower === "all time" ||
+    lower === "overall"
+  ) {
+    return {
+      attendance: {
+        workingHoursPeriod: "total",
+        workingHours: totalWorkingHours,
+      },
+    };
+  }
+
+  // ==================================================
+  // OVERTIME CLARIFICATION FOLLOW-UP
+  // ==================================================
+
+  const lastOvertimeClarification = [...conversation]
+    .reverse()
+    .find((message) => {
+      if (message.role !== "assistant") return false;
+
+      const content = message.content?.toLowerCase() || "";
+
+      return (
+        content.includes("overtime") &&
+        content.includes("this month") &&
+        content.includes("total")
+      );
+    });
+
+  if (lastOvertimeClarification) {
+    const monthlyOvertime = userContext.attendance?.overtimeHours ?? 0;
+
+    const totalOvertime = userContext.attendance?.totalOvertimeHours ?? 0;
+
+    // ---------- This Month ----------
+
+    if (
+      lower === "this month" ||
+      lower === "month" ||
+      lower === "monthly" ||
+      lower === "this month's"
+    ) {
+      if (hasValue(monthlyOvertime)) {
+        return {
+          attendance: {
+            overtimePeriod: "month",
+            overtimeHours: monthlyOvertime,
+          },
+        };
+      }
+
+      return {
+        attendance: {
+          overtimePeriod: "month",
+          overtimeHours: 0,
+          overtimeStatus: "none",
+        },
+      };
+    }
+
+    // ---------- Total ----------
+
+    if (
+      lower === "total" ||
+      lower === "total overtime" ||
+      lower === "total overtime hours" ||
+      lower === "all time"
+    ) {
+      if (hasValue(totalOvertime)) {
+        return {
+          attendance: {
+            overtimePeriod: "total",
+            overtimeHours: totalOvertime,
+          },
+        };
+      }
+
+      return {
+        attendance: {
+          overtimePeriod: "total",
+          overtimeHours: 0,
+          overtimeStatus: "none",
+        },
+      };
+    }
+  }
+
+  // ==================================================
+  // ATTENDANCE
+  // ==================================================
 
   if (
     question.includes("attendance") ||
@@ -20,7 +179,9 @@ export const getRequestedContext = (
     };
   }
 
-  // ---------- Productivity ----------
+  // ==================================================
+  // PRODUCTIVITY
+  // ==================================================
 
   if (question.includes("productivity") || question.includes("productive")) {
     context.productivity = {
@@ -28,27 +189,184 @@ export const getRequestedContext = (
     };
   }
 
-  // ---------- Weekly Hours ----------
+  // ==================================================
+  // SPECIFIC TOTAL WORKING HOURS
+  // ==================================================
+
+  if (
+    lower.includes("total working hours") ||
+    lower.includes("total work hours") ||
+    lower.includes("total working time") ||
+    lower.includes("total work time") ||
+    lower.includes("working hours overall") ||
+    lower.includes("overall working hours")
+  ) {
+    context.attendance = {
+      totalWorkingHours: userContext.attendance.totalWorkingHours,
+    };
+  }
+
+  // ==================================================
+  // SPECIFIC AVERAGE DAILY HOURS
+  // ==================================================
+
+  if (
+    lower.includes("average daily hours") ||
+    lower.includes("average daily working hours") ||
+    lower.includes("average working hours per day") ||
+    lower.includes("average daily working time") ||
+    lower.includes("daily average hours")
+  ) {
+    context.attendance = {
+      averageDailyHours: userContext.attendance.averageDailyHours,
+    };
+  }
+
+  // ==================================================
+  // LEAVES
+  // ==================================================
+
+  if (
+    lower.includes("leave") &&
+    (lower.includes("taken") ||
+      lower.includes("used") ||
+      lower.includes("how many") ||
+      lower.includes("number of") ||
+      lower.includes("count"))
+  ) {
+    context.attendance = {
+      leavesTaken: userContext.attendance.leavesTaken,
+    };
+  }
+
+  // ==================================================
+  // OVERTIME
+  // ==================================================
+
+  const isOvertimeQuestion =
+    lower.includes("overtime hours") ||
+    lower.includes("overtime hour") ||
+    lower.includes("overtime") ||
+    lower.includes("extra working hours") ||
+    lower.includes("extra work hours") ||
+    lower.includes("extra hours worked");
+
+  if (isOvertimeQuestion) {
+    const monthlyOvertime = userContext.attendance?.overtimeHours ?? 0;
+
+    const totalOvertime = userContext.attendance?.totalOvertimeHours ?? 0;
+
+    const asksThisMonth =
+      lower.includes("this month") ||
+      lower.includes("this month's") ||
+      lower.includes("monthly");
+
+    const asksTotal =
+      lower.includes("total") ||
+      lower.includes("all time") ||
+      lower.includes("overall");
+
+    // ----------------------------------------------
+    // Explicitly asking for this month
+    // ----------------------------------------------
+
+    if (asksThisMonth) {
+      context.attendance = {
+        overtimePeriod: "month",
+        overtimeHours: monthlyOvertime,
+      };
+    }
+
+    // ----------------------------------------------
+    // Explicitly asking for total
+    // ----------------------------------------------
+    else if (asksTotal) {
+      context.attendance = {
+        overtimePeriod: "total",
+        overtimeHours: totalOvertime,
+      };
+    }
+
+    // ----------------------------------------------
+    // Both exist
+    // ----------------------------------------------
+    else if (hasValue(monthlyOvertime) && hasValue(totalOvertime)) {
+      context.clarification = {
+        type: "overtimePeriod",
+        message:
+          "Do you want to know your overtime hours for this month or your total overtime hours?",
+      };
+    }
+
+    // ----------------------------------------------
+    // Only monthly exists
+    // ----------------------------------------------
+    else if (hasValue(monthlyOvertime)) {
+      context.attendance = {
+        overtimePeriod: "month",
+        overtimeHours: monthlyOvertime,
+      };
+    }
+
+    // ----------------------------------------------
+    // Only total exists
+    // ----------------------------------------------
+    else if (hasValue(totalOvertime)) {
+      context.attendance = {
+        overtimePeriod: "total",
+        overtimeHours: totalOvertime,
+      };
+    }
+
+    // ----------------------------------------------
+    // No overtime
+    // ----------------------------------------------
+    else {
+      context.attendance = {
+        overtimeHours: 0,
+        totalOvertimeHours: 0,
+        overtimeStatus: "none",
+      };
+    }
+  }
+
+  // ==================================================
+  // WEEKLY HOURS
+  // ==================================================
+
+  // ==================================================
+  // WEEKLY HOURS
+  // ==================================================
 
   if (
     question.includes("weekly hours") ||
     question.includes("hours this week") ||
     question.includes("worked this week")
   ) {
-    context.weeklyHours = userContext.attendance.weeklyHours;
+    context.attendance = {
+      workingHoursPeriod: "week",
+      workingHours: userContext.attendance.weeklyHours,
+    };
   }
 
-  // ---------- Monthly Hours ----------
+  // ==================================================
+  // MONTHLY HOURS
+  // ==================================================
 
   if (
     question.includes("monthly hours") ||
     question.includes("hours this month") ||
     question.includes("worked this month")
   ) {
-    context.monthlyHours = userContext.attendance.monthlyHours;
+    context.attendance = {
+      workingHoursPeriod: "month",
+      workingHours: userContext.attendance.monthlyHours,
+    };
   }
 
-  // ---------- Current Streak ----------
+  // ==================================================
+  // CURRENT STREAK
+  // ==================================================
 
   if (
     question.includes("current streak") ||
@@ -58,19 +376,25 @@ export const getRequestedContext = (
     context.currentStreak = userContext.streak.current;
   }
 
-  // ---------- Longest Streak ----------
+  // ==================================================
+  // LONGEST STREAK
+  // ==================================================
 
   if (question.includes("longest streak") || question.includes("best streak")) {
     context.longestStreak = userContext.streak.longest;
   }
 
-  // ---------- Punctuality ----------
+  // ==================================================
+  // PUNCTUALITY
+  // ==================================================
 
   if (question.includes("punctuality") || question.includes("punctual")) {
     context.punctuality = userContext.productivity.punctuality;
   }
 
-  // ---------- Break Score ----------
+  // ==================================================
+  // BREAK SCORE
+  // ==================================================
 
   if (
     question.includes("break score") ||
@@ -79,7 +403,9 @@ export const getRequestedContext = (
     context.breakScore = userContext.productivity.breakScore;
   }
 
-  // ---------- Weekly Goal ----------
+  // ==================================================
+  // WEEKLY GOAL
+  // ==================================================
 
   if (
     question.includes("weekly goal") ||
@@ -97,7 +423,9 @@ export const getRequestedContext = (
     };
   }
 
-  // ---------- Average Check-in ----------
+  // ==================================================
+  // AVERAGE CHECK-IN
+  // ==================================================
 
   if (
     question.includes("average check in") ||
@@ -107,7 +435,9 @@ export const getRequestedContext = (
     context.averageCheckIn = userContext.work.averageCheckIn;
   }
 
-  // ---------- Average Break ----------
+  // ==================================================
+  // AVERAGE BREAK
+  // ==================================================
 
   if (
     question.includes("average break") ||
@@ -116,7 +446,9 @@ export const getRequestedContext = (
     context.averageBreakDuration = userContext.work.averageBreakDuration;
   }
 
-  // ---------- Overall Performance ----------
+  // ==================================================
+  // OVERALL PERFORMANCE
+  // ==================================================
 
   const overallPerformanceKeywords = [
     "how am i doing",
@@ -161,7 +493,179 @@ export const getRequestedContext = (
     };
   }
 
-  // ---------- Follow-up Questions ----------
+  // ==================================================
+  // WORKING HOURS
+  // ==================================================
+
+  const hasWorkingHoursKeyword =
+    lower.includes("working hour") ||
+    lower.includes("working hours") ||
+    lower.includes("work hour") ||
+    lower.includes("work hours");
+
+  const asksToday = lower.includes("today");
+
+  const asksWeek = lower.includes("this week") || lower.includes("weekly");
+
+  const asksMonth = lower.includes("this month") || lower.includes("monthly");
+
+  const asksTotal =
+    lower.includes("total") ||
+    lower.includes("overall") ||
+    lower.includes("all time");
+
+  // --------------------------------------------------
+  // Direct Today
+  // --------------------------------------------------
+
+  if (hasWorkingHoursKeyword && asksToday) {
+    context.attendance = {
+      workingHoursPeriod: "today",
+      workingHours: userContext.attendance.todayHours ?? 0,
+    };
+  }
+
+  // --------------------------------------------------
+  // Direct Week
+  // --------------------------------------------------
+  else if (hasWorkingHoursKeyword && asksWeek) {
+    context.attendance = {
+      workingHoursPeriod: "week",
+      workingHours: userContext.attendance.weeklyHours ?? 0,
+    };
+  }
+
+  // --------------------------------------------------
+  // Direct Month
+  // --------------------------------------------------
+  else if (hasWorkingHoursKeyword && asksMonth) {
+    context.attendance = {
+      workingHoursPeriod: "month",
+      workingHours: userContext.attendance.monthlyHours ?? 0,
+    };
+  }
+
+  // --------------------------------------------------
+  // Direct Total
+  // --------------------------------------------------
+  else if (hasWorkingHoursKeyword && asksTotal) {
+    context.attendance = {
+      workingHoursPeriod: "total",
+      workingHours: userContext.attendance.totalWorkingHours ?? 0,
+    };
+  }
+
+  // --------------------------------------------------
+  // Ambiguous Working Hours
+  // --------------------------------------------------
+  else if (hasWorkingHoursKeyword) {
+    const todayHours = userContext.attendance?.todayHours ?? 0;
+
+    const weeklyHours = userContext.attendance?.weeklyHours ?? 0;
+
+    const monthlyHours = userContext.attendance?.monthlyHours ?? 0;
+
+    const totalWorkingHours = userContext.attendance?.totalWorkingHours ?? 0;
+
+    const availablePeriods = [];
+
+    if (hasValue(todayHours)) {
+      availablePeriods.push({
+        key: "today",
+        label: "today",
+      });
+    }
+
+    if (hasValue(weeklyHours)) {
+      availablePeriods.push({
+        key: "week",
+        label: "this week",
+      });
+    }
+
+    if (hasValue(monthlyHours)) {
+      availablePeriods.push({
+        key: "month",
+        label: "this month",
+      });
+    }
+
+    if (hasValue(totalWorkingHours)) {
+      availablePeriods.push({
+        key: "total",
+        label: "your total working hours",
+      });
+    }
+
+    // ----------------------------------------------
+    // No working hours
+    // ----------------------------------------------
+
+    if (availablePeriods.length === 0) {
+      context.attendance = {
+        workingHoursStatus: "none",
+        todayHours: 0,
+        weeklyHours: 0,
+        monthlyHours: 0,
+        totalWorkingHours: 0,
+      };
+    }
+
+    // ----------------------------------------------
+    // Only one period exists
+    // ----------------------------------------------
+    else if (availablePeriods.length === 1) {
+      const period = availablePeriods[0].key;
+
+      if (period === "today") {
+        context.attendance = {
+          workingHoursPeriod: "today",
+          workingHours: todayHours,
+        };
+      } else if (period === "week") {
+        context.attendance = {
+          workingHoursPeriod: "week",
+          workingHours: weeklyHours,
+        };
+      } else if (period === "month") {
+        context.attendance = {
+          workingHoursPeriod: "month",
+          workingHours: monthlyHours,
+        };
+      } else if (period === "total") {
+        context.attendance = {
+          workingHoursPeriod: "total",
+          workingHours: totalWorkingHours,
+        };
+      }
+    }
+
+    // ----------------------------------------------
+    // Multiple periods exist
+    // ----------------------------------------------
+    else {
+      const labels = availablePeriods.map((period) => period.label);
+
+      let message;
+
+      if (labels.length === 2) {
+        message = `Do you want to know your working hours for ${labels[0]} or ${labels[1]}?`;
+      } else if (labels.length === 3) {
+        message = `Do you want to know your working hours for ${labels[0]}, ${labels[1]}, or ${labels[2]}?`;
+      } else {
+        message = `Do you want to know your working hours for ${labels[0]}, ${labels[1]}, ${labels[2]}, or ${labels[3]}?`;
+      }
+
+      context.clarification = {
+        type: "workingHoursPeriod",
+        message,
+      };
+    }
+  }
+
+  // ==================================================
+  // FOLLOW-UP QUESTIONS
+  // ==================================================
 
   const evaluationKeywords = [
     "is that good",
@@ -209,57 +713,121 @@ export const getRequestedContext = (
       );
 
       if (Object.keys(previousContext).length > 0) {
-        if (previousContext.attendance) {
+        // ---------- Attendance ----------
+
+        if (previousContext.attendance?.percentage !== undefined) {
           context.followUp = {
             metric: "attendance",
             value: previousContext.attendance.percentage,
           };
-        } else if (previousContext.productivity) {
+        }
+
+        // ---------- Total Working Hours ----------
+        else if (previousContext.attendance?.totalWorkingHours !== undefined) {
+          context.followUp = {
+            metric: "totalWorkingHours",
+            value: previousContext.attendance.totalWorkingHours,
+          };
+        }
+
+        // ---------- Average Daily Hours ----------
+        else if (previousContext.attendance?.averageDailyHours !== undefined) {
+          context.followUp = {
+            metric: "averageDailyHours",
+            value: previousContext.attendance.averageDailyHours,
+          };
+        }
+
+        // ---------- Leaves ----------
+        else if (previousContext.attendance?.leavesTaken !== undefined) {
+          context.followUp = {
+            metric: "leavesTaken",
+            value: previousContext.attendance.leavesTaken,
+          };
+        }
+
+        // ---------- Overtime ----------
+        else if (previousContext.attendance?.overtimeHours !== undefined) {
+          context.followUp = {
+            metric: "overtimeHours",
+            value: previousContext.attendance.overtimeHours,
+          };
+        }
+
+        // ---------- Productivity ----------
+        else if (previousContext.productivity?.percentage !== undefined) {
           context.followUp = {
             metric: "productivity",
             value: previousContext.productivity.percentage,
           };
-        } else if (previousContext.weeklyHours !== undefined) {
+        }
+
+        // ---------- Weekly Hours ----------
+        else if (previousContext.weeklyHours !== undefined) {
           context.followUp = {
             metric: "weeklyHours",
             value: previousContext.weeklyHours,
           };
-        } else if (previousContext.monthlyHours !== undefined) {
+        }
+
+        // ---------- Monthly Hours ----------
+        else if (previousContext.monthlyHours !== undefined) {
           context.followUp = {
             metric: "monthlyHours",
             value: previousContext.monthlyHours,
           };
-        } else if (previousContext.currentStreak !== undefined) {
+        }
+
+        // ---------- Current Streak ----------
+        else if (previousContext.currentStreak !== undefined) {
           context.followUp = {
             metric: "currentStreak",
             value: previousContext.currentStreak,
           };
-        } else if (previousContext.longestStreak !== undefined) {
+        }
+
+        // ---------- Longest Streak ----------
+        else if (previousContext.longestStreak !== undefined) {
           context.followUp = {
             metric: "longestStreak",
             value: previousContext.longestStreak,
           };
-        } else if (previousContext.punctuality !== undefined) {
+        }
+
+        // ---------- Punctuality ----------
+        else if (previousContext.punctuality !== undefined) {
           context.followUp = {
             metric: "punctuality",
             value: previousContext.punctuality,
           };
-        } else if (previousContext.breakScore !== undefined) {
+        }
+
+        // ---------- Break Score ----------
+        else if (previousContext.breakScore !== undefined) {
           context.followUp = {
             metric: "breakScore",
             value: previousContext.breakScore,
           };
-        } else if (previousContext.weeklyGoal) {
+        }
+
+        // ---------- Weekly Goal ----------
+        else if (previousContext.weeklyGoal) {
           context.followUp = {
             metric: "weeklyGoal",
             value: previousContext.weeklyGoal,
           };
-        } else if (previousContext.averageCheckIn !== undefined) {
+        }
+
+        // ---------- Average Check-in ----------
+        else if (previousContext.averageCheckIn !== undefined) {
           context.followUp = {
             metric: "averageCheckIn",
             value: previousContext.averageCheckIn,
           };
-        } else if (previousContext.averageBreakDuration !== undefined) {
+        }
+
+        // ---------- Average Break ----------
+        else if (previousContext.averageBreakDuration !== undefined) {
           context.followUp = {
             metric: "averageBreakDuration",
             value: previousContext.averageBreakDuration,
@@ -279,6 +847,8 @@ export const getRequestedContext = (
         }
       }
     }
+
+    // ---------- Unknown Follow-up ----------
 
     if (!context.followUp) {
       context.followUp = {
