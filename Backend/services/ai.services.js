@@ -1,5 +1,7 @@
 import Groq from "groq-sdk";
+
 import { TIMEWISE_KNOWLEDGE } from "../utils/aiKnowledge.js";
+import { getCalendarContext } from "./calendarContext.service.js";
 
 const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY,

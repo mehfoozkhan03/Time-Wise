@@ -1,9 +1,13 @@
 import { getAttendanceStats } from "./attendanceStats.service.js";
 import { attendanceModel } from "../models/Attendance.model.js";
 import { getTodayRange } from "../utils/attenndaceHelper.js";
+import { getCalendarContext } from "../services/calendarContext.service.js";
 
 export const getAIUserContext = async (userID) => {
   const stats = await getAttendanceStats(userID);
+  const calendar = await getCalendarContext({
+    userID,
+  });
 
   // --------------------------------------------------
   // Attendance history
@@ -45,6 +49,12 @@ export const getAIUserContext = async (userID) => {
   // getAttendanceStats() so WiseBot and Reports
   // use the same source of truth.
   // --------------------------------------------------
+
+  console.log("========== CALENDAR AI CONTEXT ==========");
+
+  console.log(JSON.stringify(calendar, null, 2));
+
+  console.log("=========================================");
 
   return {
     attendance: {
@@ -96,5 +106,7 @@ export const getAIUserContext = async (userID) => {
       averageCheckIn: stats.averageCheckIn,
       averageBreakDuration: stats.averageBreakDuration,
     },
+
+    calendar,
   };
 };

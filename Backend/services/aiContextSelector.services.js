@@ -165,6 +165,56 @@ export const getRequestedContext = (
   }
 
   // ==================================================
+  // CALENDAR / EVENTS / FESTIVALS
+  // ==================================================
+
+  const calendar = userContext.calendar ?? {};
+
+  const calendarEvents = Array.isArray(calendar.events) ? calendar.events : [];
+
+  const calendarHolidays = Array.isArray(calendar.holidays)
+    ? calendar.holidays
+    : [];
+
+  const isCalendarQuestion =
+    lower.includes("event") ||
+    lower.includes("events") ||
+    lower.includes("calendar") ||
+    lower.includes("festival") ||
+    lower.includes("festivals") ||
+    lower.includes("holiday") ||
+    lower.includes("holidays") ||
+    lower.includes("diwali") ||
+    lower.includes("holi") ||
+    lower.includes("navratri") ||
+    lower.includes("dussehra") ||
+    lower.includes("dussera") ||
+    lower.includes("janmashtami") ||
+    lower.includes("raksha bandhan") ||
+    lower.includes("rakhi") ||
+    lower.includes("ganesh") ||
+    lower.includes("ganesh chaturthi") ||
+    lower.includes("christmas") ||
+    lower.includes("eid") ||
+    lower.includes("independence day") ||
+    lower.includes("republic day") ||
+    lower.includes("birthday") ||
+    lower.includes("meeting") ||
+    lower.includes("appointment") ||
+    lower.includes("tomorrow") ||
+    lower.includes("today");
+
+  if (isCalendarQuestion) {
+    const matchingEvents = calendarEvents;
+    const matchingHolidays = calendarHolidays;
+
+    context.calendar = {
+      events: matchingEvents,
+      holidays: matchingHolidays,
+    };
+  }
+
+  // ==================================================
   // ATTENDANCE
   // ==================================================
 
