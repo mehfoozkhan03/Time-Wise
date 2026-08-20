@@ -185,7 +185,7 @@ export const AppRoutes = () => {
           {/* ================= ADMIN DASHBOARD ================= */}
           <Route path="/adminDashboard" element={<AdminDashboard />}>
             <Route index element={<DashboardHome />} />
-            <Route path="dashboard" element={<DashboardHome />} />
+            <Route path="adminDashboard" element={<DashboardHome />} />
             <Route path="employee" element={<DashboardEmployee />} />
             <Route path="attendance" element={<DashboardAttendance />} />
             <Route path="thought" element={<DashboardThuoght />} />
