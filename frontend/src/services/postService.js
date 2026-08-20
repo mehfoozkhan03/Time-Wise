@@ -35,6 +35,10 @@ export const postService = {
     return api.delete(`/posts/${id}`)
   },
 
+  // =====================================================
+  // Post Likes
+  // =====================================================
+
   togglePostLike(id) {
     return api.post(`/posts/${id}/like`)
   },
@@ -66,7 +70,7 @@ export const postService = {
     })
   },
 
-  nt(commentId, text) {
+  updateComment(commentId, text) {
     return api.patch(`/posts/comments/${commentId}`, {
       text,
     })
@@ -75,6 +79,10 @@ export const postService = {
   deleteComment(commentId) {
     return api.delete(`/posts/comments/${commentId}`)
   },
+
+  // =====================================================
+  // Comment Likes
+  // =====================================================
 
   toggleCommentLike(commentId) {
     return api.post(`/posts/comments/${commentId}/like`)

@@ -174,15 +174,24 @@ export const updateExistingComment = createAsyncThunk(
   'post/updateExistingComment',
   async ({ postId, commentId, text }, thunkAPI) => {
     try {
-      const { data } = await postService.updateComment(commentId, text)
+      const response = await postService.updateComment(commentId, text)
+
+      console.log('UPDATE COMMENT RESPONSE:', response.data)
 
       return {
         postId,
-        comment: data.comment,
+        comment: response.data.comment,
       }
     } catch (error) {
+      console.error(
+        'UPDATE COMMENT API ERROR:',
+        error.response?.status,
+        error.response?.data,
+      )
+
       return thunkAPI.rejectWithValue(
-        error.response?.data?.message || 'Unable to update comment',
+        error.response?.data?.message ||
+          `Unable to update comment (${error.response?.status || 'unknown error'})`,
       )
     }
   },

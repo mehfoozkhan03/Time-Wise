@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import './Feed.css'
@@ -12,18 +12,37 @@ const Feed = ({ type = 'feed', sortBy = 'latest' }) => {
 
   const { user } = useSelector((state) => state.auth)
 
-  const { posts, loading, isError, errorMessage, searchQuery } = useSelector(
-    (state) => state.post,
-  )
+  const { posts, loading, isError, errorMessage, searchQuery, hasMore, page } =
+    useSelector((state) => state.post)
+
+  const [loadingMore, setLoadingMore] = useState(false)
+
+  // =====================================================
+  // Initial Fetch
+  // =====================================================
 
   useEffect(() => {
     if (posts.length === 0) {
-      dispatch(fetchPosts())
+      dispatch(
+        fetchPosts({
+          page: 1,
+          limit: 10,
+          sort: 'newest',
+        }),
+      )
     }
   }, [dispatch, posts.length])
 
+  // =====================================================
+  // Filter + Search + Sort
+  // =====================================================
+
   const filteredPosts = useMemo(() => {
     let result = [...posts]
+
+    // ---------------------------------------------------
+    // Feed Type
+    // ---------------------------------------------------
 
     switch (type) {
       case 'my-posts':
@@ -39,17 +58,19 @@ const Feed = ({ type = 'feed', sortBy = 'latest' }) => {
         break
 
       case 'trending':
-        result = result.sort(
-          (a, b) => (b.likesCount || 0) - (a.likesCount || 0),
-        )
+        result.sort((a, b) => (b.likesCount || 0) - (a.likesCount || 0))
         break
 
       default:
         break
     }
 
+    // ---------------------------------------------------
+    // Search
+    // ---------------------------------------------------
+
     if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase()
+      const query = searchQuery.toLowerCase().trim()
 
       result = result.filter((post) => {
         const content = (post.content || '').toLowerCase()
@@ -61,6 +82,10 @@ const Feed = ({ type = 'feed', sortBy = 'latest' }) => {
         return content.includes(query) || author.includes(query)
       })
     }
+
+    // ---------------------------------------------------
+    // Sorting
+    // ---------------------------------------------------
 
     switch (sortBy) {
       case 'latest':
@@ -86,13 +111,55 @@ const Feed = ({ type = 'feed', sortBy = 'latest' }) => {
     return result
   }, [posts, user, type, searchQuery, sortBy])
 
+  // =====================================================
+  // Load More
+  // =====================================================
+
+  const handleLoadMore = async () => {
+    if (loadingMore || loading || !hasMore) {
+      return
+    }
+
+    try {
+      setLoadingMore(true)
+
+      await dispatch(
+        fetchPosts({
+          page: page + 1,
+          limit: 10,
+          sort: 'newest',
+        }),
+      ).unwrap()
+    } catch (error) {
+      console.error('Failed to load more posts:', error)
+    } finally {
+      setLoadingMore(false)
+    }
+  }
+
+  // =====================================================
+  // Initial Loading
+  // =====================================================
+
   if (loading && posts.length === 0) {
     return <div className="feed-loading">Loading posts...</div>
   }
 
-  if (isError) {
-    return <div className="feed-error">{errorMessage}</div>
+  // =====================================================
+  // Error
+  // =====================================================
+
+  if (isError && posts.length === 0) {
+    return (
+      <div className="feed-error">
+        {errorMessage || 'Unable to load posts.'}
+      </div>
+    )
   }
+
+  // =====================================================
+  // Empty State
+  // =====================================================
 
   if (filteredPosts.length === 0) {
     return (
@@ -106,7 +173,9 @@ const Feed = ({ type = 'feed', sortBy = 'latest' }) => {
                 ? 'No posts yet 📝'
                 : type === 'trending'
                   ? 'No trending posts 🔥'
-                  : 'Nothing found 👀'}
+                  : searchQuery.trim()
+                    ? 'Nothing found 👀'
+                    : 'No posts yet 📝'}
         </h2>
 
         <p>
@@ -118,17 +187,48 @@ const Feed = ({ type = 'feed', sortBy = 'latest' }) => {
                 ? 'Create your first post.'
                 : type === 'trending'
                   ? 'Trending posts will appear here.'
-                  : 'Try changing your search.'}
+                  : searchQuery.trim()
+                    ? 'Try changing your search.'
+                    : 'Be the first to share something with the community.'}
         </p>
       </div>
     )
   }
+
+  // =====================================================
+  // Feed
+  // =====================================================
 
   return (
     <div className="feed">
       {filteredPosts.map((post) => (
         <PostCard key={post._id} post={post} />
       ))}
+
+      {/* ===============================================
+          Load More
+      =============================================== */}
+
+      {hasMore && (
+        <div className="feed-load-more">
+          <button
+            type="button"
+            className="feed-load-more-btn"
+            onClick={handleLoadMore}
+            disabled={loadingMore || loading}
+          >
+            {loadingMore ? 'Loading more...' : 'Load more posts'}
+          </button>
+        </div>
+      )}
+
+      {/* ===============================================
+          End of Feed
+      =============================================== */}
+
+      {!hasMore && posts.length > 0 && (
+        <div className="feed-end">You've reached the end.</div>
+      )}
     </div>
   )
 }
