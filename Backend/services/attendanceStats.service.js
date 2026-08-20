@@ -47,16 +47,29 @@ export const getAttendanceStats = async (userID) => {
 
   const monthlyHours = formatWorkingHours(totalMonthlySeconds);
 
-  // ---------- Average Daily Working Hours ----------
+  // ---------- All Attendance History ----------
 
-  const workingDayRecords = monthlyAttendance.filter(
-    (record) => isWorkingDay(record.date) && record.totalWorkingSeconds > 0,
+  const attendanceHistory = await attendanceModel
+    .find({
+      user: userID,
+    })
+    .sort({
+      date: -1,
+    });
+
+  const totalWorkingSeconds = attendanceHistory.reduce(
+    (sum, record) => sum + record.totalWorkingSeconds,
+    0,
   );
 
+  const totalWorkingHours = formatWorkingHours(totalWorkingSeconds);
+
+  // ---------- Average Daily Working Hours ----------
+
   const averageDailyHours =
-    workingDayRecords.length === 0
+    attendanceHistory.length === 0
       ? 0
-      : formatWorkingHours(totalMonthlySeconds / workingDayRecords.length);
+      : +(totalWorkingSeconds / attendanceHistory.length / 3600).toFixed(1);
 
   // ---------- Average Check-in Time ----------
 
@@ -119,6 +132,25 @@ export const getAttendanceStats = async (userID) => {
   }, 0);
 
   const overtimeHours = formatWorkingHours(totalOvertimeSeconds);
+
+  // --------------------------------------------------
+  // Total Overtime Hours
+  // --------------------------------------------------
+  // Calculate overtime across all attendance history.
+
+  let allTimeOvertimeSeconds = 0;
+
+  for (const record of attendanceHistory) {
+    const workingSeconds = record.totalWorkingSeconds || 0;
+
+    const requiredDailySeconds = attendanceConfig.requiredDailyHours * 60 * 60;
+
+    const overtimeSeconds = Math.max(0, workingSeconds - requiredDailySeconds);
+
+    allTimeOvertimeSeconds += overtimeSeconds;
+  }
+
+  const totalOvertimeHours = formatWorkingHours(allTimeOvertimeSeconds);
 
   // ---------- Attendance Percentage ----------
 
@@ -220,15 +252,6 @@ export const getAttendanceStats = async (userID) => {
       date: -1,
     });
 
-  // ---------- Total Working Hours (All Time) ----------
-
-  const totalWorkingSeconds = attendanceRecords.reduce(
-    (sum, record) => sum + record.totalWorkingSeconds,
-    0,
-  );
-
-  const totalWorkingHours = formatWorkingHours(totalWorkingSeconds);
-
   let dayStreak = 0;
 
   const cursor = new Date(now);
@@ -323,6 +346,7 @@ export const getAttendanceStats = async (userID) => {
 
     leavesTaken,
     overtimeHours,
+    totalOvertimeHours,
 
     productivity,
     punctuality,

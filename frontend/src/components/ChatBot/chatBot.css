@@ -13,6 +13,102 @@
     will-change: transform;
 }
 
+/* ==========================================================
+   WELCOME TOOLTIP
+========================================================== */
+
+.ai_welcome_tooltip {
+    position: relative;
+    width: 275px;
+    margin-bottom: 15px;
+    padding: 13px 15px;
+    border: 1px solid rgba(62, 181, 232, 0.35);
+    border-radius: 15px;
+    background: var(--card);
+    color: var(--text_primary);
+    box-shadow:
+        0 13px 35px rgba(0, 0, 0, 0.23),
+        0 0 25px rgba(62, 181, 232, 0.12);
+    backdrop-filter: blur(21px);
+    -webkit-backdrop-filter: blur(21px);
+    pointer-events: none;
+    animation:
+        ai_welcome_tooltip_in 0.55s cubic-bezier(0.23, 1, 0.33, 1);
+}
+
+.ai_welcome_tooltip_content {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.ai_welcome_tooltip_icon {
+    flex-shrink: 0;
+    font-size: 21px;
+    line-height: 1;
+    animation: ai_welcome_wave 1.1s ease-in-out;
+}
+
+.ai_welcome_tooltip_content strong {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--text_primary);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.ai_welcome_tooltip_content p {
+    margin: 0;
+    color: var(--text_secondary);
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.ai_welcome_tooltip_arrow {
+    position: absolute;
+    right: 19px;
+    bottom: -7px;
+    width: 13px;
+    height: 13px;
+    background: var(--card);
+    border-right: 1px solid rgba(62, 181, 232, 0.35);
+    border-bottom: 1px solid rgba(62, 181, 232, 0.35);
+    transform: rotate(45deg);
+}
+
+@keyframes ai_welcome_tooltip_in {
+    from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.94);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes ai_welcome_wave {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    25% {
+        transform: rotate(15deg);
+    }
+
+    50% {
+        transform: rotate(-10deg);
+    }
+
+    75% {
+        transform: rotate(9deg);
+    }
+
+    100% {
+        transform: rotate(0deg);
+    }
+}
 
 /* ==========================================================
    AI BUTTON
@@ -204,22 +300,33 @@
    CHAT BODY
 ========================================================== */
 
+/* ==========================================================
+   SCROLLBAR
+========================================================== */
 .ai_chat_body {
     flex: 1;
     overflow-y: auto;
     padding: 17px 15px;
     scrollbar-width: thin;
+    scrollbar-color: var(--primary) transparent;
+        /* ✅ CORRECT */
 }
 
 .ai_chat_body::-webkit-scrollbar {
     width: 5px;
+    /* ✅ ADD THIS */
+    }
+    
+    .ai_chat_body::-webkit-scrollbar-track {
+        background: transparent;
+        /* ✅ ADD THIS */
 }
 
 .ai_chat_body::-webkit-scrollbar-thumb {
-    background: var(--border);
+    background: var(--primary);
+        /* ✅ USE background, not scrollbar-color */
     border-radius: 11px;
 }
-
 
 /* ==========================================================
    BOT MESSAGE
