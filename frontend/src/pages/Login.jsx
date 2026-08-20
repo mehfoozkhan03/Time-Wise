@@ -13,7 +13,6 @@ import { loginUser, registerUser } from "../store/authSlice";
 import { loginAdmin } from "../store/adminAuthSlice";
 import { adminAuthService } from "../services/adminAuthService";
 import { Feedback } from "./FeedBack";
-import Skeleton from "../components/Skeleton/Skeleton";
 
 const initialFormData = {
   firstName: "",
@@ -98,115 +97,6 @@ const SignUpPage = () => {
   const resetForm = () => {
     setFormData(initialFormData);
     setErrors({});
-  };
-
-  const [showSkeleton, setShowSkeleton] = useState(true);
-
-  //Skeleton//
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowSkeleton(false);
-    }, 1500); // 1.5 second
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  //Skeleton//
-
-  if (isLoading || showSkeleton) {
-    return (
-      <div className="sing_login">
-        <div className="login-page">
-          {/* Heading */}
-          <Skeleton
-            width="55%"
-            height="32px"
-            radius="8px"
-            className="login-skeleton-heading"
-          />
-
-          {/* Login Skeleton */}
-          {!isRegister && (
-            <div className="login-skeleton-form">
-              {/* Email */}
-              <div className="login-skeleton-field">
-                <Skeleton width="100%" height="54px" radius="8px" />
-              </div>
-
-              {/* Password */}
-              <div className="login-skeleton-field">
-                <Skeleton width="100%" height="54px" radius="8px" />
-              </div>
-
-              {/* Login Button */}
-              <Skeleton width="100%" height="52px" radius="8px" />
-
-              {/* Bottom Message */}
-              <div className="login-skeleton-bottom">
-                <Skeleton width="180px" height="18px" radius="6px" />
-              </div>
-            </div>
-          )}
-
-          {/* Register Skeleton */}
-          {isRegister && (
-            <div className="login-skeleton-form">
-              {/* First Name */}
-              <div className="login-skeleton-field">
-                <Skeleton width="100%" height="54px" radius="8px" />
-              </div>
-
-              {/* Last Name */}
-              <div className="login-skeleton-field">
-                <Skeleton width="100%" height="54px" radius="8px" />
-              </div>
-
-              {/* Email */}
-              <div className="login-skeleton-field">
-                <Skeleton width="100%" height="54px" radius="8px" />
-              </div>
-
-              {/* Password */}
-              <div className="login-skeleton-field">
-                <Skeleton width="100%" height="54px" radius="8px" />
-              </div>
-
-              {/* Confirm Password */}
-              <div className="login-skeleton-field">
-                <Skeleton width="100%" height="54px" radius="8px" />
-              </div>
-
-              {/* DOB */}
-              <div className="login-skeleton-field">
-                <Skeleton width="100%" height="54px" radius="8px" />
-              </div>
-
-              {/* Gender */}
-              <div className="login-skeleton-field">
-                <Skeleton width="100%" height="54px" radius="8px" />
-              </div>
-
-              {/* Register Button */}
-              <Skeleton width="100%" height="52px" radius="8px" />
-
-              {/* Bottom Message */}
-              <div className="login-skeleton-bottom">
-                <Skeleton width="180px" height="18px" radius="6px" />
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-    );
-  }
-
-  //Skeleton//
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
   // ── Validation ────────────────────────────────────────────────────────────────
@@ -470,7 +360,6 @@ const SignUpPage = () => {
                   type="email"
                   name="email"
                   value={formData.email}
-                  onChange={handleChange}
                   placeholder=""
                 />
                 <label>Email</label>
@@ -484,7 +373,6 @@ const SignUpPage = () => {
                   type={showLoginPassword ? "text" : "password"}
                   name="password"
                   value={formData.password}
-                  onChange={handleChange}
                   placeholder=""
                 />
                 <label>Password</label>

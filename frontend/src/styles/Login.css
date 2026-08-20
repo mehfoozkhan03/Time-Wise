@@ -180,6 +180,7 @@ select:is(:-webkit-autofill, :autofill) {
   font-size: 18px;
   transition: 0.3s;
 }
+
 .password-box.error-active .eye-icon {
   top: 27px;
 }
@@ -243,36 +244,6 @@ select:is(:-webkit-autofill, :autofill) {
   font-size: 14px;
   margin-top: 5px;
   margin-left: 2px;
-}
-
-/* ===========================
-   LOGIN / REGISTER SKELETON
-=========================== */
-
-.login-skeleton-heading {
-  display: block;
-  margin: 0 auto 30px;
-}
-
-.login-skeleton-form {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  gap: 15px;
-}
-
-.login-skeleton-field {
-  width: 100%;
-}
-
-.login-skeleton-field .skeleton {
-  width: 100%;
-}
-
-.login-skeleton-bottom {
-  display: flex;
-  justify-content: center;
-  margin-top: 2px;
 }
 
 /* ===========================
