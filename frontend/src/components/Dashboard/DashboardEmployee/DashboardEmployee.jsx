@@ -112,7 +112,7 @@ export const DashboardEmployee = () => {
           <div className="dashboardEmployee-users">
             {employeeDetails &&
               employeeDetails.map((el, id) => (
-                <div className="employee-users-container">
+                <div className="employee-users-container" key={id}>
                   <div className="dashboardEmployee-information">
                     <div className="dashboardEmploye-avatar">{el.avatar}</div>
                     <div className="dashboardEmployee-name">

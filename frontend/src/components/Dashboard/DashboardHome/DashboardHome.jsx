@@ -180,7 +180,7 @@ export const DashboardHome = () => {
           <div className="home-card-container">
             {cardData &&
               cardData.map((el, id) => (
-                <div className="home-card">
+                <div className="home-card" key={id}>
                   <div className="circle-container">
                     <span style={{ color: el.color }}>{el.icon}</span>
                     <div
@@ -242,7 +242,7 @@ export const DashboardHome = () => {
             <div className="recent-employe-details">
               {recentData &&
                 recentData.map((el, id) => (
-                  <div className="recent-employee-content">
+                  <div className="recent-employee-content" key={id}>
                     <div className="employe-left">
                       <div className="recent-employee-avatar">{el.avatar}</div>
                       <div>
