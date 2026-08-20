@@ -22,6 +22,99 @@ import {
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
 export const DashboardHome = () => {
+  const cardData = [
+    {
+      icon: <FaUsers />,
+      count: "214",
+      title: "Total Employees",
+      subTitle: "+3 this month",
+      color: "#3a9dcf",
+    },
+    {
+      icon: "✅",
+      count: "169",
+      title: "Present Today",
+      subTitle: "83.2% attendance",
+      color: "#43746b",
+    },
+    {
+      icon: "❌",
+      count: "69",
+      title: "Absent Today",
+      subTitle: "4 no-shows flagged",
+      color: "#df2033",
+      backgroundColor: "",
+    },
+    {
+      icon: "☕",
+      count: "9",
+      title: "On Break",
+      subTitle: "Average 45 min",
+      color: "#f3a823",
+    },
+    {
+      icon: "⏰",
+      count: "12",
+      title: "Late Check-ins",
+      subTitle: "30 min late today",
+      color: "#7270c9",
+    },
+  ];
+
+  const actionData = [
+    {
+      icon: <FaPlus style={{ color: "#6954b1" }} />,
+      title: "Add Employee",
+    },
+    {
+      icon: <FaBell style={{ color: "#ef9b52" }} />,
+      title: "Send Notification",
+    },
+    {
+      icon: <FaLightbulb style={{ color: "#ffc844" }} />,
+      title: "Publish Thought",
+    },
+    {
+      icon: <FaBullhorn style={{ color: "#d13673" }} />,
+      title: "New Announcement",
+    },
+    {
+      icon: <FaChartBar style={{ color: "#c9d7ba" }} />,
+      title: "Generate Report",
+    },
+  ];
+
+  const recentData = [
+    {
+      avatar: "SM",
+      name: "Sarah Mitchell",
+      designation: "Senior Designer",
+      isPresent: "Present",
+      dotColor: "#47b396"
+    },
+    {
+      avatar: "SM",
+      name: "Sarah Mitchell",
+      designation: "Senior Designer",
+      isPresent: "Absent",
+      dotColor: "#df2033"
+    },
+    {
+      avatar: "SM",
+      name: "Sarah Mitchell",
+      designation: "Senior Designer",
+      isPresent: "Present",
+      dotColor: "#47b396"
+    },
+    {
+      avatar: "SM",
+      name: "Sarah Mitchell",
+      designation: "Senior Designer",
+      isPresent: "Absent",
+      dotColor: "#df2033"
+    },
+  ];
+
   // attendance chart
   const labels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
   const present = [30, 60, 90, 120, 150, 180, 210];
@@ -85,93 +178,27 @@ export const DashboardHome = () => {
       <div className="dashboardHome-container">
         <div className="card-thought-container">
           <div className="home-card-container">
-            <div className="home-card">
-              <div className="circle-container">
-                <FaUsers style={{ color: "#583790", fontSize: "20px" }} />
-                <div className="home-circle"></div>
-              </div>
-              <div>
-                <h1>214</h1>
-                <div className="card-bottom-div">
-                  <span>Total Employees</span>
-                  <span style={{ color: "#3a9dcf", fontSize: "12px" }}>
-                    +3 this month
-                  </span>
+            {cardData &&
+              cardData.map((el, id) => (
+                <div className="home-card" key={id}>
+                  <div className="circle-container">
+                    <span style={{ color: el.color }}>{el.icon}</span>
+                    <div
+                      className="home-circle"
+                      style={{ background: el.color }}
+                    ></div>
+                  </div>
+                  <div>
+                    <h1>{el.count}</h1>
+                    <div className="card-bottom-div">
+                      <span>{el.title}</span>
+                      <span style={{ color: el.color, fontSize: "12px" }}>
+                        {el.subTitle}
+                      </span>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-            <div className="home-card">
-              <div className="circle-container">
-                <span style={{ fontSize: "20px" }}>✅</span>
-                <div
-                  style={{ backgroundColor: "#44b590" }}
-                  className="home-circle"
-                ></div>
-              </div>
-              <div>
-                <h1>169</h1>
-                <div className="card-bottom-div">
-                  <span>Present Today</span>
-                  <span style={{ color: "#43746b", fontSize: "12px" }}>
-                    83.2% attendance
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div className="home-card">
-              <div className="circle-container">
-                <span style={{ fontSize: "18px" }}>❌</span>
-                <div
-                  style={{ backgroundColor: "#da5058" }}
-                  className="home-circle"
-                ></div>
-              </div>
-              <div>
-                <h1>69</h1>
-                <div className="card-bottom-div">
-                  <span>Absent Today</span>
-                  <span style={{ color: "#df2033", fontSize: "12px" }}>
-                    4 no-shows flagged
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div className="home-card">
-              <div className="circle-container">
-                <span style={{ fontSize: "20px" }}>☕</span>
-                <div
-                  style={{ backgroundColor: "#f3a823" }}
-                  className="home-circle"
-                ></div>
-              </div>
-              <div>
-                <h1>9</h1>
-                <div className="card-bottom-div">
-                  <span>On Break</span>
-                  <span style={{ color: "#ce9950", fontSize: "12px" }}>
-                    Average 45 min
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div className="home-card">
-              <div className="circle-container">
-                <span style={{ fontSize: "20px" }}>⏰</span>
-                <div
-                  style={{ backgroundColor: "#8c7cf0" }}
-                  className="home-circle"
-                ></div>
-              </div>
-              <div>
-                <h1>12</h1>
-                <div className="card-bottom-div">
-                  <span>Late Check-ins</span>
-                  <span style={{ color: "#7270c9", fontSize: "12px" }}>
-                    30 min late today
-                  </span>
-                </div>
-              </div>
-            </div>
+              ))}
           </div>
           <div className="home-thought">
             <div className="home-thought-heading">
@@ -193,26 +220,16 @@ export const DashboardHome = () => {
 
         {/* Quick actions */}
         <div className="quick-actions">
-          <div className="add-employe">
-            <FaPlus style={{ color: "#6954b1" }} />
-            <span>Add Employee</span>
-          </div>
-          <div className="send-notification">
-            <FaBell style={{ color: "#ef9b52" }} />
-            <span>Send Notification</span>
-          </div>
-          <div className="publish-thought">
-            <FaLightbulb style={{ color: "#ffc844" }} />
-            <span>Publish Thought</span>
-          </div>
-          <div className="new-announcement">
-            <FaBullhorn style={{ color: "#d13673" }} />
-            <span>New Announcement</span>
-          </div>
-          <div className="generate-report">
-            <FaChartBar style={{ color: "#c9d7ba" }} />
-            <span>Generate Report</span>
-          </div>
+          {actionData &&
+            actionData.map((el, id) => (
+              <div
+                className="add-employe"
+                key={id}
+              >
+                {el.icon}
+                <span>{el.title}</span>
+              </div>
+            ))}
         </div>
 
         {/* Dashboard Overview */}
@@ -223,58 +240,22 @@ export const DashboardHome = () => {
               <h3>Recent Employees</h3>
             </div>
             <div className="recent-employe-details">
-              <div className="recent-employee-content">
-                <div className="employe-left">
-                  <div className="recent-employee-avatar">SM</div>
-                  <div>
-                    <p>Sarah Mitchell</p>
-                    <span>Senior Designer</span>
+              {recentData &&
+                recentData.map((el, id) => (
+                  <div className="recent-employee-content" key={id}>
+                    <div className="employe-left">
+                      <div className="recent-employee-avatar">{el.avatar}</div>
+                      <div>
+                        <p>{el.name}</p>
+                        <span>{el.designation}</span>
+                      </div>
+                    </div>
+                    <div className="recent-dot-container">
+                      <div className="recent-dot" style={{background: el.dotColor}}></div>
+                      <span style={{color: el.dotColor}}>{el.isPresent}</span>
+                    </div>
                   </div>
-                </div>
-                <div className="recent-dot-container">
-                  <div className="recent-dot"></div>
-                  <span>Present</span>
-                </div>
-              </div>
-              <div className="recent-employee-content">
-                <div className="employe-left">
-                  <div className="recent-employee-avatar">SM</div>
-                  <div>
-                    <p>James Okonkwo</p>
-                    <span>Engineering Manager</span>
-                  </div>
-                </div>
-                <div className="recent-dot-container">
-                  <div className="recent-dot"></div>
-                  <span>Present</span>
-                </div>
-              </div>
-              <div className="recent-employee-content">
-                <div className="employe-left">
-                  <div className="recent-employee-avatar">SM</div>
-                  <div>
-                    <p>Sarah Mitchell</p>
-                    <span>Senior Designer</span>
-                  </div>
-                </div>
-                <div className="recent-dot-container">
-                  <div className="recent-dot"></div>
-                  <span>Late</span>
-                </div>
-              </div>
-              <div className="recent-employee-content">
-                <div className="employe-left">
-                  <div className="recent-employee-avatar">SM</div>
-                  <div>
-                    <p>Sarah Mitchell</p>
-                    <span>Senior Designer</span>
-                  </div>
-                </div>
-                <div className="recent-dot-container">
-                  <div className="recent-dot"></div>
-                  <span>Absent</span>
-                </div>
-              </div>
+                ))}
             </div>
           </div>
           {/* Attendance section */}

@@ -25,7 +25,7 @@ export const DashboardSidebar = () => {
         </div>
         <div className="dashboardSidebar-list">
           <NavLink
-            to="/dashboard/"
+            to="/adminDashboard"
             className="dashboard-home dashboard-navlink"
             end
           >
