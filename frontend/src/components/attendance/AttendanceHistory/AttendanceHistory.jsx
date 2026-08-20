@@ -299,9 +299,14 @@ export default function AttendanceHistory() {
     return acc;
   }, {});
 
-  const months = Object.keys(groupedHistory);
+  const months = Object.keys(groupedHistory).sort((a, b) => {
+    const dateA = new Date(`1 ${a}`);
+    const dateB = new Date(`1 ${b}`);
 
-  const [currentIndex, setCurrentIndex] = useState(-1);
+    return dateA - dateB;
+  });
+
+  const [currentMonth, setCurrentMonth] = useState(null);
 
   //skeleton//
   const [showSkeleton, setShowSkeleton] = useState(true);
@@ -315,15 +320,16 @@ export default function AttendanceHistory() {
   //skeleton//
 
   // Jab months load ho jaye to latest month select karo
-  useEffect(() => {
-    if (months.length > 0) {
-      setCurrentIndex(months.length - 1);
-    }
-  }, [months.length]);
 
-  const currentMonth = currentIndex >= 0 ? months[currentIndex] : null;
+  useEffect(() => {
+    if (months.length > 0 && !currentMonth) {
+      setCurrentMonth(months[months.length - 1]);
+    }
+  }, [months.length, currentMonth]);
+  // const currentMonth = currentIndex >= 0 ? months[currentIndex] : null;
 
   const [showMonthModal, setShowMonthModal] = useState(false);
+  const [noDataMonth, setNoDataMonth] = useState(null);
 
   const monthNames = [
     "January",
@@ -341,21 +347,31 @@ export default function AttendanceHistory() {
   ];
 
   const previousMonth = () => {
-    setCurrentIndex((prev) => {
-      if (prev > 0) {
-        return prev - 1;
-      }
-      return prev;
-    });
+    const currentIndex = months.indexOf(currentMonth);
+
+    if (currentIndex > 0) {
+      setCurrentMonth(months[currentIndex - 1]);
+    }
   };
 
   const nextMonth = () => {
-    setCurrentIndex((prev) => {
-      if (prev < months.length - 1) {
-        return prev + 1;
-      }
-      return prev;
-    });
+    const currentIndex = months.indexOf(currentMonth);
+
+    if (currentIndex < months.length - 1) {
+      setCurrentMonth(months[currentIndex + 1]);
+    }
+  };
+
+  const handleMonthSelect = (month) => {
+    const selectedMonth = months.find((m) => m.startsWith(month));
+
+    if (selectedMonth) {
+      setCurrentMonth(selectedMonth);
+      setShowMonthModal(false);
+    } else {
+      setShowMonthModal(false);
+      setNoDataMonth(month);
+    }
   };
 
   useEffect(() => {
@@ -475,7 +491,9 @@ export default function AttendanceHistory() {
                   <button
                     className="month_btn"
                     onClick={previousMonth}
-                    disabled={currentIndex <= 0}
+                    disabled={
+                      !currentMonth || months.indexOf(currentMonth) <= 0
+                    }
                   >
                     <FaChevronLeft />
                   </button>
@@ -490,7 +508,10 @@ export default function AttendanceHistory() {
                   <button
                     className="month_btn"
                     onClick={nextMonth}
-                    disabled={currentIndex >= months.length - 1}
+                    disabled={
+                      !currentMonth ||
+                      months.indexOf(currentMonth) >= months.length - 1
+                    }
                   >
                     <FaChevronRight />
                   </button>
@@ -555,22 +576,41 @@ export default function AttendanceHistory() {
                       className={
                         currentMonth?.startsWith(month) ? "active_month" : ""
                       }
-                      onClick={() => {
-                        const index = months.findIndex((m) =>
-                          m.startsWith(month),
-                        );
-
-                        if (index !== -1) {
-                          setCurrentIndex(index);
-                        }
-
-                        setShowMonthModal(false);
-                      }}
+                      onClick={() => handleMonthSelect(month)}
                     >
                       {month.slice(0, 3)}
                     </button>
                   ))}
                 </div>
+                
+              </div>
+            </div>
+          )}
+
+          {noDataMonth && (
+            <div
+              className="no_data_modal_overlay"
+              onClick={() => setNoDataMonth(null)}
+            >
+              <div
+                className="no_data_modal"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="no_data_icon">📅</div>
+
+                <h3>No Attendance Data</h3>
+
+                <p>
+                  No attendance records found for <strong>{noDataMonth}</strong>
+                  .
+                </p>
+
+                <button
+                  className="no_data_close_btn"
+                  onClick={() => setNoDataMonth(null)}
+                >
+                  OK
+                </button>
               </div>
             </div>
           )}

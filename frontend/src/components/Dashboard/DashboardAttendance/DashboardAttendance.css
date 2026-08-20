@@ -40,6 +40,8 @@
     display: grid;
     grid-template-columns: repeat(6, 1fr);
     justify-content: space-between;
+}
+.dashboardAttendance-users>div:not(:last-child){
     border-bottom: 1px solid var(--border);
 }
 .dashboardAttendance-users>div>div{
