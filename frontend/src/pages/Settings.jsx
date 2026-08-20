@@ -9,7 +9,9 @@ import { RiPaletteLine } from "react-icons/ri";
 import { FaLock } from "react-icons/fa";
 import { GoDatabase } from "react-icons/go";
 import { MdOutlineContactSupport } from "react-icons/md";
-import "../styles/Setting.css"
+import { MdEventAvailable } from "react-icons/md";
+
+import "../styles/Setting.css";
 
 export const Settings = () => {
   const location = useLocation();
@@ -22,6 +24,10 @@ export const Settings = () => {
     "/settings/attendance": {
       title: "Attendance",
       icon: <MdOutlineWatchLater />,
+    },
+    "/settings/leave": {
+      title: "Leave",
+      icon: <MdEventAvailable />,
     },
     "/settings/calendar": {
       title: "Calendar",
@@ -53,17 +59,17 @@ export const Settings = () => {
     pageData[location.pathname] || pageData["/settings/profile"];
 
   return (
-    <>
-      <div className="setting-page-container">
-        <SettingSidebar />
-        <div className="setting-page-content">
-          <div className="content-heading">
-            <span>{currentPage.icon}</span>
-            <h4>{currentPage.title}</h4>
-          </div>
-          <Outlet />
+    <div className="setting-page-container">
+      <SettingSidebar />
+
+      <div className="setting-page-content">
+        <div className="content-heading">
+          <span>{currentPage.icon}</span>
+          <h4>{currentPage.title}</h4>
         </div>
+
+        <Outlet />
       </div>
-    </>
+    </div>
   );
 };
