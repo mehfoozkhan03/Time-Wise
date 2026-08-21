@@ -1,161 +1,258 @@
-.dashboardEmployee-container{
-    padding: 30px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+.dashboardEmployee-container {
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
-.employee-management-header{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.employee-management-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
-.employee-management-heading>h3{
-    font-family: 18px;
+.employee-management-heading > h3 {
+  font-family: 18px;
 }
-.employee-management-heading>span{
-    font-size: 13px;
+.employee-management-heading > span {
+  font-size: 13px;
 }
-.employee-management-right{
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    border: 1px solid var(--border);
-    padding: 10px 15px;
-    border-radius: 10px;
-    background-color: #07254c;
+.employee-management-right {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  border: 1px solid var(--border);
+  padding: 10px 15px;
+  border-radius: 10px;
+  background-color: #07254c;
 }
-.employee-management-right>span{
-    color: #3b99c8;
-    font-size: 14px;
-    font-weight: 600;
+.employee-management-right > span {
+  color: #3b99c8;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 /* Employee filter */
 
-.employe-search-filter{
-    display: flex;
-    align-items: center;
-    gap: 15px;
+.employe-search-filter {
+  display: flex;
+  align-items: center;
+  gap: 15px;
 }
-.dashboardEmployee-searchbar{
-    padding: 5px 15px;
-    width: 80%;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    border: 1px solid var(--border);
-    border-radius: 10px;
+.dashboardEmployee-searchbar {
+  padding: 0px 15px;
+  width: 80%;
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--border);
+  gap: 5px;
+  border-radius: 10px;
 }
-.dashboardEmployee-searchbar>input{
-    width: 100%;
-    padding: 7px;
-    background-color: transparent;
-    border: none;
-    outline: none;
+.dashboardEmployee-input-container {
+  width: 90%;
+  display: flex;
+  align-items: center;
+  gap: 15px;
 }
-.dashboardEmployee-department{
-    width: 10%;
+.dashboardEmployee-input-container > input {
+  width: 100%;
+  padding: 7px;
+  background-color: transparent;
+  border: none;
+  outline: none;
 }
-.dashboardEmployee-filter{
-    width: 10%;
+.employee-searchBtn {
+  width: 10%;
+  padding: 12px 15px;
+  display: flex;
+  gap: 5px;
+  border-left: 1px solid var(--border);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.dashboardEmployee-department>select,
-.dashboardEmployee-filter>select{
-    padding: 12px 10px;
-    border-radius: 10px;
-    width: 100%;
-    background-color: transparent;
-}
-.dashboardEmployee-department>select>option,
-.dashboardEmployee-filter>select>option{
-    background-color: transparent;
+.employee-searchBtn > button {
+  background-color: transparent;
+  color: var(--text_primary);
+  font-weight: 700;
+  font-size: 16px;
 }
 
+/* Custom Dropdown */
+.dashboardEmployee-department,
+.dashboardEmployee-filter {
+  position: relative;
+  width: 10%;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+
+.customDropdown {
+  position: relative;
+  width: 100%;
+}
+
+/* Dropdown Button */
+.customDropdown-button {
+  width: 100%;
+  padding: 10px 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg_primary);
+  color: var(--text_primary);
+}
+
+/* Arrow */
+.customDropdown-arrow {
+  font-size: 18px;
+  line-height: 1;
+  transition: transform 0.2s ease;
+}
+
+.customDropdown-arrow-open {
+  transform: rotate(180deg);
+}
+
+/* Dropdown Menu */
+.customDropdown-menu {
+  position: absolute;
+  top: 45px;
+  left: 0;
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.12);
+  z-index: 100;
+}
+
+/* Dropdown Option */
+.customDropdown-option {
+  padding: 9px 10px;
+  color: var(--text_primary);
+  font-size: 14px;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+/* Hover */
+.customDropdown-option:hover {
+  background: var(--primary_hover);
+}
+
+/* Selected */
+.customDropdown-option-active {
+  background: var(--primary);
+  font-weight: 500;
+}
 
 /* Employee Details */
-.dahboardEmployee-details{
-    border: 1px solid var(--border);
-    border-radius: 20px;
+.dahboardEmployee-details {
+  border: 1px solid var(--border);
+  border-radius: 20px;
 }
-.dashboardEmployee-header{
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    border-bottom: 1px solid var(--border);
-    padding: 20px;
+.dashboardEmployee-header {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  border-bottom: 1px solid var(--border);
+  padding: 20px;
 }
-.dashboardEmployee-header>div{
-    font-size: 13px;
-    color: #565c6a;
-    font-weight: bold;
+.dashboardEmployee-header > div {
+  font-size: 13px;
+  color: #565c6a;
+  font-weight: bold;
 }
-.employee-users-container{
-    padding: 20px;
-    border-bottom: 1px solid var(--border);
+.employee-users-container {
+  padding: 20px;
 }
-.dashboardEmployee-information{
-    display: flex;
-    align-items: center;
-    gap: 10px;
+.employee-users-container:not(:last-child) {
+  border-bottom: 1px solid var(--border);
 }
-.dashboardEmploye-avatar{
-    height: 40px;
-    width: 40px;
-    border-radius: 50%;
-    border: 1px solid var(--border);
+.dashboardEmployee-information {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
-.dashboardEmployee-name>p{
-    font-size: 14px;
-    color: var(--text_primary);
+.dashboardEmploye-avatar {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
 }
-.dashboardEmployee-name>span{
-    font-size: 12px;
-    color: var(--text_secondary);
+.dashboardEmployee-name > p {
+  font-size: 14px;
+  color: var(--text_primary);
 }
-.employee-users-container{
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    align-items: center;
+.dashboardEmployee-name > span {
+  font-size: 12px;
+  color: var(--text_secondary);
 }
-.dashboardEmployee-department,
+.employee-users-container {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  align-items: center;
+}
+.dashboardEmployee-department-name,
 .dashboardEmployee-designation,
 .dashboardEmployee-role,
-.dashboardEmployee-status>span,
-.dashboardEmployee-actions>div>span{
-    font-size: 13px;
-    color: var(--text_primary);
+.dashboardEmployee-status > span,
+.dashboardEmployee-actions > div > span {
+  font-size: 13px;
+  color: var(--text_primary);
 }
-.dashboardEmploye-avatar{
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.dashboardEmploye-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.dashboardEmployee-status{
-    width: fit-content;
-    padding: 3px 15px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    border: 1px solid #459e98;
-    border-radius: 20px;
-    background-color: #22333a;
+.dashboardEmployee-status {
+  width: fit-content;
+  padding: 3px 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid #459e98;
+  border-radius: 20px;
+  background-color: #22333a;
 }
-.dashboardEmployee-status>div{
-    height: 5px;
-    width: 5px;
-    border-radius: 50%;
-    background-color: #5feab2;
+.dashboardEmployee-status > div {
+  height: 5px;
+  width: 5px;
+  border-radius: 50%;
+  background-color: #5feab2;
 }
-.dashboardEmployee-status>span{
-    color: rgb(82, 201, 193);
-    font-size: 11px;
+.dashboardEmployee-status > span {
+  color: rgb(82, 201, 193);
+  font-size: 11px;
 }
-.dashboardEmployee-actions{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+.dashboardEmployee-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
-.dashboardEmployee-actions>div{
-    display: flex;
-    align-items: center;
-    gap: 5px;
+.dashboardEmployee-actions > div {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* employeeDashboard-loadmore-btn */
+.employeeDashboard-loadmore-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.employeeDashboard-loadmore-btn > button {
+  padding: 14px 50px;
+  border-radius: 10px;
+  font-size: 16px;
+  background-color: var(--primary);
+  color: var(--text_primary);
+}
+
+.employeeDashboard-loadmore-btn > button:hover {
+  background-color: var(--primary_hover);
 }

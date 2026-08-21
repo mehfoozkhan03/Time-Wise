@@ -4,39 +4,89 @@ import { FaPlus } from "react-icons/fa6";
 import { FaSearch } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 import { MdEdit, MdDelete } from "react-icons/md";
+import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { FaKey } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllUser } from "../../../store/authSlice";
-import { useEffect, useState } from "react";
+import {
+  fetchAllUser,
+  loadLessUsers,
+  setSearch,
+} from "../../../store/authSlice";
+import { useEffect, useRef, useState } from "react";
+
+const departments = [
+  "All",
+  "Engineering",
+  "Design",
+  "HR",
+  "Analytics",
+  "Marketing",
+];
 
 export const DashboardEmployee = () => {
   const dispatch = useDispatch();
-  const { users, totalUsers, isLoading } = useSelector((state) => state.auth);
-  console.log("🚀 ~ totalUsers:", totalUsers);
-  const [page, setPage] = useState(1);
+  const { users, totalUsers, isLoading, search, currentPage } = useSelector(
+    (state) => state.auth,
+  );
 
-  const handleLoadMore = () => {
-    const nextPage = page + 1;
+  // Search Employee by Name
+  const [searchInput, setSearchInput] = useState("");
 
-    setPage(nextPage);
-
-    dispatch(
-      fetchAllUser({
-        page: nextPage,
-        limit: 10,
-      }),
-    );
+  const handleSearch = () => {
+    dispatch(setSearch(searchInput.trim()));
   };
 
+  // This is for Getting more users & less users
+  const handleLoadMore = () => {
+    dispatch(fetchAllUser());
+  };
+
+  const handleLoadLess = () => {
+    dispatch(loadLessUsers());
+  };
+
+  //# Filter DropDown
+
+  const [openDropdown, setOpenDropdown] = useState(null);
+
+  const [selectedDepartment, setSelectedDepartment] = useState("All");
+
+  const [selectedStatus, setSelectedStatus] = useState("All");
+
+  const dropdownRef = useRef(null);
+
+  const statusOptions = ["All", "Active", "Inactive"];
+
+  // Department
+  const handleDepartmentSelect = (department) => {
+    setSelectedDepartment(department);
+    setOpenDropdown(null);
+  };
+
+  // Status
+  const handleStatusSelect = (status) => {
+    setSelectedStatus(status);
+    setOpenDropdown(null);
+  };
+
+  // # Dropdown useEffect
   useEffect(() => {
-    dispatch(
-      fetchAllUser({
-        page: 1,
-        limit: 10,
-      }),
-    );
-  }, [dispatch]);
-  console.log("🚀 ~ users:", users);
+    const handleOutsideClick = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setOpenDropdown(null);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, []);
+
+  useEffect(() => {
+    dispatch(fetchAllUser());
+  }, [dispatch, search]);
 
   return (
     <>
@@ -56,30 +106,112 @@ export const DashboardEmployee = () => {
         </div>
 
         {/* Employee filter */}
-        <div className="employe-search-filter">
+        <div
+          ref={dropdownRef}
+          className="employe-search-filter"
+        >
           <div className="dashboardEmployee-searchbar">
-            <FaSearch style={{ color: "#579cbd" }} />
-            <input
-              type="search"
-              placeholder="Search employee..."
-            />
+            <div className="dashboardEmployee-input-container">
+              <FaSearch style={{ color: "#579cbd" }} />
+              <input
+                type="search"
+                placeholder="Search employee..."
+                value={searchInput}
+                onChange={(e) => {
+                  setSearchInput(e.target.value);
+                }}
+              />
+            </div>
+            <div
+              onClick={handleSearch}
+              className="employee-searchBtn"
+            >
+              <button type="button">Search</button>
+            </div>
           </div>
           <div className="dashboardEmployee-department">
-            <select>
-              <option value="All">All</option>
-              <option value="Engineering">Engineering</option>
-              <option value="Design">Design</option>
-              <option value="HR">HR</option>
-              <option value="Analytics">Analytics</option>
-              <option value="Marketing">Marketing</option>
-            </select>
+            <div className="customDropdown">
+              <button
+                type="button"
+                className="customDropdown-button"
+                onClick={() =>
+                  setOpenDropdown((prev) =>
+                    prev === "department" ? null : "department",
+                  )
+                }
+              >
+                <span>{selectedDepartment}</span>
+
+                <span
+                  className={`customDropdown-arrow ${
+                    openDropdown === "department"
+                      ? "customDropdown-arrow-open"
+                      : ""
+                  }`}
+                >
+                  <MdOutlineKeyboardArrowDown />
+                </span>
+              </button>
+
+              {openDropdown === "department" && (
+                <div className="customDropdown-menu">
+                  {departments.map((department) => (
+                    <div
+                      key={department}
+                      className={`customDropdown-option ${
+                        selectedDepartment === department
+                          ? "customDropdown-option-active"
+                          : ""
+                      }`}
+                      onClick={() => handleDepartmentSelect(department)}
+                    >
+                      {department}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
           <div className="dashboardEmployee-filter">
-            <select>
-              <option value="All">All</option>
-              <option value="Active">Active</option>
-              <option value="Inactive">Inactive</option>
-            </select>
+            <div className="customDropdown">
+              <button
+                type="button"
+                className="customDropdown-button"
+                onClick={() =>
+                  setOpenDropdown((prev) =>
+                    prev === "status" ? null : "status",
+                  )
+                }
+              >
+                <span>{selectedStatus}</span>
+
+                <span
+                  className={`customDropdown-arrow ${
+                    openDropdown === "status" ? "customDropdown-arrow-open" : ""
+                  }`}
+                >
+                  <MdOutlineKeyboardArrowDown />
+                </span>
+              </button>
+
+              {openDropdown === "status" && (
+                <div className="customDropdown-menu">
+                  {statusOptions.map((status) => (
+                    <div
+                      key={status}
+                      className={`customDropdown-option ${
+                        selectedStatus === status
+                          ? "customDropdown-option-active"
+                          : ""
+                      }`}
+                      onClick={() => handleStatusSelect(status)}
+                    >
+                      {status}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
@@ -102,7 +234,10 @@ export const DashboardEmployee = () => {
                   key={id}
                 >
                   <div className="dashboardEmployee-information">
-                    <div className="dashboardEmploye-avatar">{el.avatar}</div>
+                    <div className="dashboardEmploye-avatar">
+                      {el.firstName?.[0]?.toUpperCase()}
+                      {el.lastName?.[0]?.toUpperCase()}
+                    </div>
                     <div className="dashboardEmployee-name">
                       <p>
                         {el.firstName} {el.lastName}
@@ -110,7 +245,7 @@ export const DashboardEmployee = () => {
                       <span>{el._id}</span>
                     </div>
                   </div>
-                  <div className="dashboardEmployee-department">
+                  <div className="dashboardEmployee-department-name">
                     {el.department ? el.department : "--"}
                   </div>
                   <div className="dashboardEmployee-designation">
@@ -119,7 +254,7 @@ export const DashboardEmployee = () => {
                   <div className="dashboardEmployee-role">{el.role}</div>
                   <div className="dashboardEmployee-status">
                     <div></div>
-                    <span>{el.isOnline ? "Active" : "Deactive"}</span>
+                    <span>{el.isOnline ? "Active" : "Inactive"}</span>
                   </div>
                   <div className="dashboardEmployee-actions">
                     <div className="dashboardEmployee-view">
@@ -144,6 +279,15 @@ export const DashboardEmployee = () => {
                 </div>
               ))}
           </div>
+        </div>
+        <div className="employeeDashboard-loadmore-btn">
+          <button
+            onClick={handleLoadLess}
+            disabled={isLoading || currentPage <= 1}
+          >
+            Load Less
+          </button>
+
           {users.length < totalUsers && (
             <button
               onClick={handleLoadMore}

@@ -25,8 +25,10 @@ export const authService = {
   updateTheme(theme) {
     return api.patch("/user/theme", { theme });
   },
-  getAllUser(page, limit) {
-    return api.get(`/user/users?page=${page}&limit=${limit}`);
+  getAllUser(page, limit, search = "") {
+    return api.get(
+      `/user/users?page=${page}&limit=${limit}&search=${encodeURIComponent(search)}`,
+    );
   },
   updateActivity() {
     return api.patch("/user/activity");

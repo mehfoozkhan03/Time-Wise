@@ -25,9 +25,18 @@ export const fetchCurrentUser = createAsyncThunk(
 
 export const fetchAllUser = createAsyncThunk(
   "user/getAllUser",
-  async ({ page, limit }, thunkAPI) => {
+  async (_, thunkAPI) => {
     try {
-      const response = await authService.getAllUser(page, limit);
+      const state = thunkAPI.getState();
+
+      const currentPage = state.auth.currentPage;
+      const limit = state.auth.limit;
+      const search = state.auth.search;
+
+      const nextPage = currentPage + 1;
+      const previousPage = currentPage - 1;
+
+      const response = await authService.getAllUser(nextPage, limit, search, previousPage);
 
       return {
         users: response.data.users,
@@ -39,13 +48,11 @@ export const fetchAllUser = createAsyncThunk(
       return thunkAPI.rejectWithValue({
         success: false,
         title: "Unable to fetch all users",
-        message:
-          error.response?.data?.message || "Something went wrong",
+        message: error.response?.data?.message || "Something went wrong",
       });
     }
-  }
+  },
 );
-
 
 export const loginUser = createAsyncThunk(
   "auth/loginUser",
@@ -148,6 +155,7 @@ const initialState = {
   errorMessage: "",
   currentPage: 0,
   limit: 10,
+  search: "",
 };
 
 const authSlice = createSlice({
@@ -160,6 +168,17 @@ const authSlice = createSlice({
       state.errorMessage = "";
       state.isError = false;
     },
+    setSearch(state, action) {
+      state.search = action.payload;
+      state.users = [];
+      state.currentPage = 0;
+    },
+    loadLessUsers(state) {
+    if (state.currentPage > 1) {
+      state.users.splice(state.users.length - state.limit);
+      state.currentPage -= 1;
+    }
+  },
   },
 
   extraReducers: (builder) => {
@@ -240,7 +259,13 @@ const authSlice = createSlice({
       .addCase(fetchAllUser.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = false;
-        state.users.push(...action.payload.users);
+
+        if (action.payload.page === 1) {
+          state.users = action.payload.users;
+        } else {
+          state.users.push(...action.payload.users);
+        }
+
         state.totalUsers = action.payload.totalUsers;
         state.currentPage = action.payload.page;
         state.limit = action.payload.limit;
@@ -262,7 +287,7 @@ const authSlice = createSlice({
   },
 });
 
-export const { logout } = authSlice.actions;
+export const { logout, setSearch, loadLessUsers } = authSlice.actions;
 
 export default authSlice.reducer;
 
