@@ -50,12 +50,12 @@ export const getAIUserContext = async (userID) => {
   // use the same source of truth.
   // --------------------------------------------------
 
-  console.log("========== CALENDAR AI CONTEXT ==========");
+  // console.log("========== CALENDAR AI CONTEXT ==========");
 
-  console.log(JSON.stringify(calendar, null, 2));
+  // console.log(JSON.stringify(calendar, null, 2));
 
-  console.log("=========================================");
-
+  // console.log("=========================================");
+8
   return {
     attendance: {
       percentage: stats.attendancePercentage,
