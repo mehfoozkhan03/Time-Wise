@@ -21,6 +21,32 @@ export const fetchCurrentUser = createAsyncThunk(
   },
 );
 
+// ========================== Fetch all users =========================
+
+export const fetchAllUser = createAsyncThunk(
+  "user/getAllUser",
+  async ({ page, limit }, thunkAPI) => {
+    try {
+      const response = await authService.getAllUser(page, limit);
+
+      return {
+        users: response.data.users,
+        totalUsers: response.data.totalUsers,
+        page: response.data.page,
+        limit: response.data.limit,
+      };
+    } catch (error) {
+      return thunkAPI.rejectWithValue({
+        success: false,
+        title: "Unable to fetch all users",
+        message:
+          error.response?.data?.message || "Something went wrong",
+      });
+    }
+  }
+);
+
+
 export const loginUser = createAsyncThunk(
   "auth/loginUser",
   async (credentials, thunkAPI) => {
@@ -115,9 +141,13 @@ const initialState = {
     .split("; ")
     .some((cookie) => cookie.startsWith("token=")),
   user: null,
+  users: [],
+  totalUsers: 0,
   isLoading: false,
   isError: false,
   errorMessage: "",
+  currentPage: 0,
+  limit: 10,
 };
 
 const authSlice = createSlice({
@@ -196,6 +226,28 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.user = null;
         state.isAuthenticated = false;
+        state.isError = true;
+        state.errorMessage = action.payload;
+      })
+
+      // ==================== Get all Users ================
+      .addCase(fetchAllUser.pending, (state) => {
+        state.isLoading = true;
+        state.isError = null;
+        state.errorMessage = "";
+      })
+
+      .addCase(fetchAllUser.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.users.push(...action.payload.users);
+        state.totalUsers = action.payload.totalUsers;
+        state.currentPage = action.payload.page;
+        state.limit = action.payload.limit;
+      })
+
+      .addCase(fetchAllUser.rejected, (state, action) => {
+        state.isLoading = false;
         state.isError = true;
         state.errorMessage = action.payload;
       })

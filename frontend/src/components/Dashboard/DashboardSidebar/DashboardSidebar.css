@@ -2,12 +2,12 @@
     position: sticky;
     top: 0;
     width: 270px;
-    height: 89vh;
+    height: 100vh;
+    overflow: hidden;
     border: 1px solid var(--border);
 }
 .dashboard-logo{
     padding: 20px;
-    height: 14vh;
     border-bottom: 1px solid var(--border);
     display: flex;
     align-items: center;
@@ -19,7 +19,6 @@
 /* dashboard list */
 .dashboardSidebar-list{
     padding: 7px;
-    height: 61vh;
     display: flex;
     flex-direction: column;
     gap: 5px;
@@ -58,7 +57,6 @@
 /* dashboard logout */
 .dashboard-logout{
     padding: 7px 5px;
-    height: 14vh;
 }
 .dashboard-logout>div{
     display: flex;

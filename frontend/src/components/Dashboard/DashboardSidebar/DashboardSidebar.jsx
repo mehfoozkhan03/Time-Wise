@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import './DashboardSidebar.css';
 import '../../../styles/global.css';
 
-import { MdOutlineSpaceDashboard } from 'react-icons/md';
+import { MdEventAvailable, MdOutlineSpaceDashboard } from 'react-icons/md';
 import { IoIosArrowRoundBack } from 'react-icons/io';
 import { AiOutlineLogout } from 'react-icons/ai';
 import {
@@ -45,6 +45,20 @@ export const DashboardSidebar = () => {
           >
             <FaCalendarDays style={{ color: '#c8dcff' }} />
             <span>Attendance</span>
+          </NavLink>
+          <NavLink
+            to="leave"
+            className="dashboard-leave dashboard-navlink"
+          >
+            <MdEventAvailable style={{ color: '#c8dcff' }} />
+            <span>Leave</span>
+          </NavLink>
+          <NavLink
+            to="calendar"
+            className="dashboard-calendar dashboard-navlink"
+          >
+            <FaCalendarDays style={{ color: '#c8dcff' }} />
+            <span>Calendar</span>
           </NavLink>
           <NavLink
             to="thought"

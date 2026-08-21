@@ -5,55 +5,38 @@ import { FaSearch } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 import { MdEdit, MdDelete } from "react-icons/md";
 import { FaKey } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchAllUser } from "../../../store/authSlice";
+import { useEffect, useState } from "react";
 
 export const DashboardEmployee = () => {
-  const employeeDetails = [
-    {
-      id: "ID #0001",
-      avatar: "SM",
-      name: "Sarah Mitchell",
-      department: "Design",
-      designation: "Senior Designer",
-      role: "Admin",
-      status: "Active",
-    },
-    {
-      id: "ID #0001",
-      avatar: "SM",
-      name: "Sarah Mitchell",
-      department: "Design",
-      designation: "Senior Designer",
-      role: "Admin",
-      status: "Active",
-    },
-    {
-      id: "ID #0001",
-      avatar: "SM",
-      name: "Sarah Mitchell",
-      department: "Design",
-      designation: "Senior Designer",
-      role: "Admin",
-      status: "Active",
-    },
-    {
-      id: "ID #0001",
-      avatar: "SM",
-      name: "Sarah Mitchell",
-      department: "Design",
-      designation: "Senior Designer",
-      role: "Admin",
-      status: "Active",
-    },
-    {
-      id: "ID #0001",
-      avatar: "SM",
-      name: "Sarah Mitchell",
-      department: "Design",
-      designation: "Senior Designer",
-      role: "Admin",
-      status: "Active",
-    },
-  ];
+  const dispatch = useDispatch();
+  const { users, totalUsers, isLoading } = useSelector((state) => state.auth);
+  console.log("🚀 ~ totalUsers:", totalUsers);
+  const [page, setPage] = useState(1);
+
+  const handleLoadMore = () => {
+    const nextPage = page + 1;
+
+    setPage(nextPage);
+
+    dispatch(
+      fetchAllUser({
+        page: nextPage,
+        limit: 10,
+      }),
+    );
+  };
+
+  useEffect(() => {
+    dispatch(
+      fetchAllUser({
+        page: 1,
+        limit: 10,
+      }),
+    );
+  }, [dispatch]);
+  console.log("🚀 ~ users:", users);
 
   return (
     <>
@@ -62,7 +45,9 @@ export const DashboardEmployee = () => {
         <div className="employee-management-header">
           <div className="employee-management-heading">
             <h3>Employee Management</h3>
-            <span>7 of 7 employees shown</span>
+            <span>
+              {users.length} of {totalUsers} employees shown
+            </span>
           </div>
           <div className="employee-management-right">
             <FaPlus style={{ color: "#6954b1" }} />
@@ -110,24 +95,31 @@ export const DashboardEmployee = () => {
             <div>ACTIONS</div>
           </div>
           <div className="dashboardEmployee-users">
-            {employeeDetails &&
-              employeeDetails.map((el, id) => (
-                <div className="employee-users-container" key={id}>
+            {users &&
+              users.map((el, id) => (
+                <div
+                  className="employee-users-container"
+                  key={id}
+                >
                   <div className="dashboardEmployee-information">
                     <div className="dashboardEmploye-avatar">{el.avatar}</div>
                     <div className="dashboardEmployee-name">
-                      <p>{el.name}</p>
-                      <span>{el.id}</span>
+                      <p>
+                        {el.firstName} {el.lastName}
+                      </p>
+                      <span>{el._id}</span>
                     </div>
                   </div>
-                  <div className="dashboardEmployee-department">{el.department}</div>
+                  <div className="dashboardEmployee-department">
+                    {el.department ? el.department : "--"}
+                  </div>
                   <div className="dashboardEmployee-designation">
-                    {el.designation}
+                    {el.designation ? el.designation : "--"}
                   </div>
                   <div className="dashboardEmployee-role">{el.role}</div>
                   <div className="dashboardEmployee-status">
                     <div></div>
-                    <span>{el.status}</span>
+                    <span>{el.isOnline ? "Active" : "Deactive"}</span>
                   </div>
                   <div className="dashboardEmployee-actions">
                     <div className="dashboardEmployee-view">
@@ -152,6 +144,14 @@ export const DashboardEmployee = () => {
                 </div>
               ))}
           </div>
+          {users.length < totalUsers && (
+            <button
+              onClick={handleLoadMore}
+              disabled={isLoading}
+            >
+              {isLoading ? "Loading..." : "Load More"}
+            </button>
+          )}
         </div>
       </div>
     </>
