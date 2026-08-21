@@ -15,7 +15,7 @@ export const getRequestedContext = (
   const hasValue = (value) => typeof value === "number" && value > 0;
 
   // ==================================================
-  // WORKING HOURS CLARIFICATION FOLLOW-UP
+  // WORKING HOURS / OVERTIME CLARIFICATION FOLLOW-UP
   // ==================================================
 
   const todayHours = Number(userContext.attendance?.todayHours ?? 0);
@@ -28,64 +28,113 @@ export const getRequestedContext = (
     userContext.attendance?.totalWorkingHours ?? 0,
   );
 
-  // ==================================================
-  // Direct Period Selection
-  // ==================================================
-  //
-  // These are the choices WiseBot gives after:
-  // "Do you want to know your working hours
-  //  for this week, this month, or your total
-  //  working hours?"
-  //
-  // We handle them directly so they don't depend
-  // on conversation-history detection.
-  // ==================================================
+  // --------------------------------------------------
+  // Check what the previous assistant asked
+  // --------------------------------------------------
 
-  if (lower === "today" || lower === "for today") {
-    return {
-      attendance: {
-        workingHoursPeriod: "today",
-        workingHours: todayHours,
-      },
-    };
+  const lastAssistantMessage = [...conversation]
+    .reverse()
+    .find((msg) => msg.role === "assistant");
+
+  const lastAssistantContent =
+    lastAssistantMessage?.content?.toLowerCase() || "";
+
+  const isWorkingHoursClarification =
+    lastAssistantContent.includes("working hours") &&
+    lastAssistantContent.includes("week") &&
+    lastAssistantContent.includes("month") &&
+    lastAssistantContent.includes("total");
+
+  const isOvertimeClarification =
+    lastAssistantContent.includes("overtime") &&
+    lastAssistantContent.includes("month") &&
+    lastAssistantContent.includes("total");
+
+  // --------------------------------------------------
+  // OVERTIME FOLLOW-UP MUST COME FIRST
+  // --------------------------------------------------
+
+  if (isOvertimeClarification) {
+    const monthlyOvertime = Number(userContext.attendance?.overtimeHours ?? 0);
+
+    const totalOvertime = Number(
+      userContext.attendance?.totalOvertimeHours ?? 0,
+    );
+
+    // This month
+    if (
+      lower === "month" ||
+      lower === "this month" ||
+      lower === "monthly" ||
+      lower === "this month's"
+    ) {
+      return {
+        attendance: {
+          overtimePeriod: "month",
+          overtimeHours: monthlyOvertime,
+        },
+      };
+    }
+
+    // Total
+    if (
+      lower === "total" ||
+      lower === "total overtime" ||
+      lower === "total overtime hours" ||
+      lower === "all time" ||
+      lower === "overall"
+    ) {
+      return {
+        attendance: {
+          overtimePeriod: "total",
+          overtimeHours: totalOvertime,
+        },
+      };
+    }
   }
 
-  if (lower === "week" || lower === "this week" || lower === "weekly") {
-    return {
-      attendance: {
-        workingHoursPeriod: "week",
-        workingHours: weeklyHours,
-      },
-    };
-  }
+  // ==================================================
+  // WORKING HOURS FOLLOW-UP
+  // ==================================================
 
-  if (
-    lower === "month" ||
-    lower === "this month" ||
-    lower === "monthly" ||
-    lower === "this month's"
-  ) {
-    return {
-      attendance: {
-        workingHoursPeriod: "month",
-        workingHours: monthlyHours,
-      },
-    };
-  }
+  const isWorkingHoursFollowUp =
+    lastAssistantContent.includes("working hours") &&
+    (lastAssistantContent.includes("week") ||
+      lastAssistantContent.includes("month") ||
+      lastAssistantContent.includes("total"));
 
-  if (
-    lower === "total" ||
-    lower === "total hours" ||
-    lower === "total working hours" ||
-    lower === "all time" ||
-    lower === "overall"
-  ) {
-    return {
-      attendance: {
-        workingHoursPeriod: "total",
-        workingHours: totalWorkingHours,
-      },
-    };
+  if (isWorkingHoursFollowUp) {
+    if (lower === "week" || lower === "this week" || lower === "weekly") {
+      return {
+        attendance: {
+          workingHoursPeriod: "week",
+          workingHours: userContext.attendance.weeklyHours,
+        },
+      };
+    }
+
+    if (lower === "month" || lower === "this month" || lower === "monthly") {
+      return {
+        attendance: {
+          workingHoursPeriod: "month",
+          workingHours: userContext.attendance.monthlyHours,
+        },
+      };
+    }
+
+    if (
+      lower === "total" ||
+      lower === "total hours" ||
+      lower === "total working hours" ||
+      lower === "overall"
+    ) {
+      return {
+        attendance: {
+          workingHoursPeriod: "total",
+          workingHours: userContext.attendance.totalWorkingHours,
+        },
+      };
+    }
   }
 
   // ==================================================
@@ -165,6 +214,81 @@ export const getRequestedContext = (
   }
 
   // ==================================================
+  // CALENDAR / EVENTS / FESTIVALS
+  // ==================================================
+
+  const calendar = userContext.calendar ?? {};
+
+  const calendarEvents = Array.isArray(calendar.events) ? calendar.events : [];
+
+  const calendarHolidays = Array.isArray(calendar.holidays)
+    ? calendar.holidays
+    : [];
+
+  const normalizeText = (value) =>
+    String(value ?? "")
+      .trim()
+      .toLowerCase();
+
+  const getDateOnly = (value) => {
+    if (!value) return null;
+
+    const date = new Date(value);
+
+    if (Number.isNaN(date.getTime())) {
+      return null;
+    }
+
+    return date.toISOString().split("T")[0];
+  };
+
+  // --------------------------------------------------
+  // Calendar question detection
+  // --------------------------------------------------
+
+  const calendarKeywords = [
+    "event",
+    "events",
+    "calendar",
+    "festival",
+    "festivals",
+    "holiday",
+    "holidays",
+    "meeting",
+    "meetings",
+    "appointment",
+    "appointments",
+    "birthday",
+  ];
+
+  const asksCalendarQuestion = calendarKeywords.some((keyword) =>
+    lower.includes(keyword),
+  );
+
+  // --------------------------------------------------
+  // Date-related questions
+  // --------------------------------------------------
+
+  const calendarAsksToday = lower.includes("today");
+
+  const calendarAsksTomorrow = lower.includes("tomorrow");
+  // --------------------------------------------------
+  // Search event / holiday by user's message
+  // --------------------------------------------------
+
+  if (asksCalendarQuestion || calendarAsksToday || calendarAsksTomorrow) {
+    const enhancedContext = getEnhancedCalendarContext(
+      message,
+      userContext,
+      conversation,
+    );
+
+    if (Object.keys(enhancedContext).length > 0) {
+      return enhancedContext;
+    }
+  }
+
+  // ==================================================
   // ATTENDANCE
   // ==================================================
 
@@ -232,7 +356,11 @@ export const getRequestedContext = (
       lower.includes("used") ||
       lower.includes("how many") ||
       lower.includes("number of") ||
-      lower.includes("count"))
+      lower.includes("count") ||
+      lower.includes("leave") ||
+      lower.includes("leaves") ||
+      lower.includes("how many leaves") ||
+      lower.includes("leaves taken"))
   ) {
     context.attendance = {
       leavesTaken: userContext.attendance.leavesTaken,
@@ -371,7 +499,9 @@ export const getRequestedContext = (
   if (
     question.includes("current streak") ||
     question.includes("my streak") ||
-    question.includes("day streak")
+    question.includes("day streak") ||
+    lower.includes("streak") ||
+    lower.includes("attendance streak")
   ) {
     context.currentStreak = userContext.streak.current;
   }

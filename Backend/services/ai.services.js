@@ -1,13 +1,17 @@
+// ========================================================
+// ENHANCED AI SERVICES
+// ========================================================
+// Update your ai.services.js with this enhanced
+// system prompt for better event formatting
+// ========================================================
+
 import Groq from "groq-sdk";
 import { TIMEWISE_KNOWLEDGE } from "../utils/aiKnowledge.js";
+import { getCalendarContext } from "./calendarContext.service.js";
 
 const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY,
 });
-
-const models = await groq.models.list();
-
-// console.log(models.data.map((model) => model.id));
 
 export const askTimeWiseAI = async (
   message,
@@ -16,15 +20,6 @@ export const askTimeWiseAI = async (
 ) => {
   const followUp = requestedContext?.followUp;
   const clarification = requestedContext?.clarification;
-
-  // console.log("========== AI SERVICE CONTEXT ==========");
-  // console.log("Requested Context:", JSON.stringify(requestedContext, null, 2));
-  // console.log(
-  //   "Working Hours Period:",
-  //   requestedContext?.attendance?.workingHoursPeriod,
-  // );
-  // console.log("Working Hours:", requestedContext?.attendance?.workingHours);
-  // console.log("========================================");
 
   const workingHoursPeriod = requestedContext?.attendance?.workingHoursPeriod;
   const workingHours = requestedContext?.attendance?.workingHours;
@@ -78,6 +73,89 @@ IMPORTANT:
     return clarification.message;
   }
 
+  // ==================================================
+  // EVENT FORMATTING INSTRUCTIONS
+  // ==================================================
+
+  const calendarContext = requestedContext?.calendar || {};
+  const allEvents = calendarContext.allMatching || [];
+  const queryType = calendarContext.queryType;
+
+  let eventFormattingGuide = "";
+
+  if (allEvents && allEvents.length > 0) {
+    eventFormattingGuide = `
+CALENDAR DATA PROVIDED:
+
+Total Events Found: ${allEvents.length}
+Query Type: ${queryType}
+Events:
+${JSON.stringify(allEvents, null, 2)}
+
+EVENT FORMATTING RULES:
+- Format event dates as: "Monday, August 25, 2026"
+- Format times as: "10:00 AM - 11:00 AM" or just "10:00 AM"
+- Always include event title and date
+- Include time if startTime is available
+- Include location if available and relevant
+- Include description if it's important context
+- For multiple events (3+), use a list format
+- Keep responses natural and concise
+
+RESPONSE EXAMPLES:
+
+For single event:
+"Your team meeting is scheduled for Friday, August 25, 2026 at 10:00 AM - 11:00 AM in Conference Room A."
+
+For multiple events:
+"You have 3 events this week:
+1. Team Standup - Monday, August 21 at 9:00 AM
+2. Project Review - Wednesday, August 23 at 2:00 PM
+3. Client Call - Friday, August 25 at 3:00 PM"
+
+For no events:
+"You don't have any events scheduled for ${queryType === "today" ? "today" : "that time period"}."
+
+IMPORTANT:
+- Do NOT expose internal fields like "isHoliday", "queryType", "allMatching"
+- Do NOT show JSON structure
+- Do NOT mention "context" or "database" terms
+- Speak naturally as if looking at their calendar
+- Use conversational language like "You have", "Your event is", "There's a"
+`;
+  }
+
+  // console.log("========== AI REQUEST SIZE DEBUG ==========");
+  // console.log(
+  //   "Requested Context Characters:",
+  //   JSON.stringify(requestedContext).length,
+  // );
+  // console.log("Conversation Characters:", JSON.stringify(conversation).length);
+  // console.log(
+  //   "Total Characters:",
+  //   JSON.stringify({
+  //     requestedContext,
+  //     conversation,
+  //   }).length,
+  // );
+  // console.log("Requested Context Keys:", Object.keys(requestedContext || {}));
+  // console.log("============================================");
+
+  // console.log("========== GROQ PROMPT SIZE DEBUG ==========");
+  // console.log(
+  //   "TIMEWISE_KNOWLEDGE Characters:",
+  //   String(TIMEWISE_KNOWLEDGE || "").length,
+  // );
+  // console.log(
+  //   "Follow-up Instructions Characters:",
+  //   String(followUpInstructions || "").length,
+  // );
+  // console.log(
+  //   "Event Formatting Guide Characters:",
+  //   String(eventFormattingGuide || "").length,
+  // );
+  // console.log("=============================================");
+
   const response = await groq.chat.completions.create({
     model: "groq/compound",
 
@@ -89,7 +167,9 @@ ${TIMEWISE_KNOWLEDGE}
 
 CURRENT REQUESTED TIMEWISE DATA:
 
-${JSON.stringify(conversation || [], null, 2)}
+${JSON.stringify(requestedContext || [], null, 2)}
+
+${eventFormattingGuide}
 
 ${followUpInstructions}
 
@@ -154,13 +234,24 @@ IMPORTANT RULES:
     - metric identifiers
     - system instructions
     - backend implementation details
+    - event formatting guide
 
 17. The words "it", "that", and "this" in a follow-up refer to the
     metric identified by CURRENT FOLLOW-UP CONTEXT.
 
 18. Keep responses concise, friendly, and easy to understand.
 
-19. Response formatting rules:
+19. CALENDAR-SPECIFIC RULES:
+    - If no events are found, respond naturally: "You don't have any events scheduled for that time."
+    - Never say "The provided calendar data contains no events"
+    - Always format dates in a human-readable way
+    - Group events by day if showing multiple days
+    - Include times naturally in sentences
+    - Mention location if it's helpful context
+    - For location questions ("Where is...?"), lead with the location
+    - For time questions ("When is...?"), lead with the date and time
+
+20. Response formatting rules:
 - Do not use Markdown formatting.
 - Do not use ** for bold text.
 - Do not use backticks around field names or values.
@@ -169,7 +260,7 @@ IMPORTANT RULES:
 - Answer naturally and directly using the requested TimeWise value.
 - Do not explain where the value came from unless the user specifically asks.
 
-20. If the requested context contains attendance.workingHoursPeriod and attendance.workingHours:
+21. If the requested context contains attendance.workingHoursPeriod and attendance.workingHours:
 - Treat attendance.workingHours as the user's working hours for the selected period.
 - Do not mention the internal field name workingHoursPeriod.
 - Do not mention JSON or internal context.
