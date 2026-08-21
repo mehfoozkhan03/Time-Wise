@@ -50,6 +50,19 @@ const Leave = () => {
     setRequests((previous) => [newRequest, ...previous]);
   };
 
+  const handleCancelRequest = (requestId) => {
+    setRequests((previous) =>
+      previous.map((request) =>
+        request.id === requestId
+          ? {
+              ...request,
+              status: "Cancelled",
+            }
+          : request
+      )
+    );
+  };
+
   return (
     <div className="leave-page">
       <div className="leave-page-header">
@@ -70,8 +83,10 @@ const Leave = () => {
       <div className="leave-page-content">
         <LeaveBalance />
 
-        <LeaveHistory requests={requests} />
-
+        <LeaveHistory
+          requests={requests}
+          onCancelRequest={handleCancelRequest}
+        />
       </div>
 
       {showApplyLeave && (
