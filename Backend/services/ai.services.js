@@ -1,10 +1,3 @@
-// ========================================================
-// ENHANCED AI SERVICES
-// ========================================================
-// Update your ai.services.js with this enhanced
-// system prompt for better event formatting
-// ========================================================
-
 import Groq from "groq-sdk";
 import { TIMEWISE_KNOWLEDGE } from "../utils/aiKnowledge.js";
 import { getCalendarContext } from "./calendarContext.service.js";
@@ -78,7 +71,51 @@ IMPORTANT:
   // ==================================================
 
   const calendarContext = requestedContext?.calendar || {};
-  const allEvents = calendarContext.allMatching || [];
+  const calendarEvents = Array.isArray(calendarContext.events)
+    ? calendarContext.events
+    : [];
+  const calendarHolidays = Array.isArray(calendarContext.holidays)
+    ? calendarContext.holidays
+    : [];
+  const allEvents = [...calendarEvents, ...calendarHolidays];
+
+  console.log("========== CALENDAR SERVICE DEBUG ==========");
+  console.log("Calendar Context:", JSON.stringify(calendarContext, null, 2));
+  console.log("Calendar Events:", calendarEvents.length);
+  console.log("Calendar Holidays:", calendarHolidays.length);
+  console.log("All Events:", allEvents.length);
+  console.log("============================================");
+
+  // ==================================================
+  // DIRECT CALENDAR RESPONSE
+  // ==================================================
+
+  if (allEvents.length > 0) {
+    const firstEvent = allEvents[0];
+
+    const formattedDate = firstEvent.date
+      ? new Date(firstEvent.date).toLocaleDateString("en-IN", {
+          weekday: "long",
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        })
+      : null;
+
+    // Single calendar result
+    if (allEvents.length === 1 && formattedDate) {
+      if (firstEvent.startTime) {
+        const time = firstEvent.endTime
+          ? `${firstEvent.startTime} - ${firstEvent.endTime}`
+          : firstEvent.startTime;
+
+        return `${firstEvent.title} is on ${formattedDate} at ${time}.`;
+      }
+
+      return `${firstEvent.title} is on ${formattedDate}.`;
+    }
+  }
+
   const queryType = calendarContext.queryType;
 
   let eventFormattingGuide = "";
@@ -139,25 +176,10 @@ IMPORTANT:
   //   }).length,
   // );
   // console.log("Requested Context Keys:", Object.keys(requestedContext || {}));
-  // console.log("============================================");
-
-  // console.log("========== GROQ PROMPT SIZE DEBUG ==========");
-  // console.log(
-  //   "TIMEWISE_KNOWLEDGE Characters:",
-  //   String(TIMEWISE_KNOWLEDGE || "").length,
-  // );
-  // console.log(
-  //   "Follow-up Instructions Characters:",
-  //   String(followUpInstructions || "").length,
-  // );
-  // console.log(
-  //   "Event Formatting Guide Characters:",
-  //   String(eventFormattingGuide || "").length,
-  // );
-  // console.log("=============================================");
 
   const response = await groq.chat.completions.create({
     model: "groq/compound",
+    max_completion_tokens: 1000,
 
     messages: [
       {
@@ -167,7 +189,7 @@ ${TIMEWISE_KNOWLEDGE}
 
 CURRENT REQUESTED TIMEWISE DATA:
 
-${JSON.stringify(requestedContext || [], null, 2)}
+${JSON.stringify(requestedContext || {}, null, 2)}
 
 ${eventFormattingGuide}
 
@@ -279,6 +301,23 @@ IMPORTANT RULES:
       },
     ],
   });
+
+  console.log("============================================");
+
+  console.log("========== GROQ PROMPT SIZE DEBUG ==========");
+  console.log(
+    "TIMEWISE_KNOWLEDGE Characters:",
+    String(TIMEWISE_KNOWLEDGE || "").length,
+  );
+  console.log(
+    "Follow-up Instructions Characters:",
+    String(followUpInstructions || "").length,
+  );
+  console.log(
+    "Event Formatting Guide Characters:",
+    String(eventFormattingGuide || "").length,
+  );
+  console.log("=============================================");
 
   return response.choices[0]?.message?.content || "";
 };

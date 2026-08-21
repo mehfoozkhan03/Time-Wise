@@ -225,12 +225,12 @@ export const getRequestedContext = (
     ? calendar.holidays
     : [];
 
-  const normalizeText = (value) =>
+  const normalizeCalendarText = (value) =>
     String(value ?? "")
       .trim()
       .toLowerCase();
 
-  const getDateOnly = (value) => {
+  const getCalendarDateOnly = (value) => {
     if (!value) return null;
 
     const date = new Date(value);
@@ -261,30 +261,101 @@ export const getRequestedContext = (
     "birthday",
   ];
 
-  const asksCalendarQuestion = calendarKeywords.some((keyword) =>
+  const hasCalendarKeyword = calendarKeywords.some((keyword) =>
     lower.includes(keyword),
   );
 
+  const hasMatchingEventName = calendarEvents.some((event) => {
+    const title = normalizeCalendarText(event.title);
+
+    return title.length > 0 && lower.includes(title);
+  });
+
+  const hasMatchingHolidayName = calendarHolidays.some((holiday) => {
+    const title = normalizeCalendarText(holiday.title);
+
+    return title.length > 0 && lower.includes(title);
+  });
+
+  const isCalendarQuestion =
+    hasCalendarKeyword || hasMatchingEventName || hasMatchingHolidayName;
+
   // --------------------------------------------------
-  // Date-related questions
+  // Search calendar
   // --------------------------------------------------
 
-  const calendarAsksToday = lower.includes("today");
+  if (isCalendarQuestion) {
+    const searchWords = lower
+      .replace(/[?!.,]/g, " ")
+      .split(/\s+/)
+      .filter((word) => word.length > 2)
+      .filter(
+        (word) =>
+          ![
+            "when",
+            "what",
+            "which",
+            "where",
+            "show",
+            "tell",
+            "about",
+            "date",
+            "dates",
+            "is",
+            "are",
+            "my",
+          ].includes(word),
+      );
 
-  const calendarAsksTomorrow = lower.includes("tomorrow");
-  // --------------------------------------------------
-  // Search event / holiday by user's message
-  // --------------------------------------------------
+    // ------------------------------------------------
+    // Personal events
+    // ------------------------------------------------
 
-  if (asksCalendarQuestion || calendarAsksToday || calendarAsksTomorrow) {
-    const enhancedContext = getEnhancedCalendarContext(
-      message,
-      userContext,
-      conversation,
-    );
+    const matchingEvents = calendarEvents
+      .filter((event) => {
+        const title = normalizeCalendarText(event.title);
+        const description = normalizeCalendarText(event.description);
 
-    if (Object.keys(enhancedContext).length > 0) {
-      return enhancedContext;
+        return searchWords.some(
+          (word) => title.includes(word) || description.includes(word),
+        );
+      })
+      .map((event) => ({
+        title: event.title,
+        date: getCalendarDateOnly(event.date),
+        startTime: event.startTime || "",
+        endTime: event.endTime || "",
+        location: event.location || "",
+      }));
+
+    // ------------------------------------------------
+    // Holidays / festivals
+    // ------------------------------------------------
+
+    const matchingHolidays = calendarHolidays
+      .filter((holiday) => {
+        const title = normalizeCalendarText(holiday.title);
+
+        const description = normalizeCalendarText(holiday.description);
+
+        return searchWords.some(
+          (word) => title.includes(word) || description.includes(word),
+        );
+      })
+      .map((holiday) => ({
+        title: holiday.title,
+        date: getCalendarDateOnly(holiday.date),
+      }));
+
+    // ------------------------------------------------
+    // Only send matching calendar records
+    // ------------------------------------------------
+
+    if (matchingEvents.length > 0 || matchingHolidays.length > 0) {
+      context.calendar = {
+        events: matchingEvents,
+        holidays: matchingHolidays,
+      };
     }
   }
 
