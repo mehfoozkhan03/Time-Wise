@@ -8,6 +8,8 @@ import {
   updateTheme,
   logout,
   getUserProfile,
+  getAllUser,
+  updateActivity,
 } from '../controllers/userData.controller.js';
 
 import { auth } from '../middleware/AuthMiddleware.js';
@@ -30,12 +32,15 @@ userRoutes.post('/logout', logout);
 
 userRoutes.get('/me', auth, getCurrentUser);
 
+userRoutes.get('/users', auth, getAllUser);
+
+userRoutes.patch("/activity", auth, updateActivity);
+
 userRoutes.get('/profile/:userId', auth, getUserProfile);
 
 userRoutes.patch('/theme', auth, updateTheme);
 
 userRoutes.post('/adminlogin', admin_login);
 
-// userRoutes.get('/alluser', auth, getAllUser)
 
 export { userRoutes };
