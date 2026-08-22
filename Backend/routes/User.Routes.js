@@ -1,4 +1,4 @@
-import express from 'express';
+import express from "express";
 
 import {
   admin_login,
@@ -10,9 +10,12 @@ import {
   getUserProfile,
   getAllUser,
   updateActivity,
-} from '../controllers/userData.controller.js';
+} from "../controllers/userData.controller.js";
 
-import { auth } from '../middleware/AuthMiddleware.js';
+import { auth } from "../middleware/AuthMiddleware.js";
+import { updateUserDepartment } from "../controllers/updateDepartment.controller.js";
+import { updateUserDesignation } from "./../controllers/updateDesignation.controller.js";
+import { updateEmployee } from "../controllers/updateEmployee.controller.js";
 
 const userRoutes = express.Router();
 
@@ -24,23 +27,29 @@ const userRoutes = express.Router();
 
 // /user/me
 
-userRoutes.post('/login', login);
+userRoutes.post("/login", login);
 
-userRoutes.post('/signup', signup);
+userRoutes.post("/signup", signup);
 
-userRoutes.post('/logout', logout);
+userRoutes.post("/logout", logout);
 
-userRoutes.get('/me', auth, getCurrentUser);
+userRoutes.get("/me", auth, getCurrentUser);
 
-userRoutes.get('/users', auth, getAllUser);
+userRoutes.get("/users", auth, getAllUser);
 
 userRoutes.patch("/activity", auth, updateActivity);
 
-userRoutes.get('/profile/:userId', auth, getUserProfile);
+userRoutes.patch("/:userId/department", updateUserDepartment);
 
-userRoutes.patch('/theme', auth, updateTheme);
+userRoutes.patch("/:userId/designation", updateUserDesignation);
 
-userRoutes.post('/adminlogin', admin_login);
+userRoutes.patch("/:userId", auth, updateEmployee);
+// userRoutes.patch("/:userId", auth, adminOnly, updateEmployee);
 
+userRoutes.get("/profile/:userId", auth, getUserProfile);
+
+userRoutes.patch("/theme", auth, updateTheme);
+
+userRoutes.post("/adminlogin", admin_login);
 
 export { userRoutes };
