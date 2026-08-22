@@ -6,6 +6,7 @@ import {
   getConversation,
   clearConversation,
 } from "../services/aiConversation.service.js";
+import { understandTimeWiseQuery } from "../services/aiQueryUnderstanding.services.js";
 
 export const askAI = async (req, res) => {
   try {
@@ -20,35 +21,37 @@ export const askAI = async (req, res) => {
 
     const userID = req.user.userID;
 
-    const conversation = getConversation(userID);
+    const conversation = await getConversation(userID);
 
     const userContext = await getAIUserContext(userID);
+
+    // ==================================================
+    // PHASE 1: AI QUERY UNDERSTANDING
+    // ==================================================
+
+    const queryUnderstanding = await understandTimeWiseQuery(
+      message.trim(),
+      conversation,
+    );
+
+    console.log("========== PHASE 1 RESULT ==========");
+    console.log(JSON.stringify(queryUnderstanding, null, 2));
+    console.log("====================================");
+
+    // ==================================================
+    // EXISTING TIMEWISE CONTEXT
+    // ==================================================
 
     const requestedContext = getRequestedContext(
       message.trim(),
       userContext,
       conversation,
+      queryUnderstanding,
     );
 
-    // console.log("========== AI CONTEXT DEBUG ==========");
-
-    // console.log("USER MESSAGE:", message.trim());
-
-    // console.log(
-    //   "REQUESTED CONTEXT:",
-    //   JSON.stringify(requestedContext, null, 2),
-    // );
-
-    // console.log("=======================================");
-
-    // console.log("USER MESSAGE:", message.trim());
-
-    // console.log("CONVERSATION:", JSON.stringify(conversation, null, 2));
-
-    // console.log(
-    //   "REQUESTED CONTEXT:",
-    //   JSON.stringify(requestedContext, null, 2),
-    // );
+    // ==================================================
+    // FINAL AI RESPONSE
+    // ==================================================
 
     const answer = await askTimeWiseAI(
       message.trim(),
@@ -56,9 +59,9 @@ export const askAI = async (req, res) => {
       conversation,
     );
 
-    addConversationMessage(userID, "user", message.trim());
+    await addConversationMessage(userID, "user", message.trim());
 
-    addConversationMessage(userID, "assistant", answer);
+    await addConversationMessage(userID, "assistant", answer);
 
     return res.status(200).json({
       success: true,
@@ -78,7 +81,7 @@ export const clearAIConversation = async (req, res) => {
   try {
     const userID = req.user.userID;
 
-    clearConversation(userID);
+    await clearConversation(userID);
 
     return res.status(200).json({
       success: true,
@@ -98,7 +101,7 @@ export const getAIConversation = async (req, res) => {
   try {
     const userID = req.user.userID;
 
-    const conversation = getConversation(userID);
+    const conversation = await getConversation(userID);
 
     return res.status(200).json({
       success: true,

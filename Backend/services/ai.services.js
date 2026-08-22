@@ -59,6 +59,24 @@ IMPORTANT:
   }
 
   // ==================================================
+  // Direct Overtime Response
+  // ==================================================
+
+  const overtimePeriod = requestedContext?.attendance?.overtimePeriod;
+
+  const overtimeHours = requestedContext?.attendance?.overtimeHours;
+
+  if (overtimePeriod && overtimeHours !== undefined) {
+    if (overtimePeriod === "month") {
+      return `Your overtime hours for this month are ${overtimeHours} hours.`;
+    }
+
+    if (overtimePeriod === "total") {
+      return `Your total overtime hours are ${overtimeHours} hours.`;
+    }
+  }
+
+  // ==================================================
   // Clarification Response
   // ==================================================
 
@@ -177,9 +195,15 @@ IMPORTANT:
   // );
   // console.log("Requested Context Keys:", Object.keys(requestedContext || {}));
 
+  console.log("========== GROQ MESSAGE DEBUG ==========");
+  console.log("Message received by AI service:", JSON.stringify(message));
+  console.log("Message type:", typeof message);
+  console.log("Message length:", String(message || "").length);
+  console.log("========================================");
+
   const response = await groq.chat.completions.create({
     model: "groq/compound",
-    max_completion_tokens: 1000,
+    max_completion_tokens: 300,
 
     messages: [
       {

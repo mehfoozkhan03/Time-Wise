@@ -2,17 +2,133 @@ export const getRequestedContext = (
   message,
   userContext,
   conversation = [],
+  queryUnderstanding = null,
 ) => {
-  const question = message.toLowerCase();
-  const lower = message.toLowerCase();
+  const question = message.toLowerCase().trim();
+  const lower = message.toLowerCase().trim();
+
+  const normalizedFollowUp = lower
+    .replace(/\s+/g, " ")
+    .replace(/\bwek\b/g, "week")
+    .replace(/\bwk\b/g, "week")
+    .replace(/\bmon\b/g, "month")
+    .replace(/\bmont\b/g, "month")
+    .replace(/\bmo\b/g, "month");
 
   const context = {};
+
+  const intentToContext = {
+    attendance: "attendance",
+    working_hours: "workingHours",
+    overtime: "overtime",
+    productivity: "productivity",
+    streak: "streak",
+    leaves: "leaves",
+    punctuality: "punctuality",
+    average_daily_hours: "averageDailyHours",
+    average_checkin: "averageCheckin",
+    calendar_event: "calendar",
+    holiday: "holidays",
+    notification: "notifications",
+    goal: "goals",
+    report: "reports",
+    profile: "profile",
+  };
 
   // ==================================================
   // Helper: Check whether a value actually exists
   // ==================================================
 
+  const getValidPeriod = (period) => {
+    const validPeriods = ["today", "week", "month", "total"];
+
+    return validPeriods.includes(period) ? period : null;
+  };
+
+  const aiIntent = queryUnderstanding?.intent || null;
+
+  const aiPeriod = getValidPeriod(queryUnderstanding?.period);
+
+  const aiConfidence = Number(queryUnderstanding?.confidence ?? 0);
+
+  // Only trust Phase 1 when it returned a valid, confident intent.
+  // If Phase 1 fails, the existing keyword/follow-up logic below remains
+  // available as a safe fallback.
+  const useAIIntent =
+    Boolean(aiIntent) && aiIntent !== "unknown" && aiConfidence >= 0.7;
+
   const hasValue = (value) => typeof value === "number" && value > 0;
+
+  // ==================================================
+  // PHASE 1 AI ROUTING HELPERS
+  // ==================================================
+
+  const buildWorkingHoursContext = (period) => {
+    switch (period) {
+      case "today":
+        return {
+          attendance: {
+            workingHoursPeriod: "today",
+            workingHours: todayHours,
+          },
+        };
+
+      case "week":
+        return {
+          attendance: {
+            workingHoursPeriod: "week",
+            workingHours: weeklyHours,
+          },
+        };
+
+      case "month":
+        return {
+          attendance: {
+            workingHoursPeriod: "month",
+            workingHours: monthlyHours,
+          },
+        };
+
+      case "total":
+        return {
+          attendance: {
+            workingHoursPeriod: "total",
+            workingHours: totalWorkingHours,
+          },
+        };
+
+      default:
+        return null;
+    }
+  };
+
+  const buildOvertimeContext = (period) => {
+    const monthlyOvertime = Number(userContext.attendance?.overtimeHours ?? 0);
+
+    const totalOvertime = Number(
+      userContext.attendance?.totalOvertimeHours ?? 0,
+    );
+
+    if (period === "month") {
+      return {
+        attendance: {
+          overtimePeriod: "month",
+          overtimeHours: monthlyOvertime,
+        },
+      };
+    }
+
+    if (period === "total") {
+      return {
+        attendance: {
+          overtimePeriod: "total",
+          overtimeHours: totalOvertime,
+        },
+      };
+    }
+
+    return null;
+  };
 
   // ==================================================
   // WORKING HOURS / OVERTIME CLARIFICATION FOLLOW-UP
@@ -27,6 +143,195 @@ export const getRequestedContext = (
   const totalWorkingHours = Number(
     userContext.attendance?.totalWorkingHours ?? 0,
   );
+
+  // ==================================================
+  // PHASE 1 AI ROUTING
+  // ==================================================
+  // This is the bridge between the AI query understanding layer and the
+  // existing TimeWise context selector. It allows natural typos such as
+  // "wrking hou" or "totl workng hors" to reach the same data as a
+  // correctly typed query, without maintaining a typo dictionary.
+
+  if (useAIIntent) {
+    console.log("========== AI CONTEXT ROUTING ==========");
+    console.log("Intent:", aiIntent);
+    console.log("Period:", aiPeriod || "none");
+    console.log("Confidence:", aiConfidence);
+    console.log("=======================================");
+
+    if (aiIntent === "working_hours") {
+      if (aiPeriod) {
+        const aiWorkingHoursContext = buildWorkingHoursContext(aiPeriod);
+
+        if (aiWorkingHoursContext) {
+          return aiWorkingHoursContext;
+        }
+      }
+
+      // No period was supplied. Preserve the existing clarification behavior.
+      const availablePeriods = [];
+
+      if (hasValue(todayHours)) {
+        availablePeriods.push({ key: "today", label: "today" });
+      }
+
+      if (hasValue(weeklyHours)) {
+        availablePeriods.push({ key: "week", label: "this week" });
+      }
+
+      if (hasValue(monthlyHours)) {
+        availablePeriods.push({ key: "month", label: "this month" });
+      }
+
+      if (hasValue(totalWorkingHours)) {
+        availablePeriods.push({
+          key: "total",
+          label: "your total working hours",
+        });
+      }
+
+      if (availablePeriods.length === 0) {
+        return {
+          attendance: {
+            workingHoursStatus: "none",
+            todayHours: 0,
+            weeklyHours: 0,
+            monthlyHours: 0,
+            totalWorkingHours: 0,
+          },
+        };
+      }
+
+      if (availablePeriods.length === 1) {
+        return buildWorkingHoursContext(availablePeriods[0].key);
+      }
+
+      const labels = availablePeriods.map((item) => item.label);
+      let clarificationMessage;
+
+      if (labels.length === 2) {
+        clarificationMessage = `Do you want to know your working hours for ${labels[0]} or ${labels[1]}?`;
+      } else if (labels.length === 3) {
+        clarificationMessage = `Do you want to know your working hours for ${labels[0]}, ${labels[1]}, or ${labels[2]}?`;
+      } else {
+        clarificationMessage = `Do you want to know your working hours for ${labels[0]}, ${labels[1]}, ${labels[2]}, or ${labels[3]}?`;
+      }
+
+      return {
+        clarification: {
+          type: "workingHoursPeriod",
+          message: clarificationMessage,
+        },
+      };
+    }
+
+    if (aiIntent === "overtime") {
+      if (aiPeriod === "today" || aiPeriod === "week") {
+        // Overtime is currently exposed by TimeWise as month/total.
+        // Ignore an unsupported AI period and use the normal fallback below.
+      } else if (aiPeriod) {
+        const aiOvertimeContext = buildOvertimeContext(aiPeriod);
+
+        if (aiOvertimeContext) {
+          return aiOvertimeContext;
+        }
+      } else {
+        const monthlyOvertime = Number(
+          userContext.attendance?.overtimeHours ?? 0,
+        );
+        const totalOvertime = Number(
+          userContext.attendance?.totalOvertimeHours ?? 0,
+        );
+
+        if (hasValue(monthlyOvertime) && hasValue(totalOvertime)) {
+          return {
+            clarification: {
+              type: "overtimePeriod",
+              message:
+                "Do you want to know your overtime hours for this month or your total overtime hours?",
+            },
+          };
+        }
+
+        if (hasValue(monthlyOvertime)) {
+          return {
+            attendance: {
+              overtimePeriod: "month",
+              overtimeHours: monthlyOvertime,
+            },
+          };
+        }
+
+        if (hasValue(totalOvertime)) {
+          return {
+            attendance: {
+              overtimePeriod: "total",
+              overtimeHours: totalOvertime,
+            },
+          };
+        }
+
+        return {
+          attendance: {
+            overtimeHours: 0,
+            totalOvertimeHours: 0,
+            overtimeStatus: "none",
+          },
+        };
+      }
+    }
+
+    if (aiIntent === "attendance") {
+      return {
+        attendance: {
+          percentage: userContext.attendance?.percentage ?? 0,
+        },
+      };
+    }
+
+    if (aiIntent === "productivity") {
+      return {
+        productivity: {
+          percentage: userContext.productivity?.percentage ?? 0,
+        },
+      };
+    }
+
+    if (aiIntent === "streak") {
+      return {
+        currentStreak: userContext.streak?.current ?? 0,
+        longestStreak: userContext.streak?.longest ?? 0,
+      };
+    }
+
+    if (aiIntent === "leaves") {
+      return {
+        attendance: {
+          leavesTaken: userContext.attendance?.leavesTaken ?? 0,
+        },
+      };
+    }
+
+    if (aiIntent === "punctuality") {
+      return {
+        punctuality: userContext.productivity?.punctuality ?? 0,
+      };
+    }
+
+    if (aiIntent === "average_daily_hours") {
+      return {
+        attendance: {
+          averageDailyHours: userContext.attendance?.averageDailyHours ?? 0,
+        },
+      };
+    }
+
+    if (aiIntent === "average_checkin") {
+      return {
+        averageCheckIn: userContext.work?.averageCheckIn ?? null,
+      };
+    }
+  }
 
   // --------------------------------------------------
   // Check what the previous assistant asked
@@ -50,11 +355,16 @@ export const getRequestedContext = (
     lastAssistantContent.includes("month") &&
     lastAssistantContent.includes("total");
 
+  const isOvertimeFollowUp =
+    lastAssistantContent.includes("overtime hours") &&
+    (lastAssistantContent.includes("this month") ||
+      lastAssistantContent.includes("total"));
+
   // --------------------------------------------------
   // OVERTIME FOLLOW-UP MUST COME FIRST
   // --------------------------------------------------
 
-  if (isOvertimeClarification) {
+  if (isOvertimeClarification || isOvertimeFollowUp) {
     const monthlyOvertime = Number(userContext.attendance?.overtimeHours ?? 0);
 
     const totalOvertime = Number(
@@ -63,10 +373,10 @@ export const getRequestedContext = (
 
     // This month
     if (
-      lower === "month" ||
-      lower === "this month" ||
-      lower === "monthly" ||
-      lower === "this month's"
+      normalizedFollowUp === "month" ||
+      normalizedFollowUp === "this month" ||
+      normalizedFollowUp === "monthly" ||
+      normalizedFollowUp === "this month's"
     ) {
       return {
         attendance: {
@@ -78,11 +388,11 @@ export const getRequestedContext = (
 
     // Total
     if (
-      lower === "total" ||
-      lower === "total overtime" ||
-      lower === "total overtime hours" ||
-      lower === "all time" ||
-      lower === "overall"
+      normalizedFollowUp === "total" ||
+      normalizedFollowUp === "total overtime" ||
+      normalizedFollowUp === "total overtime hours" ||
+      normalizedFollowUp === "all time" ||
+      normalizedFollowUp === "overall"
     ) {
       return {
         attendance: {
@@ -104,7 +414,11 @@ export const getRequestedContext = (
       lastAssistantContent.includes("total"));
 
   if (isWorkingHoursFollowUp) {
-    if (lower === "week" || lower === "this week" || lower === "weekly") {
+    if (
+      normalizedFollowUp === "week" ||
+      normalizedFollowUp === "this week" ||
+      normalizedFollowUp === "weekly"
+    ) {
       return {
         attendance: {
           workingHoursPeriod: "week",
@@ -113,7 +427,11 @@ export const getRequestedContext = (
       };
     }
 
-    if (lower === "month" || lower === "this month" || lower === "monthly") {
+    if (
+      normalizedFollowUp === "month" ||
+      normalizedFollowUp === "this month" ||
+      normalizedFollowUp === "monthly"
+    ) {
       return {
         attendance: {
           workingHoursPeriod: "month",
@@ -123,91 +441,15 @@ export const getRequestedContext = (
     }
 
     if (
-      lower === "total" ||
-      lower === "total hours" ||
-      lower === "total working hours" ||
-      lower === "overall"
+      normalizedFollowUp === "total" ||
+      normalizedFollowUp === "total hours" ||
+      normalizedFollowUp === "total working hours" ||
+      normalizedFollowUp === "overall"
     ) {
       return {
         attendance: {
           workingHoursPeriod: "total",
           workingHours: userContext.attendance.totalWorkingHours,
-        },
-      };
-    }
-  }
-
-  // ==================================================
-  // OVERTIME CLARIFICATION FOLLOW-UP
-  // ==================================================
-
-  const lastOvertimeClarification = [...conversation]
-    .reverse()
-    .find((message) => {
-      if (message.role !== "assistant") return false;
-
-      const content = message.content?.toLowerCase() || "";
-
-      return (
-        content.includes("overtime") &&
-        content.includes("this month") &&
-        content.includes("total")
-      );
-    });
-
-  if (lastOvertimeClarification) {
-    const monthlyOvertime = userContext.attendance?.overtimeHours ?? 0;
-
-    const totalOvertime = userContext.attendance?.totalOvertimeHours ?? 0;
-
-    // ---------- This Month ----------
-
-    if (
-      lower === "this month" ||
-      lower === "month" ||
-      lower === "monthly" ||
-      lower === "this month's"
-    ) {
-      if (hasValue(monthlyOvertime)) {
-        return {
-          attendance: {
-            overtimePeriod: "month",
-            overtimeHours: monthlyOvertime,
-          },
-        };
-      }
-
-      return {
-        attendance: {
-          overtimePeriod: "month",
-          overtimeHours: 0,
-          overtimeStatus: "none",
-        },
-      };
-    }
-
-    // ---------- Total ----------
-
-    if (
-      lower === "total" ||
-      lower === "total overtime" ||
-      lower === "total overtime hours" ||
-      lower === "all time"
-    ) {
-      if (hasValue(totalOvertime)) {
-        return {
-          attendance: {
-            overtimePeriod: "total",
-            overtimeHours: totalOvertime,
-          },
-        };
-      }
-
-      return {
-        attendance: {
-          overtimePeriod: "total",
-          overtimeHours: 0,
-          overtimeStatus: "none",
         },
       };
     }

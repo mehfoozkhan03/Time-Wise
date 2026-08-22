@@ -1,27 +1,51 @@
-const conversations = new Map();
+import { AIConversation } from "../models/AIConversation.model.js";
 
-const MAX_MESSAGES = 6;
+// ==================================================
+// GET CONVERSATION
+// ==================================================
 
-export const getConversation = (userID) => {
-  return conversations.get(userID) || [];
+export const getConversation = async (userID) => {
+  const conversation = await AIConversation.findOne({
+    user: userID,
+  }).lean();
+
+  if (!conversation) {
+    return [];
+  }
+
+  return conversation.messages || [];
 };
 
-export const addConversationMessage = (userID, role, content) => {
-  const conversation = conversations.get(userID) || [];
+// ==================================================
+// ADD MESSAGE
+// ==================================================
 
-  conversation.push({
+export const addConversationMessage = async (userID, role, content) => {
+  let conversation = await AIConversation.findOne({
+    user: userID,
+  });
+
+  if (!conversation) {
+    conversation = new AIConversation({
+      user: userID,
+      messages: [],
+    });
+  }
+
+  conversation.messages.push({
     role,
     content,
   });
 
-  // Keep only the latest messages
-  if (conversation.length > MAX_MESSAGES) {
-    conversation.splice(0, conversation.length - MAX_MESSAGES);
-  }
-
-  conversations.set(userID, conversation);
+  await conversation.save();
 };
 
-export const clearConversation = (userID) => {
-  conversations.delete(userID);
+// ==================================================
+// CLEAR CONVERSATION
+// ==================================================
+
+export const clearConversation = async (userID) => {
+  await AIConversation.deleteOne({
+    user: userID,
+  });
 };

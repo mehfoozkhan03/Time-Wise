@@ -55,7 +55,7 @@ export const getAIUserContext = async (userID) => {
   // console.log(JSON.stringify(calendar, null, 2));
 
   // console.log("=========================================");
-8
+
   return {
     attendance: {
       percentage: stats.attendancePercentage,
