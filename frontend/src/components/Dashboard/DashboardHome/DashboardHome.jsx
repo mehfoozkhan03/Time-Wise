@@ -10,6 +10,7 @@ import {
 import { FaPlus } from "react-icons/fa";
 
 import { Bar } from "react-chartjs-2";
+import { useDispatch, useSelector } from 'react-redux';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -18,14 +19,23 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { fetchAllUser } from "../../../store/authSlice";
+import { useEffect } from "react";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
 export const DashboardHome = () => {
+  const dispatch = useDispatch()
+  const { totalUsers } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+      dispatch(fetchAllUser());
+    }, [dispatch]);
+
   const cardData = [
     {
       icon: <FaUsers />,
-      count: "214",
+      count: totalUsers,
       title: "Total Employees",
       subTitle: "+3 this month",
       color: "#3a9dcf",

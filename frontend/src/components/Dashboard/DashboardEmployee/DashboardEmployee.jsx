@@ -10,9 +10,12 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   fetchAllUser,
   loadLessUsers,
-  setSearch,
+  updateUserDepartment,
 } from "../../../store/authSlice";
 import { useEffect, useRef, useState } from "react";
+import { DepartmentDropdown } from "../Dropdowns/DepartmentDropdown/DepartmentDropdown";
+import { DesignationDropdown } from "../Dropdowns/DesignationDropdown/DesignationDropdown";
+import { authService } from "../../../services/authService";
 
 const departments = [
   "All",
@@ -23,22 +26,55 @@ const departments = [
   "Marketing",
 ];
 
+const employeeDepartments = [
+  "Engineering",
+  "Design",
+  "HR",
+  "Analytics",
+  "Marketing",
+];
+
+const employeeDesignations = [
+  "Software Developer",
+  "Frontend Developer",
+  "Backend Developer",
+  "Full Stack Developer",
+  "UI/UX Designer",
+  "HR Executive",
+  "Data Analyst",
+  "Marketing Executive",
+];
+
 export const DashboardEmployee = () => {
   const dispatch = useDispatch();
   const { users, totalUsers, isLoading, search, currentPage } = useSelector(
     (state) => state.auth,
   );
 
-  // Search Employee by Name
+  //# Search Employee by Name
   const [searchInput, setSearchInput] = useState("");
 
   const handleSearch = () => {
-    dispatch(setSearch(searchInput.trim()));
+    dispatch(
+      fetchAllUser({
+        page: 1,
+        department: selectedDepartment,
+        status: selectedStatus,
+        search: searchInput.trim(),
+      }),
+    );
   };
 
-  // This is for Getting more users & less users
+  //# This is for Getting more users & less users
   const handleLoadMore = () => {
-    dispatch(fetchAllUser());
+    dispatch(
+      fetchAllUser({
+        page: currentPage + 1,
+        department: selectedDepartment,
+        status: selectedStatus,
+        search,
+      }),
+    );
   };
 
   const handleLoadLess = () => {
@@ -57,16 +93,66 @@ export const DashboardEmployee = () => {
 
   const statusOptions = ["All", "Active", "Inactive"];
 
-  // Department
+  //# Department
   const handleDepartmentSelect = (department) => {
     setSelectedDepartment(department);
     setOpenDropdown(null);
+
+    dispatch(
+      fetchAllUser({
+        page: 1,
+        department,
+        status: selectedStatus,
+        search,
+      }),
+    );
   };
 
-  // Status
+  //# Select Employee Department
+  const handleDepartmentChange = (userId, department) => {
+    dispatch(
+      updateUserDepartment({
+        userId,
+        department,
+      }),
+    );
+  };
+
+  useEffect(() => {
+    dispatch(
+      fetchAllUser({
+        page: 1,
+        department: "All",
+        status: "All",
+        search: "",
+      }),
+    );
+  }, [dispatch]);
+
+  //# Select Employee Designation
+  const handleDesignationChange = async (userId, designation) => {
+    try {
+      await authService.updateUserDesignation(userId, designation);
+
+      dispatch(fetchAllUser());
+    } catch (error) {
+      console.error("Designation update failed:", error);
+    }
+  };
+
+  //# Status
   const handleStatusSelect = (status) => {
     setSelectedStatus(status);
     setOpenDropdown(null);
+
+    dispatch(
+      fetchAllUser({
+        page: 1,
+        department: selectedDepartment,
+        status,
+        search,
+      }),
+    );
   };
 
   // # Dropdown useEffect
@@ -83,10 +169,6 @@ export const DashboardEmployee = () => {
       document.removeEventListener("mousedown", handleOutsideClick);
     };
   }, []);
-
-  useEffect(() => {
-    dispatch(fetchAllUser());
-  }, [dispatch, search]);
 
   return (
     <>
@@ -242,14 +324,32 @@ export const DashboardEmployee = () => {
                       <p>
                         {el.firstName} {el.lastName}
                       </p>
-                      <span>{el._id}</span>
                     </div>
                   </div>
                   <div className="dashboardEmployee-department-name">
-                    {el.department ? el.department : "--"}
+                    {el.department ? (
+                      <span>{el.department}</span>
+                    ) : (
+                      <DepartmentDropdown
+                        departments={employeeDepartments}
+                        onSelect={(department) =>
+                          handleDepartmentChange(el._id, department)
+                        }
+                      />
+                    )}
                   </div>
                   <div className="dashboardEmployee-designation">
-                    {el.designation ? el.designation : "--"}
+                    {el.designation ? (
+                      <span>{el.designation}</span>
+                    ) : (
+                      <DesignationDropdown
+                        designations={employeeDesignations}
+                        selectedDesignation={el.designation}
+                        onSelect={(designation) =>
+                          handleDesignationChange(el._id, designation)
+                        }
+                      />
+                    )}
                   </div>
                   <div className="dashboardEmployee-role">{el.role}</div>
                   <div className="dashboardEmployee-status">

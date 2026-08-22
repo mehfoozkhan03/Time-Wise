@@ -180,6 +180,8 @@
   width: 40px;
   border-radius: 50%;
   border: 1px solid var(--border);
+  background-color: var(--primary);
+  font-weight: 700;
 }
 .dashboardEmployee-name > p {
   font-size: 14px;

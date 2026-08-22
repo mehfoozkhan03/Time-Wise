@@ -12,8 +12,8 @@ export const ActivityTracker = () => {
     // Update immediately
     updateActivity();
 
-    // Then every 30 seconds
-    const interval = setInterval(updateActivity, 1000);
+    // Then every 5 min
+    const interval = setInterval(updateActivity, 5 * 60 * 1000);
 
     return () => clearInterval(interval);
   }, []);
