@@ -3,6 +3,8 @@ export const getRequestedContext = (
   userContext,
   conversation = [],
   queryUnderstanding = null,
+  intentEntity = null,
+  dataRoute = null,
 ) => {
   const question = message.toLowerCase().trim();
   const lower = message.toLowerCase().trim();
@@ -16,6 +18,18 @@ export const getRequestedContext = (
     .replace(/\bmo\b/g, "month");
 
   const context = {};
+
+  // ==================================================
+  // PHASE 3: DATA ROUTE
+  // ==================================================
+
+  const phase3Route = dataRoute?.routable ? dataRoute : null;
+
+  console.log("========== PHASE 3 CONTEXT ROUTE ==========");
+
+  console.log(JSON.stringify(phase3Route, null, 2));
+
+  console.log("============================================");
 
   const intentToContext = {
     attendance: "attendance",
@@ -48,6 +62,39 @@ export const getRequestedContext = (
   const aiIntent = queryUnderstanding?.intent || null;
 
   const aiPeriod = getValidPeriod(queryUnderstanding?.period);
+
+  const phase2Intent = intentEntity?.intent || null;
+
+  const phase2Action = intentEntity?.action || null;
+
+  const phase2Entity = intentEntity?.entity || null;
+
+  const phase2Period = getValidPeriod(intentEntity?.period);
+
+  const phase2DateReference = intentEntity?.dateReference || "none";
+
+  const phase2Search = intentEntity?.search || "none";
+
+  const phase2Confident = Number(intentEntity?.confidence || 0) >= 0.75;
+
+  const effectiveIntent =
+    phase2Confident && phase2Intent ? phase2Intent : aiIntent;
+
+  const effectivePeriod =
+    phase2Confident && phase2Period ? phase2Period : aiPeriod;
+
+  console.log("========== PHASE 2 CONTEXT ==========");
+
+  console.log({
+    intent: phase2Intent,
+    action: phase2Action,
+    entity: phase2Entity,
+    period: phase2Period,
+    dateReference: phase2DateReference,
+    search: phase2Search,
+  });
+
+  console.log("=====================================");
 
   const aiConfidence = Number(queryUnderstanding?.confidence ?? 0);
 
@@ -102,6 +149,38 @@ export const getRequestedContext = (
     }
   };
 
+  // ==================================================
+  // PHASE 3 WORKING HOURS ROUTING
+  // ==================================================
+
+  const getPhase3WorkingHoursContext = (route) => {
+    if (!route) {
+      return null;
+    }
+
+    if (route.source !== "userContext" || route.dataType !== "hours") {
+      return null;
+    }
+
+    if (route.entity === "today_working_hours" || route.period === "today") {
+      return buildWorkingHoursContext("today");
+    }
+
+    if (route.entity === "weekly_working_hours" || route.period === "week") {
+      return buildWorkingHoursContext("week");
+    }
+
+    if (route.entity === "monthly_working_hours" || route.period === "month") {
+      return buildWorkingHoursContext("month");
+    }
+
+    if (route.entity === "total_working_hours" || route.period === "total") {
+      return buildWorkingHoursContext("total");
+    }
+
+    return null;
+  };
+
   const buildOvertimeContext = (period) => {
     const monthlyOvertime = Number(userContext.attendance?.overtimeHours ?? 0);
 
@@ -143,6 +222,35 @@ export const getRequestedContext = (
   const totalWorkingHours = Number(
     userContext.attendance?.totalWorkingHours ?? 0,
   );
+
+  // ==================================================
+  // PHASE 3 AI DATA ROUTING
+  // ==================================================
+
+  if (phase3Route) {
+    // ----------------------------------------------
+    // Working Hours
+    // ----------------------------------------------
+
+    if (phase3Route.intent === "working_hours") {
+      const phase3WorkingHoursContext =
+        getPhase3WorkingHoursContext(phase3Route);
+
+      if (phase3WorkingHoursContext) {
+        console.log("========== PHASE 3 CONTEXT MATCH ==========");
+
+        console.log("Entity:", phase3Route.entity);
+
+        console.log("Field:", phase3Route.field);
+
+        console.log("Period:", phase3Route.period);
+
+        console.log("============================================");
+
+        return phase3WorkingHoursContext;
+      }
+    }
+  }
 
   // ==================================================
   // PHASE 1 AI ROUTING

@@ -7,6 +7,10 @@ import {
   clearConversation,
 } from "../services/aiConversation.service.js";
 import { understandTimeWiseQuery } from "../services/aiQueryUnderstanding.services.js";
+import { understandIntentAndEntity } from "../services/aiIntentEntity.services.js";
+import { routeTimeWiseData } from "../services/aiDataRouter.services.js";
+import { retrieveTimeWiseData } from "../services/aiDataRetrieval.services.js";
+import { generateTimeWiseResponse } from "../services/ai.response.services.js";
 
 export const askAI = async (req, res) => {
   try {
@@ -34,30 +38,54 @@ export const askAI = async (req, res) => {
       conversation,
     );
 
-    console.log("========== PHASE 1 RESULT ==========");
-    console.log(JSON.stringify(queryUnderstanding, null, 2));
-    console.log("====================================");
-
     // ==================================================
-    // EXISTING TIMEWISE CONTEXT
+    // PHASE 2: INTENT + ENTITY
     // ==================================================
 
-    const requestedContext = getRequestedContext(
-      message.trim(),
+    const intentEntity = await understandIntentAndEntity({
+      message: message.trim(),
+      phase1Result: queryUnderstanding,
+      conversation,
+    });
+
+    // ==================================================
+    // PHASE 3: DATA / CONTEXT ROUTING
+    // ==================================================
+
+    const dataRoute = routeTimeWiseData({
+      intentEntity,
+    });
+
+    const retrievedData = retrieveTimeWiseData({
       userContext,
-      conversation,
-      queryUnderstanding,
+      dataRoute,
+    });
+
+    console.log("========== PHASE 5 INPUT ==========");
+    console.log(
+      JSON.stringify(
+        {
+          question: message,
+          retrievedData,
+        },
+        null,
+        2,
+      ),
     );
+    console.log("===================================");
+
+    const phase5 = await generateTimeWiseResponse({
+      question: message,
+      phase2: intentEntity,
+      phase3: dataRoute,
+      phase4: retrievedData,
+    });
 
     // ==================================================
-    // FINAL AI RESPONSE
+    // PHASE 5 FINAL RESPONSE
     // ==================================================
 
-    const answer = await askTimeWiseAI(
-      message.trim(),
-      requestedContext,
-      conversation,
-    );
+    const answer = phase5.answer;
 
     await addConversationMessage(userID, "user", message.trim());
 
