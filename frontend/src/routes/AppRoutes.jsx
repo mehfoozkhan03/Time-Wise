@@ -27,6 +27,7 @@ import { Reports } from './../pages/Reports/Reports';
 import { Settings } from '../pages/Settings';
 import { Profile } from './../components/Setting/Profile/Profile';
 import { SettingAttendance } from './../components/Setting/SettingAttendance/SettingAttendance';
+import Leave from "../components/Setting/Leave/Leave";
 import { Appearance } from './../components/Setting/Appearance/Appearance';
 import { Notification } from './../components/Setting/Notification/Notifications';
 import { Security } from './../components/Setting/Security/Security';
@@ -161,6 +162,7 @@ export const AppRoutes = () => {
             <Route index element={<Navigate to="profile" replace />} />
             <Route path="profile" element={<Profile />} />
             <Route path="attendance" element={<SettingAttendance />} />
+            <Route path="leave" element={<Leave />} />
             <Route path="calendar" element={<Calendar />} />
             <Route path="appearance" element={<Appearance />} />
             <Route path="notification" element={<Notification />} />
