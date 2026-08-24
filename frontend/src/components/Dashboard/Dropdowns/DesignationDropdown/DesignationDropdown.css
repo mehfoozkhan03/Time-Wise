@@ -1,0 +1,50 @@
+.employeeDesignationDropdown{
+    position: relative;
+    width: 85%;
+    background-color: var(--bg);
+    padding: 10px 15px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+}
+
+.employeeDesignationDropdown-button{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: transparent;
+    color: var(--text_color);
+    font-size: 12px;
+}
+
+/* employeeDesignationDropdown-menu */
+.employeeDesignationDropdown-menu{
+    position: absolute;
+    left: 0;
+    top: 40px;
+    width: 100%;
+    background-color: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    z-index: 999;
+    font-size: 12px;
+}
+
+.employeeDesignationDropdown-option{
+    padding: 10px 20px;
+    border-radius: 7px;
+}
+
+.employeeDesignationDropdown-option:hover{
+    background-color: var(--primary_hover);
+    font-weight: 700;
+}
+
+.employeeDesignationDropdown-option.active{
+    background-color: var(--primary);
+}
+
+.employeeDesignationDropdown-arrow-open {
+  transform: rotate(180deg);
+  transition: transform 0.2s ease;
+}
