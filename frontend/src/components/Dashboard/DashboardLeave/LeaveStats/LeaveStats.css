@@ -6,8 +6,9 @@
   width: 100%;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
+  padding:24px 40px;
   gap: 18px;
-  margin-bottom: 24px;
+
 }
 
 /* ==========================================
@@ -138,7 +139,7 @@
 /* ==========================================
    RESPONSIVE
 ========================================== */
-
+/* 
 @media (max-width: 1100px) {
   .leave_stats {
     grid-template-columns: repeat(2, 1fr);
@@ -166,4 +167,4 @@
     height: 44px;
     min-width: 44px;
   }
-}
+} */

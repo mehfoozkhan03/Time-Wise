@@ -1,5 +1,7 @@
 .leave_requests {
-  width: 100%;
+  width: calc(100% - 80px);
+  margin: 0 30px;
+
   background: var(--card);
   border: 1px solid var(--card-border);
   border-radius: var(--radius_md);
@@ -90,6 +92,7 @@
 
 .leave_search input {
   width: 100%;
+  background-color:var(--surface) !important;
   height: 40px;
   padding: 0 14px 0 38px;
   border-radius: var(--radius_sm);
