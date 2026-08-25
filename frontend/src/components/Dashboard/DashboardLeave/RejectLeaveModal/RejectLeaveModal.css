@@ -1,0 +1,438 @@
+/* ==========================================
+   OVERLAY
+========================================== */
+
+.reject_leave_overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 24px;
+
+  background: rgba(0, 0, 0, 0.45);
+
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+
+  animation: rejectLeaveOverlayIn 0.2s ease;
+}
+
+/* ==========================================
+   MODAL
+========================================== */
+
+.reject_leave_modal {
+  width: min(470px, 100%);
+  max-height: calc(100vh - 48px);
+
+  overflow-y: auto;
+
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius_lg);
+
+  box-shadow: var(--shadow_lg);
+
+  animation: rejectLeaveModalIn 0.25s ease;
+}
+
+/* ==========================================
+   HEADER
+========================================== */
+
+.reject_leave_header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 20px 22px 0;
+}
+
+.reject_leave_header_icon {
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: color-mix(
+    in srgb,
+    var(--error) 12%,
+    transparent
+  );
+
+  color: var(--error);
+
+  font-size: 16px;
+}
+
+.reject_leave_close {
+  width: 32px;
+  height: 32px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid var(--border);
+  border-radius: var(--radius_sm);
+
+  background: var(--surface);
+  color: var(--text_secondary);
+
+  font-size: 12px;
+
+  transition:
+    background var(--transition),
+    color var(--transition),
+    border-color var(--transition);
+}
+
+.reject_leave_close:hover {
+  background: var(--card-hover);
+  color: var(--text_primary);
+  border-color: var(--card-border);
+}
+
+/* ==========================================
+   CONTENT
+========================================== */
+
+.reject_leave_content {
+  padding: 18px 22px 22px;
+}
+
+.reject_leave_content h2 {
+  margin: 0 0 7px;
+
+  font-family: "Poppins", sans-serif;
+  font-size: 19px;
+  font-weight: 600;
+
+  color: var(--text_primary);
+}
+
+.reject_leave_description {
+  margin: 0 0 18px;
+
+  color: var(--text_secondary);
+
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+/* ==========================================
+   EMPLOYEE
+========================================== */
+
+.reject_leave_employee {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+
+  padding: 12px;
+
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius_md);
+
+  margin-bottom: 14px;
+}
+
+.reject_leave_avatar {
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: var(--tag-bg);
+  color: var(--tag-text);
+
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.reject_leave_employee_info {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.reject_leave_employee_info strong {
+  color: var(--text_primary);
+
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.reject_leave_employee_info span {
+  color: var(--text_secondary);
+
+  font-size: 11px;
+}
+
+/* ==========================================
+   WARNING
+========================================== */
+
+.reject_leave_warning {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+
+  margin-bottom: 18px;
+  padding: 10px 12px;
+
+  border: 1px solid
+    color-mix(in srgb, var(--warning) 25%, transparent);
+
+  border-radius: var(--radius_sm);
+
+  background: color-mix(
+    in srgb,
+    var(--warning) 8%,
+    transparent
+  );
+
+  color: var(--text_secondary);
+
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.reject_leave_warning svg {
+  flex-shrink: 0;
+
+  margin-top: 2px;
+
+  color: var(--warning);
+
+  font-size: 12px;
+}
+
+/* ==========================================
+   FIELD
+========================================== */
+
+.reject_leave_field {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.reject_leave_field label {
+  margin-bottom: 7px;
+
+  color: var(--text_primary);
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.reject_leave_field label span {
+  margin-left: 3px;
+  color: var(--error);
+}
+
+.reject_leave_field textarea {
+  width: 100%;
+  min-height: 105px;
+
+  padding: 11px 12px 27px;
+
+  resize: vertical;
+
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius_sm);
+
+  color: var(--text_primary);
+
+  font-family: inherit;
+  font-size: 12px;
+  line-height: 1.5;
+
+  outline: none;
+
+  transition:
+    border-color var(--transition),
+    box-shadow var(--transition),
+    background var(--transition);
+}
+
+.reject_leave_field textarea::placeholder {
+  color: var(--text_secondary);
+  opacity: 0.7;
+}
+
+.reject_leave_field textarea:focus {
+  border-color: var(--primary);
+
+  box-shadow: 0 0 0 3px
+    color-mix(in srgb, var(--primary) 12%, transparent);
+}
+
+.reject_leave_character_count {
+  position: absolute;
+  right: 10px;
+  bottom: 8px;
+
+  color: var(--text_secondary);
+
+  font-size: 10px;
+
+  pointer-events: none;
+}
+
+/* ==========================================
+   ACTIONS
+========================================== */
+
+.reject_leave_actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+
+  margin-top: 20px;
+  padding-top: 17px;
+
+  border-top: 1px solid var(--divider);
+}
+
+.reject_leave_btn {
+  min-height: 37px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+
+  padding: 0 15px;
+
+  border-radius: var(--radius_sm);
+
+  font-size: 12px;
+  font-weight: 500;
+
+  transition:
+    background var(--transition),
+    color var(--transition),
+    border-color var(--transition),
+    opacity var(--transition),
+    transform var(--transition);
+}
+
+.reject_leave_btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+/* Cancel */
+
+.reject_leave_btn.cancel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text_secondary);
+}
+
+.reject_leave_btn.cancel:hover {
+  background: var(--card-hover);
+  color: var(--text_primary);
+}
+
+/* Confirm */
+
+.reject_leave_btn.confirm {
+  background: var(--error);
+  border: 1px solid var(--error);
+  color: var(--text-inverse);
+}
+
+.reject_leave_btn.confirm:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.reject_leave_btn.confirm:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+/* ==========================================
+   ANIMATION
+========================================== */
+
+@keyframes rejectLeaveOverlayIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes rejectLeaveModalIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width: 600px) {
+  .reject_leave_overlay {
+    padding: 14px;
+    align-items: flex-end;
+  }
+
+  .reject_leave_modal {
+    max-height: calc(100vh - 28px);
+
+    border-radius:
+      var(--radius_lg)
+      var(--radius_lg)
+      0
+      0;
+  }
+
+  .reject_leave_header {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .reject_leave_content {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .reject_leave_actions {
+    flex-direction: column-reverse;
+  }
+
+  .reject_leave_btn {
+    width: 100%;
+  }
+}
