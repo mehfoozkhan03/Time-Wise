@@ -11,6 +11,14 @@ import { understandIntentAndEntity } from "../services/aiIntentEntity.services.j
 import { routeTimeWiseData } from "../services/aiDataRouter.services.js";
 import { retrieveTimeWiseData } from "../services/aiDataRetrieval.services.js";
 import { generateTimeWiseResponse } from "../services/ai.response.services.js";
+import { understandMultipleIntents } from "../services/aiMultiIntent.services.js";
+import {
+  prepareRequests,
+  loadPending,
+  savePending,
+  clearPending,
+  getNextPending,
+} from "../services/aiOrchestrator.services.js";
 
 export const askAI = async (req, res) => {
   try {
@@ -48,6 +56,64 @@ export const askAI = async (req, res) => {
       conversation,
     });
 
+    const getSinglePhase2Request = (phase2) => {
+      if (!phase2) {
+        return null;
+      }
+
+      return {
+        intent: phase2.intent,
+        action: phase2.action,
+        entity: phase2.entity,
+        period: phase2.period,
+        dateReference: phase2.dateReference,
+        search: phase2.search,
+        confidence: phase2.confidence,
+      };
+    };
+
+    // ==================================================
+    // PHASE 5.5 - MULTI-INTENT DETECTION
+    // ==================================================
+
+    const multiIntent = await understandMultipleIntents({
+      message: message.trim(),
+      phase1Result: queryUnderstanding,
+      phase2Result: intentEntity,
+    });
+
+    // ==================================================
+    // PHASE 5.5 - MULTI-INTENT / FOLLOW-UP
+    // ==================================================
+
+    const phase2Requests = multiIntent.requests || [];
+
+    const { completeRequests, incompleteRequests } = prepareRequests({
+      requests: phase2Requests,
+      question: message,
+    });
+
+    const existingPending = await loadPending(userID);
+
+    const allPending = [...existingPending, ...incompleteRequests];
+
+    console.log("========== PHASE 5.5 ========== ");
+
+    console.log(
+      JSON.stringify(
+        {
+          completeRequests,
+          incompleteRequests,
+          existingPending,
+          allPending,
+        },
+        null,
+        2,
+      ),
+    );
+
+    console.log("================================");
+
     // ==================================================
     // PHASE 3: DATA / CONTEXT ROUTING
     // ==================================================
@@ -60,19 +126,6 @@ export const askAI = async (req, res) => {
       userContext,
       dataRoute,
     });
-
-    console.log("========== PHASE 5 INPUT ==========");
-    console.log(
-      JSON.stringify(
-        {
-          question: message,
-          retrievedData,
-        },
-        null,
-        2,
-      ),
-    );
-    console.log("===================================");
 
     const phase5 = await generateTimeWiseResponse({
       question: message,

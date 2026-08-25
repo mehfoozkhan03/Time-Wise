@@ -457,29 +457,9 @@ ${safeMessage}
 
     const raw = response.choices?.[0]?.message?.content || "";
 
-    console.log("========== PHASE 2 RAW RESPONSE ==========");
-    console.log(JSON.stringify(response, null, 2));
-    console.log("===========================================");
-
-    console.log("========== PHASE 2 RAW CONTENT ===========");
-    console.log(raw);
-    console.log("===========================================");
-
-    const parsed = parseJSON(raw);
-
-    console.log("========== PHASE 2 PARSED JSON ===========");
-    console.log(JSON.stringify(parsed, null, 2));
-    console.log("===========================================");
-
-    const result = normalizeIntentEntity(parsed);
-
-    console.log("========== PHASE 2 RESULT ==========");
-
-    console.log(JSON.stringify(result, null, 2));
-
-    console.log("====================================");
-
     return result;
+
+    
   } catch (error) {
     console.error("Intent + Entity Engine Error:", error?.message || error);
 

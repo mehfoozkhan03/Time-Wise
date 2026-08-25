@@ -534,12 +534,6 @@ export const routeTimeWiseData = ({ intentEntity }) => {
     intentEntity,
   });
 
-  console.log("========== PHASE 3 DATA ROUTING ==========");
-
-  console.log(JSON.stringify(route, null, 2));
-
-  console.log("===========================================");
-
   return route;
 };
 

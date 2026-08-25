@@ -450,11 +450,5 @@ export const retrieveTimeWiseData = ({ userContext, dataRoute }) => {
     };
   }
 
-  console.log("========== PHASE 4 DATA RETRIEVAL ==========");
-
-  console.log(JSON.stringify(result, null, 2));
-
-  console.log("=============================================");
-
   return result;
 };
