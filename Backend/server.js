@@ -13,6 +13,7 @@ import calendarRoutes from "./routes/Calendar.routes.js";
 import holidayRouter from "./routes/Holiday.routes.js";
 import { contactRoute } from "./routes/Contact.routes.js";
 import notificationRoute from "./routes/Notification.routes.js";
+import leaveRoutes from "./routes/Leave.routes.js";
 import aiRoutes from "./routes/Ai.routes.js";
 
 dotenv.config();
@@ -54,6 +55,8 @@ server.use("/holiday", holidayRouter);
 server.use("/api/contact", contactRoute);
 
 server.use("/notifications", notificationRoute);
+
+server.use("/leave", leaveRoutes);
 
 server.use("/ai", aiRoutes);
 

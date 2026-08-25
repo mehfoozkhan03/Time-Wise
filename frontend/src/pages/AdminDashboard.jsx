@@ -3,7 +3,7 @@ import '../styles/Dashboard.css';
 import { Outlet, useLocation } from 'react-router-dom';
 import { DashboardSidebar } from '../components/Dashboard/DashboardSidebar/DashboardSidebar';
 
-import { MdEventAvailable, MdOutlineSpaceDashboard } from 'react-icons/md';
+import { MdEventAvailable, MdOutlineSpaceDashboard, MdOutlineWatchLater } from 'react-icons/md';
 import {
   FaUsers,
   FaCalendarDays,
@@ -33,18 +33,18 @@ export default function AdminDashboard() {
     },
     '/adminDashboard/attendance': {
       title: 'Attendance',
-      icon: <FaCalendarDays />,
-      color: '#c8dcff',
+      icon: <MdOutlineWatchLater />,
+      color: '#60A5FA',
     },
     '/adminDashboard/leave': {
       title: 'Leave',
       icon: <MdEventAvailable />,
-      color: '#c8dcff',
+      color: '#FB7185',
     },
     '/adminDashboard/calendar': {
       title: 'Calendar',
       icon: <FaCalendarDays />,
-      color: '#c8dcff',
+      color: '#38BDF8',
     },
     '/adminDashboard/thought': {
       title: 'Thoughts',

@@ -43,12 +43,12 @@ userRoutes.patch("/:userId/department", updateUserDepartment);
 
 userRoutes.patch("/:userId/designation", updateUserDesignation);
 
+userRoutes.patch("/theme", auth, updateTheme);
+
 userRoutes.patch("/:userId", auth, updateEmployee);
 // userRoutes.patch("/:userId", auth, adminOnly, updateEmployee);
 
 userRoutes.get("/profile/:userId", auth, getUserProfile);
-
-userRoutes.patch("/theme", auth, updateTheme);
 
 userRoutes.post("/adminlogin", admin_login);
 
