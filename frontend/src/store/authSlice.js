@@ -21,6 +21,61 @@ export const fetchCurrentUser = createAsyncThunk(
   },
 );
 
+//# ========================== Fetch all users =========================
+
+export const fetchAllUser = createAsyncThunk(
+  "user/getAllUser",
+  async (
+    { page = 1, department = "All", status = "All", search = "" } = {},
+    thunkAPI,
+  ) => {
+    try {
+      const state = thunkAPI.getState();
+      const limit = state.auth.limit;
+
+      const response = await authService.getAllUser(
+        page,
+        limit,
+        search,
+        department,
+        status,
+      );
+
+      return {
+        users: response.data.users,
+        totalUsers: response.data.totalUsers,
+        page: response.data.page,
+        limit: response.data.limit,
+      };
+    } catch (error) {
+      return thunkAPI.rejectWithValue({
+        success: false,
+        title: "Unable to fetch all users",
+        message: error.response?.data?.message || "Something went wrong",
+      });
+    }
+  },
+);
+
+//# ================== Update Employee ===================
+
+export const updateEmployee = createAsyncThunk(
+  "user/updateEmployee",
+  async ({ userId, employeeData }, thunkAPI) => {
+    try {
+      const response = await authService.updateEmployee(userId, employeeData);
+
+      return response.data.user;
+    } catch (error) {
+      return thunkAPI.rejectWithValue({
+        success: false,
+        title: "Unable to update employee",
+        message: error.response?.data?.message || "Something went wrong",
+      });
+    }
+  },
+);
+
 export const loginUser = createAsyncThunk(
   "auth/loginUser",
   async (credentials, thunkAPI) => {
@@ -110,14 +165,39 @@ export const updateTheme = createAsyncThunk(
   },
 );
 
+//# =================== Update Department ======================
+export const updateUserDepartment = createAsyncThunk(
+  "user/updateUserDepartment",
+  async ({ userId, department }, thunkAPI) => {
+    try {
+      const response = await authService.updateUserDepartment(
+        userId,
+        department,
+      );
+
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue({
+        success: false,
+        message: error.response?.data?.message || "Failed to update department",
+      });
+    }
+  },
+);
+
 const initialState = {
   isAuthenticated: document.cookie
     .split("; ")
     .some((cookie) => cookie.startsWith("token=")),
   user: null,
+  users: [],
+  totalUsers: 0,
   isLoading: false,
   isError: false,
   errorMessage: "",
+  currentPage: 0,
+  limit: 10,
+  search: "",
 };
 
 const authSlice = createSlice({
@@ -129,6 +209,21 @@ const authSlice = createSlice({
       state.isAuthenticated = false;
       state.errorMessage = "";
       state.isError = false;
+    },
+    setSearch(state, action) {
+      state.search = action.payload;
+      state.users = [];
+      state.currentPage = 0;
+    },
+    loadLessUsers(state) {
+      if (state.currentPage > 1) {
+        state.users.splice(state.users.length - state.limit);
+        state.currentPage -= 1;
+      }
+    },
+    resetUsers(state) {
+      state.users = [];
+      state.currentPage = 0;
     },
   },
 
@@ -200,17 +295,92 @@ const authSlice = createSlice({
         state.errorMessage = action.payload;
       })
 
+      // ==================== Get all Users ================
+      .addCase(fetchAllUser.pending, (state) => {
+        state.isLoading = true;
+        state.isError = null;
+        state.errorMessage = "";
+      })
+
+      .addCase(fetchAllUser.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+
+        if (action.payload.page === 1) {
+          state.users = action.payload.users;
+        } else {
+          state.users.push(...action.payload.users);
+        }
+
+        state.totalUsers = action.payload.totalUsers;
+        state.currentPage = action.payload.page;
+        state.limit = action.payload.limit;
+      })
+
+      .addCase(fetchAllUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.errorMessage = action.payload;
+      })
+
       // ================= Theme Update =================
 
       .addCase(updateTheme.fulfilled, (state, action) => {
         if (state.user) {
           state.user.theme = action.payload;
         }
+      })
+
+      //# ====================== Update Department =====================
+      .addCase(updateUserDepartment.fulfilled, (state, action) => {
+        const { userId, department } = action.meta.arg;
+
+        const index = state.users.findIndex((user) => user._id === userId);
+
+        if (index !== -1) {
+          state.users[index].department = department;
+        }
+      })
+
+      .addCase(updateUserDepartment.rejected, (state, action) => {
+        state.isError = true;
+        state.errorMessage = action.payload;
+      })
+
+      //# ===================== Update Employee Details ======================
+      .addCase(updateEmployee.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+        state.errorMessage = "";
+      })
+
+      .addCase(updateEmployee.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+
+        const index = state.users.findIndex(
+          (user) => user._id === action.payload._id,
+        );
+
+        if (index !== -1) {
+          state.users[index] = action.payload;
+        }
+
+        if (state.user && state.user._id === action.payload._id) {
+          state.user = action.payload;
+        }
+      })
+
+      .addCase(updateEmployee.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.errorMessage = action.payload;
       });
   },
 });
 
-export const { logout } = authSlice.actions;
+export const { logout, setSearch, loadLessUsers, resetUsers } =
+  authSlice.actions;
 
 export default authSlice.reducer;
 

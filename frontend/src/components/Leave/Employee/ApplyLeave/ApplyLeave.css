@@ -1,0 +1,204 @@
+.applyLeave-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.65);
+}
+
+.applyLeave-modal {
+  width: min(520px, 100%);
+  max-height: 90vh;
+  overflow-y: auto;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--text_primary);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+}
+
+.applyLeave-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 22px;
+  border-bottom: 1px solid var(--border);
+}
+
+.applyLeave-header h2 {
+  margin: 0 0 5px;
+  font-size: 20px;
+}
+
+.applyLeave-header p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text_secondary);
+}
+
+.applyLeave-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--text_secondary);
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.applyLeave-close:hover {
+  background: var(--surface_hover);
+  color: var(--text_primary);
+}
+
+.applyLeave-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 22px;
+}
+
+.applyLeave-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.applyLeave-field label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text_primary);
+}
+
+.applyLeave-field input,
+.applyLeave-field select,
+.applyLeave-field textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 11px 12px;
+  background: var(--surface);
+  color: var(--text_primary);
+  font: inherit;
+  outline: none;
+}
+
+.applyLeave-field input:focus,
+.applyLeave-field select:focus,
+.applyLeave-field textarea:focus {
+  border-color: var(--primary);
+}
+
+.applyLeave-field textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.applyLeave-date-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.applyLeave-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.applyLeave-info > div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface_hover);
+}
+
+.applyLeave-info span {
+  font-size: 12px;
+  color: var(--text_secondary);
+}
+
+.applyLeave-info strong {
+  font-size: 15px;
+  color: var(--text_primary);
+}
+
+.applyLeave-error {
+  margin: 0;
+  font-size: 13px;
+  color: #ef4444;
+}
+
+.applyLeave-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding-top: 4px;
+}
+
+.applyLeave-cancel,
+.applyLeave-submit {
+  padding: 10px 17px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.applyLeave-cancel {
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text_primary);
+}
+
+.applyLeave-cancel:hover {
+  background: var(--surface_hover);
+}
+
+.applyLeave-submit {
+  border: 1px solid var(--primary);
+  background: var(--primary);
+  color: #fff;
+}
+
+.applyLeave-submit:hover {
+  opacity: 0.9;
+}
+
+@media (max-width: 600px) {
+  .applyLeave-overlay {
+    padding: 12px;
+  }
+
+  .applyLeave-header,
+  .applyLeave-form {
+    padding: 18px;
+  }
+
+  .applyLeave-date-grid,
+  .applyLeave-info {
+    grid-template-columns: 1fr;
+  }
+
+  .applyLeave-actions {
+    flex-direction: column-reverse;
+  }
+
+  .applyLeave-cancel,
+  .applyLeave-submit {
+    width: 100%;
+  }
+}

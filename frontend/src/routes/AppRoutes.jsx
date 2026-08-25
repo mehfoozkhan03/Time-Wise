@@ -27,6 +27,7 @@ import { Reports } from './../pages/Reports/Reports';
 import { Settings } from '../pages/Settings';
 import { Profile } from './../components/Setting/Profile/Profile';
 import { SettingAttendance } from './../components/Setting/SettingAttendance/SettingAttendance';
+import Leave from "../components/Setting/Leave/Leave";
 import { Appearance } from './../components/Setting/Appearance/Appearance';
 import { Notification } from './../components/Setting/Notification/Notifications';
 import { Security } from './../components/Setting/Security/Security';
@@ -47,6 +48,7 @@ import { NotificationPage } from '../pages/NotificationPage/NotificationPage';
 import { AuthLayout } from '../layouts/AuthLayout';
 import { AdminLayout } from '../layouts/AdminLayout';
 import { CommunityProfile } from '../components/community/CommunityProfile/CommunityProfile';
+import { DashboardLeave } from '../components/Dashboard/DashboardLeave/DashboardLeave';
 
 export const AppRoutes = () => {
   return (
@@ -160,6 +162,7 @@ export const AppRoutes = () => {
             <Route index element={<Navigate to="profile" replace />} />
             <Route path="profile" element={<Profile />} />
             <Route path="attendance" element={<SettingAttendance />} />
+            <Route path="leave" element={<Leave />} />
             <Route path="calendar" element={<Calendar />} />
             <Route path="appearance" element={<Appearance />} />
             <Route path="notification" element={<Notification />} />
@@ -188,6 +191,8 @@ export const AppRoutes = () => {
             <Route path="adminDashboard" element={<DashboardHome />} />
             <Route path="employee" element={<DashboardEmployee />} />
             <Route path="attendance" element={<DashboardAttendance />} />
+            <Route path="leave" element={<DashboardLeave />} />
+            <Route path="calendar" element={<Calendar />} />
             <Route path="thought" element={<DashboardThuoght />} />
             <Route path="notification" element={<DashboardNotification />} />
             <Route path="announcement" element={<DashboardAnnouncement />} />

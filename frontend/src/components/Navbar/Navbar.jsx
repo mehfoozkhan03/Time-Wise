@@ -268,7 +268,7 @@ export default function Navbar() {
                     : "User"}
                 </h4>
 
-                <span>Frontend Developer</span>
+                <span>{user?.designation}</span>
               </div>
 
               <FaChevronDown

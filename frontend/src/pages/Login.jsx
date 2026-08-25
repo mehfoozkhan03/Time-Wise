@@ -291,7 +291,7 @@ const SignUpPage = () => {
 
             onCloseCb: () => {
               if (isAdminLogin) {
-                navigate("/admin/dashboard");
+                navigate("/adminDashboard");
               } else {
                 navigate("/");
               }

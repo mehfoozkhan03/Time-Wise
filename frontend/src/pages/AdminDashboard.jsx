@@ -3,7 +3,7 @@ import '../styles/Dashboard.css';
 import { Outlet, useLocation } from 'react-router-dom';
 import { DashboardSidebar } from '../components/Dashboard/DashboardSidebar/DashboardSidebar';
 
-import { MdOutlineSpaceDashboard } from 'react-icons/md';
+import { MdEventAvailable, MdOutlineSpaceDashboard, MdOutlineWatchLater } from 'react-icons/md';
 import {
   FaUsers,
   FaCalendarDays,
@@ -21,42 +21,52 @@ export default function AdminDashboard() {
   const location = useLocation();
 
   const headerData = {
-    '/dashboard/home': {
+    '/adminDashboard/home': {
       title: 'Dashboard',
       icon: <MdOutlineSpaceDashboard />,
       color: '#fff',
     },
-    '/dashboard/employee': {
+    '/adminDashboard/employee': {
       title: 'Employees',
       icon: <FaUsers />,
       color: '#583790',
     },
-    '/dashboard/attendance': {
+    '/adminDashboard/attendance': {
       title: 'Attendance',
-      icon: <FaCalendarDays />,
-      color: '#c8dcff',
+      icon: <MdOutlineWatchLater />,
+      color: '#60A5FA',
     },
-    '/dashboard/thought': {
+    '/adminDashboard/leave': {
+      title: 'Leave',
+      icon: <MdEventAvailable />,
+      color: '#FB7185',
+    },
+    '/adminDashboard/calendar': {
+      title: 'Calendar',
+      icon: <FaCalendarDays />,
+      color: '#38BDF8',
+    },
+    '/adminDashboard/thought': {
       title: 'Thoughts',
       icon: <FaLightbulb />,
       color: '#ffc844',
     },
-    '/dashboard/notification': {
+    '/adminDashboard/notification': {
       title: 'Notifications',
       icon: <FaBell />,
       color: '#ef9b52',
     },
-    '/dashboard/announcement': {
+    '/adminDashboard/announcement': {
       title: 'Announcements',
       icon: <FaBullhorn />,
       color: '#d13673',
     },
-    '/dashboard/report': {
+    '/adminDashboard/report': {
       title: 'Reports & Analytics',
       icon: <FaChartBar />,
       color: '#c9d7ba',
     },
-    '/dashboard/setting': {
+    '/adminDashboard/setting': {
       title: 'Settings',
       icon: <FaGear />,
       color: '#fff',
@@ -64,7 +74,7 @@ export default function AdminDashboard() {
   };
 
   const currentPage =
-    headerData[location.pathname] || headerData['/dashboard/home'];
+    headerData[location.pathname] || headerData['/adminDashboard/home'];
 
   return (
     <>

@@ -1,0 +1,169 @@
+/* ==========================================
+   LEAVE STATS
+========================================== */
+
+.leave_stats {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+/* ==========================================
+   STAT CARD
+========================================== */
+
+.leave_stat_card {
+  position: relative;
+  min-height: 125px;
+  padding: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius_md);
+  box-shadow: var(--shadow_sm);
+
+  overflow: hidden;
+
+  transition:
+    transform var(--transition),
+    background var(--transition),
+    border-color var(--transition),
+    box-shadow var(--transition);
+}
+
+.leave_stat_card:hover {
+  background: var(--card-hover);
+  border-color: var(--border);
+  box-shadow: var(--shadow_md);
+  transform: translateY(-3px);
+}
+
+/* ==========================================
+   CARD CONTENT
+========================================== */
+
+.leave_stat_content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.leave_stat_title {
+  font-size: 13px;
+  line-height: 1.4;
+  font-weight: 500;
+  color: var(--text_secondary);
+}
+
+.leave_stat_value {
+  margin: 0;
+
+  font-family: "Poppins", sans-serif;
+  font-size: 30px;
+  line-height: 1;
+  font-weight: 600;
+
+  color: var(--text_primary);
+}
+
+/* ==========================================
+   ICON
+========================================== */
+
+.leave_stat_icon {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: var(--radius_sm);
+
+  font-size: 18px;
+
+  transition:
+    transform var(--transition),
+    background var(--transition);
+}
+
+.leave_stat_card:hover .leave_stat_icon {
+  transform: scale(1.05);
+}
+
+/* ==========================================
+   TOTAL
+========================================== */
+
+.leave_stat_card.total .leave_stat_icon {
+  color: var(--primary);
+  background: var(--tag-bg);
+}
+
+/* ==========================================
+   PENDING
+========================================== */
+
+.leave_stat_card.pending .leave_stat_icon {
+  color: var(--warning);
+  background: color-mix(in srgb, var(--warning) 18%, transparent);
+}
+
+/* ==========================================
+   APPROVED
+========================================== */
+
+.leave_stat_card.approved .leave_stat_icon {
+  color: var(--success);
+  background: color-mix(in srgb, var(--success) 18%, transparent);
+}
+
+/* ==========================================
+   REJECTED
+========================================== */
+
+.leave_stat_card.rejected .leave_stat_icon {
+  color: var(--error);
+  background: color-mix(in srgb, var(--error) 18%, transparent);
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width: 1100px) {
+  .leave_stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .leave_stats {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+
+  .leave_stat_card {
+    min-height: 110px;
+    padding: 18px;
+  }
+
+  .leave_stat_value {
+    font-size: 26px;
+  }
+
+  .leave_stat_icon {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+  }
+}
