@@ -29,3 +29,40 @@ export const cancelLeave = async (leaveID) => {
 
   return data.data;
 };
+
+export const getAdminLeaves = async () => {
+  const { data } = await api.get("/leave/admin");
+
+  return data.data;
+};
+
+export const getAdminLeaveById = async (leaveID) => {
+  const { data } = await api.get(`/leave/admin/${leaveID}`);
+
+  return data.data;
+};
+
+export const approveAdminLeave = async (leaveID) => {
+  const { data } = await api.patch(
+    `/leave/admin/${leaveID}/approve`
+  );
+
+  return data.data;
+};
+
+export const rejectAdminLeave = async (leaveID, adminComment) => {
+  const { data } = await api.patch(
+    `/leave/admin/${leaveID}/reject`,
+    {
+      adminComment,
+    }
+  );
+
+  return data.data;
+};
+
+export const getAdminLeaveStatistics = async () => {
+  const { data } = await api.get("/leave/admin/stats");
+
+  return data.data;
+};

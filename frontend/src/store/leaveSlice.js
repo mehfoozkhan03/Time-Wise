@@ -8,10 +8,11 @@ export const fetchLeaveBalance = createAsyncThunk(
       return await leaveService.getLeaveBalance();
     } catch (error) {
       return rejectWithValue(
-        error.response?.data?.message || "Failed to fetch leave balance.",
+        error.response?.data?.message ||
+          "Failed to fetch leave balance."
       );
     }
-  },
+  }
 );
 
 export const fetchMyLeaves = createAsyncThunk(
@@ -21,10 +22,11 @@ export const fetchMyLeaves = createAsyncThunk(
       return await leaveService.getMyLeaves();
     } catch (error) {
       return rejectWithValue(
-        error.response?.data?.message || "Failed to fetch leave requests.",
+        error.response?.data?.message ||
+          "Failed to fetch leave requests."
       );
     }
-  },
+  }
 );
 
 export const submitLeave = createAsyncThunk(
@@ -34,10 +36,11 @@ export const submitLeave = createAsyncThunk(
       return await leaveService.applyLeave(payload);
     } catch (error) {
       return rejectWithValue(
-        error.response?.data?.message || "Failed to submit leave request.",
+        error.response?.data?.message ||
+          "Failed to submit leave request."
       );
     }
-  },
+  }
 );
 
 export const cancelLeaveRequest = createAsyncThunk(
@@ -47,10 +50,84 @@ export const cancelLeaveRequest = createAsyncThunk(
       return await leaveService.cancelLeave(leaveID);
     } catch (error) {
       return rejectWithValue(
-        error.response?.data?.message || "Failed to cancel leave request.",
+        error.response?.data?.message ||
+          "Failed to cancel leave request."
       );
     }
-  },
+  }
+);
+
+export const fetchAdminLeaves = createAsyncThunk(
+  "leave/fetchAdminLeaves",
+  async (_, { rejectWithValue }) => {
+    try {
+      return await leaveService.getAdminLeaves();
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message ||
+          "Failed to fetch admin leave requests."
+      );
+    }
+  }
+);
+
+export const fetchAdminLeaveById = createAsyncThunk(
+  "leave/fetchAdminLeaveById",
+  async (leaveID, { rejectWithValue }) => {
+    try {
+      return await leaveService.getAdminLeaveById(leaveID);
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message ||
+          "Failed to fetch leave details."
+      );
+    }
+  }
+);
+
+export const approveAdminLeave = createAsyncThunk(
+  "leave/approveAdminLeave",
+  async (leaveID, { rejectWithValue }) => {
+    try {
+      return await leaveService.approveAdminLeave(leaveID);
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message ||
+          "Failed to approve leave request."
+      );
+    }
+  }
+);
+
+export const rejectAdminLeave = createAsyncThunk(
+  "leave/rejectAdminLeave",
+  async ({ leaveID, adminComment }, { rejectWithValue }) => {
+    try {
+      return await leaveService.rejectAdminLeave(
+        leaveID,
+        adminComment
+      );
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message ||
+          "Failed to reject leave request."
+      );
+    }
+  }
+);
+
+export const fetchLeaveStatistics = createAsyncThunk(
+  "leave/fetchStatistics",
+  async (_, { rejectWithValue }) => {
+    try {
+      return await leaveService.getAdminLeaveStatistics();
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message ||
+          "Failed to fetch leave statistics."
+      );
+    }
+  }
 );
 
 const leaveSlice = createSlice({
@@ -59,6 +136,10 @@ const leaveSlice = createSlice({
   initialState: {
     balance: null,
     requests: [],
+
+    adminRequests: [],
+    adminStatistics: null,
+
     loading: false,
     error: null,
   },
@@ -84,7 +165,8 @@ const leaveSlice = createSlice({
 
       .addCase(fetchLeaveBalance.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || "Failed to fetch leave balance.";
+        state.error =
+          action.payload || "Failed to fetch leave balance.";
       })
 
       .addCase(fetchMyLeaves.pending, (state) => {
@@ -99,7 +181,8 @@ const leaveSlice = createSlice({
 
       .addCase(fetchMyLeaves.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || "Failed to fetch leave requests.";
+        state.error =
+          action.payload || "Failed to fetch leave requests.";
       })
 
       .addCase(submitLeave.pending, (state) => {
@@ -114,7 +197,8 @@ const leaveSlice = createSlice({
 
       .addCase(submitLeave.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || "Failed to submit leave request.";
+        state.error =
+          action.payload || "Failed to submit leave request.";
       })
 
       .addCase(cancelLeaveRequest.pending, (state) => {
@@ -126,7 +210,7 @@ const leaveSlice = createSlice({
         state.loading = false;
 
         const index = state.requests.findIndex(
-          (item) => item._id === action.payload._id,
+          (item) => item._id === action.payload._id
         );
 
         if (index !== -1) {
@@ -136,7 +220,91 @@ const leaveSlice = createSlice({
 
       .addCase(cancelLeaveRequest.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || "Failed to cancel leave request.";
+        state.error =
+          action.payload ||
+          "Failed to cancel leave request.";
+      })
+
+      .addCase(fetchAdminLeaves.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+
+      .addCase(fetchAdminLeaves.fulfilled, (state, action) => {
+        state.loading = false;
+        state.adminRequests = action.payload;
+      })
+
+      .addCase(fetchAdminLeaves.rejected, (state, action) => {
+        state.loading = false;
+        state.error =
+          action.payload ||
+          "Failed to fetch admin leave requests.";
+      })
+
+      .addCase(fetchAdminLeaveById.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+
+      .addCase(fetchAdminLeaveById.fulfilled, (state) => {
+        state.loading = false;
+      })
+
+      .addCase(fetchAdminLeaveById.rejected, (state, action) => {
+        state.loading = false;
+        state.error =
+          action.payload ||
+          "Failed to fetch leave details.";
+      })
+
+      .addCase(approveAdminLeave.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+
+      .addCase(approveAdminLeave.fulfilled, (state) => {
+        state.loading = false;
+      })
+
+      .addCase(approveAdminLeave.rejected, (state, action) => {
+        state.loading = false;
+        state.error =
+          action.payload ||
+          "Failed to approve leave request.";
+      })
+
+      .addCase(rejectAdminLeave.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+
+      .addCase(rejectAdminLeave.fulfilled, (state) => {
+        state.loading = false;
+      })
+
+      .addCase(rejectAdminLeave.rejected, (state, action) => {
+        state.loading = false;
+        state.error =
+          action.payload ||
+          "Failed to reject leave request.";
+      })
+
+      .addCase(fetchLeaveStatistics.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+
+      .addCase(fetchLeaveStatistics.fulfilled, (state, action) => {
+        state.loading = false;
+        state.adminStatistics = action.payload;
+      })
+
+      .addCase(fetchLeaveStatistics.rejected, (state, action) => {
+        state.loading = false;
+        state.error =
+          action.payload ||
+          "Failed to fetch leave statistics.";
       });
   },
 });

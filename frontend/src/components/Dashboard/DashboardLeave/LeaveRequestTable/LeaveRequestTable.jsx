@@ -23,38 +23,44 @@ export default function LeaveRequestTable({
     });
   };
 
+  const formatLeaveType = (leaveType) => {
+    if (!leaveType) return "—";
+
+    const labels = {
+      annual: "Annual Leave",
+      sick: "Sick Leave",
+      casual: "Casual Leave",
+    };
+
+    return (
+      labels[leaveType.toLowerCase()] ||
+      leaveType
+    );
+  };
+
+  const getEmployee = (request) => {
+    return request.employee || request.user || null;
+  };
+
   const getEmployeeName = (employee) => {
     if (!employee) return "Unknown Employee";
 
     return `${employee.firstName || ""} ${
       employee.lastName || ""
-    }`.trim();
+    }`.trim() || "Unknown Employee";
   };
 
   const getInitials = (employee) => {
     if (!employee) return "?";
 
-    const first = employee.firstName?.charAt(0) || "";
-    const last = employee.lastName?.charAt(0) || "";
+    const first =
+      employee.firstName?.charAt(0) || "";
+
+    const last =
+      employee.lastName?.charAt(0) || "";
 
     return `${first}${last}`.toUpperCase();
   };
-
-  const handleView = (request) => {
-    onView?.(request);
-  };
-
-  const handleApprove = (request) => {
-    onApprove?.(request);
-  };
-
-  const handleReject = (request) => {
-    onReject?.(request);
-  };
-
-  /* ==========================================
-     EMPTY STATE
-  ========================================== */
 
   if (requests.length === 0) {
     return (
@@ -66,8 +72,8 @@ export default function LeaveRequestTable({
         <h3>No Leave Requests Found</h3>
 
         <p>
-          There are no leave requests matching your current
-          search or filter.
+          There are no leave requests matching your
+          current search or filter.
         </p>
       </div>
     );
@@ -93,46 +99,39 @@ export default function LeaveRequestTable({
 
           <tbody>
             {requests.map((request) => {
+              const employee = getEmployee(request);
               const isPending =
                 request.status === "Pending";
 
               return (
-                <tr key={request.id}>
-                  {/* =====================================
-                      EMPLOYEE
-                  ===================================== */}
-
+                <tr
+                  key={request.id || request._id}
+                >
                   <td>
                     <div className="leave_employee">
                       <div className="leave_employee_avatar">
-                        {getInitials(request.employee)}
+                        {getInitials(employee)}
                       </div>
 
                       <div className="leave_employee_info">
                         <span className="leave_employee_name">
-                          {getEmployeeName(request.employee)}
+                          {getEmployeeName(employee)}
                         </span>
 
                         <span className="leave_employee_email">
-                          {request.employee?.email || "—"}
+                          {employee?.email || "—"}
                         </span>
                       </div>
                     </div>
                   </td>
 
-                  {/* =====================================
-                      LEAVE TYPE
-                  ===================================== */}
-
                   <td>
                     <span className="leave_type">
-                      {request.leaveType || "—"}
+                      {formatLeaveType(
+                        request.leaveType
+                      )}
                     </span>
                   </td>
-
-                  {/* =====================================
-                      LEAVE PERIOD
-                  ===================================== */}
 
                   <td>
                     <div className="leave_period">
@@ -150,83 +149,69 @@ export default function LeaveRequestTable({
                     </div>
                   </td>
 
-                  {/* =====================================
-                      DAYS
-                  ===================================== */}
-
                   <td>
                     <span className="leave_days">
-                      {request.requestedDays || 0}
+                      {request.totalDays ??
+                        request.requestedDays ??
+                        0}
                     </span>
                   </td>
-
-                  {/* =====================================
-                      STATUS
-                  ===================================== */}
 
                   <td>
                     <span
                       className={`leave_status ${request.status?.toLowerCase()}`}
                     >
-                      <span className="leave_status_dot"></span>
+                      <span className="leave_status_dot" />
 
                       {request.status || "Unknown"}
                     </span>
                   </td>
 
-                  {/* =====================================
-                      APPLIED DATE
-                  ===================================== */}
-
                   <td>
                     <span className="leave_applied_date">
-                      {request.appliedDate || "—"}
+                      {formatDate(
+                        request.appliedAt ||
+                          request.createdAt ||
+                          request.appliedDate
+                      )}
                     </span>
                   </td>
 
-                  {/* =====================================
-                      ACTIONS
-                  ===================================== */}
-
                   <td>
                     <div className="leave_table_actions">
-                      {/* View */}
                       <button
                         type="button"
                         className="leave_action_btn view"
                         title="View request"
                         aria-label="View leave request"
                         onClick={() =>
-                          handleView(request)
+                          onView?.(request)
                         }
                       >
                         <FaEye />
                       </button>
 
-                      {/* Pending Actions */}
                       {isPending && (
                         <>
-                          {/* Approve */}
                           <button
                             type="button"
                             className="leave_action_btn approve"
                             title="Approve request"
                             aria-label="Approve leave request"
                             onClick={() =>
-                              handleApprove(request)
+                              onApprove?.(request)
                             }
                           >
                             <FaCheck />
                           </button>
 
-                          {/* Reject */}
                           <button
                             type="button"
                             className="leave_action_btn reject"
                             title="Reject request"
                             aria-label="Reject leave request"
                             onClick={() =>
-                              handleReject(request)
+                              onReject?.(request)
                             }
                           >
                             <FaTimes />
