@@ -1,6 +1,6 @@
 import { getAttendanceStats } from "./attendanceStats.service.js";
 import { attendanceModel } from "../models/Attendance.model.js";
-import { getTodayRange } from "../utils/attenndaceHelper.js";
+import { getTodayRange } from "../utils/attendanceHelper.js";
 import { getCalendarContext } from "../services/calendarContext.service.js";
 
 export const getAIUserContext = async (userID) => {

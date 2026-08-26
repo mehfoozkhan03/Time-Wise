@@ -1,19 +1,97 @@
 import {
   getWeekRange,
   getMonthRange,
-  isWorkingDay,
   formatWorkingHours,
-} from "../utils/attenndaceHelper.js";
-import { attendanceConfig } from "../config/attendanceConfig.js";
-import { attendanceModel } from "../models/Attendance.model.js";
+} from '../utils/attendanceHelper.js'
+
+import { attendanceConfig } from '../config/attendanceConfig.js'
+
+import { attendanceModel } from '../models/Attendance.model.js'
+
+import { holidayModel } from '../models/Holidays.model.js'
+
+// =======================================================
+// Helpers
+// =======================================================
+
+const startOfDay = (date) => {
+  const result = new Date(date)
+
+  result.setHours(0, 0, 0, 0)
+
+  return result
+}
+
+const endOfDay = (date) => {
+  const result = new Date(date)
+
+  result.setHours(23, 59, 59, 999)
+
+  return result
+}
+
+const isConfiguredWorkingDay = (date) => {
+  return attendanceConfig.workingDays.includes(date.getDay())
+}
+
+const getDateKey = (date) => {
+  const value = new Date(date)
+
+  return `${value.getFullYear()}-${String(value.getMonth() + 1).padStart(
+    2,
+    '0',
+  )}-${String(value.getDate()).padStart(2, '0')}`
+}
+
+const getHolidayDateKey = (holiday) => {
+  return getDateKey(holiday.date)
+}
+
+// =======================================================
+// Get Attendance Stats
+// =======================================================
 
 export const getAttendanceStats = async (userID) => {
-  const now = new Date();
+  const now = new Date()
 
-  const { weekStart, weekEnd } = getWeekRange(now);
-  const { monthStart, monthEnd } = getMonthRange(now);
+  const { weekStart, weekEnd } = getWeekRange(now)
 
-  // ---------- Weekly Attendance ----------
+  const { monthStart, monthEnd } = getMonthRange(now)
+
+  // =====================================================
+  // Get Active Holidays
+  // =====================================================
+
+  /*
+    We fetch holidays once instead of querying MongoDB
+    separately for every date.
+
+    This is important for streaks and attendance percentage
+    because those calculations inspect many dates.
+  */
+
+  const holidays = await holidayModel
+    .find({
+      isActive: true,
+    })
+    .select('date')
+    .lean()
+
+  const holidayDateSet = new Set(
+    holidays.map((holiday) => getHolidayDateKey(holiday)),
+  )
+
+  const isAttendanceWorkingDay = (date) => {
+    if (!isConfiguredWorkingDay(date)) {
+      return false
+    }
+
+    return !holidayDateSet.has(getDateKey(date))
+  }
+
+  // =====================================================
+  // Weekly Attendance
+  // =====================================================
 
   const weeklyAttendance = await attendanceModel.find({
     user: userID,
@@ -21,16 +99,30 @@ export const getAttendanceStats = async (userID) => {
       $gte: weekStart,
       $lte: weekEnd,
     },
-  });
+  })
 
-  const totalWeeklySeconds = weeklyAttendance.reduce(
-    (sum, record) => sum + record.totalWorkingSeconds,
+  /*
+    Only attendance recorded on valid working days
+    contributes to working hours.
+
+    This prevents Saturday/Sunday/holiday check-ins from
+    inflating weekly hours.
+  */
+
+  const validWeeklyAttendance = weeklyAttendance.filter((record) =>
+    isAttendanceWorkingDay(record.date),
+  )
+
+  const totalWeeklySeconds = validWeeklyAttendance.reduce(
+    (sum, record) => sum + (record.totalWorkingSeconds || 0),
     0,
-  );
+  )
 
-  const weeklyHours = formatWorkingHours(totalWeeklySeconds);
+  const weeklyHours = formatWorkingHours(totalWeeklySeconds)
 
-  // ---------- Monthly Attendance ----------
+  // =====================================================
+  // Monthly Attendance
+  // =====================================================
 
   const monthlyAttendance = await attendanceModel.find({
     user: userID,
@@ -38,16 +130,33 @@ export const getAttendanceStats = async (userID) => {
       $gte: monthStart,
       $lte: monthEnd,
     },
-  });
+  })
 
-  const totalMonthlySeconds = monthlyAttendance.reduce(
-    (sum, record) => sum + record.totalWorkingSeconds,
+  /*
+    This is the important filtering layer.
+
+    Any attendance record created on:
+      - Saturday
+      - Sunday
+      - Active holiday
+
+    is excluded from normal attendance calculations.
+  */
+
+  const validMonthlyAttendance = monthlyAttendance.filter((record) =>
+    isAttendanceWorkingDay(record.date),
+  )
+
+  const totalMonthlySeconds = validMonthlyAttendance.reduce(
+    (sum, record) => sum + (record.totalWorkingSeconds || 0),
     0,
-  );
+  )
 
-  const monthlyHours = formatWorkingHours(totalMonthlySeconds);
+  const monthlyHours = formatWorkingHours(totalMonthlySeconds)
 
-  // ---------- All Attendance History ----------
+  // =====================================================
+  // All Attendance History
+  // =====================================================
 
   const attendanceHistory = await attendanceModel
     .find({
@@ -55,283 +164,372 @@ export const getAttendanceStats = async (userID) => {
     })
     .sort({
       date: -1,
-    });
+    })
 
-  const totalWorkingSeconds = attendanceHistory.reduce(
-    (sum, record) => sum + record.totalWorkingSeconds,
+  /*
+    Normal working statistics should only include
+    actual attendance working days.
+
+    A historical Saturday/holiday check-in therefore
+    does not inflate total working hours.
+  */
+
+  const validAttendanceHistory = attendanceHistory.filter((record) =>
+    isAttendanceWorkingDay(record.date),
+  )
+
+  const totalWorkingSeconds = validAttendanceHistory.reduce(
+    (sum, record) => sum + (record.totalWorkingSeconds || 0),
     0,
-  );
+  )
 
-  const totalWorkingHours = formatWorkingHours(totalWorkingSeconds);
+  const totalWorkingHours = formatWorkingHours(totalWorkingSeconds)
 
-  // ---------- Average Daily Working Hours ----------
+  // =====================================================
+  // Average Daily Working Hours
+  // =====================================================
 
   const averageDailyHours =
-    attendanceHistory.length === 0
+    validAttendanceHistory.length === 0
       ? 0
-      : +(totalWorkingSeconds / attendanceHistory.length / 3600).toFixed(1);
+      : +(totalWorkingSeconds / validAttendanceHistory.length / 3600).toFixed(1)
 
-  // ---------- Average Check-in Time ----------
+  // =====================================================
+  // Average Check-in Time
+  // =====================================================
 
-  const checkInRecords = monthlyAttendance.filter(
+  const checkInRecords = validMonthlyAttendance.filter(
     (record) => record.checkInTime,
-  );
+  )
 
-  let averageCheckIn = "--:--";
+  let averageCheckIn = '--:--'
 
   if (checkInRecords.length > 0) {
     const totalMinutes = checkInRecords.reduce((sum, record) => {
-      const checkIn = new Date(record.checkInTime);
+      const checkIn = new Date(record.checkInTime)
 
-      return sum + checkIn.getHours() * 60 + checkIn.getMinutes();
-    }, 0);
+      return sum + checkIn.getHours() * 60 + checkIn.getMinutes()
+    }, 0)
 
-    const averageMinutes = Math.round(totalMinutes / checkInRecords.length);
+    const averageMinutes = Math.round(totalMinutes / checkInRecords.length)
 
-    const hours = Math.floor(averageMinutes / 60);
-    const minutes = averageMinutes % 60;
+    const hours = Math.floor(averageMinutes / 60)
 
-    averageCheckIn = `${hours.toString().padStart(2, "0")}:${minutes
+    const minutes = averageMinutes % 60
+
+    averageCheckIn = `${hours
       .toString()
-      .padStart(2, "0")}`;
+      .padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`
   }
 
-  // ---------- Average Break Duration ----------
+  // =====================================================
+  // Average Break Duration
+  // =====================================================
 
   const averageBreakDuration =
     checkInRecords.length === 0
       ? 0
       : Math.round(
-          monthlyAttendance.reduce(
-            (sum, record) => sum + record.totalBreakSeconds,
+          validMonthlyAttendance.reduce(
+            (sum, record) => sum + (record.totalBreakSeconds || 0),
             0,
           ) /
             checkInRecords.length /
             60,
-        );
+        )
 
-  // ---------- Leaves Taken ----------
+  // =====================================================
+  // Leaves Taken
+  // =====================================================
 
-  const leavesTaken = monthlyAttendance.filter(
-    (record) => record.status === "Leave",
-  ).length;
+  const leavesTaken = validMonthlyAttendance.filter(
+    (record) => record.status === 'Leave',
+  ).length
 
-  // ---------- Overtime Hours ----------
+  // =====================================================
+  // Overtime
+  // =====================================================
 
-  const requiredDailySeconds = attendanceConfig.requiredDailyHours * 60 * 60;
+  const requiredDailySeconds = attendanceConfig.requiredDailyHours * 60 * 60
 
-  const totalOvertimeSeconds = monthlyAttendance.reduce((total, record) => {
-    if (
-      !isWorkingDay(record.date) ||
-      record.totalWorkingSeconds <= requiredDailySeconds
-    ) {
-      return total;
-    }
+  const totalOvertimeSeconds = validMonthlyAttendance.reduce(
+    (total, record) => {
+      const workingSeconds = record.totalWorkingSeconds || 0
 
-    return total + (record.totalWorkingSeconds - requiredDailySeconds);
-  }, 0);
+      if (workingSeconds <= requiredDailySeconds) {
+        return total
+      }
 
-  const overtimeHours = formatWorkingHours(totalOvertimeSeconds);
+      return total + (workingSeconds - requiredDailySeconds)
+    },
+    0,
+  )
 
-  // --------------------------------------------------
+  const overtimeHours = formatWorkingHours(totalOvertimeSeconds)
+
+  // =====================================================
   // Total Overtime Hours
-  // --------------------------------------------------
-  // Calculate overtime across all attendance history.
+  // =====================================================
 
-  let allTimeOvertimeSeconds = 0;
+  let allTimeOvertimeSeconds = 0
 
-  for (const record of attendanceHistory) {
-    const workingSeconds = record.totalWorkingSeconds || 0;
+  for (const record of validAttendanceHistory) {
+    const workingSeconds = record.totalWorkingSeconds || 0
 
-    const requiredDailySeconds = attendanceConfig.requiredDailyHours * 60 * 60;
+    const overtimeSeconds = Math.max(0, workingSeconds - requiredDailySeconds)
 
-    const overtimeSeconds = Math.max(0, workingSeconds - requiredDailySeconds);
-
-    allTimeOvertimeSeconds += overtimeSeconds;
+    allTimeOvertimeSeconds += overtimeSeconds
   }
 
-  const totalOvertimeHours = formatWorkingHours(allTimeOvertimeSeconds);
+  const totalOvertimeHours = formatWorkingHours(allTimeOvertimeSeconds)
 
-  // ---------- Attendance Percentage ----------
+  // =====================================================
+  // Attendance Percentage
+  // =====================================================
 
-  let workingDays = 0;
+  /*
+    Count only actual attendance-required days.
+
+    Example:
+
+      Monday  -> working day
+      Tuesday -> working day
+      Wednesday -> holiday
+      Thursday -> working day
+      Friday -> working day
+      Saturday -> weekend
+      Sunday -> weekend
+
+    Attendance denominator = 4
+
+    NOT 7.
+
+    Therefore even if someone has a database attendance
+    record on Wednesday/Saturday, those records cannot
+    push the percentage above 100%.
+  */
+
+  let workingDays = 0
 
   for (
     let date = new Date(monthStart);
     date <= now;
     date.setDate(date.getDate() + 1)
   ) {
-    if (isWorkingDay(date)) {
-      workingDays++;
+    if (isAttendanceWorkingDay(date)) {
+      workingDays++
     }
   }
 
-  const attendanceCredits = monthlyAttendance.reduce((total, record) => {
+  const attendanceCredits = validMonthlyAttendance.reduce((total, record) => {
     switch (record.status) {
-      case "Present":
-        return total + 1;
+      case 'Present':
+        return total + 1
 
-      case "Late":
-        return total + 0.75;
+      case 'Late':
+        return total + 0.75
 
-      case "Half Day":
-        return total + 0.5;
+      case 'Half Day':
+        return total + 0.5
 
       default:
-        return total;
+        return total
     }
-  }, 0);
+  }, 0)
 
   const attendancePercentage =
-    workingDays === 0 ? 0 : Math.round((attendanceCredits / workingDays) * 100);
+    workingDays === 0
+      ? 0
+      : Math.min(Math.round((attendanceCredits / workingDays) * 100), 100)
 
-  const attendedDays = monthlyAttendance.filter((record) =>
-    ["Present", "Late", "Half Day"].includes(record.status),
-  ).length;
+  const attendedDays = validMonthlyAttendance.filter((record) =>
+    ['Present', 'Late', 'Half Day'].includes(record.status),
+  ).length
 
-  // ---------- Weekly Goal Score ----------
+  // =====================================================
+  // Weekly Goal Score
+  // =====================================================
 
   const weeklyGoalScore = Math.min(
     (weeklyHours / attendanceConfig.requiredWeeklyHours) * 100,
     100,
-  );
+  )
 
-  // ---------- Punctuality ----------
+  // =====================================================
+  // Punctuality
+  // =====================================================
 
-  let punctualityCredits = 0;
+  let punctualityCredits = 0
 
-  monthlyAttendance.forEach((record) => {
+  validMonthlyAttendance.forEach((record) => {
     switch (record.status) {
-      case "Present":
-        punctualityCredits += 1;
-        break;
+      case 'Present':
+        punctualityCredits += 1
+        break
 
-      case "Late":
-        punctualityCredits += 0.5;
-        break;
+      case 'Late':
+        punctualityCredits += 0.5
+        break
 
       default:
-        break;
+        break
     }
-  });
+  })
 
   const punctuality =
     attendedDays === 0
       ? 100
-      : Math.round((punctualityCredits / attendedDays) * 100);
+      : Math.round((punctualityCredits / attendedDays) * 100)
 
-  // ---------- Break Discipline ----------
+  // =====================================================
+  // Break Discipline
+  // =====================================================
 
-  const allowedBreak = attendanceConfig.maxBreakMinutes;
+  const allowedBreak = attendanceConfig.maxBreakMinutes
 
-  let breakScore = 100;
+  let breakScore = 100
 
   if (averageBreakDuration > allowedBreak) {
-    breakScore = Math.max(0, 100 - (averageBreakDuration - allowedBreak) * 2);
+    breakScore = Math.max(0, 100 - (averageBreakDuration - allowedBreak) * 2)
   }
 
-  // ---------- Work Efficiency ----------
+  // =====================================================
+  // Work Efficiency / Productivity
+  // =====================================================
 
   const productivity = Math.round(
     weeklyGoalScore * 0.5 +
       attendancePercentage * 0.2 +
       punctuality * 0.2 +
       breakScore * 0.1,
-  );
+  )
 
-  // ---------- Current Streak ----------
+  // =====================================================
+  // Attendance Records For Streaks
+  // =====================================================
 
-  const attendanceRecords = await attendanceModel
-    .find({
-      user: userID,
-      status: {
-        $in: ["Present", "Late", "Half Day"],
-      },
-    })
-    .sort({
-      date: -1,
-    });
+  /*
+    We deliberately filter these records again.
 
-  let dayStreak = 0;
+    A Present record on a holiday or weekend must NOT
+    become part of a streak.
+  */
 
-  const cursor = new Date(now);
+  const attendanceRecords = attendanceHistory
+    .filter(
+      (record) =>
+        isAttendanceWorkingDay(record.date) &&
+        ['Present', 'Late', 'Half Day'].includes(record.status),
+    )
+    .sort((a, b) => b.date - a.date)
 
-  cursor.setHours(0, 0, 0, 0);
+  // =====================================================
+  // Current Streak
+  // =====================================================
 
-  while (true) {
-    if (!isWorkingDay(cursor)) {
-      cursor.setDate(cursor.getDate() - 1);
-      continue;
-    }
+  let dayStreak = 0
 
-    const found = attendanceRecords.find(
-      (record) => record.date.toDateString() === cursor.toDateString(),
-    );
+  const cursor = startOfDay(now)
 
-    if (!found) {
-      break;
-    }
+  /*
+    If today is a weekend/holiday, skip backwards until
+    the most recent attendance-required day.
+  */
 
-    dayStreak++;
-
-    cursor.setDate(cursor.getDate() - 1);
+  while (!isAttendanceWorkingDay(cursor)) {
+    cursor.setDate(cursor.getDate() - 1)
   }
 
-  // ---------- Longest Streak ----------
+  while (true) {
+    const found = attendanceRecords.find(
+      (record) => getDateKey(record.date) === getDateKey(cursor),
+    )
 
-  let longestStreak = 0;
-  let currentStreak = 0;
+    if (!found) {
+      break
+    }
+
+    dayStreak++
+
+    cursor.setDate(cursor.getDate() - 1)
+
+    while (!isAttendanceWorkingDay(cursor)) {
+      cursor.setDate(cursor.getDate() - 1)
+    }
+  }
+
+  // =====================================================
+  // Longest Streak
+  // =====================================================
+
+  let longestStreak = 0
+
+  let currentStreak = 0
 
   const sortedAttendance = [...attendanceRecords].sort(
     (a, b) => a.date - b.date,
-  );
+  )
 
-  let previousDate = null;
+  let previousDate = null
 
   for (const record of sortedAttendance) {
+    const currentDate = startOfDay(record.date)
+
     if (!previousDate) {
-      currentStreak = 1;
-      longestStreak = 1;
+      currentStreak = 1
 
-      previousDate = new Date(record.date);
-      previousDate.setHours(0, 0, 0, 0);
+      longestStreak = 1
 
-      continue;
+      previousDate = currentDate
+
+      continue
     }
 
-    const expectedDate = new Date(previousDate);
+    /*
+      Find the next attendance-required day after the
+      previous attendance record.
 
-    expectedDate.setDate(expectedDate.getDate() + 1);
+      This automatically skips:
+        - Saturday
+        - Sunday
+        - Holidays
+    */
 
-    while (!isWorkingDay(expectedDate)) {
-      expectedDate.setDate(expectedDate.getDate() + 1);
+    const expectedDate = new Date(previousDate)
+
+    expectedDate.setDate(expectedDate.getDate() + 1)
+
+    while (!isAttendanceWorkingDay(expectedDate)) {
+      expectedDate.setDate(expectedDate.getDate() + 1)
     }
-
-    const currentDate = new Date(record.date);
-
-    currentDate.setHours(0, 0, 0, 0);
 
     if (currentDate.getTime() === expectedDate.getTime()) {
-      currentStreak++;
+      currentStreak++
     } else {
-      currentStreak = 1;
+      currentStreak = 1
     }
 
-    longestStreak = Math.max(longestStreak, currentStreak);
+    longestStreak = Math.max(longestStreak, currentStreak)
 
-    previousDate = currentDate;
+    previousDate = currentDate
   }
 
-  // ---------- Weekly Goal ----------
+  // =====================================================
+  // Weekly Goal
+  // =====================================================
 
-  const weeklyTarget = attendanceConfig.requiredWeeklyHours;
+  const weeklyTarget = attendanceConfig.requiredWeeklyHours
 
-  const weeklyHoursRemaining = Math.max(weeklyTarget - weeklyHours, 0);
+  const weeklyHoursRemaining = Math.max(weeklyTarget - weeklyHours, 0)
 
   const weeklyGoalPercentage = Math.min(
     Math.round((weeklyHours / weeklyTarget) * 100),
     100,
-  );
+  )
+
+  // =====================================================
+  // Return Stats
+  // =====================================================
 
   return {
     dayStreak,
@@ -342,15 +540,19 @@ export const getAttendanceStats = async (userID) => {
     weeklyHours,
     monthlyHours,
     totalWorkingHours,
+
     averageDailyHours,
 
     leavesTaken,
+
     overtimeHours,
     totalOvertimeHours,
 
     productivity,
+
     punctuality,
     breakScore,
+
     weeklyGoalScore,
 
     weeklyTarget,
@@ -359,5 +561,5 @@ export const getAttendanceStats = async (userID) => {
 
     averageCheckIn,
     averageBreakDuration,
-  };
-};
+  }
+}
