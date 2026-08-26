@@ -29,6 +29,31 @@ const getNestedValue = (object, path) => {
 const getWorkingHoursValue = (userContext, entity, period) => {
   const attendance = userContext?.attendance || {};
 
+  // ----------------------------------------------------------
+  // OVERTIME entities must read the OVERTIME fields, not the
+  // working-hours fields. "total" → all-time overtime;
+  // anything else (month / none) → this month's overtime.
+  // ----------------------------------------------------------
+  const overtimeEntities = new Set([
+    "overtime_hours",
+    "monthly_overtime",
+    "total_overtime",
+  ]);
+
+  if (overtimeEntities.has(entity)) {
+    const useTotal = entity === "total_overtime" || period === "total";
+
+    const overtimeValue = useTotal
+      ? attendance.totalOvertimeHours
+      : attendance.overtimeHours;
+
+    return {
+      entity,
+      period,
+      value: hasValue(overtimeValue) ? overtimeValue : null,
+    };
+  }
+
   const candidates = {
     today: [
       attendance.todayHours,

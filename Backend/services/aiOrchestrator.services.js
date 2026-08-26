@@ -9,25 +9,13 @@ import {
 // ==================================================
 
 const FOLLOW_UP_RULES = {
-  attendance: {
-    field: "period",
-
-    question:
-      "What period would you like to check your attendance for: today, this week, or this month?",
-  },
-
   overtime: {
     field: "period",
 
     question:
       "Would you like to know your overtime for this month or your total overtime?",
-  },
 
-  productivity: {
-    field: "period",
-
-    question:
-      "Would you like to know your productivity for this week or this month?",
+    requiresPeriod: true,
   },
 
   working_hours: {
@@ -35,7 +23,12 @@ const FOLLOW_UP_RULES = {
 
     question:
       "Would you like to know your working hours for today, this week, this month, or your total working hours?",
+
+    requiresPeriod: true,
   },
+
+  // REMOVED: productivity no longer requires follow-up
+  // Users asking "productivity" or "productivity score" now get immediate answer
 };
 
 // ==================================================
@@ -81,9 +74,13 @@ const getFollowUpRule = (request) => {
 export const isCompleteRequest = (request) => {
   const rule = getFollowUpRule(request);
 
-  // No clarification rule means the request
-  // can continue directly through the pipeline.
   if (!rule) {
+    return true;
+  }
+
+  // HELP / HOW-TO requests do not require
+  // a period.
+  if (request.action === "help") {
     return true;
   }
 
