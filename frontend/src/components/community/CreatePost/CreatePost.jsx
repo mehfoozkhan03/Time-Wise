@@ -106,10 +106,8 @@
 
 // export default CreatePost
 
-
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-
 import { createNewPost } from '../../../store/postSlice'
 
 import {
@@ -129,6 +127,31 @@ const CreatePost = () => {
 
   const [content, setContent] = useState('')
   const [posting, setPosting] = useState(false)
+
+  // Dynamic Greeting
+  const [greeting, setGreeting] = useState('Good Morning')
+
+  useEffect(() => {
+    const updateGreeting = () => {
+      const hour = new Date().getHours()
+
+      if (hour >= 5 && hour < 12) {
+        setGreeting('Good Morning')
+      } else if (hour >= 12 && hour < 17) {
+        setGreeting('Good Afternoon')
+      } else if (hour >= 17 && hour < 21) {
+        setGreeting('Good Evening')
+      } else {
+        setGreeting('Good Night')
+      }
+    }
+
+    updateGreeting()
+
+    const interval = setInterval(updateGreeting, 60000)
+
+    return () => clearInterval(interval)
+  }, [])
 
   const initials = useMemo(() => {
     if (!user) return 'U'
@@ -163,7 +186,9 @@ const CreatePost = () => {
         <div className="create_post_avatar">{initials}</div>
 
         <div>
-          <h3>Good Morning, {user?.firstName || 'Employee'} 👋</h3>
+          <h3>
+            {greeting}, {user?.firstName || 'Employee'} 👋
+          </h3>
 
           <p>Share an update with your teammates.</p>
         </div>
