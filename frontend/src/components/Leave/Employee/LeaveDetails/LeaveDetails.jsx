@@ -5,20 +5,46 @@ import "./LeaveDetails.css";
 
 const LeaveDetails = ({ request, onClose, onCancel }) => {
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [cancelling, setCancelling] = useState(false);
+  const [error, setError] = useState("");
 
   if (!request) {
     return null;
   }
 
-  const canCancel = request.status === "Pending";
+  const status = request.status || "Pending";
+  const canCancel = status === "Pending";
 
-  const handleCancel = () => {
-    onCancel(request.id);
+  const handleClose = () => {
+    if (cancelling) {
+      return;
+    }
+
     onClose();
   };
 
+  const handleCancel = async () => {
+    try {
+      setCancelling(true);
+      setError("");
+
+      await onCancel(request.id);
+
+      onClose();
+    } catch (cancelError) {
+      setError(
+        cancelError?.message || "Failed to cancel leave request.",
+      );
+    } finally {
+      setCancelling(false);
+    }
+  };
+
   return (
-    <div className="leaveDetails-overlay" onMouseDown={onClose}>
+    <div
+      className="leaveDetails-overlay"
+      onMouseDown={handleClose}
+    >
       <div
         className="leaveDetails-modal"
         onMouseDown={(event) => event.stopPropagation()}
@@ -32,8 +58,9 @@ const LeaveDetails = ({ request, onClose, onCancel }) => {
           <button
             type="button"
             className="leaveDetails-close"
-            onClick={onClose}
+            onClick={handleClose}
             aria-label="Close"
+            disabled={cancelling}
           >
             <MdClose />
           </button>
@@ -44,9 +71,9 @@ const LeaveDetails = ({ request, onClose, onCancel }) => {
             <span className="leaveDetails-label">Status</span>
 
             <span
-              className={`leaveDetails-status ${request.status.toLowerCase()}`}
+              className={`leaveDetails-status ${status.toLowerCase()}`}
             >
-              {request.status}
+              {status}
             </span>
           </div>
 
@@ -88,6 +115,12 @@ const LeaveDetails = ({ request, onClose, onCancel }) => {
               <p>{request.adminComment}</p>
             </div>
           )}
+
+          {error && (
+            <p className="leaveDetails-error">
+              {error}
+            </p>
+          )}
         </div>
 
         <div className="leaveDetails-footer">
@@ -95,7 +128,11 @@ const LeaveDetails = ({ request, onClose, onCancel }) => {
             <button
               type="button"
               className="leaveDetails-cancel-btn"
-              onClick={() => setShowConfirmation(true)}
+              onClick={() => {
+                setError("");
+                setShowConfirmation(true);
+              }}
+              disabled={cancelling}
             >
               Cancel Request
             </button>
@@ -105,7 +142,8 @@ const LeaveDetails = ({ request, onClose, onCancel }) => {
             <button
               type="button"
               className="leaveDetails-close-btn"
-              onClick={onClose}
+              onClick={handleClose}
+              disabled={cancelling}
             >
               Close
             </button>
@@ -113,13 +151,19 @@ const LeaveDetails = ({ request, onClose, onCancel }) => {
 
           {showConfirmation && (
             <div className="leaveDetails-confirmation">
-              <p>Are you sure you want to cancel this leave request?</p>
+              <p>
+                Are you sure you want to cancel this leave request?
+              </p>
 
               <div className="leaveDetails-confirmation-actions">
                 <button
                   type="button"
                   className="leaveDetails-keep-btn"
-                  onClick={() => setShowConfirmation(false)}
+                  onClick={() => {
+                    setError("");
+                    setShowConfirmation(false);
+                  }}
+                  disabled={cancelling}
                 >
                   Keep Request
                 </button>
@@ -128,8 +172,11 @@ const LeaveDetails = ({ request, onClose, onCancel }) => {
                   type="button"
                   className="leaveDetails-confirm-btn"
                   onClick={handleCancel}
+                  disabled={cancelling}
                 >
-                  Cancel Request
+                  {cancelling
+                    ? "Cancelling..."
+                    : "Cancel Request"}
                 </button>
               </div>
             </div>

@@ -25,9 +25,28 @@ export default function RejectLeaveModal({
     return null;
   }
 
-  const employeeName = `${request.employee?.firstName || ""} ${
-    request.employee?.lastName || ""
-  }`.trim();
+  const employee =
+    request.employee || request.user || null;
+
+  const employeeName =
+    `${employee?.firstName || ""} ${
+      employee?.lastName || ""
+    }`.trim();
+
+  const formatLeaveType = (leaveType) => {
+    if (!leaveType) return "Leave Request";
+
+    const labels = {
+      annual: "Annual Leave",
+      sick: "Sick Leave",
+      casual: "Casual Leave",
+    };
+
+    return (
+      labels[leaveType.toLowerCase()] ||
+      leaveType
+    );
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -51,9 +70,10 @@ export default function RejectLeaveModal({
     >
       <div
         className="reject_leave_modal"
-        onClick={(event) => event.stopPropagation()}
+        onClick={(event) =>
+          event.stopPropagation()
+        }
       >
-        {/* Header */}
         <div className="reject_leave_header">
           <div className="reject_leave_header_icon">
             <FaBan />
@@ -69,43 +89,44 @@ export default function RejectLeaveModal({
           </button>
         </div>
 
-        {/* Content */}
         <div className="reject_leave_content">
           <h2>Reject Leave Request</h2>
 
           <p className="reject_leave_description">
-            Are you sure you want to reject this leave request?
-            Please provide a reason for the employee.
+            Are you sure you want to reject this
+            leave request? Please provide a reason
+            for the employee.
           </p>
 
-          {/* Employee */}
           <div className="reject_leave_employee">
             <div className="reject_leave_avatar">
-              {request.employee?.firstName?.charAt(0)}
-              {request.employee?.lastName?.charAt(0)}
+              {employee?.firstName?.charAt(0)}
+              {employee?.lastName?.charAt(0)}
             </div>
 
             <div className="reject_leave_employee_info">
               <strong>
-                {employeeName || "Unknown Employee"}
+                {employeeName ||
+                  "Unknown Employee"}
               </strong>
 
               <span>
-                {request.leaveType || "Leave Request"}
+                {formatLeaveType(
+                  request.leaveType
+                )}
               </span>
             </div>
           </div>
 
-          {/* Warning */}
           <div className="reject_leave_warning">
             <FaExclamationTriangle />
 
             <span>
-              This action will mark the request as rejected.
+              This action will mark the request
+              as rejected.
             </span>
           </div>
 
-          {/* Form */}
           <form onSubmit={handleSubmit}>
             <div className="reject_leave_field">
               <label htmlFor="rejectReason">
@@ -116,7 +137,9 @@ export default function RejectLeaveModal({
               <textarea
                 id="rejectReason"
                 value={reason}
-                onChange={(event) => setReason(event.target.value)}
+                onChange={(event) =>
+                  setReason(event.target.value)
+                }
                 placeholder="Enter the reason for rejecting this leave request..."
                 rows="4"
                 maxLength="500"
@@ -127,7 +150,6 @@ export default function RejectLeaveModal({
               </div>
             </div>
 
-            {/* Actions */}
             <div className="reject_leave_actions">
               <button
                 type="button"

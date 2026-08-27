@@ -235,6 +235,11 @@
   opacity: 0.9;
 }
 
+.leaveDetails-error {
+  margin: 0;
+  font-size: 13px;
+  color: #ef4444;
+}
 @media (max-width: 600px) {
   .leaveDetails-confirmation-actions {
     flex-direction: column;

@@ -22,9 +22,13 @@ export default function LeaveRequestDetails({
     return null;
   }
 
-  const employeeName = `${request.employee?.firstName || ""} ${
-    request.employee?.lastName || ""
-  }`.trim();
+  const employee =
+    request.employee || request.user || null;
+
+  const employeeName =
+    `${employee?.firstName || ""} ${
+      employee?.lastName || ""
+    }`.trim();
 
   const formatDate = (date) => {
     if (!date) return "—";
@@ -36,15 +40,40 @@ export default function LeaveRequestDetails({
     });
   };
 
-  const isPending = request.status === "Pending";
+  const formatLeaveType = (leaveType) => {
+    if (!leaveType) return "—";
+
+    const labels = {
+      annual: "Annual Leave",
+      sick: "Sick Leave",
+      casual: "Casual Leave",
+    };
+
+    return (
+      labels[leaveType.toLowerCase()] ||
+      leaveType
+    );
+  };
+
+  const totalDays =
+    request.totalDays ??
+    request.requestedDays ??
+    0;
+
+  const isPending =
+    request.status === "Pending";
 
   return (
-    <div className="leave_details_overlay" onClick={onClose}>
+    <div
+      className="leave_details_overlay"
+      onClick={onClose}
+    >
       <div
         className="leave_details_modal"
-        onClick={(event) => event.stopPropagation()}
+        onClick={(event) =>
+          event.stopPropagation()
+        }
       >
-        {/* Header */}
         <div className="leave_details_header">
           <div>
             <span className="leave_details_eyebrow">
@@ -64,24 +93,25 @@ export default function LeaveRequestDetails({
           </button>
         </div>
 
-        {/* Employee */}
         <div className="leave_details_employee">
           <div className="leave_details_avatar">
-            {request.employee?.firstName?.charAt(0)}
-            {request.employee?.lastName?.charAt(0)}
+            {employee?.firstName?.charAt(0)}
+            {employee?.lastName?.charAt(0)}
           </div>
 
           <div className="leave_details_employee_info">
-            <h3>{employeeName || "Unknown Employee"}</h3>
+            <h3>
+              {employeeName || "Unknown Employee"}
+            </h3>
 
             <span>
               <FaEnvelope />
-              {request.employee?.email || "No email available"}
+              {employee?.email ||
+                "No email available"}
             </span>
           </div>
         </div>
 
-        {/* Status */}
         <div className="leave_details_status_row">
           <span className="leave_details_status_label">
             Current Status
@@ -90,13 +120,12 @@ export default function LeaveRequestDetails({
           <span
             className={`leave_details_status ${request.status?.toLowerCase()}`}
           >
-            <span className="leave_details_status_dot"></span>
+            <span className="leave_details_status_dot" />
 
             {request.status || "Unknown"}
           </span>
         </div>
 
-        {/* Request Information */}
         <div className="leave_details_section">
           <div className="leave_details_section_title">
             <FaFileAlt />
@@ -109,7 +138,11 @@ export default function LeaveRequestDetails({
                 Leave Type
               </span>
 
-              <strong>{request.leaveType || "—"}</strong>
+              <strong>
+                {formatLeaveType(
+                  request.leaveType
+                )}
+              </strong>
             </div>
 
             <div className="leave_details_item">
@@ -118,8 +151,10 @@ export default function LeaveRequestDetails({
               </span>
 
               <strong>
-                {request.requestedDays || 0}{" "}
-                {request.requestedDays === 1 ? "Day" : "Days"}
+                {totalDays}{" "}
+                {totalDays === 1
+                  ? "Day"
+                  : "Days"}
               </strong>
             </div>
 
@@ -152,13 +187,16 @@ export default function LeaveRequestDetails({
 
               <strong>
                 <FaClock />
-                {request.appliedDate || "—"}
+                {formatDate(
+                  request.appliedAt ||
+                    request.createdAt ||
+                    request.appliedDate
+                )}
               </strong>
             </div>
           </div>
         </div>
 
-        {/* Reason */}
         <div className="leave_details_section">
           <div className="leave_details_section_title">
             <FaFileAlt />
@@ -166,11 +204,11 @@ export default function LeaveRequestDetails({
           </div>
 
           <div className="leave_details_reason">
-            {request.reason || "No reason provided."}
+            {request.reason ||
+              "No reason provided."}
           </div>
         </div>
 
-        {/* Admin Comment */}
         {request.adminComment && (
           <div className="leave_details_section">
             <div className="leave_details_section_title">
@@ -184,7 +222,6 @@ export default function LeaveRequestDetails({
           </div>
         )}
 
-        {/* Footer */}
         <div className="leave_details_footer">
           <button
             type="button"
@@ -199,7 +236,9 @@ export default function LeaveRequestDetails({
               <button
                 type="button"
                 className="leave_details_btn reject"
-                onClick={() => onReject?.(request)}
+                onClick={() =>
+                  onReject?.(request)
+                }
               >
                 <FaBan />
                 Reject
@@ -208,7 +247,9 @@ export default function LeaveRequestDetails({
               <button
                 type="button"
                 className="leave_details_btn approve"
-                onClick={() => onApprove?.(request)}
+                onClick={() =>
+                  onApprove?.(request)
+                }
               >
                 <FaCheck />
                 Approve

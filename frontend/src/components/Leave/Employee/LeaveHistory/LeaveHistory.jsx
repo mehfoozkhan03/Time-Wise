@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { MdVisibility } from "react-icons/md";
 
 import LeaveDetails from "../LeaveDetails/LeaveDetails";
@@ -24,9 +24,29 @@ const LeaveHistory = ({ requests = [], onCancelRequest }) => {
 
     return requests.filter(
       (request) =>
-        request.status.toLowerCase() === activeFilter.toLowerCase()
+        request.status?.toLowerCase() === activeFilter.toLowerCase(),
     );
   }, [requests, activeFilter]);
+
+  useEffect(() => {
+    if (!selectedRequest) {
+      return;
+    }
+
+    const updatedRequest = requests.find(
+      (request) => request.id === selectedRequest.id,
+    );
+
+    if (updatedRequest) {
+      setSelectedRequest(updatedRequest);
+    } else {
+      setSelectedRequest(null);
+    }
+  }, [requests, selectedRequest]);
+
+  const handleViewRequest = (request) => {
+    setSelectedRequest(request);
+  };
 
   return (
     <>
@@ -80,38 +100,42 @@ const LeaveHistory = ({ requests = [], onCancelRequest }) => {
               </thead>
 
               <tbody>
-                {filteredRequests.map((request) => (
-                  <tr key={request.id}>
-                    <td>{request.leaveType}</td>
+                {filteredRequests.map((request) => {
+                  const status = request.status || "Pending";
 
-                    <td>
-                      {request.startDate} - {request.endDate}
-                    </td>
+                  return (
+                    <tr key={request.id}>
+                      <td>{request.leaveType}</td>
 
-                    <td>{request.requestedDays}</td>
+                      <td>
+                        {request.startDate} - {request.endDate}
+                      </td>
 
-                    <td>
-                      <span
-                        className={`leaveHistory-status ${request.status.toLowerCase()}`}
-                      >
-                        {request.status}
-                      </span>
-                    </td>
+                      <td>{request.requestedDays}</td>
 
-                    <td>{request.appliedDate}</td>
+                      <td>
+                        <span
+                          className={`leaveHistory-status ${status.toLowerCase()}`}
+                        >
+                          {status}
+                        </span>
+                      </td>
 
-                    <td>
-                      <button
-                        type="button"
-                        className="leaveHistory-view"
-                        onClick={() => setSelectedRequest(request)}
-                        aria-label={`View ${request.leaveType} request`}
-                      >
-                        <MdVisibility />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                      <td>{request.appliedDate}</td>
+
+                      <td>
+                        <button
+                          type="button"
+                          className="leaveHistory-view"
+                          onClick={() => handleViewRequest(request)}
+                          aria-label={`View ${request.leaveType} request`}
+                        >
+                          <MdVisibility />
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

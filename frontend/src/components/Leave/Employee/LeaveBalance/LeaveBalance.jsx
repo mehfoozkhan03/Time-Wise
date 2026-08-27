@@ -1,27 +1,23 @@
 import "./LeaveBalance.css";
 
-const leaveBalance = [
-  {
-    type: "Annual Leave",
-    total: 21,
-    used: 8,
-    remaining: 13,
-  },
-  {
-    type: "Sick Leave",
-    total: 10,
-    used: 2,
-    remaining: 8,
-  },
-  {
-    type: "Casual Leave",
-    total: 5,
-    used: 3,
-    remaining: 2,
-  },
-];
+const LeaveBalance = ({ balance }) => {
+  if (!balance) return null;
 
-const LeaveBalance = () => {
+  const leaveData = [
+    {
+      type: "Annual Leave",
+      ...balance.annual,
+    },
+    {
+      type: "Sick Leave",
+      ...balance.sick,
+    },
+    {
+      type: "Casual Leave",
+      ...balance.casual,
+    },
+  ];
+
   return (
     <section className="leaveBalance">
       <div className="leaveBalance-header">
@@ -30,7 +26,7 @@ const LeaveBalance = () => {
       </div>
 
       <div className="leaveBalance-grid">
-        {leaveBalance.map((leave) => (
+        {leaveData.map((leave) => (
           <div className="leaveBalance-card" key={leave.type}>
             <h3>{leave.type}</h3>
 

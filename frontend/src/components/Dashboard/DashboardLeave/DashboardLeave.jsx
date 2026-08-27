@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import "./DashboardLeave.css";
 
@@ -7,128 +8,122 @@ import LeaveRequests from "./LeaveRequests/LeaveRequests";
 import LeaveRequestDetails from "./LeaveRequestDetails/LeaveRequestDetails";
 import RejectLeaveModal from "./RejectLeaveModal/RejectLeaveModal";
 
-import leaveData from "../../../data/leaveData";
+import {
+  fetchAdminLeaves,
+  approveAdminLeave,
+  rejectAdminLeave,
+  fetchLeaveStatistics,
+} from "../../../store/leaveSlice";
 
 export const DashboardLeave = () => {
-  const [requests, setRequests] = useState(leaveData);
+  const dispatch = useDispatch();
+
+  const {
+    adminRequests = [],
+    adminStatistics = null,
+    loading,
+    error,
+  } = useSelector((state) => state.leave);
 
   const [selectedRequest, setSelectedRequest] = useState(null);
-
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
-
   const [isRejectModalOpen, setIsRejectModalOpen] = useState(false);
 
-  /* ==========================================
-     VIEW REQUEST
-  ========================================== */
+  useEffect(() => {
+    dispatch(fetchAdminLeaves());
+    dispatch(fetchLeaveStatistics());
+  }, [dispatch]);
+
+  const formattedRequests = useMemo(() => {
+    return adminRequests.map((request) => ({
+      ...request,
+
+      id: request._id,
+
+      employee: request.user || request.employee,
+
+      user: request.user || request.employee,
+    }));
+  }, [adminRequests]);
 
   const handleViewRequest = (request) => {
     setSelectedRequest(request);
     setIsDetailsOpen(true);
   };
 
-  /* ==========================================
-     CLOSE DETAILS
-  ========================================== */
-
   const handleCloseDetails = () => {
     setIsDetailsOpen(false);
     setSelectedRequest(null);
   };
 
-  /* ==========================================
-     APPROVE REQUEST
-  ========================================== */
+  const handleApproveRequest = async (request) => {
+    const leaveID = request?.id || request?._id;
 
-  const handleApproveRequest = (request) => {
-    if (!request) return;
+    if (!leaveID) {
+      return;
+    }
 
-    setRequests((currentRequests) =>
-      currentRequests.map((item) =>
-        item.id === request.id
-          ? {
-              ...item,
-              status: "Approved",
-            }
-          : item
-      )
-    );
+    try {
+      await dispatch(approveAdminLeave(leaveID)).unwrap();
 
-    setSelectedRequest((currentRequest) =>
-      currentRequest
-        ? {
-            ...currentRequest,
-            status: "Approved",
-          }
-        : null
-    );
+      await dispatch(fetchAdminLeaves()).unwrap();
+      await dispatch(fetchLeaveStatistics()).unwrap();
+
+      setIsDetailsOpen(false);
+      setSelectedRequest(null);
+    } catch (approveError) {
+      console.error("Approve Leave Error:", approveError);
+    }
   };
-
-  /* ==========================================
-     OPEN REJECT MODAL
-  ========================================== */
 
   const handleOpenRejectModal = (request) => {
     setSelectedRequest(request);
-
     setIsDetailsOpen(false);
     setIsRejectModalOpen(true);
   };
-
-  /* ==========================================
-     CLOSE REJECT MODAL
-  ========================================== */
 
   const handleCloseRejectModal = () => {
     setIsRejectModalOpen(false);
     setSelectedRequest(null);
   };
 
-  /* ==========================================
-     CONFIRM REJECTION
-  ========================================== */
+  const handleConfirmReject = async ({ request, reason }) => {
+    const leaveID = request?.id || request?._id;
 
-  const handleConfirmReject = ({ request, reason }) => {
-    if (!request) return;
+    if (!leaveID) {
+      return;
+    }
 
-    setRequests((currentRequests) =>
-      currentRequests.map((item) =>
-        item.id === request.id
-          ? {
-              ...item,
-              status: "Rejected",
-              adminComment: reason,
-            }
-          : item
-      )
-    );
+    try {
+      await dispatch(
+        rejectAdminLeave({
+          leaveID,
+          adminComment: reason,
+        }),
+      ).unwrap();
 
-    setIsRejectModalOpen(false);
-    setSelectedRequest(null);
+      await dispatch(fetchAdminLeaves()).unwrap();
+      await dispatch(fetchLeaveStatistics()).unwrap();
+
+      setIsRejectModalOpen(false);
+      setSelectedRequest(null);
+    } catch (rejectError) {
+      console.error("Reject Leave Error:", rejectError);
+      throw rejectError;
+    }
   };
 
   return (
     <div className="dashboard_leave">
-      {/* =====================================
-          LEAVE STATS
-      ===================================== */}
-
-      <LeaveStats requests={requests} />
-
-      {/* =====================================
-          LEAVE REQUESTS
-      ===================================== */}
+      <LeaveStats statistics={adminStatistics} requests={formattedRequests} />
 
       <LeaveRequests
-        requests={requests}
+        requests={formattedRequests}
+        loading={loading}
         onView={handleViewRequest}
         onApprove={handleApproveRequest}
         onReject={handleOpenRejectModal}
       />
-
-      {/* =====================================
-          REQUEST DETAILS
-      ===================================== */}
 
       <LeaveRequestDetails
         isOpen={isDetailsOpen}
@@ -138,16 +133,16 @@ export const DashboardLeave = () => {
         onReject={handleOpenRejectModal}
       />
 
-      {/* =====================================
-          REJECT MODAL
-      ===================================== */}
-
       <RejectLeaveModal
         isOpen={isRejectModalOpen}
         request={selectedRequest}
         onClose={handleCloseRejectModal}
         onConfirm={handleConfirmReject}
       />
+
+      {error && <p className="dashboard_leave_error">{error}</p>}
     </div>
   );
 };
+
+export default DashboardLeave;

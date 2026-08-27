@@ -7,6 +7,7 @@ import LeaveRequestTable from "../LeaveRequestTable/LeaveRequestTable";
 
 export default function LeaveRequests({
   requests = [],
+  loading = false,
   onView,
   onApprove,
   onReject,
@@ -14,22 +15,33 @@ export default function LeaveRequests({
   const [activeFilter, setActiveFilter] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
 
-  const filters = ["All", "Pending", "Approved", "Rejected"];
+  const filters = [
+    "All",
+    "Pending",
+    "Approved",
+    "Rejected",
+  ];
 
   const filteredRequests = useMemo(() => {
+    const search = searchTerm.trim().toLowerCase();
+
     return requests.filter((request) => {
       const matchesStatus =
-        activeFilter === "All" || request.status === activeFilter;
+        activeFilter === "All" ||
+        request.status === activeFilter;
 
-      const employeeName = `${request.employee?.firstName || ""} ${
-        request.employee?.lastName || ""
-      }`.toLowerCase();
+      const employee = request.employee || request.user;
 
-      const email = request.employee?.email?.toLowerCase() || "";
+      const employeeName =
+        `${employee?.firstName || ""} ${
+          employee?.lastName || ""
+        }`.toLowerCase();
 
-      const leaveType = request.leaveType?.toLowerCase() || "";
+      const email =
+        employee?.email?.toLowerCase() || "";
 
-      const search = searchTerm.toLowerCase().trim();
+      const leaveType =
+        request.leaveType?.toLowerCase() || "";
 
       const matchesSearch =
         !search ||
@@ -43,7 +55,6 @@ export default function LeaveRequests({
 
   return (
     <section className="leave_requests">
-      {/* Header */}
       <div className="leave_requests_header">
         <div className="leave_requests_heading">
           <h2>Leave Requests</h2>
@@ -59,9 +70,7 @@ export default function LeaveRequests({
         </div>
       </div>
 
-      {/* Controls */}
       <div className="leave_requests_controls">
-        {/* Search */}
         <div className="leave_search">
           <FaSearch className="leave_search_icon" />
 
@@ -69,17 +78,17 @@ export default function LeaveRequests({
             type="text"
             placeholder="Search employee or leave type..."
             value={searchTerm}
-            onChange={(event) => setSearchTerm(event.target.value)}
+            onChange={(event) =>
+              setSearchTerm(event.target.value)
+            }
           />
         </div>
 
-        {/* Filter label */}
         <div className="leave_filter_label">
           <FaSlidersH />
           <span>Filter</span>
         </div>
 
-        {/* Status Filters */}
         <div className="leave_status_filters">
           {filters.map((filter) => (
             <button
@@ -98,13 +107,18 @@ export default function LeaveRequests({
         </div>
       </div>
 
-      {/* Table */}
-      <LeaveRequestTable
-        requests={filteredRequests}
-        onView={onView}
-        onApprove={onApprove}
-        onReject={onReject}
-      />
+      {loading && requests.length === 0 ? (
+        <div className="leave_requests_loading">
+          Loading leave requests...
+        </div>
+      ) : (
+        <LeaveRequestTable
+          requests={filteredRequests}
+          onView={onView}
+          onApprove={onApprove}
+          onReject={onReject}
+        />
+      )}
     </section>
   );
 }

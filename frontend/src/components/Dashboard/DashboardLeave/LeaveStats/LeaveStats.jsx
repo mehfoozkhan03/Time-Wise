@@ -1,4 +1,5 @@
 import "./LeaveStats.css";
+
 import {
   FaClipboardList,
   FaClock,
@@ -6,20 +7,30 @@ import {
   FaTimesCircle,
 } from "react-icons/fa";
 
-export default function LeaveStats({ requests = [] }) {
-  const totalRequests = requests.length;
+export default function LeaveStats({
+  statistics,
+  requests = [],
+}) {
+  const totalRequests =
+    statistics?.total ?? requests.length;
 
-  const pendingRequests = requests.filter(
-    (request) => request.status === "Pending"
-  ).length;
+  const pendingRequests =
+    statistics?.pending ??
+    requests.filter(
+      (request) => request.status === "Pending"
+    ).length;
 
-  const approvedRequests = requests.filter(
-    (request) => request.status === "Approved"
-  ).length;
+  const approvedRequests =
+    statistics?.approved ??
+    requests.filter(
+      (request) => request.status === "Approved"
+    ).length;
 
-  const rejectedRequests = requests.filter(
-    (request) => request.status === "Rejected"
-  ).length;
+  const rejectedRequests =
+    statistics?.rejected ??
+    requests.filter(
+      (request) => request.status === "Rejected"
+    ).length;
 
   const stats = [
     {
@@ -55,14 +66,23 @@ export default function LeaveStats({ requests = [] }) {
   return (
     <div className="leave_stats">
       {stats.map((stat) => (
-        <div className={`leave_stat_card ${stat.className}`} key={stat.id}>
+        <div
+          className={`leave_stat_card ${stat.className}`}
+          key={stat.id}
+        >
           <div className="leave_stat_content">
-            <span className="leave_stat_title">{stat.title}</span>
+            <span className="leave_stat_title">
+              {stat.title}
+            </span>
 
-            <h3 className="leave_stat_value">{stat.value}</h3>
+            <h3 className="leave_stat_value">
+              {stat.value}
+            </h3>
           </div>
 
-          <div className="leave_stat_icon">{stat.icon}</div>
+          <div className="leave_stat_icon">
+            {stat.icon}
+          </div>
         </div>
       ))}
     </div>

@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import "./Leave.css";
 
@@ -6,61 +7,81 @@ import LeaveBalance from "../../Leave/Employee/LeaveBalance/LeaveBalance";
 import ApplyLeave from "../../Leave/Employee/ApplyLeave/ApplyLeave";
 import LeaveHistory from "../../Leave/Employee/LeaveHistory/LeaveHistory";
 
-const initialRequests = [
-  {
-    id: 1,
-    leaveType: "Sick Leave",
-    leaveTypeValue: "sick",
-    startDate: "25 Aug 2026",
-    endDate: "26 Aug 2026",
-    requestedDays: 2,
-    reason: "Personal reason",
-    status: "Pending",
-    appliedDate: "20 Aug 2026",
-  },
-  {
-    id: 2,
-    leaveType: "Annual Leave",
-    leaveTypeValue: "annual",
-    startDate: "10 Sep 2026",
-    endDate: "12 Sep 2026",
-    requestedDays: 3,
-    reason: "Family trip",
-    status: "Approved",
-    appliedDate: "18 Aug 2026",
-  },
-  {
-    id: 3,
-    leaveType: "Casual Leave",
-    leaveTypeValue: "casual",
-    startDate: "15 Jul 2026",
-    endDate: "15 Jul 2026",
-    requestedDays: 1,
-    reason: "Personal work",
-    status: "Rejected",
-    appliedDate: "10 Jul 2026",
-  },
-];
+import {
+  fetchLeaveBalance,
+  fetchMyLeaves,
+  submitLeave,
+  cancelLeaveRequest,
+} from "../../../store/leaveSlice";
+
+const leaveTypeLabels = {
+  annual: "Annual Leave",
+  sick: "Sick Leave",
+  casual: "Casual Leave",
+};
+
+const formatDate = (date) => {
+  if (!date) {
+    return "";
+  }
+
+  return new Date(date).toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+};
 
 const Leave = () => {
-  const [showApplyLeave, setShowApplyLeave] = useState(false);
-  const [requests, setRequests] = useState(initialRequests);
+  const dispatch = useDispatch();
 
-  const handleSubmitLeave = (newRequest) => {
-    setRequests((previous) => [newRequest, ...previous]);
+  const { balance, requests, loading, error } = useSelector(
+    (state) => state.leave,
+  );
+
+  const [showApplyLeave, setShowApplyLeave] = useState(false);
+
+  useEffect(() => {
+    dispatch(fetchLeaveBalance());
+    dispatch(fetchMyLeaves());
+  }, [dispatch]);
+
+  const formattedRequests = useMemo(() => {
+    return requests.map((request) => ({
+      id: request._id,
+      leaveType: leaveTypeLabels[request.leaveType] || request.leaveType,
+      leaveTypeValue: request.leaveType,
+      startDate: formatDate(request.startDate),
+      endDate: formatDate(request.endDate),
+      requestedDays: request.totalDays,
+      reason: request.reason,
+      status: request.status,
+      appliedDate: formatDate(request.appliedAt),
+      adminComment: request.adminComment || "",
+      rawRequest: request,
+    }));
+  }, [requests]);
+
+  const handleSubmitLeave = async (leaveData) => {
+    try {
+      await dispatch(submitLeave(leaveData)).unwrap();
+      await dispatch(fetchMyLeaves()).unwrap();
+
+      setShowApplyLeave(false);
+    } catch (submitError) {
+      console.error("Submit Leave Error:", submitError);
+      throw submitError;
+    }
   };
 
-  const handleCancelRequest = (requestId) => {
-    setRequests((previous) =>
-      previous.map((request) =>
-        request.id === requestId
-          ? {
-              ...request,
-              status: "Cancelled",
-            }
-          : request
-      )
-    );
+  const handleCancelRequest = async (requestId) => {
+    try {
+      await dispatch(cancelLeaveRequest(requestId)).unwrap();
+      await dispatch(fetchMyLeaves()).unwrap();
+    } catch (cancelError) {
+      console.error("Cancel Leave Error:", cancelError);
+      throw cancelError;
+    }
   };
 
   return (
@@ -81,18 +102,31 @@ const Leave = () => {
       </div>
 
       <div className="leave-page-content">
-        <LeaveBalance />
+        {loading && !balance && !requests.length ? (
+          <p>Loading leave information...</p>
+        ) : (
+          <>
+            <LeaveBalance balance={balance} />
 
-        <LeaveHistory
-          requests={requests}
-          onCancelRequest={handleCancelRequest}
-        />
+            <LeaveHistory
+              requests={formattedRequests}
+              onCancelRequest={handleCancelRequest}
+            />
+          </>
+        )}
+
+        {error && (
+          <p style={{ color: "#ef4444", margin: 0 }}>
+            {error}
+          </p>
+        )}
       </div>
 
       {showApplyLeave && (
         <ApplyLeave
           onClose={() => setShowApplyLeave(false)}
           onSubmit={handleSubmitLeave}
+          balance={balance}
         />
       )}
     </div>

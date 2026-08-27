@@ -3,6 +3,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import tourReducer from "./tourSlice";
 import authReducer from "./authSlice";
 import attendanceReducer from "./attendanceSlice";
+import leaveReducer from "./leaveSlice";
 import notificationReducer from "./notificationSlice";
 import postReducer from "./postSlice";
 import dashboardReducer from "./dashboardSlice";
@@ -21,6 +22,8 @@ const store = configureStore({
     auth: authReducer,
 
     attendance: attendanceReducer,
+
+    leave: leaveReducer,
 
     notification: notificationReducer,
 
