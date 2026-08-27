@@ -10,10 +10,16 @@ export const getConversation = async (userID) => {
   }).lean();
 
   if (!conversation) {
-    return [];
+    return {
+      messages: [],
+      pendingRequests: [],
+    };
   }
 
-  return conversation.messages || [];
+  return {
+    messages: conversation.messages || [],
+    pendingRequests: conversation.pendingRequests || [],
+  };
 };
 
 // ==================================================
@@ -29,6 +35,7 @@ export const addConversationMessage = async (userID, role, content) => {
     conversation = new AIConversation({
       user: userID,
       messages: [],
+      pendingRequests: [],
     });
   }
 
@@ -38,6 +45,57 @@ export const addConversationMessage = async (userID, role, content) => {
   });
 
   await conversation.save();
+};
+
+// ==================================================
+// GET PENDING REQUESTS
+// ==================================================
+
+export const getPendingRequests = async (userID) => {
+  const conversation = await AIConversation.findOne({
+    user: userID,
+  }).lean();
+
+  return conversation?.pendingRequests || [];
+};
+
+// ==================================================
+// SAVE PENDING REQUESTS
+// ==================================================
+
+export const savePendingRequests = async (userID, pendingRequests) => {
+  let conversation = await AIConversation.findOne({
+    user: userID,
+  });
+
+  if (!conversation) {
+    conversation = new AIConversation({
+      user: userID,
+      messages: [],
+      pendingRequests: [],
+    });
+  }
+
+  conversation.pendingRequests = pendingRequests || [];
+
+  await conversation.save();
+};
+
+// ==================================================
+// CLEAR PENDING REQUESTS
+// ==================================================
+
+export const clearPendingRequests = async (userID) => {
+  await AIConversation.updateOne(
+    {
+      user: userID,
+    },
+    {
+      $set: {
+        pendingRequests: [],
+      },
+    },
+  );
 };
 
 // ==================================================

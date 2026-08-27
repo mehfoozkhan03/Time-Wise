@@ -25,12 +25,6 @@ export const getRequestedContext = (
 
   const phase3Route = dataRoute?.routable ? dataRoute : null;
 
-  console.log("========== PHASE 3 CONTEXT ROUTE ==========");
-
-  console.log(JSON.stringify(phase3Route, null, 2));
-
-  console.log("============================================");
-
   const intentToContext = {
     attendance: "attendance",
     working_hours: "workingHours",
@@ -82,19 +76,6 @@ export const getRequestedContext = (
 
   const effectivePeriod =
     phase2Confident && phase2Period ? phase2Period : aiPeriod;
-
-  console.log("========== PHASE 2 CONTEXT ==========");
-
-  console.log({
-    intent: phase2Intent,
-    action: phase2Action,
-    entity: phase2Entity,
-    period: phase2Period,
-    dateReference: phase2DateReference,
-    search: phase2Search,
-  });
-
-  console.log("=====================================");
 
   const aiConfidence = Number(queryUnderstanding?.confidence ?? 0);
 
@@ -237,16 +218,6 @@ export const getRequestedContext = (
         getPhase3WorkingHoursContext(phase3Route);
 
       if (phase3WorkingHoursContext) {
-        console.log("========== PHASE 3 CONTEXT MATCH ==========");
-
-        console.log("Entity:", phase3Route.entity);
-
-        console.log("Field:", phase3Route.field);
-
-        console.log("Period:", phase3Route.period);
-
-        console.log("============================================");
-
         return phase3WorkingHoursContext;
       }
     }

@@ -51,6 +51,7 @@ find
 list
 count
 show
+help
 compare
 explain
 evaluate
@@ -209,6 +210,33 @@ to determine what the user is referring to.
 
 19. Return valid JSON only.
 
+ATTENDANCE RULE:
+
+If the user asks how to check, view, see, access, or find their attendance,
+classify the action as "help".
+
+Examples:
+
+"How do I check my attendance?"
+"Where can I see my attendance?"
+"How can I view my attendance?"
+"Where is my attendance?"
+"How do I see attendance?"
+
+Return:
+
+{
+  "intent": "attendance",
+  "action": "help",
+  "entity": "attendance",
+  "period": "none",
+  "dateReference": "none",
+  "search": "none",
+  "confidence": 1
+}
+
+Do NOT ask for a period for these questions.
+
 ==================================================
 OUTPUT FORMAT
 ==================================================
@@ -289,6 +317,7 @@ const normalizeIntentEntity = (result) => {
     "update",
     "delete",
     "unknown",
+    "help",
   ]);
 
   const validEntities = new Set([
@@ -457,27 +486,9 @@ ${safeMessage}
 
     const raw = response.choices?.[0]?.message?.content || "";
 
-    console.log("========== PHASE 2 RAW RESPONSE ==========");
-    console.log(JSON.stringify(response, null, 2));
-    console.log("===========================================");
-
-    console.log("========== PHASE 2 RAW CONTENT ===========");
-    console.log(raw);
-    console.log("===========================================");
-
     const parsed = parseJSON(raw);
 
-    console.log("========== PHASE 2 PARSED JSON ===========");
-    console.log(JSON.stringify(parsed, null, 2));
-    console.log("===========================================");
-
     const result = normalizeIntentEntity(parsed);
-
-    console.log("========== PHASE 2 RESULT ==========");
-
-    console.log(JSON.stringify(result, null, 2));
-
-    console.log("====================================");
 
     return result;
   } catch (error) {

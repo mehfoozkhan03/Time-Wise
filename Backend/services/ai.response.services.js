@@ -70,16 +70,6 @@ RETRIEVED DATA:
 ${JSON.stringify(safeData)}
 `;
 
-    console.log("========== PHASE 5 GROQ REQUEST ==========");
-
-    console.log("Model:", RESPONSE_MODEL);
-
-    console.log("Question:", question);
-
-    console.log("Retrieved Data:", JSON.stringify(safeData));
-
-    console.log("===========================================");
-
     // ========================================================
     // GROQ REQUEST
     // ========================================================
@@ -103,19 +93,6 @@ ${JSON.stringify(safeData)}
 
       max_completion_tokens: 300,
     });
-
-    console.log("========== PHASE 5 GROQ RESPONSE RECEIVED ==========");
-
-    console.log("Response received");
-
-    console.log("Choice count:", response?.choices?.length || 0);
-
-    console.log(
-      "Raw message:",
-      JSON.stringify(response?.choices?.[0]?.message, null, 2),
-    );
-
-    console.log("=====================================================");
 
     // ========================================================
     // EXTRACT CONTENT
@@ -147,12 +124,6 @@ ${JSON.stringify(safeData)}
     // ========================================================
 
     if (!answer) {
-      console.log("========== PHASE 5 CONTENT EMPTY ==========");
-
-      console.log("Model reasoning:", message?.reasoning || "none");
-
-      console.log("============================================");
-
       // ------------------------------------------------------
       // Numeric value fallback
       // ------------------------------------------------------
@@ -177,12 +148,6 @@ ${JSON.stringify(safeData)}
     if (!answer) {
       answer = "I’m sorry, but I couldn't generate an answer right now.";
     }
-
-    console.log("========== PHASE 5 ANSWER ==========");
-
-    console.log(answer);
-
-    console.log("====================================");
 
     return {
       success: true,

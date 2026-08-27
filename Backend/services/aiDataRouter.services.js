@@ -67,7 +67,7 @@ const ENTITY_MAP = {
 
   attendance_percentage: {
     source: "userContext",
-    field: "attendancePercentage",
+    field: "attendance.percentage",
     operation: "get",
     dataType: "percentage",
   },
@@ -173,14 +173,14 @@ const ENTITY_MAP = {
 
   current_streak: {
     source: "userContext",
-    field: "dayStreak",
+    field: "streak.current",
     operation: "get",
     dataType: "number",
   },
 
   longest_streak: {
     source: "userContext",
-    field: "longestStreak",
+    field: "streak.longest",
     operation: "get",
     dataType: "number",
   },
@@ -191,7 +191,7 @@ const ENTITY_MAP = {
 
   leaves_taken: {
     source: "userContext",
-    field: "leavesTaken",
+    field: "attendance.leavesTaken",
     operation: "count",
     dataType: "number",
   },
@@ -202,7 +202,7 @@ const ENTITY_MAP = {
 
   punctuality_score: {
     source: "userContext",
-    field: "punctuality",
+    field: "productivity.punctuality",
     operation: "get",
     dataType: "percentage",
   },
@@ -224,7 +224,7 @@ const ENTITY_MAP = {
 
   average_checkin_time: {
     source: "userContext",
-    field: "averageCheckinTime",
+    field: "work.averageCheckIn",
     operation: "get",
     dataType: "time",
   },
@@ -533,12 +533,6 @@ export const routeTimeWiseData = ({ intentEntity }) => {
   const route = buildRoute({
     intentEntity,
   });
-
-  console.log("========== PHASE 3 DATA ROUTING ==========");
-
-  console.log(JSON.stringify(route, null, 2));
-
-  console.log("===========================================");
 
   return route;
 };

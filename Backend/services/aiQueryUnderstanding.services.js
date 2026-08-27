@@ -409,11 +409,6 @@ ${safeMessage}
 
     const result = normalizeResult(parsed);
 
-    console.log("========== QUERY UNDERSTANDING ==========");
-    console.log("Original:", safeMessage);
-    console.log("Result:", JSON.stringify(result, null, 2));
-    console.log("==========================================");
-
     return result;
   } catch (error) {
     console.error("Query Understanding Error:", error?.message || error);

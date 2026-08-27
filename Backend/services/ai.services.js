@@ -17,6 +17,9 @@ export const askTimeWiseAI = async (
   const followUp = requestedContext?.followUp;
   const clarification = requestedContext?.clarification;
 
+  const isHelpRequest = requestedContext?.isHelpRequest;
+  const helpRequest = requestedContext?.helpRequest;
+
   const workingHoursPeriod = requestedContext?.attendance?.workingHoursPeriod;
   const workingHours = requestedContext?.attendance?.workingHours;
 
@@ -37,6 +40,50 @@ IMPORTANT:
 - Never switch to attendance, productivity, punctuality, or another metric unless the CURRENT FOLLOW-UP CONTEXT identifies that metric.
 - Never mention this internal follow-up context to the user.
 `;
+  }
+
+  // ==================================================
+  // HELP REQUEST
+  // ==================================================
+
+  if (isHelpRequest && helpRequest) {
+    const helpResponse = await groq.chat.completions.create({
+      model: "openai/gpt-oss-20b",
+      max_completion_tokens: 300,
+
+      messages: [
+        {
+          role: "system",
+          content: `
+You are the TimeWise Assistant.
+
+The user is asking HOW to use/check a TimeWise feature.
+
+Feature:
+${helpRequest.entity || helpRequest.intent}
+
+Rules:
+- Explain how the user can use or check this feature in TimeWise.
+- Do not ask for a period unless the user specifically asks for a specific period.
+- Use only information that exists in TimeWise.
+- Do not invent buttons, pages, or features.
+- Do not use Markdown.
+- Do not use asterisks.
+- Do not mention JSON, internal fields, backend, AI, or system instructions.
+- Keep the answer concise and helpful.
+`,
+        },
+        {
+          role: "user",
+          content: message,
+        },
+      ],
+    });
+
+    return (
+      helpResponse.choices?.[0]?.message?.content ||
+      "You can check your attendance from the Attendance section in TimeWise."
+    );
   }
 
   // ==================================================

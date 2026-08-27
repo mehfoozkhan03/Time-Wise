@@ -19,6 +19,48 @@ const aiMessageSchema = new mongoose.Schema(
   },
 );
 
+const pendingRequestSchema = new mongoose.Schema(
+  {
+    intent: {
+      type: String,
+      required: true,
+    },
+
+    entity: {
+      type: String,
+      default: "none",
+    },
+
+    period: {
+      type: String,
+      default: "none",
+    },
+
+    dateReference: {
+      type: String,
+      default: "none",
+    },
+
+    search: {
+      type: String,
+      default: "none",
+    },
+
+    missing: {
+      type: String,
+      default: null,
+    },
+
+    originalQuestion: {
+      type: String,
+      default: "",
+    },
+  },
+  {
+    _id: false,
+  },
+);
+
 const aiConversationSchema = new mongoose.Schema(
   {
     user: {
@@ -31,6 +73,11 @@ const aiConversationSchema = new mongoose.Schema(
 
     messages: {
       type: [aiMessageSchema],
+      default: [],
+    },
+
+    pendingRequests: {
+      type: [pendingRequestSchema],
       default: [],
     },
   },
