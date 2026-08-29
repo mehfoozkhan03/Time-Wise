@@ -369,6 +369,24 @@ const ENTITY_MAP = {
     operation: "get",
     dataType: "text",
   },
+
+  // ----------------------------------------------------------
+  // ALIASES (Phase 2 sometimes outputs these)
+  // ----------------------------------------------------------
+
+  attendance: {
+    source: "userContext",
+    field: "attendance.percentage",
+    operation: "get",
+    dataType: "percentage",
+  },
+
+  leave: {
+    source: "userContext",
+    field: "attendance.leavesTaken",
+    operation: "count",
+    dataType: "number",
+  },
 };
 
 // ============================================================
