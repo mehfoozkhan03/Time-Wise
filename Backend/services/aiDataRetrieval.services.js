@@ -47,6 +47,14 @@ const getWorkingHoursValue = (userContext, entity, period) => {
       ? attendance.totalOvertimeHours
       : attendance.overtimeHours;
 
+    console.log("DEBUG overtime:", {
+      entity,
+      period,
+      overtimeValue,
+      totalOvertimeHours: attendance.totalOvertimeHours,
+      overtimeHours: attendance.overtimeHours,
+    });
+
     return {
       entity,
       period,

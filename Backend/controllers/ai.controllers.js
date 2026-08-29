@@ -100,6 +100,101 @@ const detectPeriod = (rawMessage) => {
   return best.period;
 };
 
+// ==================================================
+// DETERMINISTIC HOURS ANSWER
+// Working-hours and overtime answers are plain numbers, so we
+// build the sentence in code from the exact retrieved value.
+// This never mis-reads a real 0 as "no data", never errors out,
+// and never depends on the AI (so it can't hit the rate limit).
+// ==================================================
+
+const HOURS_INTENTS = new Set(["working_hours", "overtime"]);
+
+const HOURS_ENTITIES = new Set([
+  "working_hours",
+  "overtime_hours",
+  "monthly_overtime",
+  "total_overtime",
+]);
+
+const isHoursRequest = (request) =>
+  HOURS_INTENTS.has(request?.intent) || HOURS_ENTITIES.has(request?.entity);
+
+const formatHoursAnswer = ({
+  entity = "",
+  intent = "",
+  period = "none",
+  value,
+}) => {
+  const isOvertime =
+    intent === "overtime" ||
+    ["overtime_hours", "monthly_overtime", "total_overtime"].includes(entity);
+
+  const metric = isOvertime ? "overtime hours" : "working hours";
+
+  const periodPhrase =
+    {
+      today: "today",
+      week: "this week",
+      month: "this month",
+      total: "in total",
+    }[period] || "";
+
+  // No data for this period (e.g. no hours logged today yet).
+  if (value === null || value === undefined) {
+    if (period === "today") {
+      return `You haven't logged any ${metric} today yet.`;
+    }
+    const tail = periodPhrase ? ` ${periodPhrase}` : "";
+    return `I don't have any ${metric} recorded${tail}.`;
+  }
+
+  const num = typeof value === "number" ? value : Number(value);
+  const shown = Number.isFinite(num) ? Math.round(num * 10) / 10 : value;
+  const verb = shown === 1 ? "is" : "are";
+  const tail = periodPhrase ? ` ${periodPhrase}` : "";
+
+  return `Your ${metric}${tail} ${verb} ${shown}.`;
+};
+
+// ==================================================
+// FUZZY MATCH A MISSPELLED SIMPLE QUERY
+// If the message isn't an exact known query, find the closest
+// one within a small edit distance so "workign hours" ->
+// "working hours", "atttendance" -> "attendance" etc. resolve
+// instantly (no AI call). Anything not clearly close returns
+// null and flows on to the AI pipeline exactly as before.
+// ==================================================
+
+const findClosestSimpleQuery = (message, keys = []) => {
+  const cleaned = String(message || "")
+    .trim()
+    .toLowerCase();
+
+  // Too short to fuzzy-match safely (avoids matching stray words).
+  if (cleaned.length < 4) {
+    return null;
+  }
+
+  let best = { key: null, distance: Infinity };
+
+  for (const key of keys) {
+    // Only compare against keys of a similar length.
+    if (Math.abs(cleaned.length - key.length) > 3) {
+      continue;
+    }
+
+    const distance = editDistance(cleaned, key);
+    const threshold = key.length <= 6 ? 2 : 3;
+
+    if (distance <= threshold && distance < best.distance) {
+      best = { key, distance };
+    }
+  }
+
+  return best.key;
+};
+
 export const askAI = async (req, res) => {
   try {
     const { message } = req.body;
@@ -148,14 +243,22 @@ export const askAI = async (req, res) => {
           dataRoute: resumedRoute,
         });
 
-        const resumedPhase5 = await generateTimeWiseResponse({
-          question: `${pendingRequest.originalQuestion || pendingRequest.intent} ${answeredPeriod}`,
-          phase2: resumedRequest,
-          phase3: resumedRoute,
-          phase4: resumedData,
-        });
+        // Follow-up answers are always an hours metric (working hours or
+        // overtime), so we format the sentence ourselves from the exact
+        // retrieved value. This never mis-reads a real 0 as "no data" and
+        // never depends on the AI, so the answer is identical every time.
 
-        const resumedAnswer = resumedPhase5.answer;
+        console.log(
+          "DEBUG userContext.attendance:",
+          JSON.stringify(resumedUserContext.attendance, null, 2),
+        );
+
+        const resumedAnswer = formatHoursAnswer({
+          entity: resumedRequest.entity,
+          intent: resumedRequest.intent,
+          period: answeredPeriod,
+          value: resumedData.value,
+        });
 
         await addConversationMessage(userID, "user", message.trim());
 
@@ -310,7 +413,22 @@ export const askAI = async (req, res) => {
       },
     };
 
-    const simpleQueryResult = simpleQueries[normalizedMessage];
+    // Exact match first; if none, fall back to a typo-tolerant match so
+    // "workign hours", "atttendance", "wroking hour" etc. still resolve
+    // instantly (no AI call, no rate limit). A real question that isn't
+    // close to any known one returns null and flows on to the AI.
+    let simpleQueryResult = simpleQueries[normalizedMessage];
+
+    if (!simpleQueryResult) {
+      const closestKey = findClosestSimpleQuery(
+        normalizedMessage,
+        Object.keys(simpleQueries),
+      );
+
+      if (closestKey) {
+        simpleQueryResult = simpleQueries[closestKey];
+      }
+    }
 
     if (simpleQueryResult) {
       const requests = [
@@ -382,14 +500,28 @@ export const askAI = async (req, res) => {
           dataRoute: simpleRoute,
         });
 
-        const simplePhase5 = await generateTimeWiseResponse({
-          question: message.trim(),
-          phase2: simpleRequest,
-          phase3: simpleRoute,
-          phase4: simpleData,
-        });
+        // Hours metrics are formatted in code (never via the AI) so a
+        // real 0 can't be mis-read as "no data". Everything else still
+        // uses the AI for a natural sentence.
+        let simpleAnswer;
 
-        const simpleAnswer = simplePhase5.answer;
+        if (isHoursRequest(simpleRequest)) {
+          simpleAnswer = formatHoursAnswer({
+            entity: simpleRequest.entity,
+            intent: simpleRequest.intent,
+            period: simpleRequest.period,
+            value: simpleData.value,
+          });
+        } else {
+          const simplePhase5 = await generateTimeWiseResponse({
+            question: message.trim(),
+            phase2: simpleRequest,
+            phase3: simpleRoute,
+            phase4: simpleData,
+          });
+
+          simpleAnswer = simplePhase5.answer;
+        }
 
         await addConversationMessage(userID, "user", message.trim());
 
@@ -528,18 +660,32 @@ export const askAI = async (req, res) => {
       dataRoute,
     });
 
-    const phase5 = await generateTimeWiseResponse({
-      question: message,
-      phase2: intentEntity,
-      phase3: dataRoute,
-      phase4: retrievedData,
-    });
-
     // ==================================================
     // PHASE 5 FINAL RESPONSE
     // ==================================================
+    // If this resolved to an hours metric, format it deterministically
+    // (same reason as the follow-up path: a real 0 must not become
+    // "No matching information"). Everything else still uses the AI.
 
-    const answer = phase5.answer;
+    let answer;
+
+    if (isHoursRequest(intentEntity)) {
+      answer = formatHoursAnswer({
+        entity: intentEntity.entity,
+        intent: intentEntity.intent,
+        period: intentEntity.period,
+        value: retrievedData.value,
+      });
+    } else {
+      const phase5 = await generateTimeWiseResponse({
+        question: message,
+        phase2: intentEntity,
+        phase3: dataRoute,
+        phase4: retrievedData,
+      });
+
+      answer = phase5.answer;
+    }
 
     await addConversationMessage(userID, "user", message.trim());
 
