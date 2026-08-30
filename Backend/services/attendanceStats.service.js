@@ -2,50 +2,50 @@ import {
   getWeekRange,
   getMonthRange,
   formatWorkingHours,
-} from '../utils/attendanceHelper.js'
+} from "../utils/attendanceHelper.js";
 
-import { attendanceConfig } from '../config/attendanceConfig.js'
+import { attendanceConfig } from "../config/attendanceConfig.js";
 
-import { attendanceModel } from '../models/Attendance.model.js'
+import { attendanceModel } from "../models/Attendance.model.js";
 
-import { holidayModel } from '../models/Holidays.model.js'
+import { holidayModel } from "../models/Holidays.model.js";
 
 // =======================================================
 // Helpers
 // =======================================================
 
 const startOfDay = (date) => {
-  const result = new Date(date)
+  const result = new Date(date);
 
-  result.setHours(0, 0, 0, 0)
+  result.setHours(0, 0, 0, 0);
 
-  return result
-}
+  return result;
+};
 
 const endOfDay = (date) => {
-  const result = new Date(date)
+  const result = new Date(date);
 
-  result.setHours(23, 59, 59, 999)
+  result.setHours(23, 59, 59, 999);
 
-  return result
-}
+  return result;
+};
 
 const isConfiguredWorkingDay = (date) => {
-  return attendanceConfig.workingDays.includes(date.getDay())
-}
+  return attendanceConfig.workingDays.includes(date.getDay());
+};
 
 const getDateKey = (date) => {
-  const value = new Date(date)
+  const value = new Date(date);
 
   return `${value.getFullYear()}-${String(value.getMonth() + 1).padStart(
     2,
-    '0',
-  )}-${String(value.getDate()).padStart(2, '0')}`
-}
+    "0",
+  )}-${String(value.getDate()).padStart(2, "0")}`;
+};
 
 const getHolidayDateKey = (holiday) => {
-  return getDateKey(holiday.date)
-}
+  return getDateKey(holiday.date);
+};
 
 // =======================================================
 // Get Attendance Stats
@@ -566,4 +566,4 @@ export const getAttendanceStats = async (userID) => {
     averageCheckIn,
     averageBreakDuration,
   };
-}
+};
