@@ -5,6 +5,34 @@ import "./LeaveRequests.css";
 
 import LeaveRequestTable from "../LeaveRequestTable/LeaveRequestTable";
 
+const filters = [
+  "All",
+  "Pending",
+  "Approved",
+  "Rejected",
+];
+
+const getEmployeeSearchData = (request) => {
+  const employee = request.employee || request.user;
+
+  const name = [
+    employee?.firstName,
+    employee?.lastName,
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+
+  const email = employee?.email?.toLowerCase() || "";
+  const leaveType = request.leaveType?.toLowerCase() || "";
+
+  return {
+    name,
+    email,
+    leaveType,
+  };
+};
+
 export default function LeaveRequests({
   requests = [],
   loading = false,
@@ -15,13 +43,6 @@ export default function LeaveRequests({
   const [activeFilter, setActiveFilter] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
 
-  const filters = [
-    "All",
-    "Pending",
-    "Approved",
-    "Rejected",
-  ];
-
   const filteredRequests = useMemo(() => {
     const search = searchTerm.trim().toLowerCase();
 
@@ -30,26 +51,25 @@ export default function LeaveRequests({
         activeFilter === "All" ||
         request.status === activeFilter;
 
-      const employee = request.employee || request.user;
+      if (!matchesStatus) {
+        return false;
+      }
 
-      const employeeName =
-        `${employee?.firstName || ""} ${
-          employee?.lastName || ""
-        }`.toLowerCase();
+      if (!search) {
+        return true;
+      }
 
-      const email =
-        employee?.email?.toLowerCase() || "";
+      const {
+        name,
+        email,
+        leaveType,
+      } = getEmployeeSearchData(request);
 
-      const leaveType =
-        request.leaveType?.toLowerCase() || "";
-
-      const matchesSearch =
-        !search ||
-        employeeName.includes(search) ||
+      return (
+        name.includes(search) ||
         email.includes(search) ||
-        leaveType.includes(search);
-
-      return matchesStatus && matchesSearch;
+        leaveType.includes(search)
+      );
     });
   }, [requests, activeFilter, searchTerm]);
 
@@ -78,9 +98,7 @@ export default function LeaveRequests({
             type="text"
             placeholder="Search employee or leave type..."
             value={searchTerm}
-            onChange={(event) =>
-              setSearchTerm(event.target.value)
-            }
+            onChange={(event) => setSearchTerm(event.target.value)}
           />
         </div>
 

@@ -1,7 +1,3 @@
-/* ==========================================
-   OVERLAY
-========================================== */
-
 .reject_leave_overlay {
   position: fixed;
   inset: 0;
@@ -21,10 +17,6 @@
   animation: rejectLeaveOverlayIn 0.2s ease;
 }
 
-/* ==========================================
-   MODAL
-========================================== */
-
 .reject_leave_modal {
   width: min(470px, 100%);
   max-height: calc(100vh - 48px);
@@ -38,11 +30,9 @@
   box-shadow: var(--shadow_lg);
 
   animation: rejectLeaveModalIn 0.25s ease;
-}
 
-/* ==========================================
-   HEADER
-========================================== */
+  scrollbar-width: thin;
+}
 
 .reject_leave_header {
   display: flex;
@@ -55,6 +45,7 @@
 .reject_leave_header_icon {
   width: 42px;
   height: 42px;
+  min-width: 42px;
 
   display: flex;
   align-items: center;
@@ -74,8 +65,9 @@
 }
 
 .reject_leave_close {
-  width: 32px;
-  height: 32px;
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
 
   display: flex;
   align-items: center;
@@ -92,18 +84,16 @@
   transition:
     background var(--transition),
     color var(--transition),
-    border-color var(--transition);
+    border-color var(--transition),
+    transform var(--transition);
 }
 
 .reject_leave_close:hover {
   background: var(--card-hover);
   color: var(--text_primary);
   border-color: var(--card-border);
+  transform: translateY(-1px);
 }
-
-/* ==========================================
-   CONTENT
-========================================== */
 
 .reject_leave_content {
   padding: 18px 22px 22px;
@@ -128,22 +118,17 @@
   line-height: 1.6;
 }
 
-/* ==========================================
-   EMPLOYEE
-========================================== */
-
 .reject_leave_employee {
   display: flex;
   align-items: center;
   gap: 11px;
 
+  margin-bottom: 14px;
   padding: 12px;
 
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius_md);
-
-  margin-bottom: 14px;
 }
 
 .reject_leave_avatar {
@@ -177,17 +162,21 @@
 
   font-size: 13px;
   font-weight: 600;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .reject_leave_employee_info span {
   color: var(--text_secondary);
 
   font-size: 11px;
-}
 
-/* ==========================================
-   WARNING
-========================================== */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
 .reject_leave_warning {
   display: flex;
@@ -223,10 +212,6 @@
 
   font-size: 12px;
 }
-
-/* ==========================================
-   FIELD
-========================================== */
 
 .reject_leave_field {
   position: relative;
@@ -299,10 +284,6 @@
   pointer-events: none;
 }
 
-/* ==========================================
-   ACTIONS
-========================================== */
-
 .reject_leave_actions {
   display: flex;
   align-items: center;
@@ -316,7 +297,7 @@
 }
 
 .reject_leave_btn {
-  min-height: 37px;
+  min-height: 38px;
 
   display: inline-flex;
   align-items: center;
@@ -342,8 +323,6 @@
   transform: translateY(-1px);
 }
 
-/* Cancel */
-
 .reject_leave_btn.cancel {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -354,8 +333,6 @@
   background: var(--card-hover);
   color: var(--text_primary);
 }
-
-/* Confirm */
 
 .reject_leave_btn.confirm {
   background: var(--error);
@@ -371,10 +348,6 @@
   cursor: not-allowed;
   opacity: 0.45;
 }
-
-/* ==========================================
-   ANIMATION
-========================================== */
 
 @keyframes rejectLeaveOverlayIn {
   from {
@@ -398,41 +371,190 @@
   }
 }
 
-/* ==========================================
-   RESPONSIVE
-========================================== */
-
-@media (max-width: 600px) {
+@media (max-width: 720px) {
   .reject_leave_overlay {
-    padding: 14px;
+    padding: 18px;
+  }
+
+  .reject_leave_modal {
+    width: min(460px, 100%);
+    max-height: calc(100vh - 36px);
+  }
+
+  .reject_leave_header {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .reject_leave_content {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .reject_leave_overlay {
+    padding: 0;
     align-items: flex-end;
   }
 
   .reject_leave_modal {
-    max-height: calc(100vh - 28px);
-
-    border-radius:
-      var(--radius_lg)
-      var(--radius_lg)
-      0
-      0;
+    width: 100%;
+    max-height: calc(100vh - 12px);
+    border-radius: var(--radius_lg) var(--radius_lg) 0 0;
   }
 
   .reject_leave_header {
-    padding-left: 18px;
-    padding-right: 18px;
+    padding: 18px 18px 0;
+  }
+
+  .reject_leave_header_icon {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    font-size: 15px;
+  }
+
+  .reject_leave_close {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
   }
 
   .reject_leave_content {
-    padding-left: 18px;
-    padding-right: 18px;
+    padding: 16px 18px 18px;
+  }
+
+  .reject_leave_content h2 {
+    font-size: 18px;
+  }
+
+  .reject_leave_description {
+    font-size: 11px;
+    margin-bottom: 16px;
+  }
+
+  .reject_leave_employee {
+    padding: 11px;
+  }
+
+  .reject_leave_warning {
+    margin-bottom: 16px;
+  }
+
+  .reject_leave_field textarea {
+    min-height: 110px;
   }
 
   .reject_leave_actions {
     flex-direction: column-reverse;
+    gap: 9px;
+    margin-top: 18px;
+    padding-top: 15px;
   }
 
   .reject_leave_btn {
     width: 100%;
+    min-height: 40px;
+  }
+}
+
+@media (max-width: 320px) {
+  .reject_leave_modal {
+    max-height: calc(100vh - 8px);
+  }
+
+  .reject_leave_header {
+    padding: 16px 14px 0;
+  }
+
+  .reject_leave_header_icon {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    font-size: 14px;
+  }
+
+  .reject_leave_close {
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+  }
+
+  .reject_leave_content {
+    padding: 14px 14px 16px;
+  }
+
+  .reject_leave_content h2 {
+    font-size: 17px;
+  }
+
+  .reject_leave_description {
+    font-size: 10px;
+    line-height: 1.5;
+  }
+
+  .reject_leave_employee {
+    gap: 9px;
+    padding: 10px;
+  }
+
+  .reject_leave_avatar {
+    width: 35px;
+    height: 35px;
+    min-width: 35px;
+    font-size: 10px;
+  }
+
+  .reject_leave_employee_info strong {
+    font-size: 12px;
+  }
+
+  .reject_leave_employee_info span {
+    font-size: 10px;
+  }
+
+  .reject_leave_warning {
+    gap: 7px;
+    padding: 9px 10px;
+    font-size: 10px;
+  }
+
+  .reject_leave_field label {
+    font-size: 11px;
+  }
+
+  .reject_leave_field textarea {
+    min-height: 100px;
+    padding: 10px 11px 25px;
+    font-size: 11px;
+  }
+
+  .reject_leave_character_count {
+    right: 9px;
+    bottom: 7px;
+    font-size: 9px;
+  }
+
+  .reject_leave_actions {
+    margin-top: 16px;
+    padding-top: 14px;
+  }
+
+  .reject_leave_btn {
+    min-height: 38px;
+    font-size: 11px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reject_leave_overlay,
+  .reject_leave_modal {
+    animation: none;
+  }
+
+  .reject_leave_close,
+  .reject_leave_btn {
+    transition: none;
   }
 }

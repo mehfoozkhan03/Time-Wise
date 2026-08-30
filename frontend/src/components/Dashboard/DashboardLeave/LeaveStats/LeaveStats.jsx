@@ -1,5 +1,4 @@
 import "./LeaveStats.css";
-
 import {
   FaClipboardList,
   FaClock,
@@ -7,57 +6,43 @@ import {
   FaTimesCircle,
 } from "react-icons/fa";
 
+const getCount = (statistics, requests, status) => {
+  if (statistics) {
+    if (status === "total") return statistics.total ?? requests.length;
+    return statistics[status] ?? 0;
+  }
+
+  if (status === "total") return requests.length;
+
+  return requests.filter((request) => request.status === status).length;
+};
+
 export default function LeaveStats({
   statistics,
   requests = [],
 }) {
-  const totalRequests =
-    statistics?.total ?? requests.length;
-
-  const pendingRequests =
-    statistics?.pending ??
-    requests.filter(
-      (request) => request.status === "Pending"
-    ).length;
-
-  const approvedRequests =
-    statistics?.approved ??
-    requests.filter(
-      (request) => request.status === "Approved"
-    ).length;
-
-  const rejectedRequests =
-    statistics?.rejected ??
-    requests.filter(
-      (request) => request.status === "Rejected"
-    ).length;
-
   const stats = [
     {
-      id: 1,
       title: "Total Requests",
-      value: totalRequests,
+      value: getCount(statistics, requests, "total"),
       icon: <FaClipboardList />,
       className: "total",
     },
     {
-      id: 2,
       title: "Pending",
-      value: pendingRequests,
+      value: getCount(statistics, requests, "pending"),
       icon: <FaClock />,
       className: "pending",
     },
     {
-      id: 3,
       title: "Approved",
-      value: approvedRequests,
+      value: getCount(statistics, requests, "approved"),
       icon: <FaCheckCircle />,
       className: "approved",
     },
     {
-      id: 4,
       title: "Rejected",
-      value: rejectedRequests,
+      value: getCount(statistics, requests, "rejected"),
       icon: <FaTimesCircle />,
       className: "rejected",
     },
@@ -67,22 +52,15 @@ export default function LeaveStats({
     <div className="leave_stats">
       {stats.map((stat) => (
         <div
+          key={stat.title}
           className={`leave_stat_card ${stat.className}`}
-          key={stat.id}
         >
           <div className="leave_stat_content">
-            <span className="leave_stat_title">
-              {stat.title}
-            </span>
-
-            <h3 className="leave_stat_value">
-              {stat.value}
-            </h3>
+            <span className="leave_stat_title">{stat.title}</span>
+            <h3 className="leave_stat_value">{stat.value}</h3>
           </div>
 
-          <div className="leave_stat_icon">
-            {stat.icon}
-          </div>
+          <div className="leave_stat_icon">{stat.icon}</div>
         </div>
       ))}
     </div>

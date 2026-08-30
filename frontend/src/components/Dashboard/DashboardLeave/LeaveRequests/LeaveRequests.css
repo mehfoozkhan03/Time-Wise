@@ -1,17 +1,12 @@
 .leave_requests {
-  width: calc(100% - 80px);
+  width: calc(100% - 60px);
   margin: 0 30px;
-
   background: var(--card);
   border: 1px solid var(--card-border);
   border-radius: var(--radius_md);
   box-shadow: var(--shadow_sm);
   overflow: hidden;
 }
-
-/* ==========================================
-   HEADER
-========================================== */
 
 .leave_requests_header {
   display: flex;
@@ -20,6 +15,10 @@
   gap: 20px;
   padding: 24px 26px 20px;
   border-bottom: 1px solid var(--divider);
+}
+
+.leave_requests_heading {
+  min-width: 0;
 }
 
 .leave_requests_heading h2 {
@@ -37,13 +36,12 @@
   line-height: 1.5;
 }
 
-/* Request Count */
-
 .leave_requests_count {
   display: flex;
   align-items: center;
   gap: 7px;
   padding: 8px 13px;
+  flex-shrink: 0;
   border-radius: 50px;
   background: var(--tag-bg);
   color: var(--tag-text);
@@ -60,10 +58,6 @@
   font-weight: 500;
 }
 
-/* ==========================================
-   CONTROLS
-========================================== */
-
 .leave_requests_controls {
   display: flex;
   align-items: center;
@@ -73,8 +67,6 @@
   border-bottom: 1px solid var(--divider);
 }
 
-/* Search */
-
 .leave_search {
   position: relative;
   width: min(320px, 100%);
@@ -82,8 +74,9 @@
 
 .leave_search_icon {
   position: absolute;
-  left: 13px;
   top: 50%;
+  left: 13px;
+  z-index: 1;
   transform: translateY(-50%);
   color: var(--text_secondary);
   font-size: 13px;
@@ -92,14 +85,18 @@
 
 .leave_search input {
   width: 100%;
-  background-color:var(--surface) !important;
   height: 40px;
   padding: 0 14px 0 38px;
+  background: var(--surface) !important;
+  color: var(--text_primary);
   border-radius: var(--radius_sm);
   font-size: 13px;
 }
 
-/* Filter label */
+.leave_search input::placeholder {
+  color: var(--text_secondary);
+  opacity: 0.8;
+}
 
 .leave_filter_label {
   display: flex;
@@ -114,8 +111,6 @@
 .leave_filter_label svg {
   font-size: 12px;
 }
-
-/* Status filters */
 
 .leave_status_filters {
   display: flex;
@@ -135,6 +130,9 @@
   font-size: 12px;
   font-weight: 500;
   white-space: nowrap;
+  transition:
+    color var(--transition),
+    background var(--transition);
 }
 
 .leave_filter_btn:hover {
@@ -151,17 +149,13 @@
   background: var(--primary_hover);
 }
 
-/* ==========================================
-   RESPONSIVE
-========================================== */
-
 @media (max-width: 1000px) {
   .leave_requests_controls {
     flex-wrap: wrap;
   }
 
   .leave_search {
-    flex: 1;
+    flex: 1 1 280px;
     min-width: 240px;
   }
 
@@ -170,7 +164,12 @@
   }
 }
 
-@media (max-width: 700px) {
+@media (max-width: 720px) {
+  .leave_requests {
+    width: calc(100% - 48px);
+    margin: 0 24px;
+  }
+
   .leave_requests_header {
     align-items: flex-start;
     padding: 20px;
@@ -182,7 +181,7 @@
 
   .leave_search {
     width: 100%;
-    flex: none;
+    flex: 1 1 100%;
   }
 
   .leave_filter_label {
@@ -192,6 +191,7 @@
   .leave_status_filters {
     width: 100%;
     overflow-x: auto;
+    scrollbar-width: thin;
   }
 
   .leave_filter_btn {
@@ -200,11 +200,107 @@
 }
 
 @media (max-width: 480px) {
+  .leave_requests {
+    width: calc(100% - 32px);
+    margin: 0 16px;
+    border-radius: var(--radius_sm);
+  }
+
   .leave_requests_header {
     flex-direction: column;
+    gap: 14px;
+    padding: 18px 16px;
+  }
+
+  .leave_requests_heading h2 {
+    font-size: 18px;
+  }
+
+  .leave_requests_heading p {
+    font-size: 12px;
   }
 
   .leave_requests_count {
     align-self: flex-start;
+  }
+
+  .leave_requests_controls {
+    gap: 12px;
+    padding: 14px 16px;
+  }
+
+  .leave_search input {
+    height: 38px;
+  }
+
+  .leave_status_filters {
+    gap: 4px;
+    padding: 3px;
+  }
+
+  .leave_filter_btn {
+    padding: 7px 10px;
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 320px) {
+  .leave_requests {
+    width: calc(100% - 24px);
+    margin: 0 12px;
+  }
+
+  .leave_requests_header {
+    padding: 16px 12px;
+    gap: 12px;
+  }
+
+  .leave_requests_heading h2 {
+    font-size: 17px;
+  }
+
+  .leave_requests_heading p {
+    font-size: 11px;
+  }
+
+  .leave_requests_count {
+    padding: 7px 11px;
+  }
+
+  .leave_requests_count span {
+    font-size: 13px;
+  }
+
+  .leave_requests_count small {
+    font-size: 11px;
+  }
+
+  .leave_requests_controls {
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .leave_search input {
+    height: 36px;
+    padding-left: 34px;
+    font-size: 12px;
+  }
+
+  .leave_search_icon {
+    left: 11px;
+    font-size: 12px;
+  }
+
+  .leave_filter_label {
+    font-size: 12px;
+  }
+
+  .leave_status_filters {
+    gap: 3px;
+  }
+
+  .leave_filter_btn {
+    padding: 6px 9px;
+    font-size: 10px;
   }
 }
