@@ -7,6 +7,8 @@ import {
   FaFileAlt,
   FaCheck,
   FaBan,
+  FaBuilding,
+  FaBriefcase,
 } from "react-icons/fa";
 
 import "./LeaveRequestDetails.css";
@@ -143,6 +145,18 @@ export default function LeaveRequestDetails({
               <FaEnvelope />
               {employee?.email || "No email available"}
             </span>
+
+            <div className="leave_details_employee_meta">
+              <span>
+                <FaBuilding />
+                {employee?.department || "Department not available"}
+              </span>
+
+              <span>
+                <FaBriefcase />
+                {employee?.designation || "Designation not available"}
+              </span>
+            </div>
           </div>
         </div>
 

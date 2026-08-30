@@ -1,77 +1,30 @@
-import { useMemo, useState } from "react";
 import { FaSearch, FaSlidersH } from "react-icons/fa";
 
 import "./LeaveRequests.css";
 
 import LeaveRequestTable from "../LeaveRequestTable/LeaveRequestTable";
 
-const filters = [
-  "All",
-  "Pending",
-  "Approved",
-  "Rejected",
-];
-
-const getEmployeeSearchData = (request) => {
-  const employee = request.employee || request.user;
-
-  const name = [
-    employee?.firstName,
-    employee?.lastName,
-  ]
-    .filter(Boolean)
-    .join(" ")
-    .toLowerCase();
-
-  const email = employee?.email?.toLowerCase() || "";
-  const leaveType = request.leaveType?.toLowerCase() || "";
-
-  return {
-    name,
-    email,
-    leaveType,
-  };
-};
+const filters = ["All", "Pending", "Approved", "Rejected"];
 
 export default function LeaveRequests({
   requests = [],
   loading = false,
+  activeFilter = "All",
+  searchTerm = "",
+  onSearchChange,
+  onFilterChange,
   onView,
   onApprove,
   onReject,
+  pagination,
+  onPageChange,
 }) {
-  const [activeFilter, setActiveFilter] = useState("All");
-  const [searchTerm, setSearchTerm] = useState("");
+  const currentPage = pagination?.page || 1;
+  const totalPages = pagination?.totalPages || 0;
+  const totalRequests = pagination?.total || 0;
 
-  const filteredRequests = useMemo(() => {
-    const search = searchTerm.trim().toLowerCase();
-
-    return requests.filter((request) => {
-      const matchesStatus =
-        activeFilter === "All" ||
-        request.status === activeFilter;
-
-      if (!matchesStatus) {
-        return false;
-      }
-
-      if (!search) {
-        return true;
-      }
-
-      const {
-        name,
-        email,
-        leaveType,
-      } = getEmployeeSearchData(request);
-
-      return (
-        name.includes(search) ||
-        email.includes(search) ||
-        leaveType.includes(search)
-      );
-    });
-  }, [requests, activeFilter, searchTerm]);
+  const canGoPrevious = currentPage > 1;
+  const canGoNext = currentPage < totalPages;
 
   return (
     <section className="leave_requests">
@@ -79,13 +32,11 @@ export default function LeaveRequests({
         <div className="leave_requests_heading">
           <h2>Leave Requests</h2>
 
-          <p>
-            Manage and review employee leave requests.
-          </p>
+          <p>Manage and review employee leave requests.</p>
         </div>
 
         <div className="leave_requests_count">
-          <span>{filteredRequests.length}</span>
+          <span>{totalRequests}</span>
           <small>Requests</small>
         </div>
       </div>
@@ -98,7 +49,10 @@ export default function LeaveRequests({
             type="text"
             placeholder="Search employee or leave type..."
             value={searchTerm}
-            onChange={(event) => setSearchTerm(event.target.value)}
+            onChange={(event) =>
+              onSearchChange?.(event.target.value)
+            }
+            disabled={loading}
           />
         </div>
 
@@ -117,7 +71,8 @@ export default function LeaveRequests({
                   ? "leave_filter_btn active"
                   : "leave_filter_btn"
               }
-              onClick={() => setActiveFilter(filter)}
+              onClick={() => onFilterChange?.(filter)}
+              disabled={loading}
             >
               {filter}
             </button>
@@ -130,12 +85,42 @@ export default function LeaveRequests({
           Loading leave requests...
         </div>
       ) : (
-        <LeaveRequestTable
-          requests={filteredRequests}
-          onView={onView}
-          onApprove={onApprove}
-          onReject={onReject}
-        />
+        <>
+          <LeaveRequestTable
+            requests={requests}
+            onView={onView}
+            onApprove={onApprove}
+            onReject={onReject}
+          />
+
+          {totalPages > 1 && (
+            <div className="leave_pagination">
+              <button
+                type="button"
+                className="leave_pagination_btn"
+                onClick={() => onPageChange?.(currentPage - 1)}
+                disabled={!canGoPrevious || loading}
+              >
+                Previous
+              </button>
+
+              <div className="leave_pagination_info">
+                <span>
+                  Page {currentPage} of {totalPages}
+                </span>
+              </div>
+
+              <button
+                type="button"
+                className="leave_pagination_btn"
+                onClick={() => onPageChange?.(currentPage + 1)}
+                disabled={!canGoNext || loading}
+              >
+                Next
+              </button>
+            </div>
+          )}
+        </>
       )}
     </section>
   );

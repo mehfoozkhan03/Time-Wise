@@ -132,10 +132,11 @@
   white-space: nowrap;
   transition:
     color var(--transition),
-    background var(--transition);
+    background var(--transition),
+    opacity var(--transition);
 }
 
-.leave_filter_btn:hover {
+.leave_filter_btn:hover:not(:disabled) {
   color: var(--text_primary);
   background: var(--card-hover);
 }
@@ -145,8 +146,77 @@
   background: var(--primary);
 }
 
-.leave_filter_btn.active:hover {
+.leave_filter_btn.active:hover:not(:disabled) {
   background: var(--primary_hover);
+}
+
+.leave_filter_btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.leave_requests_loading {
+  min-height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+  color: var(--text_secondary);
+  font-size: 13px;
+}
+
+.leave_pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 16px 26px;
+  background: var(--surface);
+  border-top: 1px solid var(--divider);
+}
+
+.leave_pagination_btn {
+  min-width: 82px;
+  min-height: 34px;
+  padding: 0 13px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: var(--radius_sm);
+  background: var(--card);
+  color: var(--text_secondary);
+  font-size: 12px;
+  font-weight: 500;
+  transition:
+    background var(--transition),
+    color var(--transition),
+    border-color var(--transition),
+    opacity var(--transition),
+    transform var(--transition);
+}
+
+.leave_pagination_btn:hover:not(:disabled) {
+  background: var(--card-hover);
+  border-color: var(--card-border);
+  color: var(--text_primary);
+  transform: translateY(-1px);
+}
+
+.leave_pagination_btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.leave_pagination_info {
+  min-width: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text_secondary);
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
 }
 
 @media (max-width: 1000px) {
@@ -197,6 +267,10 @@
   .leave_filter_btn {
     flex-shrink: 0;
   }
+
+  .leave_pagination {
+    padding: 14px 20px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -240,6 +314,23 @@
 
   .leave_filter_btn {
     padding: 7px 10px;
+    font-size: 11px;
+  }
+
+  .leave_pagination {
+    gap: 8px;
+    padding: 13px 16px;
+  }
+
+  .leave_pagination_btn {
+    min-width: 72px;
+    min-height: 33px;
+    padding: 0 10px;
+    font-size: 11px;
+  }
+
+  .leave_pagination_info {
+    min-width: auto;
     font-size: 11px;
   }
 }
@@ -301,6 +392,22 @@
 
   .leave_filter_btn {
     padding: 6px 9px;
+    font-size: 10px;
+  }
+
+  .leave_pagination {
+    gap: 6px;
+    padding: 12px;
+  }
+
+  .leave_pagination_btn {
+    min-width: 62px;
+    min-height: 32px;
+    padding: 0 7px;
+    font-size: 10px;
+  }
+
+  .leave_pagination_info {
     font-size: 10px;
   }
 }
