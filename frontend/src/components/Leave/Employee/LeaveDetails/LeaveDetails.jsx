@@ -40,6 +40,20 @@ const LeaveDetails = ({ request, onClose, onCancel }) => {
     }
   };
 
+  const handleShowConfirmation = () => {
+    setError("");
+    setShowConfirmation(true);
+  };
+
+  const handleKeepRequest = () => {
+    if (cancelling) {
+      return;
+    }
+
+    setError("");
+    setShowConfirmation(false);
+  };
+
   return (
     <div
       className="leaveDetails-overlay"
@@ -50,7 +64,7 @@ const LeaveDetails = ({ request, onClose, onCancel }) => {
         onMouseDown={(event) => event.stopPropagation()}
       >
         <div className="leaveDetails-header">
-          <div>
+          <div className="leaveDetails-heading">
             <h2>Leave Details</h2>
             <p>View details of your leave request.</p>
           </div>
@@ -124,32 +138,29 @@ const LeaveDetails = ({ request, onClose, onCancel }) => {
         </div>
 
         <div className="leaveDetails-footer">
-          {canCancel && !showConfirmation && (
-            <button
-              type="button"
-              className="leaveDetails-cancel-btn"
-              onClick={() => {
-                setError("");
-                setShowConfirmation(true);
-              }}
-              disabled={cancelling}
-            >
-              Cancel Request
-            </button>
-          )}
+          {!showConfirmation ? (
+            <div className="leaveDetails-footer-actions">
+              {canCancel && (
+                <button
+                  type="button"
+                  className="leaveDetails-cancel-btn"
+                  onClick={handleShowConfirmation}
+                  disabled={cancelling}
+                >
+                  Cancel Request
+                </button>
+              )}
 
-          {!showConfirmation && (
-            <button
-              type="button"
-              className="leaveDetails-close-btn"
-              onClick={handleClose}
-              disabled={cancelling}
-            >
-              Close
-            </button>
-          )}
-
-          {showConfirmation && (
+              <button
+                type="button"
+                className="leaveDetails-close-btn"
+                onClick={handleClose}
+                disabled={cancelling}
+              >
+                Close
+              </button>
+            </div>
+          ) : (
             <div className="leaveDetails-confirmation">
               <p>
                 Are you sure you want to cancel this leave request?
@@ -159,10 +170,7 @@ const LeaveDetails = ({ request, onClose, onCancel }) => {
                 <button
                   type="button"
                   className="leaveDetails-keep-btn"
-                  onClick={() => {
-                    setError("");
-                    setShowConfirmation(false);
-                  }}
+                  onClick={handleKeepRequest}
                   disabled={cancelling}
                 >
                   Keep Request
@@ -174,9 +182,7 @@ const LeaveDetails = ({ request, onClose, onCancel }) => {
                   onClick={handleCancel}
                   disabled={cancelling}
                 >
-                  {cancelling
-                    ? "Cancelling..."
-                    : "Cancel Request"}
+                  {cancelling ? "Cancelling..." : "Cancel Request"}
                 </button>
               </div>
             </div>

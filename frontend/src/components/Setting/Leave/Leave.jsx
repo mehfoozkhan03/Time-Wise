@@ -35,9 +35,12 @@ const formatDate = (date) => {
 const Leave = () => {
   const dispatch = useDispatch();
 
-  const { balance, requests, loading, error } = useSelector(
-    (state) => state.leave,
-  );
+  const {
+    balance,
+    requests = [],
+    loading = false,
+    error = null,
+  } = useSelector((state) => state.leave);
 
   const [showApplyLeave, setShowApplyLeave] = useState(false);
 
@@ -46,28 +49,39 @@ const Leave = () => {
     dispatch(fetchMyLeaves());
   }, [dispatch]);
 
-  const formattedRequests = useMemo(() => {
-    return requests.map((request) => ({
-      id: request._id,
-      leaveType: leaveTypeLabels[request.leaveType] || request.leaveType,
-      leaveTypeValue: request.leaveType,
-      startDate: formatDate(request.startDate),
-      endDate: formatDate(request.endDate),
-      requestedDays: request.totalDays,
-      reason: request.reason,
-      status: request.status,
-      appliedDate: formatDate(request.appliedAt),
-      adminComment: request.adminComment || "",
-      rawRequest: request,
-    }));
-  }, [requests]);
+  const formattedRequests = useMemo(
+    () =>
+      requests.map((request) => ({
+        id: request._id,
+        leaveType:
+          leaveTypeLabels[request.leaveType] || request.leaveType,
+        leaveTypeValue: request.leaveType,
+        startDate: formatDate(request.startDate),
+        endDate: formatDate(request.endDate),
+        requestedDays: request.totalDays,
+        reason: request.reason,
+        status: request.status,
+        appliedDate: formatDate(request.appliedAt),
+        adminComment: request.adminComment || "",
+        rawRequest: request,
+      })),
+    [requests],
+  );
+
+  const handleOpenApplyLeave = () => {
+    setShowApplyLeave(true);
+  };
+
+  const handleCloseApplyLeave = () => {
+    setShowApplyLeave(false);
+  };
 
   const handleSubmitLeave = async (leaveData) => {
     try {
       await dispatch(submitLeave(leaveData)).unwrap();
       await dispatch(fetchMyLeaves()).unwrap();
 
-      setShowApplyLeave(false);
+      handleCloseApplyLeave();
     } catch (submitError) {
       console.error("Submit Leave Error:", submitError);
       throw submitError;
@@ -84,10 +98,13 @@ const Leave = () => {
     }
   };
 
+  const isInitialLoading =
+    loading && !balance && requests.length === 0;
+
   return (
-    <div className="leave-page">
-      <div className="leave-page-header">
-        <div>
+    <main className="leave-page">
+      <header className="leave-page-header">
+        <div className="leave-page-heading">
           <h1>Leave</h1>
           <p>Manage your leave requests and balances.</p>
         </div>
@@ -95,15 +112,18 @@ const Leave = () => {
         <button
           type="button"
           className="leave-apply-btn"
-          onClick={() => setShowApplyLeave(true)}
+          onClick={handleOpenApplyLeave}
+          disabled={loading}
         >
           Apply for Leave
         </button>
-      </div>
+      </header>
 
       <div className="leave-page-content">
-        {loading && !balance && !requests.length ? (
-          <p>Loading leave information...</p>
+        {isInitialLoading ? (
+          <div className="leave-page-loading">
+            <span>Loading leave information...</span>
+          </div>
         ) : (
           <>
             <LeaveBalance balance={balance} />
@@ -116,20 +136,23 @@ const Leave = () => {
         )}
 
         {error && (
-          <p style={{ color: "#ef4444", margin: 0 }}>
+          <div
+            className="leave-page-error"
+            role="alert"
+          >
             {error}
-          </p>
+          </div>
         )}
       </div>
 
       {showApplyLeave && (
         <ApplyLeave
-          onClose={() => setShowApplyLeave(false)}
+          onClose={handleCloseApplyLeave}
           onSubmit={handleSubmitLeave}
           balance={balance}
         />
       )}
-    </div>
+    </main>
   );
 };
 
