@@ -24,6 +24,13 @@
   box-shadow: var(--shadow_lg);
   animation: leaveDetailsModalIn 0.25s ease;
   scrollbar-width: thin;
+  box-sizing: border-box;
+}
+
+.leave_details_modal *,
+.leave_details_modal *::before,
+.leave_details_modal *::after {
+  box-sizing: border-box;
 }
 
 .leave_details_header {
@@ -41,6 +48,7 @@
   color: var(--primary);
   font-size: 11px;
   font-weight: 600;
+  line-height: 1.3;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -50,6 +58,7 @@
   font-family: "Poppins", sans-serif;
   font-size: 20px;
   font-weight: 600;
+  line-height: 1.3;
   color: var(--text_primary);
 }
 
@@ -64,12 +73,15 @@
   border-radius: var(--radius_sm);
   background: var(--surface);
   color: var(--text_secondary);
+  font-family: inherit;
   font-size: 13px;
+  outline: none;
   transition:
     background var(--transition),
     color var(--transition),
     border-color var(--transition),
-    transform var(--transition);
+    transform var(--transition),
+    box-shadow var(--transition);
 }
 
 .leave_details_close:hover {
@@ -77,6 +89,12 @@
   color: var(--text_primary);
   border-color: var(--card-border);
   transform: translateY(-1px);
+}
+
+.leave_details_close:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px
+    color-mix(in srgb, var(--primary) 12%, transparent);
 }
 
 .leave_details_employee {
@@ -102,6 +120,7 @@
   color: var(--tag-text);
   font-size: 13px;
   font-weight: 600;
+  line-height: 1;
 }
 
 .leave_details_employee_info {
@@ -117,6 +136,7 @@
   font-family: "Poppins", sans-serif;
   font-size: 15px;
   font-weight: 600;
+  line-height: 1.3;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -129,6 +149,7 @@
   min-width: 0;
   color: var(--text_secondary);
   font-size: 12px;
+  line-height: 1.3;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -138,6 +159,7 @@
   flex-shrink: 0;
   font-size: 10px;
 }
+
 .leave_details_employee_meta {
   display: flex;
   align-items: center;
@@ -150,9 +172,9 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-
   color: var(--text_secondary);
   font-size: 11px;
+  line-height: 1.3;
   overflow: visible;
   text-overflow: unset;
   white-space: nowrap;
@@ -176,6 +198,7 @@
   color: var(--text_secondary);
   font-size: 12px;
   font-weight: 500;
+  line-height: 1.3;
 }
 
 .leave_details_status {
@@ -186,6 +209,7 @@
   border-radius: 50px;
   font-size: 11px;
   font-weight: 500;
+  line-height: 1.2;
   white-space: nowrap;
 }
 
@@ -245,6 +269,7 @@
   color: var(--text_primary);
   font-size: 13px;
   font-weight: 600;
+  line-height: 1.3;
 }
 
 .leave_details_section_title svg {
@@ -282,6 +307,7 @@
   color: var(--text_secondary);
   font-size: 11px;
   font-weight: 500;
+  line-height: 1.3;
 }
 
 .leave_details_item strong {
@@ -292,6 +318,7 @@
   color: var(--text_primary);
   font-size: 12px;
   font-weight: 600;
+  line-height: 1.3;
 }
 
 .leave_details_item strong svg {
@@ -340,17 +367,26 @@
   gap: 7px;
   padding: 0 15px;
   border-radius: var(--radius_sm);
+  font-family: inherit;
   font-size: 12px;
   font-weight: 500;
+  outline: none;
   transition:
     background var(--transition),
     color var(--transition),
     border-color var(--transition),
-    transform var(--transition);
+    transform var(--transition),
+    box-shadow var(--transition);
 }
 
 .leave_details_btn:hover {
   transform: translateY(-1px);
+}
+
+.leave_details_btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px
+    color-mix(in srgb, var(--primary) 12%, transparent);
 }
 
 .leave_details_btn.secondary {
@@ -485,7 +521,7 @@
   }
 
   .leave_details_employee_meta {
-  gap: 5px 12px;
+    gap: 5px 12px;
   }
 
   .leave_details_employee_meta span {
@@ -580,19 +616,19 @@
 
   .leave_details_employee_info span {
     font-size: 10px;
-    }
+  }
 
-    .leave_details_employee_meta {
+  .leave_details_employee_meta {
     gap: 3px 8px;
   }
 
-.leave_details_employee_meta span {
-  font-size: 9px;
-}
+  .leave_details_employee_meta span {
+    font-size: 9px;
+  }
 
-.leave_details_employee_meta svg {
-  font-size: 8px;
-}
+  .leave_details_employee_meta svg {
+    font-size: 8px;
+  }
 
   .leave_details_status_row {
     margin: 12px 14px 0;

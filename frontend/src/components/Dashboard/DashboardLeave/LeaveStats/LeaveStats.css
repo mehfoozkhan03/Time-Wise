@@ -14,14 +14,11 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-
   background: var(--card);
   border: 1px solid var(--card-border);
   border-radius: var(--radius_md);
   box-shadow: var(--shadow_sm);
-
   overflow: hidden;
-
   transition:
     transform var(--transition),
     background var(--transition),
@@ -36,44 +33,53 @@
   transform: translateY(-3px);
 }
 
+.leave_stat_card:focus-within {
+  border-color: var(--primary);
+  box-shadow:
+    var(--shadow_sm),
+    0 0 0 3px
+      color-mix(in srgb, var(--primary) 10%, transparent);
+}
+
 .leave_stat_content {
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 8px;
-  min-width: 0;
 }
 
 .leave_stat_title {
-  font-size: 13px;
-  line-height: 1.4;
-  font-weight: 500;
+  margin: 0;
   color: var(--text_secondary);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.4;
 }
 
 .leave_stat_value {
   margin: 0;
+  color: var(--text_primary);
   font-family: "Poppins", sans-serif;
   font-size: 30px;
-  line-height: 1;
   font-weight: 600;
-  color: var(--text_primary);
+  line-height: 1;
+  letter-spacing: -0.02em;
 }
 
 .leave_stat_icon {
   width: 48px;
   height: 48px;
   min-width: 48px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   border-radius: var(--radius_sm);
   font-size: 18px;
-
+  line-height: 1;
   transition:
     transform var(--transition),
-    background var(--transition);
+    background var(--transition),
+    box-shadow var(--transition);
 }
 
 .leave_stat_card:hover .leave_stat_icon {
@@ -87,22 +93,41 @@
 
 .leave_stat_card.pending .leave_stat_icon {
   color: var(--warning);
-  background: color-mix(in srgb, var(--warning) 18%, transparent);
+  background: color-mix(
+    in srgb,
+    var(--warning) 18%,
+    transparent
+  );
 }
 
 .leave_stat_card.approved .leave_stat_icon {
   color: var(--success);
-  background: color-mix(in srgb, var(--success) 18%, transparent);
+  background: color-mix(
+    in srgb,
+    var(--success) 18%,
+    transparent
+  );
 }
 
 .leave_stat_card.rejected .leave_stat_icon {
   color: var(--error);
-  background: color-mix(in srgb, var(--error) 18%, transparent);
+  background: color-mix(
+    in srgb,
+    var(--error) 18%,
+    transparent
+  );
+}
+
+@media (max-width: 1000px) {
+  .leave_stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding: 22px 30px;
+    gap: 16px;
+  }
 }
 
 @media (max-width: 720px) {
   .leave_stats {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
     padding: 20px 24px;
     gap: 14px;
   }
@@ -110,6 +135,14 @@
   .leave_stat_card {
     min-height: 115px;
     padding: 18px;
+  }
+
+  .leave_stat_content {
+    gap: 7px;
+  }
+
+  .leave_stat_title {
+    font-size: 12px;
   }
 
   .leave_stat_value {
@@ -168,6 +201,10 @@
     gap: 10px;
   }
 
+  .leave_stat_content {
+    gap: 5px;
+  }
+
   .leave_stat_title {
     font-size: 11px;
   }
@@ -181,5 +218,16 @@
     height: 38px;
     min-width: 38px;
     font-size: 15px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .leave_stat_card,
+  .leave_stat_icon {
+    transition: none;
+  }
+
+  .leave_stat_card:hover {
+    transform: none;
   }
 }
