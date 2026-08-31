@@ -4,7 +4,7 @@ import * as leaveService from "../services/leaveService";
 const getErrorMessage = (error, fallback) =>
   error.response?.data?.message || fallback;
 
-const createAdminPagination = () => ({
+const createPagination = () => ({
   page: 1,
   limit: 10,
   total: 0,
@@ -26,9 +26,16 @@ export const fetchLeaveBalance = createAsyncThunk(
 
 export const fetchMyLeaves = createAsyncThunk(
   "leave/fetchLeaves",
-  async (_, { rejectWithValue }) => {
+  async (
+    { page = 1, limit = 10, status = "All" } = {},
+    { rejectWithValue },
+  ) => {
     try {
-      return await leaveService.getMyLeaves();
+      return await leaveService.getMyLeaves({
+        page,
+        limit,
+        status,
+      });
     } catch (error) {
       return rejectWithValue(
         getErrorMessage(error, "Failed to fetch leave requests."),
@@ -66,12 +73,7 @@ export const cancelLeaveRequest = createAsyncThunk(
 export const fetchAdminLeaves = createAsyncThunk(
   "leave/fetchAdminLeaves",
   async (
-    {
-      page = 1,
-      limit = 10,
-      status = "All",
-      search = "",
-    } = {},
+    { page = 1, limit = 10, status = "All", search = "" } = {},
     { rejectWithValue },
   ) => {
     try {
@@ -83,10 +85,7 @@ export const fetchAdminLeaves = createAsyncThunk(
       });
     } catch (error) {
       return rejectWithValue(
-        getErrorMessage(
-          error,
-          "Failed to fetch admin leave requests.",
-        ),
+        getErrorMessage(error, "Failed to fetch admin leave requests."),
       );
     }
   },
@@ -112,10 +111,7 @@ export const approveAdminLeave = createAsyncThunk(
       return await leaveService.approveAdminLeave(leaveID);
     } catch (error) {
       return rejectWithValue(
-        getErrorMessage(
-          error,
-          "Failed to approve leave request.",
-        ),
+        getErrorMessage(error, "Failed to approve leave request."),
       );
     }
   },
@@ -123,21 +119,12 @@ export const approveAdminLeave = createAsyncThunk(
 
 export const rejectAdminLeave = createAsyncThunk(
   "leave/rejectAdminLeave",
-  async (
-    { leaveID, adminComment },
-    { rejectWithValue },
-  ) => {
+  async ({ leaveID, adminComment }, { rejectWithValue }) => {
     try {
-      return await leaveService.rejectAdminLeave(
-        leaveID,
-        adminComment,
-      );
+      return await leaveService.rejectAdminLeave(leaveID, adminComment);
     } catch (error) {
       return rejectWithValue(
-        getErrorMessage(
-          error,
-          "Failed to reject leave request.",
-        ),
+        getErrorMessage(error, "Failed to reject leave request."),
       );
     }
   },
@@ -150,10 +137,7 @@ export const fetchLeaveStatistics = createAsyncThunk(
       return await leaveService.getAdminLeaveStatistics();
     } catch (error) {
       return rejectWithValue(
-        getErrorMessage(
-          error,
-          "Failed to fetch leave statistics.",
-        ),
+        getErrorMessage(error, "Failed to fetch leave statistics."),
       );
     }
   },
@@ -161,11 +145,13 @@ export const fetchLeaveStatistics = createAsyncThunk(
 
 const initialState = {
   balance: null,
+
   requests: [],
+  pagination: createPagination(),
 
   adminRequests: [],
   adminStatistics: null,
-  adminPagination: createAdminPagination(),
+  adminPagination: createPagination(),
 
   loading: false,
   error: null,
@@ -180,13 +166,19 @@ const leaveSlice = createSlice({
       state.error = null;
     },
 
+    resetPagination: (state) => {
+      state.pagination = createPagination();
+    },
+
     resetAdminPagination: (state) => {
-      state.adminPagination = createAdminPagination();
+      state.adminPagination = createPagination();
     },
   },
 
   extraReducers: (builder) => {
     builder
+
+      // ================= Employee Balance =================
 
       .addCase(fetchLeaveBalance.pending, (state) => {
         state.loading = true;
@@ -200,10 +192,10 @@ const leaveSlice = createSlice({
 
       .addCase(fetchLeaveBalance.rejected, (state, action) => {
         state.loading = false;
-        state.error =
-          action.payload ||
-          "Failed to fetch leave balance.";
+        state.error = action.payload || "Failed to fetch leave balance.";
       })
+
+      // ================= Employee Leaves =================
 
       .addCase(fetchMyLeaves.pending, (state) => {
         state.loading = true;
@@ -212,32 +204,34 @@ const leaveSlice = createSlice({
 
       .addCase(fetchMyLeaves.fulfilled, (state, action) => {
         state.loading = false;
-        state.requests = action.payload;
+
+        state.requests = action.payload?.requests || [];
+
+        state.pagination = action.payload?.pagination || createPagination();
       })
 
       .addCase(fetchMyLeaves.rejected, (state, action) => {
         state.loading = false;
-        state.error =
-          action.payload ||
-          "Failed to fetch leave requests.";
+        state.error = action.payload || "Failed to fetch leave requests.";
       })
+
+      // ================= Submit Leave =================
 
       .addCase(submitLeave.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
 
-      .addCase(submitLeave.fulfilled, (state, action) => {
+      .addCase(submitLeave.fulfilled, (state) => {
         state.loading = false;
-        state.requests.unshift(action.payload);
       })
 
       .addCase(submitLeave.rejected, (state, action) => {
         state.loading = false;
-        state.error =
-          action.payload ||
-          "Failed to submit leave request.";
+        state.error = action.payload || "Failed to submit leave request.";
       })
+
+      // ================= Cancel Leave =================
 
       .addCase(cancelLeaveRequest.pending, (state) => {
         state.loading = true;
@@ -258,10 +252,10 @@ const leaveSlice = createSlice({
 
       .addCase(cancelLeaveRequest.rejected, (state, action) => {
         state.loading = false;
-        state.error =
-          action.payload ||
-          "Failed to cancel leave request.";
+        state.error = action.payload || "Failed to cancel leave request.";
       })
+
+      // ================= Admin Leaves =================
 
       .addCase(fetchAdminLeaves.pending, (state) => {
         state.loading = true;
@@ -271,20 +265,18 @@ const leaveSlice = createSlice({
       .addCase(fetchAdminLeaves.fulfilled, (state, action) => {
         state.loading = false;
 
-        state.adminRequests =
-          action.payload?.requests || [];
+        state.adminRequests = action.payload?.requests || [];
 
         state.adminPagination =
-          action.payload?.pagination ||
-          createAdminPagination();
+          action.payload?.pagination || createPagination();
       })
 
       .addCase(fetchAdminLeaves.rejected, (state, action) => {
         state.loading = false;
-        state.error =
-          action.payload ||
-          "Failed to fetch admin leave requests.";
+        state.error = action.payload || "Failed to fetch admin leave requests.";
       })
+
+      // ================= Admin Leave Details =================
 
       .addCase(fetchAdminLeaveById.pending, (state) => {
         state.loading = true;
@@ -297,10 +289,10 @@ const leaveSlice = createSlice({
 
       .addCase(fetchAdminLeaveById.rejected, (state, action) => {
         state.loading = false;
-        state.error =
-          action.payload ||
-          "Failed to fetch leave details.";
+        state.error = action.payload || "Failed to fetch leave details.";
       })
+
+      // ================= Admin Approve =================
 
       .addCase(approveAdminLeave.pending, (state) => {
         state.loading = true;
@@ -321,10 +313,10 @@ const leaveSlice = createSlice({
 
       .addCase(approveAdminLeave.rejected, (state, action) => {
         state.loading = false;
-        state.error =
-          action.payload ||
-          "Failed to approve leave request.";
+        state.error = action.payload || "Failed to approve leave request.";
       })
+
+      // ================= Admin Reject =================
 
       .addCase(rejectAdminLeave.pending, (state) => {
         state.loading = true;
@@ -345,10 +337,10 @@ const leaveSlice = createSlice({
 
       .addCase(rejectAdminLeave.rejected, (state, action) => {
         state.loading = false;
-        state.error =
-          action.payload ||
-          "Failed to reject leave request.";
+        state.error = action.payload || "Failed to reject leave request.";
       })
+
+      // ================= Admin Statistics =================
 
       .addCase(fetchLeaveStatistics.pending, (state) => {
         state.loading = true;
@@ -362,16 +354,12 @@ const leaveSlice = createSlice({
 
       .addCase(fetchLeaveStatistics.rejected, (state, action) => {
         state.loading = false;
-        state.error =
-          action.payload ||
-          "Failed to fetch leave statistics.";
+        state.error = action.payload || "Failed to fetch leave statistics.";
       });
   },
 });
 
-export const {
-  clearLeaveError,
-  resetAdminPagination,
-} = leaveSlice.actions;
+export const { clearLeaveError, resetPagination, resetAdminPagination } =
+  leaveSlice.actions;
 
 export default leaveSlice.reducer;
