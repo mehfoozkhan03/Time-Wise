@@ -1,24 +1,22 @@
-import "./DesignationDropdown.css";
+import "./RoleDropdown.css";
 
 import { useEffect, useRef, useState } from "react";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 
-export const DesignationDropdown = ({
-  designations,
-  selectedDesignation,
+export const RoleDropdown = ({
+  roles,
+  selectedRole,
   onSelect,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const dropdownRef = useRef(null);
 
-  //# Select Designation
-  const handleSelect = (designation) => {
-    onSelect(designation);
+  const handleSelect = (role) => {
     setIsOpen(false);
+    onSelect(role);
   };
 
-  //# Close dropdown when clicked outside
   useEffect(() => {
     const handleOutsideClick = (event) => {
       if (
@@ -29,7 +27,10 @@ export const DesignationDropdown = ({
       }
     };
 
-    document.addEventListener("mousedown", handleOutsideClick);
+    document.addEventListener(
+      "mousedown",
+      handleOutsideClick
+    );
 
     return () => {
       document.removeEventListener(
@@ -41,44 +42,38 @@ export const DesignationDropdown = ({
 
   return (
     <div
+      className="employeeRoleDropdown"
       ref={dropdownRef}
-      className="employeeDesignationDropdown"
     >
       <button
         type="button"
-        className="employeeDesignationDropdown-button"
+        className="employeeRoleDropdown-button"
         onClick={() =>
           setIsOpen((prev) => !prev)
         }
       >
         <span>
-          {selectedDesignation || "Select Designation"}
+          {selectedRole || "Select Role"}
         </span>
 
         <MdOutlineKeyboardArrowDown
           className={
             isOpen
-              ? "employeeDesignationDropdown-arrow-open"
+              ? "employeeRoleDropdown-arrow-open"
               : ""
           }
         />
       </button>
 
       {isOpen && (
-        <div className="employeeDesignationDropdown-menu">
-          {designations.map((designation) => (
+        <div className="employeeRoleDropdown-menu">
+          {roles.map((role) => (
             <div
-              key={designation}
-              className={`employeeDesignationDropdown-option ${
-                selectedDesignation === designation
-                  ? "employeeDesignationDropdown-option-active"
-                  : ""
-              }`}
-              onClick={() =>
-                handleSelect(designation)
-              }
+              key={role}
+              className="employeeRoleDropdown-option"
+              onClick={() => handleSelect(role)}
             >
-              {designation}
+              {role}
             </div>
           ))}
         </div>
