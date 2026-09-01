@@ -65,7 +65,7 @@ export const signup = async (req, res) => {
 
       gender: req.body.gender || null,
 
-      role: req.body.role || "employee",
+      role: req.body.role || null,
 
       department: req.body.department || null,
 

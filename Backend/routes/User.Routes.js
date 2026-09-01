@@ -15,7 +15,8 @@ import {
 import { auth } from "../middleware/AuthMiddleware.js";
 import { updateUserDepartment } from "../controllers/updateDepartment.controller.js";
 import { updateUserDesignation } from "./../controllers/updateDesignation.controller.js";
-import { updateEmployee } from "../controllers/updateEmployee.controller.js";
+import { updateUser } from "../controllers/updateEmployee.controller.js";
+import { updateRole } from "../controllers/updateRole.controller.js";
 
 const userRoutes = express.Router();
 
@@ -43,9 +44,11 @@ userRoutes.patch("/:userId/department", updateUserDepartment);
 
 userRoutes.patch("/:userId/designation", updateUserDesignation);
 
+userRoutes.patch("/:userId/role", auth, updateRole);
+
 userRoutes.patch("/theme", auth, updateTheme);
 
-userRoutes.patch("/:userId", auth, updateEmployee);
+userRoutes.put("/users/:userId", auth, updateUser);
 // userRoutes.patch("/:userId", auth, adminOnly, updateEmployee);
 
 userRoutes.get("/profile/:userId", auth, getUserProfile);
