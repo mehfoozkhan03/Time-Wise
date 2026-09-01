@@ -1,36 +1,19 @@
 import { userModel } from "../models/User.model.js";
 
-export const updateUser = async (req, res) => {
+export const updateRole = async (req, res) => {
   try {
     const { userId } = req.params;
+    const { role } = req.body;
 
-    const {
-      firstName,
-      lastName,
-      department,
-      designation,
-      role
-    } = req.body;
-
-    if (
-      !firstName?.trim() ||
-      !lastName?.trim() ||
-      !department ||
-      !designation ||
-      !role
-    ) {
+    if (!role) {
       return res.status(400).json({
-        message: "All employee fields are required",
+        message: "Role is required",
       });
     }
 
     const updatedUser = await userModel.findByIdAndUpdate(
       userId,
       {
-        firstName: firstName.trim(),
-        lastName: lastName.trim(),
-        department,
-        designation,
         role,
       },
       {
@@ -47,10 +30,10 @@ export const updateUser = async (req, res) => {
 
     return res.status(200).json(updatedUser);
   } catch (error) {
-    console.error("Update user error:", error);
+    console.error("Update role error:", error);
 
     return res.status(500).json({
-      message: "Failed to update user",
+      message: "Failed to update role",
       error: error.message,
     });
   }

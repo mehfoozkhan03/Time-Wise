@@ -185,6 +185,49 @@ export const updateUserDepartment = createAsyncThunk(
   },
 );
 
+//# Update Role
+export const updateUserRole = createAsyncThunk(
+  "auth/updateUserRole",
+  async ({ userId, role }, { rejectWithValue }) => {
+    try {
+      const response = await authService.updateRole(userId, role);
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to update role",
+      );
+    }
+  },
+);
+
+//# Update Employee
+export const updateUser = createAsyncThunk(
+  "auth/updateUser",
+  async (
+    { userId, firstName, lastName, department, designation, role },
+    thunkAPI,
+  ) => {
+    try {
+      const response = await authService.updateUser(userId, {
+        firstName,
+        lastName,
+        department,
+        designation,
+        role
+      });
+
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error?.response?.data?.message ||
+          error?.message ||
+          "Failed to update user",
+      );
+    }
+  },
+);
+
 const initialState = {
   isAuthenticated: document.cookie
     .split("; ")
@@ -347,34 +390,42 @@ const authSlice = createSlice({
         state.errorMessage = action.payload;
       })
 
-      //# ===================== Update Employee Details ======================
-      .addCase(updateEmployee.pending, (state) => {
-        state.isLoading = true;
-        state.isError = false;
-        state.errorMessage = "";
-      })
-
-      .addCase(updateEmployee.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isError = false;
+      //# Update Role
+      .addCase(updateUserRole.fulfilled, (state, action) => {
+        const updatedUser = action.payload;
 
         const index = state.users.findIndex(
-          (user) => user._id === action.payload._id,
+          (user) => user._id === updatedUser._id,
         );
 
         if (index !== -1) {
-          state.users[index] = action.payload;
-        }
-
-        if (state.user && state.user._id === action.payload._id) {
-          state.user = action.payload;
+          state.users[index] = updatedUser;
         }
       })
 
-      .addCase(updateEmployee.rejected, (state, action) => {
+      //# ===================== Update Employee Details ======================
+      .addCase(updateUser.pending, (state) => {
+        state.isLoading = true;
+      })
+
+      .addCase(updateUser.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.isError = true;
-        state.errorMessage = action.payload;
+
+        const updatedUser = action.payload;
+
+        const index = state.users.findIndex(
+          (user) => user._id === updatedUser._id,
+        );
+
+        if (index !== -1) {
+          state.users[index] = updatedUser;
+        }
+      })
+
+      .addCase(updateUser.rejected, (state, action) => {
+        state.isLoading = false;
+
+        state.isError = action.payload;
       });
   },
 });

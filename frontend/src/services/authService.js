@@ -53,7 +53,13 @@ export const authService = {
     });
   },
 
-  updateEmployee(userId, employeeData) {
-    return api.patch(`/user/${userId}`, employeeData);
+  updateRole(userId, role) {
+    return api.patch(`/user/${userId}/role`, {
+      role,
+    });
+  },
+
+  updateUser(userId, userData) {
+    return api.put(`/user/users/${userId}`, userData);
   },
 };

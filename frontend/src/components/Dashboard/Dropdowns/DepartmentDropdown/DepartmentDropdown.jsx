@@ -3,19 +3,28 @@ import "./DepartmentDropdown.css";
 import { useEffect, useRef, useState } from "react";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 
-export const DepartmentDropdown = ({ departments, onSelect }) => {
+export const DepartmentDropdown = ({
+  departments,
+  selectedDepartment,
+  onSelect,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const dropdownRef = useRef(null);
 
+  //# Select Department
   const handleSelect = (department) => {
-    setIsOpen(false);
     onSelect(department);
+    setIsOpen(false);
   };
 
+  //# Close dropdown when clicked outside
   useEffect(() => {
     const handleOutsideClick = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target)
+      ) {
         setIsOpen(false);
       }
     };
@@ -23,7 +32,10 @@ export const DepartmentDropdown = ({ departments, onSelect }) => {
     document.addEventListener("mousedown", handleOutsideClick);
 
     return () => {
-      document.removeEventListener("mousedown", handleOutsideClick);
+      document.removeEventListener(
+        "mousedown",
+        handleOutsideClick
+      );
     };
   }, []);
 
@@ -35,12 +47,20 @@ export const DepartmentDropdown = ({ departments, onSelect }) => {
       <button
         type="button"
         className="employeeDepartmentDropdown-button"
-        onClick={() => setIsOpen((prev) => !prev)}
+        onClick={() =>
+          setIsOpen((prev) => !prev)
+        }
       >
-        <span>Select Department</span>
+        <span>
+          {selectedDepartment || "Select Department"}
+        </span>
 
         <MdOutlineKeyboardArrowDown
-          className={isOpen ? "employeeDepartmentDropdown-arrow-open" : ""}
+          className={
+            isOpen
+              ? "employeeDepartmentDropdown-arrow-open"
+              : ""
+          }
         />
       </button>
 
@@ -49,8 +69,14 @@ export const DepartmentDropdown = ({ departments, onSelect }) => {
           {departments.map((department) => (
             <div
               key={department}
-              className="employeeDepartmentDropdown-option"
-              onClick={() => handleSelect(department)}
+              className={`employeeDepartmentDropdown-option ${
+                selectedDepartment === department
+                  ? "employeeDepartmentDropdown-option-active"
+                  : ""
+              }`}
+              onClick={() =>
+                handleSelect(department)
+              }
             >
               {department}
             </div>
