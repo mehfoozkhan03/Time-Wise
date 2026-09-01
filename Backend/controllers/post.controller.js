@@ -11,19 +11,25 @@ import { createNotification } from '../services/notification.service.js'
 
 export const createPost = async (req, res) => {
   try {
-    const { content, image, type, tags, visibility } = req.body
+    const { content, type, tags, visibility } = req.body
 
-    if (!content || !content.trim()) {
+    const hasContent = content && content.trim().length > 0
+    const hasImage = !!req.file
+
+    // A post must contain either text or an image
+    if (!hasContent && !hasImage) {
       return res.status(400).json({
         success: false,
-        message: 'Post content is required.',
+        message: 'Post must contain text or an image.',
       })
     }
 
+    const imageUrl = req.file ? req.file.path : null
+
     const post = await postModel.create({
       createdBy: req.user.userID,
-      content: content.trim(),
-      image: image || null,
+      content: hasContent ? content.trim() : '',
+      image: imageUrl,
       type: type || 'general',
       tags: tags || [],
       visibility: visibility || 'public',

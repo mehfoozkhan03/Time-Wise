@@ -25,6 +25,8 @@ import { toggleSavedPost } from '../controllers/savedPost.controller.js'
 
 import { auth } from '../middleware/AuthMiddleware.js'
 
+import { uploadPostImage } from '../middleware/postUpload.middleware.js'
+
 const router = express.Router()
 
 router.get('/test-save', (req, res) => {
@@ -39,7 +41,7 @@ router.use(auth)
 // Posts
 // =======================================================
 
-router.post('/', createPost)
+router.post('/', uploadPostImage.single('image'), createPost)
 
 router.get('/', getAllPosts)
 
