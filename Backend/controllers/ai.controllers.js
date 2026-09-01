@@ -810,11 +810,12 @@ export const getAIConversation = async (req, res) => {
   try {
     const userID = req.user.userID;
 
-    const conversation = await getConversation(userID);
+    // Load last 5 messages for chat persistence
+    const conversation = await getConversation(userID, { limit: 5 });
 
     return res.status(200).json({
       success: true,
-      conversation,
+      conversation: conversation.messages,
     });
   } catch (error) {
     console.error("Get AI Conversation Error:", error);

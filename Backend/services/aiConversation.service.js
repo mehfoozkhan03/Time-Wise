@@ -2,9 +2,12 @@ import { AIConversation } from "../models/AIConversation.model.js";
 
 // ==================================================
 // GET CONVERSATION
+// Optionally limit to last N messages for chat persistence
 // ==================================================
 
-export const getConversation = async (userID) => {
+export const getConversation = async (userID, options = {}) => {
+  const { limit } = options;
+
   const conversation = await AIConversation.findOne({
     user: userID,
   }).lean();
@@ -16,9 +19,17 @@ export const getConversation = async (userID) => {
     };
   }
 
+  const allMessages = conversation.messages || [];
+
+  // If limit is specified, return only the last N messages
+  // Otherwise return all messages
+  const messages = limit && limit > 0 ? allMessages.slice(-limit) : allMessages;
+
   return {
-    messages: conversation.messages || [],
+    messages,
     pendingRequests: conversation.pendingRequests || [],
+    // Include metadata about total message count
+    totalMessageCount: allMessages.length,
   };
 };
 
