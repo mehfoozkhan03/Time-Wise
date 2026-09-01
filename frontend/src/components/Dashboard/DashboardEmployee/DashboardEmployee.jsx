@@ -314,21 +314,6 @@ export const DashboardEmployee = () => {
       return;
     }
 
-    if (!editData.department) {
-      alert("Department is required.");
-      return;
-    }
-
-    if (!editData.designation) {
-      alert("Designation is required.");
-      return;
-    }
-
-    if (!editData.role) {
-      alert("Role is required.");
-      return;
-    }
-
     try {
       await dispatch(
         updateUser({
@@ -537,9 +522,7 @@ export const DashboardEmployee = () => {
                     }`}
                     key={el._id}
                   >
-                    {/* ========================= */}
                     {/* EMPLOYEE NAME */}
-                    {/* ========================= */}
 
                     <div className="dashboardEmployee-information">
                       {/* AVATAR */}
@@ -562,30 +545,20 @@ export const DashboardEmployee = () => {
                             <input
                               type="text"
                               name="firstName"
-                              value={editData.firstName}
+                              value={`${editData.firstName} ${editData.lastName}`}
                               onChange={handleEditChange}
                               placeholder="First name"
-                            />
-
-                            <input
-                              type="text"
-                              name="lastName"
-                              value={editData.lastName}
-                              onChange={handleEditChange}
-                              placeholder="Last name"
                             />
                           </div>
                         ) : (
                           <p>
-                            {el.firstName} {el.lastName}
+                            {el.firstName?.charAt(0).toUpperCase() + el.firstName?.slice(1)} {el.lastName?.charAt(0).toUpperCase() + el.lastName?.slice(1)}
                           </p>
                         )}
                       </div>
                     </div>
 
-                    {/* ========================= */}
                     {/* DEPARTMENT */}
-                    {/* ========================= */}
 
                     <div className="dashboardEmployee-department-name">
                       {isEditing ? (
@@ -607,9 +580,7 @@ export const DashboardEmployee = () => {
                       )}
                     </div>
 
-                    {/* ========================= */}
                     {/* DESIGNATION */}
-                    {/* ========================= */}
 
                     <div className="dashboardEmployee-designation">
                       {isEditing ? (
@@ -650,9 +621,7 @@ export const DashboardEmployee = () => {
                       )}
                     </div>
 
-                    {/* ========================= */}
-                    {/* STATUS */}
-                    {/* ========================= */}
+                    {/* ========================= STATUS =========================*/}
 
                     <div className="dashboardEmployee-status">
                       <div></div>
@@ -660,9 +629,7 @@ export const DashboardEmployee = () => {
                       <span>{el.isOnline ? "Active" : "Inactive"}</span>
                     </div>
 
-                    {/* ========================= */}
                     {/* ACTIONS */}
-                    {/* ========================= */}
 
                     <div className="dashboardEmployee-actions">
                       {isEditing ? (
@@ -784,9 +751,7 @@ export const DashboardEmployee = () => {
           </div>
         </div>
 
-        {/* ========================= */}
         {/* LOAD MORE / LESS */}
-        {/* ========================= */}
 
         <div className="employeeDashboard-loadmore-btn">
           <button

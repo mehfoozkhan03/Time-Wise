@@ -171,17 +171,22 @@
   border-bottom: 1px solid var(--border);
 }
 .dashboardEmployee-information {
+  width: 100%;
   display: flex;
   align-items: center;
   gap: 10px;
 }
 .dashboardEmploye-avatar {
   height: 40px;
-  width: 40px;
+  width: 20%;
   border-radius: 50%;
   border: 1px solid var(--border);
   background-color: var(--primary);
   font-weight: 700;
+}
+
+.dashboardEmployee-name{
+  width: 80%;
 }
 .dashboardEmployee-name > p {
   font-size: 14px;
@@ -257,4 +262,35 @@
 
 .employeeDashboard-loadmore-btn > button:hover {
   background-color: var(--primary_hover);
+}
+
+
+/* dashboardEmployee-edit */
+.dashboardEmployee-edit,
+.dashboardEmployee-view,
+.employee-cancel-action,
+.employee-save-action{
+  cursor: pointer;
+}
+
+/* Edit Name */
+.employee-edit-name {
+  display: flex;
+  align-items: center;
+  width: 80%;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+.employee-edit-name input {
+  width: 100%;
+  min-width: 0;
+  border: none;
+  outline: none;
+  padding: 8px 10px;
+  font-size: 13px;
+  color: var(--text_primary);
+  background: transparent;
 }
