@@ -17,7 +17,12 @@ export const createLeave = async (req, res) => {
   try {
     const userID = req.user.userID;
 
-    const { leaveType, startDate, endDate, reason } = req.body;
+    const {
+      leaveType,
+      startDate,
+      endDate,
+      reason,
+    } = req.body;
 
     const leave = await createLeaveRequest({
       userID,
@@ -29,7 +34,8 @@ export const createLeave = async (req, res) => {
 
     return res.status(201).json({
       success: true,
-      message: "Leave request submitted successfully.",
+      message:
+        "Leave request submitted successfully.",
       data: leave,
     });
   } catch (error) {
@@ -37,7 +43,9 @@ export const createLeave = async (req, res) => {
 
     return res.status(400).json({
       success: false,
-      message: error.message || "Failed to create leave request.",
+      message:
+        error.message ||
+        "Failed to create leave request.",
     });
   }
 };
@@ -57,7 +65,9 @@ export const getMyLeaves = async (req, res) => {
 
     return res.status(500).json({
       success: false,
-      message: error.message || "Failed to fetch leave requests.",
+      message:
+        error.message ||
+        "Failed to fetch leave requests.",
     });
   }
 };
@@ -74,7 +84,10 @@ export const getMyLeaveById = async (req, res) => {
       });
     }
 
-    const leave = await getLeaveById(leaveID, userID);
+    const leave = await getLeaveById(
+      leaveID,
+      userID,
+    );
 
     if (!leave) {
       return res.status(404).json({
@@ -88,16 +101,24 @@ export const getMyLeaveById = async (req, res) => {
       data: leave,
     });
   } catch (error) {
-    console.error("Get Leave Details Error:", error);
+    console.error(
+      "Get Leave Details Error:",
+      error,
+    );
 
     return res.status(500).json({
       success: false,
-      message: error.message || "Failed to fetch leave details.",
+      message:
+        error.message ||
+        "Failed to fetch leave details.",
     });
   }
 };
 
-export const getMyLeaveBalance = async (req, res) => {
+export const getMyLeaveBalance = async (
+  req,
+  res,
+) => {
   try {
     const userID = req.user.userID;
 
@@ -108,11 +129,16 @@ export const getMyLeaveBalance = async (req, res) => {
       data: balance,
     });
   } catch (error) {
-    console.error("Get Leave Balance Error:", error);
+    console.error(
+      "Get Leave Balance Error:",
+      error,
+    );
 
     return res.status(500).json({
       success: false,
-      message: error.message || "Failed to fetch leave balance.",
+      message:
+        error.message ||
+        "Failed to fetch leave balance.",
     });
   }
 };
@@ -129,24 +155,36 @@ export const cancelMyLeave = async (req, res) => {
       });
     }
 
-    const leave = await cancelLeaveRequest(leaveID, userID);
+    const leave = await cancelLeaveRequest(
+      leaveID,
+      userID,
+    );
 
     return res.status(200).json({
       success: true,
-      message: "Leave request cancelled successfully.",
+      message:
+        "Leave request cancelled successfully.",
       data: leave,
     });
   } catch (error) {
-    console.error("Cancel Leave Error:", error);
+    console.error(
+      "Cancel Leave Error:",
+      error,
+    );
 
     return res.status(400).json({
       success: false,
-      message: error.message || "Failed to cancel leave request.",
+      message:
+        error.message ||
+        "Failed to cancel leave request.",
     });
   }
 };
 
-export const getAllLeavesForAdmin = async (req, res) => {
+export const getAllLeavesForAdmin = async (
+  req,
+  res,
+) => {
   try {
     if (!req.user?.adminID) {
       return res.status(403).json({
@@ -155,23 +193,44 @@ export const getAllLeavesForAdmin = async (req, res) => {
       });
     }
 
-    const leaves = await getAllLeaveRequests();
+    const {
+      page = 1,
+      limit = 10,
+      status = "All",
+      search = "",
+    } = req.query;
+
+    const result = await getAllLeaveRequests({
+      page,
+      limit,
+      status,
+      search,
+    });
 
     return res.status(200).json({
       success: true,
-      data: leaves,
+      data: result.requests,
+      pagination: result.pagination,
     });
   } catch (error) {
-    console.error("Get All Leaves Error:", error);
+    console.error(
+      "Get All Leaves Error:",
+      error,
+    );
 
     return res.status(500).json({
       success: false,
-      message: error.message || "Failed to fetch leave requests.",
+      message:
+        error.message ||
+        "Failed to fetch leave requests.",
     });
   }
 };
 
-export const getAdminLeaveDetails = async (req, res) => {
+export const getAdminLeaveDetails = async (
+  req,
+  res,
+) => {
   try {
     if (!req.user?.adminID) {
       return res.status(403).json({
@@ -189,7 +248,8 @@ export const getAdminLeaveDetails = async (req, res) => {
       });
     }
 
-    const leave = await getAdminLeaveById(leaveID);
+    const leave =
+      await getAdminLeaveById(leaveID);
 
     if (!leave) {
       return res.status(404).json({
@@ -203,11 +263,16 @@ export const getAdminLeaveDetails = async (req, res) => {
       data: leave,
     });
   } catch (error) {
-    console.error("Get Admin Leave Details Error:", error);
+    console.error(
+      "Get Admin Leave Details Error:",
+      error,
+    );
 
     return res.status(500).json({
       success: false,
-      message: error.message || "Failed to fetch leave details.",
+      message:
+        error.message ||
+        "Failed to fetch leave details.",
     });
   }
 };
@@ -230,19 +295,28 @@ export const approveLeave = async (req, res) => {
       });
     }
 
-    const leave = await approveLeaveRequest(leaveID, req.user.adminID);
+    const leave = await approveLeaveRequest(
+      leaveID,
+      req.user.adminID,
+    );
 
     return res.status(200).json({
       success: true,
-      message: "Leave request approved successfully.",
+      message:
+        "Leave request approved successfully.",
       data: leave,
     });
   } catch (error) {
-    console.error("Approve Leave Error:", error);
+    console.error(
+      "Approve Leave Error:",
+      error,
+    );
 
     return res.status(400).json({
       success: false,
-      message: error.message || "Failed to approve leave request.",
+      message:
+        error.message ||
+        "Failed to approve leave request.",
     });
   }
 };
@@ -274,20 +348,29 @@ export const rejectLeave = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      message: "Leave request rejected successfully.",
+      message:
+        "Leave request rejected successfully.",
       data: leave,
     });
   } catch (error) {
-    console.error("Reject Leave Error:", error);
+    console.error(
+      "Reject Leave Error:",
+      error,
+    );
 
     return res.status(400).json({
       success: false,
-      message: error.message || "Failed to reject leave request.",
+      message:
+        error.message ||
+        "Failed to reject leave request.",
     });
   }
 };
 
-export const getAdminLeaveStats = async (req, res) => {
+export const getAdminLeaveStats = async (
+  req,
+  res,
+) => {
   try {
     if (!req.user?.adminID) {
       return res.status(403).json({
@@ -296,18 +379,24 @@ export const getAdminLeaveStats = async (req, res) => {
       });
     }
 
-    const statistics = await getLeaveStatistics();
+    const statistics =
+      await getLeaveStatistics();
 
     return res.status(200).json({
       success: true,
       data: statistics,
     });
   } catch (error) {
-    console.error("Get Leave Statistics Error:", error);
+    console.error(
+      "Get Leave Statistics Error:",
+      error,
+    );
 
     return res.status(500).json({
       success: false,
-      message: error.message || "Failed to fetch leave statistics.",
+      message:
+        error.message ||
+        "Failed to fetch leave statistics.",
     });
   }
 };

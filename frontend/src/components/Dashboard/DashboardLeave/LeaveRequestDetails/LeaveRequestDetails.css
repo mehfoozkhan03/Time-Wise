@@ -1,82 +1,64 @@
-/* ==========================================
-   OVERLAY
-========================================== */
-
 .leave_details_overlay {
   position: fixed;
   inset: 0;
   z-index: 1000;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   padding: 24px;
-
   background: rgba(0, 0, 0, 0.45);
-
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
-
   animation: leaveDetailsOverlayIn 0.2s ease;
 }
-
-/* ==========================================
-   MODAL
-========================================== */
 
 .leave_details_modal {
   width: min(620px, 100%);
   max-height: calc(100vh - 48px);
-
   display: flex;
   flex-direction: column;
-
   overflow-y: auto;
-
   background: var(--card);
   border: 1px solid var(--card-border);
   border-radius: var(--radius_lg);
-
   box-shadow: var(--shadow_lg);
-
   animation: leaveDetailsModalIn 0.25s ease;
+  scrollbar-width: thin;
+  box-sizing: border-box;
 }
 
-/* ==========================================
-   HEADER
-========================================== */
+.leave_details_modal *,
+.leave_details_modal *::before,
+.leave_details_modal *::after {
+  box-sizing: border-box;
+}
 
 .leave_details_header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: 20px;
-
   padding: 22px 24px;
-
   border-bottom: 1px solid var(--divider);
 }
 
 .leave_details_eyebrow {
   display: block;
   margin-bottom: 4px;
-
   color: var(--primary);
-
   font-size: 11px;
   font-weight: 600;
+  line-height: 1.3;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
 .leave_details_header h2 {
   margin: 0;
-
   font-family: "Poppins", sans-serif;
   font-size: 20px;
   font-weight: 600;
-
+  line-height: 1.3;
   color: var(--text_primary);
 }
 
@@ -84,43 +66,43 @@
   width: 34px;
   height: 34px;
   min-width: 34px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   border: 1px solid var(--border);
   border-radius: var(--radius_sm);
-
   background: var(--surface);
   color: var(--text_secondary);
-
+  font-family: inherit;
   font-size: 13px;
-
+  outline: none;
   transition:
     background var(--transition),
     color var(--transition),
-    border-color var(--transition);
+    border-color var(--transition),
+    transform var(--transition),
+    box-shadow var(--transition);
 }
 
 .leave_details_close:hover {
   background: var(--card-hover);
   color: var(--text_primary);
   border-color: var(--card-border);
+  transform: translateY(-1px);
 }
 
-/* ==========================================
-   EMPLOYEE
-========================================== */
+.leave_details_close:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px
+    color-mix(in srgb, var(--primary) 12%, transparent);
+}
 
 .leave_details_employee {
   display: flex;
   align-items: center;
   gap: 14px;
-
   margin: 20px 24px 0;
   padding: 16px;
-
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius_md);
@@ -130,23 +112,19 @@
   width: 48px;
   height: 48px;
   min-width: 48px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   border-radius: 50%;
-
   background: var(--tag-bg);
   color: var(--tag-text);
-
   font-size: 13px;
   font-weight: 600;
+  line-height: 1;
 }
 
 .leave_details_employee_info {
   min-width: 0;
-
   display: flex;
   flex-direction: column;
   gap: 5px;
@@ -154,38 +132,65 @@
 
 .leave_details_employee_info h3 {
   margin: 0;
-
   color: var(--text_primary);
-
   font-family: "Poppins", sans-serif;
   font-size: 15px;
   font-weight: 600;
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .leave_details_employee_info span {
   display: flex;
   align-items: center;
   gap: 6px;
-
+  min-width: 0;
   color: var(--text_secondary);
-
   font-size: 12px;
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .leave_details_employee_info svg {
+  flex-shrink: 0;
   font-size: 10px;
 }
 
-/* ==========================================
-   STATUS
-========================================== */
+.leave_details_employee_meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  margin-top: 2px;
+}
+
+.leave_details_employee_meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text_secondary);
+  font-size: 11px;
+  line-height: 1.3;
+  overflow: visible;
+  text-overflow: unset;
+  white-space: nowrap;
+}
+
+.leave_details_employee_meta svg {
+  flex-shrink: 0;
+  color: var(--primary);
+  font-size: 10px;
+}
 
 .leave_details_status_row {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 15px;
-
   margin: 16px 24px 0;
 }
 
@@ -193,24 +198,25 @@
   color: var(--text_secondary);
   font-size: 12px;
   font-weight: 500;
+  line-height: 1.3;
 }
 
 .leave_details_status {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-
   padding: 5px 10px;
-
   border-radius: 50px;
-
   font-size: 11px;
   font-weight: 500;
+  line-height: 1.2;
+  white-space: nowrap;
 }
 
 .leave_details_status_dot {
   width: 6px;
   height: 6px;
+  flex-shrink: 0;
   border-radius: 50%;
 }
 
@@ -241,9 +247,15 @@
   background: var(--error);
 }
 
-/* ==========================================
-   SECTION
-========================================== */
+.leave_details_status.cancelled {
+  color: var(--text_secondary);
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+.leave_details_status.cancelled .leave_details_status_dot {
+  background: var(--text_secondary);
+}
 
 .leave_details_section {
   margin: 20px 24px 0;
@@ -253,13 +265,11 @@
   display: flex;
   align-items: center;
   gap: 8px;
-
   margin-bottom: 12px;
-
   color: var(--text_primary);
-
   font-size: 13px;
   font-weight: 600;
+  line-height: 1.3;
 }
 
 .leave_details_section_title svg {
@@ -267,29 +277,21 @@
   font-size: 12px;
 }
 
-/* ==========================================
-   INFORMATION GRID
-========================================== */
-
 .leave_details_grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   border: 1px solid var(--border);
   border-radius: var(--radius_md);
-
   overflow: hidden;
 }
 
 .leave_details_item {
   min-height: 72px;
   padding: 13px 15px;
-
   display: flex;
   flex-direction: column;
   justify-content: center;
   gap: 6px;
-
   background: var(--surface);
 }
 
@@ -303,62 +305,51 @@
 
 .leave_details_item_label {
   color: var(--text_secondary);
-
   font-size: 11px;
   font-weight: 500;
+  line-height: 1.3;
 }
 
 .leave_details_item strong {
   display: flex;
   align-items: center;
   gap: 6px;
-
+  min-width: 0;
   color: var(--text_primary);
-
   font-size: 12px;
   font-weight: 600;
+  line-height: 1.3;
 }
 
 .leave_details_item strong svg {
+  flex-shrink: 0;
   color: var(--primary);
   font-size: 10px;
 }
 
-/* ==========================================
-   REASON / COMMENT
-========================================== */
-
 .leave_details_reason,
 .leave_details_comment {
   padding: 13px 15px;
-
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius_md);
-
   color: var(--text_secondary);
-
   font-size: 12px;
   line-height: 1.6;
+  overflow-wrap: anywhere;
 }
 
 .leave_details_comment {
   border-left: 3px solid var(--primary);
 }
 
-/* ==========================================
-   FOOTER
-========================================== */
-
 .leave_details_footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 15px;
-
   margin-top: 22px;
   padding: 18px 24px;
-
   border-top: 1px solid var(--divider);
 }
 
@@ -370,31 +361,33 @@
 
 .leave_details_btn {
   min-height: 38px;
-
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 7px;
-
   padding: 0 15px;
-
   border-radius: var(--radius_sm);
-
+  font-family: inherit;
   font-size: 12px;
   font-weight: 500;
-
+  outline: none;
   transition:
     background var(--transition),
     color var(--transition),
     border-color var(--transition),
-    transform var(--transition);
+    transform var(--transition),
+    box-shadow var(--transition);
 }
 
 .leave_details_btn:hover {
   transform: translateY(-1px);
 }
 
-/* Close */
+.leave_details_btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px
+    color-mix(in srgb, var(--primary) 12%, transparent);
+}
 
 .leave_details_btn.secondary {
   background: var(--surface);
@@ -407,8 +400,6 @@
   color: var(--text_primary);
 }
 
-/* Reject */
-
 .leave_details_btn.reject {
   background: transparent;
   border: 1px solid var(--error);
@@ -418,8 +409,6 @@
 .leave_details_btn.reject:hover {
   background: color-mix(in srgb, var(--error) 10%, transparent);
 }
-
-/* Approve */
 
 .leave_details_btn.approve {
   background: var(--primary);
@@ -431,10 +420,6 @@
   background: var(--primary_hover);
   border-color: var(--primary_hover);
 }
-
-/* ==========================================
-   ANIMATION
-========================================== */
 
 @keyframes leaveDetailsOverlayIn {
   from {
@@ -458,36 +443,105 @@
   }
 }
 
-/* ==========================================
-   RESPONSIVE
-========================================== */
-
-@media (max-width: 600px) {
+@media (max-width: 720px) {
   .leave_details_overlay {
-    padding: 14px;
-    align-items: flex-end;
+    padding: 18px;
   }
 
   .leave_details_modal {
-    max-height: calc(100vh - 28px);
-    border-radius: var(--radius_lg) var(--radius_lg) 0 0;
+    width: min(600px, 100%);
+    max-height: calc(100vh - 36px);
   }
 
-  .leave_details_header,
-  .leave_details_footer {
-    padding-left: 18px;
-    padding-right: 18px;
+  .leave_details_header {
+    padding: 20px;
   }
 
   .leave_details_employee,
   .leave_details_status_row,
   .leave_details_section {
-    margin-left: 18px;
-    margin-right: 18px;
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+
+  .leave_details_footer {
+    padding: 18px 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .leave_details_overlay {
+    padding: 0;
+    align-items: flex-end;
+  }
+
+  .leave_details_modal {
+    width: 100%;
+    max-height: calc(100vh - 16px);
+    border-radius: var(--radius_lg) var(--radius_lg) 0 0;
+  }
+
+  .leave_details_header {
+    padding: 18px;
+  }
+
+  .leave_details_eyebrow {
+    font-size: 10px;
+  }
+
+  .leave_details_header h2 {
+    font-size: 18px;
+  }
+
+  .leave_details_close {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+  }
+
+  .leave_details_employee {
+    margin: 16px 18px 0;
+    padding: 14px;
+    gap: 11px;
+  }
+
+  .leave_details_avatar {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    font-size: 12px;
+  }
+
+  .leave_details_employee_info h3 {
+    font-size: 14px;
+  }
+
+  .leave_details_employee_info span {
+    font-size: 11px;
+  }
+
+  .leave_details_employee_meta {
+    gap: 5px 12px;
+  }
+
+  .leave_details_employee_meta span {
+    font-size: 10px;
+  }
+
+  .leave_details_status_row {
+    margin: 14px 18px 0;
+  }
+
+  .leave_details_section {
+    margin: 18px 18px 0;
   }
 
   .leave_details_grid {
     grid-template-columns: 1fr;
+  }
+
+  .leave_details_item {
+    min-height: 64px;
   }
 
   .leave_details_item:nth-child(odd) {
@@ -505,6 +559,9 @@
   .leave_details_footer {
     align-items: stretch;
     flex-direction: column-reverse;
+    gap: 10px;
+    margin-top: 18px;
+    padding: 16px 18px;
   }
 
   .leave_details_actions {
@@ -517,5 +574,122 @@
 
   .leave_details_footer > .secondary {
     width: 100%;
+  }
+
+  .leave_details_btn {
+    min-height: 40px;
+  }
+}
+
+@media (max-width: 320px) {
+  .leave_details_modal {
+    max-height: calc(100vh - 10px);
+  }
+
+  .leave_details_header {
+    padding: 16px 14px;
+  }
+
+  .leave_details_header h2 {
+    font-size: 17px;
+  }
+
+  .leave_details_employee {
+    margin: 14px 14px 0;
+    padding: 12px;
+  }
+
+  .leave_details_avatar {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    font-size: 11px;
+  }
+
+  .leave_details_employee_info {
+    gap: 3px;
+  }
+
+  .leave_details_employee_info h3 {
+    font-size: 13px;
+  }
+
+  .leave_details_employee_info span {
+    font-size: 10px;
+  }
+
+  .leave_details_employee_meta {
+    gap: 3px 8px;
+  }
+
+  .leave_details_employee_meta span {
+    font-size: 9px;
+  }
+
+  .leave_details_employee_meta svg {
+    font-size: 8px;
+  }
+
+  .leave_details_status_row {
+    margin: 12px 14px 0;
+  }
+
+  .leave_details_status_label {
+    font-size: 11px;
+  }
+
+  .leave_details_status {
+    padding: 4px 8px;
+    font-size: 10px;
+  }
+
+  .leave_details_section {
+    margin: 16px 14px 0;
+  }
+
+  .leave_details_section_title {
+    margin-bottom: 10px;
+    font-size: 12px;
+  }
+
+  .leave_details_item {
+    min-height: 60px;
+    padding: 11px 12px;
+  }
+
+  .leave_details_item_label {
+    font-size: 10px;
+  }
+
+  .leave_details_item strong {
+    font-size: 11px;
+  }
+
+  .leave_details_reason,
+  .leave_details_comment {
+    padding: 12px;
+    font-size: 11px;
+  }
+
+  .leave_details_footer {
+    padding: 14px;
+  }
+
+  .leave_details_btn {
+    min-height: 38px;
+    padding: 0 12px;
+    font-size: 11px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .leave_details_overlay,
+  .leave_details_modal {
+    animation: none;
+  }
+
+  .leave_details_close,
+  .leave_details_btn {
+    transition: none;
   }
 }

@@ -1,11 +1,48 @@
 import { useEffect, useState } from "react";
-import {
-  FaTimes,
-  FaExclamationTriangle,
-  FaBan,
-} from "react-icons/fa";
+import { FaTimes, FaExclamationTriangle, FaBan } from "react-icons/fa";
 
 import "./RejectLeaveModal.css";
+
+const leaveTypeLabels = {
+  annual: "Annual Leave",
+  sick: "Sick Leave",
+  casual: "Casual Leave",
+};
+
+const getEmployee = (request) => request.employee || request.user || null;
+
+const getEmployeeName = (employee) => {
+  if (!employee) {
+    return "Unknown Employee";
+  }
+
+  const name = [employee.firstName, employee.lastName]
+    .filter(Boolean)
+    .join(" ");
+
+  return name || "Unknown Employee";
+};
+
+const getEmployeeInitials = (employee) => {
+  if (!employee) {
+    return "?";
+  }
+
+  const initials = [employee.firstName?.charAt(0), employee.lastName?.charAt(0)]
+    .filter(Boolean)
+    .join("")
+    .toUpperCase();
+
+  return initials || "?";
+};
+
+const formatLeaveType = (leaveType) => {
+  if (!leaveType) {
+    return "Leave Request";
+  }
+
+  return leaveTypeLabels[leaveType.toLowerCase()] || leaveType;
+};
 
 export default function RejectLeaveModal({
   isOpen,
@@ -25,28 +62,8 @@ export default function RejectLeaveModal({
     return null;
   }
 
-  const employee =
-    request.employee || request.user || null;
-
-  const employeeName =
-    `${employee?.firstName || ""} ${
-      employee?.lastName || ""
-    }`.trim();
-
-  const formatLeaveType = (leaveType) => {
-    if (!leaveType) return "Leave Request";
-
-    const labels = {
-      annual: "Annual Leave",
-      sick: "Sick Leave",
-      casual: "Casual Leave",
-    };
-
-    return (
-      labels[leaveType.toLowerCase()] ||
-      leaveType
-    );
-  };
+  const employee = getEmployee(request);
+  const employeeName = getEmployeeName(employee);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -64,15 +81,10 @@ export default function RejectLeaveModal({
   };
 
   return (
-    <div
-      className="reject_leave_overlay"
-      onClick={onClose}
-    >
+    <div className="reject_leave_overlay" onClick={onClose}>
       <div
         className="reject_leave_modal"
-        onClick={(event) =>
-          event.stopPropagation()
-        }
+        onClick={(event) => event.stopPropagation()}
       >
         <div className="reject_leave_header">
           <div className="reject_leave_header_icon">
@@ -93,38 +105,26 @@ export default function RejectLeaveModal({
           <h2>Reject Leave Request</h2>
 
           <p className="reject_leave_description">
-            Are you sure you want to reject this
-            leave request? Please provide a reason
-            for the employee.
+            Are you sure you want to reject this leave request? Please provide a
+            reason for the employee.
           </p>
 
           <div className="reject_leave_employee">
             <div className="reject_leave_avatar">
-              {employee?.firstName?.charAt(0)}
-              {employee?.lastName?.charAt(0)}
+              {getEmployeeInitials(employee)}
             </div>
 
             <div className="reject_leave_employee_info">
-              <strong>
-                {employeeName ||
-                  "Unknown Employee"}
-              </strong>
+              <strong>{employeeName}</strong>
 
-              <span>
-                {formatLeaveType(
-                  request.leaveType
-                )}
-              </span>
+              <span>{formatLeaveType(request.leaveType)}</span>
             </div>
           </div>
 
           <div className="reject_leave_warning">
             <FaExclamationTriangle />
 
-            <span>
-              This action will mark the request
-              as rejected.
-            </span>
+            <span>This action will mark the request as rejected.</span>
           </div>
 
           <form onSubmit={handleSubmit}>
@@ -137,9 +137,7 @@ export default function RejectLeaveModal({
               <textarea
                 id="rejectReason"
                 value={reason}
-                onChange={(event) =>
-                  setReason(event.target.value)
-                }
+                onChange={(event) => setReason(event.target.value)}
                 placeholder="Enter the reason for rejecting this leave request..."
                 rows="4"
                 maxLength="500"

@@ -1,70 +1,91 @@
 .applyLeave-overlay {
   position: fixed;
   inset: 0;
-  z-index: 1000;
+  z-index: 1100;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
-  background: rgba(0, 0, 0, 0.65);
+  padding: 24px;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  animation: applyLeaveOverlayIn 0.2s ease;
 }
 
 .applyLeave-modal {
   width: min(520px, 100%);
-  max-height: 90vh;
+  max-height: calc(100vh - 48px);
   overflow-y: auto;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  background: var(--surface);
-  color: var(--text_primary);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius_lg);
+  box-shadow: var(--shadow_lg);
+  scrollbar-width: thin;
+  animation: applyLeaveModalIn 0.25s ease;
 }
 
 .applyLeave-header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 16px;
-  padding: 20px 22px;
-  border-bottom: 1px solid var(--border);
+  gap: 18px;
+  padding: 22px 24px 18px;
+  border-bottom: 1px solid var(--divider);
 }
 
 .applyLeave-header h2 {
   margin: 0 0 5px;
-  font-size: 20px;
+  font-family: "Poppins", sans-serif;
+  font-size: 19px;
+  font-weight: 600;
+  color: var(--text_primary);
 }
 
 .applyLeave-header p {
   margin: 0;
-  font-size: 13px;
   color: var(--text_secondary);
+  font-size: 12px;
+  line-height: 1.5;
 }
 
 .applyLeave-close {
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 34px;
-  height: 34px;
-  padding: 0;
-  border: none;
-  border-radius: 7px;
-  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius_sm);
+  background: var(--surface);
   color: var(--text_secondary);
-  font-size: 22px;
+  font-size: 15px;
   cursor: pointer;
+  transition:
+    background var(--transition),
+    color var(--transition),
+    border-color var(--transition),
+    transform var(--transition),
+    opacity var(--transition);
 }
 
-.applyLeave-close:hover {
-  background: var(--surface_hover);
+.applyLeave-close:hover:not(:disabled) {
+  background: var(--card-hover);
+  border-color: var(--card-border);
   color: var(--text_primary);
+  transform: translateY(-1px);
+}
+
+.applyLeave-close:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 
 .applyLeave-form {
   display: flex;
   flex-direction: column;
-  gap: 18px;
-  padding: 22px;
+  gap: 17px;
+  padding: 22px 24px 24px;
 }
 
 .applyLeave-field {
@@ -74,131 +95,373 @@
 }
 
 .applyLeave-field label {
-  font-size: 14px;
-  font-weight: 600;
   color: var(--text_primary);
+  font-size: 12px;
+  font-weight: 600;
 }
 
 .applyLeave-field input,
-.applyLeave-field select,
 .applyLeave-field textarea {
   width: 100%;
-  box-sizing: border-box;
   border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 11px 12px;
+  border-radius: var(--radius_sm);
   background: var(--surface);
   color: var(--text_primary);
-  font: inherit;
+  font-family: inherit;
+  font-size: 13px;
   outline: none;
+  transition:
+    border-color var(--transition),
+    box-shadow var(--transition),
+    background var(--transition),
+    opacity var(--transition);
+}
+
+.applyLeave-field input {
+  height: 44px;
+  padding: 0 12px;
+}
+
+.applyLeave-field textarea {
+  min-height: 110px;
+  padding: 11px 12px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.applyLeave-field input::placeholder,
+.applyLeave-field textarea::placeholder {
+  color: var(--text_secondary);
+  opacity: 0.7;
 }
 
 .applyLeave-field input:focus,
-.applyLeave-field select:focus,
 .applyLeave-field textarea:focus {
   border-color: var(--primary);
+  box-shadow:
+    0 0 0 3px
+    color-mix(in srgb, var(--primary) 12%, transparent);
 }
 
-.applyLeave-field textarea {
-  resize: vertical;
-  min-height: 100px;
+.applyLeave-field input:disabled,
+.applyLeave-field textarea:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
 }
 
 .applyLeave-date-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
 }
 
 .applyLeave-info {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
 }
 
 .applyLeave-info > div {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  padding: 14px;
+  min-width: 0;
+  padding: 12px 14px;
   border: 1px solid var(--border);
-  border-radius: 8px;
-  background: var(--surface_hover);
+  border-radius: var(--radius_sm);
+  background: var(--surface);
 }
 
 .applyLeave-info span {
-  font-size: 12px;
+  display: block;
+  margin-bottom: 5px;
   color: var(--text_secondary);
+  font-size: 11px;
 }
 
 .applyLeave-info strong {
-  font-size: 15px;
   color: var(--text_primary);
+  font-size: 13px;
+  font-weight: 600;
 }
 
 .applyLeave-error {
-  margin: 0;
-  font-size: 13px;
-  color: #ef4444;
+  margin: -2px 0 0;
+  padding: 10px 12px;
+  border: 1px solid
+    color-mix(in srgb, var(--error) 25%, transparent);
+  border-radius: var(--radius_sm);
+  background: color-mix(
+    in srgb,
+    var(--error) 8%,
+    transparent
+  );
+  color: var(--error);
+  font-size: 11px;
+  line-height: 1.5;
 }
 
 .applyLeave-actions {
   display: flex;
+  align-items: center;
   justify-content: flex-end;
-  gap: 10px;
-  padding-top: 4px;
+  gap: 9px;
+  margin-top: 2px;
+  padding-top: 18px;
+  border-top: 1px solid var(--divider);
 }
 
-.applyLeave-cancel,
-.applyLeave-submit {
-  padding: 10px 17px;
-  border-radius: 8px;
-  font-size: 14px;
+.applyLeave-actions button {
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+  border-radius: var(--radius_sm);
+  font-family: inherit;
+  font-size: 12px;
   font-weight: 600;
   cursor: pointer;
+  transition:
+    background var(--transition),
+    color var(--transition),
+    border-color var(--transition),
+    opacity var(--transition),
+    transform var(--transition);
+}
+
+.applyLeave-actions button:hover:not(:disabled) {
+  transform: translateY(-1px);
 }
 
 .applyLeave-cancel {
   border: 1px solid var(--border);
-  background: transparent;
-  color: var(--text_primary);
+  background: var(--surface);
+  color: var(--text_secondary);
 }
 
-.applyLeave-cancel:hover {
-  background: var(--surface_hover);
+.applyLeave-cancel:hover:not(:disabled) {
+  background: var(--card-hover);
+  color: var(--text_primary);
+  border-color: var(--card-border);
 }
 
 .applyLeave-submit {
   border: 1px solid var(--primary);
   background: var(--primary);
-  color: #fff;
+  color: var(--text-inverse);
 }
 
-.applyLeave-submit:hover {
-  opacity: 0.9;
+.applyLeave-submit:hover:not(:disabled) {
+  background: var(--primary_hover);
+  border-color: var(--primary_hover);
 }
 
-@media (max-width: 600px) {
-  .applyLeave-overlay {
-    padding: 12px;
+.applyLeave-actions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+@keyframes applyLeaveOverlayIn {
+  from {
+    opacity: 0;
   }
 
-  .applyLeave-header,
-  .applyLeave-form {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes applyLeaveModalIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 720px) {
+  .applyLeave-overlay {
     padding: 18px;
   }
 
-  .applyLeave-date-grid,
-  .applyLeave-info {
+  .applyLeave-modal {
+    width: min(500px, 100%);
+    max-height: calc(100vh - 36px);
+  }
+
+  .applyLeave-header {
+    padding: 20px 20px 17px;
+  }
+
+  .applyLeave-form {
+    padding: 20px;
+  }
+
+  .applyLeave-field input {
+    height: 43px;
+  }
+}
+
+@media (max-width: 480px) {
+  .applyLeave-overlay {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .applyLeave-modal {
+    width: 100%;
+    max-height: calc(100vh - 10px);
+    border-radius:
+      var(--radius_lg)
+      var(--radius_lg)
+      0
+      0;
+  }
+
+  .applyLeave-header {
+    padding: 18px 18px 16px;
+  }
+
+  .applyLeave-header h2 {
+    font-size: 18px;
+  }
+
+  .applyLeave-header p {
+    font-size: 11px;
+  }
+
+  .applyLeave-close {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+  }
+
+  .applyLeave-form {
+    gap: 15px;
+    padding: 18px;
+  }
+
+  .applyLeave-date-grid {
     grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .applyLeave-info {
+    gap: 10px;
+  }
+
+  .applyLeave-info > div {
+    padding: 11px 12px;
+  }
+
+  .applyLeave-field textarea {
+    min-height: 105px;
   }
 
   .applyLeave-actions {
     flex-direction: column-reverse;
+    gap: 9px;
+    padding-top: 16px;
   }
 
-  .applyLeave-cancel,
-  .applyLeave-submit {
+  .applyLeave-actions button {
     width: 100%;
+    min-height: 40px;
+  }
+}
+
+@media (max-width: 320px) {
+  .applyLeave-modal {
+    max-height: calc(100vh - 6px);
+  }
+
+  .applyLeave-header {
+    gap: 12px;
+    padding: 16px 14px 14px;
+  }
+
+  .applyLeave-header h2 {
+    font-size: 17px;
+  }
+
+  .applyLeave-header p {
+    font-size: 10px;
+  }
+
+  .applyLeave-close {
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+    font-size: 13px;
+  }
+
+  .applyLeave-form {
+    gap: 13px;
+    padding: 15px 14px 16px;
+  }
+
+  .applyLeave-field {
+    gap: 6px;
+  }
+
+  .applyLeave-field label {
+    font-size: 11px;
+  }
+
+  .applyLeave-field input {
+    height: 40px;
+    padding: 0 10px;
+    font-size: 11px;
+  }
+
+  .applyLeave-field textarea {
+    min-height: 100px;
+    padding: 10px;
+    font-size: 11px;
+  }
+
+  .applyLeave-info {
+    gap: 8px;
+  }
+
+  .applyLeave-info > div {
+    padding: 10px;
+  }
+
+  .applyLeave-info span {
+    font-size: 9px;
+  }
+
+  .applyLeave-info strong {
+    font-size: 11px;
+  }
+
+  .applyLeave-error {
+    padding: 9px 10px;
+    font-size: 10px;
+  }
+
+  .applyLeave-actions {
+    gap: 8px;
+    padding-top: 14px;
+  }
+
+  .applyLeave-actions button {
+    min-height: 38px;
+    font-size: 11px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .applyLeave-overlay,
+  .applyLeave-modal {
+    animation: none;
+  }
+
+  .applyLeave-close,
+  .applyLeave-actions button {
+    transition: none;
   }
 }

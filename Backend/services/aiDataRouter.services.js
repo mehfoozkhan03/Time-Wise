@@ -162,7 +162,7 @@ const ENTITY_MAP = {
 
   productivity_score: {
     source: "userContext",
-    field: "productivity",
+    field: "productivity.percentage",
     operation: "get",
     dataType: "percentage",
   },
@@ -202,7 +202,7 @@ const ENTITY_MAP = {
 
   punctuality_score: {
     source: "userContext",
-    field: "productivity.punctuality",
+    field: "productivity.percentage",
     operation: "get",
     dataType: "percentage",
   },
@@ -368,6 +368,32 @@ const ENTITY_MAP = {
     field: "name",
     operation: "get",
     dataType: "text",
+  },
+
+  // ----------------------------------------------------------
+  // ALIASES (Phase 2 sometimes outputs these)
+  // ----------------------------------------------------------
+
+  attendance: {
+    source: "userContext",
+    field: "attendance.percentage",
+    operation: "get",
+    dataType: "percentage",
+  },
+
+  leaves: {
+    source: "userContext",
+    field: "attendance.leavesTaken",
+    operation: "count",
+    dataType: "number",
+    period: "none",
+  },
+
+  leave_balance: {
+    source: "userContext",
+    field: "attendance.leavesTaken",
+    operation: "count",
+    dataType: "number",
   },
 };
 

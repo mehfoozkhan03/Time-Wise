@@ -1,6 +1,8 @@
 import { useMemo, useState } from "react";
 import { MdClose } from "react-icons/md";
 
+import CustomSelect from "../../../Common/CustomSelect/CustomSelect";
+
 import "./ApplyLeave.css";
 
 const leaveTypeLabels = {
@@ -43,6 +45,11 @@ const ApplyLeave = ({ onClose, onSubmit, balance }) => {
     [balance],
   );
 
+  const availableLeaveTypes = useMemo(
+    () => leaveTypes.filter((leave) => leave.balance > 0),
+    [leaveTypes],
+  );
+
   const selectedLeave = useMemo(
     () => leaveTypes.find((leave) => leave.value === formData.leaveType),
     [formData.leaveType, leaveTypes],
@@ -77,6 +84,14 @@ const ApplyLeave = ({ onClose, onSubmit, balance }) => {
     }));
 
     setError("");
+  };
+
+  const handleClose = () => {
+    if (submitting) {
+      return;
+    }
+
+    onClose();
   };
 
   const handleSubmit = async (event) => {
@@ -150,7 +165,7 @@ const ApplyLeave = ({ onClose, onSubmit, balance }) => {
   };
 
   return (
-    <div className="applyLeave-overlay" onMouseDown={onClose}>
+    <div className="applyLeave-overlay" onMouseDown={handleClose}>
       <div
         className="applyLeave-modal"
         onMouseDown={(event) => event.stopPropagation()}
@@ -164,7 +179,7 @@ const ApplyLeave = ({ onClose, onSubmit, balance }) => {
           <button
             type="button"
             className="applyLeave-close"
-            onClick={onClose}
+            onClick={handleClose}
             aria-label="Close"
             disabled={submitting}
           >
@@ -176,25 +191,15 @@ const ApplyLeave = ({ onClose, onSubmit, balance }) => {
           <div className="applyLeave-field">
             <label htmlFor="leaveType">Leave Type</label>
 
-            <select
+            <CustomSelect
               id="leaveType"
               name="leaveType"
               value={formData.leaveType}
+              options={availableLeaveTypes}
               onChange={handleChange}
               disabled={submitting || !balance}
-            >
-              <option value="">Select leave type</option>
-
-              {leaveTypes.map((leave) => (
-                <option
-                  key={leave.value}
-                  value={leave.value}
-                  disabled={leave.balance <= 0}
-                >
-                  {leave.label}
-                </option>
-              ))}
-            </select>
+              placeholder="Select leave type"
+            />
           </div>
 
           <div className="applyLeave-date-grid">
@@ -259,7 +264,7 @@ const ApplyLeave = ({ onClose, onSubmit, balance }) => {
             <button
               type="button"
               className="applyLeave-cancel"
-              onClick={onClose}
+              onClick={handleClose}
               disabled={submitting}
             >
               Cancel

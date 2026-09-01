@@ -1,17 +1,19 @@
 .leave_requests {
-  width: calc(100% - 80px);
+  width: calc(100% - 60px);
   margin: 0 30px;
-
   background: var(--card);
   border: 1px solid var(--card-border);
   border-radius: var(--radius_md);
   box-shadow: var(--shadow_sm);
   overflow: hidden;
+  box-sizing: border-box;
 }
 
-/* ==========================================
-   HEADER
-========================================== */
+.leave_requests *,
+.leave_requests *::before,
+.leave_requests *::after {
+  box-sizing: border-box;
+}
 
 .leave_requests_header {
   display: flex;
@@ -22,11 +24,16 @@
   border-bottom: 1px solid var(--divider);
 }
 
+.leave_requests_heading {
+  min-width: 0;
+}
+
 .leave_requests_heading h2 {
   margin: 0 0 5px;
   font-family: "Poppins", sans-serif;
   font-size: 20px;
   font-weight: 600;
+  line-height: 1.3;
   color: var(--text_primary);
 }
 
@@ -37,13 +44,13 @@
   line-height: 1.5;
 }
 
-/* Request Count */
-
 .leave_requests_count {
   display: flex;
   align-items: center;
   gap: 7px;
   padding: 8px 13px;
+  flex-shrink: 0;
+  border: 1px solid color-mix(in srgb, var(--tag-text) 10%, transparent);
   border-radius: 50px;
   background: var(--tag-bg);
   color: var(--tag-text);
@@ -52,17 +59,15 @@
 .leave_requests_count span {
   font-size: 14px;
   font-weight: 600;
+  line-height: 1;
 }
 
 .leave_requests_count small {
   color: inherit;
   font-size: 12px;
   font-weight: 500;
+  line-height: 1;
 }
-
-/* ==========================================
-   CONTROLS
-========================================== */
 
 .leave_requests_controls {
   display: flex;
@@ -73,17 +78,17 @@
   border-bottom: 1px solid var(--divider);
 }
 
-/* Search */
-
 .leave_search {
   position: relative;
   width: min(320px, 100%);
+  min-width: 0;
 }
 
 .leave_search_icon {
   position: absolute;
-  left: 13px;
   top: 50%;
+  left: 13px;
+  z-index: 1;
   transform: translateY(-50%);
   color: var(--text_secondary);
   font-size: 13px;
@@ -92,14 +97,41 @@
 
 .leave_search input {
   width: 100%;
-  background-color:var(--surface) !important;
   height: 40px;
   padding: 0 14px 0 38px;
+  background: var(--surface) !important;
+  color: var(--text_primary);
+  border: 1px solid var(--border);
   border-radius: var(--radius_sm);
+  font-family: inherit;
   font-size: 13px;
+  outline: none;
+  transition:
+    border-color var(--transition),
+    box-shadow var(--transition),
+    background var(--transition),
+    opacity var(--transition);
 }
 
-/* Filter label */
+.leave_search input::placeholder {
+  color: var(--text_secondary);
+  opacity: 0.8;
+}
+
+.leave_search input:hover:not(:disabled) {
+  border-color: var(--card-border);
+}
+
+.leave_search input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px
+    color-mix(in srgb, var(--primary) 12%, transparent);
+}
+
+.leave_search input:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
 
 .leave_filter_label {
   display: flex;
@@ -112,10 +144,9 @@
 }
 
 .leave_filter_label svg {
+  flex-shrink: 0;
   font-size: 12px;
 }
-
-/* Status filters */
 
 .leave_status_filters {
   display: flex;
@@ -125,19 +156,32 @@
   background: var(--card);
   border: 1px solid var(--card-border);
   border-radius: var(--radius_sm);
+  overflow-x: auto;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
 }
 
 .leave_filter_btn {
+  min-height: 30px;
   padding: 7px 12px;
+  flex-shrink: 0;
+  border: 1px solid transparent;
   border-radius: 6px;
   background: transparent;
   color: var(--text_secondary);
+  font-family: inherit;
   font-size: 12px;
   font-weight: 500;
+  line-height: 1;
   white-space: nowrap;
+  transition:
+    color var(--transition),
+    background var(--transition),
+    border-color var(--transition),
+    opacity var(--transition);
 }
 
-.leave_filter_btn:hover {
+.leave_filter_btn:hover:not(:disabled) {
   color: var(--text_primary);
   background: var(--card-hover);
 }
@@ -145,15 +189,98 @@
 .leave_filter_btn.active {
   color: var(--text-inverse);
   background: var(--primary);
+  border-color: var(--primary);
 }
 
-.leave_filter_btn.active:hover {
+.leave_filter_btn.active:hover:not(:disabled) {
   background: var(--primary_hover);
+  border-color: var(--primary_hover);
 }
 
-/* ==========================================
-   RESPONSIVE
-========================================== */
+.leave_filter_btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px
+    color-mix(in srgb, var(--primary) 14%, transparent);
+}
+
+.leave_filter_btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.leave_requests_loading {
+  min-height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+  color: var(--text_secondary);
+  font-size: 13px;
+}
+
+.leave_pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 16px 26px;
+  background: var(--surface);
+  border-top: 1px solid var(--divider);
+}
+
+.leave_pagination_btn {
+  min-width: 82px;
+  min-height: 34px;
+  padding: 0 13px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: var(--radius_sm);
+  background: var(--card);
+  color: var(--text_secondary);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  transition:
+    background var(--transition),
+    color var(--transition),
+    border-color var(--transition),
+    opacity var(--transition),
+    transform var(--transition);
+}
+
+.leave_pagination_btn:hover:not(:disabled) {
+  background: var(--card-hover);
+  border-color: var(--card-border);
+  color: var(--text_primary);
+  transform: translateY(-1px);
+}
+
+.leave_pagination_btn:focus-visible {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px
+    color-mix(in srgb, var(--primary) 12%, transparent);
+}
+
+.leave_pagination_btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+  transform: none;
+}
+
+.leave_pagination_info {
+  min-width: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text_secondary);
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
 
 @media (max-width: 1000px) {
   .leave_requests_controls {
@@ -161,16 +288,25 @@
   }
 
   .leave_search {
-    flex: 1;
+    flex: 1 1 280px;
     min-width: 240px;
   }
 
   .leave_filter_label {
     margin-left: 0;
   }
+
+  .leave_status_filters {
+    max-width: 100%;
+  }
 }
 
-@media (max-width: 700px) {
+@media (max-width: 720px) {
+  .leave_requests {
+    width: calc(100% - 48px);
+    margin: 0 24px;
+  }
+
   .leave_requests_header {
     align-items: flex-start;
     padding: 20px;
@@ -182,7 +318,8 @@
 
   .leave_search {
     width: 100%;
-    flex: none;
+    flex: 1 1 100%;
+    min-width: 0;
   }
 
   .leave_filter_label {
@@ -191,20 +328,166 @@
 
   .leave_status_filters {
     width: 100%;
+    max-width: none;
     overflow-x: auto;
+    scrollbar-width: thin;
   }
 
   .leave_filter_btn {
     flex-shrink: 0;
   }
+
+  .leave_pagination {
+    padding: 14px 20px;
+  }
 }
 
 @media (max-width: 480px) {
+  .leave_requests {
+    width: calc(100% - 32px);
+    margin: 0 16px;
+    border-radius: var(--radius_sm);
+  }
+
   .leave_requests_header {
     flex-direction: column;
+    gap: 14px;
+    padding: 18px 16px;
+  }
+
+  .leave_requests_heading h2 {
+    font-size: 18px;
+  }
+
+  .leave_requests_heading p {
+    font-size: 12px;
   }
 
   .leave_requests_count {
     align-self: flex-start;
+  }
+
+  .leave_requests_controls {
+    gap: 12px;
+    padding: 14px 16px;
+  }
+
+  .leave_search input {
+    height: 38px;
+    font-size: 12px;
+  }
+
+  .leave_status_filters {
+    gap: 4px;
+    padding: 3px;
+  }
+
+  .leave_filter_btn {
+    min-height: 29px;
+    padding: 7px 10px;
+    font-size: 11px;
+  }
+
+  .leave_pagination {
+    gap: 8px;
+    padding: 13px 16px;
+  }
+
+  .leave_pagination_btn {
+    min-width: 72px;
+    min-height: 33px;
+    padding: 0 10px;
+    font-size: 11px;
+  }
+
+  .leave_pagination_info {
+    min-width: auto;
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 320px) {
+  .leave_requests {
+    width: calc(100% - 24px);
+    margin: 0 12px;
+  }
+
+  .leave_requests_header {
+    padding: 16px 12px;
+    gap: 12px;
+  }
+
+  .leave_requests_heading h2 {
+    font-size: 17px;
+  }
+
+  .leave_requests_heading p {
+    font-size: 11px;
+  }
+
+  .leave_requests_count {
+    padding: 7px 11px;
+  }
+
+  .leave_requests_count span {
+    font-size: 13px;
+  }
+
+  .leave_requests_count small {
+    font-size: 11px;
+  }
+
+  .leave_requests_controls {
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .leave_search input {
+    height: 36px;
+    padding-left: 34px;
+    font-size: 12px;
+  }
+
+  .leave_search_icon {
+    left: 11px;
+    font-size: 12px;
+  }
+
+  .leave_filter_label {
+    font-size: 12px;
+  }
+
+  .leave_status_filters {
+    gap: 3px;
+  }
+
+  .leave_filter_btn {
+    min-height: 28px;
+    padding: 6px 9px;
+    font-size: 10px;
+  }
+
+  .leave_pagination {
+    gap: 6px;
+    padding: 12px;
+  }
+
+  .leave_pagination_btn {
+    min-width: 62px;
+    min-height: 32px;
+    padding: 0 7px;
+    font-size: 10px;
+  }
+
+  .leave_pagination_info {
+    font-size: 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .leave_search input,
+  .leave_filter_btn,
+  .leave_pagination_btn {
+    transition: none;
   }
 }

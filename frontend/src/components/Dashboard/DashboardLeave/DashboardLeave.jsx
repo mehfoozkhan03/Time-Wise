@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import "./DashboardLeave.css";
@@ -15,12 +15,23 @@ import {
   fetchLeaveStatistics,
 } from "../../../store/leaveSlice";
 
+const getLeaveId = (request) => request?.id || request?._id;
+
+const formatRequests = (requests) =>
+  requests.map((request) => ({
+    ...request,
+    id: request._id,
+    employee: request.user || request.employee,
+    user: request.user || request.employee,
+  }));
+
 export const DashboardLeave = () => {
   const dispatch = useDispatch();
 
   const {
     adminRequests = [],
     adminStatistics = null,
+    adminPagination = null,
     loading,
     error,
   } = useSelector((state) => state.leave);
@@ -29,35 +40,100 @@ export const DashboardLeave = () => {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [isRejectModalOpen, setIsRejectModalOpen] = useState(false);
 
+  const [page, setPage] = useState(1);
+  const [limit] = useState(10);
+  const [status, setStatus] = useState("All");
+  const [search, setSearch] = useState("");
+
+  const formattedRequests = useMemo(
+    () => formatRequests(adminRequests),
+    [adminRequests],
+  );
+
+  const fetchLeaveData = useCallback(
+    async (currentPage, currentStatus, currentSearch) => {
+      await dispatch(
+        fetchAdminLeaves({
+          page: currentPage,
+          limit,
+          status: currentStatus,
+          search: currentSearch,
+        }),
+      ).unwrap();
+    },
+    [dispatch, limit],
+  );
+
   useEffect(() => {
-    dispatch(fetchAdminLeaves());
+    const isInitialLoad = page === 1 && status === "All" && search === "";
+
+    if (isInitialLoad) {
+      fetchLeaveData(1, "All", "");
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      fetchLeaveData(page, status, search);
+    }, 400);
+
+    return () => clearTimeout(timer);
+  }, [page, status, search, fetchLeaveData]);
+
+  useEffect(() => {
     dispatch(fetchLeaveStatistics());
   }, [dispatch]);
 
-  const formattedRequests = useMemo(() => {
-    return adminRequests.map((request) => ({
-      ...request,
+  const refreshLeaveData = async () => {
+    await dispatch(
+      fetchAdminLeaves({
+        page,
+        limit,
+        status,
+        search,
+      }),
+    ).unwrap();
 
-      id: request._id,
+    await dispatch(fetchLeaveStatistics()).unwrap();
+  };
 
-      employee: request.user || request.employee,
+  const handleSearchChange = (value) => {
+    setSearch(value);
+    setPage(1);
+  };
 
-      user: request.user || request.employee,
-    }));
-  }, [adminRequests]);
+  const handleFilterChange = (newStatus) => {
+    setStatus(newStatus);
+    setPage(1);
+  };
+
+  const handlePageChange = (newPage) => {
+    if (
+      newPage < 1 ||
+      (adminPagination?.totalPages && newPage > adminPagination.totalPages)
+    ) {
+      return;
+    }
+
+    setPage(newPage);
+  };
+
+  const closeRequestDetails = () => {
+    setIsDetailsOpen(false);
+    setSelectedRequest(null);
+  };
+
+  const closeRejectModal = () => {
+    setIsRejectModalOpen(false);
+    setSelectedRequest(null);
+  };
 
   const handleViewRequest = (request) => {
     setSelectedRequest(request);
     setIsDetailsOpen(true);
   };
 
-  const handleCloseDetails = () => {
-    setIsDetailsOpen(false);
-    setSelectedRequest(null);
-  };
-
   const handleApproveRequest = async (request) => {
-    const leaveID = request?.id || request?._id;
+    const leaveID = getLeaveId(request);
 
     if (!leaveID) {
       return;
@@ -66,11 +142,9 @@ export const DashboardLeave = () => {
     try {
       await dispatch(approveAdminLeave(leaveID)).unwrap();
 
-      await dispatch(fetchAdminLeaves()).unwrap();
-      await dispatch(fetchLeaveStatistics()).unwrap();
+      await refreshLeaveData();
 
-      setIsDetailsOpen(false);
-      setSelectedRequest(null);
+      closeRequestDetails();
     } catch (approveError) {
       console.error("Approve Leave Error:", approveError);
     }
@@ -82,13 +156,8 @@ export const DashboardLeave = () => {
     setIsRejectModalOpen(true);
   };
 
-  const handleCloseRejectModal = () => {
-    setIsRejectModalOpen(false);
-    setSelectedRequest(null);
-  };
-
   const handleConfirmReject = async ({ request, reason }) => {
-    const leaveID = request?.id || request?._id;
+    const leaveID = getLeaveId(request);
 
     if (!leaveID) {
       return;
@@ -102,11 +171,9 @@ export const DashboardLeave = () => {
         }),
       ).unwrap();
 
-      await dispatch(fetchAdminLeaves()).unwrap();
-      await dispatch(fetchLeaveStatistics()).unwrap();
+      await refreshLeaveData();
 
-      setIsRejectModalOpen(false);
-      setSelectedRequest(null);
+      closeRejectModal();
     } catch (rejectError) {
       console.error("Reject Leave Error:", rejectError);
       throw rejectError;
@@ -120,15 +187,21 @@ export const DashboardLeave = () => {
       <LeaveRequests
         requests={formattedRequests}
         loading={loading}
+        activeFilter={status}
+        searchTerm={search}
+        onSearchChange={handleSearchChange}
+        onFilterChange={handleFilterChange}
         onView={handleViewRequest}
         onApprove={handleApproveRequest}
         onReject={handleOpenRejectModal}
+        pagination={adminPagination}
+        onPageChange={handlePageChange}
       />
 
       <LeaveRequestDetails
         isOpen={isDetailsOpen}
         request={selectedRequest}
-        onClose={handleCloseDetails}
+        onClose={closeRequestDetails}
         onApprove={handleApproveRequest}
         onReject={handleOpenRejectModal}
       />
@@ -136,7 +209,7 @@ export const DashboardLeave = () => {
       <RejectLeaveModal
         isOpen={isRejectModalOpen}
         request={selectedRequest}
-        onClose={handleCloseRejectModal}
+        onClose={closeRejectModal}
         onConfirm={handleConfirmReject}
       />
 

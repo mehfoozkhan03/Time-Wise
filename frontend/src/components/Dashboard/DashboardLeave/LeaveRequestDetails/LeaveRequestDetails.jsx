@@ -7,9 +7,79 @@ import {
   FaFileAlt,
   FaCheck,
   FaBan,
+  FaBuilding,
+  FaBriefcase,
 } from "react-icons/fa";
 
 import "./LeaveRequestDetails.css";
+
+const leaveTypeLabels = {
+  annual: "Annual Leave",
+  sick: "Sick Leave",
+  casual: "Casual Leave",
+};
+
+const formatDate = (date) => {
+  if (!date) {
+    return "—";
+  }
+
+  return new Date(date).toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+};
+
+const formatLeaveType = (leaveType) => {
+  if (!leaveType) {
+    return "—";
+  }
+
+  return (
+    leaveTypeLabels[leaveType.toLowerCase()] ||
+    leaveType
+  );
+};
+
+const getEmployee = (request) =>
+  request.employee || request.user || null;
+
+const getEmployeeName = (employee) => {
+  if (!employee) {
+    return "Unknown Employee";
+  }
+
+  const name = [
+    employee.firstName,
+    employee.lastName,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  return name || "Unknown Employee";
+};
+
+const getEmployeeInitials = (employee) => {
+  if (!employee) {
+    return "?";
+  }
+
+  const initials = [
+    employee.firstName?.charAt(0),
+    employee.lastName?.charAt(0),
+  ]
+    .filter(Boolean)
+    .join("")
+    .toUpperCase();
+
+  return initials || "?";
+};
+
+const getAppliedDate = (request) =>
+  request.appliedAt ||
+  request.createdAt ||
+  request.appliedDate;
 
 export default function LeaveRequestDetails({
   isOpen,
@@ -22,46 +92,18 @@ export default function LeaveRequestDetails({
     return null;
   }
 
-  const employee =
-    request.employee || request.user || null;
-
-  const employeeName =
-    `${employee?.firstName || ""} ${
-      employee?.lastName || ""
-    }`.trim();
-
-  const formatDate = (date) => {
-    if (!date) return "—";
-
-    return new Date(date).toLocaleDateString("en-GB", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-    });
-  };
-
-  const formatLeaveType = (leaveType) => {
-    if (!leaveType) return "—";
-
-    const labels = {
-      annual: "Annual Leave",
-      sick: "Sick Leave",
-      casual: "Casual Leave",
-    };
-
-    return (
-      labels[leaveType.toLowerCase()] ||
-      leaveType
-    );
-  };
+  const employee = getEmployee(request);
+  const employeeName = getEmployeeName(employee);
 
   const totalDays =
     request.totalDays ??
     request.requestedDays ??
     0;
 
-  const isPending =
-    request.status === "Pending";
+  const isPending = request.status === "Pending";
+
+  const statusClass =
+    request.status?.toLowerCase() || "";
 
   return (
     <div
@@ -70,9 +112,7 @@ export default function LeaveRequestDetails({
     >
       <div
         className="leave_details_modal"
-        onClick={(event) =>
-          event.stopPropagation()
-        }
+        onClick={(event) => event.stopPropagation()}
       >
         <div className="leave_details_header">
           <div>
@@ -95,20 +135,28 @@ export default function LeaveRequestDetails({
 
         <div className="leave_details_employee">
           <div className="leave_details_avatar">
-            {employee?.firstName?.charAt(0)}
-            {employee?.lastName?.charAt(0)}
+            {getEmployeeInitials(employee)}
           </div>
 
           <div className="leave_details_employee_info">
-            <h3>
-              {employeeName || "Unknown Employee"}
-            </h3>
+            <h3>{employeeName}</h3>
 
             <span>
               <FaEnvelope />
-              {employee?.email ||
-                "No email available"}
+              {employee?.email || "No email available"}
             </span>
+
+            <div className="leave_details_employee_meta">
+              <span>
+                <FaBuilding />
+                {employee?.department || "Department not available"}
+              </span>
+
+              <span>
+                <FaBriefcase />
+                {employee?.designation || "Designation not available"}
+              </span>
+            </div>
           </div>
         </div>
 
@@ -118,10 +166,9 @@ export default function LeaveRequestDetails({
           </span>
 
           <span
-            className={`leave_details_status ${request.status?.toLowerCase()}`}
+            className={`leave_details_status ${statusClass}`}
           >
             <span className="leave_details_status_dot" />
-
             {request.status || "Unknown"}
           </span>
         </div>
@@ -139,9 +186,7 @@ export default function LeaveRequestDetails({
               </span>
 
               <strong>
-                {formatLeaveType(
-                  request.leaveType
-                )}
+                {formatLeaveType(request.leaveType)}
               </strong>
             </div>
 
@@ -152,9 +197,7 @@ export default function LeaveRequestDetails({
 
               <strong>
                 {totalDays}{" "}
-                {totalDays === 1
-                  ? "Day"
-                  : "Days"}
+                {totalDays === 1 ? "Day" : "Days"}
               </strong>
             </div>
 
@@ -187,11 +230,7 @@ export default function LeaveRequestDetails({
 
               <strong>
                 <FaClock />
-                {formatDate(
-                  request.appliedAt ||
-                    request.createdAt ||
-                    request.appliedDate
-                )}
+                {formatDate(getAppliedDate(request))}
               </strong>
             </div>
           </div>
@@ -204,8 +243,7 @@ export default function LeaveRequestDetails({
           </div>
 
           <div className="leave_details_reason">
-            {request.reason ||
-              "No reason provided."}
+            {request.reason || "No reason provided."}
           </div>
         </div>
 
@@ -236,9 +274,7 @@ export default function LeaveRequestDetails({
               <button
                 type="button"
                 className="leave_details_btn reject"
-                onClick={() =>
-                  onReject?.(request)
-                }
+                onClick={() => onReject?.(request)}
               >
                 <FaBan />
                 Reject
@@ -247,9 +283,7 @@ export default function LeaveRequestDetails({
               <button
                 type="button"
                 className="leave_details_btn approve"
-                onClick={() =>
-                  onApprove?.(request)
-                }
+                onClick={() => onApprove?.(request)}
               >
                 <FaCheck />
                 Approve

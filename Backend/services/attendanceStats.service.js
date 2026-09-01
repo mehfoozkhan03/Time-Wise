@@ -2,61 +2,61 @@ import {
   getWeekRange,
   getMonthRange,
   formatWorkingHours,
-} from '../utils/attendanceHelper.js'
+} from "../utils/attendanceHelper.js";
 
-import { attendanceConfig } from '../config/attendanceConfig.js'
+import { attendanceConfig } from "../config/attendanceConfig.js";
 
-import { attendanceModel } from '../models/Attendance.model.js'
+import { attendanceModel } from "../models/Attendance.model.js";
 
-import { holidayModel } from '../models/Holidays.model.js'
+import { holidayModel } from "../models/Holidays.model.js";
 
 // =======================================================
 // Helpers
 // =======================================================
 
 const startOfDay = (date) => {
-  const result = new Date(date)
+  const result = new Date(date);
 
-  result.setHours(0, 0, 0, 0)
+  result.setHours(0, 0, 0, 0);
 
-  return result
-}
+  return result;
+};
 
 const endOfDay = (date) => {
-  const result = new Date(date)
+  const result = new Date(date);
 
-  result.setHours(23, 59, 59, 999)
+  result.setHours(23, 59, 59, 999);
 
-  return result
-}
+  return result;
+};
 
 const isConfiguredWorkingDay = (date) => {
-  return attendanceConfig.workingDays.includes(date.getDay())
-}
+  return attendanceConfig.workingDays.includes(date.getDay());
+};
 
 const getDateKey = (date) => {
-  const value = new Date(date)
+  const value = new Date(date);
 
   return `${value.getFullYear()}-${String(value.getMonth() + 1).padStart(
     2,
-    '0',
-  )}-${String(value.getDate()).padStart(2, '0')}`
-}
+    "0",
+  )}-${String(value.getDate()).padStart(2, "0")}`;
+};
 
 const getHolidayDateKey = (holiday) => {
-  return getDateKey(holiday.date)
-}
+  return getDateKey(holiday.date);
+};
 
 // =======================================================
 // Get Attendance Stats
 // =======================================================
 
 export const getAttendanceStats = async (userID) => {
-  const now = new Date()
+  const now = new Date();
 
-  const { weekStart, weekEnd } = getWeekRange(now)
+  const { weekStart, weekEnd } = getWeekRange(now);
 
-  const { monthStart, monthEnd } = getMonthRange(now)
+  const { monthStart, monthEnd } = getMonthRange(now);
 
   // =====================================================
   // Get Active Holidays
@@ -74,20 +74,20 @@ export const getAttendanceStats = async (userID) => {
     .find({
       isActive: true,
     })
-    .select('date')
-    .lean()
+    .select("date")
+    .lean();
 
   const holidayDateSet = new Set(
     holidays.map((holiday) => getHolidayDateKey(holiday)),
-  )
+  );
 
   const isAttendanceWorkingDay = (date) => {
     if (!isConfiguredWorkingDay(date)) {
-      return false
+      return false;
     }
 
-    return !holidayDateSet.has(getDateKey(date))
-  }
+    return !holidayDateSet.has(getDateKey(date));
+  };
 
   // =====================================================
   // Weekly Attendance
@@ -99,7 +99,7 @@ export const getAttendanceStats = async (userID) => {
       $gte: weekStart,
       $lte: weekEnd,
     },
-  })
+  });
 
   /*
     Only attendance recorded on valid working days
@@ -111,14 +111,14 @@ export const getAttendanceStats = async (userID) => {
 
   const validWeeklyAttendance = weeklyAttendance.filter((record) =>
     isAttendanceWorkingDay(record.date),
-  )
+  );
 
   const totalWeeklySeconds = validWeeklyAttendance.reduce(
     (sum, record) => sum + (record.totalWorkingSeconds || 0),
     0,
-  )
+  );
 
-  const weeklyHours = formatWorkingHours(totalWeeklySeconds)
+  const weeklyHours = formatWorkingHours(totalWeeklySeconds);
 
   // =====================================================
   // Monthly Attendance
@@ -130,7 +130,7 @@ export const getAttendanceStats = async (userID) => {
       $gte: monthStart,
       $lte: monthEnd,
     },
-  })
+  });
 
   /*
     This is the important filtering layer.
@@ -145,14 +145,14 @@ export const getAttendanceStats = async (userID) => {
 
   const validMonthlyAttendance = monthlyAttendance.filter((record) =>
     isAttendanceWorkingDay(record.date),
-  )
+  );
 
   const totalMonthlySeconds = validMonthlyAttendance.reduce(
     (sum, record) => sum + (record.totalWorkingSeconds || 0),
     0,
-  )
+  );
 
-  const monthlyHours = formatWorkingHours(totalMonthlySeconds)
+  const monthlyHours = formatWorkingHours(totalMonthlySeconds);
 
   // =====================================================
   // All Attendance History
@@ -164,7 +164,7 @@ export const getAttendanceStats = async (userID) => {
     })
     .sort({
       date: -1,
-    })
+    });
 
   /*
     Normal working statistics should only include
@@ -176,14 +176,14 @@ export const getAttendanceStats = async (userID) => {
 
   const validAttendanceHistory = attendanceHistory.filter((record) =>
     isAttendanceWorkingDay(record.date),
-  )
+  );
 
   const totalWorkingSeconds = validAttendanceHistory.reduce(
     (sum, record) => sum + (record.totalWorkingSeconds || 0),
     0,
-  )
+  );
 
-  const totalWorkingHours = formatWorkingHours(totalWorkingSeconds)
+  const totalWorkingHours = formatWorkingHours(totalWorkingSeconds);
 
   // =====================================================
   // Average Daily Working Hours
@@ -192,7 +192,9 @@ export const getAttendanceStats = async (userID) => {
   const averageDailyHours =
     validAttendanceHistory.length === 0
       ? 0
-      : +(totalWorkingSeconds / validAttendanceHistory.length / 3600).toFixed(1)
+      : +(totalWorkingSeconds / validAttendanceHistory.length / 3600).toFixed(
+          1,
+        );
 
   // =====================================================
   // Average Check-in Time
@@ -200,26 +202,26 @@ export const getAttendanceStats = async (userID) => {
 
   const checkInRecords = validMonthlyAttendance.filter(
     (record) => record.checkInTime,
-  )
+  );
 
-  let averageCheckIn = '--:--'
+  let averageCheckIn = "--:--";
 
   if (checkInRecords.length > 0) {
     const totalMinutes = checkInRecords.reduce((sum, record) => {
-      const checkIn = new Date(record.checkInTime)
+      const checkIn = new Date(record.checkInTime);
 
-      return sum + checkIn.getHours() * 60 + checkIn.getMinutes()
-    }, 0)
+      return sum + checkIn.getHours() * 60 + checkIn.getMinutes();
+    }, 0);
 
-    const averageMinutes = Math.round(totalMinutes / checkInRecords.length)
+    const averageMinutes = Math.round(totalMinutes / checkInRecords.length);
 
-    const hours = Math.floor(averageMinutes / 60)
+    const hours = Math.floor(averageMinutes / 60);
 
-    const minutes = averageMinutes % 60
+    const minutes = averageMinutes % 60;
 
     averageCheckIn = `${hours
       .toString()
-      .padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`
+      .padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`;
   }
 
   // =====================================================
@@ -236,52 +238,54 @@ export const getAttendanceStats = async (userID) => {
           ) /
             checkInRecords.length /
             60,
-        )
+        );
 
   // =====================================================
   // Leaves Taken
   // =====================================================
 
   const leavesTaken = validMonthlyAttendance.filter(
-    (record) => record.status === 'Leave',
-  ).length
+    (record) => record.status === "Leave",
+  ).length;
 
   // =====================================================
   // Overtime
   // =====================================================
 
-  const requiredDailySeconds = attendanceConfig.requiredDailyHours * 60 * 60
+  const requiredDailySeconds = attendanceConfig.requiredDailyHours * 60 * 60;
 
   const totalOvertimeSeconds = validMonthlyAttendance.reduce(
     (total, record) => {
-      const workingSeconds = record.totalWorkingSeconds || 0
+      const workingSeconds = record.totalWorkingSeconds || 0;
 
       if (workingSeconds <= requiredDailySeconds) {
-        return total
+        return total;
       }
 
-      return total + (workingSeconds - requiredDailySeconds)
+      return total + (workingSeconds - requiredDailySeconds);
     },
     0,
-  )
+  );
 
-  const overtimeHours = formatWorkingHours(totalOvertimeSeconds)
+  const overtimeHours = formatWorkingHours(totalOvertimeSeconds);
 
   // =====================================================
   // Total Overtime Hours
   // =====================================================
 
-  let allTimeOvertimeSeconds = 0
+  // Match the Reports page: count ALL records (including weekends/holidays).
+  // This ensures AI and Reports show the same overtime value.
+  let allTimeOvertimeSeconds = 0;
 
-  for (const record of validAttendanceHistory) {
-    const workingSeconds = record.totalWorkingSeconds || 0
+  for (const record of attendanceHistory) {
+    const workingSeconds = record.totalWorkingSeconds || 0;
 
-    const overtimeSeconds = Math.max(0, workingSeconds - requiredDailySeconds)
+    const overtimeSeconds = Math.max(0, workingSeconds - requiredDailySeconds);
 
-    allTimeOvertimeSeconds += overtimeSeconds
+    allTimeOvertimeSeconds += overtimeSeconds;
   }
 
-  const totalOvertimeHours = formatWorkingHours(allTimeOvertimeSeconds)
+  const totalOvertimeHours = formatWorkingHours(allTimeOvertimeSeconds);
 
   // =====================================================
   // Attendance Percentage
@@ -309,7 +313,7 @@ export const getAttendanceStats = async (userID) => {
     push the percentage above 100%.
   */
 
-  let workingDays = 0
+  let workingDays = 0;
 
   for (
     let date = new Date(monthStart);
@@ -317,34 +321,34 @@ export const getAttendanceStats = async (userID) => {
     date.setDate(date.getDate() + 1)
   ) {
     if (isAttendanceWorkingDay(date)) {
-      workingDays++
+      workingDays++;
     }
   }
 
   const attendanceCredits = validMonthlyAttendance.reduce((total, record) => {
     switch (record.status) {
-      case 'Present':
-        return total + 1
+      case "Present":
+        return total + 1;
 
-      case 'Late':
-        return total + 0.75
+      case "Late":
+        return total + 0.75;
 
-      case 'Half Day':
-        return total + 0.5
+      case "Half Day":
+        return total + 0.5;
 
       default:
-        return total
+        return total;
     }
-  }, 0)
+  }, 0);
 
   const attendancePercentage =
     workingDays === 0
       ? 0
-      : Math.min(Math.round((attendanceCredits / workingDays) * 100), 100)
+      : Math.min(Math.round((attendanceCredits / workingDays) * 100), 100);
 
   const attendedDays = validMonthlyAttendance.filter((record) =>
-    ['Present', 'Late', 'Half Day'].includes(record.status),
-  ).length
+    ["Present", "Late", "Half Day"].includes(record.status),
+  ).length;
 
   // =====================================================
   // Weekly Goal Score
@@ -353,44 +357,44 @@ export const getAttendanceStats = async (userID) => {
   const weeklyGoalScore = Math.min(
     (weeklyHours / attendanceConfig.requiredWeeklyHours) * 100,
     100,
-  )
+  );
 
   // =====================================================
   // Punctuality
   // =====================================================
 
-  let punctualityCredits = 0
+  let punctualityCredits = 0;
 
   validMonthlyAttendance.forEach((record) => {
     switch (record.status) {
-      case 'Present':
-        punctualityCredits += 1
-        break
+      case "Present":
+        punctualityCredits += 1;
+        break;
 
-      case 'Late':
-        punctualityCredits += 0.5
-        break
+      case "Late":
+        punctualityCredits += 0.5;
+        break;
 
       default:
-        break
+        break;
     }
-  })
+  });
 
   const punctuality =
     attendedDays === 0
       ? 100
-      : Math.round((punctualityCredits / attendedDays) * 100)
+      : Math.round((punctualityCredits / attendedDays) * 100);
 
   // =====================================================
   // Break Discipline
   // =====================================================
 
-  const allowedBreak = attendanceConfig.maxBreakMinutes
+  const allowedBreak = attendanceConfig.maxBreakMinutes;
 
-  let breakScore = 100
+  let breakScore = 100;
 
   if (averageBreakDuration > allowedBreak) {
-    breakScore = Math.max(0, 100 - (averageBreakDuration - allowedBreak) * 2)
+    breakScore = Math.max(0, 100 - (averageBreakDuration - allowedBreak) * 2);
   }
 
   // =====================================================
@@ -402,7 +406,7 @@ export const getAttendanceStats = async (userID) => {
       attendancePercentage * 0.2 +
       punctuality * 0.2 +
       breakScore * 0.1,
-  )
+  );
 
   // =====================================================
   // Attendance Records For Streaks
@@ -419,17 +423,17 @@ export const getAttendanceStats = async (userID) => {
     .filter(
       (record) =>
         isAttendanceWorkingDay(record.date) &&
-        ['Present', 'Late', 'Half Day'].includes(record.status),
+        ["Present", "Late", "Half Day"].includes(record.status),
     )
-    .sort((a, b) => b.date - a.date)
+    .sort((a, b) => b.date - a.date);
 
   // =====================================================
   // Current Streak
   // =====================================================
 
-  let dayStreak = 0
+  let dayStreak = 0;
 
-  const cursor = startOfDay(now)
+  const cursor = startOfDay(now);
 
   /*
     If today is a weekend/holiday, skip backwards until
@@ -437,24 +441,24 @@ export const getAttendanceStats = async (userID) => {
   */
 
   while (!isAttendanceWorkingDay(cursor)) {
-    cursor.setDate(cursor.getDate() - 1)
+    cursor.setDate(cursor.getDate() - 1);
   }
 
   while (true) {
     const found = attendanceRecords.find(
       (record) => getDateKey(record.date) === getDateKey(cursor),
-    )
+    );
 
     if (!found) {
-      break
+      break;
     }
 
-    dayStreak++
+    dayStreak++;
 
-    cursor.setDate(cursor.getDate() - 1)
+    cursor.setDate(cursor.getDate() - 1);
 
     while (!isAttendanceWorkingDay(cursor)) {
-      cursor.setDate(cursor.getDate() - 1)
+      cursor.setDate(cursor.getDate() - 1);
     }
   }
 
@@ -462,27 +466,27 @@ export const getAttendanceStats = async (userID) => {
   // Longest Streak
   // =====================================================
 
-  let longestStreak = 0
+  let longestStreak = 0;
 
-  let currentStreak = 0
+  let currentStreak = 0;
 
   const sortedAttendance = [...attendanceRecords].sort(
     (a, b) => a.date - b.date,
-  )
+  );
 
-  let previousDate = null
+  let previousDate = null;
 
   for (const record of sortedAttendance) {
-    const currentDate = startOfDay(record.date)
+    const currentDate = startOfDay(record.date);
 
     if (!previousDate) {
-      currentStreak = 1
+      currentStreak = 1;
 
-      longestStreak = 1
+      longestStreak = 1;
 
-      previousDate = currentDate
+      previousDate = currentDate;
 
-      continue
+      continue;
     }
 
     /*
@@ -495,37 +499,37 @@ export const getAttendanceStats = async (userID) => {
         - Holidays
     */
 
-    const expectedDate = new Date(previousDate)
+    const expectedDate = new Date(previousDate);
 
-    expectedDate.setDate(expectedDate.getDate() + 1)
+    expectedDate.setDate(expectedDate.getDate() + 1);
 
     while (!isAttendanceWorkingDay(expectedDate)) {
-      expectedDate.setDate(expectedDate.getDate() + 1)
+      expectedDate.setDate(expectedDate.getDate() + 1);
     }
 
     if (currentDate.getTime() === expectedDate.getTime()) {
-      currentStreak++
+      currentStreak++;
     } else {
-      currentStreak = 1
+      currentStreak = 1;
     }
 
-    longestStreak = Math.max(longestStreak, currentStreak)
+    longestStreak = Math.max(longestStreak, currentStreak);
 
-    previousDate = currentDate
+    previousDate = currentDate;
   }
 
   // =====================================================
   // Weekly Goal
   // =====================================================
 
-  const weeklyTarget = attendanceConfig.requiredWeeklyHours
+  const weeklyTarget = attendanceConfig.requiredWeeklyHours;
 
-  const weeklyHoursRemaining = Math.max(weeklyTarget - weeklyHours, 0)
+  const weeklyHoursRemaining = Math.max(weeklyTarget - weeklyHours, 0);
 
   const weeklyGoalPercentage = Math.min(
     Math.round((weeklyHours / weeklyTarget) * 100),
     100,
-  )
+  );
 
   // =====================================================
   // Return Stats
@@ -561,5 +565,5 @@ export const getAttendanceStats = async (userID) => {
 
     averageCheckIn,
     averageBreakDuration,
-  }
-}
+  };
+};

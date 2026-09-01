@@ -100,6 +100,197 @@ const detectPeriod = (rawMessage) => {
   return best.period;
 };
 
+// ==================================================
+// DETERMINISTIC HOURS ANSWER
+// Working-hours and overtime answers are plain numbers, so we
+// build the sentence in code from the exact retrieved value.
+// This never mis-reads a real 0 as "no data", never errors out,
+// and never depends on the AI (so it can't hit the rate limit).
+// ==================================================
+
+const HOURS_INTENTS = new Set(["working_hours", "overtime"]);
+
+const HOURS_ENTITIES = new Set([
+  "working_hours",
+  "overtime_hours",
+  "monthly_overtime",
+  "total_overtime",
+]);
+
+const isHoursRequest = (request) =>
+  HOURS_INTENTS.has(request?.intent) || HOURS_ENTITIES.has(request?.entity);
+
+const formatHoursAnswer = ({
+  entity = "",
+  intent = "",
+  period = "none",
+  value,
+}) => {
+  const isOvertime =
+    intent === "overtime" ||
+    ["overtime_hours", "monthly_overtime", "total_overtime"].includes(entity);
+
+  const metric = isOvertime ? "overtime hours" : "working hours";
+
+  const periodPhrase =
+    {
+      today: "today",
+      week: "this week",
+      month: "this month",
+      total: "in total",
+    }[period] || "";
+
+  // No data for this period (e.g. no hours logged today yet).
+  if (value === null || value === undefined) {
+    if (period === "today") {
+      return `You haven't logged any ${metric} today yet.`;
+    }
+    const tail = periodPhrase ? ` ${periodPhrase}` : "";
+    return `I don't have any ${metric} recorded${tail}.`;
+  }
+
+  const num = typeof value === "number" ? value : Number(value);
+  const shown = Number.isFinite(num) ? Math.round(num * 10) / 10 : value;
+  const verb = shown === 1 ? "is" : "are";
+  const tail = periodPhrase ? ` ${periodPhrase}` : "";
+
+  return `Your ${metric}${tail} ${verb} ${shown}.`;
+};
+
+// ==================================================
+// DETERMINISTIC ANSWER FOR SIMPLE METRICS
+// Leaves, streak, attendance %, productivity — all are
+// simple numbers/percentages that don't need the AI.
+// ==================================================
+
+const SIMPLE_METRIC_MAP = {
+  attendance_percentage: { label: "attendance percentage", suffix: "%" },
+  attendance: { label: "attendance", suffix: "%" },
+  productivity_score: { label: "productivity score", suffix: "%" },
+  leaves_taken: { label: "leaves taken", suffix: "" },
+  leave: { label: "leaves taken", suffix: "" },
+  current_streak: { label: "current streak", suffix: " days" },
+  longest_streak: { label: "longest streak", suffix: " days" },
+  punctuality_score: { label: "punctuality score", suffix: "%" },
+  average_checkin_time: { label: "average check-in time", suffix: "" },
+};
+
+const isSimpleMetric = (request) =>
+  SIMPLE_METRIC_MAP.hasOwnProperty(request?.entity);
+
+const formatSimpleAnswer = ({ entity = "", value }) => {
+  const config = SIMPLE_METRIC_MAP[entity];
+  if (!config) return null;
+
+  if (value === null || value === undefined) {
+    return `I don't have any ${config.label} recorded.`;
+  }
+
+  // Special case: time format (HH:MM)
+  if (entity === "average_checkin_time") {
+    return `Your ${config.label} is ${value}.`;
+  }
+
+  const num = typeof value === "number" ? value : Number(value);
+  const shown = Number.isFinite(num) ? Math.round(num * 10) / 10 : value;
+
+  return `Your ${config.label} is ${shown}${config.suffix}.`;
+};
+
+// ==================================================
+// FUZZY MATCH A MISSPELLED SIMPLE QUERY
+// If the message isn't an exact known query, find the closest
+// one within a small edit distance so "workign hours" ->
+// "working hours", "atttendance" -> "attendance" etc. resolve
+// instantly (no AI call). Anything not clearly close returns
+// null and flows on to the AI pipeline exactly as before.
+// ==================================================
+
+const findClosestSimpleQuery = (message, keys = []) => {
+  const cleaned = String(message || "")
+    .trim()
+    .toLowerCase();
+
+  // Too short to fuzzy-match safely (avoids matching stray words).
+  if (cleaned.length < 4) {
+    return null;
+  }
+
+  let best = { key: null, distance: Infinity };
+
+  for (const key of keys) {
+    // Only compare against keys of a similar length.
+    if (Math.abs(cleaned.length - key.length) > 3) {
+      continue;
+    }
+
+    const distance = editDistance(cleaned, key);
+    const threshold = key.length <= 6 ? 2 : 3;
+
+    if (distance <= threshold && distance < best.distance) {
+      best = { key, distance };
+    }
+  }
+
+  return best.key;
+};
+
+// ==================================================
+// COMBINE MULTIPLE ANSWERS INTO ONE SENTENCE
+// ==================================================
+
+const combineAnswers = (answers) => {
+  if (answers.length === 0) return "";
+  if (answers.length === 1) return answers[0];
+
+  // Join all but the last with ", ", then add " and " + last
+  const last = answers[answers.length - 1];
+  const rest = answers.slice(0, -1);
+
+  if (answers.length === 2) {
+    return `${rest[0]} and ${last}`;
+  }
+
+  return `${rest.join(", ")}, and ${last}`;
+};
+
+// ==================================================
+// ASK FOR PERIOD (handles multiple metrics needing same period)
+// ==================================================
+
+const getFollowUpQuestion = (requests) => {
+  if (requests.length === 0) return null;
+
+  // Check which metrics need periods
+  const hoursRequests = requests.filter(isHoursRequest);
+  const otherRequests = requests.filter((r) => !isHoursRequest(r));
+
+  if (hoursRequests.length > 0) {
+    const metrics = [];
+    for (const req of hoursRequests) {
+      const isOvertime =
+        req.intent === "overtime" ||
+        ["overtime_hours", "monthly_overtime", "total_overtime"].includes(
+          req.entity,
+        );
+      const metric = isOvertime ? "overtime" : "working hours";
+      metrics.push(metric);
+    }
+
+    const uniqueMetrics = [...new Set(metrics)].join(" & ");
+
+    return `What period for ${uniqueMetrics}? (today, week, month, or total)`;
+  }
+
+  // For non-hours metrics that might need period
+  if (otherRequests.length > 0) {
+    const entities = otherRequests.map((r) => r.entity).join(" & ");
+    return `What period for ${entities}?`;
+  }
+
+  return null;
+};
+
 export const askAI = async (req, res) => {
   try {
     const { message } = req.body;
@@ -114,61 +305,77 @@ export const askAI = async (req, res) => {
     const userID = req.user.userID;
 
     // ==================================================
-    // FOLLOW-UP RESUME
-    // If we already asked the user for a period (e.g. for overtime
-    // or working hours) and their reply is just that period
-    // ("month", "total", ...), CONTINUE that saved question.
-    // Without this, a bare "month" goes through the AI and gets
-    // misread as monthly WORKING hours.
+    // FOLLOW-UP RESUME (MULTI-INTENT VERSION)
+    // If we already asked for periods and the reply contains
+    // period words, apply them to ALL pending requests.
     // ==================================================
 
-    // Typo-tolerant period detection: "wek" -> week, "totl" -> total,
-    // "monht" -> month, "todya" -> today, etc. (see detectPeriod above).
     const answeredPeriod = detectPeriod(message);
 
     const pendingList = await loadPending(userID);
 
     if (pendingList.length > 0) {
       if (answeredPeriod) {
-        const pendingRequest = pendingList[0];
-
-        const resumedRequest = {
-          ...pendingRequest,
+        // Apply period to ALL pending requests
+        const resumedRequests = pendingList.map((pending) => ({
+          ...pending,
           period: answeredPeriod,
-        };
+        }));
 
         const resumedUserContext = await getAIUserContext(userID);
 
-        const resumedRoute = routeTimeWiseData({
-          intentEntity: resumedRequest,
-        });
+        // Process each request
+        const answerResults = [];
+        for (const resumedRequest of resumedRequests) {
+          const resumedRoute = routeTimeWiseData({
+            intentEntity: resumedRequest,
+          });
 
-        const resumedData = retrieveTimeWiseData({
-          userContext: resumedUserContext,
-          dataRoute: resumedRoute,
-        });
+          const resumedData = retrieveTimeWiseData({
+            userContext: resumedUserContext,
+            dataRoute: resumedRoute,
+          });
 
-        const resumedPhase5 = await generateTimeWiseResponse({
-          question: `${pendingRequest.originalQuestion || pendingRequest.intent} ${answeredPeriod}`,
-          phase2: resumedRequest,
-          phase3: resumedRoute,
-          phase4: resumedData,
-        });
+          let answer;
+          if (isHoursRequest(resumedRequest)) {
+            answer = formatHoursAnswer({
+              entity: resumedRequest.entity,
+              intent: resumedRequest.intent,
+              period: answeredPeriod,
+              value: resumedData.value,
+            });
+          } else if (isSimpleMetric(resumedRequest)) {
+            answer = formatSimpleAnswer({
+              entity: resumedRequest.entity,
+              value: resumedData.value,
+            });
+          } else {
+            const resumedPhase5 = await generateTimeWiseResponse({
+              question: `${resumedRequest.originalQuestion || resumedRequest.intent} ${answeredPeriod}`,
+              phase2: resumedRequest,
+              phase3: resumedRoute,
+              phase4: resumedData,
+            });
+            answer = resumedPhase5.answer;
+          }
+          answerResults.push(answer);
+        }
 
-        const resumedAnswer = resumedPhase5.answer;
-
+        await clearPending(userID);
         await addConversationMessage(userID, "user", message.trim());
-
-        await addConversationMessage(userID, "assistant", resumedAnswer);
+        await addConversationMessage(
+          userID,
+          "assistant",
+          combineAnswers(answerResults),
+        );
 
         return res.status(200).json({
           success: true,
-          answer: resumedAnswer,
+          answer: combineAnswers(answerResults),
         });
       }
 
-      // The user ignored the follow-up and asked something new,
-      // so drop the stale pending question before continuing.
+      // Not a period answer, clear pending
       await clearPending(userID);
     }
 
@@ -310,7 +517,19 @@ export const askAI = async (req, res) => {
       },
     };
 
-    const simpleQueryResult = simpleQueries[normalizedMessage];
+    // Exact match first; if none, fall back to a typo-tolerant match
+    let simpleQueryResult = simpleQueries[normalizedMessage];
+
+    if (!simpleQueryResult) {
+      const closestKey = findClosestSimpleQuery(
+        normalizedMessage,
+        Object.keys(simpleQueries),
+      );
+
+      if (closestKey) {
+        simpleQueryResult = simpleQueries[closestKey];
+      }
+    }
 
     if (simpleQueryResult) {
       const requests = [
@@ -324,10 +543,6 @@ export const askAI = async (req, res) => {
         requests,
         question: message.trim(),
       });
-
-      const existingPending = await loadPending(userID);
-
-      const allPending = [...existingPending, ...incompleteRequests];
 
       console.log("========== SIMPLE QUERY ==========");
 
@@ -345,29 +560,18 @@ export const askAI = async (req, res) => {
 
       console.log("==================================");
 
-      // If the query still needs a period (e.g. overtime), ask for it.
+      // Handle incomplete requests (follow-up)
       if (incompleteRequests.length > 0) {
-        // Start a fresh follow-up for THIS query only.
-        // Drop any old, abandoned pending question (that's what made
-        // "working hours" ask about overtime).
         await clearPending(userID);
         await savePending({ userID, requests: incompleteRequests });
-        const nextPending = getNextPending(incompleteRequests);
+        const question = getFollowUpQuestion(incompleteRequests);
         return res.status(200).json({
           success: true,
-          answer:
-            nextPending?.question || "What period would you like to check?",
+          answer: question || "What period would you like to check?",
         });
       }
 
-      // ==================================================
-      // SIMPLE QUERY DIRECT ANSWER
-      // The query is complete, so answer it deterministically
-      // through Phase 3 -> 4 -> 5. We do NOT ask Groq to guess
-      // the entity, so single words like "leaves" and
-      // "attendance" always route correctly (and we save tokens).
-      // ==================================================
-
+      // Handle complete requests
       if (completeRequests.length > 0) {
         const simpleRequest = completeRequests[0];
 
@@ -382,17 +586,30 @@ export const askAI = async (req, res) => {
           dataRoute: simpleRoute,
         });
 
-        const simplePhase5 = await generateTimeWiseResponse({
-          question: message.trim(),
-          phase2: simpleRequest,
-          phase3: simpleRoute,
-          phase4: simpleData,
-        });
-
-        const simpleAnswer = simplePhase5.answer;
+        let simpleAnswer;
+        if (isHoursRequest(simpleRequest)) {
+          simpleAnswer = formatHoursAnswer({
+            entity: simpleRequest.entity,
+            intent: simpleRequest.intent,
+            period: simpleRequest.period,
+            value: simpleData.value,
+          });
+        } else if (isSimpleMetric(simpleRequest)) {
+          simpleAnswer = formatSimpleAnswer({
+            entity: simpleRequest.entity,
+            value: simpleData.value,
+          });
+        } else {
+          const simplePhase5 = await generateTimeWiseResponse({
+            question: message.trim(),
+            phase2: simpleRequest,
+            phase3: simpleRoute,
+            phase4: simpleData,
+          });
+          simpleAnswer = simplePhase5.answer;
+        }
 
         await addConversationMessage(userID, "user", message.trim());
-
         await addConversationMessage(userID, "assistant", simpleAnswer);
 
         return res.status(200).json({
@@ -424,22 +641,6 @@ export const askAI = async (req, res) => {
       phase1Result: queryUnderstanding,
       conversation,
     });
-
-    const getSinglePhase2Request = (phase2) => {
-      if (!phase2) {
-        return null;
-      }
-
-      return {
-        intent: phase2.intent,
-        action: phase2.action,
-        entity: phase2.entity,
-        period: phase2.period,
-        dateReference: phase2.dateReference,
-        search: phase2.search,
-        confidence: phase2.confidence,
-      };
-    };
 
     // ==================================================
     // PHASE 5.5 - MULTI-INTENT DETECTION
@@ -485,7 +686,6 @@ export const askAI = async (req, res) => {
       );
 
       await addConversationMessage(userID, "user", message.trim());
-
       await addConversationMessage(userID, "assistant", helpResponse);
 
       return res.status(200).json({
@@ -494,19 +694,13 @@ export const askAI = async (req, res) => {
       });
     }
 
-    const existingPending = await loadPending(userID);
-
-    const allPending = [...existingPending, ...incompleteRequests];
-
-    console.log("========== PHASE 5.5 ========== ");
+    console.log("========== MULTI-INTENT ========== ");
 
     console.log(
       JSON.stringify(
         {
           completeRequests,
           incompleteRequests,
-          existingPending,
-          allPending,
         },
         null,
         2,
@@ -516,38 +710,71 @@ export const askAI = async (req, res) => {
     console.log("================================");
 
     // ==================================================
-    // PHASE 3: DATA / CONTEXT ROUTING
+    // MULTI-INTENT RESPONSE HANDLING
     // ==================================================
 
-    const dataRoute = routeTimeWiseData({
-      intentEntity,
-    });
+    // If there are incomplete requests (need periods), save them
+    if (incompleteRequests.length > 0) {
+      const existingPending = await loadPending(userID);
+      const allPending = [...existingPending, ...incompleteRequests];
 
-    const retrievedData = retrieveTimeWiseData({
-      userContext,
-      dataRoute,
-    });
+      await clearPending(userID);
+      await savePending({ userID, requests: allPending });
 
-    const phase5 = await generateTimeWiseResponse({
-      question: message,
-      phase2: intentEntity,
-      phase3: dataRoute,
-      phase4: retrievedData,
-    });
+      const question = getFollowUpQuestion(allPending);
 
-    // ==================================================
-    // PHASE 5 FINAL RESPONSE
-    // ==================================================
+      return res.status(200).json({
+        success: true,
+        answer: question || "What period would you like to check?",
+      });
+    }
 
-    const answer = phase5.answer;
+    // All requests are complete - answer them all
+    const userContextForRequests = await getAIUserContext(userID);
+
+    const answers = [];
+
+    for (const request of completeRequests) {
+      const route = routeTimeWiseData({
+        intentEntity: request,
+      });
+
+      const data = retrieveTimeWiseData({
+        userContext: userContextForRequests,
+        dataRoute: route,
+      });
+
+      let answer;
+      if (isHoursRequest(request)) {
+        answer = formatHoursAnswer({
+          entity: request.entity,
+          intent: request.intent,
+          period: request.period,
+          value: data.value,
+        });
+      } else if (isSimpleMetric(request)) {
+        answer = formatSimpleAnswer({
+          entity: request.entity,
+          value: data.value,
+        });
+      } else {
+        const phase5 = await generateTimeWiseResponse({
+          question: request.originalQuestion || request.intent,
+          phase2: request,
+          phase3: route,
+          phase4: data,
+        });
+        answer = phase5.answer;
+      }
+      answers.push(answer);
+    }
 
     await addConversationMessage(userID, "user", message.trim());
-
-    await addConversationMessage(userID, "assistant", answer);
+    await addConversationMessage(userID, "assistant", combineAnswers(answers));
 
     return res.status(200).json({
       success: true,
-      answer,
+      answer: combineAnswers(answers),
     });
   } catch (error) {
     console.error("AI Controller Error:", error);

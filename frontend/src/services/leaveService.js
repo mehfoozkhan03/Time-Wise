@@ -25,44 +25,76 @@ export const applyLeave = async (payload) => {
 };
 
 export const cancelLeave = async (leaveID) => {
-  const { data } = await api.patch(`/leave/${leaveID}/cancel`);
+  const { data } = await api.patch(
+    `/leave/${leaveID}/cancel`,
+  );
 
   return data.data;
 };
 
-export const getAdminLeaves = async () => {
-  const { data } = await api.get("/leave/admin");
+export const getAdminLeaves = async ({
+  page = 1,
+  limit = 10,
+  status = "All",
+  search = "",
+} = {}) => {
+  const params = {
+    page,
+    limit,
+  };
 
-  return data.data;
+  if (status && status !== "All") {
+    params.status = status;
+  }
+
+  if (search?.trim()) {
+    params.search = search.trim();
+  }
+
+  const { data } = await api.get("/leave/admin", {
+    params,
+  });
+
+  return {
+    requests: data.data,
+    pagination: data.pagination,
+  };
 };
 
 export const getAdminLeaveById = async (leaveID) => {
-  const { data } = await api.get(`/leave/admin/${leaveID}`);
+  const { data } = await api.get(
+    `/leave/admin/${leaveID}`,
+  );
 
   return data.data;
 };
 
 export const approveAdminLeave = async (leaveID) => {
   const { data } = await api.patch(
-    `/leave/admin/${leaveID}/approve`
+    `/leave/admin/${leaveID}/approve`,
   );
 
   return data.data;
 };
 
-export const rejectAdminLeave = async (leaveID, adminComment) => {
+export const rejectAdminLeave = async (
+  leaveID,
+  adminComment,
+) => {
   const { data } = await api.patch(
     `/leave/admin/${leaveID}/reject`,
     {
       adminComment,
-    }
+    },
   );
 
   return data.data;
 };
 
 export const getAdminLeaveStatistics = async () => {
-  const { data } = await api.get("/leave/admin/stats");
+  const { data } = await api.get(
+    "/leave/admin/stats",
+  );
 
   return data.data;
 };

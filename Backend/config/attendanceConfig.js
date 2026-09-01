@@ -13,5 +13,5 @@ export const attendanceConfig = {
 
   workingDays: [1, 2, 3, 4, 5], // Monday-Friday
 
-  maxBreakMinutes: 60,
+  maxBreakMinutes: 30,
 }
