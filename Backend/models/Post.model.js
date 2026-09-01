@@ -15,15 +15,43 @@ const postSchema = new mongoose.Schema(
 
     content: {
       type: String,
-      required: true,
       trim: true,
       maxlength: 2000,
+      default: '',
     },
 
+    // Legacy single image field
+    // Kept so existing posts do not break
     image: {
       type: String,
       default: null,
     },
+
+    // ================= Images =================
+
+    images: [
+      {
+        url: {
+          type: String,
+          required: true,
+          trim: true,
+        },
+
+        publicId: {
+          type: String,
+          default: null,
+        },
+
+        alt: {
+          type: String,
+          default: '',
+          trim: true,
+          maxlength: 200,
+        },
+      },
+    ],
+
+    // ================= Post Type =================
 
     type: {
       type: String,
