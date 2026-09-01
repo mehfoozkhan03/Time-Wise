@@ -103,14 +103,54 @@ export const createLeaveRequest = async ({
   });
 };
 
-export const getEmployeeLeaves = async (userID) => {
-  return await leaveModel
-    .find({
-      user: userID,
-    })
-    .sort({
-      createdAt: -1,
-    });
+export const getEmployeeLeaves = async ({
+  userID,
+  page = 1,
+  limit = 10,
+  status = "All",
+} = {}) => {
+  const currentPage = Math.max(Number(page) || 1, 1);
+
+  const pageLimit = Math.min(
+    Math.max(Number(limit) || 10, 1),
+    100,
+  );
+
+  const skip = (currentPage - 1) * pageLimit;
+
+  const filter = {
+    user: userID,
+  };
+
+  if (
+    status &&
+    status !== "All" &&
+    leaveStatuses.includes(status)
+  ) {
+    filter.status = status;
+  }
+
+  const [requests, total] = await Promise.all([
+    leaveModel
+      .find(filter)
+      .sort({
+        createdAt: -1,
+      })
+      .skip(skip)
+      .limit(pageLimit),
+
+    leaveModel.countDocuments(filter),
+  ]);
+
+  return {
+    requests,
+    pagination: {
+      page: currentPage,
+      limit: pageLimit,
+      total,
+      totalPages: Math.ceil(total / pageLimit),
+    },
+  };
 };
 
 export const getLeaveById = async (leaveID, userID) => {
@@ -161,7 +201,8 @@ export const approveLeaveRequest = async (leaveID, adminID) => {
     throw new Error("Invalid leave type.");
   }
 
-  const availableBalance = balance[balanceKey].total - balance[balanceKey].used;
+  const availableBalance =
+    balance[balanceKey].total - balance[balanceKey].used;
 
   if (leave.totalDays > availableBalance) {
     throw new Error("Insufficient leave balance.");
@@ -212,19 +253,22 @@ export const getLeaveBalance = async (userID) => {
     annual: {
       total: balance.annual.total,
       used: balance.annual.used,
-      remaining: balance.annual.total - balance.annual.used,
+      remaining:
+        balance.annual.total - balance.annual.used,
     },
 
     sick: {
       total: balance.sick.total,
       used: balance.sick.used,
-      remaining: balance.sick.total - balance.sick.used,
+      remaining:
+        balance.sick.total - balance.sick.used,
     },
 
     casual: {
       total: balance.casual.total,
       used: balance.casual.used,
-      remaining: balance.casual.total - balance.casual.used,
+      remaining:
+        balance.casual.total - balance.casual.used,
     },
   };
 };
@@ -237,20 +281,30 @@ export const getAllLeaveRequests = async ({
 } = {}) => {
   const currentPage = Math.max(Number(page) || 1, 1);
 
-  const pageLimit = Math.min(Math.max(Number(limit) || 10, 1), 100);
+  const pageLimit = Math.min(
+    Math.max(Number(limit) || 10, 1),
+    100,
+  );
 
   const skip = (currentPage - 1) * pageLimit;
 
   const filter = {};
 
-  if (status && status !== "All" && leaveStatuses.includes(status)) {
+  if (
+    status &&
+    status !== "All" &&
+    leaveStatuses.includes(status)
+  ) {
     filter.status = status;
   }
 
   const currentSearch = search.trim();
 
   if (currentSearch) {
-    const escapedSearch = currentSearch.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const escapedSearch = currentSearch.replace(
+      /[.*+?^${}()|[\]\\]/g,
+      "\\$&",
+    );
 
     const searchRegex = new RegExp(escapedSearch, "i");
 
@@ -279,7 +333,9 @@ export const getAllLeaveRequests = async ({
       },
     );
 
-    const matchingUserIDs = matchingUsers.map((user) => user._id);
+    const matchingUserIDs = matchingUsers.map(
+      (user) => user._id,
+    );
 
     filter.$or = [
       {
@@ -296,9 +352,18 @@ export const getAllLeaveRequests = async ({
   const [requests, total] = await Promise.all([
     leaveModel
       .find(filter)
-      .populate("user", "firstName lastName email department designation")
-      .populate("approvedBy", "firstName lastName email")
-      .populate("rejectedBy", "firstName lastName email")
+      .populate(
+        "user",
+        "firstName lastName email department designation",
+      )
+      .populate(
+        "approvedBy",
+        "firstName lastName email",
+      )
+      .populate(
+        "rejectedBy",
+        "firstName lastName email",
+      )
       .sort({
         createdAt: -1,
       })
@@ -322,13 +387,28 @@ export const getAllLeaveRequests = async ({
 export const getAdminLeaveById = async (leaveID) => {
   return await leaveModel
     .findById(leaveID)
-    .populate("user", "firstName lastName email department designation")
-    .populate("approvedBy", "firstName lastName email")
-    .populate("rejectedBy", "firstName lastName email");
+    .populate(
+      "user",
+      "firstName lastName email department designation",
+    )
+    .populate(
+      "approvedBy",
+      "firstName lastName email",
+    )
+    .populate(
+      "rejectedBy",
+      "firstName lastName email",
+    );
 };
 
 export const getLeaveStatistics = async () => {
-  const [total, pending, approved, rejected, cancelled] = await Promise.all([
+  const [
+    total,
+    pending,
+    approved,
+    rejected,
+    cancelled,
+  ] = await Promise.all([
     leaveModel.countDocuments(),
 
     leaveModel.countDocuments({

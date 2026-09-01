@@ -34,8 +34,7 @@ export const createLeave = async (req, res) => {
 
     return res.status(201).json({
       success: true,
-      message:
-        "Leave request submitted successfully.",
+      message: "Leave request submitted successfully.",
       data: leave,
     });
   } catch (error) {
@@ -54,11 +53,23 @@ export const getMyLeaves = async (req, res) => {
   try {
     const userID = req.user.userID;
 
-    const leaves = await getEmployeeLeaves(userID);
+    const {
+      page = 1,
+      limit = 10,
+      status = "All",
+    } = req.query;
+
+    const result = await getEmployeeLeaves({
+      userID,
+      page,
+      limit,
+      status,
+    });
 
     return res.status(200).json({
       success: true,
-      data: leaves,
+      data: result.requests,
+      pagination: result.pagination,
     });
   } catch (error) {
     console.error("Get My Leaves Error:", error);

@@ -6,10 +6,28 @@ export const getLeaveBalance = async () => {
   return data.data;
 };
 
-export const getMyLeaves = async () => {
-  const { data } = await api.get("/leave/my");
+export const getMyLeaves = async ({
+  page = 1,
+  limit = 10,
+  status = "All",
+} = {}) => {
+  const params = {
+    page,
+    limit,
+  };
 
-  return data.data;
+  if (status && status !== "All") {
+    params.status = status;
+  }
+
+  const { data } = await api.get("/leave/my", {
+    params,
+  });
+
+  return {
+    requests: data.data,
+    pagination: data.pagination,
+  };
 };
 
 export const getLeaveById = async (leaveID) => {
