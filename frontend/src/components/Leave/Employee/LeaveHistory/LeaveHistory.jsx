@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
-import { MdVisibility } from "react-icons/md";
+import {
+  MdChevronLeft,
+  MdChevronRight,
+  MdVisibility,
+} from "react-icons/md";
 
 import CustomSelect from "../../../Common/CustomSelect/CustomSelect";
 import LeaveDetails from "../LeaveDetails/LeaveDetails";
@@ -75,7 +79,13 @@ const LeaveHistory = ({
       return;
     }
 
-    onPageChange?.((pagination?.page || 1) - 1);
+    const previousPage = (pagination?.page || 1) - 1;
+
+    if (previousPage < 1) {
+      return;
+    }
+
+    onPageChange?.(previousPage);
   };
 
   const handleNextPage = () => {
@@ -83,7 +93,14 @@ const LeaveHistory = ({
       return;
     }
 
-    onPageChange?.((pagination?.page || 1) + 1);
+    const nextPage = (pagination?.page || 1) + 1;
+    const totalPages = pagination?.totalPages || 0;
+
+    if (totalPages && nextPage > totalPages) {
+      return;
+    }
+
+    onPageChange?.(nextPage);
   };
 
   const currentPage = pagination?.page || 1;
@@ -91,7 +108,9 @@ const LeaveHistory = ({
   const totalRequests = pagination?.total || 0;
 
   const hasPreviousPage = currentPage > 1;
-  const hasNextPage = totalPages > 0 && currentPage < totalPages;
+
+  const hasNextPage =
+    totalPages > 0 && currentPage < totalPages;
 
   const showPagination = totalPages > 1;
 
@@ -107,7 +126,9 @@ const LeaveHistory = ({
           <div>
             <h2>Leave Requests</h2>
 
-            <p>View and manage your leave requests.</p>
+            <p>
+              View and manage your leave requests.
+            </p>
           </div>
         </div>
 
@@ -133,7 +154,10 @@ const LeaveHistory = ({
 
           {totalRequests > 0 && (
             <span className="leaveHistory-count">
-              {totalRequests} {totalRequests === 1 ? "request" : "requests"}
+              {totalRequests}{" "}
+              {totalRequests === 1
+                ? "request"
+                : "requests"}
             </span>
           )}
         </div>
@@ -165,17 +189,21 @@ const LeaveHistory = ({
 
                 <tbody>
                   {requests.map((request) => {
-                    const status = request.status || "Pending";
+                    const status =
+                      request.status || "Pending";
 
                     return (
                       <tr key={request.id}>
                         <td>{request.leaveType}</td>
 
                         <td>
-                          {request.startDate} - {request.endDate}
+                          {request.startDate} -{" "}
+                          {request.endDate}
                         </td>
 
-                        <td>{request.requestedDays}</td>
+                        <td>
+                          {request.requestedDays}
+                        </td>
 
                         <td>
                           <span
@@ -185,13 +213,17 @@ const LeaveHistory = ({
                           </span>
                         </td>
 
-                        <td>{request.appliedDate}</td>
+                        <td>
+                          {request.appliedDate}
+                        </td>
 
                         <td>
                           <button
                             type="button"
                             className="leaveHistory-view"
-                            onClick={() => handleViewRequest(request)}
+                            onClick={() =>
+                              handleViewRequest(request)
+                            }
                             aria-label={`View ${request.leaveType} request`}
                           >
                             <MdVisibility />
@@ -210,16 +242,43 @@ const LeaveHistory = ({
                   type="button"
                   className="leaveHistory-pagination-btn"
                   onClick={handlePreviousPage}
-                  disabled={loading || !hasPreviousPage}
+                  disabled={
+                    loading || !hasPreviousPage
+                  }
                   aria-label="Previous page"
                 >
-                  Previous
+                  <MdChevronLeft />
+
+                  <span>Previous</span>
                 </button>
 
                 <div className="leaveHistory-pagination-info">
-                  <span>
-                    Page <strong>{currentPage}</strong> of{" "}
-                    <strong>{totalPages}</strong>
+                  <span className="leaveHistory-pagination-label">
+                    Page
+                  </span>
+
+                  <span
+                    className={
+                      currentPage === 1
+                        ? "leaveHistory-page-number active"
+                        : "leaveHistory-page-number"
+                    }
+                  >
+                    1
+                  </span>
+
+                  <span className="leaveHistory-pagination-label">
+                    of
+                  </span>
+
+                  <span
+                    className={
+                      currentPage === totalPages
+                        ? "leaveHistory-page-number active"
+                        : "leaveHistory-page-number"
+                    }
+                  >
+                    {totalPages}
                   </span>
                 </div>
 
@@ -227,10 +286,14 @@ const LeaveHistory = ({
                   type="button"
                   className="leaveHistory-pagination-btn"
                   onClick={handleNextPage}
-                  disabled={loading || !hasNextPage}
+                  disabled={
+                    loading || !hasNextPage
+                  }
                   aria-label="Next page"
                 >
-                  Next
+                  <span>Next</span>
+
+                  <MdChevronRight />
                 </button>
               </div>
             )}
