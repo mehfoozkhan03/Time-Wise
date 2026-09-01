@@ -1,4 +1,9 @@
 import { v2 as cloudinary } from 'cloudinary'
+import dotenv from 'dotenv';
+
+dotenv.config({
+  path:"./.env.production"
+})
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
