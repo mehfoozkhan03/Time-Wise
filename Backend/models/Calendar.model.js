@@ -136,4 +136,4 @@ const calendarSchema = new mongoose.Schema(
   },
 );
 
-export const calendarModel = mongoose.model("CalendarEvent", calendarSchema);-A
+export const calendarModel = mongoose.model("CalendarEvent", calendarSchema);
