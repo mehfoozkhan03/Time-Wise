@@ -24,6 +24,22 @@ const PRIORITY_OPTIONS = [
   { value: "HIGH", label: "HIGH" },
 ];
 
+const GENERAL_EVENT_TYPES = [
+  EVENT_TYPES.HOLIDAY,
+  EVENT_TYPES.GOVERNMENT_HOLIDAY,
+  EVENT_TYPES.FESTIVAL,
+  EVENT_TYPES.SPECIAL_EVENT,
+  EVENT_TYPES.WORK_EVENT,
+];
+
+const requiresEmployee = (type, isAdmin) => {
+  if (!isAdmin) {
+    return false;
+  }
+
+  return !GENERAL_EVENT_TYPES.includes(type);
+};
+
 function EventFormFields({
   formData,
   errors = {},
@@ -32,16 +48,29 @@ function EventFormFields({
   isAdmin = false,
   isSubmitting = false,
 }) {
-  const employeeOptions = employees.map((employee) => ({
-    value: employee._id,
-    label: employee.name,
-  }));
+  const employeeOptions = employees
+    .filter((employee) => employee?._id)
+    .map((employee) => ({
+      value: employee._id,
+      label:
+        employee.name ||
+        `${employee.firstName || ""} ${employee.lastName || ""}`.trim() ||
+        employee.email ||
+        "Unnamed Employee",
+    }));
+
+  const showEmployeeField = requiresEmployee(
+    formData.type,
+    isAdmin,
+  );
 
   return (
     <>
-      {isAdmin && (
+      {showEmployeeField && (
         <div className="formGroup">
-          <label htmlFor="employeeId">Assign Employee *</label>
+          <label htmlFor="employeeId">
+            Assign Employee *
+          </label>
 
           <CustomSelect
             id="employeeId"
@@ -51,14 +80,16 @@ function EventFormFields({
             onChange={onChange}
             disabled={isSubmitting}
             placeholder={
-              employees.length
+              employeeOptions.length
                 ? "Select Employee"
                 : "No Employees Found"
             }
           />
 
           {errors.employeeId && (
-            <small className="errorText">{errors.employeeId}</small>
+            <small className="errorText">
+              {errors.employeeId}
+            </small>
           )}
         </div>
       )}
@@ -78,12 +109,16 @@ function EventFormFields({
         />
 
         {errors.title && (
-          <small className="errorText">{errors.title}</small>
+          <small className="errorText">
+            {errors.title}
+          </small>
         )}
       </div>
 
       <div className="formGroup">
-        <label htmlFor="description">Description</label>
+        <label htmlFor="description">
+          Description
+        </label>
 
         <textarea
           id="description"
@@ -125,11 +160,16 @@ function EventFormFields({
           />
 
           {errors.date && (
-            <small className="errorText">{errors.date}</small>
+            <small className="errorText">
+              {errors.date}
+            </small>
           )}
         </div>
 
-        <label htmlFor="isAllDay" className="checkboxGroup">
+        <label
+          htmlFor="isAllDay"
+          className="checkboxGroup"
+        >
           <input
             id="isAllDay"
             type="checkbox"
@@ -146,7 +186,9 @@ function EventFormFields({
       {!formData.isAllDay && (
         <div className="formRow">
           <div className="formGroup">
-            <label htmlFor="startTime">Start Time</label>
+            <label htmlFor="startTime">
+              Start Time
+            </label>
 
             <input
               id="startTime"
@@ -159,7 +201,9 @@ function EventFormFields({
           </div>
 
           <div className="formGroup">
-            <label htmlFor="endTime">End Time</label>
+            <label htmlFor="endTime">
+              End Time
+            </label>
 
             <input
               id="endTime"
@@ -171,14 +215,18 @@ function EventFormFields({
             />
 
             {errors.endTime && (
-              <small className="errorText">{errors.endTime}</small>
+              <small className="errorText">
+                {errors.endTime}
+              </small>
             )}
           </div>
         </div>
       )}
 
       <div className="formGroup">
-        <label htmlFor="location">Location</label>
+        <label htmlFor="location">
+          Location
+        </label>
 
         <input
           id="location"
@@ -192,7 +240,9 @@ function EventFormFields({
       </div>
 
       <div className="formGroup">
-        <label htmlFor="priority">Priority</label>
+        <label htmlFor="priority">
+          Priority
+        </label>
 
         <CustomSelect
           id="priority"

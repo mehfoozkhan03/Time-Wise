@@ -2,10 +2,6 @@ import mongoose from "mongoose";
 
 const calendarSchema = new mongoose.Schema(
   {
-    /* ==========================
-       Event Information
-    ========================== */
-
     title: {
       type: String,
       required: true,
@@ -61,19 +57,15 @@ const calendarSchema = new mongoose.Schema(
       default: false,
     },
 
-    /* ==========================
-       Employee
-    ========================== */
-
     employeeId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true,
+      default: null,
     },
 
     employeeName: {
       type: String,
-      required: true,
+      default: "",
       trim: true,
     },
 
@@ -104,20 +96,12 @@ const calendarSchema = new mongoose.Schema(
       default: "",
     },
 
-    /* ==========================
-       Event Visibility
-    ========================== */
-
     visibility: {
       type: String,
       enum: ["PUBLIC", "PRIVATE"],
       default: "PRIVATE",
       required: true,
     },
-
-    /* ==========================
-      Access Control
-    ========================== */
 
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
@@ -152,5 +136,4 @@ const calendarSchema = new mongoose.Schema(
   },
 );
 
-export const calendarModel = mongoose.model("CalendarEvent", calendarSchema);
-    
+export const calendarModel = mongoose.model("CalendarEvent", calendarSchema);-A
