@@ -77,9 +77,7 @@ export const DashboardEmployee = () => {
 
   const statusOptions = ["All", "Active", "Inactive"];
 
-  //# =========================
-  //# EDIT STATE
-  //# =========================
+  //# ========================= EDIT STATE =========================
 
   // Currently editing employee
   const [editingUserId, setEditingUserId] = useState(null);
@@ -93,9 +91,7 @@ export const DashboardEmployee = () => {
     role: "",
   });
 
-  //# =========================
-  //# SEARCH
-  //# =========================
+  //# ========================= SEARCH =========================
 
   const handleSearch = () => {
     dispatch(
@@ -108,9 +104,7 @@ export const DashboardEmployee = () => {
     );
   };
 
-  //# =========================
-  //# LOAD MORE
-  //# =========================
+  //# ========================= LOAD MORE =========================
 
   const handleLoadMore = () => {
     dispatch(
@@ -123,17 +117,13 @@ export const DashboardEmployee = () => {
     );
   };
 
-  //# =========================
-  //# LOAD LESS
-  //# =========================
+  //# ========================= LOAD LESS =========================
 
   const handleLoadLess = () => {
     dispatch(loadLessUsers());
   };
 
-  //# =========================
-  //# FILTER DROPDOWN
-  //# =========================
+  //# ========================= FILTER DROPDOWN =========================
 
   const handleDepartmentSelect = (department) => {
     setSelectedDepartment(department);
@@ -189,9 +179,7 @@ export const DashboardEmployee = () => {
     );
   };
 
-  //# =========================
-  //# FETCH USERS
-  //# =========================
+  //# ========================= FETCH USERS =========================
 
   useEffect(() => {
     dispatch(
@@ -204,9 +192,7 @@ export const DashboardEmployee = () => {
     );
   }, [dispatch]);
 
-  //# =========================
-  //# OUTSIDE CLICK
-  //# =========================
+  //# ========================= OUTSIDE CLICK =========================
 
   useEffect(() => {
     const handleOutsideClick = (event) => {
@@ -222,9 +208,7 @@ export const DashboardEmployee = () => {
     };
   }, []);
 
-  //# =========================
-  //# EDIT EMPLOYEE
-  //# =========================
+  //# ========================= EDIT EMPLOYEE =========================
 
   const handleEdit = (user) => {
     // Set current employee as editing
@@ -240,9 +224,7 @@ export const DashboardEmployee = () => {
     });
   };
 
-  //# =========================
-  //# EDIT INPUT CHANGE
-  //# =========================
+  //# ========================= EDIT INPUT CHANGE =========================
 
   const handleEditChange = (e) => {
     const { name, value } = e.target;
@@ -253,9 +235,7 @@ export const DashboardEmployee = () => {
     }));
   };
 
-  //# =========================
-  //# EDIT DEPARTMENT CHANGE
-  //# =========================
+  //# ========================= EDIT DEPARTMENT CHANGE =========================
 
   const handleEditDepartmentChange = (department) => {
     setEditData((prev) => ({
@@ -264,9 +244,7 @@ export const DashboardEmployee = () => {
     }));
   };
 
-  //# =========================
-  //# EDIT DESIGNATION CHANGE
-  //# =========================
+  //# ========================= EDIT DESIGNATION CHANGE =========================
 
   const handleEditDesignationChange = (designation) => {
     setEditData((prev) => ({
@@ -275,9 +253,7 @@ export const DashboardEmployee = () => {
     }));
   };
 
-  //# =========================
-  //# CANCEL EDIT
-  //# =========================
+  //# ========================= CANCEL EDIT =========================
 
   const handleCancelEdit = () => {
     setEditingUserId(null);
@@ -298,9 +274,7 @@ export const DashboardEmployee = () => {
     }));
   };
 
-  //# =========================
-  //# SAVE EDIT
-  //# =========================
+  //# ========================= SAVE EDIT =========================
 
   const handleSaveEdit = async (userId) => {
     // Basic validation
@@ -486,10 +460,7 @@ export const DashboardEmployee = () => {
           </div>
         </div>
 
-        {/* ========================= */}
         {/* EMPLOYEE DETAILS TABLE */}
-        {/* ========================= */}
-
         <div className="dahboardEmployee-details">
           {/* TABLE HEADER */}
 
@@ -623,10 +594,29 @@ export const DashboardEmployee = () => {
 
                     {/* ========================= STATUS =========================*/}
 
-                    <div className="dashboardEmployee-status">
-                      <div></div>
+                    <div className="dashboardEmployee-status" style={{
+                        background:
+                          el.isOnline
+                            ? "#12352F"
+                            : "#351A21",
+                        border:
+                          el.isOnline
+                            ? "1px solid #2F8F83"
+                            : "1px solid #8F4652",
+                      }}>
+                      <div style={{
+                          background:
+                            el.isOnline
+                              ? "#22C55E"
+                              : "#EF4444",
+                        }}></div>
 
-                      <span>{el.isOnline ? "Active" : "Inactive"}</span>
+                      <span style={{
+                          color:
+                            el.isOnline
+                              ? "#5EE7C4"
+                              : "#FF6B7A",
+                        }}>{el.isOnline ? "Active" : "Inactive"}</span>
                     </div>
 
                     {/* ACTIONS */}

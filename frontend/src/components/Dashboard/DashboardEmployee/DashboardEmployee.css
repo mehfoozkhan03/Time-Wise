@@ -58,6 +58,7 @@
   background-color: transparent;
   border: none;
   outline: none;
+  color: var(--text_primary);
 }
 .employee-searchBtn {
   width: 10%;
@@ -220,18 +221,14 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  border: 1px solid #459e98;
   border-radius: 20px;
-  background-color: #22333a;
 }
 .dashboardEmployee-status > div {
   height: 5px;
   width: 5px;
   border-radius: 50%;
-  background-color: #5feab2;
 }
 .dashboardEmployee-status > span {
-  color: rgb(82, 201, 193);
   font-size: 11px;
 }
 .dashboardEmployee-actions {

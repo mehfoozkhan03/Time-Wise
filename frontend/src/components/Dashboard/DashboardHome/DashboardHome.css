@@ -193,18 +193,20 @@
 .employe-left p{
     font-size: 16px;
     color: var(--text_primary);
+    text-transform: capitalize;
 }
 .employe-left span{
     font-size: 12px;
     color: var(--text_secondary);
 }
 .recent-employee-avatar{
-    height: 30px;
-    width: 30px;
+    height: 40px;
+    width: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
+    font-weight: 700;
     background-color: var(--primary);
 }
 .recent-dot-container{
@@ -213,8 +215,6 @@
     align-items: center;
     gap: 5px;
     border-radius: 10px;
-    border: 1px solid #478989;
-    background-color: #183e3e;
 }
 .recent-dot{
     height: 5px;
@@ -223,7 +223,6 @@
 }
 .recent-dot-container>span{
     font-size: 12px;
-    color: #6ecdb9;
 }
 
 /* Attendance section */
