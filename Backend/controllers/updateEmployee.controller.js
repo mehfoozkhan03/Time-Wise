@@ -14,13 +14,11 @@ export const updateUser = async (req, res) => {
 
     if (
       !firstName?.trim() ||
-      !lastName?.trim() ||
-      !department ||
-      !designation ||
-      !role
+      !lastName?.trim()
+      
     ) {
       return res.status(400).json({
-        message: "All employee fields are required",
+        message: "Names fields are required",
       });
     }
 

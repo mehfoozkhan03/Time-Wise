@@ -1,89 +1,107 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { attendanceService } from '../services/attendanceService'
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { attendanceService } from "../services/attendanceService";
 
 // ======================= THUNKS =======================
 
 export const getTodayAttendance = createAsyncThunk(
-  'attendance/getTodayAttendance',
+  "attendance/getTodayAttendance",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await attendanceService.getTodayAttendance()
-      return response.data.attendance
+      const response = await attendanceService.getTodayAttendance();
+      return response.data.attendance;
     } catch (error) {
       return rejectWithValue(
-        error.response?.data?.message || 'Failed to fetch attendance',
-      )
+        error.response?.data?.message || "Failed to fetch attendance",
+      );
     }
   },
-)
+);
 
 export const getAttendanceHistory = createAsyncThunk(
-  'attendance/getAttendanceHistory',
+  "attendance/getAttendanceHistory",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await attendanceService.getAttendanceHistory()
-      return response.data.attendance
+      const response = await attendanceService.getAttendanceHistory();
+      return response.data.attendance;
     } catch (error) {
       return rejectWithValue(
-        error.response?.data?.message || 'Failed to fetch attendance history',
-      )
+        error.response?.data?.message || "Failed to fetch attendance history",
+      );
     }
   },
-)
+);
 
 export const checkIn = createAsyncThunk(
-  'attendance/checkIn',
+  "attendance/checkIn",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await attendanceService.checkIn()
-      return response.data.attendance
+      const response = await attendanceService.checkIn();
+      return response.data.attendance;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.message || 'Check in failed')
+      return rejectWithValue(
+        error.response?.data?.message || "Check in failed",
+      );
     }
   },
-)
+);
 
 export const startBreak = createAsyncThunk(
-  'attendance/startBreak',
+  "attendance/startBreak",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await attendanceService.startBreak()
-      return response.data.attendance
+      const response = await attendanceService.startBreak();
+      return response.data.attendance;
     } catch (error) {
       return rejectWithValue(
-        error.response?.data?.message || 'Failed to start break',
-      )
+        error.response?.data?.message || "Failed to start break",
+      );
     }
   },
-)
+);
 
 export const endBreak = createAsyncThunk(
-  'attendance/endBreak',
+  "attendance/endBreak",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await attendanceService.endBreak()
-      return response.data.attendance
+      const response = await attendanceService.endBreak();
+      return response.data.attendance;
     } catch (error) {
       return rejectWithValue(
-        error.response?.data?.message || 'Failed to end break',
-      )
+        error.response?.data?.message || "Failed to end break",
+      );
     }
   },
-)
+);
 
 export const checkOut = createAsyncThunk(
-  'attendance/checkOut',
+  "attendance/checkOut",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await attendanceService.checkOut()
-      return response.data.attendance
+      const response = await attendanceService.checkOut();
+      return response.data.attendance;
     } catch (error) {
       return rejectWithValue(
-        error.response?.data?.message || 'Check out failed',
-      )
+        error.response?.data?.message || "Check out failed",
+      );
     }
   },
-)
+);
+
+//# Getting total present employee
+export const getDashboardStats = createAsyncThunk(
+  "attendance/getDashboardStats",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await attendanceService.getDashboardStats();
+
+      return response.data.stats;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to fetch dashboard stats",
+      );
+    }
+  },
+);
 
 // ======================= INITIAL STATE =======================
 
@@ -95,21 +113,23 @@ const initialState = {
   loading: false,
 
   error: null,
-}
+
+  stats: null,
+};
 
 // ======================= SLICE =======================
 
 const attendanceSlice = createSlice({
-  name: 'attendance',
+  name: "attendance",
 
   initialState,
 
   reducers: {
     clearAttendance(state) {
-      state.today = null
-      state.history = []
-      state.loading = false
-      state.error = null
+      state.today = null;
+      state.history = [];
+      state.loading = false;
+      state.error = null;
     },
   },
 
@@ -119,107 +139,124 @@ const attendanceSlice = createSlice({
       // ================= GET TODAY =================
 
       .addCase(getTodayAttendance.pending, (state) => {
-        state.loading = true
-        state.error = null
+        state.loading = true;
+        state.error = null;
       })
 
       .addCase(getTodayAttendance.fulfilled, (state, action) => {
-        state.loading = false
-        state.today = action.payload
+        state.loading = false;
+        state.today = action.payload;
       })
 
       .addCase(getTodayAttendance.rejected, (state, action) => {
-        state.loading = false
-        state.error = action.payload
+        state.loading = false;
+        state.error = action.payload;
       })
 
       // ================= HISTORY =================
 
       .addCase(getAttendanceHistory.pending, (state) => {
-        state.loading = true
-        state.error = null
+        state.loading = true;
+        state.error = null;
       })
 
       .addCase(getAttendanceHistory.fulfilled, (state, action) => {
-        state.loading = false
-        state.history = action.payload
+        state.loading = false;
+        state.history = action.payload;
       })
 
       .addCase(getAttendanceHistory.rejected, (state, action) => {
-        state.loading = false
-        state.error = action.payload
+        state.loading = false;
+        state.error = action.payload;
       })
 
       // ================= CHECK IN =================
 
       .addCase(checkIn.pending, (state) => {
-        state.loading = true
-        state.error = null
+        state.loading = true;
+        state.error = null;
       })
 
       .addCase(checkIn.fulfilled, (state, action) => {
-        state.loading = false
-        state.today = action.payload
+        state.loading = false;
+        state.today = action.payload;
       })
 
       .addCase(checkIn.rejected, (state, action) => {
-        state.loading = false
-        state.error = action.payload
+        state.loading = false;
+        state.error = action.payload;
       })
 
       // ================= START BREAK =================
 
       .addCase(startBreak.pending, (state) => {
-        state.loading = true
-        state.error = null
+        state.loading = true;
+        state.error = null;
       })
 
       .addCase(startBreak.fulfilled, (state, action) => {
-        state.loading = false
-        state.today = action.payload
+        state.loading = false;
+        state.today = action.payload;
       })
 
       .addCase(startBreak.rejected, (state, action) => {
-        state.loading = false
-        state.error = action.payload
+        state.loading = false;
+        state.error = action.payload;
       })
 
       // ================= END BREAK =================
 
       .addCase(endBreak.pending, (state) => {
-        state.loading = true
-        state.error = null
+        state.loading = true;
+        state.error = null;
       })
 
       .addCase(endBreak.fulfilled, (state, action) => {
-        state.loading = false
-        state.today = action.payload
+        state.loading = false;
+        state.today = action.payload;
       })
 
       .addCase(endBreak.rejected, (state, action) => {
-        state.loading = false
-        state.error = action.payload
+        state.loading = false;
+        state.error = action.payload;
       })
 
       // ================= CHECK OUT =================
 
       .addCase(checkOut.pending, (state) => {
-        state.loading = true
-        state.error = null
+        state.loading = true;
+        state.error = null;
       })
 
       .addCase(checkOut.fulfilled, (state, action) => {
-        state.loading = false
-        state.today = action.payload
+        state.loading = false;
+        state.today = action.payload;
       })
 
       .addCase(checkOut.rejected, (state, action) => {
-        state.loading = false
-        state.error = action.payload
+        state.loading = false;
+        state.error = action.payload;
       })
+
+      // ================= DASHBOARD STATS =================
+
+      .addCase(getDashboardStats.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+
+      .addCase(getDashboardStats.fulfilled, (state, action) => {
+        state.loading = false;
+        state.stats = action.payload;
+      })
+
+      .addCase(getDashboardStats.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
   },
-})
+});
 
-export const { clearAttendance } = attendanceSlice.actions
+export const { clearAttendance } = attendanceSlice.actions;
 
-export default attendanceSlice.reducer
+export default attendanceSlice.reducer;

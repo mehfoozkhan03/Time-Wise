@@ -57,6 +57,22 @@ export const fetchAllUser = createAsyncThunk(
   },
 );
 
+//# ==================== Recent Employee ========================
+export const fetchRecentEmployees = createAsyncThunk(
+  "auth/fetchRecentEmployees",
+  async (_, thunkAPI) => {
+    try {
+      const response = await authService.getRecentEmployees();
+
+      return response.data.employees;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Failed to fetch recent employees",
+      );
+    }
+  },
+);
+
 //# ================== Update Employee ===================
 
 export const updateEmployee = createAsyncThunk(
@@ -214,7 +230,7 @@ export const updateUser = createAsyncThunk(
         lastName,
         department,
         designation,
-        role
+        role,
       });
 
       return response.data;
@@ -234,6 +250,7 @@ const initialState = {
     .some((cookie) => cookie.startsWith("token=")),
   user: null,
   users: [],
+  recentEmployees: [],
   totalUsers: 0,
   isLoading: false,
   isError: false,
@@ -361,6 +378,24 @@ const authSlice = createSlice({
       })
 
       .addCase(fetchAllUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.errorMessage = action.payload;
+      })
+
+      //# ================== Recent Employee ==================
+      .addCase(fetchRecentEmployees.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+      })
+
+      .addCase(fetchRecentEmployees.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.recentEmployees = action.payload;
+      })
+
+      .addCase(fetchRecentEmployees.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.errorMessage = action.payload;

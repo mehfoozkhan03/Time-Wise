@@ -9,6 +9,7 @@ import { attendanceConfig } from "../config/attendanceConfig.js";
 import { attendanceModel } from "../models/Attendance.model.js";
 
 import { holidayModel } from "../models/Holidays.model.js";
+import { userModel } from "../models/User.model.js";
 
 // =======================================================
 // Helpers
@@ -54,9 +55,89 @@ const getHolidayDateKey = (holiday) => {
 export const getAttendanceStats = async (userID) => {
   const now = new Date();
 
+  const todayStart = startOfDay(now);
+  const todayEnd = endOfDay(now);
+
+  const totalPresentToday = await attendanceModel.countDocuments({
+    date: {
+      $gte: todayStart,
+      $lte: todayEnd,
+    },
+    checkInTime: {
+      $ne: null,
+    },
+  });
+
+  const totalOnBreakToday = await attendanceModel.countDocuments({
+    date: {
+      $gte: todayStart,
+      $lte: todayEnd,
+    },
+    breaks: {
+      $elemMatch: {
+        breakStart: { $ne: null },
+        breakEnd: null,
+      },
+    },
+  });
+
+  const totalLateCheckInsToday = await attendanceModel.countDocuments({
+    date: {
+      $gte: todayStart,
+      $lte: todayEnd,
+    },
+    checkInTime: {
+      $ne: null,
+    },
+    status: "Late",
+  });
+
   const { weekStart, weekEnd } = getWeekRange(now);
 
   const { monthStart, monthEnd } = getMonthRange(now);
+
+  //# ====================== Weekly Attendance Chart - All Employees =============================
+const totalEmployees = await userModel.countDocuments();
+
+const weeklyCompanyAttendance = await attendanceModel.find({
+  date: {
+    $gte: weekStart,
+    $lte: weekEnd,
+  },
+});
+
+const weeklyAttendanceChart = [];
+
+for (let i = 6; i >= 0; i--) {
+  const date = new Date(todayStart);
+
+  date.setDate(date.getDate() - i);
+
+  const dayStart = startOfDay(date);
+  const dayEnd = endOfDay(date);
+
+  const dayAttendance = weeklyCompanyAttendance.filter(
+    (record) =>
+      record.date >= dayStart &&
+      record.date <= dayEnd
+  );
+
+  const present = dayAttendance.filter(
+    (record) =>
+      record.checkInTime &&
+      ["Present", "Late", "Half Day"].includes(record.status)
+  ).length;
+
+  const absent = totalEmployees - present;
+
+  weeklyAttendanceChart.push({
+    day: date.toLocaleDateString("en-US", {
+      weekday: "short",
+    }),
+    present,
+    absent,
+  });
+}
 
   // =====================================================
   // Get Active Holidays
@@ -565,5 +646,13 @@ export const getAttendanceStats = async (userID) => {
 
     averageCheckIn,
     averageBreakDuration,
+
+    totalPresentToday,
+
+    totalOnBreakToday,
+
+    totalLateCheckInsToday,
+
+    weeklyAttendanceChart,
   };
 };

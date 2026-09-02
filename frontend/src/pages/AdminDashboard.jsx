@@ -1,4 +1,4 @@
-import '../styles/Dashboard.css';
+import '../styles/AdminDashboard.css';
 import { Outlet, useLocation } from 'react-router-dom';
 import { DashboardSidebar } from '../components/Dashboard/DashboardSidebar/DashboardSidebar';
 import { MdEventAvailable, MdOutlineSpaceDashboard, MdOutlineWatchLater } from 'react-icons/md';
@@ -11,8 +11,6 @@ import {
   FaChartBar,
   FaGear,
 } from 'react-icons/fa6';
-
-import { FaSearch } from 'react-icons/fa';
 import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io';
 
 export default function AdminDashboard() {
@@ -87,19 +85,11 @@ export default function AdminDashboard() {
               <span>{currentPage.title}</span>
             </div>
             <div className="header-right">
-              <div className="dashboard-search">
-                <FaSearch style={{ color: '#579cbd' }} />
-                <input type="search" placeholder="Search employee..." />
-              </div>
               <div className="notificaton-div">
                 <FaBell style={{ color: '#ef9b52', fontSize: '18px' }} />
               </div>
               <div className="admin-profile">
                 <div className="admin-avatar">
-                  {/* <img
-                    src=""
-                    alt=""
-                  /> */}
                   <span>SK</span>
                 </div>
                 <div className="admin-content">

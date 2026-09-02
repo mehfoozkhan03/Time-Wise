@@ -10,7 +10,7 @@ import {
 import { FaPlus } from "react-icons/fa";
 
 import { Bar } from "react-chartjs-2";
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -19,18 +19,26 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { fetchAllUser } from "../../../store/authSlice";
+import { fetchAllUser, fetchRecentEmployees } from "../../../store/authSlice";
 import { useEffect } from "react";
+import { getDashboardStats } from "../../../store/attendanceSlice";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
 export const DashboardHome = () => {
-  const dispatch = useDispatch()
-  const { totalUsers } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const { totalUsers, recentEmployees } = useSelector((state) => state.auth);
+  console.log("🚀 ~ recentEmployees:", recentEmployees);
+
+  const { stats } = useSelector((state) => state.attendance);
+
+  const totalAbsentToday = (totalUsers || 0) - (stats?.totalPresentToday || 0);
 
   useEffect(() => {
-      dispatch(fetchAllUser());
-    }, [dispatch]);
+    dispatch(fetchAllUser());
+    dispatch(fetchRecentEmployees());
+    dispatch(getDashboardStats());
+  }, [dispatch]);
 
   const cardData = [
     {
@@ -42,14 +50,14 @@ export const DashboardHome = () => {
     },
     {
       icon: "✅",
-      count: "169",
+      count: stats?.totalPresentToday ?? 0,
       title: "Present Today",
       subTitle: "83.2% attendance",
       color: "#43746b",
     },
     {
       icon: "❌",
-      count: "69",
+      count: totalAbsentToday,
       title: "Absent Today",
       subTitle: "4 no-shows flagged",
       color: "#df2033",
@@ -57,14 +65,14 @@ export const DashboardHome = () => {
     },
     {
       icon: "☕",
-      count: "9",
+      count: stats?.totalOnBreakToday || 0,
       title: "On Break",
       subTitle: "Average 45 min",
       color: "#f3a823",
     },
     {
       icon: "⏰",
-      count: "12",
+      count: stats?.totalLateCheckInsToday || 0,
       title: "Late Check-ins",
       subTitle: "30 min late today",
       color: "#7270c9",
@@ -94,94 +102,71 @@ export const DashboardHome = () => {
     },
   ];
 
-  const recentData = [
-    {
-      avatar: "SM",
-      name: "Sarah Mitchell",
-      designation: "Senior Designer",
-      isPresent: "Present",
-      dotColor: "#47b396"
-    },
-    {
-      avatar: "SM",
-      name: "Sarah Mitchell",
-      designation: "Senior Designer",
-      isPresent: "Absent",
-      dotColor: "#df2033"
-    },
-    {
-      avatar: "SM",
-      name: "Sarah Mitchell",
-      designation: "Senior Designer",
-      isPresent: "Present",
-      dotColor: "#47b396"
-    },
-    {
-      avatar: "SM",
-      name: "Sarah Mitchell",
-      designation: "Senior Designer",
-      isPresent: "Absent",
-      dotColor: "#df2033"
-    },
-  ];
+  //# attendance chart
+  const weeklyChart = stats?.weeklyAttendanceChart || [];
 
-  // attendance chart
-  const labels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-  const present = [30, 60, 90, 120, 150, 180, 210];
-  const absent = [5, 35, 65, 95, 125, 155, 185];
+  const labels = weeklyChart.map((item) => item.day);
+
+  const present = weeklyChart.map((item) => item.present);
+
+  const absent = weeklyChart.map((item) => item.absent);
+
   const data = {
-    labels,
-    datasets: [
-      {
-        label: "Attendance",
-        data: present,
-        absentData: absent,
-        backgroundColor: "#e45454",
-        barThickness: 15, // Fixed width
-        maxBarThickness: 15, // Maximum width
-        borderRadius: 8,
-        borderSkipped: false,
-        borderWidth: 0,
-        categoryPercentage: 1,
-        barPercentage: 1,
-      },
-    ],
-  };
+  labels,
+  datasets: [
+    {
+      label: "Present",
+      data: present,
+      backgroundColor: "#47b396",
+      barThickness: 15,
+      maxBarThickness: 15,
+      borderRadius: 8,
+      borderSkipped: false,
+    },
+    {
+      label: "Absent",
+      data: absent,
+      backgroundColor: "#df2033",
+      barThickness: 15,
+      maxBarThickness: 15,
+      borderRadius: 8,
+      borderSkipped: false,
+    },
+  ],
+};
+
 
   const options = {
-    responsive: true,
-    plugins: {
-      legend: {
+  responsive: true,
+
+  plugins: {
+    legend: {
+      display: true,
+      position: "top",
+    },
+
+    tooltip: {
+      backgroundColor: "#1f2937",
+      titleColor: "#fff",
+      bodyColor: "#fff",
+    },
+  },
+
+  scales: {
+    x: {
+      grid: {
         display: false,
       },
-
-      tooltip: {
-        backgroundColor: "#1f2937",
-        titleColor: "#fff",
-        bodyColor: "#fff",
-
-        callbacks: {
-          label: function (context) {
-            const present = context.raw;
-            const absent = context.dataset.absentData[context.dataIndex];
-
-            return [`Present : ${present}`, `Absent : ${absent}`];
-          },
-        },
-      },
     },
 
-    scales: {
-      x: {
-        grid: {
-          display: false,
-        },
-      },
-      y: {
-        beginAtZero: true,
+    y: {
+      beginAtZero: true,
+      ticks: {
+        precision: 0,
       },
     },
-  };
+  },
+};
 
   return (
     <>
@@ -190,7 +175,10 @@ export const DashboardHome = () => {
           <div className="home-card-container">
             {cardData &&
               cardData.map((el, id) => (
-                <div className="home-card" key={id}>
+                <div
+                  className="home-card"
+                  key={id}
+                >
                   <div className="circle-container">
                     <span style={{ color: el.color }}>{el.icon}</span>
                     <div
@@ -250,19 +238,56 @@ export const DashboardHome = () => {
               <h3>Recent Employees</h3>
             </div>
             <div className="recent-employe-details">
-              {recentData &&
-                recentData.map((el, id) => (
-                  <div className="recent-employee-content" key={id}>
+              {recentEmployees &&
+                recentEmployees.map((el) => (
+                  <div
+                    className="recent-employee-content"
+                    key={el._id}
+                  >
                     <div className="employe-left">
-                      <div className="recent-employee-avatar">{el.avatar}</div>
+                      <div className="recent-employee-avatar">
+                        {el.firstName[0].toUpperCase()}
+                        {el.lastName[0].toUpperCase()}
+                      </div>
                       <div>
-                        <p>{el.name}</p>
+                        <p>
+                          {el.firstName} {el.lastName}
+                        </p>
                         <span>{el.designation}</span>
                       </div>
                     </div>
-                    <div className="recent-dot-container">
-                      <div className="recent-dot" style={{background: el.dotColor}}></div>
-                      <span style={{color: el.dotColor}}>{el.isPresent}</span>
+                    <div
+                      className="recent-dot-container"
+                      style={{
+                        background:
+                          el.attendanceStatus === "Present"
+                            ? "#12352F"
+                            : "#351A21",
+                        border:
+                          el.attendanceStatus === "Present"
+                            ? "1px solid #2F8F83"
+                            : "1px solid #8F4652",
+                      }}
+                    >
+                      <div
+                        className="recent-dot"
+                        style={{
+                          background:
+                            el.attendanceStatus === "Present"
+                              ? "#22C55E"
+                              : "#EF4444",
+                        }}
+                      ></div>
+                      <span
+                        style={{
+                          color:
+                            el.attendanceStatus === "Present"
+                              ? "#5EE7C4"
+                              : "#FF6B7A",
+                        }}
+                      >
+                        {el.attendanceStatus}
+                      </span>
                     </div>
                   </div>
                 ))}

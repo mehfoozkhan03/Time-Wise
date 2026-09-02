@@ -23,20 +23,6 @@
     align-items: center;
     gap: 20px;
 }
-.dashboard-search{
-    padding: 5px 20px;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-}
-.dashboard-search>input{
-    padding: 5px;
-    outline: none;
-    border: none;
-    background-color: transparent;
-}
 .notificaton-div{
     padding: 10px 12px;
     border: 1px solid var(--border);

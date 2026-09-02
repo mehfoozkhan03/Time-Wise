@@ -37,6 +37,10 @@ export const authService = {
     );
   },
 
+  getRecentEmployees() {
+    return api.get("/user/recent-employees");
+  },
+
   updateActivity() {
     return api.patch("/user/activity");
   },
