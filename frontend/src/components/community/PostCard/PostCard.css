@@ -249,7 +249,22 @@
 .delete-btn:hover {
     color: #ef4444;
 }
+.post-dropdown button {
+  transition: all 0.2s ease;
+}
 
+.post-dropdown button svg {
+  transition: color 0.2s ease;
+}
+
+/* Edit Post hover */
+.post-dropdown button:first-child:hover {
+  color: #38bdf8;
+}
+
+.post-dropdown button:first-child:hover svg {
+  color: #38bdf8;
+}
 
 @media (max-width: 768px) {
 
