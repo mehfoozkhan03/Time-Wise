@@ -1,6 +1,27 @@
 import "./DashboardAttendance.css";
+import { getDashboardStats } from "./../../../store/dashboardSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
 
 export const DashboardAttendance = () => {
+  const today = new Date().toLocaleDateString("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
+
+  const dispatch = useDispatch();
+
+  const { stats } = useSelector((state) => state.attendance);
+  console.log("📊 Dashboard stats:", stats);
+
+  // const userAttendance = stats?.todayAttendanceRecords || [];
+
+  useEffect(() => {
+    dispatch(getDashboardStats());
+  }, [dispatch]);
+
   const userAttendance = [
     {
       avatar: "SM",
@@ -59,7 +80,7 @@ export const DashboardAttendance = () => {
       <div className="dashboardAttendance-container">
         <div className="dashboardAttendence-header">
           <h3>Attendance Records</h3>
-          <span>Today — Thursday, June 26, 2026</span>
+          <span>Today — {today}</span>
         </div>
         <div className="dashboarAttendance-details">
           <div className="dashboardAttendance-details-head">
@@ -72,10 +93,12 @@ export const DashboardAttendance = () => {
           </div>
           <div className="dashboardAttendance-users">
             {userAttendance &&
-              userAttendance.map((el, id) => (
-                <div key={id}>
+              userAttendance.map((el) => (
+                <div key={el._id}>
                   <div>
-                    <div className="dashboardAttendance-avatar">{el.avatar}</div>
+                    <div className="dashboardAttendance-avatar">
+                      {el.avatar}
+                    </div>
                     <div>
                       <p style={{ fontSize: "14px" }}>{el.name}</p>
                       <span style={{ fontSize: "11px", opacity: "0.7" }}>
