@@ -1,0 +1,94 @@
+.admin_footer {
+  width: 100%;
+  padding: 20px 50px;
+  border-top: 1px solid var(--border);
+}
+
+.admin_footer_container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content:center; /* space-between remove */
+  gap:40px; /* gap kam */
+}
+
+/* LOGO */
+
+.admin_footer_brand {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.admin_footer_logo {
+  width: 55px;
+  height: auto;
+  display: block;
+}
+
+/* COPYRIGHT */
+
+.admin_footer_bottom_text {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+.admin_footer_bottom_text p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--text_secondary);
+  white-space: nowrap;
+}
+
+.admin_footer_heart {
+  color: #ff4d5a;
+  font-size: 14px;
+}
+
+/* SUPPORT */
+
+.admin_footer_contact {
+  display: flex;
+  align-items: center; /* sab support content ek line */
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.admin_footer_contact h3 {
+  margin: 0;
+  font-size: 14px;
+  color: var(--text_primary);
+}
+
+.admin_footer_contact p {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  gap: 5px;
+  font-size: 14px;
+  color: var(--text_secondary);
+  white-space: nowrap;
+}
+
+/* SOCIAL */
+
+.admin_footer_social {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin_footer_social a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text_secondary);
+  font-size: 17px;
+  text-decoration: none;
+}
+
+.admin_footer_social a:hover {
+  color: var(--primary);
+}
