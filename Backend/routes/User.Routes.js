@@ -17,6 +17,7 @@ import { updateUserDepartment } from "../controllers/updateDepartment.controller
 import { updateUserDesignation } from "./../controllers/updateDesignation.controller.js";
 import { updateUser } from "../controllers/updateEmployee.controller.js";
 import { updateRole } from "../controllers/updateRole.controller.js";
+import { getRecentEmployees } from "../controllers/recentEmployee.controller.js";
 
 const userRoutes = express.Router();
 
@@ -40,11 +41,14 @@ userRoutes.get("/users", auth, getAllUser);
 
 userRoutes.patch("/activity", auth, updateActivity);
 
+userRoutes.get("/recent-employees", auth, getRecentEmployees);
+
 userRoutes.patch("/:userId/department", updateUserDepartment);
 
 userRoutes.patch("/:userId/designation", updateUserDesignation);
 
 userRoutes.patch("/:userId/role", auth, updateRole);
+
 
 userRoutes.patch("/theme", auth, updateTheme);
 
