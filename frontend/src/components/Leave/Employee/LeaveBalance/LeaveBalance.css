@@ -9,13 +9,13 @@
 
 .leaveBalance-header {
   display: flex;
-  flex-direction: column;
-  gap: 5px;
+  align-items: center;
+  justify-content: space-between;
   margin-bottom: 20px;
 }
 
 .leaveBalance-header h2 {
-  margin: 0;
+  margin: 0 0 5px;
   font-family: "Poppins", sans-serif;
   font-size: 18px;
   line-height: 1.4;
@@ -32,12 +32,17 @@
 
 .leaveBalance-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(
+    3,
+    minmax(0, 1fr)
+  );
   gap: 16px;
 }
 
 .leaveBalance-card {
+  position: relative;
   min-width: 0;
+  overflow: hidden;
   padding: 20px;
   background: var(--surface);
   border: 1px solid var(--border);
@@ -49,15 +54,61 @@
     transform var(--transition);
 }
 
+.leaveBalance-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--primary);
+  opacity: 0.75;
+}
+
 .leaveBalance-card:hover {
   background: var(--card-hover);
-  border-color: var(--card-border);
+  border-color: color-mix(
+    in srgb,
+    var(--primary) 35%,
+    var(--border)
+  );
   box-shadow: var(--shadow_sm);
   transform: translateY(-2px);
 }
 
+.leaveBalance-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.leaveBalance-icon {
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid
+    color-mix(
+      in srgb,
+      var(--primary) 25%,
+      var(--border)
+    );
+  border-radius: 8px;
+  background: color-mix(
+    in srgb,
+    var(--primary) 9%,
+    var(--surface)
+  );
+  color: var(--primary);
+  font-size: 18px;
+}
+
 .leaveBalance-card h3 {
-  margin: 0 0 18px;
+  min-width: 0;
+  margin: 0;
   font-family: "Poppins", sans-serif;
   font-size: 14px;
   line-height: 1.4;
@@ -67,51 +118,74 @@
 
 .leaveBalance-total {
   display: flex;
-  align-items: baseline;
-  gap: 8px;
+  align-items: center;
+  gap: 10px;
   padding-bottom: 17px;
   border-bottom: 1px solid var(--divider);
 }
 
-.leaveBalance-total span {
+.leaveBalance-total > span {
   font-family: "Poppins", sans-serif;
-  font-size: 30px;
+  font-size: 31px;
   line-height: 1;
   font-weight: 600;
   color: var(--text_primary);
 }
 
+.leaveBalance-total > div {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
 .leaveBalance-total small {
   color: var(--text_secondary);
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 500;
+  line-height: 1.4;
+}
+
+.leaveBalance-total strong {
+  color: var(--text_primary);
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1.4;
+  white-space: nowrap;
 }
 
 .leaveBalance-details {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(
+    2,
+    minmax(0, 1fr)
+  );
   gap: 12px;
   padding-top: 16px;
 }
 
-.leaveBalance-details > div {
+.leaveBalance-detail {
+  min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  min-width: 0;
+  gap: 4px;
 }
 
-.leaveBalance-details span {
+.leaveBalance-detail span {
   color: var(--text_secondary);
-  font-size: 11px;
+  font-size: 10px;
   line-height: 1.4;
 }
 
-.leaveBalance-details strong {
+.leaveBalance-detail strong {
   color: var(--text_primary);
   font-size: 14px;
   line-height: 1.3;
   font-weight: 600;
+}
+
+.leaveBalance-detail:last-child strong {
+  color: var(--primary);
 }
 
 @media (max-width: 1000px) {
@@ -127,7 +201,7 @@
     padding: 18px;
   }
 
-  .leaveBalance-total span {
+  .leaveBalance-total > span {
     font-size: 28px;
   }
 }
@@ -145,8 +219,15 @@
     font-size: 17px;
   }
 
+  .leaveBalance-header p {
+    font-size: 11px;
+  }
+
   .leaveBalance-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(
+      2,
+      minmax(0, 1fr)
+    );
     gap: 14px;
   }
 
@@ -154,8 +235,17 @@
     padding: 18px;
   }
 
-  .leaveBalance-card h3 {
+  .leaveBalance-card-header {
     margin-bottom: 16px;
+  }
+
+  .leaveBalance-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 17px;
+  }
+
+  .leaveBalance-card h3 {
     font-size: 13px;
   }
 
@@ -163,8 +253,12 @@
     padding-bottom: 15px;
   }
 
-  .leaveBalance-total span {
+  .leaveBalance-total > span {
     font-size: 27px;
+  }
+
+  .leaveBalance-total strong {
+    font-size: 9px;
   }
 
   .leaveBalance-details {
@@ -179,7 +273,6 @@
   }
 
   .leaveBalance-header {
-    gap: 4px;
     margin-bottom: 16px;
   }
 
@@ -188,7 +281,7 @@
   }
 
   .leaveBalance-header p {
-    font-size: 11px;
+    font-size: 10px;
   }
 
   .leaveBalance-grid {
@@ -201,17 +294,32 @@
     border-radius: var(--radius_sm);
   }
 
-  .leaveBalance-card h3 {
+  .leaveBalance-card-header {
+    gap: 9px;
     margin-bottom: 15px;
+  }
+
+  .leaveBalance-icon {
+    width: 31px;
+    height: 31px;
+    border-radius: 7px;
+    font-size: 16px;
+  }
+
+  .leaveBalance-card h3 {
     font-size: 13px;
   }
 
-  .leaveBalance-total span {
+  .leaveBalance-total > span {
     font-size: 26px;
   }
 
   .leaveBalance-total small {
-    font-size: 10px;
+    font-size: 9px;
+  }
+
+  .leaveBalance-total strong {
+    font-size: 9px;
   }
 
   .leaveBalance-details {
@@ -219,11 +327,11 @@
     padding-top: 14px;
   }
 
-  .leaveBalance-details span {
-    font-size: 10px;
+  .leaveBalance-detail span {
+    font-size: 9px;
   }
 
-  .leaveBalance-details strong {
+  .leaveBalance-detail strong {
     font-size: 13px;
   }
 }
@@ -242,7 +350,7 @@
   }
 
   .leaveBalance-header p {
-    font-size: 10px;
+    font-size: 9px;
   }
 
   .leaveBalance-grid {
@@ -253,22 +361,36 @@
     padding: 14px;
   }
 
-  .leaveBalance-card h3 {
+  .leaveBalance-card-header {
+    gap: 8px;
     margin-bottom: 13px;
+  }
+
+  .leaveBalance-icon {
+    width: 29px;
+    height: 29px;
+    font-size: 15px;
+  }
+
+  .leaveBalance-card h3 {
     font-size: 12px;
   }
 
   .leaveBalance-total {
-    gap: 6px;
+    gap: 7px;
     padding-bottom: 13px;
   }
 
-  .leaveBalance-total span {
+  .leaveBalance-total > span {
     font-size: 24px;
   }
 
   .leaveBalance-total small {
-    font-size: 9px;
+    font-size: 8px;
+  }
+
+  .leaveBalance-total strong {
+    font-size: 8px;
   }
 
   .leaveBalance-details {
@@ -276,11 +398,11 @@
     padding-top: 12px;
   }
 
-  .leaveBalance-details span {
-    font-size: 9px;
+  .leaveBalance-detail span {
+    font-size: 8px;
   }
 
-  .leaveBalance-details strong {
+  .leaveBalance-detail strong {
     font-size: 12px;
   }
 }

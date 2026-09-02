@@ -99,17 +99,18 @@ html:not(.dark) .holidayForm .formGroup input[type="date"] {
     color-scheme: light;
 }
 
-.holidayForm
-.formGroup
-input[type="date"]::-webkit-calendar-picker-indicator {
+.holidayForm .formGroup input[type="date"]::-webkit-calendar-picker-indicator {
     cursor: pointer;
     opacity: .9;
 }
 
 .holidayForm .checkboxGroup {
+    position: relative;
+
     display: flex;
     align-items: center;
     justify-content: center;
+
     gap: 10px;
 
     width: 100%;
@@ -120,17 +121,31 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 .holidayForm .checkboxGroup input[type="checkbox"] {
-    position: absolute;
+    position: absolute !important;
 
-    width: 1px;
-    height: 1px;
+    width: 1px !important;
+    height: 1px !important;
 
-    margin: 0;
-    padding: 0;
+    min-width: 1px !important;
+    min-height: 1px !important;
 
-    overflow: hidden;
-    opacity: 0;
-    pointer-events: none;
+    margin: -1px !important;
+    padding: 0 !important;
+
+    overflow: hidden !important;
+
+    clip: rect(0, 0, 0, 0) !important;
+    clip-path: inset(50%) !important;
+
+    white-space: nowrap !important;
+
+    border: 0 !important;
+
+    opacity: 0 !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+
+    pointer-events: none !important;
 }
 
 .holidayForm .checkboxGroup label {
@@ -139,6 +154,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     justify-content: center;
 
     gap: 10px;
+
     margin: 0;
 
     color: var(--text_primary);
@@ -186,10 +202,7 @@ html:not(.dark) .holidayForm .checkboxGroup label::before {
     border-color: #cbd2dc;
 }
 
-.holidayForm
-.checkboxGroup
-input[type="checkbox"]:checked
-+ label::before {
+.holidayForm .checkboxGroup input[type="checkbox"]:checked + label::before {
     content: "✓";
 
     background: var(--primary);
@@ -206,10 +219,7 @@ input[type="checkbox"]:checked
     border-color: var(--primary);
 }
 
-.holidayForm
-.checkboxGroup
-input[type="checkbox"]:focus-visible
-+ label::before {
+.holidayForm .checkboxGroup input[type="checkbox"]:focus-visible + label::before {
     border-color: var(--primary);
     box-shadow: 0 0 0 3px rgba(41, 163, 224, .15);
 }
@@ -218,18 +228,12 @@ input[type="checkbox"]:focus-visible
     transform: scale(.94);
 }
 
-.holidayForm
-.checkboxGroup
-input[type="checkbox"]:disabled
-+ label {
+.holidayForm .checkboxGroup input[type="checkbox"]:disabled + label {
     cursor: not-allowed;
     opacity: .6;
 }
 
-.holidayForm
-.checkboxGroup
-input[type="checkbox"]:disabled
-+ label::before {
+.holidayForm .checkboxGroup input[type="checkbox"]:disabled + label::before {
     cursor: not-allowed;
 }
 

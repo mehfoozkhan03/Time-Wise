@@ -1,5 +1,10 @@
 import { useState } from "react";
-import { MdClose } from "react-icons/md";
+import {
+  MdCalendarToday,
+  MdClose,
+  MdEventAvailable,
+  MdInfoOutline,
+} from "react-icons/md";
 
 import "./LeaveDetails.css";
 
@@ -32,9 +37,7 @@ const LeaveDetails = ({ request, onClose, onCancel }) => {
 
       onClose();
     } catch (cancelError) {
-      setError(
-        cancelError?.message || "Failed to cancel leave request.",
-      );
+      setError(cancelError?.message || "Failed to cancel leave request.");
     } finally {
       setCancelling(false);
     }
@@ -55,18 +58,24 @@ const LeaveDetails = ({ request, onClose, onCancel }) => {
   };
 
   return (
-    <div
-      className="leaveDetails-overlay"
-      onMouseDown={handleClose}
-    >
+    <div className="leaveDetails-overlay" onMouseDown={handleClose}>
       <div
         className="leaveDetails-modal"
         onMouseDown={(event) => event.stopPropagation()}
       >
         <div className="leaveDetails-header">
           <div className="leaveDetails-heading">
-            <h2>Leave Details</h2>
-            <p>View details of your leave request.</p>
+            <div className="leaveDetails-title-row">
+              <div className="leaveDetails-title-icon">
+                <MdEventAvailable />
+              </div>
+
+              <div>
+                <h2>Leave Details</h2>
+
+                <p>View details of your leave request.</p>
+              </div>
+            </div>
           </div>
 
           <button
@@ -82,56 +91,95 @@ const LeaveDetails = ({ request, onClose, onCancel }) => {
 
         <div className="leaveDetails-content">
           <div className="leaveDetails-status-row">
-            <span className="leaveDetails-label">Status</span>
+            <div className="leaveDetails-status-heading">
+              <MdInfoOutline />
 
-            <span
-              className={`leaveDetails-status ${status.toLowerCase()}`}
-            >
+              <span className="leaveDetails-label">Request Status</span>
+            </div>
+
+            <span className={`leaveDetails-status ${status.toLowerCase()}`}>
               {status}
             </span>
+          </div>
+
+          <div className="leaveDetails-section-title">
+            <span>Request Information</span>
           </div>
 
           <div className="leaveDetails-grid">
             <div className="leaveDetails-item">
               <span>Leave Type</span>
+
               <strong>{request.leaveType}</strong>
             </div>
 
             <div className="leaveDetails-item">
               <span>Total Days</span>
-              <strong>{request.requestedDays} days</strong>
+
+              <strong>
+                {request.requestedDays}{" "}
+                {request.requestedDays === 1 ? "day" : "days"}
+              </strong>
             </div>
 
             <div className="leaveDetails-item">
               <span>Start Date</span>
-              <strong>{request.startDate}</strong>
+
+              <strong>
+                <MdCalendarToday />
+                {request.startDate}
+              </strong>
             </div>
 
             <div className="leaveDetails-item">
               <span>End Date</span>
-              <strong>{request.endDate}</strong>
+
+              <strong>
+                <MdCalendarToday />
+                {request.endDate}
+              </strong>
             </div>
 
-            <div className="leaveDetails-item">
+            <div className="leaveDetails-item leaveDetails-item-full">
               <span>Applied Date</span>
-              <strong>{request.appliedDate}</strong>
+
+              <strong>
+                <MdCalendarToday />
+                {request.appliedDate}
+              </strong>
             </div>
+          </div>
+
+          <div className="leaveDetails-section-title">
+            <span>Leave Reason</span>
           </div>
 
           <div className="leaveDetails-reason">
-            <span>Reason</span>
-            <p>{request.reason}</p>
+            <p>{request.reason || "No reason provided."}</p>
           </div>
 
           {request.adminComment && (
-            <div className="leaveDetails-comment">
-              <span>Admin Comment</span>
-              <p>{request.adminComment}</p>
-            </div>
+            <>
+              <div className="leaveDetails-section-title">
+                <span>Admin Response</span>
+              </div>
+
+              <div className="leaveDetails-comment">
+                <div className="leaveDetails-comment-icon">
+                  <MdInfoOutline />
+                </div>
+
+                <div>
+                  <span>Admin Comment</span>
+
+                  <p>{request.adminComment}</p>
+                </div>
+              </div>
+            </>
           )}
 
           {error && (
-            <p className="leaveDetails-error">
+            <p className="leaveDetails-error" role="alert">
               {error}
             </p>
           )}
@@ -162,9 +210,17 @@ const LeaveDetails = ({ request, onClose, onCancel }) => {
             </div>
           ) : (
             <div className="leaveDetails-confirmation">
-              <p>
-                Are you sure you want to cancel this leave request?
-              </p>
+              <div className="leaveDetails-confirmation-message">
+                <div className="leaveDetails-confirmation-icon">
+                  <MdInfoOutline />
+                </div>
+
+                <div>
+                  <strong>Cancel this request?</strong>
+
+                  <p>This action will cancel your pending leave request.</p>
+                </div>
+              </div>
 
               <div className="leaveDetails-confirmation-actions">
                 <button
