@@ -51,6 +51,35 @@ const postSchema = new mongoose.Schema(
       },
     ],
 
+    attachments: [
+      {
+        url: {
+          type: String,
+          required: true,
+        },
+
+        publicId: {
+          type: String,
+          required: true,
+        },
+
+        originalName: {
+          type: String,
+          required: true,
+        },
+
+        mimetype: {
+          type: String,
+          required: true,
+        },
+
+        size: {
+          type: Number,
+          required: true,
+        },
+      },
+    ],
+
     // ================= Post Type =================
 
     type: {
@@ -147,6 +176,7 @@ const postSchema = new mongoose.Schema(
       default: null,
     },
   },
+
   {
     timestamps: true,
     versionKey: false,

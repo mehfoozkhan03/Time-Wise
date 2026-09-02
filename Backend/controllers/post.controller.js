@@ -5,7 +5,6 @@ import { SavedPost } from '../models/SavedPost.model.js'
 // import { notificationModel } from "../models/Notification.model.js";
 import { createNotification } from '../services/notification.service.js'
 
-// =======================================================
 // Create Post
 // =======================================================
 
@@ -14,24 +13,54 @@ export const createPost = async (req, res) => {
     const { content, type, tags, visibility } = req.body
 
     const hasContent = content && content.trim().length > 0
-    const hasImage = !!req.file
 
-    // A post must contain either text or an image
-    if (!hasContent && !hasImage) {
+    const uploadedImages = req.files?.images || []
+    const uploadedAttachments = req.files?.attachments || []
+
+    const hasImages = uploadedImages.length > 0
+    const hasAttachments = uploadedAttachments.length > 0
+
+    // A post must contain either text or at least one image
+    if (!hasContent && !hasImages && !hasAttachments) {
       return res.status(400).json({
         success: false,
-        message: 'Post must contain text or an image.',
+        message: 'Post must contain text, an image or an attachment.',
       })
     }
 
-    const imageUrl = req.file ? req.file.path : null
+    // Format uploaded Cloudinary images
+    const images = uploadedImages.map((file) => ({
+      url: file.path,
+      publicId: file.filename,
+      alt: '',
+    }))
+
+    const attachments = uploadedAttachments.map((file) => ({
+      url: file.path,
+      publicId: file.filename,
+      originalName: file.originalname,
+      mimetype: file.mimetype,
+      size: file.size,
+    }))
 
     const post = await postModel.create({
       createdBy: req.user.userID,
+
       content: hasContent ? content.trim() : '',
-      image: imageUrl,
+
+      // Legacy field
+      // This keeps older components/posts compatible
+      image: images.length > 0 ? images[0].url : null,
+
+      // New multiple-images field
+      images,
+
+      attachments,
+
       type: type || 'general',
+
       tags: tags || [],
+
       visibility: visibility || 'public',
     })
 
@@ -57,9 +86,12 @@ export const createPost = async (req, res) => {
     return res.status(201).json({
       success: true,
       message: 'Post created successfully.',
+
       post: {
         ...populatedPost.toObject(),
+
         isLiked: false,
+
         isSaved: false,
       },
     })

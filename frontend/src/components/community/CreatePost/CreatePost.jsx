@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+
 import { useDispatch, useSelector } from 'react-redux'
 
 import { createNewPost } from '../../../store/postSlice'
@@ -14,7 +15,12 @@ import {
 import './CreatePost.css'
 
 const MAX_LENGTH = 500
-const MAX_IMAGE_SIZE = 5 * 1024 * 1024 // 5MB
+
+const MAX_IMAGE_SIZE = 5 * 1024 * 1024
+const MAX_IMAGES = 4
+
+const MAX_ATTACHMENT_SIZE = 10 * 1024 * 1024
+const MAX_ATTACHMENTS = 5
 
 const CreatePost = () => {
   const dispatch = useDispatch()
@@ -28,10 +34,17 @@ const CreatePost = () => {
   // IMAGE STATE
   // ======================================================
 
-  const [selectedImage, setSelectedImage] = useState(null)
-  const [imagePreview, setImagePreview] = useState(null)
+  const [selectedImages, setSelectedImages] = useState([])
 
   const fileInputRef = useRef(null)
+
+  // ======================================================
+  // ATTACHMENT STATE
+  // ======================================================
+
+  const [selectedAttachments, setSelectedAttachments] = useState([])
+
+  const attachmentInputRef = useRef(null)
 
   // ======================================================
   // DYNAMIC GREETING
@@ -78,92 +91,210 @@ const CreatePost = () => {
   // ======================================================
 
   const handleImageChange = (event) => {
-    const file = event.target.files?.[0]
+    const files = Array.from(event.target.files || [])
 
-    if (!file) return
+    if (!files.length) return
 
-    // Validate image type
-    if (!file.type.startsWith('image/')) {
-      alert('Please select a valid image file.')
+    const remainingSlots = MAX_IMAGES - selectedImages.length
+
+    if (remainingSlots <= 0) {
+      alert(`You can upload a maximum of ${MAX_IMAGES} images.`)
       event.target.value = ''
       return
     }
 
-    // Validate image size
-    if (file.size > MAX_IMAGE_SIZE) {
-      alert('Image size must be less than 5MB.')
-      event.target.value = ''
-      return
+    const filesToProcess = files.slice(0, remainingSlots)
+
+    const validImages = []
+
+    for (const file of filesToProcess) {
+      if (!file.type.startsWith('image/')) {
+        alert(`${file.name} is not a valid image.`)
+        continue
+      }
+
+      if (file.size > MAX_IMAGE_SIZE) {
+        alert(`${file.name} is larger than 5MB.`)
+        continue
+      }
+
+      validImages.push({
+        id: `${file.name}-${file.lastModified}-${Math.random()}`,
+        file,
+        preview: URL.createObjectURL(file),
+      })
     }
 
-    // Remove previous preview URL
-    if (imagePreview) {
-      URL.revokeObjectURL(imagePreview)
+    if (validImages.length > 0) {
+      setSelectedImages((previousImages) => [...previousImages, ...validImages])
     }
 
-    const previewUrl = URL.createObjectURL(file)
+    if (files.length > remainingSlots) {
+      alert(`Only ${remainingSlots} more image(s) can be added.`)
+    }
 
-    setSelectedImage(file)
-    setImagePreview(previewUrl)
-
-    // Allows selecting the same file again after removing it
+    // Allows selecting the same image again
     event.target.value = ''
   }
 
   // ======================================================
-  // REMOVE IMAGE
+  // REMOVE SINGLE IMAGE
   // ======================================================
 
-  const removeImage = () => {
-    if (imagePreview) {
-      URL.revokeObjectURL(imagePreview)
-    }
+  const removeImage = (id) => {
+    setSelectedImages((previousImages) => {
+      const imageToRemove = previousImages.find((image) => image.id === id)
 
-    setSelectedImage(null)
-    setImagePreview(null)
+      if (imageToRemove?.preview) {
+        URL.revokeObjectURL(imageToRemove.preview)
+      }
 
-    if (fileInputRef.current) {
-      fileInputRef.current.value = ''
-    }
+      return previousImages.filter((image) => image.id !== id)
+    })
   }
 
-  // Clean up preview URL when component unmounts
+  // ======================================================
+  // ATTACHMENT SELECTION
+  // ======================================================
+
+  const handleAttachmentChange = (event) => {
+    const files = Array.from(event.target.files || [])
+
+    if (!files.length) return
+
+    const remainingSlots = MAX_ATTACHMENTS - selectedAttachments.length
+
+    if (remainingSlots <= 0) {
+      alert(`You can upload a maximum of ${MAX_ATTACHMENTS} attachments.`)
+
+      event.target.value = ''
+      return
+    }
+
+    const allowedTypes = [
+      'application/pdf',
+
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+
+      'application/vnd.ms-excel',
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+
+      'application/vnd.ms-powerpoint',
+      'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+
+      'text/plain',
+    ]
+
+    const validFiles = []
+
+    for (const file of files.slice(0, remainingSlots)) {
+      if (!allowedTypes.includes(file.type)) {
+        alert(`${file.name} is not a supported file type.`)
+        continue
+      }
+
+      if (file.size > MAX_ATTACHMENT_SIZE) {
+        alert(`${file.name} is larger than 10MB.`)
+        continue
+      }
+
+      validFiles.push({
+        id: `${file.name}-${file.lastModified}-${Math.random()}`,
+        file,
+      })
+    }
+
+    if (validFiles.length > 0) {
+      setSelectedAttachments((previous) => [...previous, ...validFiles])
+    }
+
+    if (files.length > remainingSlots) {
+      alert(`Only ${remainingSlots} more attachment(s) can be added.`)
+    }
+
+    // Allows selecting the same file again
+    event.target.value = ''
+  }
+
+  // ======================================================
+  // REMOVE ATTACHMENT
+  // ======================================================
+
+  const removeAttachment = (id) => {
+    setSelectedAttachments((previous) =>
+      previous.filter((attachment) => attachment.id !== id),
+    )
+  }
+
+  // ======================================================
+  // CLEANUP IMAGE PREVIEW URLS
+  // ======================================================
+
   useEffect(() => {
     return () => {
-      if (imagePreview) {
-        URL.revokeObjectURL(imagePreview)
-      }
+      selectedImages.forEach((image) => {
+        if (image.preview) {
+          URL.revokeObjectURL(image.preview)
+        }
+      })
     }
-  }, [imagePreview])
+  }, [])
 
   // ======================================================
   // CREATE POST
   // ======================================================
 
   const handlePost = async () => {
-    // Post requires either content or an image
-    if ((!content.trim() && !selectedImage) || posting) return
+    const isEmpty =
+      !content.trim() &&
+      selectedImages.length === 0 &&
+      selectedAttachments.length === 0
+
+    if (isEmpty || posting) {
+      return
+    }
 
     try {
       setPosting(true)
 
       const formData = new FormData()
 
-      // Only send content if the user entered something
+      // ================= Content =================
+
       if (content.trim()) {
         formData.append('content', content.trim())
       }
 
-      // Field name MUST match upload.single('image')
-      if (selectedImage) {
-        formData.append('image', selectedImage)
-      }
+      // ================= Images =================
+
+      selectedImages.forEach((image) => {
+        formData.append('images', image.file)
+      })
+
+      // ================= Attachments =================
+
+      selectedAttachments.forEach((attachment) => {
+        formData.append('attachments', attachment.file)
+      })
+
+      // ================= Create Post =================
 
       await dispatch(createNewPost(formData)).unwrap()
 
-      // Reset after successful post
+      // ================= Cleanup Image URLs =================
+
+      selectedImages.forEach((image) => {
+        if (image.preview) {
+          URL.revokeObjectURL(image.preview)
+        }
+      })
+
+      // ================= Reset =================
+
       setContent('')
-      removeImage()
+      setSelectedImages([])
+      setSelectedAttachments([])
     } catch (error) {
       console.error('Create post error:', error)
 
@@ -179,9 +310,9 @@ const CreatePost = () => {
 
   return (
     <section className="create_post_card">
-      {/* ================================================ */}
+      {/* ================================================= */}
       {/* HEADER */}
-      {/* ================================================ */}
+      {/* ================================================= */}
 
       <div className="create_post_header">
         <div className="create_post_avatar">{initials}</div>
@@ -195,9 +326,9 @@ const CreatePost = () => {
         </div>
       </div>
 
-      {/* ================================================ */}
+      {/* ================================================= */}
       {/* TEXTAREA */}
-      {/* ================================================ */}
+      {/* ================================================= */}
 
       <textarea
         value={content}
@@ -206,68 +337,127 @@ const CreatePost = () => {
         onChange={(event) => setContent(event.target.value)}
       />
 
-      {/* ================================================ */}
+      {/* ================================================= */}
       {/* HIDDEN IMAGE INPUT */}
-      {/* ================================================ */}
+      {/* ================================================= */}
 
       <input
         ref={fileInputRef}
         type="file"
         accept="image/*"
+        multiple
         hidden
         onChange={handleImageChange}
       />
 
-      {/* ================================================ */}
-      {/* IMAGE PREVIEW */}
-      {/* ================================================ */}
+      {/* ================================================= */}
+      {/* HIDDEN ATTACHMENT INPUT */}
+      {/* ================================================= */}
 
-      {imagePreview && (
-        <div className="post_image_preview">
-          <img src={imagePreview} alt="Selected post preview" />
+      <input
+        ref={attachmentInputRef}
+        type="file"
+        accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt"
+        multiple
+        hidden
+        onChange={handleAttachmentChange}
+      />
 
-          <button
-            type="button"
-            className="remove_image_btn"
-            onClick={removeImage}
-            aria-label="Remove selected image"
-          >
-            <HiOutlineXMark />
-          </button>
+      {/* ================================================= */}
+      {/* IMAGE PREVIEWS */}
+      {/* ================================================= */}
+
+      {selectedImages.length > 0 && (
+        <div
+          className={`post_image_preview_grid image_count_${selectedImages.length}`}
+        >
+          {selectedImages.map((image) => (
+            <div className="post_image_preview" key={image.id}>
+              <img src={image.preview} alt="Selected post preview" />
+
+              <button
+                type="button"
+                className="remove_image_btn"
+                onClick={() => removeImage(image.id)}
+                aria-label="Remove selected image"
+              >
+                <HiOutlineXMark />
+              </button>
+            </div>
+          ))}
         </div>
       )}
 
-      {/* ================================================ */}
+      {/* ================================================= */}
+      {/* ATTACHMENT PREVIEWS */}
+      {/* ================================================= */}
+
+      {selectedAttachments.length > 0 && (
+        <div className="post_attachment_preview">
+          {selectedAttachments.map((attachment) => (
+            <div className="post_attachment_item" key={attachment.id}>
+              <div className="post_attachment_info">
+                <HiOutlinePaperClip />
+
+                <span>{attachment.file.name}</span>
+              </div>
+
+              <button
+                type="button"
+                className="remove_attachment_btn"
+                onClick={() => removeAttachment(attachment.id)}
+                aria-label="Remove attachment"
+              >
+                <HiOutlineXMark />
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* ================================================= */}
       {/* FOOTER */}
-      {/* ================================================ */}
+      {/* ================================================= */}
 
       <div className="create_post_footer">
         <div className="create_post_tools">
-          {/* IMAGE */}
+          {/* ================= IMAGE ================= */}
 
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
-            disabled={posting}
+            disabled={posting || selectedImages.length >= MAX_IMAGES}
           >
             <HiOutlinePhoto />
             Image
+            {selectedImages.length > 0 &&
+              ` (${selectedImages.length}/${MAX_IMAGES})`}
           </button>
 
-          {/* EMOJI - PHASE 3 */}
+          {/* ================= EMOJI - PHASE 3 ================= */}
 
           <button type="button" disabled={posting}>
             <HiOutlineFaceSmile />
             Emoji
           </button>
 
-          {/* ATTACHMENT - NOT IMPLEMENTED YET */}
+          {/* ================= ATTACHMENT ================= */}
 
-          <button type="button" disabled={posting}>
+          <button
+            type="button"
+            onClick={() => attachmentInputRef.current?.click()}
+            disabled={posting || selectedAttachments.length >= MAX_ATTACHMENTS}
+          >
             <HiOutlinePaperClip />
             Attachment
+            {selectedAttachments.length > 0 &&
+              ` (${selectedAttachments.length}/${MAX_ATTACHMENTS})`}
           </button>
         </div>
+
+        {/* ================================================= */}
+        {/* POST ACTIONS */}
+        {/* ================================================= */}
 
         <div className="create_post_actions">
           <span>
@@ -278,7 +468,12 @@ const CreatePost = () => {
             className="publish_btn"
             type="button"
             onClick={handlePost}
-            disabled={(!content.trim() && !selectedImage) || posting}
+            disabled={
+              (!content.trim() &&
+                selectedImages.length === 0 &&
+                selectedAttachments.length === 0) ||
+              posting
+            }
           >
             <HiOutlinePaperAirplane />
 
