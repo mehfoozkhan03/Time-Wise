@@ -89,6 +89,7 @@ export const signup = async (req, res) => {
       description: "You can now sign in and start using TimeWise.",
       reason: "Your account is ready to use.",
       user,
+      role:"user",
     });
   } catch (error) {
     console.error("Signup Error:", error);
@@ -172,6 +173,8 @@ export const login = async (req, res) => {
     const token = jwt.sign(
       {
         userID: userData._id,
+        userEmail:userData.email,
+        role:"user"
       },
       process.env.PrivateKey,
       {
@@ -197,6 +200,7 @@ export const login = async (req, res) => {
       description: "Redirecting you to your home...",
       reason: "You have been successfully authenticated.",
       user,
+      role:"user",
     });
   } catch (error) {
     console.error("Login Error:", error);
@@ -277,6 +281,8 @@ export const admin_login = async (req, res) => {
     const token = jwt.sign(
       {
         adminID: admin._id,
+        userEmail: admin.email,
+        role: "admin",
       },
       process.env.PrivateKey,
       {
@@ -302,6 +308,7 @@ export const admin_login = async (req, res) => {
       description: "Redirecting you to your home...",
       reason: "You have been successfully authenticated as admin.",
       user,
+      role:"admin",
     });
   } catch (error) {
     console.error("Admin Login Error:", error);
