@@ -94,76 +94,76 @@ export const getAttendanceStats = async (userID) => {
 
 
   //# ====================== Today's Attendance Records - All Employees ======================
-// const todayAttendance = await attendanceModel
-//   .find({
-//     date: {
-//       $gte: todayStart,
-//       $lte: todayEnd,
-//     },
-//   })
-//   .populate("user", "firstName lastName department designation");
+const todayAttendance = await attendanceModel
+  .find({
+    date: {
+      $gte: todayStart,
+      $lte: todayEnd,
+    },
+  })
+  .populate("user", "firstName lastName department designation");
 
-// const formatTime = (date) => {
-//   if (!date) return "--";
+const formatTime = (date) => {
+  if (!date) return "--";
 
-//   return new Date(date).toLocaleTimeString("en-US", {
-//     hour: "2-digit",
-//     minute: "2-digit",
-//     hour12: false,
-//   });
-// };
+  return new Date(date).toLocaleTimeString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  });
+};
 
-// const formatBreakTime = (breaks = []) => {
-//   if (!breaks.length) return "--";
+const formatBreakTime = (breaks = []) => {
+  if (!breaks.length) return "--";
 
-//   return breaks
-//     .filter((item) => item.breakStart)
-//     .map((item) => {
-//       const start = formatTime(item.breakStart);
-//       const end = item.breakEnd ? formatTime(item.breakEnd) : "--";
+  return breaks
+    .filter((item) => item.breakStart)
+    .map((item) => {
+      const start = formatTime(item.breakStart);
+      const end = item.breakEnd ? formatTime(item.breakEnd) : "--";
 
-//       return `${start}–${end}`;
-//     })
-//     .join(", ");
-// };
+      return `${start}–${end}`;
+    })
+    .join(", ");
+};
 
-// const formatWorkingHours = (seconds = 0) => {
-//   const hours = Math.floor(seconds / 3600);
-//   const minutes = Math.floor((seconds % 3600) / 60);
+const formatWorkingHours = (seconds = 0) => {
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
 
-//   return `${hours}h ${minutes}m`;
-// };
+  return `${hours}h ${minutes}m`;
+};
 
-// const todayAttendanceRecords = todayAttendance.map((record) => {
-//   const user = record.user;
+const todayAttendanceRecords = todayAttendance.map((record) => {
+  const user = record.user;
 
-//   return {
-//     _id: record._id,
+  return {
+    _id: record._id,
 
-//     avatar: `${user?.firstName?.[0] || ""}${
-//       user?.lastName?.[0] || ""
-//     }`.toUpperCase(),
+    avatar: `${user?.firstName?.[0] || ""}${
+      user?.lastName?.[0] || ""
+    }`.toUpperCase(),
 
-//     name: `${user?.firstName || ""} ${user?.lastName || ""}`.trim(),
+    name: `${user?.firstName || ""} ${user?.lastName || ""}`.trim(),
 
-//     department:
-//       user?.department ||
-//       user?.designation ||
-//       "--",
+    department:
+      user?.department ||
+      user?.designation ||
+      "--",
 
-//     checkIn: formatTime(record.checkInTime),
+    checkIn: formatTime(record.checkInTime),
 
-//     breakTime: formatBreakTime(record.breaks),
+    breakTime: formatBreakTime(record.breaks),
 
-//     checkOut: formatTime(record.checkOutTime),
+    checkOut: formatTime(record.checkOutTime),
 
-//     workingHours: formatWorkingHours(
-//       record.totalWorkingSeconds
-//     ),
+    workingHours: formatWorkingHours(
+      record.totalWorkingSeconds
+    ),
 
-//     status: record.status || "Absent",
-//   };
-// });
+    status: record.status || "Absent",
+  };
+});
 
   const { weekStart, weekEnd } = getWeekRange(now);
 
@@ -726,7 +726,6 @@ for (let i = 6; i >= 0; i--) {
 
     totalLateCheckInsToday,
 
-    todayAttendanceRecords,
 
     weeklyAttendanceChart,
   };
