@@ -18,6 +18,7 @@ import { updateUserDesignation } from "./../controllers/updateDesignation.contro
 import { updateUser } from "../controllers/updateEmployee.controller.js";
 import { updateRole } from "../controllers/updateRole.controller.js";
 import { getRecentEmployees } from "../controllers/recentEmployee.controller.js";
+import { authorize } from "../middleware/Allowrole.middleware.js";
 
 const userRoutes = express.Router();
 
@@ -35,7 +36,7 @@ userRoutes.post("/signup", signup);
 
 userRoutes.post("/logout", logout);
 
-userRoutes.get("/me", auth, getCurrentUser);
+userRoutes.get("/me", auth,authorize("user"), getCurrentUser);
 
 userRoutes.get("/users", auth, getAllUser);
 

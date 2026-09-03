@@ -18,10 +18,7 @@ export const auth = (req, res, next) => {
           message: 'Invalid or expired token.',
         });
       }
-
       req.user = decoded;
-
-
       next();
     });
   } catch (error) {
