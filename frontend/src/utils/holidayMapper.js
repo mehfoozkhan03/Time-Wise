@@ -6,7 +6,7 @@ export const mapHolidayToEvent = (holiday = {}) => {
   const holidayType = String(holiday.type ?? EVENT_TYPES.HOLIDAY).toUpperCase();
 
   return {
-    _id: `holiday-${holiday._id}`,
+    _id: holiday._id,
 
     id: holiday._id,
 

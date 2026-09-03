@@ -26,6 +26,8 @@ import {
   deleteHoliday,
 } from "../../store/holidaySlice";
 
+import { fetchRecentEmployees } from "../../store/authSlice";
+
 import { mapHolidayList } from "../../utils/holidayMapper";
 
 import CalendarHeader from "./CalendarHeader/CalendarHeader";
@@ -57,14 +59,18 @@ export default function EventCalendar() {
     error: holidayError,
   } = useSelector((state) => state.holiday);
 
-  const { user } = useSelector((state) => state.auth);
+  const { user, recentEmployees = [] } = useSelector((state) => state.auth);
 
   const { isAuthenticated: isAdmin } = useSelector((state) => state.adminAuth);
 
   useEffect(() => {
     dispatch(fetchEvents());
     dispatch(fetchHolidays());
-  }, [dispatch]);
+
+    if (isAdmin) {
+      dispatch(fetchRecentEmployees());
+    }
+  }, [dispatch, isAdmin]);
 
   const {
     currentDate,
@@ -81,7 +87,6 @@ export default function EventCalendar() {
 
   const allEvents = useMemo(() => {
     const calendarEvents = Array.isArray(events) ? events : [];
-
     const holidayEvents = Array.isArray(mappedHolidays) ? mappedHolidays : [];
 
     return [...calendarEvents, ...holidayEvents].sort((a, b) => {
@@ -120,7 +125,6 @@ export default function EventCalendar() {
 
     for (let day = 1; day <= daysInMonth; day += 1) {
       const date = new Date(year, month, day);
-
       const dayOfWeek = date.getDay();
 
       if (dayOfWeek === 0 || dayOfWeek === 6) {
@@ -436,6 +440,8 @@ export default function EventCalendar() {
         <EventFormModal
           mode={formMode}
           event={formMode === "EDIT" ? selectedEvent : null}
+          employees={recentEmployees}
+          isAdmin={isAdmin}
           isSubmitting={isSubmitting}
           onSubmit={handleSubmitEvent}
           onClose={handleCloseEventForm}

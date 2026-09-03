@@ -1,10 +1,9 @@
+import mongoose from "mongoose";
+
 import { calendarModel } from "../models/Calendar.model.js";
 import { userModel } from "../models/User.model.js";
 import { AdminModel } from "../models/Admin.model.js";
 
-/* =========================================
-   Event Permissions
-========================================= */
 const ADMIN_EVENT_TYPES = [
   "PRESENT",
   "LEAVE",
@@ -13,33 +12,64 @@ const ADMIN_EVENT_TYPES = [
   "FESTIVAL",
   "SPECIAL_EVENT",
   "WORK_EVENT",
+  "REVIEW",
+  "DEADLINE",
+  "CLIENT_MEETING",
+  "TRAINING",
+  "MEETING",
+  "PERSONAL",
 ];
 
 const EMPLOYEE_EVENT_TYPES = ["PERSONAL", "MEETING", "BIRTHDAY"];
 
-/* =========================================
-   Event Visibility
-========================================= */
+const GENERAL_EVENT_TYPES = [
+  "HOLIDAY",
+  "GOVERNMENT_HOLIDAY",
+  "FESTIVAL",
+  "SPECIAL_EVENT",
+  "WORK_EVENT",
+];
+
 const PUBLIC_EVENT_TYPES = [
   "HOLIDAY",
   "GOVERNMENT_HOLIDAY",
   "FESTIVAL",
   "SPECIAL_EVENT",
   "MEETING",
+  "WORK_EVENT",
 ];
+
 const getVisibility = (type) => {
   if (PUBLIC_EVENT_TYPES.includes(type)) {
     return "PUBLIC";
   }
+
   return "PRIVATE";
 };
 
+const requiresEmployee = (type) => {
+  return !GENERAL_EVENT_TYPES.includes(type);
+};
+
+const getEmployeeName = (employee) => {
+  if (!employee) {
+    return "";
+  }
+
+  if (employee.name) {
+    return employee.name;
+  }
+
+  return `${employee.firstName || ""} ${employee.lastName || ""}`.trim();
+};
+
 const getLoggedInAccount = async (req) => {
-  // Employee Login
   if (req.user?.userID) {
     const employee = await userModel.findById(req.user.userID);
 
-    if (!employee) return null;
+    if (!employee) {
+      return null;
+    }
 
     return {
       account: employee,
@@ -49,11 +79,12 @@ const getLoggedInAccount = async (req) => {
     };
   }
 
-  // Admin Login
   if (req.user?.adminID) {
     const admin = await AdminModel.findById(req.user.adminID);
 
-    if (!admin) return null;
+    if (!admin) {
+      return null;
+    }
 
     return {
       account: admin,
@@ -66,9 +97,6 @@ const getLoggedInAccount = async (req) => {
   return null;
 };
 
-/* =========================================
-   GET ALL EVENTS
-========================================= */
 export const getAllEvents = async (req, res) => {
   try {
     const auth = await getLoggedInAccount(req);
@@ -84,7 +112,6 @@ export const getAllEvents = async (req, res) => {
       isActive: true,
     };
 
-    // Employees can only see public events + their own events
     if (!auth.isAdmin) {
       query = {
         isActive: true,
@@ -99,7 +126,6 @@ export const getAllEvents = async (req, res) => {
       };
     }
 
-    // Admins can see all active events
     const events = await calendarModel.find(query).sort({ date: 1 });
 
     return res.status(200).json({
@@ -140,10 +166,10 @@ export const getEventById = async (req, res) => {
       });
     }
 
-    // Employees can only view their own private events
     if (
       !auth.isAdmin &&
       event.visibility === "PRIVATE" &&
+      event.employeeId &&
       event.employeeId.toString() !== auth.account._id.toString()
     ) {
       return res.status(403).json({
@@ -191,9 +217,6 @@ export const createEvent = async (req, res) => {
       isAllDay,
     } = req.body;
 
-    /* =========================================
-       Employee Create Event
-    ========================================= */
     if (auth.isEmployee) {
       if (!EMPLOYEE_EVENT_TYPES.includes(type)) {
         return res.status(403).json({
@@ -211,22 +234,15 @@ export const createEvent = async (req, res) => {
         date,
         startTime,
         endTime,
-
         employeeId: employee._id,
-
-        employeeName:
-          employee.name || `${employee.firstName} ${employee.lastName}`,
-
+        employeeName: getEmployeeName(employee),
         department: employee.department,
         designation: employee.designation,
-
         location,
         priority,
         color,
         isAllDay,
-
         visibility: getVisibility(type),
-
         createdBy: employee._id,
         createdByModel: "User",
       });
@@ -238,9 +254,6 @@ export const createEvent = async (req, res) => {
       });
     }
 
-    /* =========================================
-       Admin Create Event
-    ========================================= */
     if (!ADMIN_EVENT_TYPES.includes(type)) {
       return res.status(403).json({
         success: false,
@@ -248,13 +261,31 @@ export const createEvent = async (req, res) => {
       });
     }
 
-    const employee = await AdminModel.findById(employeeId);
+    let employee = null;
 
-    if (!employee) {
-      return res.status(404).json({
-        success: false,
-        message: "Employee not found.",
-      });
+    if (requiresEmployee(type)) {
+      if (!employeeId) {
+        return res.status(400).json({
+          success: false,
+          message: "Employee is required for this event type.",
+        });
+      }
+
+      if (!mongoose.Types.ObjectId.isValid(employeeId)) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid employee ID.",
+        });
+      }
+
+      employee = await userModel.findById(employeeId);
+
+      if (!employee) {
+        return res.status(404).json({
+          success: false,
+          message: "Employee not found.",
+        });
+      }
     }
 
     const event = await calendarModel.create({
@@ -265,15 +296,13 @@ export const createEvent = async (req, res) => {
       startTime,
       endTime,
 
-      employeeId: employee._id,
+      employeeId: employee ? employee._id : null,
 
-      employeeName:
-        employee.name ||
-        `${employee.firstName} ${employee.lastName}` ||
-        "no name given",
+      employeeName: employee ? getEmployeeName(employee) : "",
 
-      department: employee.department || "not assigned",
-      designation: employee.designation || "untitled",
+      department: employee ? employee.department : null,
+
+      designation: employee ? employee.designation : null,
 
       location,
       priority,
@@ -282,7 +311,6 @@ export const createEvent = async (req, res) => {
 
       visibility: getVisibility(type),
 
-      // Logged in admin
       createdBy: auth.account._id,
       createdByModel: "Admin",
     });
@@ -322,14 +350,13 @@ export const updateEvent = async (req, res) => {
       });
     }
 
-    /* =========================================
-       Employee Update
-    ========================================= */
-
     if (auth.isEmployee) {
       const employee = auth.account;
 
-      if (event.employeeId.toString() !== employee._id.toString()) {
+      if (
+        !event.employeeId ||
+        event.employeeId.toString() !== employee._id.toString()
+      ) {
         return res.status(403).json({
           success: false,
           message: "You can only update your own events.",
@@ -377,36 +404,13 @@ export const updateEvent = async (req, res) => {
       });
     }
 
-    /* =========================================
-       Admin Update
-    ========================================= */
-    if (req.body.type) {
-      if (!ADMIN_EVENT_TYPES.includes(req.body.type)) {
-        return res.status(403).json({
-          success: false,
-          message: "Invalid event type.",
-        });
-      }
+    const newType = req.body.type || event.type;
 
-      event.type = req.body.type;
-      event.visibility = getVisibility(req.body.type);
-    }
-
-    if (req.body.employeeId) {
-      const employee = await AdminModel.findById(req.body.employeeId);
-
-      if (!employee) {
-        return res.status(404).json({
-          success: false,
-          message: "Employee not found.",
-        });
-      }
-
-      event.employeeId = employee._id;
-      event.employeeName =
-        employee.name || `${employee.firstName} ${employee.lastName}`;
-      event.department = employee.department;
-      event.designation = employee.designation;
+    if (!ADMIN_EVENT_TYPES.includes(newType)) {
+      return res.status(403).json({
+        success: false,
+        message: "Invalid event type.",
+      });
     }
 
     event.title = req.body.title ?? event.title;
@@ -419,7 +423,44 @@ export const updateEvent = async (req, res) => {
     event.color = req.body.color ?? event.color;
     event.isAllDay = req.body.isAllDay ?? event.isAllDay;
 
-    // Logged-in admin
+    event.type = newType;
+    event.visibility = getVisibility(newType);
+
+    if (requiresEmployee(newType)) {
+      if (!req.body.employeeId) {
+        return res.status(400).json({
+          success: false,
+          message: "Employee is required for this event type.",
+        });
+      }
+
+      if (!mongoose.Types.ObjectId.isValid(req.body.employeeId)) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid employee ID.",
+        });
+      }
+
+      const employee = await userModel.findById(req.body.employeeId);
+
+      if (!employee) {
+        return res.status(404).json({
+          success: false,
+          message: "Employee not found.",
+        });
+      }
+
+      event.employeeId = employee._id;
+      event.employeeName = getEmployeeName(employee);
+      event.department = employee.department || null;
+      event.designation = employee.designation || null;
+    } else {
+      event.employeeId = null;
+      event.employeeName = "";
+      event.department = null;
+      event.designation = null;
+    }
+
     event.updatedBy = auth.account._id;
     event.updatedByModel = "Admin";
 
@@ -440,9 +481,6 @@ export const updateEvent = async (req, res) => {
   }
 };
 
-/* =========================================
-   DELETE EVENT
-========================================= */
 export const deleteEvent = async (req, res) => {
   try {
     const auth = await getLoggedInAccount(req);
@@ -463,13 +501,13 @@ export const deleteEvent = async (req, res) => {
       });
     }
 
-    /* =========================================
-       Employee Delete
-    ========================================= */
     if (auth.isEmployee) {
       const employee = auth.account;
 
-      if (event.employeeId.toString() !== employee._id.toString()) {
+      if (
+        !event.employeeId ||
+        event.employeeId.toString() !== employee._id.toString()
+      ) {
         return res.status(403).json({
           success: false,
           message: "You can only delete your own events.",
@@ -494,9 +532,7 @@ export const deleteEvent = async (req, res) => {
         message: "Event deleted successfully.",
       });
     }
-    /* =========================================
-       Admin Delete
-    ========================================= */
+
     event.isActive = false;
     event.updatedBy = auth.account._id;
     event.updatedByModel = "Admin";

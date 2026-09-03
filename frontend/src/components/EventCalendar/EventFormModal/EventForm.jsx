@@ -6,6 +6,14 @@ import EventFormFields from "./EventFormFields";
 
 import { EVENT_TYPES } from "../../../data/eventTypes";
 
+const GENERAL_EVENT_TYPES = [
+  EVENT_TYPES.HOLIDAY,
+  EVENT_TYPES.GOVERNMENT_HOLIDAY,
+  EVENT_TYPES.FESTIVAL,
+  EVENT_TYPES.SPECIAL_EVENT,
+  EVENT_TYPES.WORK_EVENT,
+];
+
 const INITIAL_FORM = {
   title: "",
   description: "",
@@ -17,6 +25,14 @@ const INITIAL_FORM = {
   location: "",
   priority: "MEDIUM",
   employeeId: "",
+};
+
+const requiresEmployee = (type, isAdmin) => {
+  if (!isAdmin) {
+    return false;
+  }
+
+  return !GENERAL_EVENT_TYPES.includes(type);
 };
 
 const normalizeDate = (date) => {
@@ -54,6 +70,14 @@ function EventForm({
 
   useEffect(() => {
     if (mode === "EDIT" && initialData) {
+      const initialType =
+        initialData.type || EVENT_TYPES.WORK_EVENT;
+
+      const initialEmployeeId =
+        typeof initialData.employeeId === "object"
+          ? initialData.employeeId?._id || ""
+          : initialData.employeeId || "";
+
       setFormData({
         ...INITIAL_FORM,
 
@@ -61,7 +85,7 @@ function EventForm({
 
         description: initialData.description || "",
 
-        type: initialData.type || EVENT_TYPES.WORK_EVENT,
+        type: initialType,
 
         date: normalizeDate(initialData.date),
 
@@ -78,17 +102,16 @@ function EventForm({
 
         priority: initialData.priority || "MEDIUM",
 
-        employeeId:
-          typeof initialData.employeeId === "object"
-            ? initialData.employeeId?._id || ""
-            : initialData.employeeId || "",
+        employeeId: requiresEmployee(initialType, isAdmin)
+          ? initialEmployeeId
+          : "",
       });
     } else {
       setFormData(INITIAL_FORM);
     }
 
     setErrors({});
-  }, [mode, initialData]);
+  }, [mode, initialData, isAdmin]);
 
   const handleChange = useCallback(
     (event) => {
@@ -97,13 +120,18 @@ function EventForm({
       setFormData((previous) => {
         const updatedData = {
           ...previous,
-
           [name]: type === "checkbox" ? checked : value,
         };
 
         if (name === "isAllDay" && checked) {
           updatedData.startTime = "";
           updatedData.endTime = "";
+        }
+
+        if (name === "type") {
+          if (!requiresEmployee(value, isAdmin)) {
+            updatedData.employeeId = "";
+          }
         }
 
         return updatedData;
@@ -115,8 +143,15 @@ function EventForm({
           [name]: "",
         }));
       }
+
+      if (name === "type") {
+        setErrors((previous) => ({
+          ...previous,
+          employeeId: "",
+        }));
+      }
     },
-    [errors],
+    [errors, isAdmin],
   );
 
   const validateForm = useCallback(() => {
@@ -130,7 +165,7 @@ function EventForm({
       validationErrors.date = "Date is required.";
     }
 
-    if (isAdmin && !formData.employeeId) {
+    if (requiresEmployee(formData.type, isAdmin) && !formData.employeeId) {
       validationErrors.employeeId = "Employee is required.";
     }
 
@@ -140,7 +175,8 @@ function EventForm({
       formData.endTime &&
       formData.endTime <= formData.startTime
     ) {
-      validationErrors.endTime = "End time must be later than start time.";
+      validationErrors.endTime =
+        "End time must be later than start time.";
     }
 
     setErrors(validationErrors);
@@ -164,6 +200,10 @@ function EventForm({
         ...formData,
       };
 
+      if (!requiresEmployee(payload.type, isAdmin)) {
+        payload.employeeId = "";
+      }
+
       if (payload.isAllDay) {
         payload.startTime = "";
         payload.endTime = "";
@@ -171,7 +211,13 @@ function EventForm({
 
       onSubmit?.(payload);
     },
-    [formData, isSubmitting, onSubmit, validateForm],
+    [
+      formData,
+      isAdmin,
+      isSubmitting,
+      onSubmit,
+      validateForm,
+    ],
   );
 
   const handleCancel = useCallback(() => {
@@ -201,7 +247,11 @@ function EventForm({
           Cancel
         </button>
 
-        <button type="submit" className="saveBtn" disabled={isSubmitting}>
+        <button
+          type="submit"
+          className="saveBtn"
+          disabled={isSubmitting}
+        >
           {isSubmitting
             ? mode === "EDIT"
               ? "Updating..."
