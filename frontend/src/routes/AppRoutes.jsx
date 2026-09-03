@@ -12,7 +12,7 @@ import ProgressBar from './../components/ProgressBar/progressBar';
 import { BubbleCursor } from './../components/BubbleArrow/bubbleArrow';
 import RouteLoader from './../components/RouteLoader';
 
-import Calendar from './../components/Setting/Calendar';
+import Calendar from './../components/Setting/Calendar/Calendar';
 
 import EmployeeTable from '../pages/EmployeeTable';
 import EmployeeDetails from '../pages/EmployeeDetails';
