@@ -41,8 +41,8 @@ export default function MainLayout() {
         <Outlet />
       </main>
 
-
-      {isAdminPage ? <AdminFooter />:  <Footer />}
+      <Footer />
+      {/* {isAdminPage ? <AdminFooter />:  <Footer />} */}
     </> 
   );
 }
