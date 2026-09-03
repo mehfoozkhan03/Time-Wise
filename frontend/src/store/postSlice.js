@@ -35,13 +35,15 @@ export const fetchPost = createAsyncThunk(
 
 export const createNewPost = createAsyncThunk(
   'post/createNewPost',
-  async (postData, thunkAPI) => {
+
+  async (formData, { rejectWithValue }) => {
     try {
-      const { data } = await postService.createPost(postData)
-      return data.post
+      const response = await postService.createPost(formData)
+
+      return response.data.post
     } catch (error) {
-      return thunkAPI.rejectWithValue(
-        error.response?.data?.message || 'Unable to create post',
+      return rejectWithValue(
+        error.response?.data?.message || 'Unable to create post.',
       )
     }
   },
