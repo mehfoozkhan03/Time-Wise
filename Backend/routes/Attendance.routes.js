@@ -1,5 +1,6 @@
 import express from 'express';
 import { auth } from '../middleware/AuthMiddleware.js';
+import { authorize } from '../middleware/Allowrole.middleware.js';
 import {
   checkIn,
   startBreak,
@@ -12,18 +13,18 @@ import {
 
 const attendanceRouter = express.Router();
 
-attendanceRouter.post('/checkin', auth, checkIn);
+attendanceRouter.post('/checkin', auth,authorize("user"), checkIn);
 
-attendanceRouter.post('/break/start', auth, startBreak);
+attendanceRouter.post('/break/start', auth,authorize("user"), startBreak);
 
-attendanceRouter.post('/break/end', auth, endBreak);
+attendanceRouter.post('/break/end', auth,authorize("user"), endBreak);
 
-attendanceRouter.post('/checkout', auth, checkOut);
+attendanceRouter.post('/checkout', auth,authorize("user"), checkOut);
 
-attendanceRouter.get('/today', auth, getTodayAttendance);
+attendanceRouter.get('/today', auth,authorize("user"), getTodayAttendance);
 
-attendanceRouter.get('/history', auth, getAttendanceHistory);
+attendanceRouter.get('/history', auth,authorize("user"), getAttendanceHistory);
 
-attendanceRouter.get('/dashboard-stats', auth, getDashboardStats);
+attendanceRouter.get('/dashboard-stats', auth,authorize("user"), getDashboardStats);
 
 export { attendanceRouter };
