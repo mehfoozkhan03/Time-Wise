@@ -1,6 +1,30 @@
 /* ==========================================================
    NAVBAR
 ========================================================== */
+/* ==========================================
+   ONLY WHEN NAVBAR IS OVER PROFILE BANNER
+========================================== */
+
+.navbar.navbar_over_banner .navbar_links a {
+  color: #111827;
+  font-weight: 700;
+}
+
+/* Hover */
+.navbar.navbar_over_banner .navbar_links a:hover {
+  color: #000000;
+}
+
+/* Active link */
+.navbar.navbar_over_banner .navbar_links a.active {
+  color: #000000;
+}
+
+/* Hover underline */
+.navbar.navbar_over_banner .navbar_links a::after {
+  background: #111827;
+}
+
 
 .navbar {
   position: sticky;

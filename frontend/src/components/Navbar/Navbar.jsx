@@ -52,6 +52,7 @@ export default function Navbar() {
 
   const [mobileOpen, setMobileOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+  const [overProfileBanner, setOverProfileBanner] = useState(false);
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [logoutOpen, setLogoutOpen] = useState(false);
 
@@ -125,6 +126,35 @@ export default function Navbar() {
     };
   }, []);
 
+  useEffect(() => {
+  const handleScroll = () => {
+    const banner = document.querySelector(".profile_banner");
+    const navbar = document.querySelector(".navbar");
+
+    if (!banner || !navbar) {
+      setOverProfileBanner(false);
+      return;
+    }
+
+    const bannerRect = banner.getBoundingClientRect();
+    const navbarHeight = navbar.offsetHeight;
+
+    const isOverBanner =
+      bannerRect.top <= navbarHeight &&
+      bannerRect.bottom >= 0;
+
+    setOverProfileBanner(isOverBanner);
+  };
+
+  handleScroll();
+
+  window.addEventListener("scroll", handleScroll);
+
+  return () => {
+    window.removeEventListener("scroll", handleScroll);
+  };
+}, [location.pathname]);
+
   // Notification
   useEffect(() => {
     dispatch(
@@ -137,7 +167,11 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="navbar">
+    <header
+  className={`navbar ${
+    overProfileBanner ? "navbar_over_banner" : ""
+  }`}
+>
         {/* =======================
               Logo
         ======================= */}
