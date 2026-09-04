@@ -2,6 +2,7 @@
   width: 100%;
   padding: 20px 50px;
   border-top: 1px solid var(--border);
+  margin-top:20px;
 }
 
 .admin_footer_container {
