@@ -35,28 +35,30 @@ userRoutes.post("/login", login);
 userRoutes.post("/signup", signup);
 
 userRoutes.post("/logout", logout);
+// userRoutes.post("/logout", auth, authorize("user", "admin"), logout);
+
 
 userRoutes.get("/me", auth,authorize("user"), getCurrentUser);
 
-userRoutes.get("/users", auth, getAllUser);
+userRoutes.get("/users", auth,  authorize("admin"), getAllUser);
 
-userRoutes.patch("/activity", auth, updateActivity);
+userRoutes.patch("/activity", auth, authorize("user"), updateActivity);
 
-userRoutes.get("/recent-employees", auth, getRecentEmployees);
+userRoutes.get("/recent-employees", auth, authorize("admin"), getRecentEmployees);
 
-userRoutes.patch("/:userId/department", updateUserDepartment);
+userRoutes.patch("/:userId/department",  authorize("admin"), updateUserDepartment);
 
-userRoutes.patch("/:userId/designation", updateUserDesignation);
+userRoutes.patch("/:userId/designation",  authorize("admin"),updateUserDesignation);
 
-userRoutes.patch("/:userId/role", auth, updateRole);
+userRoutes.patch("/:userId/role", auth,  authorize("admin"),updateRole);
 
 
-userRoutes.patch("/theme", auth, updateTheme);
+userRoutes.patch("/theme", auth, authorize("user", "admin"), updateTheme);
 
-userRoutes.put("/users/:userId", auth, updateUser);
+userRoutes.put("/users/:userId", auth,  authorize("admin"),updateUser);
 // userRoutes.patch("/:userId", auth, adminOnly, updateEmployee);
 
-userRoutes.get("/profile/:userId", auth, getUserProfile);
+userRoutes.get("/profile/:userId", auth, authorize("admin"), getUserProfile);
 
 userRoutes.post("/adminlogin", admin_login);
 

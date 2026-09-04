@@ -89,7 +89,7 @@ export const signup = async (req, res) => {
       description: "You can now sign in and start using TimeWise.",
       reason: "Your account is ready to use.",
       user,
-      role:"user",
+      role: "user",
     });
   } catch (error) {
     console.error("Signup Error:", error);
@@ -173,12 +173,12 @@ export const login = async (req, res) => {
     const token = jwt.sign(
       {
         userID: userData._id,
-        userEmail:userData.email,
-        role:"user"
+        userEmail: userData.email,
+        role: "user",
       },
       process.env.PrivateKey,
       {
-        expiresIn: "1d",
+        expiresIn: "1h",
       },
     );
 
@@ -186,7 +186,7 @@ export const login = async (req, res) => {
       httpOnly: false,
       secure: false,
       sameSite: "Lax",
-      maxAge: 24 * 60 * 60 * 1000,
+      maxAge: 60 * 60 * 1000,
     });
 
     const user = userData.toObject();
@@ -200,7 +200,7 @@ export const login = async (req, res) => {
       description: "Redirecting you to your home...",
       reason: "You have been successfully authenticated.",
       user,
-      role:"user",
+      role: "user",
     });
   } catch (error) {
     console.error("Login Error:", error);
@@ -286,7 +286,7 @@ export const admin_login = async (req, res) => {
       },
       process.env.PrivateKey,
       {
-        expiresIn: "1d",
+        expiresIn: "1h",
       },
     );
 
@@ -294,7 +294,7 @@ export const admin_login = async (req, res) => {
       httpOnly: false,
       secure: false,
       sameSite: "Lax",
-      maxAge: 24 * 60 * 60 * 1000,
+      maxAge: 60 * 60 * 1000,
     });
 
     const user = admin.toObject();
@@ -308,7 +308,7 @@ export const admin_login = async (req, res) => {
       description: "Redirecting you to your home...",
       reason: "You have been successfully authenticated as admin.",
       user,
-      role:"admin",
+      role: "admin",
     });
   } catch (error) {
     console.error("Admin Login Error:", error);
@@ -458,9 +458,7 @@ export const getAllUser = async (req, res) => {
     }
 
     if (status === "Inactive") {
-      filter.$or = [
-        ...(filter.$or || []),
-      ];
+      filter.$or = [...(filter.$or || [])];
 
       filter.lastActiveAt = {
         $lt: new Date(Date.now() - ACTIVE_TIME),

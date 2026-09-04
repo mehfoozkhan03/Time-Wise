@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken';
+import jwt from "jsonwebtoken";
 
 export const auth = (req, res, next) => {
   try {
@@ -7,7 +7,7 @@ export const auth = (req, res, next) => {
     if (!token) {
       return res.status(401).json({
         success: false,
-        message: 'Authentication required,',
+        message: "Authentication required,",
       });
     }
 
@@ -15,18 +15,18 @@ export const auth = (req, res, next) => {
       if (err) {
         return res.status(401).json({
           success: false,
-          message: 'Invalid or expired token.',
+          message: "Invalid or expired token.",
         });
       }
       req.user = decoded;
       next();
     });
   } catch (error) {
-    console.error('Auth Middleware Error:', error);
+    console.error("Auth Middleware Error:", error);
 
     return res.status(500).json({
       success: false,
-      message: 'Internal Server Error',
+      message: "Internal Server Error",
     });
   }
 };

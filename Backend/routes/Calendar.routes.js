@@ -1,6 +1,7 @@
 import express from 'express';
 
 import { auth } from '../middleware/AuthMiddleware.js';
+import { authorize } from "../middleware/Allowrole.middleware.js";
 
 import {
   getAllEvents,
@@ -15,18 +16,18 @@ const router = express.Router();
 router.use(auth);
 
 // Get all events
-router.get('/', getAllEvents);
+router.get('/',authorize("user", "admin"), getAllEvents);
 
 // Get single event
-router.get('/:id', getEventById);
+router.get('/:id',authorize("user", "admin"), getEventById);
 
 // Create event
-router.post('/', createEvent);
+router.post('/',authorize("user", "admin"), createEvent);
 
 // Update event
-router.put('/:id', updateEvent);
+router.put('/:id',authorize("user", "admin") ,updateEvent);
 
 // Delete event
-router.delete('/:id', deleteEvent);
+router.delete('/:id',authorize("user", "admin"), deleteEvent);
 
 export default router;
