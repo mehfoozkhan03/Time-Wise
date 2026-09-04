@@ -18,7 +18,6 @@ export const auth = (req, res, next) => {
           message: "Invalid or expired token.",
         });
       }
-      console.log(decoded);
       req.user = decoded;
       next();
     });
