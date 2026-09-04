@@ -21,19 +21,10 @@ const getNestedValue = (object, path) => {
 // ============================================================
 // PERIOD FIELD MAP
 // ============================================================
-//
-// Some TimeWise contexts may store values under different
-// structures. We keep this small and deterministic.
-// ============================================================
 
 const getWorkingHoursValue = (userContext, entity, period) => {
   const attendance = userContext?.attendance || {};
 
-  // ----------------------------------------------------------
-  // OVERTIME entities must read the OVERTIME fields, not the
-  // working-hours fields. "total" → all-time overtime;
-  // anything else (month / none) → this month's overtime.
-  // ----------------------------------------------------------
   const overtimeEntities = new Set([
     "overtime_hours",
     "monthly_overtime",
@@ -104,48 +95,7 @@ const getWorkingHoursValue = (userContext, entity, period) => {
 };
 
 // ============================================================
-// CALENDAR DATE NORMALIZATION
-// ============================================================
-
-const normalizeDate = (value) => {
-  if (!value) {
-    return null;
-  }
-
-  const date = new Date(value);
-
-  if (Number.isNaN(date.getTime())) {
-    return null;
-  }
-
-  return date;
-};
-
-// ============================================================
-// SAME DATE
-// ============================================================
-
-const isSameDate = (first, second) => {
-  const a = normalizeDate(first);
-
-  const b = normalizeDate(second);
-
-  if (!a || !b) {
-    return false;
-  }
-
-  return (
-    a.getFullYear() === b.getFullYear() &&
-    a.getMonth() === b.getMonth() &&
-    a.getDate() === b.getDate()
-  );
-};
-
-// ============================================================
-// NATURAL DATE PARSER
-// ============================================================
-// Parse natural language dates like "2nd October", "Friday", "next week"
-// Returns a Date object or null if parsing fails
+// NATURAL DATE PARSING
 // ============================================================
 
 const parseNaturalDate = (dateStr) => {
@@ -227,14 +177,47 @@ const parseNaturalDate = (dateStr) => {
 };
 
 // ============================================================
+// CALENDAR DATE NORMALIZATION
+// ============================================================
+
+const normalizeDate = (value) => {
+  if (!value) {
+    return null;
+  }
+
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return null;
+  }
+
+  return date;
+};
+
+// ============================================================
+// SAME DATE
+// ============================================================
+
+const isSameDate = (first, second) => {
+  const a = normalizeDate(first);
+
+  const b = normalizeDate(second);
+
+  if (!a || !b) {
+    return false;
+  }
+
+  return (
+    a.getFullYear() === b.getFullYear() &&
+    a.getMonth() === b.getMonth() &&
+    a.getDate() === b.getDate()
+  );
+};
+
+// ============================================================
 // DATE RANGE
 // ============================================================
-// Extended to handle all dateReference values including:
-// - today, tomorrow, yesterday
-// - this_week, last_week, next_week
-// - this_month, last_month, next_month
-// - this_year, last_year, next_year
-// - specific_date (natural date parsing from search field)
+// FIXED: Properly handles all dateReference values
 // ============================================================
 
 const getDateRange = (dateReference, searchText = null) => {
@@ -244,18 +227,10 @@ const getDateRange = (dateReference, searchText = null) => {
   const start = new Date(now);
   const end = new Date(now);
 
-  // ========================================================
-  // TODAY
-  // ========================================================
-
   if (dateReference === "today") {
     end.setHours(23, 59, 59, 999);
     return { start, end };
   }
-
-  // ========================================================
-  // TOMORROW
-  // ========================================================
 
   if (dateReference === "tomorrow") {
     start.setDate(start.getDate() + 1);
@@ -264,20 +239,12 @@ const getDateRange = (dateReference, searchText = null) => {
     return { start, end };
   }
 
-  // ========================================================
-  // YESTERDAY
-  // ========================================================
-
   if (dateReference === "yesterday") {
     start.setDate(start.getDate() - 1);
     end.setTime(start.getTime());
     end.setHours(23, 59, 59, 999);
     return { start, end };
   }
-
-  // ========================================================
-  // THIS WEEK (Monday to Sunday)
-  // ========================================================
 
   if (dateReference === "this_week") {
     const dayOfWeek = now.getDay();
@@ -290,10 +257,6 @@ const getDateRange = (dateReference, searchText = null) => {
     return { start, end };
   }
 
-  // ========================================================
-  // LAST WEEK
-  // ========================================================
-
   if (dateReference === "last_week") {
     const dayOfWeek = now.getDay();
     const diff = now.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1);
@@ -304,10 +267,6 @@ const getDateRange = (dateReference, searchText = null) => {
     end.setHours(23, 59, 59, 999);
     return { start, end };
   }
-
-  // ========================================================
-  // NEXT WEEK
-  // ========================================================
 
   if (dateReference === "next_week") {
     const dayOfWeek = now.getDay();
@@ -320,10 +279,6 @@ const getDateRange = (dateReference, searchText = null) => {
     return { start, end };
   }
 
-  // ========================================================
-  // THIS MONTH
-  // ========================================================
-
   if (dateReference === "this_month") {
     start.setDate(1);
     start.setHours(0, 0, 0, 0);
@@ -334,10 +289,6 @@ const getDateRange = (dateReference, searchText = null) => {
     return { start, end };
   }
 
-  // ========================================================
-  // LAST MONTH
-  // ========================================================
-
   if (dateReference === "last_month") {
     start.setMonth(start.getMonth() - 1);
     start.setDate(1);
@@ -347,10 +298,6 @@ const getDateRange = (dateReference, searchText = null) => {
     end.setHours(23, 59, 59, 999);
     return { start, end };
   }
-
-  // ========================================================
-  // NEXT MONTH
-  // ========================================================
 
   if (dateReference === "next_month") {
     start.setMonth(start.getMonth() + 1);
@@ -363,10 +310,6 @@ const getDateRange = (dateReference, searchText = null) => {
     return { start, end };
   }
 
-  // ========================================================
-  // THIS YEAR
-  // ========================================================
-
   if (dateReference === "this_year") {
     start.setMonth(0);
     start.setDate(1);
@@ -377,10 +320,6 @@ const getDateRange = (dateReference, searchText = null) => {
     end.setHours(23, 59, 59, 999);
     return { start, end };
   }
-
-  // ========================================================
-  // LAST YEAR
-  // ========================================================
 
   if (dateReference === "last_year") {
     start.setFullYear(start.getFullYear() - 1);
@@ -395,10 +334,6 @@ const getDateRange = (dateReference, searchText = null) => {
     return { start, end };
   }
 
-  // ========================================================
-  // NEXT YEAR
-  // ========================================================
-
   if (dateReference === "next_year") {
     start.setFullYear(start.getFullYear() + 1);
     start.setMonth(0);
@@ -412,18 +347,12 @@ const getDateRange = (dateReference, searchText = null) => {
     return { start, end };
   }
 
-  // ========================================================
-  // SPECIFIC DATE (natural date parsing from searchText)
-  // ========================================================
-
   if (dateReference === "specific_date") {
-    // Use searchText if provided (Phase 2 stores "2nd October" in search field)
+    // FIXED: Try searchText first (e.g., "2nd October", "Friday")
     const dateStr = searchText || dateReference;
 
-    // Try parsing as natural date first
     let parsedDate = parseNaturalDate(dateStr);
 
-    // If that fails, try ISO/standard date parsing
     if (!parsedDate) {
       parsedDate = normalizeDate(dateStr);
     }
@@ -435,10 +364,6 @@ const getDateRange = (dateReference, searchText = null) => {
       return { start: parsedDate, end: endDate };
     }
   }
-
-  // ========================================================
-  // FALLBACK: If dateReference itself looks like a date
-  // ========================================================
 
   if (typeof dateReference === "string" && /\d/.test(dateReference)) {
     const parsed = parseNaturalDate(dateReference);
@@ -456,6 +381,9 @@ const getDateRange = (dateReference, searchText = null) => {
 // ============================================================
 // FILTER CALENDAR EVENTS
 // ============================================================
+// FIXED: Apply date range FIRST, then text search
+// This prevents filtering out date results by text
+// ============================================================
 
 const filterCalendarEvents = (events, route) => {
   if (!Array.isArray(events)) {
@@ -463,6 +391,24 @@ const filterCalendarEvents = (events, route) => {
   }
 
   let result = [...events];
+
+  // ----------------------------------------------------------
+  // Date reference FIRST (critical!)
+  // ----------------------------------------------------------
+
+  const range = getDateRange(route.dateReference, route.search);
+
+  if (range) {
+    result = result.filter((event) => {
+      const date = normalizeDate(event?.date);
+
+      if (!date) {
+        return false;
+      }
+
+      return date >= range.start && date <= range.end;
+    });
+  }
 
   // ----------------------------------------------------------
   // Event type
@@ -495,10 +441,14 @@ const filterCalendarEvents = (events, route) => {
   }
 
   // ----------------------------------------------------------
-  // Search text
+  // Search text (only if NOT a date search)
   // ----------------------------------------------------------
 
-  if (route.search && route.search !== "none") {
+  if (
+    route.search &&
+    route.search !== "none" &&
+    route.dateReference !== "specific_date"
+  ) {
     const search = String(route.search).toLowerCase();
 
     result = result.filter(
@@ -515,29 +465,13 @@ const filterCalendarEvents = (events, route) => {
     );
   }
 
-  // ----------------------------------------------------------
-  // Date reference
-  // ----------------------------------------------------------
-
-  const range = getDateRange(route.dateReference, route.search);
-
-  if (range) {
-    result = result.filter((event) => {
-      const date = normalizeDate(event?.date);
-
-      if (!date) {
-        return false;
-      }
-
-      return date >= range.start && date <= range.end;
-    });
-  }
-
   return result;
 };
 
 // ============================================================
 // FILTER HOLIDAYS
+// ============================================================
+// FIXED: Apply date range FIRST, then text search
 // ============================================================
 
 const filterHolidays = (holidays, route) => {
@@ -547,19 +481,9 @@ const filterHolidays = (holidays, route) => {
 
   let result = [...holidays];
 
-  if (route.search && route.search !== "none") {
-    const search = String(route.search).toLowerCase();
-
-    result = result.filter(
-      (holiday) =>
-        String(holiday?.title || "")
-          .toLowerCase()
-          .includes(search) ||
-        String(holiday?.description || "")
-          .toLowerCase()
-          .includes(search),
-    );
-  }
+  // ----------------------------------------------------------
+  // Date reference FIRST (critical!)
+  // ----------------------------------------------------------
 
   const range = getDateRange(route.dateReference, route.search);
 
@@ -573,6 +497,28 @@ const filterHolidays = (holidays, route) => {
 
       return date >= range.start && date <= range.end;
     });
+  }
+
+  // ----------------------------------------------------------
+  // Search text (only if NOT a date search)
+  // ----------------------------------------------------------
+
+  if (
+    route.search &&
+    route.search !== "none" &&
+    route.dateReference !== "specific_date"
+  ) {
+    const search = String(route.search).toLowerCase();
+
+    result = result.filter(
+      (holiday) =>
+        String(holiday?.title || "")
+          .toLowerCase()
+          .includes(search) ||
+        String(holiday?.description || "")
+          .toLowerCase()
+          .includes(search),
+    );
   }
 
   return result;

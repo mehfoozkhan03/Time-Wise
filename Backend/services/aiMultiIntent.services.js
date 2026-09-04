@@ -1,12 +1,6 @@
-import Groq from "groq-sdk";
-
-const groq = new Groq({
-  apiKey: process.env.GROQ_API_KEY,
-});
-
 // ==================================================
 // SIMPLE KEYWORD-BASED MULTI-INTENT DETECTOR
-// Works WITHOUT AI for common patterns.
+// NO AI REQUIRED - WORKS 100% DETERMINISTICALLY
 // ==================================================
 
 const KNOWN_INTENTS = [
@@ -71,7 +65,7 @@ const detectIntentsByKeywords = (message) => {
 };
 
 // ==================================================
-// MULTI-INTENT UNDERSTANDING
+// MULTI-INTENT UNDERSTANDING (NO AI - KEYWORDS ONLY)
 // ==================================================
 
 export const understandMultipleIntents = async ({
@@ -79,173 +73,36 @@ export const understandMultipleIntents = async ({
   phase1Result,
   phase2Result,
 }) => {
-  try {
-    // FIRST: Try simple keyword-based detection (no AI, no rate limits)
-    const keywordRequests = detectIntentsByKeywords(message);
+  // Use keyword-based detection only (no AI calls)
+  const keywordRequests = detectIntentsByKeywords(message);
 
-    if (keywordRequests.length >= 2) {
-      console.log(
-        "MULTI-INTENT: Keyword detection found",
-        keywordRequests.length,
-        "requests",
-      );
-
-      return {
-        multiple: true,
-
-        requests: keywordRequests,
-      };
-    }
-
-    // SECOND: Try AI-based detection for complex cases
-    // Only call if keyword detection found 0-1 intents
-
-    // Clean up the message for the prompt
-    const cleanMessage = message.replace(/"/g, '\\"');
-
-    const prompt = `
-You are the Multi-Intent Engine for TimeWise.
-
-Determine whether the user's message contains one request or multiple independent requests.
-
-USER MESSAGE:
-"${cleanMessage}"
-
-PHASE 1:
-${JSON.stringify(phase1Result)}
-
-PHASE 2:
-${JSON.stringify(phase2Result)}
-
-Return ONLY valid JSON.
-
-Rules:
-
-1. If the user asks only one thing, return one request.
-
-2. If the user asks multiple independent things (using "and", ",", "or"), return one request for EACH thing.
-
-3. Never invent information. Use only what the user said.
-
-4. Preserve the meaning of the user's request.
-
-5. Each request must contain exactly these fields:
-   - intent (string)
-   - action (string)
-   - entity (string)
-   - period (string)
-   - dateReference (string)
-   - search (string)
-   - confidence (number)
-
-6. Use these known TimeWise entity names:
-   - attendance_percentage
-   - overtime_hours
-   - working_hours
-   - productivity_score
-   - current_streak
-   - leaves_taken
-   - average_checkin_time
-
-Return EXACTLY this format (no extra text):
-
-{"multiple":true,"requests":[{"intent":"X","action":"get","entity":"Y","period":"none","dateReference":"none","search":"none","confidence":1}]}
-
-Examples:
-
-User: "What is my attendance and how many leaves have I taken?"
-Response: {"multiple":true,"requests":[{"intent":"attendance","action":"get","entity":"attendance_percentage","period":"none","dateReference":"none","search":"none","confidence":1},{"intent":"leaves","action":"get","entity":"leaves_taken","period":"none","dateReference":"none","search":"none","confidence":1}]}
-
-User: "Show me my streak and productivity"
-Response: {"multiple":true,"requests":[{"intent":"streak","action":"get","entity":"current_streak","period":"none","dateReference":"none","search":"none","confidence":1},{"intent":"productivity","action":"get","entity":"productivity_score","period":"none","dateReference":"none","search":"none","confidence":1}]}
-
-User: "What is my overtime this month?"
-Response: {"multiple":false,"requests":[{"intent":"overtime","action":"get","entity":"overtime_hours","period":"month","dateReference":"none","search":"none","confidence":1}]}
-
-Return JSON only. No markdown, no explanation.
-`;
-
-    const response = await groq.chat.completions.create({
-      model: "llama-3.3-70b-versatile",
-
-      messages: [
-        {
-          role: "system",
-          content:
-            "You are a strict JSON multi-intent classifier. Return ONLY valid JSON.",
-        },
-        {
-          role: "user",
-          content: prompt,
-        },
-      ],
-
-      temperature: 0,
-
-      max_completion_tokens: 500,
-    });
-
-    const content = response?.choices?.[0]?.message?.content?.trim();
-
-    if (!content) {
-      throw new Error("Multi-intent engine returned empty response");
-    }
-
-    // Clean up the response - remove markdown code blocks if present
-    const cleaned = content
-      .replace(/```json?/g, "")
-      .replace(/```/g, "")
-      .trim();
-
-    const parsed = JSON.parse(cleaned);
-
-    if (!Array.isArray(parsed?.requests)) {
-      throw new Error(
-        "Invalid multi-intent response: requests is not an array",
-      );
-    }
-
-    // Filter out invalid requests
-    const validRequests = parsed.requests.filter(
-      (r) => r && typeof r.intent === "string" && typeof r.entity === "string",
-    );
-
-    if (validRequests.length === 0) {
-      throw new Error("No valid requests found");
-    }
-
+  if (keywordRequests.length >= 2) {
     console.log(
-      "MULTI-INTENT: AI detection found",
-      validRequests.length,
+      "MULTI-INTENT: Keyword detection found",
+      keywordRequests.length,
       "requests",
     );
 
     return {
-      multiple: validRequests.length > 1,
-
-      requests: validRequests,
-    };
-  } catch (error) {
-    console.error("Multi-Intent Engine Error:", error?.message || error);
-
-    // THIRD: Fallback - extract what we can from keyword detection
-    const keywordRequests = detectIntentsByKeywords(message);
-
-    if (keywordRequests.length > 0) {
-      console.log("MULTI-INTENT: Fallback to keyword detection");
-
-      return {
-        multiple: keywordRequests.length > 1,
-
-        requests: keywordRequests,
-      };
-    }
-
-    // FINAL fallback to Phase 2
-    return {
-      multiple: false,
-
-      requests: phase2Result ? [phase2Result] : [],
+      multiple: true,
+      requests: keywordRequests,
     };
   }
+
+  // If only 0-1 intents found, return Phase 2 result as single request
+  return {
+    multiple: false,
+
+    requests: [
+      {
+        intent: phase2Result?.intent || "unknown",
+        action: phase2Result?.action || "get",
+        entity: phase2Result?.entity || "none",
+        period: phase2Result?.period || "none",
+        dateReference: phase2Result?.dateReference || "none",
+        search: phase2Result?.search || "none",
+        confidence: phase2Result?.confidence || 0,
+      },
+    ],
+  };
 };

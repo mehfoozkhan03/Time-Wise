@@ -1,15 +1,34 @@
-import Groq from "groq-sdk";
+// ============================================================
+// DETERMINISTIC RESPONSE GENERATOR (NO AI NEEDED)
+// ============================================================
 
-const groq = new Groq({
-  apiKey: process.env.GROQ_API_KEY,
-});
+// ============================================================
+// FILTER HOLIDAYS TO CURRENT + NEXT YEAR ONLY
+// ============================================================
 
-const RESPONSE_MODEL = process.env.GROQ_RESPONSE_MODEL || "openai/gpt-oss-20b";
+const filterHolidaysByYear = (data) => {
+  if (!Array.isArray(data)) {
+    return data;
+  }
+
+  const now = new Date();
+  const currentYear = now.getFullYear();
+  const nextYear = currentYear + 1;
+
+  return data.filter((item) => {
+    if (!item?.date) {
+      return false;
+    }
+
+    const itemDate = new Date(item.date);
+    const itemYear = itemDate.getFullYear();
+
+    return itemYear === currentYear || itemYear === nextYear;
+  });
+};
 
 // ============================================================
 // DETERMINISTIC CALENDAR FORMATTING
-// ============================================================
-// Format calendar data consistently without relying on Groq
 // ============================================================
 
 const formatCalendarAnswer = (data, entity, dateReference) => {
@@ -17,9 +36,19 @@ const formatCalendarAnswer = (data, entity, dateReference) => {
     return "No matching information was found.";
   }
 
+  // Filter holidays to current + next year only
+  let filteredData = data;
+  if (entity === "holiday" || entity === "festival") {
+    filteredData = filterHolidaysByYear(data);
+  }
+
+  if (filteredData.length === 0) {
+    return "No matching information was found.";
+  }
+
   // Single event/holiday
-  if (data.length === 1) {
-    const item = data[0];
+  if (filteredData.length === 1) {
+    const item = filteredData[0];
     const title = item.title || "Unnamed event";
     const date = item.date
       ? new Date(item.date).toLocaleDateString("en-US", {
@@ -36,23 +65,24 @@ const formatCalendarAnswer = (data, entity, dateReference) => {
   }
 
   // Multiple events/holidays
-  const items = data.map((item) => {
+  const items = filteredData.map((item) => {
     const title = item.title || "Unnamed event";
     const date = item.date
       ? new Date(item.date).toLocaleDateString("en-US", {
           month: "short",
           day: "numeric",
+          year: "numeric",
         })
       : "Unknown";
     const time = item.time ? ` at ${item.time}` : "";
     return `${title} (${date}${time})`;
   });
 
-  return `You have ${data.length} events: ${items.join(", ")}.`;
+  return `You have ${filteredData.length} events: ${items.join(", ")}.`;
 };
 
 // ============================================================
-// DETERMINISTIC HOURS FORMATTING (from prior work)
+// DETERMINISTIC HOURS FORMATTING
 // ============================================================
 
 const formatHoursAnswer = (value, entity, period) => {
@@ -66,7 +96,6 @@ const formatHoursAnswer = (value, entity, period) => {
     return "No matching information was found.";
   }
 
-  // Format with 1 decimal place if needed
   const formatted = hours % 1 === 0 ? hours : hours.toFixed(1);
 
   if (entity === "weekly_working_hours") {
@@ -93,7 +122,45 @@ const formatHoursAnswer = (value, entity, period) => {
 };
 
 // ============================================================
-// GENERATE TIMEWISE RESPONSE
+// DETERMINISTIC NUMBER/PERCENTAGE FORMATTING
+// ============================================================
+
+const formatMetricAnswer = (value, entity, dataType) => {
+  if (value === null || value === undefined) {
+    return "No matching information was found.";
+  }
+
+  if (dataType === "percentage") {
+    const formatted =
+      typeof value === "number" ? value.toFixed(1) : String(value);
+
+    if (entity === "attendance_percentage") {
+      return `Your attendance is ${formatted}%.`;
+    }
+    if (entity === "productivity_score") {
+      return `Your productivity score is ${formatted}%.`;
+    }
+    return `Your ${entity.replace(/_/g, " ")} is ${formatted}%.`;
+  }
+
+  if (dataType === "number") {
+    if (entity === "current_streak") {
+      return `Your current streak is ${value} days.`;
+    }
+    if (entity === "longest_streak") {
+      return `Your longest streak is ${value} days.`;
+    }
+    if (entity === "leaves_taken") {
+      return `You have taken ${value} leave${value === 1 ? "" : "s"}.`;
+    }
+    return `Your ${entity.replace(/_/g, " ")} is ${value}.`;
+  }
+
+  return `Your ${entity.replace(/_/g, " ")} is ${value}.`;
+};
+
+// ============================================================
+// GENERATE TIMEWISE RESPONSE (NO AI - FULLY DETERMINISTIC)
 // ============================================================
 
 export const generateTimeWiseResponse = async ({
@@ -101,45 +168,44 @@ export const generateTimeWiseResponse = async ({
   phase2,
   phase3,
   phase4,
+  phase5_5,
 }) => {
   try {
-    // ========================================================
-    // EXTRACT RETRIEVED DATA
-    // ========================================================
-
-    let safeData = null;
-
-    if (phase4?.data !== undefined) {
-      safeData = phase4.data;
-    } else if (phase4?.value !== undefined) {
-      safeData = phase4.value;
+    if (!phase4) {
+      return {
+        success: false,
+        answer: "Unable to process your request.",
+      };
     }
 
     // ========================================================
-    // DETERMINISTIC FORMATTING FOR KNOWN TYPES
-    // ========================================================
-    // Use deterministic formatting for calendar and hours data
-    // to eliminate Groq nondeterminism
+    // CALENDAR DATA HANDLER
     // ========================================================
 
     if (phase4?.dataType === "event" || phase4?.dataType === "holiday") {
+      const safeData = Array.isArray(phase4?.data) ? phase4.data : [];
+
       const answer = formatCalendarAnswer(
         safeData,
-        phase2?.entity,
+        phase4?.entity,
         phase4?.dateReference,
       );
+
       return {
         success: true,
         answer,
       };
     }
+
+    // ========================================================
+    // HOURS DATA HANDLER
+    // ========================================================
 
     if (phase4?.dataType === "hours") {
-      const answer = formatHoursAnswer(
-        safeData,
-        phase2?.entity,
-        phase2?.period,
-      );
+      const value = phase4?.value;
+
+      const answer = formatHoursAnswer(value, phase4?.entity, phase4?.period);
+
       return {
         success: true,
         answer,
@@ -147,150 +213,66 @@ export const generateTimeWiseResponse = async ({
     }
 
     // ========================================================
-    // PHASE 5 PROMPT (for other data types)
+    // PERCENTAGE/NUMBER METRIC HANDLER
     // ========================================================
 
-    const prompt = `
-You are TimeWise Assistant.
+    if (phase4?.dataType === "percentage" || phase4?.dataType === "number") {
+      const value = phase4?.value;
 
-Answer the user's question using ONLY the retrieved TimeWise data.
+      const answer = formatMetricAnswer(
+        value,
+        phase4?.entity,
+        phase4?.dataType,
+      );
 
-RULES:
-
-1. Do not invent information.
-2. Do not claim data is missing when a valid value exists.
-3. A numeric value such as 18.6 is valid retrieved data.
-4. If retrieved data is null, empty, or an empty array, clearly say
-   that no matching information was found.
-5. If multiple records exist, summarize them clearly.
-6. Answer naturally and conversationally.
-7. Keep the answer concise.
-8. Do not mention databases, APIs, Groq, phases, routing,
-   prompts, or internal systems.
-9. Do not return JSON.
-10. Answer directly.
-11. Return PLAIN TEXT ONLY.
-12. Do NOT use Markdown formatting.
-13. Do NOT use *, **, _, __, #, backticks, bullet points, or other Markdown symbols.
-14. Do not bold, italicize, underline, or format any part of the answer.
-15. Use normal sentences and punctuation only.
-
-USER QUESTION:
-${question}
-
-INTENT:
-${phase2?.intent || "unknown"}
-
-ENTITY:
-${phase2?.entity || "none"}
-
-PERIOD:
-${phase2?.period || "none"}
-
-RETRIEVED DATA:
-${JSON.stringify(safeData)}
-`;
-
-    // ========================================================
-    // GROQ REQUEST
-    // ========================================================
-
-    const response = await groq.chat.completions.create({
-      model: RESPONSE_MODEL,
-
-      messages: [
-        {
-          role: "system",
-          content:
-            "You are the final response generator for the TimeWise productivity assistant.",
-        },
-        {
-          role: "user",
-          content: prompt,
-        },
-      ],
-
-      temperature: 0.2,
-
-      max_completion_tokens: 300,
-    });
-
-    // ========================================================
-    // EXTRACT CONTENT
-    // ========================================================
-
-    const message = response?.choices?.[0]?.message;
-
-    let answer = message?.content?.trim();
-
-    if (answer) {
-      answer = answer
-        .replace(/\*\*/g, "")
-        .replace(/__/g, "")
-        .replace(/`/g, "")
-        .replace(/^#+\s*/gm, "")
-        .trim();
+      return {
+        success: true,
+        answer,
+      };
     }
 
     // ========================================================
-    // FALLBACK
-    // ========================================================
-    //
-    // Some reasoning models may return reasoning while
-    // content is empty. We should NOT expose reasoning
-    // directly as the user-facing answer.
-    //
-    // If content is empty, generate a deterministic answer
-    // for simple retrieved values.
+    // TIME DATA HANDLER
     // ========================================================
 
-    if (!answer) {
-      // ------------------------------------------------------
-      // Numeric value fallback
-      // ------------------------------------------------------
+    if (phase4?.dataType === "time") {
+      const value = phase4?.value;
 
-      if (typeof safeData === "number") {
-        if (phase2?.entity === "weekly_working_hours") {
-          answer = `You have worked ${safeData} hours this week.`;
-        } else if (phase2?.entity === "monthly_working_hours") {
-          answer = `You have worked ${safeData} hours this month.`;
-        } else if (phase2?.entity === "total_working_hours") {
-          answer = `Your total working hours are ${safeData} hours.`;
-        } else if (phase2?.entity === "today_working_hours") {
-          answer = `You have worked ${safeData} hours today.`;
-        }
+      if (value === null || value === undefined) {
+        return {
+          success: true,
+          answer: "No matching information was found.",
+        };
       }
+
+      if (phase4?.entity === "average_checkin_time") {
+        return {
+          success: true,
+          answer: `Your average check-in time is ${value}.`,
+        };
+      }
+
+      return {
+        success: true,
+        answer: `Your ${phase4?.entity?.replace(/_/g, " ")} is ${value}.`,
+      };
     }
 
     // ========================================================
-    // FINAL SAFETY CHECK
+    // FALLBACK - GENERIC RESPONSE
     // ========================================================
-
-    if (!answer) {
-      answer = "I'm sorry, but I couldn't generate an answer right now.";
-    }
 
     return {
       success: true,
-      answer,
+      answer: "No matching information was found.",
     };
   } catch (error) {
-    console.error("========== PHASE 5 ERROR ==========");
-
-    console.error("Message:", error?.message);
-
-    console.error("Status:", error?.status);
-
-    console.error("Full error:", error);
-
-    console.error("===================================");
+    console.error("Phase 5 Error:", error);
 
     return {
       success: false,
-
-      answer: "I'm sorry, but I'm unable to generate your answer right now.",
-
-      error: error?.message || "Unknown Phase 5 error",
+      answer:
+        "Sorry, I encountered an error processing your request. Please try again.",
     };
   }
 };
