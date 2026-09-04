@@ -50,7 +50,7 @@ export default function AdminDashboard() {
     '/adminDashboard/notification': {
       title: 'Notifications',
       icon: <FaBell />,
-      color: '#ef9b52',
+      color: '#FFF',
     },
     '/adminDashboard/announcement': {
       title: 'Announcements',
@@ -86,7 +86,7 @@ export default function AdminDashboard() {
             </div>
             <div className="header-right">
               <div className="notificaton-div">
-                <FaBell style={{ color: '#ef9b52', fontSize: '18px' }} />
+                <FaBell style={{ color: '#fff', fontSize: '18px' }} />
               </div>
               <div className="admin-profile">
                 <div className="admin-avatar">

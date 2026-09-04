@@ -18,6 +18,11 @@
     align-items: center;
     gap: 7px;
 }
+
+.dashboard-heading>span:nth-child(2){
+    font-weight: 700;
+}
+
 .header-right{
     display: flex;
     align-items: center;
