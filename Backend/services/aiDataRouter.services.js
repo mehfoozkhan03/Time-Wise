@@ -290,6 +290,20 @@ const ENTITY_MAP = {
   },
 
   // ----------------------------------------------------------
+  // WHOLE-DAY LOOKUP
+  // ----------------------------------------------------------
+  // "What's on 2nd October?" needs holidays AND events for
+  // that date, plus the weekday so weekends can be reported.
+  // ----------------------------------------------------------
+
+  day_summary: {
+    source: "calendar",
+    field: "both",
+    operation: "find",
+    dataType: "day_summary",
+  },
+
+  // ----------------------------------------------------------
   // NOTIFICATIONS
   // ----------------------------------------------------------
 
@@ -508,6 +522,10 @@ const buildRoute = ({ intentEntity }) => {
   }
 
   if (entity === "holiday" || entity === "festival") {
+    operation = "find";
+  }
+
+  if (entity === "day_summary") {
     operation = "find";
   }
 

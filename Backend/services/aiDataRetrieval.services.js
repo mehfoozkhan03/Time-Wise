@@ -246,68 +246,96 @@ const getDateRange = (dateReference, searchText = null) => {
     return { start, end };
   }
 
-  if (dateReference === "this_week") {
-    const dayOfWeek = now.getDay();
-    const diff = now.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1);
-    start.setDate(diff);
-    start.setHours(0, 0, 0, 0);
+  // ----------------------------------------------------------
+  // Week ranges (Monday - Sunday)
+  // ----------------------------------------------------------
+  // Built from explicit year/month/day so a week that crosses
+  // a month boundary cannot overflow. The old version did
+  // end.setDate(start.getDate() + 6) which, for Sat 5 Sep 2026,
+  // produced 31 Aug -> 7 Oct instead of 31 Aug -> 6 Sep.
+  // ----------------------------------------------------------
 
-    end.setDate(start.getDate() + 6);
-    end.setHours(23, 59, 59, 999);
-    return { start, end };
+  const weekRange = (weekOffset) => {
+    const dayOfWeek = now.getDay();
+
+    const daysSinceMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+
+    const weekStart = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate() - daysSinceMonday + weekOffset * 7,
+      0,
+      0,
+      0,
+      0,
+    );
+
+    const weekEnd = new Date(
+      weekStart.getFullYear(),
+      weekStart.getMonth(),
+      weekStart.getDate() + 6,
+      23,
+      59,
+      59,
+      999,
+    );
+
+    return { start: weekStart, end: weekEnd };
+  };
+
+  if (dateReference === "this_week") {
+    return weekRange(0);
   }
 
   if (dateReference === "last_week") {
-    const dayOfWeek = now.getDay();
-    const diff = now.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1);
-    start.setDate(diff - 7);
-    start.setHours(0, 0, 0, 0);
-
-    end.setDate(start.getDate() + 6);
-    end.setHours(23, 59, 59, 999);
-    return { start, end };
+    return weekRange(-1);
   }
 
   if (dateReference === "next_week") {
-    const dayOfWeek = now.getDay();
-    const diff = now.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1);
-    start.setDate(diff + 7);
-    start.setHours(0, 0, 0, 0);
-
-    end.setDate(start.getDate() + 6);
-    end.setHours(23, 59, 59, 999);
-    return { start, end };
+    return weekRange(1);
   }
 
-  if (dateReference === "this_month") {
-    start.setDate(1);
-    start.setHours(0, 0, 0, 0);
+  // ----------------------------------------------------------
+  // Month ranges
+  // ----------------------------------------------------------
+  // Day 1 of the target month to day 0 of the following month,
+  // so month lengths and leap years take care of themselves.
+  // ----------------------------------------------------------
 
-    end.setMonth(end.getMonth() + 1);
-    end.setDate(0);
-    end.setHours(23, 59, 59, 999);
-    return { start, end };
+  const monthRange = (monthOffset) => {
+    const monthStart = new Date(
+      now.getFullYear(),
+      now.getMonth() + monthOffset,
+      1,
+      0,
+      0,
+      0,
+      0,
+    );
+
+    const monthEnd = new Date(
+      now.getFullYear(),
+      now.getMonth() + monthOffset + 1,
+      0,
+      23,
+      59,
+      59,
+      999,
+    );
+
+    return { start: monthStart, end: monthEnd };
+  };
+
+  if (dateReference === "this_month") {
+    return monthRange(0);
   }
 
   if (dateReference === "last_month") {
-    start.setMonth(start.getMonth() - 1);
-    start.setDate(1);
-    start.setHours(0, 0, 0, 0);
-
-    end.setDate(0);
-    end.setHours(23, 59, 59, 999);
-    return { start, end };
+    return monthRange(-1);
   }
 
   if (dateReference === "next_month") {
-    start.setMonth(start.getMonth() + 1);
-    start.setDate(1);
-    start.setHours(0, 0, 0, 0);
-
-    end.setMonth(end.getMonth() + 2);
-    end.setDate(0);
-    end.setHours(23, 59, 59, 999);
-    return { start, end };
+    return monthRange(1);
   }
 
   if (dateReference === "this_year") {
@@ -525,9 +553,101 @@ const filterHolidays = (holidays, route) => {
 };
 
 // ============================================================
-// CALENDAR RETRIEVAL
+// MATCH HOLIDAY BY NAME (any year)
 // ============================================================
-// FIXED: For specific_date queries, return BOTH events AND holidays
+// Safety net for "When is Janmashtami?" when the current
+// year has no entry. Returns the single nearest upcoming
+// match only - never the whole 2026-2035 list.
+// ============================================================
+
+const findNearestHolidayByName = (holidays, searchText) => {
+  if (!Array.isArray(holidays) || !searchText || searchText === "none") {
+    return [];
+  }
+
+  const search = String(searchText).toLowerCase();
+
+  const matches = holidays
+    .filter(
+      (holiday) =>
+        String(holiday?.title || "")
+          .toLowerCase()
+          .includes(search) ||
+        String(holiday?.description || "")
+          .toLowerCase()
+          .includes(search),
+    )
+    .map((holiday) => ({
+      holiday,
+      date: normalizeDate(holiday?.date),
+    }))
+    .filter((item) => item.date);
+
+  if (matches.length === 0) {
+    return [];
+  }
+
+  const now = new Date();
+  now.setHours(0, 0, 0, 0);
+
+  const upcoming = matches
+    .filter((item) => item.date >= now)
+    .sort((a, b) => a.date - b.date);
+
+  if (upcoming.length > 0) {
+    return [upcoming[0].holiday];
+  }
+
+  // Everything is in the past - return the most recent one
+  const past = matches.sort((a, b) => b.date - a.date);
+
+  return [past[0].holiday];
+};
+
+// ============================================================
+// WEEKDAY / WEEKEND INFO
+// ============================================================
+
+const DAY_LABELS = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
+
+const buildDayInfo = (range) => {
+  if (!range?.start) {
+    return null;
+  }
+
+  const date = new Date(range.start);
+
+  const dayIndex = date.getDay();
+
+  return {
+    resolvedDate: date.toISOString(),
+    dayName: DAY_LABELS[dayIndex],
+    isWeekend: dayIndex === 0 || dayIndex === 6,
+  };
+};
+
+// ============================================================
+// IS THIS RANGE A SINGLE DAY?
+// ============================================================
+
+const isSingleDayRange = (range) => {
+  if (!range?.start || !range?.end) {
+    return false;
+  }
+
+  return isSameDate(range.start, range.end);
+};
+
+// ============================================================
+// CALENDAR RETRIEVAL
 // ============================================================
 
 const retrieveCalendarData = (userContext, route) => {
@@ -537,12 +657,18 @@ const retrieveCalendarData = (userContext, route) => {
 
   const holidays = Array.isArray(calendar.holidays) ? calendar.holidays : [];
 
+  const range = getDateRange(route.dateReference, route.search);
+
+  const dayInfo = isSingleDayRange(range) ? buildDayInfo(range) : null;
+
   // ----------------------------------------------------------
-  // Holiday only
+  // Whole-day lookup: holidays + events for one date
   // ----------------------------------------------------------
 
-  if (route.dataType === "holiday") {
+  if (route.dataType === "day_summary") {
     const matchedHolidays = filterHolidays(holidays, route);
+
+    const matchedEvents = filterCalendarEvents(events, route);
 
     return {
       success: true,
@@ -556,6 +682,51 @@ const retrieveCalendarData = (userContext, route) => {
       period: route.period,
 
       dateReference: route.dateReference,
+
+      dayInfo,
+
+      holidays: matchedHolidays,
+
+      events: matchedEvents,
+
+      count: matchedHolidays.length + matchedEvents.length,
+
+      data: [...matchedHolidays, ...matchedEvents],
+    };
+  }
+
+  // ----------------------------------------------------------
+  // Holiday only
+  // ----------------------------------------------------------
+
+  if (route.dataType === "holiday") {
+    let matchedHolidays = filterHolidays(holidays, route);
+
+    // Named holiday with no entry in the requested year:
+    // fall back to the nearest single occurrence.
+    if (
+      matchedHolidays.length === 0 &&
+      route.search &&
+      route.search !== "none" &&
+      route.dateReference !== "specific_date"
+    ) {
+      matchedHolidays = findNearestHolidayByName(holidays, route.search);
+    }
+
+    return {
+      success: true,
+
+      source: "calendar",
+
+      entity: route.entity,
+
+      operation: route.operation,
+
+      period: route.period,
+
+      dateReference: route.dateReference,
+
+      dayInfo,
 
       count: matchedHolidays.length,
 
@@ -581,6 +752,8 @@ const retrieveCalendarData = (userContext, route) => {
     period: route.period,
 
     dateReference: route.dateReference,
+
+    dayInfo,
 
     count: matchedEvents.length,
 
@@ -688,5 +861,22 @@ export const retrieveTimeWiseData = ({ userContext, dataRoute }) => {
     };
   }
 
-  return result;
+  // ----------------------------------------------------------
+  // ROOT CAUSE FIX
+  // ----------------------------------------------------------
+  // Phase 5 branches on `dataType`, but none of the retrieval
+  // helpers used to return it. That made every calendar and
+  // holiday answer fall through to the generic
+  // "No matching information was found." reply even when
+  // matching rows had been found. Always carry the route's
+  // dataType (and search text) forward.
+  // ----------------------------------------------------------
+
+  return {
+    ...result,
+
+    dataType: result?.dataType || dataRoute.dataType || "none",
+
+    search: dataRoute.search,
+  };
 };

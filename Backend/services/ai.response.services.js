@@ -3,28 +3,143 @@
 // ============================================================
 
 // ============================================================
-// FILTER HOLIDAYS TO CURRENT + NEXT YEAR ONLY
+// DATE HELPERS
 // ============================================================
 
-const filterHolidaysByYear = (data) => {
-  if (!Array.isArray(data)) {
-    return data;
+const DAY_LABELS = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
+
+const longDate = (value) => {
+  if (!value) {
+    return null;
   }
 
-  const now = new Date();
-  const currentYear = now.getFullYear();
-  const nextYear = currentYear + 1;
+  const date = new Date(value);
 
-  return data.filter((item) => {
-    if (!item?.date) {
-      return false;
+  if (Number.isNaN(date.getTime())) {
+    return null;
+  }
+
+  return date.toLocaleDateString("en-US", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+};
+
+const shortDate = (value) => {
+  if (!value) {
+    return "Unknown";
+  }
+
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return "Unknown";
+  }
+
+  return date.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+};
+
+// Date without the weekday, for sentences that already
+// name the day ("October 4, 2026 is a Sunday").
+const plainDate = (value) => {
+  if (!value) {
+    return null;
+  }
+
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return null;
+  }
+
+  return date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+};
+
+// ============================================================
+// ONE DATE PER HOLIDAY
+// ============================================================
+// The holidays collection stores the same festival for many
+// years. "When is Gandhi Jayanti?" must return a single date,
+// not 2026 through 2035. For each repeated title keep the
+// nearest upcoming occurrence, or the most recent past one if
+// every occurrence has already happened.
+// ============================================================
+
+const keepOneDatePerHoliday = (data) => {
+  if (!Array.isArray(data) || data.length <= 1) {
+    return Array.isArray(data) ? data : [];
+  }
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const groups = new Map();
+
+  for (const item of data) {
+    const key = String(item?.title || "")
+      .toLowerCase()
+      .trim();
+
+    if (!groups.has(key)) {
+      groups.set(key, []);
     }
 
-    const itemDate = new Date(item.date);
-    const itemYear = itemDate.getFullYear();
+    groups.get(key).push(item);
+  }
 
-    return itemYear === currentYear || itemYear === nextYear;
-  });
+  const picked = [];
+
+  for (const group of groups.values()) {
+    if (group.length === 1) {
+      picked.push(group[0]);
+      continue;
+    }
+
+    const dated = group
+      .map((item) => ({
+        item,
+        date: new Date(item?.date),
+      }))
+      .filter((entry) => !Number.isNaN(entry.date.getTime()));
+
+    if (dated.length === 0) {
+      picked.push(group[0]);
+      continue;
+    }
+
+    const upcoming = dated
+      .filter((entry) => entry.date >= today)
+      .sort((a, b) => a.date - b.date);
+
+    if (upcoming.length > 0) {
+      picked.push(upcoming[0].item);
+      continue;
+    }
+
+    const past = dated.sort((a, b) => b.date - a.date);
+
+    picked.push(past[0].item);
+  }
+
+  return picked.sort((a, b) => new Date(a?.date) - new Date(b?.date));
 };
 
 // ============================================================
@@ -36,11 +151,9 @@ const formatCalendarAnswer = (data, entity, dateReference) => {
     return "No matching information was found.";
   }
 
-  // Filter holidays to current + next year only
-  let filteredData = data;
-  if (entity === "holiday" || entity === "festival") {
-    filteredData = filterHolidaysByYear(data);
-  }
+  const isHoliday = entity === "holiday" || entity === "festival";
+
+  const filteredData = isHoliday ? keepOneDatePerHoliday(data) : data;
 
   if (filteredData.length === 0) {
     return "No matching information was found.";
@@ -50,15 +163,8 @@ const formatCalendarAnswer = (data, entity, dateReference) => {
   if (filteredData.length === 1) {
     const item = filteredData[0];
     const title = item.title || "Unnamed event";
-    const date = item.date
-      ? new Date(item.date).toLocaleDateString("en-US", {
-          weekday: "long",
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-        })
-      : "Unknown date";
-    const time = item.time ? ` at ${item.time}` : "";
+    const date = longDate(item.date) || "an unknown date";
+    const time = item.startTime ? ` at ${item.startTime}` : "";
     const description = item.description ? ` - ${item.description}` : "";
 
     return `${title} is on ${date}${time}${description}.`;
@@ -67,18 +173,93 @@ const formatCalendarAnswer = (data, entity, dateReference) => {
   // Multiple events/holidays
   const items = filteredData.map((item) => {
     const title = item.title || "Unnamed event";
-    const date = item.date
-      ? new Date(item.date).toLocaleDateString("en-US", {
-          month: "short",
-          day: "numeric",
-          year: "numeric",
-        })
-      : "Unknown";
-    const time = item.time ? ` at ${item.time}` : "";
+    const date = shortDate(item.date);
+    const time = item.startTime ? ` at ${item.startTime}` : "";
     return `${title} (${date}${time})`;
   });
 
-  return `You have ${filteredData.length} events: ${items.join(", ")}.`;
+  const label = isHoliday ? "holidays" : "events";
+
+  return `You have ${filteredData.length} ${label}: ${items.join(", ")}.`;
+};
+
+// ============================================================
+// WHOLE-DAY SUMMARY
+// ============================================================
+// "What's on 2nd October?" -> the festival on that date.
+// Nothing scheduled on a Saturday/Sunday -> report the day.
+// ============================================================
+
+const formatDaySummaryAnswer = (phase4) => {
+  const dayInfo = phase4?.dayInfo || null;
+
+  const holidays = Array.isArray(phase4?.holidays) ? phase4.holidays : [];
+
+  const events = Array.isArray(phase4?.events) ? phase4.events : [];
+
+  const dateLabel = dayInfo?.resolvedDate
+    ? longDate(dayInfo.resolvedDate)
+    : null;
+
+  const parts = [];
+
+  if (holidays.length > 0) {
+    const names = holidays.map((item) => item.title || "Unnamed holiday");
+
+    parts.push(
+      names.length === 1
+        ? `${names[0]} falls on that day`
+        : `these holidays fall on that day: ${names.join(", ")}`,
+    );
+  }
+
+  if (events.length > 0) {
+    const names = events.map((item) => {
+      const title = item.title || "Unnamed event";
+      const time = item.startTime ? ` at ${item.startTime}` : "";
+      return `${title}${time}`;
+    });
+
+    parts.push(
+      names.length === 1
+        ? `you have ${names[0]}`
+        : `you have ${names.length} events: ${names.join(", ")}`,
+    );
+  }
+
+  // ----------------------------------------------------------
+  // Nothing on that date
+  // ----------------------------------------------------------
+
+  if (parts.length === 0) {
+    if (!dateLabel) {
+      return "No matching information was found.";
+    }
+
+    const bareDate = plainDate(dayInfo.resolvedDate) || dateLabel;
+
+    if (dayInfo?.isWeekend) {
+      return `${bareDate} is a ${dayInfo.dayName}, so it is a weekend. There are no holidays or events scheduled.`;
+    }
+
+    return `${bareDate} is a ${dayInfo?.dayName || "working day"}. There are no holidays or events scheduled.`;
+  }
+
+  // ----------------------------------------------------------
+  // Something on that date
+  // ----------------------------------------------------------
+
+  const sentence = parts.join(", and ");
+
+  if (!dateLabel) {
+    return `${sentence.charAt(0).toUpperCase()}${sentence.slice(1)}.`;
+  }
+
+  const weekendNote = dayInfo?.isWeekend
+    ? " It is also a weekend."
+    : "";
+
+  return `${dateLabel} - ${sentence}.${weekendNote}`;
 };
 
 // ============================================================
@@ -179,6 +360,20 @@ export const generateTimeWiseResponse = async ({
     }
 
     // ========================================================
+    // WHOLE-DAY LOOKUP HANDLER
+    // ========================================================
+
+    if (
+      phase4?.dataType === "day_summary" ||
+      phase4?.entity === "day_summary"
+    ) {
+      return {
+        success: true,
+        answer: formatDaySummaryAnswer(phase4),
+      };
+    }
+
+    // ========================================================
     // CALENDAR DATA HANDLER
     // ========================================================
 
@@ -202,13 +397,9 @@ export const generateTimeWiseResponse = async ({
     // ========================================================
 
     if (phase4?.dataType === "hours") {
-      const value = phase4?.value;
-
-      const answer = formatHoursAnswer(value, phase4?.entity, phase4?.period);
-
       return {
         success: true,
-        answer,
+        answer: formatHoursAnswer(phase4?.value, phase4?.entity, phase4?.period),
       };
     }
 
@@ -217,17 +408,13 @@ export const generateTimeWiseResponse = async ({
     // ========================================================
 
     if (phase4?.dataType === "percentage" || phase4?.dataType === "number") {
-      const value = phase4?.value;
-
-      const answer = formatMetricAnswer(
-        value,
-        phase4?.entity,
-        phase4?.dataType,
-      );
-
       return {
         success: true,
-        answer,
+        answer: formatMetricAnswer(
+          phase4?.value,
+          phase4?.entity,
+          phase4?.dataType,
+        ),
       };
     }
 
