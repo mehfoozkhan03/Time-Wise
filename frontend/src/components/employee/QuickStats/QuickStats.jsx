@@ -7,32 +7,32 @@ import Card from "../../Card/Card";
 export default function QuickStats() {
   const { stats } = useSelector((state) => state.dashboard);
 
-  const quickStats = [
-    {
-      title: "Attendance",
-      value: `${stats.attendancePercentage}%`,
-      icon: <FaCalendarCheck />,
-      color: "#22c55e",
-    },
-    {
-      title: "Work Efficiency",
-      value: `${stats.productivity}%`,
-      icon: <FaBullseye />,
-      color: "#29A3E0",
-    },
-    {
-      title: "Monthly Hours",
-      value: `${stats.monthlyHours}h`,
-      icon: <FaClock />,
-      color: "#8b5cf6",
-    },
-    {
-      title: "Current Streak",
-      value: `${stats.dayStreak} Days`,
-      icon: <FaFire />,
-      color: "#f59e0b",
-    },
-  ];
+ const quickStats = [
+   {
+     title: 'Attendance',
+     value: `${stats?.attendancePercentage ?? 0}%`,
+     icon: <FaCalendarCheck />,
+     color: '#22c55e',
+   },
+   {
+     title: 'Work Efficiency',
+     value: `${stats?.productivity ?? 0}%`,
+     icon: <FaBullseye />,
+     color: '#29A3E0',
+   },
+   {
+     title: 'Monthly Hours',
+     value: `${stats?.monthlyHours ?? 0}h`,
+     icon: <FaClock />,
+     color: '#8b5cf6',
+   },
+   {
+     title: 'Current Streak',
+     value: `${stats?.dayStreak ?? 0} Days`,
+     icon: <FaFire />,
+     color: '#f59e0b',
+   },
+ ]
 
   return (
     <section className="profile_stats">

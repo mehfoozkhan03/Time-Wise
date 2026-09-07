@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { createNewPost } from '../../../store/postSlice'
 
+import EmojiPicker from 'emoji-picker-react'
+
 import {
   HiOutlinePhoto,
   HiOutlineFaceSmile,
@@ -47,6 +49,18 @@ const CreatePost = () => {
   const attachmentInputRef = useRef(null)
 
   // ======================================================
+  // EMOJI STATE
+  // ======================================================
+
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false)
+
+  const emojiPickerRef = useRef(null)
+
+  const textareaRef = useRef(null)
+
+  const cursorPositionRef = useRef(0)
+
+  // ======================================================
   // DYNAMIC GREETING
   // ======================================================
 
@@ -87,6 +101,95 @@ const CreatePost = () => {
   }, [user])
 
   // ======================================================
+  // CLOSE EMOJI PICKER WHEN CLICKING OUTSIDE
+  // ======================================================
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        emojiPickerRef.current &&
+        !emojiPickerRef.current.contains(event.target)
+      ) {
+        setShowEmojiPicker(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [])
+
+  // ======================================================
+  // TRACK TEXTAREA CURSOR POSITION
+  // ======================================================
+
+  const updateCursorPosition = () => {
+    if (!textareaRef.current) return
+
+    cursorPositionRef.current = textareaRef.current.selectionStart
+  }
+
+  // ======================================================
+  // EMOJI SELECTION
+  // ======================================================
+
+  const handleEmojiClick = (emojiData) => {
+    const emoji = emojiData.emoji
+
+    const currentContent = content
+
+    let cursorPosition = cursorPositionRef.current
+
+    if (cursorPosition < 0 || cursorPosition > currentContent.length) {
+      cursorPosition = currentContent.length
+    }
+
+    const newContent =
+      currentContent.slice(0, cursorPosition) +
+      emoji +
+      currentContent.slice(cursorPosition)
+
+    // Respect the 500 character limit
+    const limitedContent = newContent.slice(0, MAX_LENGTH)
+
+    setContent(limitedContent)
+
+    const newCursorPosition = Math.min(
+      cursorPosition + emoji.length,
+      MAX_LENGTH,
+    )
+
+    cursorPositionRef.current = newCursorPosition
+
+    // Keep focus in textarea and restore cursor after React updates
+    requestAnimationFrame(() => {
+      if (!textareaRef.current) return
+
+      textareaRef.current.focus()
+
+      textareaRef.current.setSelectionRange(
+        newCursorPosition,
+        newCursorPosition,
+      )
+    })
+  }
+
+  // ======================================================
+  // TOGGLE EMOJI PICKER
+  // ======================================================
+
+  const handleEmojiToggle = () => {
+    if (posting) return
+
+    // Save current cursor position before opening picker
+    updateCursorPosition()
+
+    setShowEmojiPicker((previous) => !previous)
+  }
+
+  // ======================================================
   // IMAGE SELECTION
   // ======================================================
 
@@ -99,7 +202,9 @@ const CreatePost = () => {
 
     if (remainingSlots <= 0) {
       alert(`You can upload a maximum of ${MAX_IMAGES} images.`)
+
       event.target.value = ''
+
       return
     }
 
@@ -110,11 +215,13 @@ const CreatePost = () => {
     for (const file of filesToProcess) {
       if (!file.type.startsWith('image/')) {
         alert(`${file.name} is not a valid image.`)
+
         continue
       }
 
       if (file.size > MAX_IMAGE_SIZE) {
         alert(`${file.name} is larger than 5MB.`)
+
         continue
       }
 
@@ -168,6 +275,7 @@ const CreatePost = () => {
       alert(`You can upload a maximum of ${MAX_ATTACHMENTS} attachments.`)
 
       event.target.value = ''
+
       return
     }
 
@@ -191,11 +299,13 @@ const CreatePost = () => {
     for (const file of files.slice(0, remainingSlots)) {
       if (!allowedTypes.includes(file.type)) {
         alert(`${file.name} is not a supported file type.`)
+
         continue
       }
 
       if (file.size > MAX_ATTACHMENT_SIZE) {
         alert(`${file.name} is larger than 10MB.`)
+
         continue
       }
 
@@ -295,6 +405,8 @@ const CreatePost = () => {
       setContent('')
       setSelectedImages([])
       setSelectedAttachments([])
+      setShowEmojiPicker(false)
+      cursorPositionRef.current = 0
     } catch (error) {
       console.error('Create post error:', error)
 
@@ -331,10 +443,18 @@ const CreatePost = () => {
       {/* ================================================= */}
 
       <textarea
+        ref={textareaRef}
         value={content}
         maxLength={MAX_LENGTH}
         placeholder={`What's on your mind, ${user?.firstName || 'there'}?`}
-        onChange={(event) => setContent(event.target.value)}
+        onChange={(event) => {
+          setContent(event.target.value)
+
+          cursorPositionRef.current = event.target.selectionStart
+        }}
+        onClick={updateCursorPosition}
+        onKeyUp={updateCursorPosition}
+        onSelect={updateCursorPosition}
       />
 
       {/* ================================================= */}
@@ -434,12 +554,33 @@ const CreatePost = () => {
               ` (${selectedImages.length}/${MAX_IMAGES})`}
           </button>
 
-          {/* ================= EMOJI - PHASE 3 ================= */}
+          {/* ================= EMOJI ================= */}
 
-          <button type="button" disabled={posting}>
-            <HiOutlineFaceSmile />
-            Emoji
-          </button>
+          <div className="emoji_picker_wrapper" ref={emojiPickerRef}>
+            <button
+              type="button"
+              onClick={handleEmojiToggle}
+              disabled={posting}
+            >
+              <HiOutlineFaceSmile />
+              Emoji
+            </button>
+
+            {showEmojiPicker && (
+              <div className="emoji_picker_container">
+                <EmojiPicker
+                  onEmojiClick={handleEmojiClick}
+                  width={350}
+                  height={420}
+                  searchDisabled={false}
+                  skinTonesDisabled={false}
+                  previewConfig={{
+                    showPreview: false,
+                  }}
+                />
+              </div>
+            )}
+          </div>
 
           {/* ================= ATTACHMENT ================= */}
 

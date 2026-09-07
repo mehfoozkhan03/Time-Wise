@@ -427,6 +427,45 @@
   font-size: 1.25rem;
 }
 
+/* ======================================================
+   EMOJI PICKER
+====================================================== */
+
+.emoji_picker_wrapper {
+  position: relative;
+}
+
+.emoji_picker_container {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 0;
+  z-index: 1000;
+  filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.35));
+}
+
+.emoji_picker_container .EmojiPickerReact {
+  --epr-bg-color: var(--card);
+  --epr-category-label-bg-color: var(--surface);
+  --epr-text-color: var(--text_primary);
+  --epr-search-input-bg-color: var(--bg);
+  --epr-hover-bg-color: var(--surface_hover);
+  --epr-focus-bg-color: var(--surface_hover);
+  border: 1px solid var(--border) !important;
+  border-radius: 16px !important;
+}
+
+
+@media (max-width: 600px) {
+  .emoji_picker_container {
+    left: auto;
+    right: 0;
+  }
+
+  .emoji_picker_container .EmojiPickerReact {
+    width: min(350px, calc(100vw - 40px)) !important;
+  }
+}
+
 
 /* ======================================================
    MOBILE
