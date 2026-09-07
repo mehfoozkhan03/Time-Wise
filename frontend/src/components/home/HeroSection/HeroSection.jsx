@@ -60,19 +60,21 @@ export default function HeroSection() {
     return "Good Night";
   };
 
-  const stats = useSelector((state) => state.dashboard?.stats) || {
-    dayStreak: 0,
-    longestStreak: 0,
-    attendancePercentage: 0,
-    weeklyHours: 0,
-    monthlyHours: 0,
-    productivity: 0,
-    weeklyTarget: 40,
-    weeklyHoursRemaining: 40,
-    weeklyGoalPercentage: 0,
-    averageCheckIn: "--:--",
-    averageBreakDuration: 0,
-  };
+ const dashboardStats = useSelector((state) => state.dashboard?.stats)
+
+ const stats = {
+   dayStreak: Number(dashboardStats?.dayStreak) || 0,
+   longestStreak: Number(dashboardStats?.longestStreak) || 0,
+   attendancePercentage: Number(dashboardStats?.attendancePercentage) || 0,
+   weeklyHours: Number(dashboardStats?.weeklyHours) || 0,
+   monthlyHours: Number(dashboardStats?.monthlyHours) || 0,
+   productivity: Number(dashboardStats?.productivity) || 0,
+   weeklyTarget: Number(dashboardStats?.weeklyTarget) || 40,
+   weeklyHoursRemaining: Number(dashboardStats?.weeklyHoursRemaining) || 40,
+   weeklyGoalPercentage: Number(dashboardStats?.weeklyGoalPercentage) || 0,
+   averageCheckIn: dashboardStats?.averageCheckIn || '--:--',
+   averageBreakDuration: Number(dashboardStats?.averageBreakDuration) || 0,
+ }
 
   useEffect(() => {
     if (!translations.length) return;
