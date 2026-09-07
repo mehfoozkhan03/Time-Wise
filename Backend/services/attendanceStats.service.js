@@ -92,125 +92,117 @@ export const getAttendanceStats = async (userID) => {
     status: "Late",
   });
 
-
   //# ====================== Today's Attendance Records - All Employees ======================
-const todayAttendance = await attendanceModel
-  .find({
-    date: {
-      $gte: todayStart,
-      $lte: todayEnd,
-    },
-  })
-  .populate("user", "firstName lastName department designation");
-
-const formatTime = (date) => {
-  if (!date) return "--";
-
-  return new Date(date).toLocaleTimeString("en-US", {
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-  });
-};
-
-const formatBreakTime = (breaks = []) => {
-  if (!breaks.length) return "--";
-
-  return breaks
-    .filter((item) => item.breakStart)
-    .map((item) => {
-      const start = formatTime(item.breakStart);
-      const end = item.breakEnd ? formatTime(item.breakEnd) : "--";
-
-      return `${start}–${end}`;
+  const todayAttendance = await attendanceModel
+    .find({
+      date: {
+        $gte: todayStart,
+        $lte: todayEnd,
+      },
     })
-    .join(", ");
-};
+    .populate("user", "firstName lastName department designation");
 
-const formatWorkingHours = (seconds = 0) => {
-  const hours = Math.floor(seconds / 3600);
-  const minutes = Math.floor((seconds % 3600) / 60);
+  const formatTime = (date) => {
+    if (!date) return "--";
 
-  return `${hours}h ${minutes}m`;
-};
-
-const todayAttendanceRecords = todayAttendance.map((record) => {
-  const user = record.user;
-
-  return {
-    _id: record._id,
-
-    avatar: `${user?.firstName?.[0] || ""}${
-      user?.lastName?.[0] || ""
-    }`.toUpperCase(),
-
-    name: `${user?.firstName || ""} ${user?.lastName || ""}`.trim(),
-
-    department:
-      user?.department ||
-      user?.designation ||
-      "--",
-
-    checkIn: formatTime(record.checkInTime),
-
-    breakTime: formatBreakTime(record.breaks),
-
-    checkOut: formatTime(record.checkOutTime),
-
-    workingHours: formatWorkingHours(
-      record.totalWorkingSeconds
-    ),
-
-    status: record.status || "Absent",
+    return new Date(date).toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    });
   };
-});
+
+  const formatBreakTime = (breaks = []) => {
+    if (!breaks.length) return "--";
+
+    return breaks
+      .filter((item) => item.breakStart)
+      .map((item) => {
+        const start = formatTime(item.breakStart);
+        const end = item.breakEnd ? formatTime(item.breakEnd) : "--";
+
+        return `${start}–${end}`;
+      })
+      .join(", ");
+  };
+
+  const formatWorkingHours = (seconds = 0) => {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+
+    return `${hours}h ${minutes}m`;
+  };
+
+  const todayAttendanceRecords = todayAttendance.map((record) => {
+    const user = record.user;
+
+    return {
+      _id: record._id,
+
+      avatar: `${user?.firstName?.[0] || ""}${
+        user?.lastName?.[0] || ""
+      }`.toUpperCase(),
+
+      name: `${user?.firstName || ""} ${user?.lastName || ""}`.trim(),
+
+      department: user?.department || user?.designation || "--",
+
+      checkIn: formatTime(record.checkInTime),
+
+      breakTime: formatBreakTime(record.breaks),
+
+      checkOut: formatTime(record.checkOutTime),
+
+      workingHours: formatWorkingHours(record.totalWorkingSeconds),
+
+      status: record.status || "Absent",
+    };
+  });
 
   const { weekStart, weekEnd } = getWeekRange(now);
 
   const { monthStart, monthEnd } = getMonthRange(now);
 
   //# ====================== Weekly Attendance Chart - All Employees =============================
-const totalEmployees = await userModel.countDocuments();
+  const totalEmployees = await userModel.countDocuments();
 
-const weeklyCompanyAttendance = await attendanceModel.find({
-  date: {
-    $gte: weekStart,
-    $lte: weekEnd,
-  },
-});
-
-const weeklyAttendanceChart = [];
-
-for (let i = 6; i >= 0; i--) {
-  const date = new Date(todayStart);
-
-  date.setDate(date.getDate() - i);
-
-  const dayStart = startOfDay(date);
-  const dayEnd = endOfDay(date);
-
-  const dayAttendance = weeklyCompanyAttendance.filter(
-    (record) =>
-      record.date >= dayStart &&
-      record.date <= dayEnd
-  );
-
-  const present = dayAttendance.filter(
-    (record) =>
-      record.checkInTime &&
-      ["Present", "Late", "Half Day"].includes(record.status)
-  ).length;
-
-  const absent = totalEmployees - present;
-
-  weeklyAttendanceChart.push({
-    day: date.toLocaleDateString("en-US", {
-      weekday: "short",
-    }),
-    present,
-    absent,
+  const weeklyCompanyAttendance = await attendanceModel.find({
+    date: {
+      $gte: weekStart,
+      $lte: weekEnd,
+    },
   });
-}
+
+  const weeklyAttendanceChart = [];
+
+  for (let i = 6; i >= 0; i--) {
+    const date = new Date(todayStart);
+
+    date.setDate(date.getDate() - i);
+
+    const dayStart = startOfDay(date);
+    const dayEnd = endOfDay(date);
+
+    const dayAttendance = weeklyCompanyAttendance.filter(
+      (record) => record.date >= dayStart && record.date <= dayEnd,
+    );
+
+    const present = dayAttendance.filter(
+      (record) =>
+        record.checkInTime &&
+        ["Present", "Late", "Half Day"].includes(record.status),
+    ).length;
+
+    const absent = totalEmployees - present;
+
+    weeklyAttendanceChart.push({
+      day: date.toLocaleDateString("en-US", {
+        weekday: "short",
+      }),
+      present,
+      absent,
+    });
+  }
 
   // =====================================================
   // Get Active Holidays
@@ -272,7 +264,8 @@ for (let i = 6; i >= 0; i--) {
     0,
   );
 
-  const weeklyHours = formatWorkingHours(totalWeeklySeconds);
+  // const weeklyHours = formatWorkingHours(totalWeeklySeconds);
+  const weeklyHours = totalWeeklySeconds / 60 * 60;
 
   // =====================================================
   // Monthly Attendance
@@ -725,7 +718,6 @@ for (let i = 6; i >= 0; i--) {
     totalOnBreakToday,
 
     totalLateCheckInsToday,
-
 
     weeklyAttendanceChart,
   };
