@@ -167,7 +167,13 @@ const formatCalendarAnswer = (data, entity, dateReference) => {
     const time = item.startTime ? ` at ${item.startTime}` : "";
     const description = item.description ? ` - ${item.description}` : "";
 
+    // Explicitly check if our data source is empty for a specific request
     return `${title} is on ${date}${time}${description}.`;
+  }
+
+  // Handle empty result
+  if (filteredData.length === 0) {
+    return "No matching information was found.";
   }
 
   // Multiple events/holidays
@@ -255,9 +261,7 @@ const formatDaySummaryAnswer = (phase4) => {
     return `${sentence.charAt(0).toUpperCase()}${sentence.slice(1)}.`;
   }
 
-  const weekendNote = dayInfo?.isWeekend
-    ? " It is also a weekend."
-    : "";
+  const weekendNote = dayInfo?.isWeekend ? " It is also a weekend." : "";
 
   return `${dateLabel} - ${sentence}.${weekendNote}`;
 };
@@ -399,7 +403,11 @@ export const generateTimeWiseResponse = async ({
     if (phase4?.dataType === "hours") {
       return {
         success: true,
-        answer: formatHoursAnswer(phase4?.value, phase4?.entity, phase4?.period),
+        answer: formatHoursAnswer(
+          phase4?.value,
+          phase4?.entity,
+          phase4?.period,
+        ),
       };
     }
 

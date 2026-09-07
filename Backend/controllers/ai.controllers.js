@@ -331,7 +331,7 @@ export const askAI = async (req, res) => {
             intentEntity: resumedRequest,
           });
 
-          const resumedData = retrieveTimeWiseData({
+          const resumedData = await retrieveTimeWiseData({
             userContext: resumedUserContext,
             dataRoute: resumedRoute,
           });
@@ -581,7 +581,7 @@ export const askAI = async (req, res) => {
           intentEntity: simpleRequest,
         });
 
-        const simpleData = retrieveTimeWiseData({
+        const simpleData = await retrieveTimeWiseData({
           userContext: simpleUserContext,
           dataRoute: simpleRoute,
         });
@@ -739,7 +739,7 @@ export const askAI = async (req, res) => {
         intentEntity: request,
       });
 
-      const data = retrieveTimeWiseData({
+      const data = await retrieveTimeWiseData({
         userContext: userContextForRequests,
         dataRoute: route,
       });

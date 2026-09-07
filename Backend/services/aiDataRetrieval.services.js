@@ -198,6 +198,13 @@ const normalizeDate = (value) => {
 // SAME DATE
 // ============================================================
 
+const normalizeForSearch = (value) =>
+  String(value || "")
+    .toLowerCase()
+    .replace(/[-/]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
 const isSameDate = (first, second) => {
   const a = normalizeDate(first);
 
@@ -221,6 +228,17 @@ const isSameDate = (first, second) => {
 // ============================================================
 
 const getDateRange = (dateReference, searchText = null) => {
+  // Explicit 4-digit year like "2028", "2025", "2027", "2029"
+  if (
+    typeof dateReference === "string" &&
+    /^\d{4}$/.test(dateReference.trim())
+  ) {
+    const year = parseInt(dateReference.trim(), 10);
+    const start = new Date(year, 0, 1, 0, 0, 0, 0);
+    const end = new Date(year, 11, 31, 23, 59, 59, 999);
+    return { start, end };
+  }
+
   const now = new Date();
   now.setHours(0, 0, 0, 0);
 
@@ -472,25 +490,21 @@ const filterCalendarEvents = (events, route) => {
   // Search text (only if NOT a date search)
   // ----------------------------------------------------------
 
-  if (
-    route.search &&
-    route.search !== "none" &&
-    route.dateReference !== "specific_date"
-  ) {
-    const search = String(route.search).toLowerCase();
+  if (route.search && route.search !== "none") {
+    const search = normalizeForSearch(route.search);
 
-    result = result.filter(
-      (event) =>
-        String(event?.title || "")
-          .toLowerCase()
-          .includes(search) ||
-        String(event?.description || "")
-          .toLowerCase()
-          .includes(search) ||
-        String(event?.location || "")
-          .toLowerCase()
-          .includes(search),
+    const titleMatches = result.filter((holiday) =>
+      normalizeForSearch(holiday?.title).includes(search),
     );
+
+    // Prefer exact title matches over description matches
+    if (titleMatches.length > 0) {
+      result = titleMatches;
+    } else {
+      result = result.filter((holiday) =>
+        normalizeForSearch(holiday?.description).includes(search),
+      );
+    }
   }
 
   return result;
@@ -523,7 +537,8 @@ const filterHolidays = (holidays, route) => {
         return false;
       }
 
-      return date >= range.start && date <= range.end;
+      const inRange = date >= range.start && date <= range.end;
+      return inRange;
     });
   }
 
@@ -534,19 +549,23 @@ const filterHolidays = (holidays, route) => {
   if (
     route.search &&
     route.search !== "none" &&
-    route.dateReference !== "specific_date"
+    (route.dateReference !== "specific_date" ||
+      /^\d{4}$/.test(route.dateReference))
   ) {
-    const search = String(route.search).toLowerCase();
+    const search = normalizeForSearch(route.search);
 
-    result = result.filter(
-      (holiday) =>
-        String(holiday?.title || "")
-          .toLowerCase()
-          .includes(search) ||
-        String(holiday?.description || "")
-          .toLowerCase()
-          .includes(search),
+    const titleMatches = result.filter((holiday) =>
+      normalizeForSearch(holiday?.title).includes(search),
     );
+
+    // Prefer exact title matches over description matches
+    if (titleMatches.length > 0) {
+      result = titleMatches;
+    } else {
+      result = result.filter((holiday) =>
+        normalizeForSearch(holiday?.description).includes(search),
+      );
+    }
   }
 
   return result;
@@ -567,16 +586,21 @@ const findNearestHolidayByName = (holidays, searchText) => {
 
   const search = String(searchText).toLowerCase();
 
-  const matches = holidays
-    .filter(
-      (holiday) =>
-        String(holiday?.title || "")
-          .toLowerCase()
-          .includes(search) ||
-        String(holiday?.description || "")
-          .toLowerCase()
-          .includes(search),
-    )
+  let matchedHolidays = holidays.filter((holiday) =>
+    String(holiday?.title || "")
+      .toLowerCase()
+      .includes(search),
+  );
+
+  if (matchedHolidays.length === 0) {
+    matchedHolidays = holidays.filter((holiday) =>
+      String(holiday?.description || "")
+        .toLowerCase()
+        .includes(search),
+    );
+  }
+
+  const matches = matchedHolidays
     .map((holiday) => ({
       holiday,
       date: normalizeDate(holiday?.date),
@@ -650,7 +674,7 @@ const isSingleDayRange = (range) => {
 // CALENDAR RETRIEVAL
 // ============================================================
 
-const retrieveCalendarData = (userContext, route) => {
+const retrieveCalendarData = async (userContext, route) => {
   const calendar = userContext?.calendar || {};
 
   const events = Array.isArray(calendar.events) ? calendar.events : [];
@@ -702,34 +726,32 @@ const retrieveCalendarData = (userContext, route) => {
   if (route.dataType === "holiday") {
     let matchedHolidays = filterHolidays(holidays, route);
 
-    // Named holiday with no entry in the requested year:
-    // fall back to the nearest single occurrence.
+    const explicitYearRequested =
+      typeof route.dateReference === "string" &&
+      /^\d{4}$/.test(route.dateReference);
+
+    // If local DB has no entry (e.g. 2019/no matches),
+    // fall back to the nearest occurrence ONLY if user did NOT
+    // ask for a specific year.
     if (
       matchedHolidays.length === 0 &&
       route.search &&
       route.search !== "none" &&
-      route.dateReference !== "specific_date"
+      !explicitYearRequested
     ) {
       matchedHolidays = findNearestHolidayByName(holidays, route.search);
     }
 
     return {
       success: true,
-
       source: "calendar",
-
       entity: route.entity,
-
       operation: route.operation,
-
       period: route.period,
-
       dateReference: route.dateReference,
-
       dayInfo,
-
+      holidays: matchedHolidays,
       count: matchedHolidays.length,
-
       data: matchedHolidays,
     };
   }
@@ -812,7 +834,7 @@ const retrieveUserContextData = (userContext, route) => {
 // MAIN PHASE 4 FUNCTION
 // ============================================================
 
-export const retrieveTimeWiseData = ({ userContext, dataRoute }) => {
+export const retrieveTimeWiseData = async ({ userContext, dataRoute }) => {
   if (!dataRoute?.routable) {
     return {
       success: false,
@@ -834,7 +856,7 @@ export const retrieveTimeWiseData = ({ userContext, dataRoute }) => {
   // ----------------------------------------------------------
 
   if (dataRoute.source === "calendar") {
-    result = retrieveCalendarData(userContext, dataRoute);
+    result = await retrieveCalendarData(userContext, dataRoute);
   }
 
   // ----------------------------------------------------------

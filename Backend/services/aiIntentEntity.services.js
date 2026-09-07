@@ -264,11 +264,11 @@ const keywordThreshold = (word) => {
 };
 
 const nameThreshold = (word) => {
-  if (word.length <= 5) {
+  if (word.length <= 4) {
     return 0;
   }
 
-  if (word.length <= 8) {
+  if (word.length <= 6) {
     return 1;
   }
 
@@ -518,6 +518,17 @@ const extractDateReference = (lowerMsg, tokens) => {
   }
 
   // ------------------------------------------------
+  // Explicit year check: "in 2028", "2025", etc.
+  // ------------------------------------------------
+  const yearMatch = lowerMsg.match(/\b(20\d{2})\b/);
+  if (yearMatch) {
+    return {
+      dateReference: yearMatch[1],
+      search: "none",
+    };
+  }
+
+  // ------------------------------------------------
   // ISO date: 2026-10-02
   // ------------------------------------------------
 
@@ -726,14 +737,19 @@ const detectByKeywords = (message) => {
   ]);
 
   // 1. Named holiday -> "When is Janmashtami?"
-  //    Current year only, matched by name.
+  //    Uses date reference from question if present ("next year"), else defaults to "this_year".
   if (holidayName) {
+    const overrideRef =
+      dateInfo && dateInfo.dateReference !== "none"
+        ? dateInfo.dateReference
+        : "this_year";
+
     return {
       intent: "holiday",
       action: "find",
       entity: "holiday",
       period: "none",
-      dateReference: "this_year",
+      dateReference: overrideRef,
       search: holidayName,
       confidence: 0.9,
     };

@@ -363,9 +363,9 @@ export const understandTimeWiseQuery = async (message, conversation = []) => {
   // Keep the understanding request intentionally tiny.
   // We only send recent conversation, not TimeWise data.
   const recentConversation = Array.isArray(conversation)
-    ? conversation.slice(-6).map((item) => ({
+    ? conversation.slice(-4).map((item) => ({
         role: item?.role,
-        content: item?.content,
+        content: String(item?.content || "").slice(0, 150),
       }))
     : [];
 
@@ -411,14 +411,12 @@ ${safeMessage}
 
     return result;
   } catch (error) {
-    console.error("Query Understanding Error:", error?.message || error);
-
     return {
-      intent: "unknown",
-      period: "none",
-      entity: "none",
-      search: "none",
+      primaryIntent: "UNKNOWN",
       confidence: 0,
+      extractedEntities: {},
+      dateContext: null,
+      clarificationNeeded: false,
     };
   }
 };
