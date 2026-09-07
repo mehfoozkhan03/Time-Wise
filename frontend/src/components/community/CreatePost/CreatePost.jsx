@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { createNewPost } from '../../../store/postSlice'
 
-import EmojiPicker from 'emoji-picker-react'
+import EmojiPicker from "emoji-picker-react"
 
 import {
   HiOutlinePhoto,
