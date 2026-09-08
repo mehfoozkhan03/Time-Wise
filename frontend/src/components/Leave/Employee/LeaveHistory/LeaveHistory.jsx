@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   MdChevronLeft,
   MdChevronRight,
@@ -42,7 +43,15 @@ const LeaveHistory = ({
   onPageChange,
   onCancelRequest,
 }) => {
+  const dispatch = useDispatch();
+
+  const reduxLoading = useSelector(
+    (state) => state.leave?.loading || false,
+  );
+
   const [selectedRequest, setSelectedRequest] = useState(null);
+
+  const isLoading = loading || reduxLoading;
 
   useEffect(() => {
     if (!selectedRequest) {
@@ -75,7 +84,7 @@ const LeaveHistory = ({
   };
 
   const handlePreviousPage = () => {
-    if (loading) {
+    if (isLoading) {
       return;
     }
 
@@ -89,7 +98,7 @@ const LeaveHistory = ({
   };
 
   const handleNextPage = () => {
-    if (loading) {
+    if (isLoading) {
       return;
     }
 
@@ -147,7 +156,7 @@ const LeaveHistory = ({
               value={activeFilter}
               options={filterOptions}
               onChange={handleFilterChange}
-              disabled={loading}
+              disabled={isLoading}
               placeholder="Select status"
             />
           </div>
@@ -162,7 +171,7 @@ const LeaveHistory = ({
           )}
         </div>
 
-        {loading && requests.length === 0 ? (
+        {isLoading && requests.length === 0 ? (
           <div className="leaveHistory-loading">
             <span>Loading leave requests...</span>
           </div>
@@ -243,7 +252,7 @@ const LeaveHistory = ({
                   className="leaveHistory-pagination-btn"
                   onClick={handlePreviousPage}
                   disabled={
-                    loading || !hasPreviousPage
+                    isLoading || !hasPreviousPage
                   }
                   aria-label="Previous page"
                 >
@@ -287,7 +296,7 @@ const LeaveHistory = ({
                   className="leaveHistory-pagination-btn"
                   onClick={handleNextPage}
                   disabled={
-                    loading || !hasNextPage
+                    isLoading || !hasNextPage
                   }
                   aria-label="Next page"
                 >
@@ -305,7 +314,7 @@ const LeaveHistory = ({
         <LeaveDetails
           request={selectedRequest}
           onClose={() => setSelectedRequest(null)}
-          onCancel={onCancelRequest}
+          onCancelSuccess={onCancelRequest}
         />
       )}
     </>
