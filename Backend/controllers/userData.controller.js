@@ -178,7 +178,7 @@ export const login = async (req, res) => {
       },
       process.env.PrivateKey,
       {
-        expiresIn: "1h",
+        expiresIn: "1d",
       },
     );
 
@@ -186,7 +186,7 @@ export const login = async (req, res) => {
       httpOnly: false,
       secure: false,
       sameSite: "Lax",
-      maxAge: 60 * 60 * 1000,
+      maxAge: 24 * 60 * 60 * 1000,
     });
 
     const user = userData.toObject();
@@ -286,7 +286,7 @@ export const admin_login = async (req, res) => {
       },
       process.env.PrivateKey,
       {
-        expiresIn: "1h",
+        expiresIn: "1d",
       },
     );
 
@@ -294,7 +294,7 @@ export const admin_login = async (req, res) => {
       httpOnly: false,
       secure: false,
       sameSite: "Lax",
-      maxAge: 60 * 60 * 1000,
+      maxAge: 24 * 60 * 60 * 1000,
     });
 
     const user = admin.toObject();
@@ -411,6 +411,7 @@ export const updateActivity = async (req, res) => {
 //# ========================= Get All Usres ============================
 
 export const getAllUser = async (req, res) => {
+  console.log("getData", req);
   try {
     const page = Number(req.query.page) || 1;
     const limit = Number(req.query.limit) || 10;
