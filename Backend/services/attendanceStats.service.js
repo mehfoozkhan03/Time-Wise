@@ -265,7 +265,7 @@ export const getAttendanceStats = async (userID) => {
   );
 
   // const weeklyHours = formatWorkingHours(totalWeeklySeconds);
-  const weeklyHours = totalWeeklySeconds / 60 * 60;
+  const weeklyHours = totalWeeklySeconds / 3600;
 
   // =====================================================
   // Monthly Attendance

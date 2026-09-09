@@ -49,6 +49,7 @@ import { AuthLayout } from '../layouts/AuthLayout';
 import { AdminLayout } from '../layouts/AdminLayout';
 import { CommunityProfile } from '../components/community/CommunityProfile/CommunityProfile';
 import { DashboardLeave } from '../components/Dashboard/DashboardLeave/DashboardLeave';
+import { AdminPrivateRoutes } from '../components/AdminPrivateRoutes';
 
 export const AppRoutes = () => {
   return (
@@ -184,7 +185,7 @@ export const AppRoutes = () => {
         {/* ================= Admin Layout ================= */}
           <Route path="/admin/login" element={<SignUpPage />} />
 
-        <Route element={<AdminLayout />}>
+        <Route element={<AdminPrivateRoutes><AdminLayout /></AdminPrivateRoutes>}>
           {/* ================= ADMIN DASHBOARD ================= */}
           <Route path="/adminDashboard" element={<AdminDashboard />}>
             <Route index element={<DashboardHome />} />
