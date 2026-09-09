@@ -18,7 +18,18 @@ export const auth = (req, res, next) => {
           message: "Invalid or expired token.",
         });
       }
-      req.userData = decoded;
+      console.log("decoded", decoded);
+      // Store decoded data according to role
+      if (decoded.role === "admin") {
+        req.AdminUser = decoded;
+      } else if (decoded.role === "user") {
+        req.user = decoded;
+      } else {
+        return res.status(403).json({
+          success: false,
+          message: "Invalid user role.",
+        });
+      }
       next();
     });
   } catch (error) {
