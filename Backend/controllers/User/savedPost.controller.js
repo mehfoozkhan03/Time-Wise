@@ -1,4 +1,4 @@
-import { SavedPost } from '../models/SavedPost.model.js'
+import { SavedPost } from '../../models/SavedPost.model.js'
 
 export const toggleSavedPost = async (req, res) => {
   try {

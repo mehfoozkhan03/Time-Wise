@@ -2,12 +2,12 @@ import jwt from "jsonwebtoken";
 
 export const auth = (req, res, next) => {
   try {
-    const token = req.cookies?.token || req.cookies?.adminToken;
+    const token = req.cookies?.token;
 
     if (!token) {
       return res.status(401).json({
         success: false,
-        message: "Authentication required,",
+        message: "Authentication required.",
       });
     }
 
@@ -18,18 +18,8 @@ export const auth = (req, res, next) => {
           message: "Invalid or expired token.",
         });
       }
-      console.log("decoded", decoded);
-      // Store decoded data according to role
-      if (decoded.role === "admin") {
-        req.AdminUser = decoded;
-      } else if (decoded.role === "user") {
-        req.user = decoded;
-      } else {
-        return res.status(403).json({
-          success: false,
-          message: "Invalid user role.",
-        });
-      }
+
+      req.user = decoded;
       next();
     });
   } catch (error) {

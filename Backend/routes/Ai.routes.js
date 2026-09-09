@@ -3,7 +3,7 @@ import {
   askAI,
   clearAIConversation,
   getAIConversation,
-} from "../controllers/ai.controller.js";
+} from "../controllers/User/ai.controller.js";
 import { auth } from "../middleware/AuthMiddleware.js";
 import { authorize } from "../middleware/Allowrole.middleware.js";
 

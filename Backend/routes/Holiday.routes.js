@@ -8,7 +8,7 @@ import {
   createHoliday,
   updateHoliday,
   deleteHoliday,
-} from "../controllers/holiday.controller.js";
+} from "../controllers/User/holiday.controller.js";
 import { authorize } from "../middleware/Allowrole.middleware.js";
 
 const holidayRouter = express.Router();

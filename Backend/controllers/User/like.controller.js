@@ -1,10 +1,10 @@
 import mongoose from 'mongoose'
 
-import { likeModel } from '../models/Like.model.js'
-import { postModel } from '../models/Post.model.js'
-import { commentModel } from '../models/Comment.model.js'
-import { createNotification } from './../services/notification.service.js';
-import { userModel } from './../models/User.model.js';
+import { likeModel } from '../../models/Like.model.js'
+import { postModel } from '../../models/Post.model.js'
+import { commentModel } from '../../models/Comment.model.js'
+import { createNotification } from '../../services/notification.service.js';
+import { userModel } from '../../models/User.model.js';
 
 // =======================================================
 // Toggle Post Like

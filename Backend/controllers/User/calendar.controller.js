@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 
-import { calendarModel } from "../models/Calendar.model.js";
-import { userModel } from "../models/User.model.js";
-import { AdminModel } from "../models/Admin.model.js";
+import { calendarModel } from "../../models/Calendar.model.js";
+import { userModel } from "../../models/User.model.js";
+import { AdminModel } from "../../models/Admin.model.js";
 
 const ADMIN_EVENT_TYPES = [
   "PRESENT",

@@ -1,6 +1,6 @@
-import { holidayModel } from "../models/Holidays.model.js";
-import { userModel } from "../models/User.model.js";
-import { AdminModel } from "../models/Admin.model.js";
+import { holidayModel } from "../../models/Holidays.model.js";
+import { userModel } from "../../models/User.model.js";
+import { AdminModel } from "../../models/Admin.model.js";
 
 /* =========================================
    Logged In User Helper

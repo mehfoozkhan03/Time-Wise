@@ -14,7 +14,7 @@ import {
   approveLeave,
   rejectLeave,
   getAdminLeaveStats,
-} from "../controllers/leave.controller.js";
+} from "../controllers/User/leave.controller.js";
 
 const router = express.Router();
 

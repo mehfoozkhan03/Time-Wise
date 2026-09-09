@@ -1,9 +1,8 @@
-import { postModel } from '../models/Post.model.js'
-import { userModel } from '../models/User.model.js'
-import { likeModel } from '../models/Like.model.js'
-import { SavedPost } from '../models/SavedPost.model.js'
-// import { notificationModel } from "../models/Notification.model.js";
-import { createNotification } from '../services/notification.service.js'
+import { postModel } from '../../models/Post.model.js'
+import { userModel } from '../../models/User.model.js'
+import { likeModel } from '../../models/Like.model.js'
+import { SavedPost } from '../../models/SavedPost.model.js'
+import { createNotification } from '../../services/notification.service.js'
 
 // Create Post
 // =======================================================

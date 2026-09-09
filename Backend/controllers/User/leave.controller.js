@@ -11,7 +11,7 @@ import {
   getLeaveStatistics,
   approveLeaveRequest,
   rejectLeaveRequest,
-} from "../services/leave.service.js";
+} from "../../services/leave.service.js";
 
 export const createLeave = async (req, res) => {
   try {

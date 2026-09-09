@@ -1,6 +1,16 @@
+import { AdminModel } from "../../models/Admin.model.js";
+import { userModel } from "../../models/User.model.js";
 
-// ================= Admin Login =================
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+dotenv.config();
 
+const validateLogin = (body) => {
+  return body.email?.trim() && body.password?.trim();
+};
+
+//# ================= Admin Login =================
 export const admin_login = async (req, res) => {
   try {
     if (!validateLogin(req.body)) {
@@ -135,13 +145,13 @@ export const getAllUser = async (req, res) => {
       ];
     }
 
-    // ================= Department Filter =================
+    //# ================= Department Filter =================
 
     if (department !== "All") {
       filter.department = department;
     }
 
-    // ================= Status Filter =================
+    //# ================= Status Filter =================
     const ACTIVE_TIME = 15 * 60 * 1000;
 
     if (status === "Active") {
@@ -158,7 +168,7 @@ export const getAllUser = async (req, res) => {
       };
     }
 
-    // ================= Get Users =================
+    //# ================= Get Users =================
 
     const users = await userModel
       .find(filter)
@@ -167,11 +177,11 @@ export const getAllUser = async (req, res) => {
       .skip(skip)
       .limit(limit);
 
-    // ================= Total Users =================
+    //# ================= Total Users =================
 
     const totalUsers = await userModel.countDocuments(filter);
 
-    // ================= Online Status =================
+    //# ================= Online Status =================
 
     const usersWithStatus = users.map((user) => {
       const isOnline =

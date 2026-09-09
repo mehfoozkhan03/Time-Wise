@@ -3,8 +3,8 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
 
-import { userModel } from "../models/User.model.js";
-import { AdminModel } from "../models/Admin.model.js";
+import { userModel } from "../../models/User.model.js";
+import { AdminModel } from "../../models/Admin.model.js";
 
 // ================= Validation =================
 
