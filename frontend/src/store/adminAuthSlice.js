@@ -23,6 +23,8 @@ export const loginAdmin = createAsyncThunk(
   'adminAuth/loginAdmin',
   async (credentials, thunkAPI) => {
     try {
+      console.log(`🚀 ~ credentials:`, credentials);
+
       const { data } = await adminAuthService.login(credentials);
       console.log(`🚀 ~ data:`, data);
       return data;

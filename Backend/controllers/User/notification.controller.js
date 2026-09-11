@@ -1,5 +1,5 @@
-import { notificationModel } from "../models/Notification.model.js";
-import { notificationStatusModel } from "../models/NotificationStatus.model.js";
+import { notificationModel } from "../../models/Notification.model.js";
+import { notificationStatusModel } from "../../models/NotificationStatus.model.js";
 
 // ======================================================
 // Get Notifications

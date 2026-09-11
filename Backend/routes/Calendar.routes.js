@@ -9,7 +9,7 @@ import {
   createEvent,
   updateEvent,
   deleteEvent,
-} from '../controllers/calendar.controller.js';
+} from '../controllers/User/calendar.controller.js';
 
 const router = express.Router();
 

@@ -9,7 +9,7 @@ import {
   getTodayAttendance,
   getAttendanceHistory,
   getDashboardStats,
-} from '../controllers/attendance.controller.js';
+} from '../controllers/User/attendance.controller.js';
 
 const attendanceRouter = express.Router();
 

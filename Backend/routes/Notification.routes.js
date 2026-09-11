@@ -11,7 +11,7 @@
 
 import express from "express";
 import { auth } from "../middleware/AuthMiddleware.js";
-import { deleteNotification, getNotifications, getUnreadNotificationCount, markNotificationAsRead } from "../controllers/notification.controller.js";
+import { deleteNotification, getNotifications, getUnreadNotificationCount, markNotificationAsRead } from "../controllers/User/notification.controller.js";
 import { authorize } from "../middleware/Allowrole.middleware.js";
 const notificationRoute = express.Router();
 

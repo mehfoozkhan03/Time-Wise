@@ -1,5 +1,5 @@
-import { attendanceModel } from "../models/Attendance.model.js";
-import { userModel } from "../models/User.model.js";
+import { attendanceModel } from "../../models/Attendance.model.js";
+import { userModel } from "../../models/User.model.js";
 
 
 //# ================= Recent Employees =================

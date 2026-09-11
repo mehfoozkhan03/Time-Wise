@@ -15,6 +15,7 @@ import { contactRoute } from "./routes/Contact.routes.js";
 import notificationRoute from "./routes/Notification.routes.js";
 import leaveRoutes from "./routes/Leave.routes.js";
 import aiRoutes from "./routes/Ai.routes.js";
+import { adminRoutes } from "./routes/Admin.routes.js";
 
 dotenv.config();
 
@@ -43,6 +44,8 @@ server.use(express.json(), express.text(), cookieParser());
 // ================= Routes =================
 
 server.use("/user", userRoutes);
+
+server.use("/user", adminRoutes)
 
 server.use("/posts", postRoutes);
 

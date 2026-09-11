@@ -1,10 +1,10 @@
 import mongoose from 'mongoose'
 
-import { commentModel } from '../models/Comment.model.js'
-import { postModel } from '../models/Post.model.js'
-import { likeModel } from '../models/Like.model.js'
-import { userModel } from '../models/User.model.js'
-import { createNotification } from '../services/notification.service.js'
+import { commentModel } from '../../models/Comment.model.js'
+import { postModel } from '../../models/Post.model.js'
+import { likeModel } from '../../models/Like.model.js'
+import { userModel } from '../../models/User.model.js'
+import { createNotification } from '../../services/notification.service.js'
 
 // =======================================================
 // Create Comment
