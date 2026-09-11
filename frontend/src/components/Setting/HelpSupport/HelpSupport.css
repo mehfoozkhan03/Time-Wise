@@ -286,3 +286,42 @@
         font-size: 12px;
     }
 }
+
+/* =========================
+   HELP SUPPORT SKELETON
+========================= */
+
+.help-skeleton-gap {
+  margin-top: 10px;
+}
+
+.help-skeleton-faq {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 16px 20px;
+
+  border-bottom: 1px solid var(--border);
+}
+
+.help-skeleton-contact {
+  display: flex;
+  align-items:start;
+  justify-content:start;
+
+  padding: 16px 0;
+
+  border-bottom: 1px solid var(--border);
+}
+
+.help-skeleton-contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.helpSupport-contact-content
+  .help-skeleton-contact:last-child {
+  border-bottom: none;
+}
