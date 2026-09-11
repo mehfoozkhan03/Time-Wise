@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   MdCalendarToday,
   MdClose,
@@ -6,9 +7,21 @@ import {
   MdInfoOutline,
 } from "react-icons/md";
 
+import { cancelLeaveRequest } from "../../../../store/leaveSlice";
+
 import "./LeaveDetails.css";
 
-const LeaveDetails = ({ request, onClose, onCancel }) => {
+const LeaveDetails = ({
+  request,
+  onClose,
+  onCancelSuccess,
+}) => {
+  const dispatch = useDispatch();
+
+  const reduxError = useSelector(
+    (state) => state.leave?.error || null,
+  );
+
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [cancelling, setCancelling] = useState(false);
   const [error, setError] = useState("");
@@ -29,15 +42,27 @@ const LeaveDetails = ({ request, onClose, onCancel }) => {
   };
 
   const handleCancel = async () => {
+    if (!request.id || cancelling) {
+      return;
+    }
+
     try {
       setCancelling(true);
       setError("");
 
-      await onCancel(request.id);
+      await dispatch(
+        cancelLeaveRequest(request.id),
+      ).unwrap();
+
+      await onCancelSuccess?.();
 
       onClose();
     } catch (cancelError) {
-      setError(cancelError?.message || "Failed to cancel leave request.");
+      setError(
+        cancelError?.message ||
+          reduxError ||
+          "Failed to cancel leave request.",
+      );
     } finally {
       setCancelling(false);
     }
@@ -58,7 +83,10 @@ const LeaveDetails = ({ request, onClose, onCancel }) => {
   };
 
   return (
-    <div className="leaveDetails-overlay" onMouseDown={handleClose}>
+    <div
+      className="leaveDetails-overlay"
+      onMouseDown={handleClose}
+    >
       <div
         className="leaveDetails-modal"
         onMouseDown={(event) => event.stopPropagation()}
@@ -94,10 +122,14 @@ const LeaveDetails = ({ request, onClose, onCancel }) => {
             <div className="leaveDetails-status-heading">
               <MdInfoOutline />
 
-              <span className="leaveDetails-label">Request Status</span>
+              <span className="leaveDetails-label">
+                Request Status
+              </span>
             </div>
 
-            <span className={`leaveDetails-status ${status.toLowerCase()}`}>
+            <span
+              className={`leaveDetails-status ${status.toLowerCase()}`}
+            >
               {status}
             </span>
           </div>
@@ -118,7 +150,9 @@ const LeaveDetails = ({ request, onClose, onCancel }) => {
 
               <strong>
                 {request.requestedDays}{" "}
-                {request.requestedDays === 1 ? "day" : "days"}
+                {request.requestedDays === 1
+                  ? "day"
+                  : "days"}
               </strong>
             </div>
 
@@ -155,7 +189,9 @@ const LeaveDetails = ({ request, onClose, onCancel }) => {
           </div>
 
           <div className="leaveDetails-reason">
-            <p>{request.reason || "No reason provided."}</p>
+            <p>
+              {request.reason || "No reason provided."}
+            </p>
           </div>
 
           {request.adminComment && (
@@ -218,7 +254,10 @@ const LeaveDetails = ({ request, onClose, onCancel }) => {
                 <div>
                   <strong>Cancel this request?</strong>
 
-                  <p>This action will cancel your pending leave request.</p>
+                  <p>
+                    This action will cancel your pending
+                    leave request.
+                  </p>
                 </div>
               </div>
 
@@ -238,7 +277,9 @@ const LeaveDetails = ({ request, onClose, onCancel }) => {
                   onClick={handleCancel}
                   disabled={cancelling}
                 >
-                  {cancelling ? "Cancelling..." : "Cancel Request"}
+                  {cancelling
+                    ? "Cancelling..."
+                    : "Cancel Request"}
                 </button>
               </div>
             </div>
