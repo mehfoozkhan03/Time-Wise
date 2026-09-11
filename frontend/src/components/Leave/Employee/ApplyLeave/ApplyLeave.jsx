@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   MdCalendarMonth,
   MdClose,
@@ -7,6 +8,7 @@ import {
 } from "react-icons/md";
 
 import CustomSelect from "../../../Common/CustomSelect/CustomSelect";
+import { submitLeave } from "../../../../store/leaveSlice";
 
 import "./ApplyLeave.css";
 
@@ -16,7 +18,14 @@ const leaveTypeLabels = {
   casual: "Casual Leave",
 };
 
-const ApplyLeave = ({ onClose, onSubmit, balance }) => {
+const ApplyLeave = ({ onClose, onSuccess }) => {
+  const dispatch = useDispatch();
+
+  const {
+    balance,
+    error: reduxError,
+  } = useSelector((state) => state.leave);
+
   const [formData, setFormData] = useState({
     leaveType: "",
     startDate: "",
@@ -51,29 +60,20 @@ const ApplyLeave = ({ onClose, onSubmit, balance }) => {
   );
 
   const availableLeaveTypes = useMemo(
-    () =>
-      leaveTypes.filter(
-        (leave) => leave.balance > 0,
-      ),
+    () => leaveTypes.filter((leave) => leave.balance > 0),
     [leaveTypes],
   );
 
   const selectedLeave = useMemo(
     () =>
       leaveTypes.find(
-        (leave) =>
-          leave.value === formData.leaveType,
+        (leave) => leave.value === formData.leaveType,
       ),
     [formData.leaveType, leaveTypes],
   );
 
   const requestedDays = useMemo(() => {
-    if (
-      !formData.startDate ||
-      !formData.endDate
-    ) {
-      return 0;
-    }
+    if (!formData.startDate || !formData.endDate) return 0;
 
     const start = new Date(formData.startDate);
     const end = new Date(formData.endDate);
@@ -81,23 +81,14 @@ const ApplyLeave = ({ onClose, onSubmit, balance }) => {
     start.setHours(0, 0, 0, 0);
     end.setHours(0, 0, 0, 0);
 
-    const difference =
-      end.getTime() - start.getTime();
+    const difference = end.getTime() - start.getTime();
 
-    if (difference < 0) {
-      return 0;
-    }
+    if (difference < 0) return 0;
 
     return (
-      Math.floor(
-        difference /
-          (1000 * 60 * 60 * 24),
-      ) + 1
+      Math.floor(difference / (1000 * 60 * 60 * 24)) + 1
     );
-  }, [
-    formData.startDate,
-    formData.endDate,
-  ]);
+  }, [formData.startDate, formData.endDate]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -111,9 +102,7 @@ const ApplyLeave = ({ onClose, onSubmit, balance }) => {
   };
 
   const handleClose = () => {
-    if (submitting) {
-      return;
-    }
+    if (submitting) return;
 
     onClose();
   };
@@ -122,9 +111,7 @@ const ApplyLeave = ({ onClose, onSubmit, balance }) => {
     event.preventDefault();
 
     if (!balance) {
-      setError(
-        "Leave balance is still loading. Please try again.",
-      );
+      setError("Leave balance is still loading. Please try again.");
       return;
     }
 
@@ -144,19 +131,12 @@ const ApplyLeave = ({ onClose, onSubmit, balance }) => {
     }
 
     if (formData.startDate < today) {
-      setError(
-        "Start date cannot be in the past.",
-      );
+      setError("Start date cannot be in the past.");
       return;
     }
 
-    if (
-      formData.endDate <
-      formData.startDate
-    ) {
-      setError(
-        "End date cannot be before start date.",
-      );
+    if (formData.endDate < formData.startDate) {
+      setError("End date cannot be before start date.");
       return;
     }
 
@@ -166,26 +146,17 @@ const ApplyLeave = ({ onClose, onSubmit, balance }) => {
     }
 
     if (selectedLeave.balance <= 0) {
-      setError(
-        "You have no remaining balance for this leave type.",
-      );
+      setError("You have no remaining balance for this leave type.");
       return;
     }
 
-    if (
-      requestedDays >
-      selectedLeave.balance
-    ) {
-      setError(
-        "Requested days cannot exceed your available balance.",
-      );
+    if (requestedDays > selectedLeave.balance) {
+      setError("Requested days cannot exceed your available balance.");
       return;
     }
 
     if (!formData.reason.trim()) {
-      setError(
-        "Please enter a reason for your leave.",
-      );
+      setError("Please enter a reason for your leave.");
       return;
     }
 
@@ -193,15 +164,20 @@ const ApplyLeave = ({ onClose, onSubmit, balance }) => {
       setSubmitting(true);
       setError("");
 
-      await onSubmit({
-        leaveType: formData.leaveType,
-        startDate: formData.startDate,
-        endDate: formData.endDate,
-        reason: formData.reason.trim(),
-      });
+      await dispatch(
+        submitLeave({
+          leaveType: formData.leaveType,
+          startDate: formData.startDate,
+          endDate: formData.endDate,
+          reason: formData.reason.trim(),
+        }),
+      ).unwrap();
+
+      await onSuccess();
     } catch (submitError) {
       setError(
         submitError?.message ||
+          reduxError ||
           "Failed to submit leave request.",
       );
     } finally {
@@ -216,9 +192,7 @@ const ApplyLeave = ({ onClose, onSubmit, balance }) => {
     >
       <div
         className="applyLeave-modal"
-        onMouseDown={(event) =>
-          event.stopPropagation()
-        }
+        onMouseDown={(event) => event.stopPropagation()}
       >
         <div className="applyLeave-header">
           <div className="applyLeave-heading">
@@ -228,9 +202,7 @@ const ApplyLeave = ({ onClose, onSubmit, balance }) => {
 
             <div>
               <h2>Apply for Leave</h2>
-              <p>
-                Submit a new leave request.
-              </p>
+              <p>Submit a new leave request.</p>
             </div>
           </div>
 
@@ -250,9 +222,7 @@ const ApplyLeave = ({ onClose, onSubmit, balance }) => {
           onSubmit={handleSubmit}
         >
           <div className="applyLeave-field">
-            <label htmlFor="leaveType">
-              Leave Type
-            </label>
+            <label htmlFor="leaveType">Leave Type</label>
 
             <CustomSelect
               id="leaveType"
@@ -260,18 +230,14 @@ const ApplyLeave = ({ onClose, onSubmit, balance }) => {
               value={formData.leaveType}
               options={availableLeaveTypes}
               onChange={handleChange}
-              disabled={
-                submitting || !balance
-              }
+              disabled={submitting || !balance}
               placeholder="Select leave type"
             />
           </div>
 
           <div className="applyLeave-date-grid">
             <div className="applyLeave-field">
-              <label htmlFor="startDate">
-                Start Date
-              </label>
+              <label htmlFor="startDate">Start Date</label>
 
               <div className="applyLeave-input-wrapper">
                 <MdCalendarMonth />
@@ -281,21 +247,15 @@ const ApplyLeave = ({ onClose, onSubmit, balance }) => {
                   name="startDate"
                   type="date"
                   min={today}
-                  value={
-                    formData.startDate
-                  }
+                  value={formData.startDate}
                   onChange={handleChange}
-                  disabled={
-                    submitting || !balance
-                  }
+                  disabled={submitting || !balance}
                 />
               </div>
             </div>
 
             <div className="applyLeave-field">
-              <label htmlFor="endDate">
-                End Date
-              </label>
+              <label htmlFor="endDate">End Date</label>
 
               <div className="applyLeave-input-wrapper">
                 <MdCalendarMonth />
@@ -304,15 +264,10 @@ const ApplyLeave = ({ onClose, onSubmit, balance }) => {
                   id="endDate"
                   name="endDate"
                   type="date"
-                  min={
-                    formData.startDate ||
-                    today
-                  }
+                  min={formData.startDate || today}
                   value={formData.endDate}
                   onChange={handleChange}
-                  disabled={
-                    submitting || !balance
-                  }
+                  disabled={submitting || !balance}
                 />
               </div>
             </div>
@@ -325,17 +280,11 @@ const ApplyLeave = ({ onClose, onSubmit, balance }) => {
               </div>
 
               <div>
-                <span>
-                  Available Balance
-                </span>
+                <span>Available Balance</span>
 
                 <strong>
-                  {selectedLeave?.balance ??
-                    0}{" "}
-                  {selectedLeave?.balance ===
-                  1
-                    ? "day"
-                    : "days"}
+                  {selectedLeave?.balance ?? 0}{" "}
+                  {selectedLeave?.balance === 1 ? "day" : "days"}
                 </strong>
               </div>
             </div>
@@ -346,24 +295,18 @@ const ApplyLeave = ({ onClose, onSubmit, balance }) => {
               </div>
 
               <div>
-                <span>
-                  Requested Days
-                </span>
+                <span>Requested Days</span>
 
                 <strong>
                   {requestedDays}{" "}
-                  {requestedDays === 1
-                    ? "day"
-                    : "days"}
+                  {requestedDays === 1 ? "day" : "days"}
                 </strong>
               </div>
             </div>
           </div>
 
           <div className="applyLeave-field">
-            <label htmlFor="reason">
-              Reason
-            </label>
+            <label htmlFor="reason">Reason</label>
 
             <div className="applyLeave-textarea-wrapper">
               <MdOutlineDescription />
@@ -375,18 +318,13 @@ const ApplyLeave = ({ onClose, onSubmit, balance }) => {
                 placeholder="Enter the reason for your leave"
                 value={formData.reason}
                 onChange={handleChange}
-                disabled={
-                  submitting || !balance
-                }
+                disabled={submitting || !balance}
               />
             </div>
           </div>
 
           {error && (
-            <p
-              className="applyLeave-error"
-              role="alert"
-            >
+            <p className="applyLeave-error" role="alert">
               {error}
             </p>
           )}
@@ -404,13 +342,9 @@ const ApplyLeave = ({ onClose, onSubmit, balance }) => {
             <button
               type="submit"
               className="applyLeave-submit"
-              disabled={
-                submitting || !balance
-              }
+              disabled={submitting || !balance}
             >
-              {submitting
-                ? "Submitting..."
-                : "Submit Request"}
+              {submitting ? "Submitting..." : "Submit Request"}
             </button>
           </div>
         </form>
