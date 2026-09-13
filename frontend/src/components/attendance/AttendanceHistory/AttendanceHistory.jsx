@@ -18,7 +18,7 @@ export default function AttendanceHistory() {
   }
 
   function formatTime(time) {
-    if (!time) return "--";
+    if (!time) return "00";
 
     return new Date(time).toLocaleTimeString("en-IN", {
       hour: "2-digit",

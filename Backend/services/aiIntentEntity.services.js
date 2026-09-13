@@ -777,7 +777,7 @@ const detectByKeywords = (message) => {
       };
     }
 
-    // "What meetings do I have on Friday?" -> events only
+    // "What meetings do I have on Friday?" => events only
     if (mentionsCalendarWord && !mentionsHolidayWord) {
       return {
         intent: "calendar_event",

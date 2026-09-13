@@ -25,17 +25,17 @@ useEffect(() => {
 }, []);
 
   return (
-  <div
-    className="stagger"
-    style={{
-      display: "grid",
-      gridTemplateColumns: "repeat(4,1fr)",
-      gap: 14,
-      marginBottom: 28,
-    }}
-  >
-    {showSkeleton
-      ? [...Array(8)].map((_, index) => (
+    <div
+      className="stagger"
+      style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(4,1fr)",
+        gap: 14,
+        marginBottom: 28,
+      }}
+    >
+      {showSkeleton ? (
+        [...Array(8)].map((_, index) => (
           <div
             key={index}
             style={{
@@ -59,7 +59,7 @@ useEffect(() => {
             <Skeleton width="80px" height="14px" />
           </div>
         ))
-      : (
+      ) : (
         <>
           <KPICard
             icon="📅"
@@ -145,15 +145,15 @@ useEffect(() => {
           <KPICard
             icon="🕗"
             label="Avg Check-in Time"
-            value={dashboardStats?.averageCheckIn || "--"}
+            value={dashboardStats?.averageCheckIn || "00:00"}
             trend={kpiMetrics?.checkInTrend ?? 0}
             trendSuffix=" min"
             sparkData={sparklineData?.checkin}
             sparkColor="#22d3ee"
-            sub={`Avg Break: ${dashboardStats?.averageBreakDuration || 0} min`}
+            sub={`Avg Break: ${dashboardStats?.averageBreakDuration ?? 0} min`}
           />
         </>
       )}
-  </div>
-);
+    </div>
+  );
 }

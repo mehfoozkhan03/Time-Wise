@@ -103,7 +103,7 @@ export const getAttendanceStats = async (userID) => {
     .populate("user", "firstName lastName department designation");
 
   const formatTime = (date) => {
-    if (!date) return "--";
+    if (!date) return "00";
 
     return new Date(date).toLocaleTimeString("en-US", {
       hour: "2-digit",
@@ -119,14 +119,14 @@ export const getAttendanceStats = async (userID) => {
       .filter((item) => item.breakStart)
       .map((item) => {
         const start = formatTime(item.breakStart);
-        const end = item.breakEnd ? formatTime(item.breakEnd) : "--";
+        const end = item.breakEnd ? formatTime(item.breakEnd) : "00";
 
         return `${start}–${end}`;
       })
       .join(", ");
   };
 
-  const formatWorkingHours = (seconds = 0) => {
+  const formatHoursAndMinutes = (seconds = 0) => {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
 
@@ -145,7 +145,7 @@ export const getAttendanceStats = async (userID) => {
 
       name: `${user?.firstName || ""} ${user?.lastName || ""}`.trim(),
 
-      department: user?.department || user?.designation || "--",
+      department: user?.department || user?.designation || "00",
 
       checkIn: formatTime(record.checkInTime),
 
@@ -153,7 +153,7 @@ export const getAttendanceStats = async (userID) => {
 
       checkOut: formatTime(record.checkOutTime),
 
-      workingHours: formatWorkingHours(record.totalWorkingSeconds),
+      workingHours: formatHoursAndMinutes(record.totalWorkingSeconds),
 
       status: record.status || "Absent",
     };
@@ -351,7 +351,7 @@ export const getAttendanceStats = async (userID) => {
     (record) => record.checkInTime,
   );
 
-  let averageCheckIn = "--:--";
+  let averageCheckIn = "00:00";
 
   if (checkInRecords.length > 0) {
     const totalMinutes = checkInRecords.reduce((sum, record) => {

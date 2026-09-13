@@ -73,7 +73,7 @@ export function Reports() {
   };
 
   const secondsToMinutes = (seconds) => {
-    return `${Math.floor(seconds / 60)} min`;
+    return `${Math.floor((seconds || 0) / 60)} min`;
   };
 
   const filteredLog = useMemo(() => {
