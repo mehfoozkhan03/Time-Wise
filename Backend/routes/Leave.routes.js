@@ -2,6 +2,7 @@ import express from "express";
 
 import { auth } from "../middleware/AuthMiddleware.js";
 import { authorize } from "../middleware/Allowrole.middleware.js";
+import { adminAuth } from "../middleware/adminAuth.js";
 
 import {
   createLeave,
@@ -18,19 +19,24 @@ import {
 
 const router = express.Router();
 
-router.post("/", auth,authorize("user"), createLeave);
+router.post("/", auth, authorize("user"), createLeave);
 
-router.get("/my", auth,authorize("user"),getMyLeaves);
-router.get("/balance", auth,authorize("user"), getMyLeaveBalance);
+router.get("/my", auth, authorize("user"), getMyLeaves);
 
-router.get("/admin", auth,authorize("admin"), getAllLeavesForAdmin);
-router.get("/admin/stats", auth,authorize("admin"), getAdminLeaveStats);
-router.get("/admin/:leaveID", auth,authorize("admin"), getAdminLeaveDetails);
+router.get("/balance", auth, authorize("user"), getMyLeaveBalance);
 
-router.patch("/admin/:leaveID/approve", auth,authorize("admin"), approveLeave);
-router.patch("/admin/:leaveID/reject", auth,authorize("admin"), rejectLeave);
+router.get("/admin", adminAuth, getAllLeavesForAdmin);
 
-router.get("/:leaveID", auth,authorize("user"), getMyLeaveById);
-router.patch("/:leaveID/cancel", auth,authorize("user"), cancelMyLeave);
+router.get("/admin/stats", adminAuth, getAdminLeaveStats);
+
+router.get("/admin/:leaveID", adminAuth, getAdminLeaveDetails);
+
+router.patch("/admin/:leaveID/approve", adminAuth, approveLeave);
+
+router.patch("/admin/:leaveID/reject", adminAuth, rejectLeave);
+
+router.get("/:leaveID", auth, authorize("user"), getMyLeaveById);
+
+router.patch("/:leaveID/cancel", auth, authorize("user"), cancelMyLeave);
 
 export default router;

@@ -151,6 +151,7 @@ const initialState = {
 
   adminRequests: [],
   adminStatistics: null,
+  adminSelectedLeave: null,
   adminPagination: createPagination(),
 
   loading: false,
@@ -283,8 +284,9 @@ const leaveSlice = createSlice({
         state.error = null;
       })
 
-      .addCase(fetchAdminLeaveById.fulfilled, (state) => {
+      .addCase(fetchAdminLeaveById.fulfilled, (state, action) => {
         state.loading = false;
+        state.adminSelectedLeave = action.payload;
       })
 
       .addCase(fetchAdminLeaveById.rejected, (state, action) => {
@@ -309,6 +311,10 @@ const leaveSlice = createSlice({
         if (index !== -1) {
           state.adminRequests[index] = action.payload;
         }
+
+        if (state.adminSelectedLeave?._id === action.payload._id) {
+          state.adminSelectedLeave = action.payload;
+        }
       })
 
       .addCase(approveAdminLeave.rejected, (state, action) => {
@@ -332,6 +338,10 @@ const leaveSlice = createSlice({
 
         if (index !== -1) {
           state.adminRequests[index] = action.payload;
+        }
+
+        if (state.adminSelectedLeave?._id === action.payload._id) {
+          state.adminSelectedLeave = action.payload;
         }
       })
 

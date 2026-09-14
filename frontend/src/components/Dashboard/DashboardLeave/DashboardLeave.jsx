@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import "./DashboardLeave.css";
@@ -11,19 +11,10 @@ import RejectLeaveModal from "./RejectLeaveModal/RejectLeaveModal";
 import {
   fetchAdminLeaves,
   approveAdminLeave,
-  rejectAdminLeave,
   fetchLeaveStatistics,
 } from "../../../store/leaveSlice";
 
 const getLeaveId = (request) => request?.id || request?._id;
-
-const formatRequests = (requests) =>
-  requests.map((request) => ({
-    ...request,
-    id: request._id,
-    employee: request.user || request.employee,
-    user: request.user || request.employee,
-  }));
 
 export const DashboardLeave = () => {
   const dispatch = useDispatch();
@@ -40,82 +31,18 @@ export const DashboardLeave = () => {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [isRejectModalOpen, setIsRejectModalOpen] = useState(false);
 
-  const [page, setPage] = useState(1);
-  const [limit] = useState(10);
-  const [status, setStatus] = useState("All");
-  const [search, setSearch] = useState("");
-
-  const formattedRequests = useMemo(
-    () => formatRequests(adminRequests),
-    [adminRequests],
-  );
-
-  const fetchLeaveData = useCallback(
-    async (currentPage, currentStatus, currentSearch) => {
-      await dispatch(
-        fetchAdminLeaves({
-          page: currentPage,
-          limit,
-          status: currentStatus,
-          search: currentSearch,
-        }),
-      ).unwrap();
-    },
-    [dispatch, limit],
-  );
-
-  useEffect(() => {
-    const isInitialLoad = page === 1 && status === "All" && search === "";
-
-    if (isInitialLoad) {
-      fetchLeaveData(1, "All", "");
-      return;
-    }
-
-    const timer = setTimeout(() => {
-      fetchLeaveData(page, status, search);
-    }, 400);
-
-    return () => clearTimeout(timer);
-  }, [page, status, search, fetchLeaveData]);
-
-  useEffect(() => {
-    dispatch(fetchLeaveStatistics());
-  }, [dispatch]);
-
-  const refreshLeaveData = async () => {
+  const refreshLeaveData = useCallback(async () => {
     await dispatch(
       fetchAdminLeaves({
-        page,
-        limit,
-        status,
-        search,
+        page: adminPagination?.page || 1,
+        limit: adminPagination?.limit || 10,
+        status: adminPagination?.status || "All",
+        search: adminPagination?.search || "",
       }),
     ).unwrap();
 
     await dispatch(fetchLeaveStatistics()).unwrap();
-  };
-
-  const handleSearchChange = (value) => {
-    setSearch(value);
-    setPage(1);
-  };
-
-  const handleFilterChange = (newStatus) => {
-    setStatus(newStatus);
-    setPage(1);
-  };
-
-  const handlePageChange = (newPage) => {
-    if (
-      newPage < 1 ||
-      (adminPagination?.totalPages && newPage > adminPagination.totalPages)
-    ) {
-      return;
-    }
-
-    setPage(newPage);
-  };
+  }, [dispatch, adminPagination]);
 
   const closeRequestDetails = () => {
     setIsDetailsOpen(false);
@@ -156,46 +83,26 @@ export const DashboardLeave = () => {
     setIsRejectModalOpen(true);
   };
 
-  const handleConfirmReject = async ({ request, reason }) => {
-    const leaveID = getLeaveId(request);
-
-    if (!leaveID) {
-      return;
-    }
-
+  const handleConfirmReject = async () => {
     try {
-      await dispatch(
-        rejectAdminLeave({
-          leaveID,
-          adminComment: reason,
-        }),
-      ).unwrap();
-
       await refreshLeaveData();
-
       closeRejectModal();
-    } catch (rejectError) {
-      console.error("Reject Leave Error:", rejectError);
-      throw rejectError;
+    } catch (refreshError) {
+      console.error("Refresh Leave Data Error:", refreshError);
     }
   };
 
   return (
     <div className="dashboard_leave">
-      <LeaveStats statistics={adminStatistics} requests={formattedRequests} />
+      <LeaveStats
+        statistics={adminStatistics}
+        requests={adminRequests}
+      />
 
       <LeaveRequests
-        requests={formattedRequests}
-        loading={loading}
-        activeFilter={status}
-        searchTerm={search}
-        onSearchChange={handleSearchChange}
-        onFilterChange={handleFilterChange}
         onView={handleViewRequest}
         onApprove={handleApproveRequest}
         onReject={handleOpenRejectModal}
-        pagination={adminPagination}
-        onPageChange={handlePageChange}
       />
 
       <LeaveRequestDetails

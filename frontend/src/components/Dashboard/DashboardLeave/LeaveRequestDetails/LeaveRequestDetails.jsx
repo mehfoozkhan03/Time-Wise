@@ -1,3 +1,6 @@
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
 import {
   FaTimes,
   FaCalendarAlt,
@@ -12,6 +15,8 @@ import {
 } from "react-icons/fa";
 
 import "./LeaveRequestDetails.css";
+
+import { fetchAdminLeaveById } from "../../../../store/leaveSlice";
 
 const leaveTypeLabels = {
   annual: "Annual Leave",
@@ -36,24 +41,17 @@ const formatLeaveType = (leaveType) => {
     return "—";
   }
 
-  return (
-    leaveTypeLabels[leaveType.toLowerCase()] ||
-    leaveType
-  );
+  return leaveTypeLabels[leaveType.toLowerCase()] || leaveType;
 };
 
-const getEmployee = (request) =>
-  request.employee || request.user || null;
+const getEmployee = (request) => request.employee || request.user || null;
 
 const getEmployeeName = (employee) => {
   if (!employee) {
     return "Unknown Employee";
   }
 
-  const name = [
-    employee.firstName,
-    employee.lastName,
-  ]
+  const name = [employee.firstName, employee.lastName]
     .filter(Boolean)
     .join(" ");
 
@@ -65,10 +63,7 @@ const getEmployeeInitials = (employee) => {
     return "?";
   }
 
-  const initials = [
-    employee.firstName?.charAt(0),
-    employee.lastName?.charAt(0),
-  ]
+  const initials = [employee.firstName?.charAt(0), employee.lastName?.charAt(0)]
     .filter(Boolean)
     .join("")
     .toUpperCase();
@@ -77,9 +72,9 @@ const getEmployeeInitials = (employee) => {
 };
 
 const getAppliedDate = (request) =>
-  request.appliedAt ||
-  request.createdAt ||
-  request.appliedDate;
+  request.appliedAt || request.createdAt || request.appliedDate;
+
+const getRequestId = (request) => request?.id || request?._id;
 
 export default function LeaveRequestDetails({
   isOpen,
@@ -88,37 +83,50 @@ export default function LeaveRequestDetails({
   onApprove,
   onReject,
 }) {
-  if (!isOpen || !request) {
+  const dispatch = useDispatch();
+
+  const { adminSelectedLeave = null, loading = false } = useSelector(
+    (state) => state.leave,
+  );
+
+  const requestId = getRequestId(request);
+
+  useEffect(() => {
+    if (!isOpen || !requestId) {
+      return;
+    }
+
+    dispatch(fetchAdminLeaveById(requestId));
+  }, [dispatch, isOpen, requestId]);
+
+  const currentRequest =
+    adminSelectedLeave && getRequestId(adminSelectedLeave) === requestId
+      ? adminSelectedLeave
+      : request;
+
+  if (!isOpen || !currentRequest) {
     return null;
   }
 
-  const employee = getEmployee(request);
+  const employee = getEmployee(currentRequest);
   const employeeName = getEmployeeName(employee);
 
   const totalDays =
-    request.totalDays ??
-    request.requestedDays ??
-    0;
+    currentRequest.totalDays ?? currentRequest.requestedDays ?? 0;
 
-  const isPending = request.status === "Pending";
+  const isPending = currentRequest.status === "Pending";
 
-  const statusClass =
-    request.status?.toLowerCase() || "";
+  const statusClass = currentRequest.status?.toLowerCase() || "";
 
   return (
-    <div
-      className="leave_details_overlay"
-      onClick={onClose}
-    >
+    <div className="leave_details_overlay" onClick={onClose}>
       <div
         className="leave_details_modal"
         onClick={(event) => event.stopPropagation()}
       >
         <div className="leave_details_header">
           <div>
-            <span className="leave_details_eyebrow">
-              Leave Request
-            </span>
+            <span className="leave_details_eyebrow">Leave Request</span>
 
             <h2>Request Details</h2>
           </div>
@@ -161,15 +169,11 @@ export default function LeaveRequestDetails({
         </div>
 
         <div className="leave_details_status_row">
-          <span className="leave_details_status_label">
-            Current Status
-          </span>
+          <span className="leave_details_status_label">Current Status</span>
 
-          <span
-            className={`leave_details_status ${statusClass}`}
-          >
+          <span className={`leave_details_status ${statusClass}`}>
             <span className="leave_details_status_dot" />
-            {request.status || "Unknown"}
+            {currentRequest.status || "Unknown"}
           </span>
         </div>
 
@@ -181,56 +185,43 @@ export default function LeaveRequestDetails({
 
           <div className="leave_details_grid">
             <div className="leave_details_item">
-              <span className="leave_details_item_label">
-                Leave Type
-              </span>
+              <span className="leave_details_item_label">Leave Type</span>
+
+              <strong>{formatLeaveType(currentRequest.leaveType)}</strong>
+            </div>
+
+            <div className="leave_details_item">
+              <span className="leave_details_item_label">Total Days</span>
 
               <strong>
-                {formatLeaveType(request.leaveType)}
+                {totalDays} {totalDays === 1 ? "Day" : "Days"}
               </strong>
             </div>
 
             <div className="leave_details_item">
-              <span className="leave_details_item_label">
-                Total Days
-              </span>
-
-              <strong>
-                {totalDays}{" "}
-                {totalDays === 1 ? "Day" : "Days"}
-              </strong>
-            </div>
-
-            <div className="leave_details_item">
-              <span className="leave_details_item_label">
-                Start Date
-              </span>
+              <span className="leave_details_item_label">Start Date</span>
 
               <strong>
                 <FaCalendarAlt />
-                {formatDate(request.startDate)}
+                {formatDate(currentRequest.startDate)}
               </strong>
             </div>
 
             <div className="leave_details_item">
-              <span className="leave_details_item_label">
-                End Date
-              </span>
+              <span className="leave_details_item_label">End Date</span>
 
               <strong>
                 <FaCalendarAlt />
-                {formatDate(request.endDate)}
+                {formatDate(currentRequest.endDate)}
               </strong>
             </div>
 
             <div className="leave_details_item">
-              <span className="leave_details_item_label">
-                Applied On
-              </span>
+              <span className="leave_details_item_label">Applied On</span>
 
               <strong>
                 <FaClock />
-                {formatDate(getAppliedDate(request))}
+                {formatDate(getAppliedDate(currentRequest))}
               </strong>
             </div>
           </div>
@@ -243,11 +234,11 @@ export default function LeaveRequestDetails({
           </div>
 
           <div className="leave_details_reason">
-            {request.reason || "No reason provided."}
+            {currentRequest.reason || "No reason provided."}
           </div>
         </div>
 
-        {request.adminComment && (
+        {currentRequest.adminComment && (
           <div className="leave_details_section">
             <div className="leave_details_section_title">
               <FaUser />
@@ -255,7 +246,7 @@ export default function LeaveRequestDetails({
             </div>
 
             <div className="leave_details_comment">
-              {request.adminComment}
+              {currentRequest.adminComment}
             </div>
           </div>
         )}
@@ -269,12 +260,12 @@ export default function LeaveRequestDetails({
             Close
           </button>
 
-          {isPending && (
+          {isPending && !loading && (
             <div className="leave_details_actions">
               <button
                 type="button"
                 className="leave_details_btn reject"
-                onClick={() => onReject?.(request)}
+                onClick={() => onReject?.(currentRequest)}
               >
                 <FaBan />
                 Reject
@@ -283,7 +274,7 @@ export default function LeaveRequestDetails({
               <button
                 type="button"
                 className="leave_details_btn approve"
-                onClick={() => onApprove?.(request)}
+                onClick={() => onApprove?.(currentRequest)}
               >
                 <FaCheck />
                 Approve
