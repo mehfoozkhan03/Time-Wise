@@ -2,12 +2,7 @@ import { holidayModel } from "../../models/Holidays.model.js";
 import { userModel } from "../../models/User.model.js";
 import { AdminModel } from "../../models/Admin.model.js";
 
-/* =========================================
-   Logged In User Helper
-========================================= */
-
 const getLoggedInAccount = async (req) => {
-  // Employee Login
   if (req.user?.userID) {
     const employee = await userModel.findById(req.user.userID);
 
@@ -21,9 +16,8 @@ const getLoggedInAccount = async (req) => {
     };
   }
 
-  // Admin Login
-  if (req.user?.adminID) {
-    const admin = await AdminModel.findById(req.user.adminID);
+  if (req.admin?.adminID) {
+    const admin = await AdminModel.findById(req.admin.adminID);
 
     if (!admin) return null;
 
@@ -38,9 +32,6 @@ const getLoggedInAccount = async (req) => {
   return null;
 };
 
-/* =========================================
-   GET ALL HOLIDAYS
-========================================= */
 export const getAllHolidays = async (req, res) => {
   try {
     const auth = await getLoggedInAccount(req);
@@ -75,9 +66,6 @@ export const getAllHolidays = async (req, res) => {
   }
 };
 
-/* =========================================
-   GET HOLIDAY BY ID
-========================================= */
 export const getHolidayById = async (req, res) => {
   try {
     const auth = await getLoggedInAccount(req);
@@ -170,9 +158,6 @@ export const createHoliday = async (req, res) => {
   }
 };
 
-/* =========================================
-   UPDATE HOLIDAY
-========================================= */
 export const updateHoliday = async (req, res) => {
   try {
     const auth = await getLoggedInAccount(req);
@@ -249,9 +234,6 @@ export const updateHoliday = async (req, res) => {
   }
 };
 
-/* =========================================
-   DELETE HOLIDAY
-========================================= */
 export const deleteHoliday = async (req, res) => {
   try {
     const auth = await getLoggedInAccount(req);
