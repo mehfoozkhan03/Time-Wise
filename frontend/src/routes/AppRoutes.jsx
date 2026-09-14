@@ -50,6 +50,7 @@ import { AdminLayout } from '../layouts/AdminLayout';
 import { CommunityProfile } from '../components/community/CommunityProfile/CommunityProfile';
 import { DashboardLeave } from '../components/Dashboard/DashboardLeave/DashboardLeave';
 import { AdminPrivateRoutes } from '../components/AdminPrivateRoutes';
+import  DashboardCalendar  from '../components/Dashboard/DashboardCalendar/DashboardCalendar';
 
 export const AppRoutes = () => {
   return (
@@ -193,7 +194,7 @@ export const AppRoutes = () => {
             <Route path="employee" element={<DashboardEmployee />} />
             <Route path="attendance" element={<DashboardAttendance />} />
             <Route path="leave" element={<DashboardLeave />} />
-            <Route path="calendar" element={<Calendar />} />
+            <Route path="calendar" element={<DashboardCalendar />} />
             <Route path="thought" element={<DashboardThuoght />} />
             <Route path="notification" element={<DashboardNotification />} />
             <Route path="announcement" element={<DashboardAnnouncement />} />
