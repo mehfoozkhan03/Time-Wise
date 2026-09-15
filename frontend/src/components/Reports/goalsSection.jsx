@@ -1,4 +1,3 @@
-
 import { SectionLabel } from "./sectionLabel";
 import { GoalProgress } from "./goalProgress";
 import useCountUp from "../../components/UseCount/Count";
@@ -25,14 +24,14 @@ export function GoalsSection({ dashboardStats }) {
   const goals = [
     {
       label: "Weekly Hours",
-      current: weeklyHours,
+      current: weeklyHours || 0,
       target: dashboardStats?.weeklyTarget ?? 40,
       unit: "hrs",
       color: "#6366f1",
     },
     {
       label: "Attendance Rate",
-      current: attendance,
+      current: attendance || 0,
       target: 100,
       unit: "%",
       color: "#10b981",
@@ -40,14 +39,14 @@ export function GoalsSection({ dashboardStats }) {
 
     {
       label: "Productivity Score",
-      current: productivity,
+      current: productivity || 0,
       target: 100,
       unit: "%",
       color: "#22d3ee",
     },
     {
       label: "Monthly Hours",
-      current: monthlyHours,
+      current: monthlyHours || 0,
       target: 176,
       unit: "hrs",
       color: "#8b5cf6",

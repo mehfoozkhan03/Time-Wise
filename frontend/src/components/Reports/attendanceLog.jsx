@@ -273,7 +273,7 @@ useEffect(() => {
                       {row.hours}h
                     </span>
                   ) : (
-                    <span style={{ color: "var(--text-primary)" }}>—</span>
+                    <span style={{ color: "var(--text-primary)" }}>0h</span>
                   )}
                 </td>
                 <td
