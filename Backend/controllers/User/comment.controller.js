@@ -4,33 +4,63 @@ import { commentModel } from '../../models/Comment.model.js'
 import { postModel } from '../../models/Post.model.js'
 import { likeModel } from '../../models/Like.model.js'
 import { userModel } from '../../models/User.model.js'
+
 import { createNotification } from '../../services/notification.service.js'
 
 // =======================================================
-// Create Comment
+// CONSTANTS
+// =======================================================
+
+const COMMENT_AUTHOR_FIELDS =
+  'firstName lastName profileImage designation department'
+
+const MAX_COMMENT_LENGTH = 500
+
+// =======================================================
+// CREATE COMMENT
 // =======================================================
 
 export const createComment = async (req, res) => {
   const session = await mongoose.startSession()
 
   try {
-    session.startTransaction()
-
-    const { id } = req.params
+    const { id: postId } = req.params
     const { text } = req.body
+    const userId = req.user.userID
 
-    if (!text || !text.trim()) {
-      await session.abortTransaction()
+    const trimmedText = text?.trim()
 
+    // ---------------------------------------------------
+    // Validation
+    // ---------------------------------------------------
+
+    if (!trimmedText) {
       return res.status(400).json({
         success: false,
         message: 'Comment cannot be empty.',
       })
     }
 
+    if (trimmedText.length > MAX_COMMENT_LENGTH) {
+      return res.status(400).json({
+        success: false,
+        message: `Comment cannot exceed ${MAX_COMMENT_LENGTH} characters.`,
+      })
+    }
+
+    // ---------------------------------------------------
+    // Start transaction
+    // ---------------------------------------------------
+
+    session.startTransaction()
+
+    // ---------------------------------------------------
+    // Find post
+    // ---------------------------------------------------
+
     const post = await postModel
       .findOne({
-        _id: id,
+        _id: postId,
         isDeleted: false,
       })
       .session(session)
@@ -44,6 +74,10 @@ export const createComment = async (req, res) => {
       })
     }
 
+    // ---------------------------------------------------
+    // Check comments permission
+    // ---------------------------------------------------
+
     if (!post.allowComments) {
       await session.abortTransaction()
 
@@ -53,71 +87,86 @@ export const createComment = async (req, res) => {
       })
     }
 
+    // ---------------------------------------------------
+    // Create comment
+    // ---------------------------------------------------
+
     const [comment] = await commentModel.create(
       [
         {
-          post: id,
-          createdBy: req.user.userID,
-          text: text.trim(),
+          post: postId,
+          createdBy: userId,
+          text: trimmedText,
         },
       ],
       { session },
     )
 
-    post.commentsCount += 1
+    // ---------------------------------------------------
+    // Increment comment count
+    // ---------------------------------------------------
 
-    await post.save({ session })
+    await postModel.updateOne(
+      { _id: postId },
+      {
+        $inc: {
+          commentsCount: 1,
+        },
+      },
+      { session },
+    )
 
-    // =======================================================
-// Create Comment Notification
-// =======================================================
+    // ---------------------------------------------------
+    // Create notification
+    // ---------------------------------------------------
 
-// Don't notify if user comments on own post
-if (post.createdBy.toString() !== req.user.userID.toString()) {
-  const currentUser = await userModel
-    .findById(req.user.userID)
-    .select("firstName lastName");
+    if (post.createdBy.toString() !== userId.toString()) {
+      const currentUser = await userModel
+        .findById(userId)
+        .select('firstName lastName')
+        .lean()
 
-  if (currentUser) {
-    await createNotification({
-      sender: req.user.userID,
+      if (currentUser) {
+        await createNotification({
+          sender: userId,
+          title: 'New Comment',
+          message: `${currentUser.firstName} ${currentUser.lastName} commented on your post.`,
+          type: 'post',
+          referenceModel: 'Post',
+          referenceId: post._id,
+          audienceType: 'specific',
+          targetUsers: [post.createdBy],
+        })
+      }
+    }
 
-      title: "New Comment",
-
-      message: `${currentUser.firstName} ${currentUser.lastName} commented on your post.`,
-
-      type: "post",
-
-      referenceModel: "Post",
-
-      referenceId: post._id,
-
-      audienceType: "specific",
-
-      targetUsers: [post.createdBy],
-    });
-  }
-}
+    // ---------------------------------------------------
+    // Commit transaction
+    // ---------------------------------------------------
 
     await session.commitTransaction()
 
+    // ---------------------------------------------------
+    // Populate comment
+    // ---------------------------------------------------
+
     const populatedComment = await commentModel
       .findById(comment._id)
-      .populate(
-        'createdBy',
-        'firstName lastName profileImage designation department',
-      )
+      .populate('createdBy', COMMENT_AUTHOR_FIELDS)
+      .lean()
 
     return res.status(201).json({
       success: true,
       message: 'Comment added successfully.',
       comment: {
-        ...populatedComment.toObject(),
+        ...populatedComment,
         isLiked: false,
       },
     })
   } catch (error) {
-    await session.abortTransaction()
+    if (session.inTransaction()) {
+      await session.abortTransaction()
+    }
 
     console.error('Create Comment Error:', error)
 
@@ -126,58 +175,77 @@ if (post.createdBy.toString() !== req.user.userID.toString()) {
       message: 'Unable to add comment.',
     })
   } finally {
-    session.endSession()
+    await session.endSession()
   }
 }
 
 // =======================================================
-// Get Comments
+// GET COMMENTS
 // =======================================================
 
 export const getComments = async (req, res) => {
   try {
-    const { id } = req.params
+    const { id: postId } = req.params
+    const userId = req.user.userID
 
-    const page = Math.max(parseInt(req.query.page) || 1, 1)
-    const limit = Math.max(parseInt(req.query.limit) || 10, 1)
+    const page = Math.max(parseInt(req.query.page, 10) || 1, 1)
+
+    const limit = Math.min(Math.max(parseInt(req.query.limit, 10) || 10, 1), 50)
 
     const skip = (page - 1) * limit
 
-    const totalComments = await commentModel.countDocuments({
-      post: id,
-      isDeleted: false,
-    })
+    // ---------------------------------------------------
+    // Run independent queries in parallel
+    // ---------------------------------------------------
 
-    const comments = await commentModel
-      .find({
-        post: id,
+    const [totalComments, comments] = await Promise.all([
+      commentModel.countDocuments({
+        post: postId,
         isDeleted: false,
-      })
-      .populate(
-        'createdBy',
-        'firstName lastName profileImage designation department',
-      )
-      .sort({
-        createdAt: 1,
-      })
-      .skip(skip)
-      .limit(limit)
+      }),
 
-    // Find all comments liked by the current user
-    const likedComments = await likeModel.find({
-      user: req.user.userID,
-      targetType: 'comment',
-      targetId: {
-        $in: comments.map((comment) => comment._id),
-      },
-    })
+      commentModel
+        .find({
+          post: postId,
+          isDeleted: false,
+        })
+        .populate('createdBy', COMMENT_AUTHOR_FIELDS)
+        .sort({ createdAt: 1 })
+        .skip(skip)
+        .limit(limit)
+        .lean(),
+    ])
+
+    // ---------------------------------------------------
+    // Find comments liked by current user
+    // ---------------------------------------------------
+
+    const commentIds = comments.map((comment) => comment._id)
+
+    const likedComments =
+      commentIds.length > 0
+        ? await likeModel
+            .find({
+              user: userId,
+              targetType: 'comment',
+              targetId: {
+                $in: commentIds,
+              },
+            })
+            .select('targetId')
+            .lean()
+        : []
 
     const likedSet = new Set(
       likedComments.map((like) => like.targetId.toString()),
     )
 
+    // ---------------------------------------------------
+    // Format response
+    // ---------------------------------------------------
+
     const formattedComments = comments.map((comment) => ({
-      ...comment.toObject(),
+      ...comment,
       isLiked: likedSet.has(comment._id.toString()),
     }))
 
@@ -199,20 +267,38 @@ export const getComments = async (req, res) => {
 }
 
 // =======================================================
-// Update Comment
+// UPDATE COMMENT
 // =======================================================
 
 export const updateComment = async (req, res) => {
   try {
     const { commentId } = req.params
+    const userId = req.user.userID
     const { text } = req.body
 
-    if (!text || !text.trim()) {
+    const trimmedText = text?.trim()
+
+    // ---------------------------------------------------
+    // Validation
+    // ---------------------------------------------------
+
+    if (!trimmedText) {
       return res.status(400).json({
         success: false,
         message: 'Comment cannot be empty.',
       })
     }
+
+    if (trimmedText.length > MAX_COMMENT_LENGTH) {
+      return res.status(400).json({
+        success: false,
+        message: `Comment cannot exceed ${MAX_COMMENT_LENGTH} characters.`,
+      })
+    }
+
+    // ---------------------------------------------------
+    // Find comment
+    // ---------------------------------------------------
 
     const comment = await commentModel.findById(commentId)
 
@@ -223,37 +309,49 @@ export const updateComment = async (req, res) => {
       })
     }
 
-    if (comment.createdBy.toString() !== req.user.userID) {
+    // ---------------------------------------------------
+    // Authorization
+    // ---------------------------------------------------
+
+    if (comment.createdBy.toString() !== userId.toString()) {
       return res.status(403).json({
         success: false,
         message: 'Unauthorized.',
       })
     }
 
-    comment.text = text.trim()
+    // ---------------------------------------------------
+    // Update
+    // ---------------------------------------------------
+
+    comment.text = trimmedText
     comment.isEdited = true
     comment.editedAt = new Date()
 
     await comment.save()
 
-    const populatedComment = await commentModel
-      .findById(comment._id)
-      .populate(
-        'createdBy',
-        'firstName lastName profileImage designation department',
-      )
+    // ---------------------------------------------------
+    // Fetch populated comment + like state
+    // ---------------------------------------------------
 
-    const liked = await likeModel.exists({
-      user: req.user.userID,
-      targetType: 'comment',
-      targetId: comment._id,
-    })
+    const [populatedComment, liked] = await Promise.all([
+      commentModel
+        .findById(comment._id)
+        .populate('createdBy', COMMENT_AUTHOR_FIELDS)
+        .lean(),
+
+      likeModel.exists({
+        user: userId,
+        targetType: 'comment',
+        targetId: comment._id,
+      }),
+    ])
 
     return res.status(200).json({
       success: true,
       message: 'Comment updated successfully.',
       comment: {
-        ...populatedComment.toObject(),
+        ...populatedComment,
         isLiked: !!liked,
       },
     })
@@ -268,16 +366,21 @@ export const updateComment = async (req, res) => {
 }
 
 // =======================================================
-// Delete Comment
+// DELETE COMMENT
 // =======================================================
 
 export const deleteComment = async (req, res) => {
   const session = await mongoose.startSession()
 
   try {
+    const { commentId } = req.params
+    const userId = req.user.userID
+
     session.startTransaction()
 
-    const { commentId } = req.params
+    // ---------------------------------------------------
+    // Find comment
+    // ---------------------------------------------------
 
     const comment = await commentModel.findById(commentId).session(session)
 
@@ -290,7 +393,11 @@ export const deleteComment = async (req, res) => {
       })
     }
 
-    if (comment.createdBy.toString() !== req.user.userID) {
+    // ---------------------------------------------------
+    // Authorization
+    // ---------------------------------------------------
+
+    if (comment.createdBy.toString() !== userId.toString()) {
       await session.abortTransaction()
 
       return res.status(403).json({
@@ -299,30 +406,50 @@ export const deleteComment = async (req, res) => {
       })
     }
 
+    // ---------------------------------------------------
+    // Soft delete comment
+    // ---------------------------------------------------
+
     comment.isDeleted = true
     comment.deletedAt = new Date()
+    comment.deletedBy = userId
 
     await comment.save({ session })
 
-    await postModel.findByIdAndUpdate(
-      comment.post,
+    // ---------------------------------------------------
+    // Decrease post comment count
+    // ---------------------------------------------------
+
+    await postModel.updateOne(
+      {
+        _id: comment.post,
+        commentsCount: {
+          $gt: 0,
+        },
+      },
       {
         $inc: {
           commentsCount: -1,
         },
       },
-      {
-        session,
-      },
-
-      await likeModel.deleteMany(
-        {
-          targetType: 'comment',
-          targetId: comment._id,
-        },
-        { session },
-      ),
+      { session },
     )
+
+    // ---------------------------------------------------
+    // Remove comment likes
+    // ---------------------------------------------------
+
+    await likeModel.deleteMany(
+      {
+        targetType: 'comment',
+        targetId: comment._id,
+      },
+      { session },
+    )
+
+    // ---------------------------------------------------
+    // Commit
+    // ---------------------------------------------------
 
     await session.commitTransaction()
 
@@ -331,7 +458,9 @@ export const deleteComment = async (req, res) => {
       message: 'Comment deleted successfully.',
     })
   } catch (error) {
-    await session.abortTransaction()
+    if (session.inTransaction()) {
+      await session.abortTransaction()
+    }
 
     console.error('Delete Comment Error:', error)
 
@@ -340,6 +469,6 @@ export const deleteComment = async (req, res) => {
       message: 'Unable to delete comment.',
     })
   } finally {
-    session.endSession()
+    await session.endSession()
   }
 }
