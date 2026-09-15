@@ -1,6 +1,10 @@
+import { useDispatch, useSelector } from "react-redux";
+
 import { FaEye, FaCheck, FaTimes, FaUserCircle } from "react-icons/fa";
 
 import "./LeaveRequestTable.css";
+
+import { clearLeaveError } from "../../../../store/leaveSlice";
 
 const leaveTypeLabels = {
   annual: "Annual Leave",
@@ -48,7 +52,6 @@ const getEmployeeInitials = (employee) => {
   }
 
   const firstInitial = employee.firstName?.charAt(0) || "";
-
   const lastInitial = employee.lastName?.charAt(0) || "";
 
   return `${firstInitial}${lastInitial}`.toUpperCase() || "?";
@@ -62,7 +65,44 @@ export default function LeaveRequestTable({
   onApprove,
   onReject,
 }) {
-  if (requests.length === 0) {
+  const dispatch = useDispatch();
+
+  const { adminRequests = [], error } = useSelector((state) => state.leave);
+
+  const tableRequests = adminRequests.length > 0 ? adminRequests : requests;
+
+  const formattedRequests = tableRequests.map((request) => ({
+    ...request,
+    id: request._id,
+    employee: request.user || request.employee,
+    user: request.user || request.employee,
+  }));
+
+  const handleView = (request) => {
+    if (error) {
+      dispatch(clearLeaveError());
+    }
+
+    onView?.(request);
+  };
+
+  const handleApprove = (request) => {
+    if (error) {
+      dispatch(clearLeaveError());
+    }
+
+    onApprove?.(request);
+  };
+
+  const handleReject = (request) => {
+    if (error) {
+      dispatch(clearLeaveError());
+    }
+
+    onReject?.(request);
+  };
+
+  if (formattedRequests.length === 0) {
     return (
       <div className="leave_table_empty">
         <div className="leave_empty_icon">
@@ -95,7 +135,7 @@ export default function LeaveRequestTable({
           </thead>
 
           <tbody>
-            {requests.map((request) => {
+            {formattedRequests.map((request) => {
               const employee = getEmployee(request);
               const isPending = request.status === "Pending";
 
@@ -169,7 +209,7 @@ export default function LeaveRequestTable({
                         className="leave_action_btn view"
                         title="View request"
                         aria-label="View leave request"
-                        onClick={() => onView?.(request)}
+                        onClick={() => handleView(request)}
                       >
                         <FaEye />
                       </button>
@@ -181,7 +221,7 @@ export default function LeaveRequestTable({
                             className="leave_action_btn approve"
                             title="Approve request"
                             aria-label="Approve leave request"
-                            onClick={() => onApprove?.(request)}
+                            onClick={() => handleApprove(request)}
                           >
                             <FaCheck />
                           </button>
@@ -191,7 +231,7 @@ export default function LeaveRequestTable({
                             className="leave_action_btn reject"
                             title="Reject request"
                             aria-label="Reject leave request"
-                            onClick={() => onReject?.(request)}
+                            onClick={() => handleReject(request)}
                           >
                             <FaTimes />
                           </button>
