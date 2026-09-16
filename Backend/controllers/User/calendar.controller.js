@@ -79,8 +79,8 @@ const getLoggedInAccount = async (req) => {
     };
   }
 
-  if (req.user?.adminID) {
-    const admin = await AdminModel.findById(req.user.adminID);
+  if (req.admin?.adminID) {
+    const admin = await AdminModel.findById(req.admin.adminID);
 
     if (!admin) {
       return null;
@@ -295,22 +295,15 @@ export const createEvent = async (req, res) => {
       date,
       startTime,
       endTime,
-
       employeeId: employee ? employee._id : null,
-
       employeeName: employee ? getEmployeeName(employee) : "",
-
       department: employee ? employee.department : null,
-
       designation: employee ? employee.designation : null,
-
       location,
       priority,
       color,
       isAllDay,
-
       visibility: getVisibility(type),
-
       createdBy: auth.account._id,
       createdByModel: "Admin",
     });

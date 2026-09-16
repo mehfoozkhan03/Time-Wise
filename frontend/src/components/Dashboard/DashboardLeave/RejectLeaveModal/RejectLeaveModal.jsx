@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
 import { FaTimes, FaExclamationTriangle, FaBan } from "react-icons/fa";
 
 import "./RejectLeaveModal.css";
+
+import { rejectAdminLeave } from "../../../../store/leaveSlice";
 
 const leaveTypeLabels = {
   annual: "Annual Leave",
@@ -44,12 +48,22 @@ const formatLeaveType = (leaveType) => {
   return leaveTypeLabels[leaveType.toLowerCase()] || leaveType;
 };
 
+const getRequestId = (request) => request?.id || request?._id;
+
 export default function RejectLeaveModal({
   isOpen,
   request,
   onClose,
   onConfirm,
 }) {
+  const dispatch = useDispatch();
+
+  const {
+    loading = false,
+    error = null,
+    adminSelectedLeave = null,
+  } = useSelector((state) => state.leave);
+
   const [reason, setReason] = useState("");
 
   useEffect(() => {
@@ -62,10 +76,16 @@ export default function RejectLeaveModal({
     return null;
   }
 
-  const employee = getEmployee(request);
+  const selectedRequest =
+    adminSelectedLeave &&
+    getRequestId(adminSelectedLeave) === getRequestId(request)
+      ? adminSelectedLeave
+      : request;
+
+  const employee = getEmployee(selectedRequest);
   const employeeName = getEmployeeName(employee);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     const trimmedReason = reason.trim();
@@ -74,10 +94,29 @@ export default function RejectLeaveModal({
       return;
     }
 
-    onConfirm?.({
-      request,
-      reason: trimmedReason,
-    });
+    const leaveID = getRequestId(selectedRequest);
+
+    if (!leaveID) {
+      return;
+    }
+
+    try {
+      await dispatch(
+        rejectAdminLeave({
+          leaveID,
+          adminComment: trimmedReason,
+        }),
+      ).unwrap();
+
+      onConfirm?.({
+        request: selectedRequest,
+        reason: trimmedReason,
+      });
+
+      setReason("");
+    } catch (rejectError) {
+      console.error("Reject Leave Error:", rejectError);
+    }
   };
 
   return (
@@ -117,7 +156,7 @@ export default function RejectLeaveModal({
             <div className="reject_leave_employee_info">
               <strong>{employeeName}</strong>
 
-              <span>{formatLeaveType(request.leaveType)}</span>
+              <span>{formatLeaveType(selectedRequest.leaveType)}</span>
             </div>
           </div>
 
@@ -126,6 +165,12 @@ export default function RejectLeaveModal({
 
             <span>This action will mark the request as rejected.</span>
           </div>
+
+          {error && (
+            <div className="reject_leave_error" role="alert">
+              {error}
+            </div>
+          )}
 
           <form onSubmit={handleSubmit}>
             <div className="reject_leave_field">
@@ -141,6 +186,7 @@ export default function RejectLeaveModal({
                 placeholder="Enter the reason for rejecting this leave request..."
                 rows="4"
                 maxLength="500"
+                disabled={loading}
               />
 
               <div className="reject_leave_character_count">
@@ -153,6 +199,7 @@ export default function RejectLeaveModal({
                 type="button"
                 className="reject_leave_btn cancel"
                 onClick={onClose}
+                disabled={loading}
               >
                 Cancel
               </button>
@@ -160,10 +207,10 @@ export default function RejectLeaveModal({
               <button
                 type="submit"
                 className="reject_leave_btn confirm"
-                disabled={!reason.trim()}
+                disabled={!reason.trim() || loading}
               >
                 <FaBan />
-                Reject Request
+                {loading ? "Rejecting..." : "Reject Request"}
               </button>
             </div>
           </form>

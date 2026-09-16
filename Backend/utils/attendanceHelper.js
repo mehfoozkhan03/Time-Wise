@@ -140,3 +140,5 @@ export const getHolidayForDate = async (date = new Date()) => {
 export const formatWorkingHours = (seconds) => {
   return Number((seconds / 3600).toFixed(1))
 }
+
+

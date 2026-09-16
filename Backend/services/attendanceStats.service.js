@@ -1,62 +1,225 @@
-import {
-  getWeekRange,
-  getMonthRange,
-  formatWorkingHours,
-} from "../utils/attendanceHelper.js";
+import { formatWorkingHours } from '../utils/attendanceHelper.js'
 
-import { attendanceConfig } from "../config/attendanceConfig.js";
+import { attendanceConfig } from '../config/attendanceConfig.js'
 
-import { attendanceModel } from "../models/Attendance.model.js";
+import { attendanceModel } from '../models/Attendance.model.js'
 
-import { holidayModel } from "../models/Holidays.model.js";
-import { userModel } from "../models/User.model.js";
+import { holidayModel } from '../models/Holidays.model.js'
+import { userModel } from '../models/User.model.js'
 
 // =======================================================
-// Helpers
+// Constants
 // =======================================================
 
-const startOfDay = (date) => {
-  const result = new Date(date);
+const INDIA_TIME_ZONE = 'Asia/Kolkata'
 
-  result.setHours(0, 0, 0, 0);
+// =======================================================
+// Date Helpers
+// =======================================================
 
-  return result;
-};
+const getIndiaDateParts = (date = new Date()) => {
+  const value = new Date(date)
 
-const endOfDay = (date) => {
-  const result = new Date(date);
+  const formatter = new Intl.DateTimeFormat('en-US', {
+    timeZone: INDIA_TIME_ZONE,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    weekday: 'long',
+  })
 
-  result.setHours(23, 59, 59, 999);
+  const parts = formatter.formatToParts(value)
 
-  return result;
-};
+  const getPart = (type) => parts.find((part) => part.type === type)?.value
+
+  return {
+    year: Number(getPart('year')),
+    month: Number(getPart('month')),
+    day: Number(getPart('day')),
+    weekday: getPart('weekday'),
+  }
+}
+
+// =======================================================
+// Date Key
+// =======================================================
+
+const getDateKey = (date = new Date()) => {
+  const { year, month, day } = getIndiaDateParts(date)
+
+  return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(
+    2,
+    '0',
+  )}`
+}
+
+// =======================================================
+// Weekday
+// =======================================================
+
+const getWeekday = (date = new Date()) => {
+  const { weekday } = getIndiaDateParts(date)
+
+  const weekdayMap = {
+    Sunday: 0,
+    Monday: 1,
+    Tuesday: 2,
+    Wednesday: 3,
+    Thursday: 4,
+    Friday: 5,
+    Saturday: 6,
+  }
+
+  return weekdayMap[weekday]
+}
+
+// =======================================================
+// India Midnight
+// =======================================================
+
+const getIndiaMidnight = (date = new Date()) => {
+  const { year, month, day } = getIndiaDateParts(date)
+
+  /*
+    Midnight in India = previous day 18:30 UTC.
+  */
+
+  return new Date(Date.UTC(year, month - 1, day, -5, -30, 0, 0))
+}
+
+// =======================================================
+// Start / End Of India Day
+// =======================================================
+
+const startOfDay = (date = new Date()) => {
+  return getIndiaMidnight(date)
+}
+
+const endOfDay = (date = new Date()) => {
+  const result = new Date(startOfDay(date))
+
+  result.setUTCDate(result.getUTCDate() + 1)
+  result.setUTCMilliseconds(result.getUTCMilliseconds() - 1)
+
+  return result
+}
+
+// =======================================================
+// Add Days
+// =======================================================
+
+const addDays = (date, amount) => {
+  const result = new Date(date)
+
+  result.setUTCDate(result.getUTCDate() + amount)
+
+  return result
+}
+
+// =======================================================
+// Working Day
+// =======================================================
 
 const isConfiguredWorkingDay = (date) => {
-  return attendanceConfig.workingDays.includes(date.getDay());
-};
+  const weekday = getWeekday(date)
 
-const getDateKey = (date) => {
-  const value = new Date(date);
+  return attendanceConfig.workingDays.includes(weekday)
+}
 
-  return `${value.getFullYear()}-${String(value.getMonth() + 1).padStart(
-    2,
-    "0",
-  )}-${String(value.getDate()).padStart(2, "0")}`;
-};
+// =======================================================
+// Holiday Date Key
+// =======================================================
 
 const getHolidayDateKey = (holiday) => {
-  return getDateKey(holiday.date);
-};
+  return getDateKey(holiday.date)
+}
+
+// =======================================================
+// Effective Working Seconds
+// =======================================================
+
+/*
+  Returns the actual working seconds for an attendance record.
+
+  For completed sessions:
+    totalWorkingSeconds is already stored by checkout.
+
+  For an active session:
+    current time
+    - check-in time
+    - completed breaks
+    - currently active break
+
+  This allows the dashboard to show live working hours.
+*/
+
+const getEffectiveWorkingSeconds = (record, now = new Date()) => {
+  // -----------------------------------------------------
+  // No check-in
+  // -----------------------------------------------------
+
+  if (!record?.checkInTime) {
+    return 0
+  }
+
+  // -----------------------------------------------------
+  // Already checked out
+  // -----------------------------------------------------
+
+  if (record.checkOutTime) {
+    return Math.max(record.totalWorkingSeconds || 0, 0)
+  }
+
+  // -----------------------------------------------------
+  // Currently working
+  // -----------------------------------------------------
+
+  const elapsedSeconds = Math.floor(
+    (new Date(now).getTime() - new Date(record.checkInTime).getTime()) / 1000,
+  )
+
+  const completedBreakSeconds = record.totalBreakSeconds || 0
+
+  // -----------------------------------------------------
+  // Active break
+  // -----------------------------------------------------
+
+  let activeBreakSeconds = 0
+
+  const breaks = record.breaks || []
+
+  const lastBreak = breaks[breaks.length - 1]
+
+  if (lastBreak?.breakStart && !lastBreak?.breakEnd) {
+    activeBreakSeconds = Math.floor(
+      (new Date(now).getTime() - new Date(lastBreak.breakStart).getTime()) /
+        1000,
+    )
+  }
+
+  return Math.max(
+    elapsedSeconds - completedBreakSeconds - activeBreakSeconds,
+    0,
+  )
+}
 
 // =======================================================
 // Get Attendance Stats
 // =======================================================
 
 export const getAttendanceStats = async (userID) => {
-  const now = new Date();
+  const now = new Date()
 
-  const todayStart = startOfDay(now);
-  const todayEnd = endOfDay(now);
+  // =====================================================
+  // Today
+  // =====================================================
+
+  const todayStart = startOfDay(now)
+  const todayEnd = endOfDay(now)
+
+  // =====================================================
+  // Today's Attendance - All Employees
+  // =====================================================
 
   const totalPresentToday = await attendanceModel.countDocuments({
     date: {
@@ -66,7 +229,7 @@ export const getAttendanceStats = async (userID) => {
     checkInTime: {
       $ne: null,
     },
-  });
+  })
 
   const totalOnBreakToday = await attendanceModel.countDocuments({
     date: {
@@ -79,7 +242,7 @@ export const getAttendanceStats = async (userID) => {
         breakEnd: null,
       },
     },
-  });
+  })
 
   const totalLateCheckInsToday = await attendanceModel.countDocuments({
     date: {
@@ -89,10 +252,13 @@ export const getAttendanceStats = async (userID) => {
     checkInTime: {
       $ne: null,
     },
-    status: "Late",
-  });
+    status: 'Late',
+  })
 
-  //# ====================== Today's Attendance Records - All Employees ======================
+  // =====================================================
+  // Today's Attendance Records
+  // =====================================================
+
   const todayAttendance = await attendanceModel
     .find({
       date: {
@@ -100,52 +266,53 @@ export const getAttendanceStats = async (userID) => {
         $lte: todayEnd,
       },
     })
-    .populate("user", "firstName lastName department designation");
+    .populate('user', 'firstName lastName department designation')
 
   const formatTime = (date) => {
-    if (!date) return "--";
+    if (!date) return '--'
 
-    return new Date(date).toLocaleTimeString("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
+    return new Date(date).toLocaleTimeString('en-US', {
+      timeZone: INDIA_TIME_ZONE,
+      hour: '2-digit',
+      minute: '2-digit',
       hour12: false,
-    });
-  };
+    })
+  }
 
   const formatBreakTime = (breaks = []) => {
-    if (!breaks.length) return "--";
+    if (!breaks.length) return '--'
 
     return breaks
       .filter((item) => item.breakStart)
       .map((item) => {
-        const start = formatTime(item.breakStart);
-        const end = item.breakEnd ? formatTime(item.breakEnd) : "--";
+        const start = formatTime(item.breakStart)
+        const end = item.breakEnd ? formatTime(item.breakEnd) : '--'
 
-        return `${start}–${end}`;
+        return `${start}–${end}`
       })
-      .join(", ");
-  };
+      .join(', ')
+  }
 
-  const formatWorkingHours = (seconds = 0) => {
-    const hours = Math.floor(seconds / 3600);
-    const minutes = Math.floor((seconds % 3600) / 60);
+  const formatRecordWorkingHours = (seconds = 0) => {
+    const hours = Math.floor(seconds / 3600)
+    const minutes = Math.floor((seconds % 3600) / 60)
 
-    return `${hours}h ${minutes}m`;
-  };
+    return `${hours}h ${minutes}m`
+  }
 
   const todayAttendanceRecords = todayAttendance.map((record) => {
-    const user = record.user;
+    const user = record.user
 
     return {
       _id: record._id,
 
-      avatar: `${user?.firstName?.[0] || ""}${
-        user?.lastName?.[0] || ""
+      avatar: `${user?.firstName?.[0] || ''}${
+        user?.lastName?.[0] || ''
       }`.toUpperCase(),
 
-      name: `${user?.firstName || ""} ${user?.lastName || ""}`.trim(),
+      name: `${user?.firstName || ''} ${user?.lastName || ''}`.trim(),
 
-      department: user?.department || user?.designation || "--",
+      department: user?.department || user?.designation || '--',
 
       checkIn: formatTime(record.checkInTime),
 
@@ -153,90 +320,117 @@ export const getAttendanceStats = async (userID) => {
 
       checkOut: formatTime(record.checkOutTime),
 
-      workingHours: formatWorkingHours(record.totalWorkingSeconds),
+      workingHours: formatRecordWorkingHours(
+        getEffectiveWorkingSeconds(record, now),
+      ),
 
-      status: record.status || "Absent",
-    };
-  });
+      status: record.status || 'Absent',
+    }
+  })
 
-  const { weekStart, weekEnd } = getWeekRange(now);
+  // =====================================================
+  // Current India Date
+  // =====================================================
 
-  const { monthStart, monthEnd } = getMonthRange(now);
+  const indiaToday = getIndiaMidnight(now)
 
-  //# ====================== Weekly Attendance Chart - All Employees =============================
-  const totalEmployees = await userModel.countDocuments();
+  const todayWeekday = getWeekday(now)
+
+  // =====================================================
+  // Week Range - Monday to Sunday - India Time
+  // =====================================================
+
+  const daysSinceMonday = todayWeekday === 0 ? 6 : todayWeekday - 1
+
+  const weekStart = addDays(indiaToday, -daysSinceMonday)
+
+  const weekEnd = new Date(addDays(weekStart, 7).getTime() - 1)
+
+  // =====================================================
+  // Month Range - India Time
+  // =====================================================
+
+  const { year: currentYear, month: currentMonth } = getIndiaDateParts(now)
+
+  const monthStart = new Date(
+    Date.UTC(currentYear, currentMonth - 1, 1, -5, -30, 0, 0),
+  )
+
+  const nextMonthStart = new Date(
+    Date.UTC(currentYear, currentMonth, 1, -5, -30, 0, 0),
+  )
+
+  const monthEnd = new Date(nextMonthStart.getTime() - 1)
+
+  // =====================================================
+  // Weekly Attendance Chart
+  // =====================================================
+
+  const totalEmployees = await userModel.countDocuments()
 
   const weeklyCompanyAttendance = await attendanceModel.find({
     date: {
       $gte: weekStart,
       $lte: weekEnd,
     },
-  });
+  })
 
-  const weeklyAttendanceChart = [];
+  const weeklyAttendanceChart = []
 
   for (let i = 6; i >= 0; i--) {
-    const date = new Date(todayStart);
+    const date = addDays(indiaToday, -i)
 
-    date.setDate(date.getDate() - i);
-
-    const dayStart = startOfDay(date);
-    const dayEnd = endOfDay(date);
+    const dayStart = startOfDay(date)
+    const dayEnd = endOfDay(date)
 
     const dayAttendance = weeklyCompanyAttendance.filter(
       (record) => record.date >= dayStart && record.date <= dayEnd,
-    );
+    )
 
     const present = dayAttendance.filter(
       (record) =>
         record.checkInTime &&
-        ["Present", "Late", "Half Day"].includes(record.status),
-    ).length;
+        ['Present', 'Late', 'Half Day'].includes(record.status),
+    ).length
 
-    const absent = totalEmployees - present;
+    const absent = Math.max(totalEmployees - present, 0)
 
     weeklyAttendanceChart.push({
-      day: date.toLocaleDateString("en-US", {
-        weekday: "short",
-      }),
+      day: new Intl.DateTimeFormat('en-US', {
+        timeZone: INDIA_TIME_ZONE,
+        weekday: 'short',
+      }).format(date),
+
       present,
       absent,
-    });
+    })
   }
 
   // =====================================================
-  // Get Active Holidays
+  // Active Holidays
   // =====================================================
-
-  /*
-    We fetch holidays once instead of querying MongoDB
-    separately for every date.
-
-    This is important for streaks and attendance percentage
-    because those calculations inspect many dates.
-  */
 
   const holidays = await holidayModel
     .find({
       isActive: true,
     })
-    .select("date")
-    .lean();
+    .select('date')
+    .lean()
 
   const holidayDateSet = new Set(
     holidays.map((holiday) => getHolidayDateKey(holiday)),
-  );
+  )
 
   const isAttendanceWorkingDay = (date) => {
     if (!isConfiguredWorkingDay(date)) {
-      return false;
+      return false
     }
 
-    return !holidayDateSet.has(getDateKey(date));
-  };
+    return !holidayDateSet.has(getDateKey(date))
+  }
 
   // =====================================================
-  // Weekly Attendance
+  // Weekly Attendance - USER
   // =====================================================
 
   const weeklyAttendance = await attendanceModel.find({
@@ -245,27 +439,33 @@ export const getAttendanceStats = async (userID) => {
       $gte: weekStart,
       $lte: weekEnd,
     },
-  });
-
-  /*
-    Only attendance recorded on valid working days
-    contributes to working hours.
-
-    This prevents Saturday/Sunday/holiday check-ins from
-    inflating weekly hours.
-  */
+  })
 
   const validWeeklyAttendance = weeklyAttendance.filter((record) =>
     isAttendanceWorkingDay(record.date),
-  );
+  )
 
-  const totalWeeklySeconds = validWeeklyAttendance.reduce(
-    (sum, record) => sum + (record.totalWorkingSeconds || 0),
-    0,
-  );
+  // =====================================================
+  // WEEKLY HOURS - LIVE
+  // =====================================================
 
-  // const weeklyHours = formatWorkingHours(totalWeeklySeconds);
-  const weeklyHours = totalWeeklySeconds / 3600;
+  /*
+    IMPORTANT:
+
+    For a completed attendance record:
+      use totalWorkingSeconds.
+
+    For today's currently active record:
+      calculate elapsed working time live.
+
+    Therefore Weekly Hours updates even before checkout.
+  */
+
+  const totalWeeklySeconds = validWeeklyAttendance.reduce((sum, record) => {
+    return sum + getEffectiveWorkingSeconds(record, now)
+  }, 0)
+
+  const weeklyHours = totalWeeklySeconds / 3600
 
   // =====================================================
   // Monthly Attendance
@@ -277,29 +477,21 @@ export const getAttendanceStats = async (userID) => {
       $gte: monthStart,
       $lte: monthEnd,
     },
-  });
-
-  /*
-    This is the important filtering layer.
-
-    Any attendance record created on:
-      - Saturday
-      - Sunday
-      - Active holiday
-
-    is excluded from normal attendance calculations.
-  */
+  })
 
   const validMonthlyAttendance = monthlyAttendance.filter((record) =>
     isAttendanceWorkingDay(record.date),
-  );
+  )
 
-  const totalMonthlySeconds = validMonthlyAttendance.reduce(
-    (sum, record) => sum + (record.totalWorkingSeconds || 0),
-    0,
-  );
+  // =====================================================
+  // Monthly Hours
+  // =====================================================
 
-  const monthlyHours = formatWorkingHours(totalMonthlySeconds);
+  const totalMonthlySeconds = validMonthlyAttendance.reduce((sum, record) => {
+    return sum + getEffectiveWorkingSeconds(record, now)
+  }, 0)
+
+  const monthlyHours = formatWorkingHours(totalMonthlySeconds)
 
   // =====================================================
   // All Attendance History
@@ -311,26 +503,21 @@ export const getAttendanceStats = async (userID) => {
     })
     .sort({
       date: -1,
-    });
-
-  /*
-    Normal working statistics should only include
-    actual attendance working days.
-
-    A historical Saturday/holiday check-in therefore
-    does not inflate total working hours.
-  */
+    })
 
   const validAttendanceHistory = attendanceHistory.filter((record) =>
     isAttendanceWorkingDay(record.date),
-  );
+  )
 
-  const totalWorkingSeconds = validAttendanceHistory.reduce(
-    (sum, record) => sum + (record.totalWorkingSeconds || 0),
-    0,
-  );
+  // =====================================================
+  // Total Working Hours
+  // =====================================================
 
-  const totalWorkingHours = formatWorkingHours(totalWorkingSeconds);
+  const totalWorkingSeconds = validAttendanceHistory.reduce((sum, record) => {
+    return sum + getEffectiveWorkingSeconds(record, now)
+  }, 0)
+
+  const totalWorkingHours = formatWorkingHours(totalWorkingSeconds)
 
   // =====================================================
   // Average Daily Working Hours
@@ -339,9 +526,7 @@ export const getAttendanceStats = async (userID) => {
   const averageDailyHours =
     validAttendanceHistory.length === 0
       ? 0
-      : +(totalWorkingSeconds / validAttendanceHistory.length / 3600).toFixed(
-          1,
-        );
+      : +(totalWorkingSeconds / validAttendanceHistory.length / 3600).toFixed(1)
 
   // =====================================================
   // Average Check-in Time
@@ -349,26 +534,39 @@ export const getAttendanceStats = async (userID) => {
 
   const checkInRecords = validMonthlyAttendance.filter(
     (record) => record.checkInTime,
-  );
+  )
 
-  let averageCheckIn = "--:--";
+  let averageCheckIn = '--:--'
 
   if (checkInRecords.length > 0) {
     const totalMinutes = checkInRecords.reduce((sum, record) => {
-      const checkIn = new Date(record.checkInTime);
+      const parts = new Intl.DateTimeFormat('en-US', {
+        timeZone: INDIA_TIME_ZONE,
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false,
+      }).formatToParts(new Date(record.checkInTime))
 
-      return sum + checkIn.getHours() * 60 + checkIn.getMinutes();
-    }, 0);
+      const hours = Number(
+        parts.find((part) => part.type === 'hour')?.value || 0,
+      )
 
-    const averageMinutes = Math.round(totalMinutes / checkInRecords.length);
+      const minutes = Number(
+        parts.find((part) => part.type === 'minute')?.value || 0,
+      )
 
-    const hours = Math.floor(averageMinutes / 60);
+      return sum + hours * 60 + minutes
+    }, 0)
 
-    const minutes = averageMinutes % 60;
+    const averageMinutes = Math.round(totalMinutes / checkInRecords.length)
 
-    averageCheckIn = `${hours
+    const hours = Math.floor(averageMinutes / 60)
+
+    const minutes = averageMinutes % 60
+
+    averageCheckIn = `${hours.toString().padStart(2, '0')}:${minutes
       .toString()
-      .padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`;
+      .padStart(2, '0')}`
   }
 
   // =====================================================
@@ -385,117 +583,98 @@ export const getAttendanceStats = async (userID) => {
           ) /
             checkInRecords.length /
             60,
-        );
+        )
 
   // =====================================================
   // Leaves Taken
   // =====================================================
 
   const leavesTaken = validMonthlyAttendance.filter(
-    (record) => record.status === "Leave",
-  ).length;
+    (record) => record.status === 'Leave',
+  ).length
 
   // =====================================================
   // Overtime
   // =====================================================
 
-  const requiredDailySeconds = attendanceConfig.requiredDailyHours * 60 * 60;
+  const requiredDailySeconds = attendanceConfig.requiredDailyHours * 60 * 60
 
   const totalOvertimeSeconds = validMonthlyAttendance.reduce(
     (total, record) => {
-      const workingSeconds = record.totalWorkingSeconds || 0;
+      const workingSeconds = getEffectiveWorkingSeconds(record, now)
 
       if (workingSeconds <= requiredDailySeconds) {
-        return total;
+        return total
       }
 
-      return total + (workingSeconds - requiredDailySeconds);
+      return total + (workingSeconds - requiredDailySeconds)
     },
     0,
-  );
+  )
 
-  const overtimeHours = formatWorkingHours(totalOvertimeSeconds);
+  const overtimeHours = formatWorkingHours(totalOvertimeSeconds)
 
   // =====================================================
   // Total Overtime Hours
   // =====================================================
 
-  // Match the Reports page: count ALL records (including weekends/holidays).
-  // This ensures AI and Reports show the same overtime value.
-  let allTimeOvertimeSeconds = 0;
+  /*
+    Match Reports behavior:
+    count ALL historical records.
+  */
+
+  let allTimeOvertimeSeconds = 0
 
   for (const record of attendanceHistory) {
-    const workingSeconds = record.totalWorkingSeconds || 0;
+    const workingSeconds = getEffectiveWorkingSeconds(record, now)
 
-    const overtimeSeconds = Math.max(0, workingSeconds - requiredDailySeconds);
+    const overtimeSeconds = Math.max(0, workingSeconds - requiredDailySeconds)
 
-    allTimeOvertimeSeconds += overtimeSeconds;
+    allTimeOvertimeSeconds += overtimeSeconds
   }
 
-  const totalOvertimeHours = formatWorkingHours(allTimeOvertimeSeconds);
+  const totalOvertimeHours = formatWorkingHours(allTimeOvertimeSeconds)
 
   // =====================================================
   // Attendance Percentage
   // =====================================================
 
-  /*
-    Count only actual attendance-required days.
-
-    Example:
-
-      Monday  -> working day
-      Tuesday -> working day
-      Wednesday -> holiday
-      Thursday -> working day
-      Friday -> working day
-      Saturday -> weekend
-      Sunday -> weekend
-
-    Attendance denominator = 4
-
-    NOT 7.
-
-    Therefore even if someone has a database attendance
-    record on Wednesday/Saturday, those records cannot
-    push the percentage above 100%.
-  */
-
-  let workingDays = 0;
+  let workingDays = 0
 
   for (
     let date = new Date(monthStart);
-    date <= now;
-    date.setDate(date.getDate() + 1)
+    date <= indiaToday;
+    date = addDays(date, 1)
   ) {
     if (isAttendanceWorkingDay(date)) {
-      workingDays++;
+      workingDays++
     }
   }
 
   const attendanceCredits = validMonthlyAttendance.reduce((total, record) => {
     switch (record.status) {
-      case "Present":
-        return total + 1;
+      case 'Present':
+        return total + 1
 
-      case "Late":
-        return total + 0.75;
+      case 'Late':
+        return total + 0.75
 
-      case "Half Day":
-        return total + 0.5;
+      case 'Half Day':
+        return total + 0.5
 
       default:
-        return total;
+        return total
     }
-  }, 0);
+  }, 0)
 
   const attendancePercentage =
     workingDays === 0
       ? 0
-      : Math.min(Math.round((attendanceCredits / workingDays) * 100), 100);
+      : Math.min(Math.round((attendanceCredits / workingDays) * 100), 100)
 
   const attendedDays = validMonthlyAttendance.filter((record) =>
-    ["Present", "Late", "Half Day"].includes(record.status),
-  ).length;
+    ['Present', 'Late', 'Half Day'].includes(record.status),
+  ).length
 
   // =====================================================
   // Weekly Goal Score
@@ -504,48 +683,48 @@ export const getAttendanceStats = async (userID) => {
   const weeklyGoalScore = Math.min(
     (weeklyHours / attendanceConfig.requiredWeeklyHours) * 100,
     100,
-  );
+  )
 
   // =====================================================
   // Punctuality
   // =====================================================
 
-  let punctualityCredits = 0;
+  let punctualityCredits = 0
 
   validMonthlyAttendance.forEach((record) => {
     switch (record.status) {
-      case "Present":
-        punctualityCredits += 1;
-        break;
+      case 'Present':
+        punctualityCredits += 1
+        break
 
-      case "Late":
-        punctualityCredits += 0.5;
-        break;
+      case 'Late':
+        punctualityCredits += 0.5
+        break
 
       default:
-        break;
+        break
     }
-  });
+  })
 
   const punctuality =
     attendedDays === 0
       ? 100
-      : Math.round((punctualityCredits / attendedDays) * 100);
+      : Math.round((punctualityCredits / attendedDays) * 100)
 
   // =====================================================
   // Break Discipline
   // =====================================================
 
-  const allowedBreak = attendanceConfig.maxBreakMinutes;
+  const allowedBreak = attendanceConfig.maxBreakMinutes
 
-  let breakScore = 100;
+  let breakScore = 100
 
   if (averageBreakDuration > allowedBreak) {
-    breakScore = Math.max(0, 100 - (averageBreakDuration - allowedBreak) * 2);
+    breakScore = Math.max(0, 100 - (averageBreakDuration - allowedBreak) * 2)
   }
 
   // =====================================================
-  // Work Efficiency / Productivity
+  // Productivity
   // =====================================================
 
   const productivity = Math.round(
@@ -553,59 +732,59 @@ export const getAttendanceStats = async (userID) => {
       attendancePercentage * 0.2 +
       punctuality * 0.2 +
       breakScore * 0.1,
-  );
+  )
 
   // =====================================================
   // Attendance Records For Streaks
   // =====================================================
 
-  /*
-    We deliberately filter these records again.
-
-    A Present record on a holiday or weekend must NOT
-    become part of a streak.
-  */
-
   const attendanceRecords = attendanceHistory
     .filter(
       (record) =>
         isAttendanceWorkingDay(record.date) &&
-        ["Present", "Late", "Half Day"].includes(record.status),
+        ['Present', 'Late', 'Half Day'].includes(record.status),
     )
-    .sort((a, b) => b.date - a.date);
+    .sort((a, b) => b.date - a.date)
+
+  const attendanceDateSet = new Set(
+    attendanceRecords.map((record) => getDateKey(record.date)),
+  )
 
   // =====================================================
   // Current Streak
   // =====================================================
 
-  let dayStreak = 0;
-
-  const cursor = startOfDay(now);
+  let dayStreak = 0
 
   /*
-    If today is a weekend/holiday, skip backwards until
-    the most recent attendance-required day.
+    IMPORTANT:
+
+    indiaToday is already midnight for the
+    current Indian business date.
+
+    Friday September 11 therefore remains
+    Friday regardless of the server timezone.
   */
 
+  let cursor = new Date(indiaToday)
+
   while (!isAttendanceWorkingDay(cursor)) {
-    cursor.setDate(cursor.getDate() - 1);
+    cursor = addDays(cursor, -1)
   }
 
   while (true) {
-    const found = attendanceRecords.find(
-      (record) => getDateKey(record.date) === getDateKey(cursor),
-    );
+    const cursorKey = getDateKey(cursor)
 
-    if (!found) {
-      break;
+    if (!attendanceDateSet.has(cursorKey)) {
+      break
     }
 
-    dayStreak++;
+    dayStreak++
 
-    cursor.setDate(cursor.getDate() - 1);
+    cursor = addDays(cursor, -1)
 
     while (!isAttendanceWorkingDay(cursor)) {
-      cursor.setDate(cursor.getDate() - 1);
+      cursor = addDays(cursor, -1)
     }
   }
 
@@ -613,70 +792,59 @@ export const getAttendanceStats = async (userID) => {
   // Longest Streak
   // =====================================================
 
-  let longestStreak = 0;
+  let longestStreak = 0
+  let currentStreak = 0
 
-  let currentStreak = 0;
+  const sortedDateKeys = [
+    ...new Set(attendanceRecords.map((record) => getDateKey(record.date))),
+  ].sort()
 
-  const sortedAttendance = [...attendanceRecords].sort(
-    (a, b) => a.date - b.date,
-  );
+  let previousDate = null
 
-  let previousDate = null;
+  for (const dateKey of sortedDateKeys) {
+    const [year, month, day] = dateKey.split('-').map(Number)
 
-  for (const record of sortedAttendance) {
-    const currentDate = startOfDay(record.date);
+    const currentDate = new Date(Date.UTC(year, month - 1, day, -5, -30, 0, 0))
 
     if (!previousDate) {
-      currentStreak = 1;
+      currentStreak = 1
 
-      longestStreak = 1;
+      longestStreak = 1
 
-      previousDate = currentDate;
+      previousDate = currentDate
 
-      continue;
+      continue
     }
 
-    /*
-      Find the next attendance-required day after the
-      previous attendance record.
-
-      This automatically skips:
-        - Saturday
-        - Sunday
-        - Holidays
-    */
-
-    const expectedDate = new Date(previousDate);
-
-    expectedDate.setDate(expectedDate.getDate() + 1);
+    let expectedDate = addDays(previousDate, 1)
 
     while (!isAttendanceWorkingDay(expectedDate)) {
-      expectedDate.setDate(expectedDate.getDate() + 1);
+      expectedDate = addDays(expectedDate, 1)
     }
 
-    if (currentDate.getTime() === expectedDate.getTime()) {
-      currentStreak++;
+    if (getDateKey(currentDate) === getDateKey(expectedDate)) {
+      currentStreak++
     } else {
-      currentStreak = 1;
+      currentStreak = 1
     }
 
-    longestStreak = Math.max(longestStreak, currentStreak);
+    longestStreak = Math.max(longestStreak, currentStreak)
 
-    previousDate = currentDate;
+    previousDate = currentDate
   }
 
   // =====================================================
   // Weekly Goal
   // =====================================================
 
-  const weeklyTarget = attendanceConfig.requiredWeeklyHours;
+  const weeklyTarget = attendanceConfig.requiredWeeklyHours
 
-  const weeklyHoursRemaining = Math.max(weeklyTarget - weeklyHours, 0);
+  const weeklyHoursRemaining = Math.max(weeklyTarget - weeklyHours, 0)
 
   const weeklyGoalPercentage = Math.min(
     Math.round((weeklyHours / weeklyTarget) * 100),
     100,
-  );
+  )
 
   // =====================================================
   // Return Stats
@@ -720,5 +888,6 @@ export const getAttendanceStats = async (userID) => {
     totalLateCheckInsToday,
 
     weeklyAttendanceChart,
-  };
-};
+  }
+}
+  

@@ -1,6 +1,7 @@
 import express from "express";
 
 import { auth } from "../middleware/AuthMiddleware.js";
+import { adminAuth } from "../middleware/adminAuth.js";
 
 import {
   getAllHolidays,
@@ -9,17 +10,25 @@ import {
   updateHoliday,
   deleteHoliday,
 } from "../controllers/User/holiday.controller.js";
-import { authorize } from "../middleware/Allowrole.middleware.js";
 
 const holidayRouter = express.Router();
 
-// Employee + Admin
-holidayRouter.get("/", auth,authorize("user", "admin"), getAllHolidays);
-holidayRouter.get("/:id", auth,authorize("user", "admin"), getHolidayById);
+const holidayAuth = (req, res, next) => {
+  if (req.cookies?.adminToken) {
+    return adminAuth(req, res, next);
+  }
 
-// Admin Only (Permission checked inside controller)
-holidayRouter.post("/", auth, authorize("admin"),createHoliday);
-holidayRouter.put("/:id", auth, authorize("admin"),updateHoliday);
-holidayRouter.delete("/:id", auth,authorize("admin"), deleteHoliday);
+  return auth(req, res, next);
+};
+
+holidayRouter.get("/", holidayAuth, getAllHolidays);
+
+holidayRouter.get("/:id", holidayAuth, getHolidayById);
+
+holidayRouter.post("/", adminAuth, createHoliday);
+
+holidayRouter.put("/:id", adminAuth, updateHoliday);
+
+holidayRouter.delete("/:id", adminAuth, deleteHoliday);
 
 export default holidayRouter;

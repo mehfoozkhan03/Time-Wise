@@ -197,7 +197,7 @@ export const getAllLeavesForAdmin = async (
   res,
 ) => {
   try {
-    if (!req.user?.adminID) {
+    if (!req.admin?.adminID) {
       return res.status(403).json({
         success: false,
         message: "Admin access required.",
@@ -243,7 +243,7 @@ export const getAdminLeaveDetails = async (
   res,
 ) => {
   try {
-    if (!req.user?.adminID) {
+    if (!req.admin?.adminID) {
       return res.status(403).json({
         success: false,
         message: "Admin access required.",
@@ -290,7 +290,7 @@ export const getAdminLeaveDetails = async (
 
 export const approveLeave = async (req, res) => {
   try {
-    if (!req.user?.adminID) {
+    if (!req.admin?.adminID) {
       return res.status(403).json({
         success: false,
         message: "Admin access required.",
@@ -308,7 +308,7 @@ export const approveLeave = async (req, res) => {
 
     const leave = await approveLeaveRequest(
       leaveID,
-      req.user.adminID,
+      req.admin.adminID,
     );
 
     return res.status(200).json({
@@ -334,7 +334,7 @@ export const approveLeave = async (req, res) => {
 
 export const rejectLeave = async (req, res) => {
   try {
-    if (!req.user?.adminID) {
+    if (!req.admin?.adminID) {
       return res.status(403).json({
         success: false,
         message: "Admin access required.",
@@ -353,7 +353,7 @@ export const rejectLeave = async (req, res) => {
 
     const leave = await rejectLeaveRequest(
       leaveID,
-      req.user.adminID,
+      req.admin.adminID,
       adminComment,
     );
 
@@ -383,7 +383,7 @@ export const getAdminLeaveStats = async (
   res,
 ) => {
   try {
-    if (!req.user?.adminID) {
+    if (!req.admin?.adminID) {
       return res.status(403).json({
         success: false,
         message: "Admin access required.",
