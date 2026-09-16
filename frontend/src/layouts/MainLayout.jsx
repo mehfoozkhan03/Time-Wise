@@ -34,7 +34,7 @@ export default function MainLayout() {
 
   return (
     <>
-        <Navbar />
+      <Navbar />
       {!isAdminPage && <ActivityTracker />}
 
       <main className="main_layout">
@@ -43,6 +43,6 @@ export default function MainLayout() {
 
       <Footer />
       {/* {isAdminPage ? <AdminFooter />:  <Footer />} */}
-    </> 
+    </>
   );
 }
