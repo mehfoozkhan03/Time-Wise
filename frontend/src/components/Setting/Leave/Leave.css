@@ -303,3 +303,299 @@
     transition: none;
   }
 }
+
+/* ==========================================
+   LEAVE PAGE SKELETON
+========================================== */
+
+.leave-skeleton-wrapper {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 20px;
+}
+
+
+/* ==========================================
+   LEAVE BALANCE SKELETON
+========================================== */
+
+.leave-balance-skeleton {
+  width: 100%;
+
+  padding: 20px;
+
+  background: var(--surface);
+
+  border: 1px solid var(--border);
+
+  border-radius: 10px;
+
+  box-sizing: border-box;
+}
+
+
+.leave-balance-skeleton-heading {
+  padding-bottom: 18px;
+
+  border-bottom: 1px solid var(--border);
+}
+
+
+.leave-balance-skeleton-cards {
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 14px;
+
+  padding-top: 18px;
+}
+
+
+.leave-balance-skeleton-card {
+  min-height: 125px;
+
+  padding: 16px;
+
+  border: 1px solid var(--border);
+
+  border-radius: 10px;
+
+  box-sizing: border-box;
+}
+
+
+.leave-skeleton-number {
+  margin-top: 8px;
+}
+
+
+.leave-skeleton-available {
+  margin-top: 4px;
+}
+
+
+.leave-skeleton-line {
+  width: 100%;
+
+  margin-top: 14px;
+
+  opacity: 0.8;
+}
+
+
+.leave-skeleton-used {
+  display: flex;
+
+  justify-content: space-between;
+
+  margin-top: 12px;
+}
+
+
+.leave-skeleton-small-gap {
+  margin-top: 4px;
+}
+
+
+/* ==========================================
+   LEAVE REQUESTS SKELETON
+========================================== */
+
+.leave-requests-skeleton {
+  width: 100%;
+
+  padding: 20px;
+
+  background: var(--surface);
+
+  border: 1px solid var(--border);
+
+  border-radius: 10px;
+
+  box-sizing: border-box;
+}
+
+
+/* ==========================================
+   REQUEST HEADER
+========================================== */
+
+.leave-requests-skeleton-header {
+  width: 100%;
+}
+
+
+.leave-request-subtitle {
+  margin-top: 7px;
+}
+
+
+/* ==========================================
+   FILTER AREA
+========================================== */
+
+.leave-requests-filter-area {
+  display: flex;
+
+  align-items: flex-end;
+
+  justify-content: space-between;
+
+  margin-top: 18px;
+
+  margin-bottom: 16px;
+}
+
+
+.leave-filter-section {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 7px;
+}
+
+
+.leave-select-skeleton {
+  width: 188px;
+
+  height: 40px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  padding: 0 14px;
+
+  border: 1px solid var(--border);
+
+  border-radius: 9px;
+
+  box-sizing: border-box;
+}
+
+
+/* ==========================================
+   TABLE
+========================================== */
+
+.leave-request-table-skeleton {
+  width: 100%;
+
+  overflow: hidden;
+
+  border: 1px solid var(--border);
+
+  border-radius: 7px;
+}
+
+
+/* ==========================================
+   TABLE HEADER
+========================================== */
+
+.leave-table-header-skeleton {
+  min-height: 34px;
+
+  display: grid;
+
+  grid-template-columns:
+    1.2fr
+    2fr
+    0.5fr
+    0.8fr
+    1fr
+    45px;
+
+  align-items: center;
+
+  column-gap: 15px;
+
+  padding: 0 12px;
+
+  border-bottom: 1px solid var(--border);
+
+  box-sizing: border-box;
+}
+
+
+/* ==========================================
+   TABLE ROW
+========================================== */
+
+.leave-table-row-skeleton {
+  min-height: 52px;
+
+  display: grid;
+
+  grid-template-columns:
+    1.2fr
+    2fr
+    0.5fr
+    0.8fr
+    1fr
+    45px;
+
+  align-items: center;
+
+  column-gap: 15px;
+
+  padding: 0 12px;
+
+  box-sizing: border-box;
+}
+
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width: 768px) {
+
+  .leave-balance-skeleton-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .leave-request-table-skeleton {
+    overflow-x: auto;
+  }
+
+  .leave-table-header-skeleton,
+  .leave-table-row-skeleton {
+    min-width: 750px;
+  }
+
+}
+
+
+@media (max-width: 480px) {
+
+  .leave-balance-skeleton {
+    padding: 15px;
+  }
+
+  .leave-requests-skeleton {
+    padding: 15px;
+  }
+
+  .leave-requests-filter-area {
+    align-items: flex-start;
+
+    gap: 15px;
+  }
+
+}
+.leave-header-skeleton-text {
+  margin-top: 14px;
+}
+.leave-page-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
