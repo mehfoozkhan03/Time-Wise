@@ -200,7 +200,7 @@ const SignUpPage = () => {
     e.preventDefault();
 
     // ---------------------------------------------
-    // Validation
+    // Validation 500 Khushi degi
     // ---------------------------------------------
 
     if (isRegister) {
