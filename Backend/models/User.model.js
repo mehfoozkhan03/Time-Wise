@@ -98,7 +98,52 @@ const userSchema = new mongoose.Schema(
         ref: "Attendance",
       },
     ],
+
+    // =============== Social Links ==================
+    socialLinks: {
+      linkedin: {
+        type: String,
+        default: "",
+        trim: true,
+      },
+      github: {
+        type: String,
+        default: "",
+        trim: true,
+      },
+      portfolio: {
+        type: String,
+        default: "",
+        trim: true,
+      },
+    },
+
+    // Emergency contact
+    emergencyContact: {
+      name: {
+        type: String,
+        default: "",
+        trim: true,
+      },
+      relationship: {
+        type: String,
+        default: "",
+        trim: true,
+      },
+      phone: {
+        type: String,
+        default: "",
+        trim: true,
+      },
+      email: {
+        type: String,
+        default: "",
+        trim: true,
+        lowercase: true,
+      },
+    },
   },
+
   {
     timestamps: true,
     versionKey: false,
