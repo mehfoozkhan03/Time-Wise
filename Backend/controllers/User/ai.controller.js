@@ -19,6 +19,10 @@ import {
   clearPending,
   getNextPending,
 } from "../../services/aiOrchestrator.services.js";
+import {
+  getAISettingsForUser,
+  isWiseBotAvailableToUser,
+} from "../../services/aiSettings.service.js";
 
 const editDistance = (a, b) => {
   const rows = a.length + 1;
@@ -303,6 +307,14 @@ export const askAI = async (req, res) => {
     }
 
     const userID = req.user.userID;
+    const aiSettings = await getAISettingsForUser(userID);
+
+    if (!isWiseBotAvailableToUser(aiSettings, userID)) {
+      return res.status(403).json({
+        success: false,
+        message: "WiseBot is currently disabled by your organisation administrator.",
+      });
+    }
 
     // ==================================================
     // FOLLOW-UP RESUME (MULTI-INTENT VERSION)
