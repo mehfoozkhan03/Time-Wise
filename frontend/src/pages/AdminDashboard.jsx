@@ -12,6 +12,7 @@ import {
   FaGear,
 } from 'react-icons/fa6';
 import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io';
+import { AdminProfile } from '../components/Dashboard/Dropdowns/AdminProfileDropdown/AdminProfileDropdown';
 
 export default function AdminDashboard() {
   const location = useLocation();
@@ -89,17 +90,7 @@ export default function AdminDashboard() {
                 <FaBell style={{ color: '#fff', fontSize: '18px' }} />
               </div>
               <div className="admin-profile">
-                <div className="admin-avatar">
-                  <span>SK</span>
-                </div>
-                <div className="admin-content">
-                  <span>Admin</span>
-                  <p>Super Admin</p>
-                </div>
-                <div>
-                  <IoMdArrowDropdown />
-                  <IoMdArrowDropup style={{ display: 'none' }} />
-                </div>
+                <AdminProfile />
               </div>
             </div>
           </div>

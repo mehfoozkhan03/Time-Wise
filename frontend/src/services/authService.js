@@ -9,10 +9,6 @@ export const authService = {
     return api.post("/user/login", data);
   },
 
-  /*   adminLogin(data) {
-    return api.post('/user/adminlogin', data);
-  },
- */
   logout() {
     return api.post("/user/logout");
   },
@@ -27,43 +23,15 @@ export const authService = {
     return api.patch("/user/theme", { theme });
   },
 
-  getAllUser(page, limit, search = "", department = "All", status = "All") {
-    return api.get(
-      `/user/users?page=${page}&limit=${limit}&search=${encodeURIComponent(
-        search,
-      )}&department=${encodeURIComponent(
-        department,
-      )}&status=${encodeURIComponent(status)}`,
-    );
-  },
-
-  getRecentEmployees() {
-    return api.get("/user/recent-employees");
-  },
-
   updateActivity() {
     return api.patch("/user/activity");
   },
 
-  updateUserDepartment(userId, department) {
-    return api.patch(`/user/${userId}/department`, {
-      department,
-    });
+  updateSocialLinks(socialLinks) {
+    return api.patch("/user/social-links", socialLinks);
   },
-
-  updateUserDesignation(userId, designation) {
-    return api.patch(`/user/${userId}/designation`, {
-      designation,
-    });
-  },
-
-  updateRole(userId, role) {
-    return api.patch(`/user/${userId}/role`, {
-      role,
-    });
-  },
-
-  updateUser(userId, userData) {
-    return api.put(`/user/users/${userId}`, userData);
+  
+  updateEmergencyContact(emergencyContact) {
+    return api.patch("/user/emergency-contact", emergencyContact);
   },
 };

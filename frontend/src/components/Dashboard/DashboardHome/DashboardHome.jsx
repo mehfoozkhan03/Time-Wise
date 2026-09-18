@@ -19,16 +19,20 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { fetchAllUser, fetchRecentEmployees } from "../../../store/authSlice";
 import { useEffect } from "react";
 import { getDashboardStats } from "../../../store/attendanceSlice";
+import {
+  fetchAllUser,
+  fetchRecentEmployees,
+} from "./../../../store/adminAuthSlice";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
 export const DashboardHome = () => {
   const dispatch = useDispatch();
-  const { totalUsers, recentEmployees } = useSelector((state) => state.auth);
-  console.log("🚀 ~ recentEmployees:", recentEmployees);
+  const { totalUsers, recentEmployees } = useSelector(
+    (state) => state.adminAuth,
+  );
 
   const { stats } = useSelector((state) => state.attendance);
 
@@ -112,61 +116,60 @@ export const DashboardHome = () => {
   const absent = weeklyChart.map((item) => item.absent);
 
   const data = {
-  labels,
-  datasets: [
-    {
-      label: "Present",
-      data: present,
-      backgroundColor: "#47b396",
-      barThickness: 15,
-      maxBarThickness: 15,
-      borderRadius: 8,
-      borderSkipped: false,
-    },
-    {
-      label: "Absent",
-      data: absent,
-      backgroundColor: "#df2033",
-      barThickness: 15,
-      maxBarThickness: 15,
-      borderRadius: 8,
-      borderSkipped: false,
-    },
-  ],
-};
-
+    labels,
+    datasets: [
+      {
+        label: "Present",
+        data: present,
+        backgroundColor: "#47b396",
+        barThickness: 15,
+        maxBarThickness: 15,
+        borderRadius: 8,
+        borderSkipped: false,
+      },
+      {
+        label: "Absent",
+        data: absent,
+        backgroundColor: "#df2033",
+        barThickness: 15,
+        maxBarThickness: 15,
+        borderRadius: 8,
+        borderSkipped: false,
+      },
+    ],
+  };
 
   const options = {
-  responsive: true,
+    responsive: true,
 
-  plugins: {
-    legend: {
-      display: true,
-      position: "top",
-    },
+    plugins: {
+      legend: {
+        display: true,
+        position: "top",
+      },
 
-    tooltip: {
-      backgroundColor: "#1f2937",
-      titleColor: "#fff",
-      bodyColor: "#fff",
-    },
-  },
-
-  scales: {
-    x: {
-      grid: {
-        display: false,
+      tooltip: {
+        backgroundColor: "#1f2937",
+        titleColor: "#fff",
+        bodyColor: "#fff",
       },
     },
 
-    y: {
-      beginAtZero: true,
-      ticks: {
-        precision: 0,
+    scales: {
+      x: {
+        grid: {
+          display: false,
+        },
+      },
+
+      y: {
+        beginAtZero: true,
+        ticks: {
+          precision: 0,
+        },
       },
     },
-  },
-};
+  };
 
   return (
     <>

@@ -21,77 +21,6 @@ export const fetchCurrentUser = createAsyncThunk(
   },
 );
 
-//# ========================== Fetch all users =========================
-
-export const fetchAllUser = createAsyncThunk(
-  "user/getAllUser",
-  async (
-    { page = 1, department = "All", status = "All", search = "" } = {},
-    thunkAPI,
-  ) => {
-    try {
-      const state = thunkAPI.getState();
-      const limit = state.auth.limit;
-
-      const response = await authService.getAllUser(
-        page,
-        limit,
-        search,
-        department,
-        status,
-      );
-
-      return {
-        users: response.data.users,
-        totalUsers: response.data.totalUsers,
-        page: response.data.page,
-        limit: response.data.limit,
-      };
-    } catch (error) {
-      return thunkAPI.rejectWithValue({
-        success: false,
-        title: "Unable to fetch all users",
-        message: error.response?.data?.message || "Something went wrong",
-      });
-    }
-  },
-);
-
-//# ==================== Recent Employee ========================
-export const fetchRecentEmployees = createAsyncThunk(
-  "auth/fetchRecentEmployees",
-  async (_, thunkAPI) => {
-    try {
-      const response = await authService.getRecentEmployees();
-
-      return response.data.employees;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(
-        error.response?.data?.message || "Failed to fetch recent employees",
-      );
-    }
-  },
-);
-
-//# ================== Update Employee ===================
-
-export const updateEmployee = createAsyncThunk(
-  "user/updateEmployee",
-  async ({ userId, employeeData }, thunkAPI) => {
-    try {
-      const response = await authService.updateEmployee(userId, employeeData);
-
-      return response.data.user;
-    } catch (error) {
-      return thunkAPI.rejectWithValue({
-        success: false,
-        title: "Unable to update employee",
-        message: error.response?.data?.message || "Something went wrong",
-      });
-    }
-  },
-);
-
 export const loginUser = createAsyncThunk(
   "auth/loginUser",
   async (credentials, thunkAPI) => {
@@ -128,6 +57,7 @@ export const loginUser = createAsyncThunk(
   },
 );
 
+//# =================== Register User =================== 
 export const registerUser = createAsyncThunk(
   "auth/registerUser",
   async (userData, thunkAPI) => {
@@ -164,7 +94,7 @@ export const registerUser = createAsyncThunk(
   },
 );
 
-// Theme
+//# ================ Theme ====================
 export const updateTheme = createAsyncThunk(
   "auth/updateTheme",
   async (theme, thunkAPI) => {
@@ -181,64 +111,38 @@ export const updateTheme = createAsyncThunk(
   },
 );
 
-//# =================== Update Department ======================
-export const updateUserDepartment = createAsyncThunk(
-  "user/updateUserDepartment",
-  async ({ userId, department }, thunkAPI) => {
+//# =================== Update Social Links ====================
+export const updateSocialLinks = createAsyncThunk(
+  "auth/updateSocialLinks",
+  async (socialLinks, thunkAPI) => {
     try {
-      const response = await authService.updateUserDepartment(
-        userId,
-        department,
-      );
+      const { data } = await authService.updateSocialLinks(socialLinks);
 
-      return response.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue({
-        success: false,
-        message: error.response?.data?.message || "Failed to update department",
-      });
-    }
-  },
-);
-
-//# Update Role
-export const updateUserRole = createAsyncThunk(
-  "auth/updateUserRole",
-  async ({ userId, role }, { rejectWithValue }) => {
-    try {
-      const response = await authService.updateRole(userId, role);
-
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(
-        error.response?.data?.message || "Failed to update role",
-      );
-    }
-  },
-);
-
-//# Update Employee
-export const updateUser = createAsyncThunk(
-  "auth/updateUser",
-  async (
-    { userId, firstName, lastName, department, designation, role },
-    thunkAPI,
-  ) => {
-    try {
-      const response = await authService.updateUser(userId, {
-        firstName,
-        lastName,
-        department,
-        designation,
-        role,
-      });
-
-      return response.data;
+      return data.socialLinks;
     } catch (error) {
       return thunkAPI.rejectWithValue(
-        error?.response?.data?.message ||
-          error?.message ||
-          "Failed to update user",
+        error.response?.data?.message ||
+          error.message ||
+          "Failed to update social links",
+      );
+    }
+  },
+);
+
+//# ================= Emergency Contact ==================
+export const updateEmergencyContact = createAsyncThunk(
+  "auth/updateEmergencyContact",
+  async (emergencyContact, thunkAPI) => {
+    try {
+      const { data } =
+        await authService.updateEmergencyContact(emergencyContact);
+
+      return data.emergencyContact;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message ||
+          error.message ||
+          "Failed to update emergency contact",
       );
     }
   },
@@ -248,16 +152,10 @@ const initialState = {
   isAuthenticated: document.cookie
     .split("; ")
     .some((cookie) => cookie.startsWith("token=")),
-  user: null,
-  users: [],
-  recentEmployees: [],
-  totalUsers: 0,
+
   isLoading: false,
   isError: false,
   errorMessage: "",
-  currentPage: 0,
-  limit: 10,
-  search: "",
 };
 
 const authSlice = createSlice({
@@ -269,21 +167,6 @@ const authSlice = createSlice({
       state.isAuthenticated = false;
       state.errorMessage = "";
       state.isError = false;
-    },
-    setSearch(state, action) {
-      state.search = action.payload;
-      state.users = [];
-      state.currentPage = 0;
-    },
-    loadLessUsers(state) {
-      if (state.currentPage > 1) {
-        state.users.splice(state.users.length - state.limit);
-        state.currentPage -= 1;
-      }
-    },
-    resetUsers(state) {
-      state.users = [];
-      state.currentPage = 0;
     },
   },
 
@@ -355,52 +238,6 @@ const authSlice = createSlice({
         state.errorMessage = action.payload;
       })
 
-      // ==================== Get all Users ================
-      .addCase(fetchAllUser.pending, (state) => {
-        state.isLoading = true;
-        state.isError = null;
-        state.errorMessage = "";
-      })
-
-      .addCase(fetchAllUser.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isError = false;
-
-        if (action.payload.page === 1) {
-          state.users = action.payload.users;
-        } else {
-          state.users.push(...action.payload.users);
-        }
-
-        state.totalUsers = action.payload.totalUsers;
-        state.currentPage = action.payload.page;
-        state.limit = action.payload.limit;
-      })
-
-      .addCase(fetchAllUser.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.errorMessage = action.payload;
-      })
-
-      //# ================== Recent Employee ==================
-      .addCase(fetchRecentEmployees.pending, (state) => {
-        state.isLoading = true;
-        state.isError = false;
-      })
-
-      .addCase(fetchRecentEmployees.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isError = false;
-        state.recentEmployees = action.payload;
-      })
-
-      .addCase(fetchRecentEmployees.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.errorMessage = action.payload;
-      })
-
       // ================= Theme Update =================
 
       .addCase(updateTheme.fulfilled, (state, action) => {
@@ -409,64 +246,31 @@ const authSlice = createSlice({
         }
       })
 
-      //# ====================== Update Department =====================
-      .addCase(updateUserDepartment.fulfilled, (state, action) => {
-        const { userId, department } = action.meta.arg;
-
-        const index = state.users.findIndex((user) => user._id === userId);
-
-        if (index !== -1) {
-          state.users[index].department = department;
+      //# =============== Social Links ===================
+      .addCase(updateSocialLinks.fulfilled, (state, action) => {
+        if (state.user) {
+          state.user.socialLinks = action.payload;
         }
       })
-
-      .addCase(updateUserDepartment.rejected, (state, action) => {
+      .addCase(updateSocialLinks.rejected, (state, action) => {
         state.isError = true;
         state.errorMessage = action.payload;
       })
 
-      //# Update Role
-      .addCase(updateUserRole.fulfilled, (state, action) => {
-        const updatedUser = action.payload;
-
-        const index = state.users.findIndex(
-          (user) => user._id === updatedUser._id,
-        );
-
-        if (index !== -1) {
-          state.users[index] = updatedUser;
+      //# ================ Emergency Contact ==================
+      .addCase(updateEmergencyContact.fulfilled, (state, action) => {
+        if (state.user) {
+          state.user.emergencyContact = action.payload;
         }
       })
-
-      //# ===================== Update Employee Details ======================
-      .addCase(updateUser.pending, (state) => {
-        state.isLoading = true;
-      })
-
-      .addCase(updateUser.fulfilled, (state, action) => {
-        state.isLoading = false;
-
-        const updatedUser = action.payload;
-
-        const index = state.users.findIndex(
-          (user) => user._id === updatedUser._id,
-        );
-
-        if (index !== -1) {
-          state.users[index] = updatedUser;
-        }
-      })
-
-      .addCase(updateUser.rejected, (state, action) => {
-        state.isLoading = false;
-
-        state.isError = action.payload;
+      .addCase(updateEmergencyContact.rejected, (state, action) => {
+        state.isError = true;
+        state.errorMessage = action.payload;
       });
   },
 });
 
-export const { logout, setSearch, loadLessUsers, resetUsers } =
-  authSlice.actions;
+export const { logout } = authSlice.actions;
 
 export default authSlice.reducer;
 

@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 
 export const ProfileSidebar = () => {
   const sidebarDetails = useSelector((state) => state.communityProfile.profile);
+  console.log("🚀 ~ sidebarDetails:", sidebarDetails);
 
   const activityData = [
     { day: "J", value: 30 },
