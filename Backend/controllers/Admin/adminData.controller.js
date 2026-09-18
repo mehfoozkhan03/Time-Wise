@@ -4,6 +4,8 @@ import { userModel } from "../../models/User.model.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import { attendanceModel } from "../../models/Attendance.model.js";
+import { getTodayRange } from "../../utils/attendanceHelper.js";
 dotenv.config();
 
 const validateLogin = (body) => {
@@ -108,6 +110,34 @@ export const admin_login = async (req, res) => {
 };
 
 
+export const adminLogout = async (req, res) => {
+  try {
+    res.clearCookie("adminToken", {
+      httpOnly: false,
+      secure: false,
+      sameSite: "Lax",
+    });
+
+    return res.status(200).json({
+      success: true,
+      title: "Logout Successful",
+      message: "Admin logged out successfully.",
+      reason: "Your admin session has been cleared.",
+    });
+  } catch (error) {
+    console.error("Admin Logout Error:", error);
+
+    return res.status(500).json({
+      success: false,
+      title: "Logout Failed",
+      message: "Unable to logout admin.",
+      reason:
+        process.env.NODE_ENV === "development"
+          ? error.message
+          : "Please try again later.",
+    });
+  }
+};
 
 
 //# ========================= Get All Usres ============================
@@ -116,7 +146,7 @@ export const getAllUser = async (req, res) => {
   
   try {
     const page = Number(req.query.page) || 1;
-    const limit = Number(req.query.limit) || 10;
+    const limit = Number(req.query.limit) || 26;
 
     const search = req.query.search || "";
     const department = req.query.department || "All";
@@ -208,6 +238,40 @@ export const getAllUser = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Failed to fetch users",
+      error: error.message,
+    });
+  }
+};
+
+
+// ================= Today's Attendance - Admin =================
+
+export const getAllTodayAttendance = async (req, res) => {
+  try {
+    const { startOfDay, endOfDay } = getTodayRange();
+
+    const attendance = await attendanceModel
+      .find({
+        date: {
+          $gte: startOfDay,
+          $lte: endOfDay,
+        },
+      })
+      .populate("user", "firstName lastName department")
+      .sort({ checkInTime: 1 })
+      .lean();
+
+    return res.status(200).json({
+      success: true,
+      message: "Today's attendance fetched successfully.",
+      attendance,
+    });
+  } catch (error) {
+    console.error("Get All Today Attendance Error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch today's attendance.",
       error: error.message,
     });
   }

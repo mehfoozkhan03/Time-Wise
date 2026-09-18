@@ -40,6 +40,10 @@
     width: 30px;
     border: 1px solid var(--border);
     border-radius: 20px;
+    background:
+    linear-gradient(135deg,
+      var(--primary),
+      var(--primary_hover));
 }
 
 .emergency-info {
@@ -105,6 +109,43 @@
     gap: 8px;
     font-weight: 600;
 }
+
+/* Edit Form */
+.emergencyContact-form{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.form-group{
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.form-group> label{
+    font-size: 13px;
+}
+
+.form-group> input{
+    background: transparent;
+    padding: 7px 10px;
+    color: var(--text_secondary);
+    border-radius: 7px;
+}
+
+.emergencyContact-form-buttons{
+    display: flex;
+    justify-content: space-between;
+}
+
+.emergencyContact-form-buttons> button{
+    padding: 7px 10px;
+    border-radius: 7px;
+    background-color: transparent;
+    border: 1px solid var(--border);
+    color: var(--text_primary);
+}
+
 
 @media (max-width:430px) {
     .emergency-phone-number>div:nth-child(2) {

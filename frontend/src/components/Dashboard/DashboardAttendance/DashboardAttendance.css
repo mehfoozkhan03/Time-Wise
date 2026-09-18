@@ -67,6 +67,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    text-transform: uppercase;
+    color: var(--text_primary);
 }
 .dashboardAttendance-status{
     width: 80px;

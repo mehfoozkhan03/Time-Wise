@@ -1,6 +1,8 @@
 
 // ================= Theme Update =================
 
+import { userModel } from "../../models/User.model.js";
+
 export const updateTheme = async (req, res) => {
   try {
     const { theme } = req.body;

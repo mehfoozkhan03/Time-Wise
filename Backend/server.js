@@ -43,9 +43,11 @@ server.use(express.json(), express.text(), cookieParser());
 
 // ================= Routes =================
 
-server.use("/user", userRoutes);
+//# Admin Route 
+server.use("/admin", adminRoutes)
 
-server.use("/user", adminRoutes)
+//# User Route 
+server.use("/user", userRoutes);
 
 server.use("/posts", postRoutes);
 

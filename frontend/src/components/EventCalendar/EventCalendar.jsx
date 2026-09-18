@@ -26,7 +26,7 @@ import {
   deleteHoliday,
 } from "../../store/holidaySlice";
 
-import { fetchRecentEmployees } from "../../store/authSlice";
+import { fetchRecentEmployees } from "../../store/adminAuthSlice";
 
 import { mapHolidayList } from "../../utils/holidayMapper";
 

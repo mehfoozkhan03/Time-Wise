@@ -14,9 +14,10 @@ import {
   loadLessUsers,
   updateUser,
   updateUserRole,
-} from "../../../store/authSlice";
+} from "../../../store/adminAuthSlice";
 
-import { authService } from "../../../services/authService";
+// import { authService } from "../../../services/authService";
+import { adminAuthService } from "../../../services/adminAuthService";
 
 import { useEffect, useRef, useState } from "react";
 
@@ -58,7 +59,7 @@ export const DashboardEmployee = () => {
   const dispatch = useDispatch();
 
   const { users, totalUsers, isLoading, search, currentPage } = useSelector(
-    (state) => state.auth,
+    (state) => state.adminAuth,
   );
 
   //# Search Employee by Name
@@ -167,6 +168,25 @@ export const DashboardEmployee = () => {
       );
     } catch (error) {
       console.error("Designation update failed:", error);
+    }
+  };
+
+  const handleDepartmentChange = async (userId, department) => {
+    try {
+      await adminAuthService.updateUserDepartment(userId, department);
+
+      dispatch(
+        fetchAllUser({
+          page: 1,
+          department: selectedDepartment,
+          status: selectedStatus,
+          search,
+        }),
+      );
+    } catch (error) {
+      console.error("Department update failed:", error);
+
+      alert(error?.response?.data?.message || "Failed to update department.");
     }
   };
 
@@ -523,7 +543,10 @@ export const DashboardEmployee = () => {
                           </div>
                         ) : (
                           <p>
-                            {el.firstName?.charAt(0).toUpperCase() + el.firstName?.slice(1)} {el.lastName?.charAt(0).toUpperCase() + el.lastName?.slice(1)}
+                            {el.firstName?.charAt(0).toUpperCase() +
+                              el.firstName?.slice(1)}{" "}
+                            {el.lastName?.charAt(0).toUpperCase() +
+                              el.lastName?.slice(1)}
                           </p>
                         )}
                       </div>
@@ -594,29 +617,28 @@ export const DashboardEmployee = () => {
 
                     {/* ========================= STATUS =========================*/}
 
-                    <div className="dashboardEmployee-status" style={{
-                        background:
-                          el.isOnline
-                            ? "#12352F"
-                            : "#351A21",
-                        border:
-                          el.isOnline
-                            ? "1px solid #2F8F83"
-                            : "1px solid #8F4652",
-                      }}>
-                      <div style={{
-                          background:
-                            el.isOnline
-                              ? "#22C55E"
-                              : "#EF4444",
-                        }}></div>
+                    <div
+                      className="dashboardEmployee-status"
+                      style={{
+                        background: el.isOnline ? "#12352F" : "#351A21",
+                        border: el.isOnline
+                          ? "1px solid #2F8F83"
+                          : "1px solid #8F4652",
+                      }}
+                    >
+                      <div
+                        style={{
+                          background: el.isOnline ? "#22C55E" : "#EF4444",
+                        }}
+                      ></div>
 
-                      <span style={{
-                          color:
-                            el.isOnline
-                              ? "#5EE7C4"
-                              : "#FF6B7A",
-                        }}>{el.isOnline ? "Active" : "Inactive"}</span>
+                      <span
+                        style={{
+                          color: el.isOnline ? "#5EE7C4" : "#FF6B7A",
+                        }}
+                      >
+                        {el.isOnline ? "Active" : "Inactive"}
+                      </span>
                     </div>
 
                     {/* ACTIONS */}

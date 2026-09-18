@@ -320,7 +320,7 @@ export const getUserProfile = async (req, res) => {
     const user = await userModel
       .findById(userId)
       .select(
-        "_id firstName lastName designation department profileImage createdAt lastActiveAt",
+        "_id firstName lastName email designation department profileImage createdAt lastActiveAt",
       );
 
     if (!user) {
