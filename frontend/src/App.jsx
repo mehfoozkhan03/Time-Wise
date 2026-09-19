@@ -50,8 +50,8 @@ export default function App() {
       <ScrollToTopButton />
       <AppRoutes />
 
-      {user && <Chatbot />}
-      {isAdminAuthenticated && <AdminChatBot />}
+      {/* {user && <Chatbot />}
+      {isAdminAuthenticated && <AdminChatBot />} */}
     </BrowserRouter>
   );
 }
