@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "./DashboardSetting.css";
-import { aiSettingsService } from "../../../services/aiSettingsService";
+// import { aiSettingsService } from "../../../services/aiSettingsService";
 
 export const DashboardSetting = () => {
   const [settings, setSettings] = useState(null);
@@ -12,39 +12,39 @@ export const DashboardSetting = () => {
   const [selectedIDs, setSelectedIDs] = useState([]);
   const [message, setMessage] = useState("");
 
-  useEffect(() => {
-    const load = async () => {
-      try {
-        const [settingsResponse, employeesResponse] = await Promise.all([
-          aiSettingsService.get(), aiSettingsService.getEmployees(),
-        ]);
-        setSettings(settingsResponse.data.settings);
-        setEmployees(employeesResponse.data.employees);
-        setSelectedIDs(settingsResponse.data.settings.disabledUserIDs || []);
-      } catch (error) {
-        setMessage(error.response?.data?.message || "Unable to load WiseBot settings.");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    load();
-  }, []);
+  // useEffect(() => {
+  //   const load = async () => {
+  //     try {
+  //       const [settingsResponse, employeesResponse] = await Promise.all([
+  //         aiSettingsService.get(), aiSettingsService.getEmployees(),
+  //       ]);
+  //       setSettings(settingsResponse.data.settings);
+  //       setEmployees(employeesResponse.data.employees);
+  //       setSelectedIDs(settingsResponse.data.settings.disabledUserIDs || []);
+  //     } catch (error) {
+  //       setMessage(error.response?.data?.message || "Unable to load WiseBot settings.");
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   };
+  //   load();
+  // }, []);
 
-  const save = async (accessMode, disabledUserIDs = []) => {
-    setIsSaving(true);
-    setMessage("");
-    try {
-      const { data } = await aiSettingsService.update({ accessMode, disabledUserIDs });
-      setSettings(data.settings);
-      setSelectedIDs(data.settings.disabledUserIDs || []);
-      setShowDisableChoice(false);
-      setMessage("WiseBot access updated.");
-    } catch (error) {
-      setMessage(error.response?.data?.message || "Unable to save WiseBot access.");
-    } finally {
-      setIsSaving(false);
-    }
-  };
+  // const save = async (accessMode, disabledUserIDs = []) => {
+  //   setIsSaving(true);
+  //   setMessage("");
+  //   try {
+  //     const { data } = await aiSettingsService.update({ accessMode, disabledUserIDs });
+  //     setSettings(data.settings);
+  //     setSelectedIDs(data.settings.disabledUserIDs || []);
+  //     setShowDisableChoice(false);
+  //     setMessage("WiseBot access updated.");
+  //   } catch (error) {
+  //     setMessage(error.response?.data?.message || "Unable to save WiseBot access.");
+  //   } finally {
+  //     setIsSaving(false);
+  //   }
+  // };
 
   const toggleEmployee = (id) => setSelectedIDs((current) =>
     current.includes(id) ? current.filter((item) => item !== id) : [...current, id],

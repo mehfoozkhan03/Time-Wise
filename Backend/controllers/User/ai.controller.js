@@ -19,10 +19,10 @@ import {
   clearPending,
   getNextPending,
 } from "../../services/aiOrchestrator.services.js";
-import {
-  getAISettingsForUser,
-  isWiseBotAvailableToUser,
-} from "../../services/aiSettings.service.js";
+// import {
+//   getAISettingsForUser,
+//   isWiseBotAvailableToUser,
+// } from "../../services/aiSettings.service.js";
 
 const editDistance = (a, b) => {
   const rows = a.length + 1;

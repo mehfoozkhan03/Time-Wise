@@ -122,3 +122,42 @@
   display: block;
   border-radius: 10px;
 }
+
+/* Load more */
+
+.load-more-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 8px 0 20px;
+}
+
+.load-more-btn {
+  min-width: 180px;
+  padding: 11px 20px;
+
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius_md);
+
+  background: var(--card);
+  color: var(--text_primary);
+
+  font-size: 0.9rem;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: var(--transition);
+}
+
+.load-more-btn:hover:not(:disabled) {
+  background: var(--surface);
+  color: var(--primary);
+  border-color: var(--primary);
+  transform: translateY(-1px);
+}
+
+.load-more-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

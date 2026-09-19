@@ -94,13 +94,14 @@ export const DashboardAttendance = () => {
             <div>STATUS</div>
           </div>
           <div className="dashboardAttendance-users">
-            {userAttendance &&
+            {userAttendance.length > 0 ? (
               userAttendance.map((el, id) => (
                 <div key={id}>
                   <div>
                     <div className="dashboardAttendance-avatar">
                       <span>{el.avatar}</span>
                     </div>
+
                     <div>
                       <p
                         style={{
@@ -110,21 +111,37 @@ export const DashboardAttendance = () => {
                       >
                         {el.name}
                       </p>
-                      <span style={{ fontSize: "11px", opacity: "0.7" }}>
+
+                      <span
+                        style={{
+                          fontSize: "11px",
+                          opacity: "0.7",
+                        }}
+                      >
                         {el.department}
                       </span>
                     </div>
                   </div>
+
                   <div style={{ color: "#4a9f91" }}>{el.checkIn}</div>
+
                   <div>{el.breakTime}</div>
+
                   <div>{el.checkOut}</div>
+
                   <div>{el.workingHours}</div>
+
                   <div className="dashboardAttendance-status">
                     <div></div>
                     <span>{el.status}</span>
                   </div>
                 </div>
-              ))}
+              ))
+            ) : (
+              <div className="no-attendance">
+                <p>No attendance records available for today.</p>
+              </div>
+            )}
           </div>
         </div>
       </div>
