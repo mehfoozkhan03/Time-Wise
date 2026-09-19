@@ -19,10 +19,7 @@ import {
   clearPending,
   getNextPending,
 } from "../../services/aiOrchestrator.services.js";
-import {
-  getAISettingsForUser,
-  isWiseBotAvailableToUser,
-} from "../../services/aiSettings.service.js";
+import { getUserAIBotAccess } from "../../services/aiBotAccess.service.js";
 
 const editDistance = (a, b) => {
   const rows = a.length + 1;
@@ -307,12 +304,12 @@ export const askAI = async (req, res) => {
     }
 
     const userID = req.user.userID;
-    const aiSettings = await getAISettingsForUser(userID);
+    const access = await getUserAIBotAccess(userID);
 
-    if (!isWiseBotAvailableToUser(aiSettings, userID)) {
+    if (access.blocked) {
       return res.status(403).json({
         success: false,
-        message: "WiseBot is currently disabled by your organisation administrator.",
+        message: "WiseBot access has been blocked by your administrator.",
       });
     }
 
@@ -795,6 +792,16 @@ export const askAI = async (req, res) => {
       success: false,
       message: "Unable to connect to the TimeWise Assistant.",
     });
+  }
+};
+
+export const getAIBotAccess = async (req, res) => {
+  try {
+    const access = await getUserAIBotAccess(req.user.userID);
+    return res.status(200).json({ success: true, ...access });
+  } catch (error) {
+    console.error("Get AI bot access error:", error);
+    return res.status(500).json({ success: false, message: "Unable to check WiseBot access." });
   }
 };
 
