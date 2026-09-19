@@ -8,6 +8,7 @@ import { adminAuth  } from '../middleware/adminAuth.js';
 import { updateRole } from '../controllers/Admin/updateRole.controller.js';
 import { updateUser } from '../controllers/Admin/updateEmployee.controller.js';
 import { getAIBotAccessSettings, updateAIBotAccessSettings } from "../controllers/Admin/aiBotAccess.controller.js";
+import { askAdminAI } from "../controllers/Admin/adminAI.controller.js";
 
 
 const adminRoutes = express.Router()
@@ -31,5 +32,6 @@ adminRoutes.post("/adminlogin", admin_login);
 
 adminRoutes.get("/ai-bot-access", adminAuth, getAIBotAccessSettings);
 adminRoutes.put("/ai-bot-access", adminAuth, updateAIBotAccessSettings);
+adminRoutes.post("/admin-ai/chat", adminAuth, askAdminAI);
 
 export { adminRoutes };
