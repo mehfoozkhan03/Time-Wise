@@ -238,7 +238,24 @@ export const toggleLikeComment = createAsyncThunk(
   },
 );
 
-//# ================= Admin can Delete Post ===============
+//# =================== Admin : Pin thought ===================
+export const togglePinThoughtbyAdmin = createAsyncThunk(
+  "post/togglePinThoughtbyAdmin",
+
+  async (postId, { rejectWithValue }) => {
+    try {
+      const response = await adminAuthService.togglePinThought(postId);
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to pin thought.",
+      );
+    }
+  },
+);
+
+//# ================= Admin : Delete Post ===============
 export const deleteThoughtbyAdmin = createAsyncThunk(
   "post/deleteThoughtbyAdmin",
 
@@ -594,6 +611,18 @@ const postSlice = createSlice({
         state.loading = false;
         state.isError = true;
         state.errorMessage = action.payload;
+      })
+
+      //# ================== Admin : Pin thought ================
+      .addCase(togglePinThoughtbyAdmin.fulfilled, (state, action) => {
+        const { postId, isPinned, pinnedAt } = action.payload;
+
+        const post = state.posts.find((post) => post._id === postId);
+
+        if (post) {
+          post.isPinned = isPinned;
+          post.pinnedAt = pinnedAt;
+        }
       })
 
       //# ================== Delete thought by admin ===================

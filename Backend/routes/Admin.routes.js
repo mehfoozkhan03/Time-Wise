@@ -8,7 +8,7 @@ import { updateRole } from '../controllers/Admin/updateRole.controller.js';
 import { updateUser } from '../controllers/Admin/updateEmployee.controller.js';
 import { getAIBotAccessSettings, updateAIBotAccessSettings } from "../controllers/Admin/aiBotAccess.controller.js";
 import { askAdminAI } from "../controllers/Admin/adminAI.controller.js";
-
+import { adminDeleteThought, togglePinThought } from '../controllers/Admin/adminThought.controller.js';
 
 const adminRoutes = express.Router()
 
@@ -32,6 +32,7 @@ adminRoutes.get("/attendance/today", adminAuth, getAllTodayAttendance);
 
 adminRoutes.delete("/delete/thoughts/:id",  adminAuth,  adminDeleteThought);
 
+adminRoutes.patch("/thoughts/:id/pin",  adminAuth,  togglePinThought);
 
 adminRoutes.get("/ai-bot-access", adminAuth, getAIBotAccessSettings);
 adminRoutes.put("/ai-bot-access", adminAuth, updateAIBotAccessSettings);

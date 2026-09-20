@@ -2,6 +2,9 @@ import "./DashboardAnnouncement.css";
 
 import { FaPlus } from "react-icons/fa";
 import { MdEdit, MdDelete } from "react-icons/md";
+import { AnnouncementStats } from "./AnnouncementStats/AnnouncementStats";
+import { AnnouncementFilter } from "./AnnouncementFilter/AnnouncementFilter";
+import { AnnouncementCard } from "./AnnouncementList/AnnouncementCard/AnnouncementCard";
 
 export const DashboardAnnouncement = () => {
   const cardData = [
@@ -48,7 +51,7 @@ export const DashboardAnnouncement = () => {
             <span>New Announcement</span>
           </div>
         </div>
-        <div className="dashboardAnnouncement-content">
+        {/* <div className="dashboardAnnouncement-content">
           {cardData &&
             cardData.map((el, id) => (
               <div
@@ -83,7 +86,10 @@ export const DashboardAnnouncement = () => {
                 </div>
               </div>
             ))}
-        </div>
+        </div> */}
+        <AnnouncementStats />
+        <AnnouncementFilter />
+        <AnnouncementCard />
       </div>
     </>
   );

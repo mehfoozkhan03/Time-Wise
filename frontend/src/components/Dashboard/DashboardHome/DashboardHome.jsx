@@ -25,6 +25,7 @@ import {
   fetchAllUser,
   fetchRecentEmployees,
 } from "./../../../store/adminAuthSlice";
+import { fetchPosts } from "../../../store/postSlice";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
@@ -34,15 +35,24 @@ export const DashboardHome = () => {
     (state) => state.adminAuth,
   );
 
+  const { featured, posts } = useSelector((state) => state.post);
+
   const { stats } = useSelector((state) => state.attendance);
 
   const totalAbsentToday = (totalUsers || 0) - (stats?.totalPresentToday || 0);
 
-  useEffect(() => {
-    dispatch(fetchAllUser());
-    dispatch(fetchRecentEmployees());
-    dispatch(getDashboardStats());
-  }, [dispatch]);
+  //# Pin thought
+  const latestPinnedPost =
+    [...(posts || [])]
+      .filter((post) => post.isPinned === true && post.isDeleted !== true)
+      .sort((a, b) => new Date(b.pinnedAt) - new Date(a.pinnedAt))[0] || null;
+
+  const latestPost =
+    [...(posts || [])]
+      .filter((post) => post.isDeleted !== true)
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0] || null;
+
+  const thoughtToShow = latestPinnedPost || latestPost;
 
   const cardData = [
     {
@@ -171,6 +181,13 @@ export const DashboardHome = () => {
     },
   };
 
+  useEffect(() => {
+    dispatch(fetchAllUser());
+    dispatch(fetchRecentEmployees());
+    dispatch(getDashboardStats());
+    dispatch(fetchPosts());
+  }, [dispatch]);
+
   return (
     <>
       <div className="dashboardHome-container">
@@ -206,14 +223,29 @@ export const DashboardHome = () => {
               <FaLightbulb style={{ color: "#ffc844", fontSize: "18px" }} />
               <span>THOUGHT OF THE DAY</span>
             </div>
+
             <p>
-              "Teams with high psychological safety outperform
-              brilliant-but-toxic ones every single time."
+              {thoughtToShow
+                ? `"${thoughtToShow.content}"`
+                : "No thought available."}
             </p>
+
             <div className="thought-avatar-container">
-              <div className="thought-avatar"></div>
+              <div className="thought-avatar">
+                {thoughtToShow?.createdBy?.firstName?.[0] || ""}
+                {thoughtToShow?.createdBy?.lastName?.[0] || ""}
+              </div>
+
               <span style={{ opacity: "0.6", fontSize: "14px" }}>
-                James Okonkwo - Engineering Manager
+                {thoughtToShow
+                  ? `${thoughtToShow.createdBy?.firstName || ""} ${
+                      thoughtToShow.createdBy?.lastName || ""
+                    }${
+                      thoughtToShow.createdBy?.designation
+                        ? ` - ${thoughtToShow.createdBy.designation}`
+                        : ""
+                    }`
+                  : "No author"}
               </span>
             </div>
           </div>

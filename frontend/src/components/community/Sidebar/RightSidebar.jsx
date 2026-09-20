@@ -1,23 +1,31 @@
-import { useSelector } from 'react-redux'
+import { useSelector } from "react-redux";
 
-import { FaLightbulb, FaHeart, FaUserFriends } from 'react-icons/fa'
+import { FaLightbulb, FaHeart, FaUserFriends } from "react-icons/fa";
 
-import { IoTrendingUp } from 'react-icons/io5'
+import { IoTrendingUp } from "react-icons/io5";
 
-import './RightSidebar.css'
+import "./RightSidebar.css";
 
 const RightSidebar = () => {
-  const { featured, posts } = useSelector((state) => state.post)
+  const { featured, posts } = useSelector((state) => state.post);
 
   const trendingPosts = [...posts]
     .sort((a, b) => (b.likesCount || 0) - (a.likesCount || 0))
-    .slice(0, 5)
+    .slice(0, 5);
 
   const contributors = [
     ...new Map(
       posts.map((post) => [post.createdBy?._id, post.createdBy]),
     ).values(),
-  ].slice(0, 5)
+  ].slice(0, 5);
+
+  //# Pin thought
+  const latestPinnedPost =
+    [...posts]
+      .filter((post) => post.isPinned === true && post.isDeleted !== true)
+      .sort((a, b) => new Date(b.pinnedAt) - new Date(a.pinnedAt))[0] || null;
+
+  const featuredMessage = latestPinnedPost?.content || featured?.content;
 
   return (
     <aside className="right-sidebar">
@@ -30,12 +38,30 @@ const RightSidebar = () => {
           <h3>Featured Thought</h3>
         </div>
 
-        {featured ? (
+        {/* {featured ? (
           <>
             <p>{featured.content}</p>
 
             <small>
               — {featured.createdBy?.firstName} {featured.createdBy?.lastName}
+            </small>
+          </>
+        ) : (
+          <p>No featured thought today.</p>
+        )} */}
+        {featuredMessage ? (
+          <>
+            <p>{featuredMessage}</p>
+
+            <small>
+              —{" "}
+              {latestPinnedPost
+                ? `${latestPinnedPost.createdBy?.firstName || ""} ${
+                    latestPinnedPost.createdBy?.lastName || ""
+                  }`
+                : `${featured?.createdBy?.firstName || ""} ${
+                    featured?.createdBy?.lastName || ""
+                  }`}
             </small>
           </>
         ) : (
@@ -57,7 +83,10 @@ const RightSidebar = () => {
             <small>No trending posts.</small>
           ) : (
             trendingPosts.map((post) => (
-              <div key={post._id} className="trending-item">
+              <div
+                key={post._id}
+                className="trending-item"
+              >
                 <div>
                   <strong>
                     {post.createdBy?.firstName} {post.createdBy?.lastName}
@@ -95,10 +124,13 @@ const RightSidebar = () => {
             <small>No contributors yet.</small>
           ) : (
             contributors.map((person) => (
-              <div key={person._id} className="contributor-item">
+              <div
+                key={person._id}
+                className="contributor-item"
+              >
                 <div className="contributor-avatar">
-                  {`${person.firstName?.[0] || ''}${
-                    person.lastName?.[0] || ''
+                  {`${person.firstName?.[0] || ""}${
+                    person.lastName?.[0] || ""
                   }`.toUpperCase()}
                 </div>
 
@@ -107,16 +139,15 @@ const RightSidebar = () => {
                     {person.firstName} {person.lastName}
                   </strong>
 
-                  <small>{person.designation || 'Employee'}</small>
+                  <small>{person.designation || "Employee"}</small>
                 </div>
               </div>
             ))
           )}
         </div>
       </section>
-      
     </aside>
-  )
-}
+  );
+};
 
-export default RightSidebar
+export default RightSidebar;
