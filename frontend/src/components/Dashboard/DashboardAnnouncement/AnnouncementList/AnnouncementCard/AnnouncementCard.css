@@ -1,0 +1,251 @@
+.announcement-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.announcement-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 26px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+/* ================= TOP ================= */
+
+.announcement-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.announcement-badges {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border-radius: 7px;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.pinned-badge {
+  color: #29957f;
+  background: transparent;
+  padding-left: 0;
+}
+
+.category-badge {
+  color: #5c5ce0;
+  background: var(--surface);
+}
+
+.priority-badge {
+  border: 1px solid;
+}
+
+.priority-badge.important {
+  color: #f59e0b;
+  border-color: #f7c65d;
+}
+
+.priority-badge.urgent {
+  color: #ef3340;
+  border-color: #ffb8bd;
+}
+
+/* ================= STATUS ================= */
+
+.announcement-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  padding: 5px 10px;
+
+  border-radius: 7px;
+  border: 1px solid #7ee0bd;
+
+  color: #269b78;
+  background: var(--bg);
+
+  font-size: 14px;
+}
+
+/* ================= CONTENT ================= */
+
+.announcement-content {
+  margin-top: 18px;
+}
+
+.announcement-content h3 {
+  margin: 0 0 8px;
+  color: var(--text-primary);
+  font-size: 21px;
+  font-weight: 500;
+}
+
+.announcement-content p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 17px;
+  line-height: 1.7;
+}
+
+/* ================= META ================= */
+
+.announcement-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 22px;
+
+  margin-top: 16px;
+}
+
+.announcement-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+
+  color: #91a0b5;
+  font-size: 14px;
+}
+
+.announcement-meta svg {
+  font-size: 14px;
+}
+
+/* ================= ATTACHMENT ================= */
+
+.announcement-attachment {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-top: 16px;
+  padding: 15px;
+
+  background: var(--surface);
+  border-radius: 14px;
+}
+
+.attachment-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.attachment-icon {
+  width: 45px;
+  height: 45px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #ffd0d0;
+  border-radius: 10px;
+
+  color: #ff4d4d;
+  background: #fff5f5;
+
+  font-size: 20px;
+}
+
+.attachment-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.attachment-name {
+  color: #314968;
+  font-size: 16px;
+}
+
+.attachment-size {
+  color: #8c9bb0;
+  font-size: 14px;
+}
+
+.download-button {
+  border: none;
+  background: transparent;
+
+  display: flex;
+  align-items: center;
+  gap: 7px;
+
+  color: #29957f;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+/* ================= VIEW POLICY ================= */
+
+.view-policy-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  margin-top: 16px;
+
+  border: none;
+  background: transparent;
+
+  color: #29957f;
+  font-size: 16px;
+
+  cursor: pointer;
+}
+
+/* ================= ACTIONS ================= */
+
+.announcement-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-top: 18px;
+  padding-top: 18px;
+
+  border-top: 1px solid var(--border);
+}
+
+.action-left {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+
+.announcement-actions button {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+
+  border: none;
+  background: transparent;
+
+  color: #71829a;
+  font-size: 15px;
+
+  cursor: pointer;
+}
+
+.announcement-actions button:hover {
+  color: #29957f;
+}
+
+.announcement-delete-button:hover {
+  color: #ef4444 !important;
+}
