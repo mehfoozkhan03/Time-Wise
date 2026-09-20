@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+
 import { useDispatch, useSelector } from 'react-redux'
 
 import {
@@ -18,9 +19,16 @@ export default function useAttendance() {
     history,
     loading,
     error,
+    isWorkingDay,
+    isHoliday,
+    holiday,
   } = useSelector((state) => state.attendance)
 
   const [currentTime, setCurrentTime] = useState(new Date())
+
+  // =====================================================
+  // Initial Attendance Fetch
+  // =====================================================
 
   useEffect(() => {
     dispatch(getTodayAttendance())
@@ -32,9 +40,9 @@ export default function useAttendance() {
     return () => clearInterval(interval)
   }, [dispatch])
 
-  // ================= API Actions =================
-
-  // ================= API Actions =================
+  // =====================================================
+  // API Actions
+  // =====================================================
 
   const handleCheckIn = () => dispatch(checkIn())
 
@@ -46,7 +54,9 @@ export default function useAttendance() {
 
   const fetchAttendanceHistory = () => dispatch(getAttendanceHistory())
 
-  // ================= Derived Status =================
+  // =====================================================
+  // Derived Status
+  // =====================================================
 
   const status = useMemo(() => {
     if (!attendance) return 'idle'
@@ -64,7 +74,9 @@ export default function useAttendance() {
     return 'working'
   }, [attendance])
 
-  // ================= Session Time =================
+  // =====================================================
+  // Session Time
+  // =====================================================
 
   const sessionSeconds = useMemo(() => {
     if (!attendance?.checkInTime) return 0
@@ -78,7 +90,9 @@ export default function useAttendance() {
     return Math.max(Math.floor((end.getTime() - start.getTime()) / 1000), 0)
   }, [attendance, currentTime])
 
-  // ================= Break Time =================
+  // =====================================================
+  // Break Time
+  // =====================================================
 
   const breakSeconds = useMemo(() => {
     if (!attendance) return 0
@@ -99,39 +113,48 @@ export default function useAttendance() {
     return seconds
   }, [attendance, currentTime])
 
-  // ================= Working Time =================
+  // =====================================================
+  // Working Time
+  // =====================================================
 
   const workingSeconds = useMemo(() => {
     return Math.max(sessionSeconds - breakSeconds, 0)
   }, [sessionSeconds, breakSeconds])
 
-  // ================= Formatter =================
+  // =====================================================
+  // Formatter
+  // =====================================================
 
   function formatTime(seconds) {
     const h = String(Math.floor(seconds / 3600)).padStart(2, '0')
+
     const m = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0')
+
     const s = String(seconds % 60).padStart(2, '0')
 
     return `${h}:${m}:${s}`
   }
 
+  // =====================================================
+  // Return
+  // =====================================================
+
   return {
     attendance,
-
     history,
 
     loading,
-
     error,
 
     status,
 
+    isWorkingDay,
+    isHoliday,
+    holiday,
+
     checkIn: handleCheckIn,
-
     startBreak: handleStartBreak,
-
     endBreak: handleEndBreak,
-
     checkOut: handleCheckOut,
 
     fetchAttendanceHistory,
@@ -143,9 +166,7 @@ export default function useAttendance() {
     breakTime: formatTime(breakSeconds),
 
     sessionSeconds,
-
     workingSeconds,
-
     breakSeconds,
   }
 }

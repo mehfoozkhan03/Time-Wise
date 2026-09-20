@@ -171,17 +171,36 @@ const getEffectiveWorkingSeconds = (record, now = new Date()) => {
   }
 
   // -----------------------------------------------------
-  // Currently working
+  // IMPORTANT:
+  // Only calculate live time for TODAY'S open session.
+  //
+  // An old attendance record without checkout must NOT
+  // continue accumulating hours indefinitely.
+  // -----------------------------------------------------
+
+  const recordDateKey = getDateKey(record.date)
+  const todayDateKey = getDateKey(now)
+
+  if (recordDateKey !== todayDateKey) {
+    return Math.max(record.totalWorkingSeconds || 0, 0)
+  }
+
+  // -----------------------------------------------------
+  // Today's active session
   // -----------------------------------------------------
 
   const elapsedSeconds = Math.floor(
     (new Date(now).getTime() - new Date(record.checkInTime).getTime()) / 1000,
   )
 
+  // -----------------------------------------------------
+  // Completed breaks
+  // -----------------------------------------------------
+
   const completedBreakSeconds = record.totalBreakSeconds || 0
 
   // -----------------------------------------------------
-  // Active break
+  // Currently active break
   // -----------------------------------------------------
 
   let activeBreakSeconds = 0
@@ -196,6 +215,10 @@ const getEffectiveWorkingSeconds = (record, now = new Date()) => {
         1000,
     )
   }
+
+  // -----------------------------------------------------
+  // Final live working time
+  // -----------------------------------------------------
 
   return Math.max(
     elapsedSeconds - completedBreakSeconds - activeBreakSeconds,
@@ -890,4 +913,3 @@ export const getAttendanceStats = async (userID) => {
     weeklyAttendanceChart,
   }
 }
-  
