@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { Bot, X, Send, Sparkles, Trash2 } from "lucide-react";
 
 import api from "../../services/api";
+import { aiBotAccessService } from "../../services/aiBotAccessService";
 import "./chatBot.css";
 import { Feedback } from "../../pages/FeedBack";
 
@@ -11,6 +12,7 @@ export function Chatbot() {
   const [showClearModal, setShowClearModal] = useState(false);
   const [isClearing, setIsClearing] = useState(false);
   const [showWelcomeTooltip, setShowWelcomeTooltip] = useState(true);
+  const [isBlocked, setIsBlocked] = useState(null);
 
   const chatBodyRef = useRef(null);
 
@@ -123,6 +125,20 @@ export function Chatbot() {
   }, []);
 
   useEffect(() => {
+    const loadAccess = async () => {
+      try {
+        const { data } = await aiBotAccessService.getMyAccess();
+        setIsBlocked(Boolean(data.blocked));
+      } catch (error) {
+        console.error("Failed to load WiseBot access:", error);
+        setIsBlocked(false);
+      }
+    };
+
+    loadAccess();
+  }, []);
+
+  useEffect(() => {
     const loadConversation = async () => {
       try {
         const response = await api.get("/ai/chat");
@@ -173,7 +189,7 @@ export function Chatbot() {
             </div>
 
             <div className="ai_header_actions">
-              <button
+              {!isBlocked && <button
                 type="button"
                 className="ai_clear_btn"
                 onClick={() => setShowClearModal(true)}
@@ -182,7 +198,7 @@ export function Chatbot() {
                 disabled={isClearing}
               >
                 <Trash2 size={17} />
-              </button>
+              </button>}
 
               <button
                 type="button"
@@ -197,7 +213,12 @@ export function Chatbot() {
 
           {/* Chat Body */}
           <div className="ai_chat_body" ref={chatBodyRef}>
-            {messages.map((chatMessage) => (
+            {isBlocked ? (
+              <div className="ai_message ai_bot_message">
+                <div className="ai_message_icon"><Bot size={17} /></div>
+                <div className="ai_message_content"><p>WiseBot access has been blocked by your administrator.</p></div>
+              </div>
+            ) : messages.map((chatMessage) => (
               <div
                 key={chatMessage.id}
                 className={`ai_message ${
@@ -219,7 +240,7 @@ export function Chatbot() {
             ))}
 
             {/* Loading */}
-            {isLoading && (
+            {!isBlocked && isLoading && (
               <div className="ai_message ai_bot_message">
                 <div className="ai_message_icon">
                   <Bot size={17} />
@@ -234,7 +255,7 @@ export function Chatbot() {
             )}
 
             {/* Suggestions */}
-            {messages.length <= 2 && !isLoading && (
+            {!isBlocked && messages.length <= 2 && !isLoading && (
               <div className="ai_suggestions">
                 <div className="ai_suggestions_title">
                   <Sparkles size={15} />
@@ -257,7 +278,7 @@ export function Chatbot() {
           </div>
 
           {/* Input */}
-          <div className="ai_chat_input_area">
+          {!isBlocked ? <div className="ai_chat_input_area">
             <input
               type="text"
               value={message}
@@ -285,7 +306,7 @@ export function Chatbot() {
             >
               <Send size={19} />
             </button>
-          </div>
+          </div> : <div className="ai_chat_input_area ai_blocked_input"><p>Chat input is unavailable because your administrator has blocked WiseBot access.</p></div>}
         </div>
 
         {/* Welcome Tooltip */}

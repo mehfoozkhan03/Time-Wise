@@ -19,10 +19,7 @@ import {
   clearPending,
   getNextPending,
 } from "../../services/aiOrchestrator.services.js";
-import {
-  getAISettingsForUser,
-  isWiseBotAvailableToUser,
-} from "../../services/aiSettings.service.js";
+import { getUserAIBotAccess } from "../../services/aiBotAccess.service.js";
 
 const editDistance = (a, b) => {
   const rows = a.length + 1;
@@ -239,6 +236,65 @@ const findClosestSimpleQuery = (message, keys = []) => {
   return best.key;
 };
 
+// Fast local understanding uses word similarity, not a fixed typo list.
+// It keeps common greetings, help, and metric questions quick without an
+// external AI classification call.
+const messageTokens = (message) =>
+  String(message || "").toLowerCase().replace(/[^a-z0-9\s]/g, " ").split(/\s+/).filter(Boolean);
+
+const tokenMatches = (token, word) => {
+  if (token === word) return true;
+  const threshold = word.length <= 4 ? 1 : 2;
+  return Math.abs(token.length - word.length) <= threshold && editDistance(token, word) <= threshold;
+};
+
+const hasSimilarWord = (tokens, words) =>
+  words.some((word) => tokens.some((token) => tokenMatches(token, word)));
+
+const getGreetingReply = (message) => {
+  const tokens = messageTokens(message);
+  const greetingWords = ["hi", "hello", "hey", "morning", "afternoon", "evening"];
+  const allowedWords = [...greetingWords, "good", "wisebot", "bot", "there"];
+
+  if (tokens.length > 0 && tokens.length <= 4 && hasSimilarWord(tokens, greetingWords) && tokens.every((token) => hasSimilarWord([token], allowedWords))) {
+    return "Hi! I'm WiseBot. I can help you with attendance, working hours, overtime, leaves, calendar events, reports, and TimeWise navigation.";
+  }
+  return null;
+};
+
+const getHelpReply = (message) => {
+  const tokens = messageTokens(message);
+  const asksForHelp = hasSimilarWord(tokens, ["how", "where", "help", "kaise", "kese"]);
+  if (!asksForHelp) return null;
+
+  if (hasSimilarWord(tokens, ["attendance"])) {
+    return "To check your attendance: 1. Open the Attendance page from the navigation menu. 2. View your attendance summary and history. 3. Use the available date or period filters to review a specific time.";
+  }
+  if (hasSimilarWord(tokens, ["report", "reports"])) {
+    return "To view your reports: 1. Open Reports from the navigation menu. 2. Select the report section you need. 3. Review your attendance, working-hours, and performance information.";
+  }
+  if (hasSimilarWord(tokens, ["setting", "settings", "profile"])) {
+    return "To update your profile settings: 1. Open Settings from the navigation menu. 2. Choose Profile. 3. Update the required information and save your changes.";
+  }
+  return null;
+};
+
+const getDynamicSimpleQuery = (message) => {
+  const tokens = messageTokens(message);
+  const period = detectPeriod(message) || "none";
+  const base = { action: "get", dateReference: "none", search: "none", confidence: 0.95 };
+
+  if (hasSimilarWord(tokens, ["attendance"])) return { ...base, intent: "attendance", entity: "attendance_percentage", period };
+  if (hasSimilarWord(tokens, ["overtime"])) return { ...base, intent: "overtime", entity: "overtime_hours", period };
+  if (hasSimilarWord(tokens, ["productivity"])) return { ...base, intent: "productivity", entity: "productivity_score", period };
+  if (hasSimilarWord(tokens, ["streak"])) return { ...base, intent: "streak", entity: "current_streak", period };
+  if (hasSimilarWord(tokens, ["leave", "leaves"])) return { ...base, intent: "leaves", entity: "leaves_taken", period };
+  if (hasSimilarWord(tokens, ["work", "working"]) && hasSimilarWord(tokens, ["hour", "hours"])) {
+    return { ...base, intent: "working_hours", entity: "working_hours", period };
+  }
+  return null;
+};
+
 // ==================================================
 // COMBINE MULTIPLE ANSWERS INTO ONE SENTENCE
 // ==================================================
@@ -307,13 +363,23 @@ export const askAI = async (req, res) => {
     }
 
     const userID = req.user.userID;
-    const aiSettings = await getAISettingsForUser(userID);
+    const access = await getUserAIBotAccess(userID);
 
-    if (!isWiseBotAvailableToUser(aiSettings, userID)) {
+    if (access.blocked) {
       return res.status(403).json({
         success: false,
-        message: "WiseBot is currently disabled by your organisation administrator.",
+        message: "WiseBot access has been blocked by your administrator.",
       });
+    }
+
+    const quickReply = getGreetingReply(message);
+    const helpReply = getHelpReply(message);
+
+    if (quickReply || helpReply) {
+      const answer = quickReply || helpReply;
+      await addConversationMessage(userID, "user", message.trim());
+      await addConversationMessage(userID, "assistant", answer);
+      return res.status(200).json({ success: true, answer });
     }
 
     // ==================================================
@@ -541,6 +607,10 @@ export const askAI = async (req, res) => {
       if (closestKey) {
         simpleQueryResult = simpleQueries[closestKey];
       }
+    }
+
+    if (!simpleQueryResult) {
+      simpleQueryResult = getDynamicSimpleQuery(message);
     }
 
     if (simpleQueryResult) {
@@ -795,6 +865,16 @@ export const askAI = async (req, res) => {
       success: false,
       message: "Unable to connect to the TimeWise Assistant.",
     });
+  }
+};
+
+export const getAIBotAccess = async (req, res) => {
+  try {
+    const access = await getUserAIBotAccess(req.user.userID);
+    return res.status(200).json({ success: true, ...access });
+  } catch (error) {
+    console.error("Get AI bot access error:", error);
+    return res.status(500).json({ success: false, message: "Unable to check WiseBot access." });
   }
 };
 
