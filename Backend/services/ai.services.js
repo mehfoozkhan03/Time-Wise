@@ -19,10 +19,6 @@ export const askTimeWiseAI = async (
 
   const isHelpRequest = requestedContext?.isHelpRequest;
   const helpRequest = requestedContext?.helpRequest;
-  const organizationAISettings = requestedContext?.organizationAISettings;
-  const organizationInstructions = organizationAISettings?.customInstructions
-    ? `Organisation instructions: ${organizationAISettings.customInstructions}`
-    : "";
 
   const workingHoursPeriod = requestedContext?.attendance?.workingHoursPeriod;
   const workingHours = requestedContext?.attendance?.workingHours;
@@ -60,9 +56,6 @@ IMPORTANT:
           role: "system",
           content: `
 You are the TimeWise Assistant.
-
-Your response tone is ${organizationAISettings?.tone || "friendly"}.
-${organizationInstructions}
 
 The user is asking HOW to use/check a TimeWise feature.
 
@@ -267,11 +260,6 @@ IMPORTANT:
         role: "system",
         content: `
 ${TIMEWISE_KNOWLEDGE}
-
-WISEBOT ORGANISATION SETTINGS:
-Bot name: ${organizationAISettings?.botName || "WiseBot"}
-Response tone: ${organizationAISettings?.tone || "friendly"}
-${organizationInstructions}
 
 CURRENT REQUESTED TIMEWISE DATA:
 

@@ -6,8 +6,7 @@ import { updateUserDesignation } from '../controllers/Admin/updateDesignation.co
 import { adminAuth  } from '../middleware/adminAuth.js';
 import { updateRole } from '../controllers/Admin/updateRole.controller.js';
 import { updateUser } from '../controllers/Admin/updateEmployee.controller.js';
-import { adminDeleteThought } from '../controllers/Admin/adminThought.controller.js';
-import { getAISettings, getAISettingsEmployees, updateAISettings } from "../controllers/Admin/aiSettings.controller.js";
+import { getAIBotAccessSettings, updateAIBotAccessSettings } from "../controllers/Admin/aiBotAccess.controller.js";
 import { askAdminAI } from "../controllers/Admin/adminAI.controller.js";
 
 
@@ -34,9 +33,8 @@ adminRoutes.get("/attendance/today", adminAuth, getAllTodayAttendance);
 adminRoutes.delete("/delete/thoughts/:id",  adminAuth,  adminDeleteThought);
 
 
-adminRoutes.get("/ai-settings", adminAuth, getAISettings);
-adminRoutes.put("/ai-settings", adminAuth, updateAISettings);
-adminRoutes.get("/ai-settings/employees", adminAuth, getAISettingsEmployees);
+adminRoutes.get("/ai-bot-access", adminAuth, getAIBotAccessSettings);
+adminRoutes.put("/ai-bot-access", adminAuth, updateAIBotAccessSettings);
 adminRoutes.post("/admin-ai/chat", adminAuth, askAdminAI);
 
 export { adminRoutes };
