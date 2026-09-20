@@ -33,6 +33,9 @@
     border: 1px solid var(--border);
     border-radius: 10px;
 }
+.notificaton-div svg{
+    color: var(--text_primary);
+}
 .admin-profile{
     padding: 5px 10px;
     display: flex;

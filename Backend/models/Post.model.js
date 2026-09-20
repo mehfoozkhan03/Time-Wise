@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+import mongoose from "mongoose";
 
 const postSchema = new mongoose.Schema(
   {
@@ -6,7 +6,7 @@ const postSchema = new mongoose.Schema(
 
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      ref: "User",
       required: true,
       index: true,
     },
@@ -17,7 +17,7 @@ const postSchema = new mongoose.Schema(
       type: String,
       trim: true,
       maxlength: 2000,
-      default: '',
+      default: "",
     },
 
     // Legacy single image field
@@ -44,7 +44,7 @@ const postSchema = new mongoose.Schema(
 
         alt: {
           type: String,
-          default: '',
+          default: "",
           trim: true,
           maxlength: 200,
         },
@@ -84,8 +84,8 @@ const postSchema = new mongoose.Schema(
 
     type: {
       type: String,
-      enum: ['general', 'thought', 'announcement', 'achievement', 'question'],
-      default: 'general',
+      enum: ["general", "thought", "announcement", "achievement", "question"],
+      default: "general",
     },
 
     tags: [
@@ -113,8 +113,8 @@ const postSchema = new mongoose.Schema(
 
     visibility: {
       type: String,
-      enum: ['public', 'department'],
-      default: 'public',
+      enum: ["public", "department"],
+      default: "public",
     },
 
     allowComments: {
@@ -136,7 +136,24 @@ const postSchema = new mongoose.Schema(
 
     featuredBy: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      ref: "User",
+      default: null,
+    },
+
+    // ================= Pinned =================
+    isPinned: {
+      type: Boolean,
+      default: false,
+    },
+
+    pinnedAt: {
+      type: Date,
+      default: null,
+    },
+
+    pinnedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Admin",
       default: null,
     },
 
@@ -154,7 +171,7 @@ const postSchema = new mongoose.Schema(
 
     editedBy: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      ref: "User",
       default: null,
     },
 
@@ -172,7 +189,7 @@ const postSchema = new mongoose.Schema(
 
     deletedBy: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      ref: "User",
       default: null,
     },
   },
@@ -181,6 +198,6 @@ const postSchema = new mongoose.Schema(
     timestamps: true,
     versionKey: false,
   },
-)
+);
 
-export const postModel = mongoose.model('Post', postSchema)
+export const postModel = mongoose.model("Post", postSchema);

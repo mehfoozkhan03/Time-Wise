@@ -52,6 +52,10 @@ export const adminAuthService = {
     return API.get("/admin/attendance/today");
   },
 
+  togglePinThought(postId) {
+    return API.patch(`/admin/thoughts/${postId}/pin`);
+  },
+
   deleteThoughtbyAdmin(postId) {
     return API.delete(`/admin/delete/thoughts/${postId}`);
   },

@@ -91,3 +91,13 @@
     border-radius: 50%;
     background-color: #4fa595;
 }
+
+.dashboardAttendance-users > .no-attendance {
+  width: 100%;
+  padding: 40px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text_secondary);
+  font-size: 14px;
+}

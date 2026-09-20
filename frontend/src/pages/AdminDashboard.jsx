@@ -87,7 +87,7 @@ export default function AdminDashboard() {
             </div>
             <div className="header-right">
               <div className="notificaton-div">
-                <FaBell style={{ color: '#fff', fontSize: '18px' }} />
+                <FaBell style={{ fontSize: '18px' }} />
               </div>
               <div className="admin-profile">
                 <AdminProfile />
