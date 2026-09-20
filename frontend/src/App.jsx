@@ -6,7 +6,7 @@ import { AppRoutes } from './routes/AppRoutes';
 import { fetchCurrentUser } from './store/authSlice';
 import { ScrollTop } from './components/ScrollTop/ScrollTop';
 import { Chatbot } from './components/ChatBot/chatBot';
-// import { AdminChatBot } from './components/AdminChatBot/AdminChatBot';
+import { AdminChatBot } from './components/AdminChatBot/AdminChatBot';
 import { socket } from './socket/socket';
 import { addNotification } from './store/notificationSlice';
 import { ScrollToTopButton } from './components/ScrollToTop/scrollToTop';
