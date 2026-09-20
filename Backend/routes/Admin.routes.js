@@ -37,7 +37,7 @@ adminRoutes.put('/users/:userId', adminAuth, updateUser)
 
 adminRoutes.get('/attendance/today', adminAuth, getAllTodayAttendance)
 
-adminRoutes.delete('/delete/thoughts/:id', adminAuth, adminDeleteThought)
+// adminRoutes.delete('/delete/thoughts/:id', adminAuth, adminDeleteThought)
 
 adminRoutes.get('/ai-bot-access', adminAuth, getAIBotAccessSettings)
 adminRoutes.put('/ai-bot-access', adminAuth, updateAIBotAccessSettings)

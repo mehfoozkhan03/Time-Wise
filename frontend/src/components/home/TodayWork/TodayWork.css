@@ -4,6 +4,10 @@
   gap: 30px;
 }
 
+/* ================================
+   HEADER
+================================ */
+
 .today_header {
   display: flex;
   justify-content: space-between;
@@ -18,6 +22,10 @@
 .today_header p {
   color: var(--text-secondary);
 }
+
+/* ================================
+   STATUS
+================================ */
 
 .today_status {
   display: flex;
@@ -52,6 +60,22 @@
   color: #2563eb;
 }
 
+/* Disabled status */
+.today_status.disabled {
+  background: var(--surface);
+  color: var(--text_secondary);
+  border: 1px solid var(--border);
+}
+
+/* Hide the pulsing dot when disabled */
+.today_status.disabled > *:first-child {
+  display: none;
+}
+
+/* ================================
+   TODAY CONTENT
+================================ */
+
 .today_content {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -83,6 +107,10 @@
   margin-top: 5px;
   font-size: 22px;
 }
+
+/* ================================
+   ACTION BUTTONS
+================================ */
 
 .today_action {
   margin-top: 10px;
@@ -126,10 +154,134 @@
   cursor: not-allowed;
 }
 
+/* ================================
+   DISABLED / WEEKEND / HOLIDAY
+================================ */
+
+.today_work_disabled {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* Dim + desaturate the underlying content
+   (no blur — keeps it readable and calm) */
+.today_work_disabled .today_header,
+.today_work_disabled .today_content,
+.today_work_disabled .today_action {
+  opacity: 0.45;
+  filter: grayscale(0.85);
+  pointer-events: none;
+  user-select: none;
+  transition: var(--transition);
+}
+
+/* ================================
+   SOFT VEIL OVERLAY
+================================ */
+
+.today_disabled_overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+
+  /* Soft tint that adapts to theme */
+  background: color-mix(in srgb, var(--card) 55%, transparent);
+
+  pointer-events: none;
+}
+
+/* ================================
+   DIAGONAL DISABLED PATTERN
+================================ */
+
+.today_disabled_lines {
+  position: absolute;
+  inset: -50%;
+
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent 0px,
+    transparent 22px,
+    color-mix(in srgb, var(--text_primary) 6%, transparent) 22px,
+    color-mix(in srgb, var(--text_primary) 6%, transparent) 24px
+  );
+
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+/* Soft radial fade so the pattern doesn't
+   hit the card edges too hard */
+.today_disabled_overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background: radial-gradient(
+    ellipse at center,
+    transparent 20%,
+    color-mix(in srgb, var(--card) 45%, transparent) 75%,
+    color-mix(in srgb, var(--card) 80%, transparent) 100%
+  );
+
+  pointer-events: none;
+}
+
+/* ================================
+   DISABLED MESSAGE (JSX block)
+================================ */
+
+.today_disabled_message {
+  position: relative;
+  z-index: 2;
+
+  min-width: 280px;
+  max-width: 420px;
+
+  padding: 22px 30px;
+
+  text-align: center;
+
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius_md);
+
+  box-shadow: var(--shadow_md);
+
+  pointer-events: none;
+}
+
+.today_disabled_title {
+  color: var(--text_primary);
+  font-family: 'Poppins', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  letter-spacing: 0.2px;
+}
+
+.today_disabled_subtitle {
+  color: var(--text_secondary);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+/* ================================
+   RESPONSIVE
+================================ */
+
 @media (max-width: 850px) {
   .today_content {
     grid-template-columns: 1fr;
   }
+
   .today_header {
     flex-direction: column;
     align-items: flex-start;
@@ -141,27 +293,53 @@
   .today_header h2 {
     font-size: 25px;
   }
+
   .today_status.idle {
     width: 100%;
     justify-content: center;
   }
+
   .today_work {
     gap: 11px;
   }
+
   .today_primary_button {
     padding: 11px;
   }
+
   .today_content {
     gap: 11px;
     margin-top: 11px;
   }
+
   .today_action {
     margin-top: 0;
     flex-direction: column;
     gap: 0;
   }
+
   .today_action button {
     margin-top: 11px;
+  }
+}
+
+/* ================================
+   DISABLED STATE - MOBILE
+================================ */
+
+@media (max-width: 600px) {
+  .today_disabled_message {
+    min-width: unset;
+    width: calc(100% - 40px);
+    padding: 18px 20px;
+  }
+
+  .today_disabled_title {
+    font-size: 16px;
+  }
+
+  .today_disabled_subtitle {
+    font-size: 12px;
   }
 }
 
