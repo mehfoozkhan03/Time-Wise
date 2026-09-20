@@ -233,6 +233,7 @@ const findClosestSimpleQuery = (message, keys = []) => {
     }
   }
 
+  
   return best.key;
 };
 
