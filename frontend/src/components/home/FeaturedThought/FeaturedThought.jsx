@@ -324,7 +324,6 @@ import { Star } from "../../Star/star";
 import { useState } from "react";
 
 export default function FeaturedThought() {
-
   const navigate = useNavigate();
 
   const { featured, posts, loading } = useSelector((state) => state.post);
@@ -335,12 +334,80 @@ export default function FeaturedThought() {
   // Skeleton
   // ==========================================
 
+  if (loading) {
+    // ==========================================
+    // Skeleton
+    // ==========================================
+
+    if (showSkeleton) {
+      return (
+        <section className="featured_thought_section">
+          <Skeleton width="180px" height="30px" />
+
+          <Card className="featured_thought_card">
+            <div style={{ marginBottom: "20px" }}>
+              <Skeleton width="150px" height="28px" radius="20px" />
+            </div>
+
+            {/* AUTHOR */}
+
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "12px",
+                marginBottom: "20px",
+              }}
+            >
+              <Skeleton width="55px" height="55px" radius="50%" />
+
+              <div>
+                <Skeleton width="150px" height="18px" />
+
+                <div style={{ marginTop: "8px" }}>
+                  <Skeleton width="100px" height="14px" />
+                </div>
+              </div>
+            </div>
+
+            <div style={{ marginBottom: "10px" }}>
+              <Skeleton width="100%" height="16px" />
+            </div>
+
+            <div style={{ marginBottom: "10px" }}>
+              <Skeleton width="90%" height="16px" />
+            </div>
+
+            <div style={{ marginBottom: "20px" }}>
+              <Skeleton width="70%" height="16px" />
+            </div>
+
+            {/* ACTIONS */}
+
+            <div
+              style={{
+                display: "flex",
+                gap: "20px",
+                marginBottom: "25px",
+              }}
+            >
+              <Skeleton width="40px" height="20px" />
+
+              <Skeleton width="40px" height="20px" />
+
+              <Skeleton width="40px" height="20px" />
+            </div>
+
+            <Skeleton width="170px" height="45px" radius="10px" />
+          </Card>
+        </section>
+      );
+    }
+  }
 
   /* ==========================================
      BACKEND LOADING SKELETON
   ========================================== */
-
-  if (loading) {
 
   // ==========================================
   // Find Latest Pinned Thought
@@ -358,139 +425,17 @@ export default function FeaturedThought() {
   const thoughtToShow = latestPinnedThought || featured;
 
   // ==========================================
-  // Skeleton
-  // ==========================================
-
-  if (showSkeleton) {
-    return (
-      <section className="featured_thought_section">
-        <Skeleton
-          width="180px"
-          height="30px"
-        />
-
-        <Card className="featured_thought_card">
-          <div style={{ marginBottom: "20px" }}>
-            <Skeleton
-              width="150px"
-              height="28px"
-              radius="20px"
-            />
-          </div>
-
-
-          {/* AUTHOR */}
-
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "12px",
-              marginBottom: "20px",
-            }}
-          >
-            <Skeleton
-              width="55px"
-              height="55px"
-              radius="50%"
-            />
-
-            <div>
-              <Skeleton
-                width="150px"
-                height="18px"
-              />
-
-              <div style={{ marginTop: "8px" }}>
-                <Skeleton
-                  width="100px"
-                  height="14px"
-                />
-              </div>
-
-            </div>
-
-          </div>
-
-          <div style={{ marginBottom: "10px" }}>
-            <Skeleton
-              width="100%"
-              height="16px"
-            />
-          </div>
-
-          <div style={{ marginBottom: "10px" }}>
-            <Skeleton
-              width="90%"
-              height="16px"
-            />
-          </div>
-
-          <div style={{ marginBottom: "20px" }}>
-            <Skeleton
-              width="70%"
-              height="16px"
-            />
-          </div>
-
-
-          {/* ACTIONS */}
-
-          <div
-            style={{
-              display: "flex",
-              gap: "20px",
-              marginBottom: "25px",
-            }}
-          >
-            <Skeleton
-              width="40px"
-              height="20px"
-            />
-
-            <Skeleton
-              width="40px"
-              height="20px"
-            />
-
-            <Skeleton
-              width="40px"
-              height="20px"
-            />
-          </div>
-
-          <Skeleton
-            width="170px"
-            height="45px"
-            radius="10px"
-          />
-        </Card>
-
-      </section>
-    );
-  }
-
-  // ==========================================
   // No Thought
   // ==========================================
 
   if (!thoughtToShow) {
     return (
       <section className="featured_thought_section">
-
-        <h2>
-          Featured Thought
-        </h2>
-
+        <h2>Featured Thought</h2>
 
         <Card className="featured_thought_card">
-
-          <p>
-            No featured thought available.
-          </p>
-
+          <p>No featured thought available.</p>
         </Card>
-
       </section>
     );
   }
@@ -510,17 +455,13 @@ export default function FeaturedThought() {
   // ==========================================
 
   return (
-    <section
-      className="featured_thought_section"
-      id="tour-thought-card"
-    >
+    <section className="featured_thought_section" id="tour-thought-card">
       <h2>Featured Thought</h2>
 
       <Card className="featured_thought_card">
         {/* Badge */}
 
         <div className="featured_badge">
-
           <Star />
 
           <span>
@@ -531,26 +472,15 @@ export default function FeaturedThought() {
         {/* Author */}
 
         <div className="thought_author">
-
-          <div className="author_avatar">
-            {initials}
-          </div>
-
+          <div className="author_avatar">{initials}</div>
 
           <div className="author_info">
-
             <h3>
-              {author?.firstName}{" "}
-              {author?.lastName}
+              {author?.firstName} {author?.lastName}
             </h3>
 
-            <span>
-              {author?.designation ||
-                "Employee"}
-            </span>
-
+            <span>{author?.designation || "Employee"}</span>
           </div>
-
         </div>
 
         {/* Content */}
@@ -559,54 +489,35 @@ export default function FeaturedThought() {
 
         {/* Actions */}
 
-        <div
-          className="thought_actions"
-          id="tour-thought-actions"
-        >
+        <div className="thought_actions" id="tour-thought-actions">
           <div className="action_item">
-
             <FaHeart />
 
             <span>{thoughtToShow?.likesCount || 0}</span>
           </div>
 
-
           <div className="action_item">
-
             <FaComment />
 
             <span>{thoughtToShow?.commentsCount || 0}</span>
           </div>
 
-
           <div className="action_item">
-
             <FaBookmark />
-
           </div>
-
         </div>
 
         {/* Community Button */}
 
         <button
           className="community_button"
-          onClick={() =>
-            navigate("/community")
-          }
+          onClick={() => navigate("/community")}
         >
-
-          <span>
-            View Community
-          </span>
+          <span>View Community</span>
 
           <FaArrowRight />
-
         </button>
-
       </Card>
-
     </section>
   );
-}
 }
