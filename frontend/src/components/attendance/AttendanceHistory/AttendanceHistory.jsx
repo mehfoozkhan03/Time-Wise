@@ -1,5 +1,3 @@
-
-
 import { useEffect, useState } from "react";
 import "./AttendanceHistory.css";
 import { FaChevronLeft, FaChevronRight, FaCalendarAlt } from "react-icons/fa";
@@ -289,7 +287,11 @@ export default function AttendanceHistory() {
                         <td>{formatDuration(record.totalWorkingSeconds)}</td>
                         <td>{formatDuration(record.totalBreakSeconds)}</td>
                         <td>
-                          <span className="attendance_status">
+                          <span
+                            className={`attendance_status ${record.status
+                              ?.toLowerCase()
+                              .replace(/\s+/g, "_")}`}
+                          >
                             {record.status}
                           </span>
                         </td>
@@ -331,7 +333,6 @@ export default function AttendanceHistory() {
                     </button>
                   ))}
                 </div>
-                
               </div>
             </div>
           )}

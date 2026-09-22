@@ -1,79 +1,85 @@
-const login = [
-  {
-    id:1,
-    name: "Email",
-    type: "text",
-    placeholder: "Enter you'r Email...",
-  },
-  {
-    id:2,
-    name: "Password",
-    type: "text",
-    placeholder: "Enter you'r Password...",
-  },
-];
+export const forms = {
+  login: {
+    button: "Login",
+    endpoint: "/user/login",
 
-const signup = [
-{
-    id: 1,
-    name: "First Name",
-    type: "text",
-    placeholder: "Enter you'r first Name...",
-  },
-   {
-    id: 2,
-    name: "Last Name",
-    type: "text",
-    placeholder: "Enter you'r Last Name...",
-  },
-   {
-    id: 3,
-    name: "Email",
-    type: "text",
-    placeholder: "Enter you'r Email...",
-  },
-  {
-    id: 4,
-    name: "Password",
-    type: "text",
-    placeholder: "Enter you'r Password...",
+    fields: [
+      {
+        id: 1,
+        name: "email",
+        type: "text",
+        placeholder: "Enter your Email...",
+      },
+      {
+        id: 2,
+        name: "password",
+        type: "password",
+        placeholder: "Enter your Password...",
+      },
+    ],
   },
 
-   {
-    id: 5,
-    name: "Confirm Password",
-    type: "text",
-    placeholder: "Enter you'r Confirm Password...",
+  signup: {
+    button: "Signup",
+    endpoint: "/user/signup",
+
+    fields: [
+      {
+        id: 1,
+        name: "firstName",
+        type: "text",
+        placeholder: "Enter your first Name...",
+      },
+      {
+        id: 2,
+        name: "lastName",
+        type: "text",
+        placeholder: "Enter your Last Name...",
+      },
+      {
+        id: 3,
+        name: "email",
+        type: "text",
+        placeholder: "Enter your Email...",
+      },
+      {
+        id: 4,
+        name: "password",
+        type: "password",
+        placeholder: "Enter your Password...",
+      },
+      {
+        id: 5,
+        name: "confirmPassword",
+        type: "password",
+        placeholder: "Enter your Confirm Password...",
+      },
+      {
+        id: 6,
+        name: "dob",
+        type: "date",
+        placeholder: "",
+      },
+    ],
   },
 
-   {
-    id: 6,
-    name: "dob",
-    type: "date",
-  },
-];
+  admin: {
+    button: "Admin Login",
+    endpoint: "/admin/login",
 
-const admin = [
-  {
-    id: 1,
-    name: "Email",
-    type: "text",
-    placeholder: "Enter you'r Email...",
+    fields: [
+      {
+        id: 1,
+        name: "email",
+        type: "text",
+        placeholder: "Enter your Email...",
+      },
+      {
+        id: 2,
+        name: "password",
+        type: "password",
+        placeholder: "Enter your Password...",
+      },
+    ],
   },
-  {
-    id: 1,
-    name: "Password",
-    type: "text",
-    placeholder: "Enter you'r Password...",
-  },
-];
-
-/* 
- {
-    id: 1,
-    name: "name",
-    type: "text",
-    placeholder: "enter you'r name...",
-  },
-
-*/
+};

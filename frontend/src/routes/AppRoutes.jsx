@@ -6,7 +6,7 @@ import AdminDashboard from './../pages/AdminDashboard';
 import Community from './../pages/Community/Community';
 import About from './../pages/About';
 import Contact from './../pages/Contact';
-import SignUpPage from './../pages/Login';
+// import SignUpPage from './../pages/Login';
 
 import ProgressBar from './../components/ProgressBar/progressBar';
 import { BubbleCursor } from './../components/BubbleArrow/bubbleArrow';
@@ -50,7 +50,12 @@ import { AdminLayout } from '../layouts/AdminLayout';
 import { CommunityProfile } from '../components/community/CommunityProfile/CommunityProfile';
 import { DashboardLeave } from '../components/Dashboard/DashboardLeave/DashboardLeave';
 import { AdminPrivateRoutes } from '../components/AdminPrivateRoutes';
-import  DashboardCalendar  from '../components/Dashboard/DashboardCalendar/DashboardCalendar';
+import DashboardCalendar from '../components/Dashboard/DashboardCalendar/DashboardCalendar';
+import { Signup } from '../pages/Signup';
+import {Login} from "../pages/Login";
+import {AdminLogin} from "../pages/AdminLogin";
+// import {AdminLogin} from "../pages/AdminLogin";
+
 
 export const AppRoutes = () => {
   return (
@@ -180,11 +185,13 @@ export const AppRoutes = () => {
 
         {/* ================= Auth Layout ================= */}
         <Route element={<AuthLayout />}>
-          <Route path="/signup" element={<SignUpPage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
         </Route>
 
         {/* ================= Admin Layout ================= */}
-          <Route path="/admin/login" element={<SignUpPage />} />
+        {/* <Route path="/admin/login" element={<SignUpPage />} /> */}
 
         <Route element={<AdminPrivateRoutes><AdminLayout /></AdminPrivateRoutes>}>
           {/* ================= ADMIN DASHBOARD ================= */}

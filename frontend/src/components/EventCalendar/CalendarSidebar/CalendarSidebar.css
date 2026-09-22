@@ -3,7 +3,7 @@
   flex-direction: column;
 
   width: 100%;
-  height:705px;
+  height:730px;
   max-height: 100%;
 
   gap: 16px;
@@ -20,6 +20,7 @@
 
 .calendarSidebar > * {
   width: 100%;
+  
   min-height: auto;
 }
 
