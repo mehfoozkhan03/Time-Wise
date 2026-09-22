@@ -2,12 +2,10 @@ import React from "react";
 import { Form } from "../components/Form";
 import { forms } from "../data/form";
 
-
-
-export const Login = () => {
+export const AdminLogin = () => {
     return (
         <Form
-           {...forms?.login} 
+          {...forms?.admin} 
         />
     );
 };
