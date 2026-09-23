@@ -1,212 +1,276 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { postService } from '../services/postService'
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { postService } from "../services/postService";
+import { adminAuthService } from "../services/adminAuthService";
 
 // ======================================================
 // THUNKS
 // ======================================================
 
 export const fetchPosts = createAsyncThunk(
-  'post/fetchPosts',
-  async ({ page = 1, limit = 10, sort = 'newest' } = {}, thunkAPI) => {
+  "post/fetchPosts",
+  async ({ page = 1, limit = 10, sort = "newest" } = {}, thunkAPI) => {
     try {
-      const { data } = await postService.getAllPosts(page, limit, sort)
-      return data
+      const { data } = await postService.getAllPosts(page, limit, sort);
+      return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(
-        error.response?.data?.message || 'Unable to fetch posts',
-      )
+        error.response?.data?.message || "Unable to fetch posts",
+      );
     }
   },
-)
+);
 
 export const fetchPost = createAsyncThunk(
-  'post/fetchPost',
+  "post/fetchPost",
   async (id, thunkAPI) => {
     try {
-      const { data } = await postService.getPost(id)
-      return data.post
+      const { data } = await postService.getPost(id);
+      return data.post;
     } catch (error) {
       return thunkAPI.rejectWithValue(
-        error.response?.data?.message || 'Unable to fetch post',
-      )
+        error.response?.data?.message || "Unable to fetch post",
+      );
     }
   },
-)
+);
 
 export const createNewPost = createAsyncThunk(
-  'post/createNewPost',
-  async (postData, thunkAPI) => {
+  "post/createNewPost",
+
+  async (formData, { rejectWithValue }) => {
     try {
-      const { data } = await postService.createPost(postData)
-      return data.post
+      const response = await postService.createPost(formData);
+
+      return response.data.post;
     } catch (error) {
-      return thunkAPI.rejectWithValue(
-        error.response?.data?.message || 'Unable to create post',
-      )
+      return rejectWithValue(
+        error.response?.data?.message || "Unable to create post.",
+      );
     }
   },
-)
+);
 
 export const updateExistingPost = createAsyncThunk(
-  'post/updateExistingPost',
+  "post/updateExistingPost",
   async ({ id, postData }, thunkAPI) => {
     try {
-      const { data } = await postService.updatePost(id, postData)
-      return data.post
+      const { data } = await postService.updatePost(id, postData);
+      return data.post;
     } catch (error) {
       return thunkAPI.rejectWithValue(
-        error.response?.data?.message || 'Unable to update post',
-      )
+        error.response?.data?.message || "Unable to update post",
+      );
     }
   },
-)
+);
 
 export const deleteExistingPost = createAsyncThunk(
-  'post/deleteExistingPost',
+  "post/deleteExistingPost",
   async (id, thunkAPI) => {
     try {
-      await postService.deletePost(id)
-      return id
+      await postService.deletePost(id);
+      return id;
     } catch (error) {
       return thunkAPI.rejectWithValue(
-        error.response?.data?.message || 'Unable to delete post',
-      )
+        error.response?.data?.message || "Unable to delete post",
+      );
     }
   },
-)
+);
 
 export const toggleLikePost = createAsyncThunk(
-  'post/toggleLikePost',
+  "post/toggleLikePost",
   async (id, thunkAPI) => {
     try {
-      const { data } = await postService.togglePostLike(id)
+      const { data } = await postService.togglePostLike(id);
 
       return {
         id,
         liked: data.liked,
         likesCount: data.likesCount,
-      }
+      };
     } catch (error) {
       return thunkAPI.rejectWithValue(
-        error.response?.data?.message || 'Unable to like post',
-      )
+        error.response?.data?.message || "Unable to like post",
+      );
     }
   },
-)
+);
 
 // ======================================================
 // SAVE POST THUNK - MOVED HERE BEFORE SLICE
 // ======================================================
 
 export const toggleSavePost = createAsyncThunk(
-  'post/toggleSavePost',
+  "post/toggleSavePost",
   async (id, thunkAPI) => {
     try {
-      const { data } = await postService.toggleSavedPost(id)
+      const { data } = await postService.toggleSavedPost(id);
 
       return {
         id,
         saved: data.saved,
-      }
+      };
     } catch (error) {
       return thunkAPI.rejectWithValue(
-        error.response?.data?.message || 'Unable to save post',
-      )
+        error.response?.data?.message || "Unable to save post",
+      );
     }
   },
-)
+);
 
 export const fetchFeaturedThought = createAsyncThunk(
-  'post/fetchFeaturedThought',
+  "post/fetchFeaturedThought",
   async (_, thunkAPI) => {
     try {
-      const { data } = await postService.getFeaturedThought()
-      return data.featuredThought
+      const { data } = await postService.getFeaturedThought();
+      return data.featuredThought;
     } catch (error) {
       return thunkAPI.rejectWithValue(
-        error.response?.data?.message || 'Unable to fetch featured thought',
-      )
+        error.response?.data?.message || "Unable to fetch featured thought",
+      );
     }
   },
-)
+);
 
 // ======================================================
 // COMMENT THUNKS
 // ======================================================
 
 export const fetchComments = createAsyncThunk(
-  'post/fetchComments',
+  "post/fetchComments",
   async (postId, thunkAPI) => {
     try {
-      const { data } = await postService.getComments(postId)
+      const { data } = await postService.getComments(postId);
 
       return {
         postId,
         comments: data.comments,
-      }
+      };
     } catch (error) {
       return thunkAPI.rejectWithValue(
-        error.response?.data?.message || 'Unable to fetch comments',
-      )
+        error.response?.data?.message || "Unable to fetch comments",
+      );
     }
   },
-)
+);
 
 export const createNewComment = createAsyncThunk(
-  'post/createNewComment',
+  "post/createNewComment",
   async ({ postId, text }, thunkAPI) => {
     try {
-      const { data } = await postService.createComment(postId, text)
+      const { data } = await postService.createComment(postId, text);
 
       return {
         postId,
         comment: data.comment,
-      }
+      };
     } catch (error) {
       return thunkAPI.rejectWithValue(
-        error.response?.data?.message || 'Unable to create comment',
-      )
+        error.response?.data?.message || "Unable to create comment",
+      );
     }
   },
-)
+);
+
+export const updateExistingComment = createAsyncThunk(
+  "post/updateExistingComment",
+  async ({ postId, commentId, text }, thunkAPI) => {
+    try {
+      const response = await postService.updateComment(commentId, text);
+
+      console.log("UPDATE COMMENT RESPONSE:", response.data);
+
+      return {
+        postId,
+        comment: response.data.comment,
+      };
+    } catch (error) {
+      console.error(
+        "UPDATE COMMENT API ERROR:",
+        error.response?.status,
+        error.response?.data,
+      );
+
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message ||
+          `Unable to update comment (${error.response?.status || "unknown error"})`,
+      );
+    }
+  },
+);
 
 export const deleteExistingComment = createAsyncThunk(
-  'post/deleteExistingComment',
+  "post/deleteExistingComment",
   async ({ postId, commentId }, thunkAPI) => {
     try {
-      await postService.deleteComment(commentId)
+      await postService.deleteComment(commentId);
 
       return {
         postId,
         commentId,
-      }
+      };
     } catch (error) {
       return thunkAPI.rejectWithValue(
-        error.response?.data?.message || 'Unable to delete comment',
-      )
+        error.response?.data?.message || "Unable to delete comment",
+      );
     }
   },
-)
+);
 
 export const toggleLikeComment = createAsyncThunk(
-  'post/toggleLikeComment',
+  "post/toggleLikeComment",
   async ({ postId, commentId }, thunkAPI) => {
     try {
-      const { data } = await postService.toggleCommentLike(commentId)
+      const { data } = await postService.toggleCommentLike(commentId);
 
       return {
         postId,
         commentId,
         liked: data.liked,
         likesCount: data.likesCount,
-      }
+      };
     } catch (error) {
       return thunkAPI.rejectWithValue(
-        error.response?.data?.message || 'Unable to like comment',
-      )
+        error.response?.data?.message || "Unable to like comment",
+      );
     }
   },
-)
+);
+
+//# =================== Admin : Pin thought ===================
+export const togglePinThoughtbyAdmin = createAsyncThunk(
+  "post/togglePinThoughtbyAdmin",
+
+  async (postId, { rejectWithValue }) => {
+    try {
+      const response = await adminAuthService.togglePinThought(postId);
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to pin thought.",
+      );
+    }
+  },
+);
+
+//# ================= Admin : Delete Post ===============
+export const deleteThoughtbyAdmin = createAsyncThunk(
+  "post/deleteThoughtbyAdmin",
+
+  async (postId, { rejectWithValue }) => {
+    try {
+      const response = await adminAuthService.deleteThoughtbyAdmin(postId);
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to delete thought.",
+      );
+    }
+  },
+);
 
 // ======================================================
 // INITIAL STATE
@@ -219,7 +283,7 @@ const initialState = {
 
   comments: {},
 
-  searchQuery: '',
+  searchQuery: "",
 
   loading: false,
   commentLoading: false,
@@ -229,37 +293,37 @@ const initialState = {
   totalPages: 1,
 
   isError: false,
-  errorMessage: '',
-}
+  errorMessage: "",
+};
 
 // ======================================================
 // SLICE
 // ======================================================
 const postSlice = createSlice({
-  name: 'post',
+  name: "post",
 
   initialState,
 
   reducers: {
     clearPosts(state) {
-      state.posts = []
-      state.selectedPost = null
-      state.featured = null
-      state.page = 1
-      state.totalPages = 1
-      state.hasMore = true
-      state.loading = false
-      state.isError = false
-      state.errorMessage = ''
-      state.searchQuery = ''
+      state.posts = [];
+      state.selectedPost = null;
+      state.featured = null;
+      state.page = 1;
+      state.totalPages = 1;
+      state.hasMore = true;
+      state.loading = false;
+      state.isError = false;
+      state.errorMessage = "";
+      state.searchQuery = "";
     },
 
     clearSelectedPost(state) {
-      state.selectedPost = null
+      state.selectedPost = null;
     },
 
     setSearchQuery(state, action) {
-      state.searchQuery = action.payload
+      state.searchQuery = action.payload;
     },
   },
 
@@ -270,28 +334,28 @@ const postSlice = createSlice({
       // ======================================================
 
       .addCase(fetchPosts.pending, (state) => {
-        state.loading = true
-        state.isError = false
+        state.loading = true;
+        state.isError = false;
       })
 
       .addCase(fetchPosts.fulfilled, (state, action) => {
-        state.loading = false
+        state.loading = false;
 
         if (action.payload.page === 1) {
-          state.posts = action.payload.posts
+          state.posts = action.payload.posts;
         } else {
-          state.posts.push(...action.payload.posts)
+          state.posts.push(...action.payload.posts);
         }
 
-        state.page = action.payload.page
-        state.totalPages = action.payload.totalPages
-        state.hasMore = action.payload.hasMore
+        state.page = action.payload.page;
+        state.totalPages = action.payload.totalPages;
+        state.hasMore = action.payload.hasMore;
       })
 
       .addCase(fetchPosts.rejected, (state, action) => {
-        state.loading = false
-        state.isError = true
-        state.errorMessage = action.payload
+        state.loading = false;
+        state.isError = true;
+        state.errorMessage = action.payload;
       })
 
       // ======================================================
@@ -299,18 +363,18 @@ const postSlice = createSlice({
       // ======================================================
 
       .addCase(fetchPost.pending, (state) => {
-        state.loading = true
+        state.loading = true;
       })
 
       .addCase(fetchPost.fulfilled, (state, action) => {
-        state.loading = false
-        state.selectedPost = action.payload
+        state.loading = false;
+        state.selectedPost = action.payload;
       })
 
       .addCase(fetchPost.rejected, (state, action) => {
-        state.loading = false
-        state.isError = true
-        state.errorMessage = action.payload
+        state.loading = false;
+        state.isError = true;
+        state.errorMessage = action.payload;
       })
 
       // ======================================================
@@ -318,7 +382,7 @@ const postSlice = createSlice({
       // ======================================================
 
       .addCase(createNewPost.fulfilled, (state, action) => {
-        state.posts.unshift(action.payload)
+        state.posts.unshift(action.payload);
       })
 
       // ======================================================
@@ -328,21 +392,21 @@ const postSlice = createSlice({
       .addCase(updateExistingPost.fulfilled, (state, action) => {
         const index = state.posts.findIndex(
           (post) => post._id === action.payload._id,
-        )
+        );
 
         if (index !== -1) {
-          state.posts[index] = action.payload
+          state.posts[index] = action.payload;
         }
 
         if (
           state.selectedPost &&
           state.selectedPost._id === action.payload._id
         ) {
-          state.selectedPost = action.payload
+          state.selectedPost = action.payload;
         }
 
         if (state.featured && state.featured._id === action.payload._id) {
-          state.featured = action.payload
+          state.featured = action.payload;
         }
       })
 
@@ -351,14 +415,14 @@ const postSlice = createSlice({
       // ======================================================
 
       .addCase(deleteExistingPost.fulfilled, (state, action) => {
-        state.posts = state.posts.filter((post) => post._id !== action.payload)
+        state.posts = state.posts.filter((post) => post._id !== action.payload);
 
         if (state.selectedPost && state.selectedPost._id === action.payload) {
-          state.selectedPost = null
+          state.selectedPost = null;
         }
 
         if (state.featured && state.featured._id === action.payload) {
-          state.featured = null
+          state.featured = null;
         }
       })
 
@@ -367,24 +431,24 @@ const postSlice = createSlice({
       // ======================================================
 
       .addCase(toggleLikePost.fulfilled, (state, action) => {
-        const post = state.posts.find((post) => post._id === action.payload.id)
+        const post = state.posts.find((post) => post._id === action.payload.id);
 
         if (post) {
-          post.isLiked = action.payload.liked
-          post.likesCount = action.payload.likesCount
+          post.isLiked = action.payload.liked;
+          post.likesCount = action.payload.likesCount;
         }
 
         if (
           state.selectedPost &&
           state.selectedPost._id === action.payload.id
         ) {
-          state.selectedPost.isLiked = action.payload.liked
-          state.selectedPost.likesCount = action.payload.likesCount
+          state.selectedPost.isLiked = action.payload.liked;
+          state.selectedPost.likesCount = action.payload.likesCount;
         }
 
         if (state.featured && state.featured._id === action.payload.id) {
-          state.featured.isLiked = action.payload.liked
-          state.featured.likesCount = action.payload.likesCount
+          state.featured.isLiked = action.payload.liked;
+          state.featured.likesCount = action.payload.likesCount;
         }
       })
 
@@ -394,10 +458,10 @@ const postSlice = createSlice({
 
       .addCase(toggleSavePost.fulfilled, (state, action) => {
         // Update in posts array
-        const post = state.posts.find((p) => p._id === action.payload.id)
+        const post = state.posts.find((p) => p._id === action.payload.id);
 
         if (post) {
-          post.isSaved = action.payload.saved
+          post.isSaved = action.payload.saved;
         }
 
         // Update selectedPost if it matches
@@ -405,15 +469,12 @@ const postSlice = createSlice({
           state.selectedPost &&
           state.selectedPost._id === action.payload.id
         ) {
-          state.selectedPost.isSaved = action.payload.saved
+          state.selectedPost.isSaved = action.payload.saved;
         }
 
         // Update featured if it matches
-        if (
-          state.featured &&
-          state.featured._id === action.payload.id
-        ) {
-          state.featured.isSaved = action.payload.saved
+        if (state.featured && state.featured._id === action.payload.id) {
+          state.featured.isSaved = action.payload.saved;
         }
       })
 
@@ -422,18 +483,18 @@ const postSlice = createSlice({
       // ======================================================
 
       .addCase(fetchComments.pending, (state) => {
-        state.commentLoading = true
+        state.commentLoading = true;
       })
 
       .addCase(fetchComments.fulfilled, (state, action) => {
-        state.commentLoading = false
-        state.comments[action.payload.postId] = action.payload.comments
+        state.commentLoading = false;
+        state.comments[action.payload.postId] = action.payload.comments;
       })
 
       .addCase(fetchComments.rejected, (state, action) => {
-        state.commentLoading = false
-        state.isError = true
-        state.errorMessage = action.payload
+        state.commentLoading = false;
+        state.isError = true;
+        state.errorMessage = action.payload;
       })
 
       // ======================================================
@@ -441,26 +502,40 @@ const postSlice = createSlice({
       // ======================================================
 
       .addCase(createNewComment.fulfilled, (state, action) => {
-        const { postId, comment } = action.payload
+        const { postId, comment } = action.payload;
 
         if (state.comments[postId]) {
-          state.comments[postId].push(comment)
+          state.comments[postId].push(comment);
         } else {
-          state.comments[postId] = [comment]
+          state.comments[postId] = [comment];
         }
 
-        const post = state.posts.find((post) => post._id === postId)
+        const post = state.posts.find((post) => post._id === postId);
 
         if (post) {
-          post.commentsCount += 1
+          post.commentsCount += 1;
         }
 
         if (state.selectedPost && state.selectedPost._id === postId) {
-          state.selectedPost.commentsCount += 1
+          state.selectedPost.commentsCount += 1;
         }
 
         if (state.featured && state.featured._id === postId) {
-          state.featured.commentsCount += 1
+          state.featured.commentsCount += 1;
+        }
+      })
+
+      .addCase(updateExistingComment.fulfilled, (state, action) => {
+        const { postId, comment } = action.payload;
+
+        if (state.comments[postId]) {
+          const index = state.comments[postId].findIndex(
+            (c) => c._id === comment._id,
+          );
+
+          if (index !== -1) {
+            state.comments[postId][index] = comment;
+          }
         }
       })
 
@@ -469,18 +544,18 @@ const postSlice = createSlice({
       // ======================================================
 
       .addCase(deleteExistingComment.fulfilled, (state, action) => {
-        const { postId, commentId } = action.payload
+        const { postId, commentId } = action.payload;
 
         if (state.comments[postId]) {
           state.comments[postId] = state.comments[postId].filter(
             (comment) => comment._id !== commentId,
-          )
+          );
         }
 
-        const post = state.posts.find((post) => post._id === postId)
+        const post = state.posts.find((post) => post._id === postId);
 
         if (post && post.commentsCount > 0) {
-          post.commentsCount -= 1
+          post.commentsCount -= 1;
         }
 
         if (
@@ -488,7 +563,7 @@ const postSlice = createSlice({
           state.selectedPost._id === postId &&
           state.selectedPost.commentsCount > 0
         ) {
-          state.selectedPost.commentsCount -= 1
+          state.selectedPost.commentsCount -= 1;
         }
 
         if (
@@ -496,7 +571,7 @@ const postSlice = createSlice({
           state.featured._id === postId &&
           state.featured.commentsCount > 0
         ) {
-          state.featured.commentsCount -= 1
+          state.featured.commentsCount -= 1;
         }
       })
 
@@ -505,16 +580,16 @@ const postSlice = createSlice({
       // ======================================================
 
       .addCase(toggleLikeComment.fulfilled, (state, action) => {
-        const { postId, commentId, liked, likesCount } = action.payload
+        const { postId, commentId, liked, likesCount } = action.payload;
 
         if (state.comments[postId]) {
           const comment = state.comments[postId].find(
             (c) => c._id === commentId,
-          )
+          );
 
           if (comment) {
-            comment.isLiked = liked
-            comment.likesCount = likesCount
+            comment.isLiked = liked;
+            comment.likesCount = likesCount;
           }
         }
       })
@@ -524,23 +599,56 @@ const postSlice = createSlice({
       // ======================================================
 
       .addCase(fetchFeaturedThought.pending, (state) => {
-        state.loading = true
+        state.loading = true;
       })
 
       .addCase(fetchFeaturedThought.fulfilled, (state, action) => {
-        state.loading = false
-        state.featured = action.payload
+        state.loading = false;
+        state.featured = action.payload;
       })
 
       .addCase(fetchFeaturedThought.rejected, (state, action) => {
-        state.loading = false
-        state.isError = true
-        state.errorMessage = action.payload
+        state.loading = false;
+        state.isError = true;
+        state.errorMessage = action.payload;
       })
+
+      //# ================== Admin : Pin thought ================
+      .addCase(togglePinThoughtbyAdmin.fulfilled, (state, action) => {
+        const { postId, isPinned, pinnedAt } = action.payload;
+
+        const post = state.posts.find((post) => post._id === postId);
+
+        if (post) {
+          post.isPinned = isPinned;
+          post.pinnedAt = pinnedAt;
+        }
+      })
+
+      //# ================== Delete thought by admin ===================
+      .addCase(deleteThoughtbyAdmin.pending, (state) => {
+        state.loading = true;
+        state.isError = false;
+        state.errorMessage = null;
+      })
+
+      .addCase(deleteThoughtbyAdmin.fulfilled, (state, action) => {
+        state.loading = false;
+
+        const deletedPostId = action.payload.postId;
+
+        state.posts = state.posts.filter((post) => post._id !== deletedPostId);
+      })
+
+      .addCase(deleteThoughtbyAdmin.rejected, (state, action) => {
+        state.loading = false;
+        state.isError = true;
+        state.errorMessage = action.payload;
+      });
   },
-})
+});
 
 export const { clearPosts, clearSelectedPost, setSearchQuery } =
-  postSlice.actions
+  postSlice.actions;
 
-export default postSlice.reducer
+export default postSlice.reducer;

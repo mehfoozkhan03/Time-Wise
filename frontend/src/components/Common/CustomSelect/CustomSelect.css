@@ -1,0 +1,246 @@
+.customSelect {
+    position:relative;
+    width:100%;
+}
+
+.customSelectTrigger {
+    width:100%;
+    min-height:46px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    gap:12px;
+
+    padding:0 15px;
+
+    border:1px solid var(--border);
+    border-radius:12px;
+
+    background:var(--surface);
+    color:var(--text_primary);
+
+    font:inherit;
+    font-size:.95rem;
+    text-align:left;
+
+    cursor:pointer;
+
+    transition:
+        background var(--transition),
+        border-color var(--transition),
+        box-shadow var(--transition),
+        color var(--transition);
+}
+
+.customSelectTrigger:hover {
+    border-color:var(--primary);
+}
+
+.customSelect.open .customSelectTrigger {
+    border-color:var(--primary);
+
+    box-shadow:0 0 0 3px rgba(41,163,224,.15);
+}
+
+.customSelect.disabled .customSelectTrigger {
+    opacity:.6;
+    cursor:not-allowed;
+}
+
+.customSelectTrigger .placeholder {
+    color:var(--text_secondary);
+}
+
+.customSelectArrow {
+    flex-shrink:0;
+
+    color:var(--text_secondary);
+
+    font-size:12px;
+
+    transition:
+        transform var(--transition),
+        color var(--transition);
+}
+
+.customSelect.open .customSelectArrow {
+    color:var(--primary);
+
+    transform:rotate(180deg);
+}
+
+.customSelectMenu {
+    position:absolute;
+
+    top:calc(100% + 7px);
+    left:0;
+    right:0;
+
+    z-index:1000;
+
+    max-height:260px;
+
+    overflow-y:auto;
+
+    padding:6px;
+
+    border:1px solid var(--border);
+    border-radius:12px;
+
+    background:var(--surface);
+
+    box-shadow:
+        0 16px 40px rgba(0,0,0,.35),
+        0 4px 12px rgba(0,0,0,.18);
+
+    animation:customSelectOpen .16s ease-out;
+}
+
+.customSelectOption {
+    width:100%;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    gap:12px;
+
+    min-height:42px;
+
+    padding:10px 12px;
+
+    border:none;
+    border-radius:8px;
+
+    background:transparent;
+    color:var(--text_primary);
+
+    font:inherit;
+    font-size:.92rem;
+
+    text-align:left;
+
+    cursor:pointer;
+
+    transition:
+        background var(--transition),
+        color var(--transition);
+}
+
+.customSelectOption:hover {
+    background:var(--surface_hover);
+    color:var(--primary);
+}
+
+.customSelectOption.selected {
+    background:rgba(41,163,224,.12);
+    color:var(--primary);
+    font-weight:600;
+}
+
+.customSelectOption.selected:hover {
+    background:rgba(41,163,224,.18);
+}
+
+.customSelectCheck {
+    flex-shrink:0;
+
+    color:var(--primary);
+
+    font-size:12px;
+}
+
+.customSelectMenu::-webkit-scrollbar {
+    width:6px;
+}
+
+.customSelectMenu::-webkit-scrollbar-track {
+    background:transparent;
+}
+
+.customSelectMenu::-webkit-scrollbar-thumb {
+    background:var(--border);
+    border-radius:999px;
+}
+
+.customSelectMenu::-webkit-scrollbar-thumb:hover {
+    background:var(--text_secondary);
+}
+
+html.dark .customSelectTrigger,
+html.dark .customSelectMenu {
+    background:#1b2029;
+    color:#eef3f8;
+    border-color:#303846;
+}
+
+html.dark .customSelectOption {
+    color:#eef3f8;
+}
+
+html.dark .customSelectOption:hover {
+    background:#252c38;
+    color:#42b5f5;
+}
+
+html.dark .customSelectOption.selected {
+    background:rgba(41,163,224,.14);
+    color:#42b5f5;
+}
+
+html.dark .customSelectOption.selected:hover {
+    background:rgba(41,163,224,.2);
+}
+
+html:not(.dark) .customSelectTrigger,
+html:not(.dark) .customSelectMenu {
+    background:#fff;
+    color:#2c2f3a;
+    border-color:#d9dee6;
+}
+
+html:not(.dark) .customSelectOption {
+    color:#2c2f3a;
+}
+
+html:not(.dark) .customSelectOption:hover {
+    background:#f3f7fa;
+    color:var(--primary);
+}
+
+html:not(.dark) .customSelectOption.selected {
+    background:rgba(41,163,224,.1);
+    color:var(--primary);
+}
+
+@keyframes customSelectOpen {
+    from {
+        opacity:0;
+        transform:translateY(-5px);
+    }
+
+    to {
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+@media (max-width:480px) {
+    .customSelectTrigger {
+        min-height:44px;
+        padding:0 12px;
+        font-size:.9rem;
+    }
+
+    .customSelectOption {
+        min-height:40px;
+        padding:9px 10px;
+        font-size:.88rem;
+    }
+
+    .customSelectMenu {
+        max-height:220px;
+    }
+}

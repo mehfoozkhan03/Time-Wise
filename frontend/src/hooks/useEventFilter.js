@@ -1,10 +1,7 @@
 import { useMemo, useState, useCallback } from "react";
 
 import { EVENT_CONFIG } from "../data/eventConfig";
-
-/* =========================================
-   Default Filters
-========================================= */
+import { EVENT_TYPES } from "../data/eventTypes";
 
 const DEFAULT_FILTERS = Object.fromEntries(
   Object.keys(EVENT_CONFIG).map((key) => [key, true]),
@@ -15,17 +12,9 @@ const EMPTY_FILTERS = Object.fromEntries(
 );
 
 export default function useEventFilter(events = [], currentDate) {
-  /* =========================================
-     State
-  ========================================= */
-
   const [filters, setFilters] = useState(DEFAULT_FILTERS);
 
   const [searchTerm, setSearchTerm] = useState("");
-
-  /* =========================================
-     Toggle Filter
-  ========================================= */
 
   const toggleFilter = useCallback((type) => {
     setFilters((prev) => ({
@@ -34,35 +23,26 @@ export default function useEventFilter(events = [], currentDate) {
     }));
   }, []);
 
-  /* =========================================
-     Select All
-  ========================================= */
-
   const selectAll = useCallback(() => {
     setFilters(DEFAULT_FILTERS);
   }, []);
-
-  /* =========================================
-     Clear All
-  ========================================= */
 
   const clearAll = useCallback(() => {
     setFilters(EMPTY_FILTERS);
   }, []);
 
-  /* =========================================
-     Current Month Events
-  ========================================= */
-
   const monthEvents = useMemo(() => {
-    if (!currentDate) return events;
+    if (!currentDate) {
+      return events;
+    }
 
     const currentMonth = currentDate.getMonth();
-
     const currentYear = currentDate.getFullYear();
 
     return events.filter((event) => {
-      if (!event?.date) return false;
+      if (!event?.date) {
+        return false;
+      }
 
       const date = new Date(event.date);
 
@@ -71,14 +51,38 @@ export default function useEventFilter(events = [], currentDate) {
       }
 
       return (
-        date.getFullYear() === currentYear && date.getMonth() === currentMonth
+        date.getFullYear() === currentYear &&
+        date.getMonth() === currentMonth
       );
     });
   }, [events, currentDate]);
 
-  /* =========================================
-     Filtered Events
-  ========================================= */
+  const weekendDates = useMemo(() => {
+    if (!currentDate) {
+      return [];
+    }
+
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+
+    const dates = [];
+
+    const date = new Date(year, month, 1);
+
+    while (date.getMonth() === month) {
+      const day = date.getDay();
+
+      if (day === 0 || day === 6) {
+        dates.push(new Date(date));
+      }
+
+      date.setDate(date.getDate() + 1);
+    }
+
+    return dates;
+  }, [currentDate]);
+
+  const hasWeekend = weekendDates.length > 0;
 
   const filteredEvents = useMemo(() => {
     const keywords = searchTerm
@@ -116,9 +120,14 @@ export default function useEventFilter(events = [], currentDate) {
         .join(" ")
         .toLowerCase();
 
-      return keywords.every((keyword) => searchableText.includes(keyword));
+      return keywords.every((keyword) =>
+        searchableText.includes(keyword),
+      );
     });
   }, [monthEvents, filters, searchTerm]);
+
+  const weekendFilterActive =
+    hasWeekend && Boolean(filters[EVENT_TYPES.WEEKEND]);
 
   return {
     filters,
@@ -128,5 +137,8 @@ export default function useEventFilter(events = [], currentDate) {
     selectAll,
     clearAll,
     filteredEvents,
+    weekendDates,
+    hasWeekend,
+    weekendFilterActive,
   };
 }

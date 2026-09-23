@@ -5,15 +5,20 @@
 .allUpcomingOverlay {
   position: fixed;
   inset: 0;
-  background: rgba(15, 23, 42, 0.55);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+
   display: flex;
   justify-content: center;
   align-items: center;
+
   padding: 24px;
+
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+
   z-index: 2000;
-  animation: fade_in .25s ease;
+
+  animation: fade_in 0.25s ease;
 }
 
 /* ==========================================================
@@ -21,15 +26,19 @@
 ========================================================== */
 
 .allUpcomingModal {
-  width: min(720px, 100%);
+  width: min(760px, 100%);
   max-height: 85vh;
+
   display: flex;
   flex-direction: column;
+
   overflow: hidden;
 
   background: var(--card);
+
   border: 1px solid var(--card-border);
   border-radius: var(--radius_lg);
+
   box-shadow: var(--shadow_lg);
 }
 
@@ -41,9 +50,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 20px;
 
-  padding: 22px 26px;
+  gap: 18px;
+
+  padding: 18px 22px;
 
   border-bottom: 1px solid var(--divider);
 
@@ -57,41 +67,55 @@
 .allUpcomingTitle {
   display: flex;
   align-items: center;
-  gap: 16px;
+
+  gap: 12px;
+
+  min-width: 0;
 }
 
 .allUpcomingIcon {
-  width: 48px;
-  height: 48px;
+  width: 44px;
+  height: 44px;
 
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
 
-  border-radius: 14px;
+  flex-shrink: 0;
 
-  color: var(--primary);
+  border-radius: 12px;
 
   background: var(--tag-bg);
 
-  font-size: 20px;
+  color: var(--primary);
+
+  font-size: 18px;
 }
 
 .allUpcomingHeading {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+
+  gap: 2px;
+
+  min-width: 0;
 }
 
 .allUpcomingHeading h2 {
-  font-size: 1.25rem;
-  font-weight: 600;
+  margin: 0;
+
   color: var(--text_primary);
+
+  font-size: 1.2rem;
+  font-weight: 600;
+
+  line-height: 1.3;
 }
 
 .allUpcomingCount {
   color: var(--text_secondary);
-  font-size: .88rem;
+
+  font-size: 0.85rem;
   font-weight: 500;
 }
 
@@ -104,8 +128,10 @@
   height: 42px;
 
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+
+  flex-shrink: 0;
 
   border-radius: 12px;
 
@@ -113,11 +139,14 @@
 
   color: var(--text_secondary);
 
+  cursor: pointer;
+
   transition: var(--transition);
 }
 
 .closeBtn:hover {
   background: var(--surface);
+
   color: var(--primary);
 }
 
@@ -131,9 +160,10 @@
 
 .allUpcomingBody {
   flex: 1;
+
   overflow-y: auto;
 
-  padding: 22px;
+  padding: 20px;
 }
 
 /* ==========================================================
@@ -143,24 +173,32 @@
 .allUpcomingList {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+
+  gap: 10px;
 }
 
 .allUpcomingItem {
-  padding: 14px;
+  padding: 12px;
+
+  background: var(--card);
 
   border: 1px solid var(--card-border);
   border-radius: var(--radius_md);
 
-  background: var(--card);
-
-  transition: var(--transition);
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .allUpcomingItem:hover {
   background: var(--card-hover);
+
   border-color: var(--primary);
+
   transform: translateY(-2px);
+
   box-shadow: var(--shadow_sm);
 }
 
@@ -178,6 +216,7 @@
 
 .allUpcomingBody::-webkit-scrollbar-thumb {
   background: var(--border);
+
   border-radius: 999px;
 }
 
@@ -186,7 +225,7 @@
 }
 
 /* ==========================================================
-   RESPONSIVE
+   768px
 ========================================================== */
 
 @media (max-width: 768px) {
@@ -199,35 +238,77 @@
   }
 
   .allUpcomingHeader {
-    padding: 18px;
+    padding: 16px 18px;
+
+    gap: 14px;
   }
 
-  .allUpcomingBody {
-    padding: 18px;
+  .allUpcomingTitle {
+    gap: 10px;
   }
 
   .allUpcomingIcon {
-    width: 42px;
-    height: 42px;
-    font-size: 18px;
+    width: 40px;
+    height: 40px;
+
+    font-size: 17px;
   }
 
   .allUpcomingHeading h2 {
-    font-size: 1.1rem;
+    font-size: 1.05rem;
   }
-}
 
-@media (max-width: 480px) {
-  .allUpcomingHeader {
-    padding: 16px;
+  .allUpcomingCount {
+    font-size: 0.8rem;
   }
 
   .allUpcomingBody {
-    padding: 16px;
+    padding: 18px;
+  }
+
+  .allUpcomingList {
+    gap: 8px;
   }
 
   .allUpcomingItem {
-    padding: 12px;
+    padding: 10px;
+  }
+}
+
+/* ==========================================================
+   480px
+========================================================== */
+
+@media (max-width: 480px) {
+  .allUpcomingOverlay {
+    padding: 10px;
+
+    align-items: flex-end;
+  }
+
+  .allUpcomingModal {
+    width: 100%;
+    max-height: 92vh;
+
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  .allUpcomingHeader {
+    padding: 14px 16px;
+
+    gap: 12px;
+  }
+
+  .allUpcomingTitle {
+    gap: 8px;
+  }
+
+  .allUpcomingIcon {
+    width: 36px;
+    height: 36px;
+
+    font-size: 16px;
   }
 
   .allUpcomingHeading h2 {
@@ -235,6 +316,61 @@
   }
 
   .allUpcomingCount {
-    font-size: .8rem;
+    font-size: 0.78rem;
+  }
+
+  .closeBtn {
+    width: 38px;
+    height: 38px;
+  }
+
+  .allUpcomingBody {
+    padding: 14px;
+  }
+
+  .allUpcomingList {
+    gap: 8px;
+  }
+
+  .allUpcomingItem {
+    padding: 10px;
+  }
+}
+
+/* ==========================================================
+   320px
+========================================================== */
+
+@media (max-width: 320px) {
+  .allUpcomingHeader {
+    padding: 12px;
+  }
+
+  .allUpcomingIcon {
+    width: 34px;
+    height: 34px;
+
+    font-size: 15px;
+  }
+
+  .allUpcomingHeading h2 {
+    font-size: 0.95rem;
+  }
+
+  .allUpcomingCount {
+    font-size: 0.75rem;
+  }
+
+  .closeBtn {
+    width: 34px;
+    height: 34px;
+  }
+
+  .allUpcomingBody {
+    padding: 12px;
+  }
+
+  .allUpcomingItem {
+    padding: 9px;
   }
 }

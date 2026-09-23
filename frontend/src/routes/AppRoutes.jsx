@@ -6,13 +6,13 @@ import AdminDashboard from './../pages/AdminDashboard';
 import Community from './../pages/Community/Community';
 import About from './../pages/About';
 import Contact from './../pages/Contact';
-import SignUpPage from './../pages/Login';
+// import SignUpPage from './../pages/Login';
 
 import ProgressBar from './../components/ProgressBar/progressBar';
 import { BubbleCursor } from './../components/BubbleArrow/bubbleArrow';
 import RouteLoader from './../components/RouteLoader';
 
-import Calendar from './../components/Setting/Calendar';
+import Calendar from './../components/Setting/Calendar/Calendar';
 
 import EmployeeTable from '../pages/EmployeeTable';
 import EmployeeDetails from '../pages/EmployeeDetails';
@@ -27,6 +27,7 @@ import { Reports } from './../pages/Reports/Reports';
 import { Settings } from '../pages/Settings';
 import { Profile } from './../components/Setting/Profile/Profile';
 import { SettingAttendance } from './../components/Setting/SettingAttendance/SettingAttendance';
+import Leave from "../components/Setting/Leave/Leave";
 import { Appearance } from './../components/Setting/Appearance/Appearance';
 import { Notification } from './../components/Setting/Notification/Notifications';
 import { Security } from './../components/Setting/Security/Security';
@@ -41,9 +42,20 @@ import { DashboardNotification } from './../components/Dashboard/DashboardNotifi
 import { DashboardAnnouncement } from './../components/Dashboard/DashboardAnnouncement/DashboardAnnouncement';
 import { DashboardReport } from './../components/Dashboard/DashboardReport/DashboardReport';
 import { DashboardSetting } from './../components/Dashboard/DashboardSetting/DashboardSetting';
-import { ScrollToTopButton } from '../components/ScrollToTop/scrollToTop';
+
 import { SinglePost } from '../pages/SinglePost/SinglePost';
 import { NotificationPage } from '../pages/NotificationPage/NotificationPage';
+import { AuthLayout } from '../layouts/AuthLayout';
+import { AdminLayout } from '../layouts/AdminLayout';
+import { CommunityProfile } from '../components/community/CommunityProfile/CommunityProfile';
+import { DashboardLeave } from '../components/Dashboard/DashboardLeave/DashboardLeave';
+import { AdminPrivateRoutes } from '../components/AdminPrivateRoutes';
+import DashboardCalendar from '../components/Dashboard/DashboardCalendar/DashboardCalendar';
+import { Signup } from '../pages/Signup';
+import {Login} from "../pages/Login";
+import {AdminLogin} from "../pages/AdminLogin";
+// import {AdminLogin} from "../pages/AdminLogin";
+
 
 export const AppRoutes = () => {
   return (
@@ -51,7 +63,6 @@ export const AppRoutes = () => {
       <RouteLoader />
       <BubbleCursor />
       <ProgressBar />
-      <ScrollToTopButton />
 
       <Routes>
         <Route element={<MainLayout />}>
@@ -99,20 +110,6 @@ export const AppRoutes = () => {
             }
           />
 
-          {/* ================= ADMIN DASHBOARD ================= */}
-
-          <Route path="/adminDashboard" element={<AdminDashboard />}>
-            <Route index element={<DashboardHome />} />
-            <Route path="dashboard" element={<DashboardHome />} />
-            <Route path="employee" element={<DashboardEmployee />} />
-            <Route path="attendance" element={<DashboardAttendance />} />
-            <Route path="thought" element={<DashboardThuoght />} />
-            <Route path="notification" element={<DashboardNotification />} />
-            <Route path="announcement" element={<DashboardAnnouncement />} />
-            <Route path="report" element={<DashboardReport />} />
-            <Route path="setting" element={<DashboardSetting />} />
-          </Route>
-
           {/* ================= PUBLIC PAGES ================= */}
 
           <Route
@@ -132,14 +129,14 @@ export const AppRoutes = () => {
             }
           />
 
-          {/* <Route
+          <Route
             path="/community/profile/:userId"
             element={
               <PrivateRoutes>
                 <CommunityProfile />
               </PrivateRoutes>
             }
-          /> */}
+          />
 
           <Route
             path="/community/post/:postId"
@@ -151,8 +148,6 @@ export const AppRoutes = () => {
           />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/signup" element={<SignUpPage />} />
-          <Route path="/admin/login" element={<SignUpPage />} />
 
           <Route
             path="/notifications"
@@ -174,6 +169,7 @@ export const AppRoutes = () => {
             <Route index element={<Navigate to="profile" replace />} />
             <Route path="profile" element={<Profile />} />
             <Route path="attendance" element={<SettingAttendance />} />
+            <Route path="leave" element={<Leave />} />
             <Route path="calendar" element={<Calendar />} />
             <Route path="appearance" element={<Appearance />} />
             <Route path="notification" element={<Notification />} />
@@ -185,6 +181,33 @@ export const AppRoutes = () => {
           {/* ================= 404 ================= */}
 
           <Route path="*" element={<Error />} />
+        </Route>
+
+        {/* ================= Auth Layout ================= */}
+        <Route element={<AuthLayout />}>
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
+        </Route>
+
+        {/* ================= Admin Layout ================= */}
+        {/* <Route path="/admin/login" element={<SignUpPage />} /> */}
+
+        <Route element={<AdminPrivateRoutes><AdminLayout /></AdminPrivateRoutes>}>
+          {/* ================= ADMIN DASHBOARD ================= */}
+          <Route path="/adminDashboard" element={<AdminDashboard />}>
+            <Route index element={<DashboardHome />} />
+            <Route path="adminDashboard" element={<DashboardHome />} />
+            <Route path="employee" element={<DashboardEmployee />} />
+            <Route path="attendance" element={<DashboardAttendance />} />
+            <Route path="leave" element={<DashboardLeave />} />
+            <Route path="calendar" element={<DashboardCalendar />} />
+            <Route path="thought" element={<DashboardThuoght />} />
+            <Route path="notification" element={<DashboardNotification />} />
+            <Route path="announcement" element={<DashboardAnnouncement />} />
+            <Route path="report" element={<DashboardReport />} />
+            <Route path="setting" element={<DashboardSetting />} />
+          </Route>
         </Route>
       </Routes>
     </>

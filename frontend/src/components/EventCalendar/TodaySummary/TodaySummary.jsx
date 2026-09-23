@@ -2,10 +2,7 @@ import "./TodaySummary.css";
 
 import { memo, useMemo } from "react";
 
-import {
-  FaChartPie,
-  FaRegCalendarCheck,
-} from "react-icons/fa";
+import { FaChartPie, FaRegCalendarCheck } from "react-icons/fa";
 
 import Card from "../../Common/CalendarCard/Card";
 import EmptyState from "../../Common/EmptyState/EmptyState";
@@ -19,11 +16,12 @@ function TodaySummary({ events = [] }) {
   ========================================= */
 
   const summaryData = useMemo(() => {
-    return getTodaySummary(
-      events,
-      EVENT_CONFIG
-    ).filter((item) => item.config);
+    return getTodaySummary(events, EVENT_CONFIG).filter(
+      (item) => item.config && item.count > 0,
+    );
   }, [events]);
+
+  const hasEvents = summaryData.length > 0;
 
   return (
     <Card
@@ -31,14 +29,18 @@ function TodaySummary({ events = [] }) {
       icon={<FaChartPie />}
       className="summaryCard"
     >
-      {summaryData.length === 0 ? (
+      {!hasEvents ? (
         <EmptyState
           icon={<FaRegCalendarCheck />}
           title="No Events Today"
           description="No scheduled events for today."
         />
       ) : (
-        <div className="summaryList">
+        <div
+          className="summaryList"
+          role="list"
+          aria-label="Today's Event Summary"
+        >
           {summaryData.map((item) => {
             const Icon = item.config.icon;
 
@@ -46,14 +48,15 @@ function TodaySummary({ events = [] }) {
               <div
                 key={item.type}
                 className="summaryItem"
+                role="listitem"
               >
                 <div className="summaryLeft">
                   <div
                     className="summaryIcon"
                     style={{
-                      "--summary-color":
-                        item.config.color,
+                      "--summary-color": item.config.color,
                     }}
+                    aria-hidden="true"
                   >
                     <Icon />
                   </div>
@@ -64,12 +67,17 @@ function TodaySummary({ events = [] }) {
                     </span>
 
                     <small>
-                      Today's Events
+                      {item.count === 1 ? "1 Event Today" : `${item.count} Events Today`}
                     </small>
                   </div>
                 </div>
 
-                <strong className="summaryCount">
+                <strong
+                  className="summaryCount"
+                  aria-label={`${item.count} ${item.config.label} event${
+                    item.count === 1 ? "" : "s"
+                  }`}
+                >
                   {item.count}
                 </strong>
               </div>
@@ -81,7 +89,6 @@ function TodaySummary({ events = [] }) {
   );
 }
 
-TodaySummary.displayName =
-  "TodaySummary";
+TodaySummary.displayName = "TodaySummary";
 
 export default memo(TodaySummary);

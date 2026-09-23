@@ -1,7 +1,6 @@
 /* =========================================
    Format: 24 Jul 2026
 ========================================= */
-
 export const formatDate = (date) => {
   if (!date) return "--";
 
@@ -15,7 +14,6 @@ export const formatDate = (date) => {
     year: "numeric",
   });
 };
-
 /* =========================================
    Format: Friday, 24 July 2026
 ========================================= */
@@ -34,7 +32,6 @@ export const formatFullDate = (date) => {
     year: "numeric",
   });
 };
-
 /* =========================================
    Format: 9:00 AM
 ========================================= */
@@ -53,7 +50,6 @@ export const formatTime = (time) => {
     },
   );
 };
-
 /* =========================================
    Check Today
 ========================================= */
@@ -73,7 +69,6 @@ export const isToday = (date) => {
     today.getDate() === current.getDate()
   );
 };
-
 /* =========================================
    Check Weekend
 ========================================= */
@@ -89,7 +84,6 @@ export const isWeekend = (date) => {
 
   return day === 0 || day === 6;
 };
-
 /* =========================================
    Today's Date
 ========================================= */
@@ -99,7 +93,6 @@ export const getToday = () => {
 
   return new Date(today.getFullYear(), today.getMonth(), today.getDate());
 };
-
 /* =========================================
    Today / Tomorrow / Date
 ========================================= */

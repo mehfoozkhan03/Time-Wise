@@ -2,6 +2,21 @@
    Upcoming Events
 ========================================== */
 
+.upcomingCard .cardHeader {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  gap: 10px;
+
+  text-align: center;
+}
+
+.upcomingCard .cardHeader h3 {
+  text-align: center;
+}
+
 .upcomingCard .cardBody {
   display: flex;
   flex-direction: column;
@@ -59,7 +74,6 @@
   color: var(--text_secondary);
 
   font-size: 10px;
-
   font-weight: 500;
 }
 
@@ -121,4 +135,90 @@
 .viewAllBtn:focus-visible {
   outline: 2px solid var(--primary);
   outline-offset: 2px;
+}
+
+/* ==========================================
+   760px
+========================================== */
+
+@media (max-width: 760px) {
+  .upcomingCard .cardBody {
+    gap: 10px;
+  }
+
+  .upcomingList {
+    gap: 6px;
+  }
+
+  .eventDate {
+    margin-left: 36px;
+
+    font-size: 9px;
+  }
+
+  .viewAllBtn {
+    height: 38px;
+
+    font-size: 12px;
+  }
+}
+
+/* ==========================================
+   480px
+========================================== */
+
+@media (max-width: 480px) {
+  .upcomingCard .cardHeader {
+    gap: 8px;
+  }
+
+  .upcomingCard .cardBody {
+    gap: 8px;
+  }
+
+  .upcomingList {
+    gap: 5px;
+  }
+
+  .eventDate {
+    margin-left: 32px;
+
+    font-size: 8px;
+  }
+
+  .viewAllBtn {
+    height: 36px;
+
+    font-size: 12px;
+  }
+}
+
+/* ==========================================
+   320px
+========================================== */
+
+@media (max-width: 320px) {
+  .upcomingCard .cardHeader {
+    gap: 6px;
+  }
+
+  .upcomingCard .cardBody {
+    gap: 6px;
+  }
+
+  .upcomingList {
+    gap: 4px;
+  }
+
+  .eventDate {
+    margin-left: 28px;
+
+    font-size: 8px;
+  }
+
+  .viewAllBtn {
+    height: 34px;
+
+    font-size: 11px;
+  }
 }

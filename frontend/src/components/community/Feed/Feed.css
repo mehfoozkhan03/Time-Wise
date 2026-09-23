@@ -51,3 +51,59 @@
 .empty-state p {
   color: var(--text_secondary);
 }
+
+/* =====================================================
+   Load More
+===================================================== */
+
+.feed-load-more {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 8px 0 20px;
+}
+
+.feed-load-more-btn {
+  min-width: 180px;
+  padding: 11px 20px;
+
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius_md);
+
+  background: var(--card);
+  color: var(--text_primary);
+
+  font-size: 0.9rem;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: var(--transition);
+}
+
+.feed-load-more-btn:hover:not(:disabled) {
+  background: var(--surface);
+  color: var(--primary);
+  border-color: var(--primary);
+  transform: translateY(-1px);
+}
+
+.feed-load-more-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* =====================================================
+   Feed End
+===================================================== */
+
+.feed-end {
+  width: 100%;
+  padding: 16px 0 24px;
+
+  text-align: center;
+
+  color: var(--text_secondary);
+
+  font-size: 0.82rem;
+}

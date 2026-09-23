@@ -43,9 +43,9 @@ const EditPostModal = ({ post, onClose }) => {
         <textarea value={text} onChange={(e) => setText(e.target.value)} />
 
         <div className="modal-actions">
-          <button onClick={onClose}>Cancel</button>
+          <button className='Cancel_button' onClick={onClose}>Cancel</button>
 
-          <button
+          <button className='save_button'
             onClick={handleSave}
             disabled={loading || !text.trim() || text === post.content}
           >

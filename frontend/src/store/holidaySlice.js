@@ -93,6 +93,7 @@ const initialState = {
   holidays: [],
   status: "idle",
   error: null,
+  success: false,
 };
 
 /* =========================================
@@ -104,7 +105,15 @@ const holidaySlice = createSlice({
 
   initialState,
 
-  reducers: {},
+  reducers: {
+    clearHolidayError(state) {
+      state.error = null;
+    },
+
+    clearHolidaySuccess(state) {
+      state.success = false;
+    },
+  },
 
   extraReducers: (builder) => {
     builder
@@ -116,20 +125,19 @@ const holidaySlice = createSlice({
       .addCase(fetchHolidays.pending, (state) => {
         state.status = "loading";
         state.error = null;
+        state.success = false;
       })
 
       .addCase(fetchHolidays.fulfilled, (state, action) => {
-        console.log("✅ Holiday API Payload:", action.payload);
-
         state.status = "succeeded";
         state.error = null;
+        state.success = true;
         state.holidays = action.payload.data;
       })
 
       .addCase(fetchHolidays.rejected, (state, action) => {
-        console.error("❌ Holiday Error:", action.payload);
-
         state.status = "failed";
+        state.success = false;
         state.error = action.payload;
       })
 
@@ -137,15 +145,41 @@ const holidaySlice = createSlice({
          CREATE HOLIDAY
       ========================================= */
 
+      .addCase(createHoliday.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+        state.success = false;
+      })
+
       .addCase(createHoliday.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.error = null;
+        state.success = true;
+
         state.holidays.push(action.payload.data);
+      })
+
+      .addCase(createHoliday.rejected, (state, action) => {
+        state.status = "failed";
+        state.success = false;
+        state.error = action.payload;
       })
 
       /* =========================================
          UPDATE HOLIDAY
       ========================================= */
 
+      .addCase(updateHoliday.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+        state.success = false;
+      })
+
       .addCase(updateHoliday.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.error = null;
+        state.success = true;
+
         const updatedHoliday = action.payload.data;
 
         const index = state.holidays.findIndex(
@@ -157,16 +191,40 @@ const holidaySlice = createSlice({
         }
       })
 
+      .addCase(updateHoliday.rejected, (state, action) => {
+        state.status = "failed";
+        state.success = false;
+        state.error = action.payload;
+      })
+
       /* =========================================
          DELETE HOLIDAY
       ========================================= */
 
+      .addCase(deleteHoliday.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+        state.success = false;
+      })
+
       .addCase(deleteHoliday.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.error = null;
+        state.success = true;
+
         state.holidays = state.holidays.filter(
           (holiday) => holiday._id !== action.payload,
         );
+      })
+
+      .addCase(deleteHoliday.rejected, (state, action) => {
+        state.status = "failed";
+        state.success = false;
+        state.error = action.payload;
       });
   },
 });
+
+export const { clearHolidayError, clearHolidaySuccess } = holidaySlice.actions;
 
 export default holidaySlice.reducer;

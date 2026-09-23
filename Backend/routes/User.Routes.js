@@ -1,15 +1,18 @@
-import express from 'express';
+import express from "express";
 
+import { auth } from "../middleware/AuthMiddleware.js";
+import { authorize } from "../middleware/Allowrole.middleware.js";
 import {
-  admin_login,
-  login,
-  signup,
   getCurrentUser,
-  updateTheme,
+  getUserProfile,
+  login,
   logout,
-} from '../controllers/userData.controller.js';
-
-import { auth } from '../middleware/AuthMiddleware.js';
+  signup,
+  updateActivity,
+} from "../controllers/User/userData.controller.js";
+import { updateTheme } from "./../controllers/User/theme.controller.js";
+import { updateSocialLinks } from "../controllers/User/socialLinks.controller.js";
+import { updateEmergencyContact } from "../controllers/User/emergencyContact.controller.js";
 
 const userRoutes = express.Router();
 
@@ -17,22 +20,24 @@ const userRoutes = express.Router();
 
 // /user/login
 
-// /user/adminlogin
-
 // /user/me
 
-userRoutes.post('/login', login);
+userRoutes.post("/login", login);
 
-userRoutes.post('/signup', signup);
+userRoutes.post("/signup", signup);
 
-userRoutes.post('/logout', logout);
+userRoutes.post("/logout", logout);
 
-userRoutes.get('/me', auth, getCurrentUser);
+userRoutes.get("/me", auth, authorize("user"), getCurrentUser);
 
-userRoutes.patch('/theme', auth, updateTheme);
+userRoutes.get("/profile/:userId", auth, getUserProfile);
 
-userRoutes.post('/adminlogin', admin_login);
+userRoutes.patch("/activity", auth, authorize("user"), updateActivity);
 
-// userRoutes.get('/alluser', auth, getAllUser)
+userRoutes.patch("/theme", auth, authorize("user"), updateTheme);
+
+userRoutes.patch("/social-links", auth, authorize("user"), updateSocialLinks);
+
+userRoutes.patch("/emergency-contact", auth, authorize("user"), updateEmergencyContact);
 
 export { userRoutes };

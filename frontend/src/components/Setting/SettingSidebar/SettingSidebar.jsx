@@ -11,6 +11,7 @@ import { FaLock } from "react-icons/fa";
 import { GoDatabase } from "react-icons/go";
 import { MdOutlineContactSupport } from "react-icons/md";
 import { FaCalendarAlt } from "react-icons/fa";
+import { MdEventAvailable } from "react-icons/md";
 
 export const SettingSidebar = () => {
   const { user } = useSelector((state) => state.auth);
@@ -46,6 +47,12 @@ export const SettingSidebar = () => {
                 <MdOutlineWatchLater className="settingSidebar-icon" />
                 <span>Attendance</span>
               </NavLink>
+
+              <NavLink to="leave" className="settingSidebar-link">
+              <MdEventAvailable className="settingSidebar-icon" />
+              <span>Leave</span>
+              </NavLink>
+              
               <NavLink
                 to="appearance"
                 className="appearance settingSidebar-link"

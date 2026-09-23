@@ -1,1 +1,10 @@
 node_modules
+
+.env
+.env.*
+!.env.example
+
+# Explicitly ignore all environment files
+Backend/.env.production
+Backend/.env.local
+Backend/.env.staging

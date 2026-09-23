@@ -1,13 +1,87 @@
+import { useState, useEffect } from "react";
+import Skeleton from "../../components/Skeleton/Skeleton";
 import { statusConfig } from "./statusConfig";
 
 export function AttendanceHeatmap({ calendarData = [], year, month }) {
+
+  const [showSkeleton, setShowSkeleton] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowSkeleton(false);
+    }, 1500);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   // July 2026 starts on Wednesday
   const startOffset = new Date(year, month, 1).getDay();
 
   const cells = [...Array(startOffset).fill(null), ...calendarData];
+  
+  if (showSkeleton) {
+  return (
+    <div>
 
+      {/* Week Days */}
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(7, 1fr)",
+          gap: 3,
+          marginBottom: 6,
+        }}
+      >
+        {[...Array(7)].map((_, i) => (
+          <Skeleton
+            key={i}
+            width="100%"
+            height="18px"
+          />
+        ))}
+      </div>
+
+      {/* Calendar */}
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(7, 1fr)",
+          gap: 3,
+        }}
+      >
+        {[...Array(35)].map((_, i) => (
+          <Skeleton
+            key={i}
+            width="100%"
+            height="42px"
+            radius="5px"
+          />
+        ))}
+      </div>
+
+      {/* Legend */}
+      <div
+        style={{
+          display: "flex",
+          gap: 14,
+          marginTop: 14,
+          flexWrap: "wrap",
+        }}
+      >
+        {[...Array(5)].map((_, i) => (
+          <Skeleton
+            key={i}
+            width="70px"
+            height="15px"
+          />
+        ))}
+      </div>
+
+    </div>
+  );
+}
   return (
     <div>
       <div

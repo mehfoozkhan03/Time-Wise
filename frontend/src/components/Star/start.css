@@ -1,0 +1,74 @@
+.glow_star_wrapper {
+    position: relative;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: calc(var(--glow-star-size, 1rem) * 1.5);
+    height: calc(var(--glow-star-size, 1rem) * 1.5);
+}
+
+.glow_star {
+    position: absolute;
+    color: var(--glow-star-color, #f59e0b);
+    font-size: var(--glow-star-size, 1rem);
+}
+
+/* Main Star */
+
+.glow_star_main {
+    z-index: 5;
+
+    filter:
+        drop-shadow(0 0 3px var(--glow-star-color)) drop-shadow(0 0 8px var(--glow-star-color));
+
+    animation: starBreath 2.1s ease-in-out infinite;
+}
+
+/* Ripple Stars */
+
+.glow_star_ring {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.glow_star_ring1 {
+    animation: starRipple var(--glow-star-speed, 3s) ease-out infinite;
+}
+
+.glow_star_ring2 {
+    animation: starRipple var(--glow-star-speed, 3s) ease-out infinite;
+    animation-delay: calc(var(--glow-star-speed, 3s) / 2);
+}
+
+/* Breathing */
+
+@keyframes starBreath {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.11);
+    }
+}
+
+/* Star Ripple */
+
+@keyframes starRipple {
+
+    0% {
+        transform: scale(1);
+        opacity: .45;
+    }
+
+    70% {
+        opacity: .25;
+    }
+
+    100% {
+        transform: scale(var(--glow-star-scale, 2.7));
+        opacity: 0;
+    }
+}

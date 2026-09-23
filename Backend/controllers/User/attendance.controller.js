@@ -1,0 +1,634 @@
+import {
+  getTodayRange,
+  getMinutesSinceMidnight,
+  timeStringToMinutes,
+} from "../../utils/attendanceHelper.js";
+
+import { attendanceConfig } from "../../config/attendanceConfig.js";
+
+import { attendanceModel } from "../../models/Attendance.model.js";
+
+import { holidayModel } from "../../models/Holidays.model.js";
+
+import { getAttendanceStats } from "../../services/attendanceStats.service.js";
+
+// =======================================================
+// Helpers
+// =======================================================
+
+const getDateKey = (date) => {
+  const value = new Date(date);
+
+  return `${value.getFullYear()}-${String(value.getMonth() + 1).padStart(
+    2,
+    "0",
+  )}-${String(value.getDate()).padStart(2, "0")}`;
+};
+
+const isConfiguredWorkingDay = (date = new Date()) => {
+  return attendanceConfig.workingDays.includes(date.getDay());
+};
+
+const getTodayHoliday = async () => {
+  const { startOfDay, endOfDay } = getTodayRange();
+
+  return holidayModel.findOne({
+    date: {
+      $gte: startOfDay,
+      $lte: endOfDay,
+    },
+    isActive: true,
+  });
+};
+
+const isAttendanceAllowedToday = async () => {
+  const today = new Date();
+
+  if (!isConfiguredWorkingDay(today)) {
+    return {
+      allowed: false,
+      reason: "weekend",
+      holiday: null,
+    };
+  }
+
+  const holiday = await getTodayHoliday();
+
+  if (holiday) {
+    return {
+      allowed: false,
+      reason: "holiday",
+      holiday,
+    };
+  }
+
+  return {
+    allowed: true,
+    reason: null,
+    holiday: null,
+  };
+};
+
+// =======================================================
+// Check In
+// =======================================================
+
+export const checkIn = async (req, res) => {
+  try {
+    const userID = req.user.userID;
+
+    // ---------------------------------------------------
+    // Prevent check-in on weekends / holidays
+    // ---------------------------------------------------
+
+    const attendanceDay = await isAttendanceAllowedToday();
+
+    if (!attendanceDay.allowed) {
+      if (attendanceDay.reason === "holiday") {
+        return res.status(400).json({
+          success: false,
+          message: `Today is a holiday${
+            attendanceDay.holiday?.title
+              ? ` (${attendanceDay.holiday.title})`
+              : ""
+          }. Attendance is not required.`,
+          code: "HOLIDAY",
+          holiday: attendanceDay.holiday,
+        });
+      }
+
+      return res.status(400).json({
+        success: false,
+        message: "Today is a non-working day. Attendance is not required.",
+        code: "NON_WORKING_DAY",
+      });
+    }
+
+    // ---------------------------------------------------
+    // Get today's attendance
+    // ---------------------------------------------------
+
+    const { startOfDay, endOfDay } = getTodayRange();
+
+    const existingAttendance = await attendanceModel.findOne({
+      user: userID,
+      date: {
+        $gte: startOfDay,
+        $lte: endOfDay,
+      },
+    });
+
+    if (existingAttendance) {
+      return res.status(409).json({
+        success: false,
+        message: "You have already checked in today.",
+      });
+    }
+
+    // ---------------------------------------------------
+    // Determine attendance status
+    // ---------------------------------------------------
+
+    const currentMinutes = getMinutesSinceMidnight();
+
+    const lateMinutes = timeStringToMinutes(attendanceConfig.lateAfter);
+
+    const halfDayMinutes = timeStringToMinutes(attendanceConfig.halfDayAfter);
+
+    let status = "Present";
+
+    if (currentMinutes >= halfDayMinutes) {
+      status = "Half Day";
+    } else if (currentMinutes >= lateMinutes) {
+      status = "Late";
+    }
+
+    // ---------------------------------------------------
+    // Create attendance
+    // ---------------------------------------------------
+
+    const attendance = await attendanceModel.create({
+      user: userID,
+      date: startOfDay,
+      checkInTime: new Date(),
+      status,
+    });
+
+    return res.status(201).json({
+      success: true,
+      message: "Checked in successfully.",
+      attendance,
+    });
+  } catch (error) {
+    console.error("Check In Error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error.",
+    });
+  }
+};
+
+// =======================================================
+// Start Break
+// =======================================================
+
+export const startBreak = async (req, res) => {
+  try {
+    const userID = req.user.userID;
+
+    // ---------------------------------------------------
+    // Prevent break actions on weekends / holidays
+    // ---------------------------------------------------
+
+    const attendanceDay = await isAttendanceAllowedToday();
+
+    if (!attendanceDay.allowed) {
+      if (attendanceDay.reason === "holiday") {
+        return res.status(400).json({
+          success: false,
+          message: `Today is a holiday${
+            attendanceDay.holiday?.title
+              ? ` (${attendanceDay.holiday.title})`
+              : ""
+          }. Attendance is not required.`,
+          code: "HOLIDAY",
+          holiday: attendanceDay.holiday,
+        });
+      }
+
+      return res.status(400).json({
+        success: false,
+        message: "Today is a non-working day. Attendance is not required.",
+        code: "NON_WORKING_DAY",
+      });
+    }
+
+    const { startOfDay, endOfDay } = getTodayRange();
+
+    const attendance = await attendanceModel.findOne({
+      user: userID,
+      date: {
+        $gte: startOfDay,
+        $lte: endOfDay,
+      },
+    });
+
+    if (!attendance) {
+      return res.status(404).json({
+        success: false,
+        message: "Please check in first.",
+      });
+    }
+
+    if (attendance.checkOutTime) {
+      return res.status(400).json({
+        success: false,
+        message: "You have already checked out.",
+      });
+    }
+
+    const lastBreak = attendance.breaks[attendance.breaks.length - 1];
+
+    if (lastBreak && !lastBreak.breakEnd) {
+      return res.status(400).json({
+        success: false,
+        message: "Break already started.",
+      });
+    }
+
+    attendance.breaks.push({
+      breakStart: new Date(),
+    });
+
+    await attendance.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Break started successfully.",
+      attendance,
+    });
+  } catch (error) {
+    console.error("Start Break Error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error.",
+    });
+  }
+};
+
+// =======================================================
+// End Break
+// =======================================================
+
+export const endBreak = async (req, res) => {
+  try {
+    const userID = req.user.userID;
+
+    // ---------------------------------------------------
+    // Prevent break actions on weekends / holidays
+    // ---------------------------------------------------
+
+    const attendanceDay = await isAttendanceAllowedToday();
+
+    if (!attendanceDay.allowed) {
+      if (attendanceDay.reason === "holiday") {
+        return res.status(400).json({
+          success: false,
+          message: `Today is a holiday${
+            attendanceDay.holiday?.title
+              ? ` (${attendanceDay.holiday.title})`
+              : ""
+          }. Attendance is not required.`,
+          code: "HOLIDAY",
+          holiday: attendanceDay.holiday,
+        });
+      }
+
+      return res.status(400).json({
+        success: false,
+        message: "Today is a non-working day. Attendance is not required.",
+        code: "NON_WORKING_DAY",
+      });
+    }
+
+    const { startOfDay, endOfDay } = getTodayRange();
+
+    const attendance = await attendanceModel.findOne({
+      user: userID,
+      date: {
+        $gte: startOfDay,
+        $lte: endOfDay,
+      },
+    });
+
+    if (!attendance) {
+      return res.status(404).json({
+        success: false,
+        message: "Attendance not found.",
+      });
+    }
+
+    const currentBreak = attendance.breaks[attendance.breaks.length - 1];
+
+    if (!currentBreak || currentBreak.breakEnd) {
+      return res.status(400).json({
+        success: false,
+        message: "You are not on a break.",
+      });
+    }
+
+    currentBreak.breakEnd = new Date();
+
+    const duration = Math.floor(
+      (currentBreak.breakEnd.getTime() - currentBreak.breakStart.getTime()) /
+        1000,
+    );
+
+    currentBreak.duration = duration;
+
+    attendance.totalBreakSeconds += duration;
+
+    await attendance.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Break ended successfully.",
+      attendance,
+    });
+  } catch (error) {
+    console.error("End Break Error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error.",
+    });
+  }
+};
+
+// =======================================================
+// Check Out
+// =======================================================
+
+export const checkOut = async (req, res) => {
+  try {
+    const userID = req.user.userID;
+
+    // ---------------------------------------------------
+    // Prevent checkout on weekends / holidays
+    // ---------------------------------------------------
+
+    const attendanceDay = await isAttendanceAllowedToday();
+
+    if (!attendanceDay.allowed) {
+      if (attendanceDay.reason === "holiday") {
+        return res.status(400).json({
+          success: false,
+          message: `Today is a holiday${
+            attendanceDay.holiday?.title
+              ? ` (${attendanceDay.holiday.title})`
+              : ""
+          }. Attendance is not required.`,
+          code: "HOLIDAY",
+          holiday: attendanceDay.holiday,
+        });
+      }
+
+      return res.status(400).json({
+        success: false,
+        message: "Today is a non-working day. Attendance is not required.",
+        code: "NON_WORKING_DAY",
+      });
+    }
+
+    const { startOfDay, endOfDay } = getTodayRange();
+
+    const attendance = await attendanceModel.findOne({
+      user: userID,
+      date: {
+        $gte: startOfDay,
+        $lte: endOfDay,
+      },
+    });
+
+    if (!attendance) {
+      return res.status(404).json({
+        success: false,
+        message: "Attendance not found.",
+      });
+    }
+
+    if (attendance.checkOutTime) {
+      return res.status(400).json({
+        success: false,
+        message: "You have already checked out.",
+      });
+    }
+
+    const lastBreak = attendance.breaks[attendance.breaks.length - 1];
+
+    if (lastBreak && !lastBreak.breakEnd) {
+      return res.status(400).json({
+        success: false,
+        message: "Please end your break before checking out.",
+      });
+    }
+
+    attendance.checkOutTime = new Date();
+
+    const sessionSeconds = Math.floor(
+      (attendance.checkOutTime.getTime() - attendance.checkInTime.getTime()) /
+        1000,
+    );
+
+    attendance.totalWorkingSeconds = Math.max(
+      sessionSeconds - attendance.totalBreakSeconds,
+      0,
+    );
+
+    await attendance.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Checked out successfully.",
+      attendance,
+    });
+  } catch (error) {
+    console.error("Check Out Error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error.",
+    });
+  }
+};
+
+// =======================================================
+// Today's Attendance
+// =======================================================
+
+export const getTodayAttendance = async (req, res) => {
+  try {
+    const userID = req.user.userID;
+
+    const { startOfDay, endOfDay } = getTodayRange();
+
+    // ---------------------------------------------------
+    // Check whether today requires attendance
+    // ---------------------------------------------------
+
+    const attendanceDay = await isAttendanceAllowedToday();
+
+    const attendance = await attendanceModel.findOne({
+      user: userID,
+      date: {
+        $gte: startOfDay,
+        $lte: endOfDay,
+      },
+    });
+
+    // ---------------------------------------------------
+    // Holiday
+    // ---------------------------------------------------
+
+    if (attendanceDay.reason === "holiday") {
+      return res.status(200).json({
+        success: true,
+        attendance,
+        isWorkingDay: false,
+        isHoliday: true,
+        holiday: attendanceDay.holiday,
+        message: attendance
+          ? "Attendance record found for today."
+          : "Today is a holiday. Attendance is not required.",
+      });
+    }
+
+    // ---------------------------------------------------
+    // Weekend / non-working day
+    // ---------------------------------------------------
+
+    if (attendanceDay.reason === "weekend") {
+      return res.status(200).json({
+        success: true,
+        attendance,
+        isWorkingDay: false,
+        isHoliday: false,
+        holiday: null,
+        message: attendance
+          ? "Attendance record found for today."
+          : "Today is a non-working day. Attendance is not required.",
+      });
+    }
+
+    // ---------------------------------------------------
+    // Normal working day
+    // ---------------------------------------------------
+
+    return res.status(200).json({
+      success: true,
+      attendance,
+      isWorkingDay: true,
+      isHoliday: false,
+      holiday: null,
+      message: attendance
+        ? "Attendance fetched successfully."
+        : "No attendance found for today.",
+    });
+  } catch (error) {
+    console.error("Get Today Attendance Error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error.",
+    });
+  }
+};
+
+// =======================================================
+// Attendance History (with generated Absent records)
+// =======================================================
+
+export const getAttendanceHistory = async (req, res) => {
+  try {
+    const userID = req.user.userID;
+
+    const history = await attendanceModel
+      .find({
+        user: userID,
+      })
+      .sort({
+        date: -1,
+      })
+      .lean();
+
+    // Map existing records by YYYY-MM-DD
+    const existingKeys = new Set();
+    for (const record of history) {
+      if (record.date) {
+        existingKeys.add(getDateKey(record.date));
+      }
+    }
+
+    // Fetch active holidays to exclude
+    const holidays = await holidayModel
+      .find({ isActive: true })
+      .select("date")
+      .lean();
+
+    const holidaySet = new Set(holidays.map((h) => getDateKey(h.date)));
+
+    // Generate working days for current month up to today
+    const now = new Date();
+    const startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+    startDate.setHours(0, 0, 0, 0);
+
+    const endDate = new Date(now);
+    endDate.setHours(23, 59, 59, 999);
+
+    const completeHistory = [...history];
+
+    const curr = new Date(startDate);
+    while (curr <= endDate) {
+      const dateKey = getDateKey(curr);
+      const isWorkingDay = isConfiguredWorkingDay(curr);
+      const isHoli = holidaySet.has(dateKey);
+
+      // Inject virtual Absent record for missing working days
+      if (isWorkingDay && !isHoli && !existingKeys.has(dateKey)) {
+        completeHistory.push({
+          _id: `absent-${dateKey}`,
+          user: userID,
+          date: new Date(curr),
+          status: "Absent",
+          totalWorkingSeconds: 0,
+          checkInTime: null,
+          checkOutTime: null,
+          breaks: [],
+        });
+      }
+
+      curr.setDate(curr.getDate() + 1);
+    }
+
+    // Sort descending by date
+    completeHistory.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    return res.status(200).json({
+      success: true,
+      attendance: completeHistory,
+    });
+  } catch (error) {
+    console.error("Attendance History Error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error.",
+    });
+  }
+};
+
+// =======================================================
+// Dashboard Stats
+// =======================================================
+
+export const getDashboardStats = async (req, res) => {
+  try {
+    const userID = req.user.userID;
+
+    const stats = await getAttendanceStats(userID);
+
+    return res.status(200).json({
+      success: true,
+      stats,
+    });
+  } catch (error) {
+    console.error("Dashboard Stats Error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error.",
+    });
+  }
+};

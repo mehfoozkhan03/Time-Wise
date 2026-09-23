@@ -3,6 +3,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import tourReducer from "./tourSlice";
 import authReducer from "./authSlice";
 import attendanceReducer from "./attendanceSlice";
+import leaveReducer from "./leaveSlice";
 import notificationReducer from "./notificationSlice";
 import postReducer from "./postSlice";
 import dashboardReducer from "./dashboardSlice";
@@ -10,6 +11,7 @@ import reportsReducer from "./reportsSlice";
 import adminAuthReducer from "./adminAuthSlice";
 import calendarReducer from "./calendarSlice";
 import holidayReducer from "./holidaySlice";
+import communityProfileReducer from './communityProfileSlice';
 
 const store = configureStore({
   reducer: {
@@ -20,6 +22,8 @@ const store = configureStore({
     auth: authReducer,
 
     attendance: attendanceReducer,
+
+    leave: leaveReducer,
 
     notification: notificationReducer,
 
@@ -32,6 +36,8 @@ const store = configureStore({
     calendar: calendarReducer,
 
     holiday: holidayReducer,
+
+    communityProfile: communityProfileReducer,
   },
 });
 

@@ -1,6 +1,80 @@
-import { SectionLabel } from "./SectionLabel";
+
+import { SectionLabel } from "../SectionLabel";
+import { useState, useEffect } from "react";
+import Skeleton from "../../components/Skeleton/Skeleton";
 
 export function BadgesSection({ badges }) {
+
+  //skeleton//
+const [showSkeleton, setShowSkeleton] = useState(true);
+
+useEffect(() => {
+  const timer = setTimeout(() => {
+    setShowSkeleton(false);
+  }, 1500);
+
+  return () => clearTimeout(timer);
+}, []);
+
+if (showSkeleton) {
+  return (
+    <div className="glass-card" style={{ padding: 24 }}>
+
+      <Skeleton
+        width="220px"
+        height="30px"
+      />
+
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(3, 1fr)",
+          gap: 12,
+          marginTop: 20,
+        }}
+      >
+        {[...Array(6)].map((_, index) => (
+          <div
+            key={index}
+            style={{
+              padding: "16px 10px",
+              borderRadius: 12,
+              border: "1px solid var(--border)",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 10,
+            }}
+          >
+            <Skeleton
+              width="44px"
+              height="44px"
+              radius="12px"
+            />
+
+            <Skeleton
+              width="80%"
+              height="16px"
+            />
+
+            <Skeleton
+              width="100%"
+              height="12px"
+            />
+
+            <Skeleton
+              width="60px"
+              height="20px"
+              radius="5px"
+            />
+          </div>
+        ))}
+      </div>
+
+    </div>
+  );
+}
+//skeleton//
   return (
     <div className="glass-card" style={{ padding: 24 }}>
       <SectionLabel>Achievement Badges</SectionLabel>

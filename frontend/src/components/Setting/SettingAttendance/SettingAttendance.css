@@ -117,6 +117,7 @@
     background-color: blue;
 }
 
+
 html.dark input[type="time"]::-webkit-calendar-picker-indicator {
     /* Use filters to change the color (this example turns a black icon white) */
     filter: invert(1) sepia(1) saturate(5) hue-rotate(175deg);

@@ -9,6 +9,34 @@ import { FaTriangleExclamation } from "react-icons/fa6";
 
 export const DashboardNotification = () => {
 
+    const recentNotification = [
+        {
+            icon: <FaHeart style={{color: "#ee2a44"}} />,
+            notificationTitle: "Sarah Mitchell liked a thought post",
+            time: "2m ago"
+        },
+        {
+            icon: <FaTriangleExclamation style={{color: "#f6be5d"}} />,
+            notificationTitle: "3 employees haven't checked in today",
+            time: "10m ago"
+        },
+        {
+            icon: <FaBell style={{color: "#ef9b52"}} />,
+            notificationTitle: "Monthly attendance report is ready to export",
+            time: "1h ago"
+        },
+        {
+            icon: <FaCloud />,
+            notificationTitle: "New comment on company announcement",
+            time: "3h ago"
+        },
+        {
+            icon: <RiTargetFill style={{color: "#ff6da8"}} />,
+            notificationTitle: "Attendance sync completed successfully",
+            time: "Yesterday"
+        },
+    ]
+
     return (
         <>
             <div className="dashboardNotification-container">
@@ -53,66 +81,23 @@ export const DashboardNotification = () => {
                         <span>3 unread</span>
                     </div>
                     <div className="recent-notification-content-container">
-                        <div className="recent-notification-content">
-                            <div className="recent-notification-type">
-                                <div className="recent-notification-icon">
-                                    <FaHeart style={{color: "#ee2a44"}} />
+                        {
+                            recentNotification && recentNotification.map((el, id) => (
+                                <div className="recent-notification-content" key={id}>
+                                    <div className="recent-notification-type">
+                                        <div className="recent-notification-icon">
+                                            {el.icon}
+                                        </div>
+                                        <div className="recent-notification-msg">
+                                            <p>{el.notificationTitle}</p>
+                                            <span>{el.time}</span>
+                                        </div>
+                                    </div>
+                                    <div className="recent-notification-active"></div>
                                 </div>
-                                <div className="recent-notification-msg">
-                                    <p>Sarah Mitchell liked a thought post</p>
-                                    <span>2m ago</span>
-                                </div>
-                            </div>
-                            <div className="recent-notification-active"></div>
-                        </div>
-                        <div className="recent-notification-content">
-                            <div className="recent-notification-type">
-                                <div className="recent-notification-icon">
-                                    <FaTriangleExclamation style={{color: "#f6be5d"}} />
-                                </div>
-                                <div className="recent-notification-msg">
-                                    <p>3 employees haven't checked in today</p>
-                                    <span>10m ago</span>
-                                </div>
-                            </div>
-                            <div className="recent-notification-active"></div>
-                        </div>
-                        <div className="recent-notification-content">
-                            <div className="recent-notification-type">
-                                <div className="recent-notification-icon">
-                                    <FaBell style={{color: "#ef9b52"}} />
-                                </div>
-                                <div className="recent-notification-msg">
-                                    <p>Monthly attendance report is ready to export</p>
-                                    <span>1h ago</span>
-                                </div>
-                            </div>
-                            <div className="recent-notification-active"></div>
-                        </div>
-                        <div className="recent-notification-content">
-                            <div className="recent-notification-type">
-                                <div className="recent-notification-icon">
-                                    <FaCloud />
-                                </div>
-                                <div className="recent-notification-msg">
-                                    <p>New comment on company announcement</p>
-                                    <span>3h ago</span>
-                                </div>
-                            </div>
-                            <div className="recent-notification-active"></div>
-                        </div>
-                        <div className="recent-notification-content">
-                            <div className="recent-notification-type">
-                                <div className="recent-notification-icon">
-                                    <RiTargetFill style={{color: "#ff6da8"}} />
-                                </div>
-                                <div className="recent-notification-msg">
-                                    <p>Attendance sync completed successfully</p>
-                                    <span>Yesterday</span>
-                                </div>
-                            </div>
-                            <div className="recent-notification-active"></div>
-                        </div>
+
+                            ))
+                        }
                     </div>
                 </div>
             </div>

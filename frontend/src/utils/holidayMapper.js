@@ -1,57 +1,69 @@
 import { EVENT_TYPES } from "../data/eventTypes";
 
-/* =========================================
-   Holiday -> Calendar Event Mapper
-========================================= */
+const VALID_HOLIDAY_TYPES = new Set(Object.values(EVENT_TYPES));
 
-export const mapHolidayToEvent = (holiday) => ({
-  _id: `holiday-${holiday._id}`,
+export const mapHolidayToEvent = (holiday = {}) => {
+  const holidayType = String(holiday.type ?? EVENT_TYPES.HOLIDAY).toUpperCase();
 
-  id: holiday._id,
+  return {
+    _id: holiday._id,
 
-  title: holiday.title ?? "Holiday",
+    id: holiday._id,
 
-  description: holiday.description ?? "",
+    holidayId: holiday._id,
 
-  type: holiday.type?.toUpperCase() || EVENT_TYPES.HOLIDAY,
+    title: holiday.title ?? "Holiday",
 
-  date: holiday.date,
+    description: holiday.description ?? "",
 
-  startTime: "",
+    type: VALID_HOLIDAY_TYPES.has(holidayType)
+      ? holidayType
+      : EVENT_TYPES.HOLIDAY,
 
-  endTime: "",
+    date: holiday.date ?? null,
 
-  isAllDay: true,
+    startTime: "",
 
-  employeeId: null,
+    endTime: "",
 
-  employeeName: "",
+    isAllDay: true,
 
-  department: "",
+    employeeId: null,
 
-  designation: "",
+    employeeName: "",
 
-  location: "",
+    department: "",
 
-  priority: "MEDIUM",
+    designation: "",
 
-  // Color and icon will come from eventConfig.js
-  color: null,
+    location: "",
 
-  visibility: "PUBLIC",
+    priority: "MEDIUM",
 
-  isHoliday: true,
-});
+    color: null,
 
-/* =========================================
-   Map Holiday List
-========================================= */
+    visibility: "PUBLIC",
+
+    isHoliday: true,
+
+    createdAt: holiday.createdAt ?? null,
+
+    updatedAt: holiday.updatedAt ?? null,
+
+    createdBy: holiday.createdBy ?? null,
+
+    updatedBy: holiday.updatedBy ?? null,
+
+    isActive: holiday.isActive !== false,
+  };
+};
 
 export const mapHolidayList = (holidays = []) => {
   if (!Array.isArray(holidays)) {
     console.warn("Holiday Mapper: Expected an array.", holidays);
+
     return [];
   }
 
-  return holidays.map(mapHolidayToEvent);
+  return holidays.filter(Boolean).map(mapHolidayToEvent);
 };

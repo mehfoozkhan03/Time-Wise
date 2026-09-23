@@ -1,7 +1,9 @@
-import { useState } from "react";
+
 
 import { SectionLabel } from "./sectionLabel";
 import { StatusPill } from "./statusPill";
+import { useState, useEffect } from "react";
+import Skeleton from "../../components/Skeleton/Skeleton";
 
 export function AttendanceLog({
   attendanceLog,
@@ -13,6 +15,16 @@ export function AttendanceLog({
 }) {
   const recordsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(1);
+  
+  const [showSkeleton, setShowSkeleton] = useState(true);
+
+useEffect(() => {
+  const timer = setTimeout(() => {
+    setShowSkeleton(false);
+  }, 1500);
+
+  return () => clearTimeout(timer);
+}, []);
 
   const totalPages = Math.ceil(filteredLog.length / recordsPerPage);
 
@@ -21,6 +33,78 @@ export function AttendanceLog({
 
   const currentRecords = filteredLog.slice(startIndex, endIndex);
 
+    if (showSkeleton) {
+  return (
+    <div className="glass-card" style={{ padding: 24 }}>
+
+      {/* Header */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          marginBottom: 20,
+          flexWrap: "wrap",
+          gap: 12,
+        }}
+      >
+        <Skeleton width="180px" height="30px" />
+
+        <div style={{ display: "flex", gap: 10 }}>
+          <Skeleton width="220px" height="40px" />
+          <Skeleton width="150px" height="40px" />
+        </div>
+      </div>
+
+      {/* Table */}
+      <table
+        style={{
+          width: "100%",
+          borderCollapse: "collapse",
+        }}
+      >
+        <thead>
+          <tr>
+            {[...Array(8)].map((_, i) => (
+              <th key={i} style={{ padding: "10px" }}>
+                <Skeleton height="18px" />
+              </th>
+            ))}
+          </tr>
+        </thead>
+
+        <tbody>
+          {[...Array(5)].map((_, row) => (
+            <tr key={row}>
+              {[...Array(8)].map((_, col) => (
+                <td key={col} style={{ padding: "12px" }}>
+                  <Skeleton height="18px" />
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      {/* Footer */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          marginTop: 20,
+          alignItems: "center",
+        }}
+      >
+        <Skeleton width="180px" height="18px" />
+
+        <div style={{ display: "flex", gap: 15 }}>
+          <Skeleton width="90px" height="35px" />
+          <Skeleton width="90px" height="35px" />
+        </div>
+      </div>
+
+    </div>
+  );
+}
   return (
     <div className="glass-card" style={{ padding: 24 }}>
       <div
@@ -91,7 +175,7 @@ export function AttendanceLog({
           </select>
         </div>
       </div>
-      <div style={{ overflowX: "auto" }}>
+      <div style={{ overflowX: "scroll", scrollbarWidth: "none" }}>
         <table
           style={{
             width: "100%",
@@ -189,7 +273,7 @@ export function AttendanceLog({
                       {row.hours}h
                     </span>
                   ) : (
-                    <span style={{ color: "var(--text-primary)" }}>—</span>
+                    <span style={{ color: "var(--text-primary)" }}>0h</span>
                   )}
                 </td>
                 <td

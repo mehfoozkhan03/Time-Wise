@@ -17,6 +17,17 @@
 
 .danger-btn {
   background: #ef4444 !important;
+   width:60px;
+  border-radius: 5px;
+  height: 30px;
+  background-color: var( --primary);
+  font-family:'Poppins', sans-serif;
+  color: var(--text_primary);
+}
 
-  color: white !important;
+.Cancel_button{
+  width:60px;
+  border-radius: 5px;
+  height: 30px;
+  font-family:'Poppins', sans-serif;
 }

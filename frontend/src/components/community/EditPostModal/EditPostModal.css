@@ -48,6 +48,20 @@
 .modal-actions {
   display: flex;
   justify-content: flex-end;
-
   gap: 12px;
+}
+
+.Cancel_button{
+  width:60px;
+  border-radius: 5px;
+  height: 30px;
+  font-family:'Poppins', sans-serif;
+}
+.save_button{
+   width:60px;
+  border-radius: 5px;
+  height: 30px;
+  background-color: var( --primary);
+  font-family:'Poppins', sans-serif;
+  color: var(--text_primary);
 }

@@ -57,6 +57,7 @@ export const loginUser = createAsyncThunk(
   },
 );
 
+//# =================== Register User =================== 
 export const registerUser = createAsyncThunk(
   "auth/registerUser",
   async (userData, thunkAPI) => {
@@ -93,7 +94,7 @@ export const registerUser = createAsyncThunk(
   },
 );
 
-// Theme
+//# ================ Theme ====================
 export const updateTheme = createAsyncThunk(
   "auth/updateTheme",
   async (theme, thunkAPI) => {
@@ -110,11 +111,48 @@ export const updateTheme = createAsyncThunk(
   },
 );
 
+//# =================== Update Social Links ====================
+export const updateSocialLinks = createAsyncThunk(
+  "auth/updateSocialLinks",
+  async (socialLinks, thunkAPI) => {
+    try {
+      const { data } = await authService.updateSocialLinks(socialLinks);
+
+      return data.socialLinks;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message ||
+          error.message ||
+          "Failed to update social links",
+      );
+    }
+  },
+);
+
+//# ================= Emergency Contact ==================
+export const updateEmergencyContact = createAsyncThunk(
+  "auth/updateEmergencyContact",
+  async (emergencyContact, thunkAPI) => {
+    try {
+      const { data } =
+        await authService.updateEmergencyContact(emergencyContact);
+
+      return data.emergencyContact;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message ||
+          error.message ||
+          "Failed to update emergency contact",
+      );
+    }
+  },
+);
+
 const initialState = {
   isAuthenticated: document.cookie
     .split("; ")
     .some((cookie) => cookie.startsWith("token=")),
-  user: null,
+
   isLoading: false,
   isError: false,
   errorMessage: "",
@@ -206,6 +244,28 @@ const authSlice = createSlice({
         if (state.user) {
           state.user.theme = action.payload;
         }
+      })
+
+      //# =============== Social Links ===================
+      .addCase(updateSocialLinks.fulfilled, (state, action) => {
+        if (state.user) {
+          state.user.socialLinks = action.payload;
+        }
+      })
+      .addCase(updateSocialLinks.rejected, (state, action) => {
+        state.isError = true;
+        state.errorMessage = action.payload;
+      })
+
+      //# ================ Emergency Contact ==================
+      .addCase(updateEmergencyContact.fulfilled, (state, action) => {
+        if (state.user) {
+          state.user.emergencyContact = action.payload;
+        }
+      })
+      .addCase(updateEmergencyContact.rejected, (state, action) => {
+        state.isError = true;
+        state.errorMessage = action.payload;
       });
   },
 });

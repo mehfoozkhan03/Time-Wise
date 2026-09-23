@@ -35,6 +35,10 @@ export const postService = {
     return api.delete(`/posts/${id}`)
   },
 
+  // =====================================================
+  // Post Likes
+  // =====================================================
+
   togglePostLike(id) {
     return api.post(`/posts/${id}/like`)
   },
@@ -75,6 +79,10 @@ export const postService = {
   deleteComment(commentId) {
     return api.delete(`/posts/comments/${commentId}`)
   },
+
+  // =====================================================
+  // Comment Likes
+  // =====================================================
 
   toggleCommentLike(commentId) {
     return api.post(`/posts/comments/${commentId}/like`)

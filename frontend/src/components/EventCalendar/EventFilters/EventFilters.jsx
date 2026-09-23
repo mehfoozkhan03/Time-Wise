@@ -4,16 +4,17 @@ import {
   memo,
   useMemo,
   useCallback,
+  useState,
 } from "react";
 
-import {
-  FaSearch,
-  FaTimes,
-} from "react-icons/fa";
+import { FaSearch, FaTimes } from "react-icons/fa";
 
 import { EVENT_CONFIG } from "../../../data/eventConfig";
+import { EVENT_TYPES } from "../../../data/eventTypes";
 
 const eventTypes = Object.entries(EVENT_CONFIG);
+
+const INITIAL_VISIBLE_FILTERS = 6;
 
 function EventFilters({
   filters = {},
@@ -23,14 +24,16 @@ function EventFilters({
   selectAll,
   clearAll,
   events = [],
+  weekendCount = 0,
 }) {
-  /* =========================================
-     Event Counts
-  ========================================= */
+  const [showAllFilters, setShowAllFilters] =
+    useState(false);
 
   const eventCounts = useMemo(() => {
     return events.reduce((counts, event) => {
-      if (!event?.type) return counts;
+      if (!event?.type) {
+        return counts;
+      }
 
       const type = String(event.type).toUpperCase();
 
@@ -40,35 +43,38 @@ function EventFilters({
     }, {});
   }, [events]);
 
-  /* =========================================
-     Search
-  ========================================= */
+  const visibleFilters = useMemo(() => {
+    return showAllFilters
+      ? eventTypes
+      : eventTypes.slice(0, INITIAL_VISIBLE_FILTERS);
+  }, [showAllFilters]);
+
+  const remainingFilters = useMemo(() => {
+    return Math.max(
+      eventTypes.length - INITIAL_VISIBLE_FILTERS,
+      0,
+    );
+  }, []);
 
   const handleSearchChange = useCallback(
-    (e) => {
-      setSearchTerm?.(e.target.value.trimStart());
+    (event) => {
+      setSearchTerm?.(
+        event.target.value.trimStart(),
+      );
     },
-    [setSearchTerm]
+    [setSearchTerm],
   );
 
   const handleClearSearch = useCallback(() => {
     setSearchTerm?.("");
   }, [setSearchTerm]);
 
-  /* =========================================
-     Filter Toggle
-  ========================================= */
-
   const handleToggleFilter = useCallback(
     (type) => {
       toggleFilter?.(type);
     },
-    [toggleFilter]
+    [toggleFilter],
   );
-
-  /* =========================================
-     Actions
-  ========================================= */
 
   const handleSelectAll = useCallback(() => {
     selectAll?.();
@@ -78,10 +84,14 @@ function EventFilters({
     clearAll?.();
   }, [clearAll]);
 
+  const handleToggleShowAll = useCallback(() => {
+    setShowAllFilters(
+      (previous) => !previous,
+    );
+  }, []);
+
   return (
     <section className="eventFilters">
-      {/* ================= Search ================= */}
-
       <label
         htmlFor="calendar-search"
         className="sr-only"
@@ -89,10 +99,7 @@ function EventFilters({
         Search calendar events
       </label>
 
-      <div
-        className="searchBar"
-        role="search"
-      >
+      <div className="searchBar" role="search">
         <FaSearch aria-hidden="true" />
 
         <input
@@ -111,15 +118,14 @@ function EventFilters({
           <button
             type="button"
             className="clearSearchBtn"
-            aria-label="Clear search"
             onClick={handleClearSearch}
+            aria-label="Clear Search"
+            title="Clear Search"
           >
             <FaTimes />
           </button>
         )}
       </div>
-
-      {/* ================= Actions ================= */}
 
       <div className="filterActions">
         <button
@@ -137,15 +143,28 @@ function EventFilters({
         </button>
       </div>
 
-      {/* ================= Filter Chips ================= */}
+      <div
+        className="filterList"
+        role="group"
+        aria-label="Event Filters"
+      >
+        {visibleFilters.map(([type, config]) => {
+          const isWeekend =
+            type === EVENT_TYPES.WEEKEND;
 
-      <div className="filterList">
-        {eventTypes.map(([type, config]) => {
-          const active = Boolean(filters[type]);
+          const count = isWeekend
+            ? weekendCount
+            : eventCounts[type] ?? 0;
+
+          const hasEvents = count > 0;
+
+          const active =
+            hasEvents && Boolean(filters[type]);
 
           const className = [
             "filterChip",
             active && "active",
+            !hasEvents && "disabled",
           ]
             .filter(Boolean)
             .join(" ");
@@ -158,8 +177,18 @@ function EventFilters({
               type="button"
               className={className}
               aria-pressed={active}
-              aria-label={`Toggle ${config.label} events`}
-              title={config.label}
+              aria-disabled={!hasEvents}
+              aria-label={
+                hasEvents
+                  ? `Toggle ${config.label}`
+                  : `${config.label}, no available dates`
+              }
+              title={
+                hasEvents
+                  ? config.label
+                  : `No ${config.label.toLowerCase()} available`
+              }
+              disabled={!hasEvents}
               onClick={() =>
                 handleToggleFilter(type)
               }
@@ -171,17 +200,29 @@ function EventFilters({
               <span>{config.label}</span>
 
               <span className="count">
-                {eventCounts[type] ?? 0}
+                {count}
               </span>
             </button>
           );
         })}
+
+        {remainingFilters > 0 && (
+          <button
+            type="button"
+            className="showMoreBtn"
+            onClick={handleToggleShowAll}
+            aria-expanded={showAllFilters}
+          >
+            {showAllFilters
+              ? "Show Less"
+              : `+${remainingFilters} More`}
+          </button>
+        )}
       </div>
     </section>
   );
 }
 
-EventFilters.displayName =
-  "EventFilters";
+EventFilters.displayName = "EventFilters";
 
 export default memo(EventFilters);

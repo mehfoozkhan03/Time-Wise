@@ -25,7 +25,7 @@ const DeletePostModal = ({ postId, onClose }) => {
         <p>This action cannot be undone.</p>
 
         <div className="modal-actions">
-          <button onClick={onClose}>Cancel</button>
+          <button className='Cancel_button' onClick={onClose}>Cancel</button>
 
           <button className="danger-btn" onClick={handleDelete}>
             Delete

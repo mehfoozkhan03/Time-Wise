@@ -2,10 +2,7 @@ import "./MiniCalendar.css";
 
 import { memo, useMemo, useCallback } from "react";
 
-import {
-  FaChevronLeft,
-  FaChevronRight,
-} from "react-icons/fa";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 import Card from "../../Common/CalendarCard/Card";
 
@@ -23,27 +20,31 @@ function MiniCalendar({
   selectDate,
   previousMonth,
   nextMonth,
+  onMonthChange,
 }) {
   /* =========================================
      Safety Check
   ========================================= */
 
-  if (!currentDate) return null;
+  if (!currentDate) {
+    return null;
+  }
 
   /* =========================================
      Calendar Data
   ========================================= */
 
-  const days = useMemo(
-    () => generateCalendar(currentDate),
-    [currentDate]
-  );
+  const days = useMemo(() => {
+    return generateCalendar(currentDate);
+  }, [currentDate]);
 
-  const monthTitle = useMemo(
-    () =>
-      `${getMonthName(currentDate)} ${currentDate.getFullYear()}`,
-    [currentDate]
-  );
+  const weekDays = useMemo(() => {
+    return WEEK_DAYS;
+  }, []);
+
+  const monthTitle = useMemo(() => {
+    return `${getMonthName(currentDate)} ${currentDate.getFullYear()}`;
+  }, [currentDate]);
 
   /* =========================================
      Handlers
@@ -53,16 +54,36 @@ function MiniCalendar({
     (date) => {
       selectDate?.(date);
     },
-    [selectDate]
+    [selectDate],
+  );
+
+  const createSelectHandler = useCallback(
+    (date) => () => {
+      handleSelectDay(date);
+    },
+    [handleSelectDay],
   );
 
   const handlePreviousMonth = useCallback(() => {
     previousMonth?.();
-  }, [previousMonth]);
+    onMonthChange?.("previous");
+  }, [previousMonth, onMonthChange]);
 
   const handleNextMonth = useCallback(() => {
     nextMonth?.();
-  }, [nextMonth]);
+    onMonthChange?.("next");
+  }, [nextMonth, onMonthChange]);
+
+  const getDayClassName = useCallback((item, isSelected) => {
+    return [
+      "miniDay",
+      !item.currentMonth && "otherMonth",
+      item.isToday && "today",
+      isSelected && "selected",
+    ]
+      .filter(Boolean)
+      .join(" ");
+  }, []);
 
   return (
     <Card className="miniCalendarCard">
@@ -88,43 +109,26 @@ function MiniCalendar({
         </button>
       </div>
 
-      <div className="miniWeekDays">
-        {WEEK_DAYS.map((day) => (
-          <span key={day}>
+      <div className="miniWeekDays" role="rowgroup">
+        {weekDays.map((day) => (
+          <span key={day} role="columnheader">
             {day.charAt(0)}
           </span>
         ))}
       </div>
 
-      <div className="miniGrid">
+      <div className="miniGrid" role="grid" aria-label="Mini Calendar">
         {days.map((item) => {
-          const isSelected = isSameDate(
-            item.date,
-            selectedDate
-          );
-
-          const className = [
-            "miniDay",
-            !item.currentMonth &&
-              "otherMonth",
-            item.isToday && "today",
-            isSelected && "selected",
-          ]
-            .filter(Boolean)
-            .join(" ");
+          const isSelected = isSameDate(item.date, selectedDate);
 
           return (
             <button
               key={getDateKey(item.date)}
               type="button"
-              className={className}
-              onClick={() =>
-                handleSelectDay(item.date)
-              }
+              className={getDayClassName(item, isSelected)}
+              onClick={createSelectHandler(item.date)}
               aria-pressed={isSelected}
-              aria-current={
-                item.isToday ? "date" : undefined
-              }
+              aria-current={item.isToday ? "date" : undefined}
               aria-label={`Select ${item.date.toDateString()}`}
               title={item.date.toDateString()}
             >
@@ -137,7 +141,6 @@ function MiniCalendar({
   );
 }
 
-MiniCalendar.displayName =
-  "MiniCalendar";
+MiniCalendar.displayName = "MiniCalendar";
 
 export default memo(MiniCalendar);

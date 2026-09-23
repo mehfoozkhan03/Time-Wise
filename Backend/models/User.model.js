@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema(
   {
@@ -39,13 +39,13 @@ const userSchema = new mongoose.Schema(
 
     gender: {
       type: String,
-      enum: ['Male', 'Female', 'Other'],
+      enum: ["Male", "Female", "Other"],
     },
 
     role: {
       type: String,
-      enum: ['employee', 'admin'],
-      default: 'employee',
+      enum: ["Admin", "Manager", "Employee"],
+      default: "Employee",
     },
 
     // ================= Organization =================
@@ -59,6 +59,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
+    lastActiveAt: {
+      type: Date,
+      default: null,
+    },
 
     // ================= Profile =================
 
@@ -69,15 +73,15 @@ const userSchema = new mongoose.Schema(
 
     theme: {
       type: String,
-      enum: ['light', 'dark', 'system'],
-      default: 'system',
+      enum: ["light", "dark", "system"],
+      default: "system",
     },
 
     // ================= Relations =================
 
     adminID: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Admin',
+      ref: "Admin",
       default: null,
     },
 
@@ -91,14 +95,59 @@ const userSchema = new mongoose.Schema(
     attendance: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Attendance',
+        ref: "Attendance",
       },
     ],
+
+    // =============== Social Links ==================
+    socialLinks: {
+      linkedin: {
+        type: String,
+        default: "",
+        trim: true,
+      },
+      github: {
+        type: String,
+        default: "",
+        trim: true,
+      },
+      portfolio: {
+        type: String,
+        default: "",
+        trim: true,
+      },
+    },
+
+    // Emergency contact
+    emergencyContact: {
+      name: {
+        type: String,
+        default: "",
+        trim: true,
+      },
+      relationship: {
+        type: String,
+        default: "",
+        trim: true,
+      },
+      phone: {
+        type: String,
+        default: "",
+        trim: true,
+      },
+      email: {
+        type: String,
+        default: "",
+        trim: true,
+        lowercase: true,
+      },
+    },
   },
+
   {
     timestamps: true,
     versionKey: false,
   },
-)
+);
 
-export const userModel = mongoose.model('User', userSchema)
+export const userModel = mongoose.model("User", userSchema);

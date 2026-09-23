@@ -1,6 +1,7 @@
-import express from 'express';
+import express from "express";
 
-import { auth } from '../middleware/AuthMiddleware.js';
+import { auth } from "../middleware/AuthMiddleware.js";
+import { adminAuth } from "../middleware/adminAuth.js";
 
 import {
   getAllEvents,
@@ -8,25 +9,28 @@ import {
   createEvent,
   updateEvent,
   deleteEvent,
-} from '../controllers/calendar.controller.js';
+} from "../controllers/User/calendar.controller.js";
 
 const router = express.Router();
 
-router.use(auth);
+const calendarAuth = (req, res, next) => {
+  if (req.cookies?.adminToken) {
+    return adminAuth(req, res, next);
+  }
 
-// Get all events
-router.get('/', getAllEvents);
+  return auth(req, res, next);
+};
 
-// Get single event
-router.get('/:id', getEventById);
+router.use(calendarAuth);
 
-// Create event
-router.post('/', createEvent);
+router.get("/", getAllEvents);
 
-// Update event
-router.put('/:id', updateEvent);
+router.get("/:id", getEventById);
 
-// Delete event
-router.delete('/:id', deleteEvent);
+router.post("/", createEvent);
+
+router.put("/:id", updateEvent);
+
+router.delete("/:id", deleteEvent);
 
 export default router;

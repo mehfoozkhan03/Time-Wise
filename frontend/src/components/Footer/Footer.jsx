@@ -21,7 +21,7 @@ export default function Footer() {
 
           <div className="footer_brand_text">
             <h3>Smarter Employee Management</h3>
-
+        
             <p>
               TimeWise streamlines attendance tracking, leave management,
               employee collaboration, productivity monitoring, and workplace

@@ -287,7 +287,6 @@
   color: var(--text_secondary);
   font-size: .82rem;
 }
-
 /* ================= RESPONSIVE ================= */
 
 @media (max-width: 430px) {

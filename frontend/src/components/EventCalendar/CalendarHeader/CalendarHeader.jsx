@@ -1,11 +1,13 @@
 import "./CalendarHeader.css";
 
-import { memo, useCallback, useMemo } from "react";
+import { memo, useCallback } from "react";
 
 import {
   FaChevronLeft,
   FaChevronRight,
   FaCalendarDay,
+  FaPlus,
+  FaUmbrellaBeach,
 } from "react-icons/fa";
 
 import { getMonthName } from "../../../utils/calendarUtils";
@@ -15,24 +17,16 @@ function CalendarHeader({
   previousMonth,
   nextMonth,
   goToToday,
+  onCreateEvent,
+  onCreateHoliday,
+  canCreate = false,
+  canManageHoliday = false,
 }) {
-  /* =========================================
-     Safety Check
-  ========================================= */
+  if (!currentDate) {
+    return null;
+  }
 
-  if (!currentDate) return null;
-
-  /* =========================================
-     Month Title
-  ========================================= */
-
-  const monthTitle = useMemo(() => {
-    return `${getMonthName(currentDate)} ${currentDate.getFullYear()}`;
-  }, [currentDate]);
-
-  /* =========================================
-     Handlers
-  ========================================= */
+  const monthTitle = `${getMonthName(currentDate)} ${currentDate.getFullYear()}`;
 
   const handlePreviousMonth = useCallback(() => {
     previousMonth?.();
@@ -46,6 +40,14 @@ function CalendarHeader({
     goToToday?.();
   }, [goToToday]);
 
+  const handleCreateEvent = useCallback(() => {
+    onCreateEvent?.();
+  }, [onCreateEvent]);
+
+  const handleCreateHoliday = useCallback(() => {
+    onCreateHoliday?.();
+  }, [onCreateHoliday]);
+
   return (
     <header className="calendarHeader">
       <div className="headerTitle">
@@ -57,6 +59,7 @@ function CalendarHeader({
           type="button"
           className="navBtn"
           onClick={handlePreviousMonth}
+          disabled={!previousMonth}
           aria-label="Previous month"
           title="Previous Month"
         >
@@ -67,6 +70,7 @@ function CalendarHeader({
           type="button"
           className="todayBtn"
           onClick={handleToday}
+          disabled={!goToToday}
           aria-label="Go to today"
           title="Go to Today"
         >
@@ -78,14 +82,45 @@ function CalendarHeader({
           type="button"
           className="navBtn"
           onClick={handleNextMonth}
+          disabled={!nextMonth}
           aria-label="Next month"
           title="Next Month"
         >
           <FaChevronRight />
         </button>
+
+        {canCreate && (
+          <button
+            type="button"
+            className="createEventBtn"
+            onClick={handleCreateEvent}
+            disabled={!onCreateEvent}
+            aria-label="Create Event"
+            title="Create Event"
+          >
+            <FaPlus />
+            <span>Add Event</span>
+          </button>
+        )}
+
+        {canManageHoliday && (
+          <button
+            type="button"
+            className="createHolidayBtn"
+            onClick={handleCreateHoliday}
+            disabled={!onCreateHoliday}
+            aria-label="Create Holiday"
+            title="Create Holiday"
+          >
+            <FaUmbrellaBeach />
+            <span>Add Holiday</span>
+          </button>
+        )}
       </div>
     </header>
   );
 }
+
+CalendarHeader.displayName = "CalendarHeader";
 
 export default memo(CalendarHeader);

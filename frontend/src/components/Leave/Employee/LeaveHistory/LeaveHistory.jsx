@@ -1,0 +1,324 @@
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  MdChevronLeft,
+  MdChevronRight,
+  MdVisibility,
+} from "react-icons/md";
+
+import CustomSelect from "../../../Common/CustomSelect/CustomSelect";
+import LeaveDetails from "../LeaveDetails/LeaveDetails";
+
+import "./LeaveHistory.css";
+
+const filterOptions = [
+  {
+    value: "All",
+    label: "All Requests",
+  },
+  {
+    value: "Pending",
+    label: "Pending",
+  },
+  {
+    value: "Approved",
+    label: "Approved",
+  },
+  {
+    value: "Rejected",
+    label: "Rejected",
+  },
+  {
+    value: "Cancelled",
+    label: "Cancelled",
+  },
+];
+
+const LeaveHistory = ({
+  requests = [],
+  loading = false,
+  activeFilter = "All",
+  pagination = null,
+  onFilterChange,
+  onPageChange,
+  onCancelRequest,
+}) => {
+  const dispatch = useDispatch();
+
+  const reduxLoading = useSelector(
+    (state) => state.leave?.loading || false,
+  );
+
+  const [selectedRequest, setSelectedRequest] = useState(null);
+
+  const isLoading = loading || reduxLoading;
+
+  useEffect(() => {
+    if (!selectedRequest) {
+      return;
+    }
+
+    const updatedRequest = requests.find(
+      (request) => request.id === selectedRequest.id,
+    );
+
+    if (updatedRequest) {
+      setSelectedRequest(updatedRequest);
+    } else {
+      setSelectedRequest(null);
+    }
+  }, [requests, selectedRequest]);
+
+  const handleFilterChange = (event) => {
+    const newFilter = event.target.value;
+
+    if (newFilter === activeFilter) {
+      return;
+    }
+
+    onFilterChange?.(newFilter);
+  };
+
+  const handleViewRequest = (request) => {
+    setSelectedRequest(request);
+  };
+
+  const handlePreviousPage = () => {
+    if (isLoading) {
+      return;
+    }
+
+    const previousPage = (pagination?.page || 1) - 1;
+
+    if (previousPage < 1) {
+      return;
+    }
+
+    onPageChange?.(previousPage);
+  };
+
+  const handleNextPage = () => {
+    if (isLoading) {
+      return;
+    }
+
+    const nextPage = (pagination?.page || 1) + 1;
+    const totalPages = pagination?.totalPages || 0;
+
+    if (totalPages && nextPage > totalPages) {
+      return;
+    }
+
+    onPageChange?.(nextPage);
+  };
+
+  const currentPage = pagination?.page || 1;
+  const totalPages = pagination?.totalPages || 0;
+  const totalRequests = pagination?.total || 0;
+
+  const hasPreviousPage = currentPage > 1;
+
+  const hasNextPage =
+    totalPages > 0 && currentPage < totalPages;
+
+  const showPagination = totalPages > 1;
+
+  const emptyMessage =
+    activeFilter === "All"
+      ? "You have not submitted any leave requests yet."
+      : `You have no ${activeFilter.toLowerCase()} leave requests.`;
+
+  return (
+    <>
+      <section className="leaveHistory">
+        <div className="leaveHistory-header">
+          <div>
+            <h2>Leave Requests</h2>
+
+            <p>
+              View and manage your leave requests.
+            </p>
+          </div>
+        </div>
+
+        <div className="leaveHistory-filter-row">
+          <div className="leaveHistory-filter">
+            <label
+              htmlFor="leaveHistoryStatus"
+              className="leaveHistory-filter-label"
+            >
+              Filter by Status
+            </label>
+
+            <CustomSelect
+              id="leaveHistoryStatus"
+              name="status"
+              value={activeFilter}
+              options={filterOptions}
+              onChange={handleFilterChange}
+              disabled={isLoading}
+              placeholder="Select status"
+            />
+          </div>
+
+          {totalRequests > 0 && (
+            <span className="leaveHistory-count">
+              {totalRequests}{" "}
+              {totalRequests === 1
+                ? "request"
+                : "requests"}
+            </span>
+          )}
+        </div>
+
+        {isLoading && requests.length === 0 ? (
+          <div className="leaveHistory-loading">
+            <span>Loading leave requests...</span>
+          </div>
+        ) : requests.length === 0 ? (
+          <div className="leaveHistory-empty">
+            <h3>No leave requests</h3>
+
+            <p>{emptyMessage}</p>
+          </div>
+        ) : (
+          <>
+            <div className="leaveHistory-table-wrapper">
+              <table className="leaveHistory-table">
+                <thead>
+                  <tr>
+                    <th>Leave Type</th>
+                    <th>Dates</th>
+                    <th>Days</th>
+                    <th>Status</th>
+                    <th>Applied</th>
+                    <th></th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {requests.map((request) => {
+                    const status =
+                      request.status || "Pending";
+
+                    return (
+                      <tr key={request.id}>
+                        <td>{request.leaveType}</td>
+
+                        <td>
+                          {request.startDate} -{" "}
+                          {request.endDate}
+                        </td>
+
+                        <td>
+                          {request.requestedDays}
+                        </td>
+
+                        <td>
+                          <span
+                            className={`leaveHistory-status ${status.toLowerCase()}`}
+                          >
+                            {status}
+                          </span>
+                        </td>
+
+                        <td>
+                          {request.appliedDate}
+                        </td>
+
+                        <td>
+                          <button
+                            type="button"
+                            className="leaveHistory-view"
+                            onClick={() =>
+                              handleViewRequest(request)
+                            }
+                            aria-label={`View ${request.leaveType} request`}
+                          >
+                            <MdVisibility />
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+
+            {showPagination && (
+              <div className="leaveHistory-pagination">
+                <button
+                  type="button"
+                  className="leaveHistory-pagination-btn"
+                  onClick={handlePreviousPage}
+                  disabled={
+                    isLoading || !hasPreviousPage
+                  }
+                  aria-label="Previous page"
+                >
+                  <MdChevronLeft />
+
+                  <span>Previous</span>
+                </button>
+
+                <div className="leaveHistory-pagination-info">
+                  <span className="leaveHistory-pagination-label">
+                    Page
+                  </span>
+
+                  <span
+                    className={
+                      currentPage === 1
+                        ? "leaveHistory-page-number active"
+                        : "leaveHistory-page-number"
+                    }
+                  >
+                    1
+                  </span>
+
+                  <span className="leaveHistory-pagination-label">
+                    of
+                  </span>
+
+                  <span
+                    className={
+                      currentPage === totalPages
+                        ? "leaveHistory-page-number active"
+                        : "leaveHistory-page-number"
+                    }
+                  >
+                    {totalPages}
+                  </span>
+                </div>
+
+                <button
+                  type="button"
+                  className="leaveHistory-pagination-btn"
+                  onClick={handleNextPage}
+                  disabled={
+                    isLoading || !hasNextPage
+                  }
+                  aria-label="Next page"
+                >
+                  <span>Next</span>
+
+                  <MdChevronRight />
+                </button>
+              </div>
+            )}
+          </>
+        )}
+      </section>
+
+      {selectedRequest && (
+        <LeaveDetails
+          request={selectedRequest}
+          onClose={() => setSelectedRequest(null)}
+          onCancelSuccess={onCancelRequest}
+        />
+      )}
+    </>
+  );
+};
+
+export default LeaveHistory;

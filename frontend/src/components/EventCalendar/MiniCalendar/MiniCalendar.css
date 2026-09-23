@@ -175,3 +175,100 @@
   outline: 2px solid var(--primary);
   outline-offset: 2px;
 }
+
+/* ==========================================
+   760px
+========================================== */
+
+@media (max-width: 760px) {
+  .miniCalendarCard .cardBody {
+    gap: 6px;
+  }
+
+  .miniHeader h3 {
+    font-size: 14px;
+  }
+
+  .miniHeader button {
+    width: 30px;
+    height: 30px;
+  }
+
+  .miniWeekDays {
+    gap: 2px;
+  }
+
+  .miniWeekDays span {
+    font-size: 9px;
+  }
+
+  .miniGrid {
+    gap: 3px;
+  }
+
+  .miniDay {
+    font-size: 10px;
+  }
+}
+
+/* ==========================================
+   480px
+========================================== */
+
+@media (max-width: 480px) {
+  .miniCalendarCard .cardBody {
+    gap: 5px;
+  }
+
+  .miniHeader {
+    gap: 8px;
+  }
+
+  .miniHeader h3 {
+    font-size: 13px;
+  }
+
+  .miniHeader button {
+    width: 28px;
+    height: 28px;
+  }
+
+  .miniWeekDays span {
+    font-size: 8px;
+  }
+
+  .miniGrid {
+    gap: 2px;
+  }
+
+  .miniDay {
+    font-size: 9px;
+  }
+}
+
+/* ==========================================
+   320px
+========================================== */
+
+@media (max-width: 320px) {
+  .miniHeader {
+    gap: 6px;
+  }
+
+  .miniHeader h3 {
+    font-size: 12px;
+  }
+
+  .miniHeader button {
+    width: 26px;
+    height: 26px;
+  }
+
+  .miniWeekDays span {
+    font-size: 7px;
+  }
+
+  .miniDay {
+    font-size: 8px;
+  }
+}

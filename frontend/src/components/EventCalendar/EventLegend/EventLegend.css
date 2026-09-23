@@ -2,13 +2,80 @@
    Event Legend
 ========================================== */
 
+.legendCard {
+  height: 520px;
+}
+
+.legendCard .cardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  gap: 12px;
+
+  padding: 16px 18px;
+
+  border-bottom: 1px solid var(--border);
+}
+
+.legendCard .cardHeaderLeft {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  width: 100%;
+}
+
+.legendCard .cardIcon {
+  width: 40px;
+  height: 40px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border-radius: 10px;
+
+  font-size: 18px;
+}
+
+.legendCard .cardHeader h3 {
+  margin: 0;
+
+  color: var(--text_primary);
+
+  font-size: 18px;
+  font-weight: 700;
+
+  line-height: 1.3;
+}
+
 .legendCard .cardBody {
   display: flex;
   flex-direction: column;
-  scrollbar-width: none;
-  overflow-y: scroll;
-  padding:15px 15px;
-  gap:14px;
+
+  gap: 12px;
+
+  overflow-y: auto;
+
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.legendCard .cardBody::-webkit-scrollbar {
+  width: 6px;
+}
+
+.legendCard .cardBody::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 999px;
+}
+
+.legendCard .cardBody::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
 }
 
 /* ==========================================
@@ -18,7 +85,7 @@
 .legendList {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 }
 
 /* ==========================================
@@ -30,26 +97,30 @@
 
   display: flex;
   align-items: center;
+  justify-content: flex-start;
 
-  gap: 10px;
+  gap: 12px;
 
   padding: 10px 12px;
 
+  min-height: 56px;
+
   border: 1px solid var(--border);
-  border-radius: var(--radius_sm);
+  border-radius: var(--radius_md);
 
   background: var(--surface);
 
   color: var(--text_primary);
+
+  text-align: left;
 
   cursor: pointer;
 
   transition:
     background var(--transition),
     border-color var(--transition),
-    color var(--transition),
-    transform var(--transition),
-    box-shadow var(--transition);
+    box-shadow var(--transition),
+    transform var(--transition);
 }
 
 .legendItem:hover {
@@ -69,7 +140,8 @@
 }
 
 .legendItem.inactive {
-  opacity: 0.5;
+  border-color: var(--border);
+  opacity: 0.65;
 }
 
 /* ==========================================
@@ -77,24 +149,22 @@
 ========================================== */
 
 .legendIcon {
-  width: 32px;
-  height: 32px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 38px;
+  height: 38px;
 
   flex-shrink: 0;
 
-  border-radius: var(--radius_sm);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 10px;
 
   background: var(--legend-color);
 
   color: #fff;
 
-  font-size: 13px;
-
-  font-weight: 600;
+  font-size: 15px;
 }
 
 /* ==========================================
@@ -102,19 +172,29 @@
 ========================================== */
 
 .legendContent {
+  flex: 1;
+
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
 
   min-width: 0;
 }
 
 .legendTitle {
+  width: 100%;
+
   color: var(--text_primary);
 
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
 
-  line-height: 1.2;
+  line-height: 1.3;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .legendContent small {
@@ -122,5 +202,155 @@
 
   color: var(--text_secondary);
 
-  font-size: 10px;
+  font-size: 11px;
+
+  line-height: 1.2;
+}
+
+/* ==========================================
+   760px
+========================================== */
+
+@media (max-width: 760px) {
+  .legendCard {
+    height: 460px;
+  }
+
+  .legendCard .cardHeader {
+    padding: 14px 16px;
+  }
+
+  .legendCard .cardIcon {
+    width: 36px;
+    height: 36px;
+
+    font-size: 16px;
+  }
+
+  .legendCard .cardHeader h3 {
+    font-size: 16px;
+  }
+
+  .legendList {
+    gap: 8px;
+  }
+
+  .legendItem {
+    min-height: 52px;
+
+    padding: 9px 10px;
+  }
+
+  .legendIcon {
+    width: 34px;
+    height: 34px;
+
+    font-size: 14px;
+  }
+
+  .legendTitle {
+    font-size: 13px;
+  }
+
+  .legendContent small {
+    font-size: 10px;
+  }
+}
+
+/* ==========================================
+   480px
+========================================== */
+
+@media (max-width: 480px) {
+  .legendCard {
+    height: 400px;
+  }
+
+  .legendCard .cardHeader {
+    padding: 12px 14px;
+  }
+
+  .legendCard .cardIcon {
+    width: 34px;
+    height: 34px;
+
+    font-size: 15px;
+  }
+
+  .legendCard .cardHeader h3 {
+    font-size: 15px;
+  }
+
+  .legendList {
+    gap: 8px;
+  }
+
+  .legendItem {
+    min-height: 48px;
+
+    padding: 8px;
+
+    gap: 8px;
+  }
+
+  .legendIcon {
+    width: 32px;
+    height: 32px;
+
+    font-size: 13px;
+  }
+
+  .legendTitle {
+    font-size: 12px;
+  }
+
+  .legendContent small {
+    font-size: 9px;
+  }
+}
+
+/* ==========================================
+   320px
+========================================== */
+
+@media (max-width: 320px) {
+  .legendCard {
+    height: 360px;
+  }
+
+  .legendCard .cardHeader {
+    padding: 10px 12px;
+  }
+
+  .legendCard .cardIcon {
+    width: 30px;
+    height: 30px;
+
+    font-size: 14px;
+  }
+
+  .legendCard .cardHeader h3 {
+    font-size: 14px;
+  }
+
+  .legendItem {
+    min-height: 44px;
+
+    padding: 7px;
+  }
+
+  .legendIcon {
+    width: 28px;
+    height: 28px;
+
+    font-size: 12px;
+  }
+
+  .legendTitle {
+    font-size: 11px;
+  }
+
+  .legendContent small {
+    font-size: 8px;
+  }
 }

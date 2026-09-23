@@ -1,11 +1,15 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from "react-router-dom";
 
-import './DashboardSidebar.css';
-import '../../../styles/global.css';
+import "./DashboardSidebar.css";
+import "../../../styles/global.css";
 
-import { MdOutlineSpaceDashboard } from 'react-icons/md';
-import { IoIosArrowRoundBack } from 'react-icons/io';
-import { AiOutlineLogout } from 'react-icons/ai';
+import {
+  MdEventAvailable,
+  MdOutlineSpaceDashboard,
+  MdOutlineWatchLater,
+} from "react-icons/md";
+import { IoIosArrowRoundBack } from "react-icons/io";
+import { AiOutlineLogout } from "react-icons/ai";
 import {
   FaUsers,
   FaCalendarDays,
@@ -14,18 +18,39 @@ import {
   FaBullhorn,
   FaChartBar,
   FaGear,
-} from 'react-icons/fa6';
+} from "react-icons/fa6";
+import { adminAuthService } from "../../../services/adminAuthService";
+import { useDispatch } from "react-redux";
+import { adminLogout } from "../../../store/adminAuthSlice";
 
 export const DashboardSidebar = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await adminAuthService.logout();
+
+      dispatch(adminLogout());
+
+      navigate("/admin/login");
+    } catch (error) {
+      console.error("Admin Logout Error:", error);
+    }
+  };
+
   return (
     <>
       <div className="dashboardSidebar-container">
         <div className="dashboard-logo">
-          <img src="/Logo_N.svg" alt="logo" />
+          <img
+            src="/Logo_N.svg"
+            alt="logo"
+          />
         </div>
         <div className="dashboardSidebar-list">
           <NavLink
-            to="/dashboard/"
+            to="/adminDashboard"
             className="dashboard-home dashboard-navlink"
             end
           >
@@ -36,42 +61,62 @@ export const DashboardSidebar = () => {
             to="employee"
             className="dashboard-employees dashboard-navlink"
           >
-            <FaUsers style={{ color: '#583790' }} />
+            <FaUsers style={{ color: "#583790" }} />
             <span>Employees</span>
           </NavLink>
           <NavLink
             to="attendance"
             className="dashboard-attendance dashboard-navlink"
           >
-            <FaCalendarDays style={{ color: '#c8dcff' }} />
+            <MdOutlineWatchLater style={{ color: "#60A5FA" }} />
             <span>Attendance</span>
+          </NavLink>
+          <NavLink
+            to="leave"
+            className="dashboard-leave dashboard-navlink"
+          >
+            <MdEventAvailable style={{ color: "#FB7185" }} />
+            <span>Leave</span>
+          </NavLink>
+          <NavLink
+            to="calendar"
+            className="dashboard-calendar dashboard-navlink"
+          >
+            <FaCalendarDays style={{ color: "#38BDF8" }} />
+            <span>Calendar</span>
           </NavLink>
           <NavLink
             to="thought"
             className="dashboard-thoughts dashboard-navlink"
           >
-            <FaLightbulb style={{ color: '#ffc844' }} />
+            <FaLightbulb style={{ color: "#ffc844" }} />
             <span>Thoughts</span>
           </NavLink>
           <NavLink
             to="notification"
             className="dashboard-notification dashboard-navlink"
           >
-            <FaBell style={{ color: '#ef9b52' }} />
+            <FaBell style={{ color: "#ef9b52" }} />
             <span>Notifications</span>
           </NavLink>
           <NavLink
             to="announcement"
             className="dashboard-announcement dashboard-navlink"
           >
-            <FaBullhorn style={{ color: '#d13673' }} />
+            <FaBullhorn style={{ color: "#d13673" }} />
             <span>Announcements</span>
           </NavLink>
-          <NavLink to="report" className="dashboard-report dashboard-navlink">
-            <FaChartBar style={{ color: '#c9d7ba' }} />
+          <NavLink
+            to="report"
+            className="dashboard-report dashboard-navlink"
+          >
+            <FaChartBar style={{ color: "#c9d7ba" }} />
             <span>Reports & Analytics</span>
           </NavLink>
-          <NavLink to="setting" className="dashboard-setting dashboard-navlink">
+          <NavLink
+            to="setting"
+            className="dashboard-setting dashboard-navlink"
+          >
             <FaGear />
             <span>Settings</span>
           </NavLink>
@@ -81,7 +126,10 @@ export const DashboardSidebar = () => {
             <IoIosArrowRoundBack />
             <span>Collapse</span>
           </div>
-          <div className="logout-div">
+          <div
+            className="logout-div"
+            onClick={handleLogout}
+          >
             <AiOutlineLogout />
             <span>Logout</span>
           </div>

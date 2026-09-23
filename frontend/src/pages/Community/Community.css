@@ -168,3 +168,259 @@ padding:16px;
 }
 
 }
+
+
+/*  */
+/* =====================================================
+   COMMUNITY SKELETON
+===================================================== */
+
+.community-skeleton-sidebar {
+  width: 100%;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface);
+
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+
+/* LEFT MENU */
+
+.community-skeleton-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+
+.community-skeleton-menu-item {
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+
+  padding: 0 12px;
+}
+
+
+/* =====================================================
+   CREATE POST
+===================================================== */
+
+.community-skeleton-create {
+  width: 100%;
+
+  padding: 22px;
+
+  border: 1px solid var(--border);
+  border-radius: 16px;
+
+  background: var(--surface);
+
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  margin-bottom: 18px;
+}
+
+
+/* USER */
+
+.community-skeleton-user {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+
+.community-skeleton-user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+
+/* POST ACTIONS */
+
+.community-skeleton-post-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+
+/* Push last button to right */
+
+.community-skeleton-post-actions
+  > :nth-last-child(2) {
+  margin-left: auto;
+}
+
+
+/* =====================================================
+   TOOLBAR
+===================================================== */
+
+.community-skeleton-toolbar {
+  width: 100%;
+
+  min-height: 64px;
+
+  padding: 14px 18px;
+
+  border: 1px solid var(--border);
+  border-radius: 15px;
+
+  background: var(--surface);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  margin-bottom: 18px;
+}
+
+
+.community-skeleton-filter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+
+/* =====================================================
+   POST
+===================================================== */
+
+.community-skeleton-post {
+  width: 100%;
+
+  padding: 20px;
+
+  border: 1px solid var(--border);
+  border-radius: 15px;
+
+  background: var(--surface);
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 18px;
+
+  margin-bottom: 18px;
+}
+
+
+/* POST HEADER */
+
+.community-skeleton-post-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+
+.community-skeleton-post-user {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+
+/* POST CONTENT */
+
+.community-skeleton-post-content {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+
+/* POST FOOTER */
+
+.community-skeleton-post-footer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding-top: 5px;
+}
+
+
+/* =====================================================
+   RIGHT SIDEBAR
+===================================================== */
+
+.community-skeleton-right-card {
+  width: 100%;
+
+  padding: 18px;
+
+  border: 1px solid var(--border);
+  border-radius: 14px;
+
+  background: var(--surface);
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 12px;
+
+  margin-bottom: 18px;
+}
+
+
+/* RIGHT TITLE */
+
+.community-skeleton-right-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  margin-bottom: 4px;
+}
+
+
+/* TRENDING */
+
+.community-skeleton-trending {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 10px;
+
+  padding: 5px 0;
+}
+
+
+.community-skeleton-trending > div:first-child {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+
+/* CONTRIBUTORS */
+
+.community-skeleton-contributor {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 5px 0;
+}
+
+
+.community-skeleton-contributor > div:last-child {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}

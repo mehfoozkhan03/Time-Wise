@@ -1,0 +1,60 @@
+.employeeRoleDropdown {
+  position: relative;
+  width: 100%;
+}
+
+.employeeRoleDropdown-button {
+  width: 90%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--text_color);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.employeeRoleDropdown-button:hover {
+  border-color: #579cbd;
+}
+
+.employeeRoleDropdown-arrow-open {
+  transform: rotate(180deg);
+}
+
+.employeeRoleDropdown-button svg {
+  font-size: 18px;
+  transition: transform 0.2s ease;
+}
+
+.employeeRoleDropdown-menu {
+  position: absolute;
+  top: 40px;
+  left: 0;
+  width: 90%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  z-index: 100;
+}
+
+.employeeRoleDropdown-option {
+  padding: 12px 10px;
+  font-size: 12px;
+  color: var(--text_color);
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.employeeRoleDropdown-option:hover {
+  background: var(--primary);
+}

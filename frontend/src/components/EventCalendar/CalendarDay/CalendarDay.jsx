@@ -1,6 +1,6 @@
 import "./CalendarDay.css";
 
-import { memo, useCallback, useMemo } from "react";
+import { memo, useCallback } from "react";
 
 import EventBadge from "../EventBadge/EventBadge";
 
@@ -10,63 +10,60 @@ function CalendarDay({
   isCurrentMonth,
   isToday,
   isSelected,
+  isWeekend,
+  showWeekend = true,
   onSelectDate,
   onEventClick,
+  onMoreEvents,
 }) {
-  /* =========================================
-     Visible Events
-  ========================================= */
+  const visibleEvents = events.slice(0, 1);
 
-  const visibleEvents = useMemo(() => events.slice(0, 2), [events]);
+  const isSunday = day.getDay() === 0;
 
-  /* =========================================
-     Select Date
-  ========================================= */
+  const showSundayStyle =
+    isWeekend && isSunday && showWeekend;
+
+  const className = [
+    "calendarDay",
+    !isCurrentMonth && "otherMonth",
+    isWeekend && "weekend",
+    showSundayStyle && "sunday",
+    isToday && "today",
+    isSelected && "selected",
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   const handleSelectDate = useCallback(() => {
     onSelectDate?.(day);
   }, [day, onSelectDate]);
 
-  /* =========================================
-     Keyboard Support
-  ========================================= */
-
   const handleKeyDown = useCallback(
-    (e) => {
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
+    (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
         handleSelectDate();
       }
     },
-    [handleSelectDate]
+    [handleSelectDate],
   );
 
-  /* =========================================
-     Stop Propagation
-  ========================================= */
-
-  const stopPropagation = useCallback((e) => {
-    e.stopPropagation();
+  const stopPropagation = useCallback((event) => {
+    event.stopPropagation();
   }, []);
 
-  /* =========================================
-     More Events
-  ========================================= */
+  const handleMoreEvents = useCallback(
+    (event) => {
+      event.stopPropagation();
 
-  const handleMoreEvents = useCallback((e) => {
-    e.stopPropagation();
-
-    // Future enhancement:
-    // Open modal / popover showing all events for the day.
-  }, []);
+      onMoreEvents?.(day, events);
+    },
+    [day, events, onMoreEvents],
+  );
 
   return (
     <div
-      className={`calendarDay
-        ${!isCurrentMonth ? "otherMonth" : ""}
-        ${isToday ? "today" : ""}
-        ${isSelected ? "selected" : ""}
-      `}
+      className={className}
       onClick={handleSelectDate}
       onKeyDown={handleKeyDown}
       role="button"
@@ -79,41 +76,44 @@ function CalendarDay({
       </div>
 
       <div className="dayEvents">
-        {visibleEvents.length === 0 ? (
-          <div className="emptyEvents" />
-        ) : (
-          <>
-            {visibleEvents.map((event) => (
-              <div
-                key={
-                  event._id ??
-                  event.id ??
-                  `${event.date}-${event.title}`
-                }
-                onClick={stopPropagation}
-              >
-                <EventBadge
-                  event={event}
-                  onClick={onEventClick}
-                />
-              </div>
-            ))}
+        {visibleEvents.length > 0 &&
+          visibleEvents.map((event) => (
+            <div
+              key={
+                event._id ??
+                event.id ??
+                `${event.date}-${event.title}`
+              }
+              onClick={stopPropagation}
+            >
+              <EventBadge
+                event={event}
+                onClick={onEventClick}
+              />
+            </div>
+          ))}
 
-            {events.length > 2 && (
-              <button
-                type="button"
-                className="moreEvents"
-                onClick={handleMoreEvents}
-                aria-label={`View ${events.length - 2} more events`}
-              >
-                +{events.length - 2} More
-              </button>
-            )}
-          </>
+        {events.length > 1 && (
+          <button
+            type="button"
+            className="moreEvents"
+            onClick={handleMoreEvents}
+            aria-label={`View ${
+              events.length - 1
+            } more events`}
+          >
+            +{events.length - 1} More
+          </button>
+        )}
+
+        {events.length === 0 && (
+          <div className="emptyEvents" />
         )}
       </div>
     </div>
   );
 }
+
+CalendarDay.displayName = "CalendarDay";
 
 export default memo(CalendarDay);

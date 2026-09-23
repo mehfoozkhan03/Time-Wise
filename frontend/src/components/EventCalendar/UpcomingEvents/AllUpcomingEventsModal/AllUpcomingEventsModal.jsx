@@ -1,29 +1,38 @@
 import "./AllUpcomingEventsModal.css";
 
-import {
-  memo,
-  useEffect,
-  useRef,
-} from "react";
+import { memo, useEffect, useRef, useMemo, useCallback } from "react";
 
-import {
-  FaTimes,
-  FaCalendarAlt,
-} from "react-icons/fa";
+import { FaTimes, FaCalendarAlt } from "react-icons/fa";
 
 import EventItem from "../../../Common/EventItem/EventItem";
 import EmptyState from "../../../Common/EmptyState/EmptyState";
 
-function AllUpcomingEventsModal({
-  events = [],
-  onClose,
-  onEventClick,
-}) {
+function AllUpcomingEventsModal({ events = [], onClose, onEventClick }) {
   /* =========================================
      Close Button Ref
   ========================================= */
 
   const closeButtonRef = useRef(null);
+
+  /* =========================================
+     Sorted Events
+  ========================================= */
+
+  const upcomingEvents = useMemo(() => {
+    if (!Array.isArray(events)) {
+      return [];
+    }
+
+    return [...events].sort((a, b) => {
+      const dateDiff = new Date(a.date) - new Date(b.date);
+
+      if (dateDiff !== 0) {
+        return dateDiff;
+      }
+
+      return (a.startTime || "").localeCompare(b.startTime || "");
+    });
+  }, [events]);
 
   /* =========================================
      Focus + ESC Close
@@ -38,32 +47,37 @@ function AllUpcomingEventsModal({
       }
     };
 
-    document.addEventListener(
-      "keydown",
-      handleKeyDown
-    );
+    document.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      document.removeEventListener(
-        "keydown",
-        handleKeyDown
-      );
+      document.removeEventListener("keydown", handleKeyDown);
     };
   }, [onClose]);
 
   /* =========================================
-     Overlay Close
+     Handlers
   ========================================= */
 
-  const handleOverlayClick = (e) => {
-    if (e.target === e.currentTarget) {
-      onClose?.();
-    }
-  };
+  const handleOverlayClick = useCallback(
+    (e) => {
+      if (e.target === e.currentTarget) {
+        onClose?.();
+      }
+    },
+    [onClose],
+  );
 
-  const handleModalClick = (e) => {
+  const handleModalClick = useCallback((e) => {
     e.stopPropagation();
-  };
+  }, []);
+
+  const handleEventClick = useCallback(
+    (event) => {
+      onEventClick?.(event);
+      onClose?.();
+    },
+    [onEventClick, onClose],
+  );
 
   return (
     <div
@@ -85,18 +99,16 @@ function AllUpcomingEventsModal({
 
         <div className="allUpcomingHeader">
           <div className="allUpcomingTitle">
-            <div className="allUpcomingIcon">
+            <div className="allUpcomingIcon" aria-hidden="true">
               <FaCalendarAlt />
             </div>
 
             <div className="allUpcomingHeading">
-              <h2 id="all-upcoming-title">
-                Upcoming Events
-              </h2>
+              <h2 id="all-upcoming-title">Upcoming Events</h2>
 
               <span className="allUpcomingCount">
-                {events.length} Event
-                {events.length !== 1 ? "s" : ""}
+                {upcomingEvents.length} Event
+                {upcomingEvents.length !== 1 ? "s" : ""}
               </span>
             </div>
           </div>
@@ -117,22 +129,23 @@ function AllUpcomingEventsModal({
         ========================================= */}
 
         <div className="allUpcomingBody">
-          {events.length === 0 ? (
+          {upcomingEvents.length === 0 ? (
             <EmptyState
               icon={<FaCalendarAlt />}
               title="No Upcoming Events"
               description="You're all caught up."
             />
           ) : (
-            <div className="allUpcomingList">
-              {events.map((event) => (
+            <div
+              className="allUpcomingList"
+              role="list"
+              aria-label="Upcoming Events"
+            >
+              {upcomingEvents.map((event) => (
                 <div
-                  key={
-                    event._id ??
-                    event.id ??
-                    `${event.date}-${event.title}`
-                  }
+                  key={event._id ?? event.id ?? `${event.date}-${event.title}`}
                   className="allUpcomingItem"
+                  role="listitem"
                 >
                   <EventItem
                     event={event}
@@ -140,7 +153,7 @@ function AllUpcomingEventsModal({
                     showAvatar
                     showTime
                     showType
-                    onClick={onEventClick}
+                    onClick={handleEventClick}
                   />
                 </div>
               ))}
@@ -152,7 +165,6 @@ function AllUpcomingEventsModal({
   );
 }
 
-AllUpcomingEventsModal.displayName =
-  "AllUpcomingEventsModal";
+AllUpcomingEventsModal.displayName = "AllUpcomingEventsModal";
 
 export default memo(AllUpcomingEventsModal);

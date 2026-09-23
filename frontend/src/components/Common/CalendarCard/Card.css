@@ -34,6 +34,22 @@
   transform: translateY(-2px);
 }
 
+.cardHeaderLeft {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  min-width: 0;
+}
+
+.cardHeaderActions {
+  display: flex;
+  align-items: center;
+
+  margin-left: auto;
+}
+
 /* ==========================================
    Header
 ========================================== */
@@ -102,16 +118,19 @@
 /* ==========================================
    Responsive
 ========================================== */
+/* ==========================================
+   760px
+========================================== */
 
-@media (max-width: 768px) {
+@media (max-width: 760px) {
   .cardHeader {
-    padding: 16px 16px 0;
+    padding: 14px 14px 0;
 
     gap: 10px;
   }
 
   .cardBody {
-    padding: 16px;
+    padding: 14px;
   }
 
   .cardHeader h3 {
@@ -123,5 +142,59 @@
     height: 34px;
 
     font-size: 15px;
+  }
+}
+
+/* ==========================================
+   480px
+========================================== */
+
+@media (max-width: 480px) {
+  .cardHeader {
+    padding: 12px 12px 0;
+
+    gap: 8px;
+  }
+
+  .cardBody {
+    padding: 12px;
+  }
+
+  .cardHeader h3 {
+    font-size: 14px;
+  }
+
+  .cardIcon {
+    width: 32px;
+    height: 32px;
+
+    font-size: 14px;
+  }
+}
+
+/* ==========================================
+   320px
+========================================== */
+
+@media (max-width: 320px) {
+  .cardHeader {
+    padding: 10px 10px 0;
+
+    gap: 6px;
+  }
+
+  .cardBody {
+    padding: 10px;
+  }
+
+  .cardHeader h3 {
+    font-size: 13px;
+  }
+
+  .cardIcon {
+    width: 30px;
+    height: 30px;
+
+    font-size: 13px;
   }
 }

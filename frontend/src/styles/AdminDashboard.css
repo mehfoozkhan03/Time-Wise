@@ -1,0 +1,46 @@
+.dashboard-container{
+    width: 100%;
+    display: flex;
+}
+.dashboard-content{
+    width: 100%;
+}
+.dashboard-header{
+    height: 78px;
+    width: 100%;
+    padding: 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+}
+.dashboard-heading{
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.dashboard-heading>span:nth-child(2){
+    font-weight: 700;
+}
+
+.header-right{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+.notificaton-div{
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+}
+.notificaton-div svg{
+    color: var(--text_primary);
+}
+.admin-profile{
+    padding: 5px 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+}

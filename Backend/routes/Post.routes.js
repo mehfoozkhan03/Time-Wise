@@ -7,22 +7,23 @@ import {
   getFeaturedThought,
   getPost,
   updatePost,
-} from '../controllers/post.controller.js'
+} from '../controllers/User/post.controller.js'
 
 import {
   togglePostLike,
   toggleCommentLike,
-} from '../controllers/like.controller.js'
+} from '../controllers/User/like.controller.js'
 
 import {
   createComment,
   deleteComment,
   getComments,
   updateComment,
-} from '../controllers/comment.controller.js'
+} from '../controllers/User/comment.controller.js'
 
-import { toggleSavedPost } from '../controllers/savedPost.controller.js'
+import { toggleSavedPost } from '../controllers/User/savedPost.controller.js'
 
+import { uploadPostFiles } from '../middleware/postUpload.middleware.js'
 import { auth } from '../middleware/AuthMiddleware.js'
 
 const router = express.Router()
@@ -39,7 +40,14 @@ router.use(auth)
 // Posts
 // =======================================================
 
-router.post('/', createPost)
+router.post(
+  '/',
+  uploadPostFiles.fields([
+    { name: 'images', maxCount: 4 },
+    { name: 'attachments', maxCount: 5 },
+  ]),
+  createPost,
+)
 
 router.get('/', getAllPosts)
 
