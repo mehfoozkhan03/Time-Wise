@@ -46,6 +46,17 @@ const contactSchema = new mongoose.Schema(
       enum: ["pending", "read", "replied"],
       default: "pending",
     },
+
+    emailStatus: {
+      type: String,
+      enum: ["pending", "sent", "failed"],
+      default: "pending",
+    },
+
+    emailSentAt: {
+      type: Date,
+      default: null,
+    },
   },
   {
     timestamps: true,
@@ -53,4 +64,4 @@ const contactSchema = new mongoose.Schema(
   }
 );
 
-export const contactModel = mongoose.model('Contact', contactSchema)
+export const contactModel = mongoose.model("Contact", contactSchema);
