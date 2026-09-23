@@ -1,31 +1,38 @@
+import React from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
-import React from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
-
-import ApiCall from "../services/api";
-import "../styles/Form.css";
+import ApiCall from '../services/api';
+import '../styles/Form.css';
+import { useSelector } from 'react-redux';
 
 export const Form = ({
   fields = [],
-  button = "Submit",
+  button = 'Submit',
   endpoint,
   errors = {},
   onSuccess,
 }) => {
-  
+  // here we have to set our field
   const [form, setForm] = React.useState(() => {
     return fields.reduce((acc, field) => {
-      acc[field.name] = "";
+      acc[field.name] = '';
       return acc;
     }, {});
   });
 
-
-  // const {} = useSelector(state=>state);
+  const { isloading, isError, isAuthenticated, errorMessage } = useSelector(
+    (state) => state.auth,
+  );
 
   const [showPassword, setShowPassword] = React.useState(false);
-  const [loading, setLoading] = React.useState(false);
+
+  /*
+   * here we have to set model
+   *
+   *
+   *
+   */
 
   /*
    * If fields change dynamically,
@@ -37,9 +44,10 @@ export const Form = ({
 
       fields.forEach((field) => {
         if (!(field.name in updatedForm)) {
-          updatedForm[field.name] = "";
+          updatedForm[field.name] = '';
         }
       });
+      console.log(`🚀 ~ fields:`, fields);
 
       return updatedForm;
     });
@@ -57,15 +65,9 @@ export const Form = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (loading) return;
-
     try {
-      setLoading(true);
-
       const response = await ApiCall.post(endpoint, form);
-
-      console.log("data", response);
-
+      console.log('data', response);
       if (onSuccess) {
         onSuccess(response);
       }
@@ -75,14 +77,13 @@ export const Form = ({
        */
       setForm(
         fields.reduce((acc, field) => {
-          acc[field.name] = "";
+          acc[field.name] = '';
           return acc;
-        }, {})
+        }, {}),
       );
     } catch (error) {
-      console.log("error", error);
-    } finally {
-      setLoading(false);
+      console.log('error', error);
+      // i have to work on error
     }
   };
 
@@ -90,10 +91,9 @@ export const Form = ({
    * Password field
    */
   const getInputType = (field) => {
-    if (field.type === "password") {
-      return showPassword ? "text" : "password";
+    if (field.type === 'password') {
+      return showPassword ? 'text' : 'password';
     }
-
     return field.type;
   };
 
@@ -111,18 +111,19 @@ export const Form = ({
       }}
       transition={{
         duration: 0.35,
-        ease: "easeOut",
+        ease: 'easeOut',
       }}
     >
       {fields.map((el, index) => {
         const fieldError = errors?.[el.name];
+        console.log(`🚀 ~ fieldError:`, fieldError);
 
         /*
          * =========================
          * GENDER
          * =========================
          */
-        if (el.name === "gender") {
+        if (el.name === 'gender') {
           return (
             <motion.div
               className="input-box"
@@ -140,36 +141,27 @@ export const Form = ({
                 delay: index * 0.05,
               }}
             >
-              <label className="gender-title">
-                {el.name}
-              </label>
+              <label className="gender-title">{el.name}</label>
 
               <div className="gender">
-                {Object.entries(el.typeOfGender || {}).map(
-                  ([key, value]) => {
-                    const inputId = `${el.name}-${key}`;
+                {Object.entries(el.typeOfGender || {}).map(([key, value]) => {
+                  const inputId = `${el.name}-${key}`;
 
-                    return (
-                      <div
-                        className="gender-option"
-                        key={key}
-                      >
-                        <input
-                          id={inputId}
-                          name={el.name}
-                          type={value.type}
-                          value={key}
-                          checked={form[el.name] === key}
-                          onChange={handleChange}
-                        />
+                  return (
+                    <div className="gender-option" key={key}>
+                      <input
+                        id={inputId}
+                        name={el.name}
+                        type={value.type}
+                        value={key}
+                        checked={form[el.name] === key}
+                        onChange={handleChange}
+                      />
 
-                        <label htmlFor={inputId}>
-                          {key}
-                        </label>
-                      </div>
-                    );
-                  }
-                )}
+                      <label htmlFor={inputId}>{key}</label>
+                    </div>
+                  );
+                })}
               </div>
 
               <AnimatePresence mode="wait">
@@ -183,7 +175,7 @@ export const Form = ({
                     }}
                     animate={{
                       opacity: 1,
-                      height: "auto",
+                      height: 'auto',
                       y: 0,
                     }}
                     exit={{
@@ -208,8 +200,8 @@ export const Form = ({
         return (
           <motion.div
             className={`input-box ${
-              el.type === "password" ? "password-box" : ""
-            } ${fieldError ? "error-active" : ""}`}
+              el.type === 'password' ? 'password-box' : ''
+            } ${fieldError ? 'error-active' : ''}`}
             key={el.id || el.name}
             initial={{
               opacity: 0,
@@ -229,22 +221,18 @@ export const Form = ({
               type={getInputType(el)}
               name={el.name}
               placeholder=""
-              value={form[el.name] || ""}
+              value={form[el.name] || ''}
               onChange={handleChange}
-              autoComplete={el.autoComplete || "off"}
+              autoComplete={el.autoComplete || 'off'}
               required={el.required || false}
             />
 
-            <label htmlFor={el.name}>
-              {el.name}
-            </label>
+            <label htmlFor={el.name}>{el.name}</label>
 
-            {el.type === "password" && (
+            {el.type === 'password' && (
               <motion.span
                 className="eye-icon"
-                onClick={() =>
-                  setShowPassword((prev) => !prev)
-                }
+                onClick={() => setShowPassword((prev) => !prev)}
                 whileTap={{ scale: 0.9 }}
                 whileHover={{ scale: 1.15 }}
               >
@@ -301,7 +289,7 @@ export const Form = ({
                   }}
                   animate={{
                     opacity: 1,
-                    height: "auto",
+                    height: 'auto',
                     y: 0,
                   }}
                   exit={{
@@ -321,7 +309,7 @@ export const Form = ({
       <motion.button
         type="submit"
         className="loginsumit"
-        disabled={loading}
+        disabled={isloading}
         whileHover={{
           y: -2,
         }}
@@ -329,7 +317,7 @@ export const Form = ({
           scale: 0.98,
         }}
       >
-        {loading ? "Loading..." : button}
+        {isloading ? 'Loading...' : button}
       </motion.button>
     </motion.form>
   );
