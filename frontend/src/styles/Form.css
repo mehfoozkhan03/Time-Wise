@@ -1,3 +1,7 @@
+/* ===========================
+   GLOBAL
+=========================== */
+
 * {
   margin: 0;
   padding: 0;
@@ -5,62 +9,160 @@
   font-family: sans-serif;
 }
 
+
 /* ===========================
    Chrome Autofill
 =========================== */
+
 input:is(:-webkit-autofill, :autofill),
 textarea:is(:-webkit-autofill, :autofill),
 select:is(:-webkit-autofill, :autofill) {
-  -webkit-text-fill-color: #000 !important;
-  -webkit-box-shadow: 0 0 0px 1000px #fff inset !important;
-  box-shadow: 0 0 0px 1000px #fff inset !important;
+  -webkit-text-fill-color: var(--input-text) !important;
+
+  -webkit-box-shadow:
+    0 0 0px 1000px var(--input-bg) inset !important;
+
+  box-shadow:
+    0 0 0px 1000px var(--input-bg) inset !important;
+
   transition: background-color 5000s ease-in-out 0s;
 }
 
+
 /* ===========================
-   Login Wrapper
+   AUTH CONTAINER
 =========================== */
+
 .sing_login {
   min-height: 90vh;
+
   display: flex;
   justify-content: center;
   align-items: center;
+
+  padding: 40px 20px;
+
   background: var(--bg);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
+
 /* ===========================
-   Login Card
+   AUTH CARD
 =========================== */
 
 .login-page {
   width: 400px;
+  max-width: 100%;
+
   padding: 35px 40px;
+
   background: var(--card_login);
+
   border: 1px solid var(--border);
   border-radius: 15px;
+
   backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
   box-shadow:
     0 20px 50px rgba(0, 0, 0, 0.15),
     0 8px 20px rgba(0, 0, 0, 0.08);
+
   transition: 0.35s;
 }
 
+
 .login-page:hover {
   transform: translateY(-5px);
+
   box-shadow:
     0 30px 60px rgba(0, 0, 0, 0.2),
     0 10px 30px rgba(79, 70, 229, 0.15);
 }
 
+
 /* ===========================
-   Form Animation
+   AUTH HEADING
+=========================== */
+
+.login-page h2 {
+  text-align: center;
+
+  margin-bottom: 30px;
+
+  font-size: 28px;
+  font-weight: 700;
+
+  background: linear-gradient(
+    90deg,
+    var(--primary),
+    #6366f1
+  );
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+
+/* ===========================
+   FORM
 =========================== */
 
 .form {
+  width: 100%;
+
+  margin: 0;
+  padding: 0;
+
+  background: transparent;
+
+  border: none;
+  border-radius: 0;
+
+  box-shadow: none;
+
   animation: fade 0.4s ease;
 }
+
+
+/* ===========================
+   AUTH MESSAGE
+=========================== */
+
+.message {
+  margin-top: 20px;
+
+  text-align: center;
+
+  color: var(--label-color);
+
+  font-size: 14px;
+}
+
+
+.message span {
+  color: var(--primary);
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.3s;
+}
+
+
+.message span:hover {
+  color: var(--buttonhover);
+  text-decoration: underline;
+}
+
+
+/* ===========================
+   FORM ANIMATION
+=========================== */
 
 @keyframes fade {
   from {
@@ -74,22 +176,9 @@ select:is(:-webkit-autofill, :autofill) {
   }
 }
 
-/* ===========================
-   Heading
-=========================== */
-
-.login-page h2 {
-  text-align: center;
-  margin-bottom: 30px;
-  font-weight: 700;
-  background: var(--heading);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
 
 /* ===========================
-   Input Box
+   INPUT BOX
 =========================== */
 
 .input-box {
@@ -97,226 +186,193 @@ select:is(:-webkit-autofill, :autofill) {
   margin-bottom: 15px;
 }
 
-.input-box input {
-  width: 100%;
-  font-size: 16px;
-  border-radius: 8px;
-  height: 50px;
-  padding: 8px 15px 8px;
-}
-
-.input-box select,
-.input-box textarea {
-  width: 100%;
-  height: 54px;
-  padding: 0 15px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  outline: none;
-  background: var(--input-bg);
-  color: var(--input-text);
-  font-size: 16px;
-  transition: 0.3s;
-}
-
-.input-box input:hover,
-.input-box select:hover,
-.input-box textarea:hover {
-  border-color: var(--primary);
-}
-
-.input-box input:focus,
-.input-box select:focus,
-.input-box textarea:focus {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 4px var(--focus-shadow);
-}
 
 /* ===========================
-   Floating Label
+   INPUT
 =========================== */
 
-.input-box label {
-  position: absolute;
-  top: 15px;
-  left: 15px;
-  transition: 0.3s;
-  pointer-events: none;
-  font-size: 16px;
-  color: var(--label-color);
+.input-box input {
+  width: 100%;
+  height: 50px;
+
+  padding: 8px 15px;
+
+  border: 1px solid var(--border);
+  border-radius: 8px;
+
+  outline: none;
+
   background: var(--input-bg);
-  padding: 0 5px;
+  color: var(--input-text);
+
+  font-size: 16px;
+
+  transition: 0.3s;
 }
 
-.input-box input:focus+label,
-.input-box input:not(:placeholder-shown)+label,
-.input-box select:focus+label,
-.input-box textarea:focus+label {
+
+.input-box input:hover {
+  border-color: var(--primary);
+}
+
+
+.input-box input:focus {
+  border-color: var(--primary);
+
+  box-shadow:
+    0 0 0 4px var(--focus-shadow);
+}
+
+
+/* ===========================
+   FLOATING LABEL
+=========================== */
+
+.input-box > label:not(.gender-title) {
+  position: absolute;
+
+  top: 15px;
+  left: 15px;
+
+  padding: 0 5px;
+
+  background: var(--input-bg);
+
+  color: var(--label-color);
+
+  font-size: 16px;
+
+  pointer-events: none;
+
+  transition: 0.3s;
+}
+
+
+.input-box input:focus + label,
+.input-box input:not(:placeholder-shown) + label {
+  top: 0;
+
   transform: translateY(-50%);
-  top: 0px;
+
   font-size: 15px;
+
   color: var(--primary);
 }
 
+
 /* ===========================
-   Password Box
+   PASSWORD
 =========================== */
 
 .password-box {
   position: relative;
 }
 
+
 .password-box input {
   padding-right: 45px;
 }
 
+
 .eye-icon {
   position: absolute;
+
   right: 15px;
-  top: 54%;
+  top: 25px;
+
   transform: translateY(-50%);
+
   cursor: pointer;
+
   color: var(--label-color);
+
   font-size: 18px;
+
   transition: 0.3s;
+
+  z-index: 2;
 }
 
-.password-box.error-active .eye-icon {
-  top: 27px;
-}
 
 .eye-icon:hover {
   color: var(--primary);
-  transform: translateY(-50%) scale(1.15);
+
+  transform:
+    translateY(-50%)
+    scale(1.15);
 }
 
+
 /* ===========================
-   Button
+   BUTTON
 =========================== */
 
 .loginsumit {
   width: 100%;
   height: 52px;
+
   border: none;
   border-radius: 8px;
+
   background: var(--button);
+
   color: #fff;
+
   cursor: pointer;
+
   font-size: 15px;
   font-weight: 600;
+
   letter-spacing: 1px;
+
   text-transform: uppercase;
+
   transition: 0.3s;
 }
 
+
 .loginsumit:hover {
   background: var(--buttonhover);
+
   transform: translateY(-2px);
 }
 
-/* ===========================
-   Bottom Text
-=========================== */
 
-.message {
-  text-align: center;
-  margin-top: 15px;
-  color: var(--text_secondary);
-  font-size: 15px;
+.loginsumit:disabled {
+  opacity: 0.7;
+
+  cursor: not-allowed;
+
+  transform: none;
 }
 
-.message span {
-  color: var(--primary);
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.message span:hover {
-  text-decoration: underline;
-}
 
 /* ===========================
-   Error
+   ERROR
 =========================== */
 
 .error {
   color: #ff4d4f;
+
   font-size: 14px;
+
   margin-top: 5px;
   margin-left: 2px;
 }
 
+
 /* ===========================
-   IZI TOAST — TIMEWISE THEME
+   RESPONSIVE
 =========================== */
 
-.iziToast {
-  background: var(--surface) !important;
-  border: 1px solid var(--primary) !important;
-  border-radius: var(--radius_md) !important;
-  box-shadow: var(--shadow_lg) !important;
-  color: var(--primary) !important;
-  font-family: 'Inter', sans-serif !important;
-}
+@media (max-width: 500px) {
 
-/* Title */
-.iziToast-title {
-  color: var(--primary) !important;
-  font-family: 'Poppins', sans-serif !important;
-  font-weight: 700 !important;
-}
+  .login-page {
+    width: 100%;
+    padding: 30px 25px;
+  }
 
-/* Message */
-.iziToast-message {
-  color: var(--primary) !important;
-  opacity: 0.85;
-}
-
-/* Success / Error / Warning Icons */
-.iziToast-icon,
-.iziToast-icon-success,
-.iziToast-icon-error,
-.iziToast-icon-warning,
-.iziToast-icon-info {
-  color: var(--primary) !important;
-}
-
-/* Close button */
-.iziToast-close {
-  filter: none !important;
-  opacity: 1 !important;
-}
-
-.iziToast-close::before {
-  color: var(--primary) !important;
-}
-
-/* Progress Bar */
-.iziToast-progressbar>div {
-  background: var(--primary) !important;
-}
-
-/* Left Accent Border */
-.iziToast-success,
-.iziToast-error,
-.iziToast-warning,
-.iziToast-info {
-  border-left: 4px solid var(--primary) !important;
-}
-
-/* All iziToast icons + close button → var(--primary) #29a3e0 */
-
-.iziToast-icon,
-.iziToast-icon.ico-success,
-.iziToast-icon.ico-error,
-.iziToast-icon.ico-warning,
-.iziToast-icon.ico-info,
-.iziToast-close {
-  filter: invert(55%) sepia(80%) saturate(400%) hue-rotate(170deg) brightness(100%) !important;
-  opacity: 1 !important;
-}
-
-.iziToast-close:hover {
-  filter: invert(40%) sepia(90%) saturate(500%) hue-rotate(170deg) brightness(85%) !important;
-  transform: scale(1.5) !important;
+  .sing_login {
+    padding: 30px 15px;
+  }
 }
