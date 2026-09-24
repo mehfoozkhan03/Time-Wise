@@ -1,7 +1,11 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
 import Skeleton from "../../../components/Skeleton/Skeleton";
+import CustomSelect from "../../../components/Common/CustomSelect/CustomSelect";
+
 import "./ContactForm.css";
+
 import { Feedback } from "../../../pages/FeedBack";
 import { createContact } from "../../../store/contactSlice";
 
@@ -77,13 +81,11 @@ function ContactForm() {
       [name]: value,
     }));
 
-    // Mark field as touched
     setTouched((prev) => ({
       ...prev,
       [name]: true,
     }));
 
-    // Remove error while typing
     if (errors[name]) {
       setErrors((prev) => ({
         ...prev,
@@ -134,7 +136,6 @@ function ContactForm() {
 
     if (!validate()) return;
 
-    // Convert FAQ index into the actual question text
     const contactData = {
       ...formData,
       faq:
@@ -180,7 +181,12 @@ function ContactForm() {
     }
   };
 
-  // Skeleton
+  // Custom Select options
+  const faqOptions = questions.map((question, index) => ({
+    value: String(index),
+    label: question,
+  }));
+
   return (
     <div className="formPart">
       {loading ? (
@@ -271,24 +277,15 @@ function ContactForm() {
             </div>
           </div>
 
-          <select
+          {/* Custom FAQ Select */}
+          <CustomSelect
+            id="contact-faq"
             name="faq"
             value={formData.faq}
+            options={faqOptions}
             onChange={handleChange}
-          >
-            <option value="">
-              Select Question
-            </option>
-
-            {questions.map((question, index) => (
-              <option
-                key={index}
-                value={index}
-              >
-                {question}
-              </option>
-            ))}
-          </select>
+            placeholder="Select Question"
+          />
 
           {selectedAnswer && (
             <p className="faqAnswer">
