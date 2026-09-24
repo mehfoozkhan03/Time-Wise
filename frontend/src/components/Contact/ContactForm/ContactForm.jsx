@@ -1,286 +1,17 @@
-// import { useState } from "react";
-
-// import "./ContactForm.css";
-// import { Feedback } from "../../../pages/FeedBack";
-// import axios  from 'axios';
-
-// function ContactForm() {
-//   const questions = [
-//     "What is your return policy?",
-//     "Do you offer customer support?",
-//     "How long does shipping take?",
-//     "Can I cancel my order?",
-//     "How can I contact support?",
-//   ];
-
-//   const answers = [
-//     "You can return any product within 30 days of purchase.",
-//     "Yes, 24/7 customer support is available via email and chat.",
-//     "Our standard delivery time is between 3-7 business days.",
-//     "Yes, you can update or cancel your order before it is dispatched.",
-//     "You can contact us through email, phone, or the contact form below.",
-//   ];
-
-//   const [formData, setFormData] = useState({
-//     name: "",
-//     email: "",
-//     faq: "",
-//     subject: "",
-//     message: "",
-//   });
-
-//   const [selectedAnswer, setSelectedAnswer] = useState("");
-//   const [errors, setErrors] = useState({});
-
-//   const [modal, setModal] = useState({
-//     open: false,
-//     type: "",
-//     title: "",
-//     message: "",
-//   });
-
-//   const [touched, setTouched] = useState({});
-
-//   const [isSubmitted, setIsSubmitted] = useState(false);
-
-//   const closeModal = () =>
-//     setModal({ open: false, type: "", title: "", message: "" });
-
-//   const handleChange = (e) => {
-//     const { name, value } = e.target;
-
-//     setFormData((prev) => ({
-//       ...prev,
-//       [name]: value,
-//     }));
-
-//     // Mark field as touched
-//     setTouched((prev) => ({
-//       ...prev,
-//       [name]: true,
-//     }));
-
-//     // Remove error while typing
-//     if (errors[name]) {
-//       setErrors((prev) => ({
-//         ...prev,
-//         [name]: "",
-//       }));
-//     }
-
-//     if (name === "faq") {
-//       setSelectedAnswer(value !== "" ? answers[Number(value)] : "");
-//     }
-//   };
-
-//   // ── Validation ────────────────────────────────────────────────────────────
-//   const validate = () => {
-//     const newErrors = {};
-//     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-//     if (!formData.name.trim()) newErrors.name = "Name is required";
-
-//     if (!formData.email.trim()) newErrors.email = "Email is required";
-//     else if (!emailRegex.test(formData.email))
-//       newErrors.email = "Enter a valid email address";
-
-//     if (!formData.subject.trim()) newErrors.subject = "Subject is required";
-
-//     if (!formData.message.trim()) newErrors.message = "Message is required";
-
-//     setErrors(newErrors);
-//     return Object.keys(newErrors).length === 0;
-//   };
-
-//   // ── Submit ────────────────────────────────────────────────────────────────
-//   const submit = async (e) => {
-//     e.preventDefault();
-
-//     setIsSubmitted(true);
-
-//     if (!validate()) return;
-
-//     try {
-//       const response = await axios.post(
-//         "http://localhost:8000/api/contact",
-//         formData,
-//       );
-
-//       setModal({
-//         open: true,
-//         type: "success",
-//         title: "Message Sent!",
-//         message: response.data.message,
-//       });
-
-//       setFormData({
-//         name: "",
-//         email: "",
-//         faq: "",
-//         subject: "",
-//         message: "",
-//       });
-
-//       setSelectedAnswer("");
-//       setErrors({});
-//       setTouched({});
-//       setIsSubmitted(false);
-//     } catch (error) {
-//       setModal({
-//         open: true,
-//         type: "error",
-//         title: "Failed!",
-//         message: error.response?.data?.message || "Something went wrong.",
-//       });
-//     }
-
-//     // setFormData({
-//     //   name: "",
-//     //   email: "",
-//     //   faq: "",
-//     //   subject: "",
-//     //   message: "",
-//     // });
-
-//     // setSelectedAnswer("");
-
-//     // setErrors({});
-//     // setTouched({});
-//     // setIsSubmitted(false);
-
-//     // setModal({
-//     //   open: true,
-//     //   type: "success",
-//     //   title: "Message Sent!",
-//     //   message: "Thank you for reaching out. We'll get back to you soon.",
-//     // });
-//   };
-
-//   return (
-//     <div className="formPart">
-//       <form
-//         onSubmit={submit}
-//         noValidate
-//       >
-//         <div className="inputs">
-//           <div className="input_group">
-//             <input
-//               type="text"
-//               name="name"
-//               placeholder="Your Name"
-//               value={formData.name}
-//               onChange={handleChange}
-//               onBlur={() =>
-//                 setTouched((prev) => ({
-//                   ...prev,
-//                   name: true,
-//                 }))
-//               }
-//             />
-//             {(touched.name || isSubmitted) && errors.name && (
-//               <p className="form_error">{errors.name}</p>
-//             )}
-//           </div>
-
-//           <div className="input_group">
-//             <input
-//               type="email"
-//               name="email"
-//               placeholder="Your Email"
-//               value={formData.email}
-//               onChange={handleChange}
-//               onBlur={() =>
-//                 setTouched((prev) => ({
-//                   ...prev,
-//                   email: true,
-//                 }))
-//               }
-//             />
-//             {(touched.email || isSubmitted) && errors.email && (
-//               <p className="form_error">{errors.email}</p>
-//             )}
-//           </div>
-//         </div>
-
-//         <select
-//           name="faq"
-//           value={formData.faq}
-//           onChange={handleChange}
-//         >
-//           <option value="">Select Question (Optional)</option>
-//           {questions.map((question, index) => (
-//             <option
-//               key={index}
-//               value={index}
-//             >
-//               {question}
-//             </option>
-//           ))}
-//         </select>
-
-//         <p className="faqAnswer">{selectedAnswer}</p>
-
-//         <input
-//           type="text"
-//           name="subject"
-//           placeholder="Subject"
-//           value={formData.subject}
-//           onChange={handleChange}
-//           onBlur={() =>
-//             setTouched((prev) => ({
-//               ...prev,
-//               subject: true,
-//             }))
-//           }
-//         />
-//         {(touched.subject || isSubmitted) && errors.subject && (
-//           <p className="form_error">{errors.subject}</p>
-//         )}
-
-//         <textarea
-//           rows="6"
-//           name="message"
-//           placeholder="Your Message"
-//           value={formData.message}
-//           onChange={handleChange}
-//           onBlur={() =>
-//             setTouched((prev) => ({
-//               ...prev,
-//               message: true,
-//             }))
-//           }
-//         />
-//         {errors.message && <p className="form_error">{errors.message}</p>}
-
-//         <button
-//           type="submit"
-//           className="btn"
-//         >
-//           Send Message
-//         </button>
-//       </form>
-
-//       <Feedback
-//         isOpen={modal.open}
-//         type={modal.type}
-//         title={modal.title}
-//         message={modal.message}
-//         onClose={closeModal}
-//       />
-//     </div>
-//   );
-// }
-
-// export default ContactForm;
-
-
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Skeleton from "../../../components/Skeleton/Skeleton";
 import "./ContactForm.css";
 import { Feedback } from "../../../pages/FeedBack";
-import axios  from 'axios';
+import { createContact } from "../../../store/contactSlice";
 
 function ContactForm() {
+  const dispatch = useDispatch();
+
+  const { isLoading: isContactLoading } = useSelector(
+    (state) => state.contact
+  );
+
   const questions = [
     "What is your return policy?",
     "Do you offer customer support?",
@@ -319,22 +50,24 @@ function ContactForm() {
 
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-//skeleton//
-const [loading, setLoading] = useState(true);
+  // Skeleton
+  const [loading, setLoading] = useState(true);
 
-useEffect(() => {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1500);
 
-  const timer = setTimeout(() => {
-    setLoading(false);
-  },1500);
-
-
-  return () => clearTimeout(timer);
-
-},[]);
+    return () => clearTimeout(timer);
+  }, []);
 
   const closeModal = () =>
-    setModal({ open: false, type: "", title: "", message: "" });
+    setModal({
+      open: false,
+      type: "",
+      title: "",
+      message: "",
+    });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -359,7 +92,9 @@ useEffect(() => {
     }
 
     if (name === "faq") {
-      setSelectedAnswer(value !== "" ? answers[Number(value)] : "");
+      setSelectedAnswer(
+        value !== "" ? answers[Number(value)] : ""
+      );
     }
   };
 
@@ -368,17 +103,26 @@ useEffect(() => {
     const newErrors = {};
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if (!formData.name.trim()) newErrors.name = "Name is required";
+    if (!formData.name.trim()) {
+      newErrors.name = "Name is required";
+    }
 
-    if (!formData.email.trim()) newErrors.email = "Email is required";
-    else if (!emailRegex.test(formData.email))
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!emailRegex.test(formData.email)) {
       newErrors.email = "Enter a valid email address";
+    }
 
-    if (!formData.subject.trim()) newErrors.subject = "Subject is required";
+    if (!formData.subject.trim()) {
+      newErrors.subject = "Subject is required";
+    }
 
-    if (!formData.message.trim()) newErrors.message = "Message is required";
+    if (!formData.message.trim()) {
+      newErrors.message = "Message is required";
+    }
 
     setErrors(newErrors);
+
     return Object.keys(newErrors).length === 0;
   };
 
@@ -390,17 +134,27 @@ useEffect(() => {
 
     if (!validate()) return;
 
+    // Convert FAQ index into the actual question text
+    const contactData = {
+      ...formData,
+      faq:
+        formData.faq !== ""
+          ? questions[Number(formData.faq)]
+          : "",
+    };
+
     try {
-      const response = await axios.post(
-        "http://localhost:8000/api/contact",
-        formData,
-      );
+      const response = await dispatch(
+        createContact(contactData)
+      ).unwrap();
 
       setModal({
         open: true,
         type: "success",
         title: "Message Sent!",
-        message: response.data.message,
+        message:
+          response?.message ||
+          "Thank you for reaching out. We'll get back to you soon.",
       });
 
       setFormData({
@@ -420,41 +174,30 @@ useEffect(() => {
         open: true,
         type: "error",
         title: "Failed!",
-        message: error.response?.data?.message || "Something went wrong.",
+        message:
+          error || "Something went wrong. Please try again.",
       });
     }
-
-    // setFormData({
-    //   name: "",
-    //   email: "",
-    //   faq: "",
-    //   subject: "",
-    //   message: "",
-    // });
-
-    // setSelectedAnswer("");
-
-    // setErrors({});
-    // setTouched({});
-    // setIsSubmitted(false);
-
-    // setModal({
-    //   open: true,
-    //   type: "success",
-    //   title: "Message Sent!",
-    //   message: "Thank you for reaching out. We'll get back to you soon.",
-    // });
   };
 
-  //skeleton//
- return (
-  <div className="formPart">
+  // Skeleton
+  return (
+    <div className="formPart">
+      {loading ? (
+        <div className="contactFormSkeleton">
+          <div className="inputs">
+            <Skeleton
+              width="100%"
+              height="45px"
+              radius="8px"
+            />
 
-    {loading ? (
-
-      <div className="contactFormSkeleton">
-
-        <div className="inputs">
+            <Skeleton
+              width="100%"
+              height="45px"
+              radius="8px"
+            />
+          </div>
 
           <Skeleton
             width="100%"
@@ -468,181 +211,152 @@ useEffect(() => {
             radius="8px"
           />
 
+          <Skeleton
+            width="100%"
+            height="120px"
+            radius="8px"
+          />
+
+          <Skeleton
+            width="180px"
+            height="45px"
+            radius="10px"
+          />
         </div>
-        <Skeleton
-          width="100%"
-          height="45px"
-          radius="8px"
-        />
-        <Skeleton
-          width="100%"
-          height="45px"
-          radius="8px"
-        />
-        <Skeleton
-          width="100%"
-          height="120px"
-          radius="8px"
-        />
+      ) : (
+        <form onSubmit={submit} noValidate>
+          <div className="inputs">
+            <div className="input_group">
+              <input
+                type="text"
+                name="name"
+                placeholder="Your Name"
+                value={formData.name}
+                onChange={handleChange}
+                onBlur={() =>
+                  setTouched((prev) => ({
+                    ...prev,
+                    name: true,
+                  }))
+                }
+              />
 
+              {(touched.name || isSubmitted) && errors.name && (
+                <p className="form_error">
+                  {errors.name}
+                </p>
+              )}
+            </div>
 
-        <Skeleton
-          width="180px"
-          height="45px"
-          radius="10px"
-        />
+            <div className="input_group">
+              <input
+                type="email"
+                name="email"
+                placeholder="Your Email"
+                value={formData.email}
+                onChange={handleChange}
+                onBlur={() =>
+                  setTouched((prev) => ({
+                    ...prev,
+                    email: true,
+                  }))
+                }
+              />
 
-      </div>
-
-    ) : (
-
-      <form onSubmit={submit} noValidate>
-
-
-        <div className="inputs">
-
-          <div className="input_group">
-
-            <input
-              type="text"
-              name="name"
-              placeholder="Your Name"
-              value={formData.name}
-              onChange={handleChange}
-              onBlur={() =>
-                setTouched(prev => ({
-                  ...prev,
-                  name:true
-                }))
-              }
-            />
-
-            {(touched.name || isSubmitted) && errors.name && (
-              <p className="form_error">
-                {errors.name}
-              </p>
-            )}
-
+              {(touched.email || isSubmitted) && errors.email && (
+                <p className="form_error">
+                  {errors.email}
+                </p>
+              )}
+            </div>
           </div>
 
-
-
-          <div className="input_group">
-
-            <input
-              type="email"
-              name="email"
-              placeholder="Your Email"
-              value={formData.email}
-              onChange={handleChange}
-              onBlur={() =>
-                setTouched(prev => ({
-                  ...prev,
-                  email:true
-                }))
-              }
-            />
-
-            {(touched.email || isSubmitted) && errors.email && (
-              <p className="form_error">
-                {errors.email}
-              </p>
-            )}
-
-          </div>
-        </div>
-        <select
-          name="faq"
-          value={formData.faq}
-          onChange={handleChange}
-        >
-
-          <option value="">
-            Select Question (Optional)
-          </option>
-
-
-          {questions.map((question,index)=>(
-
-            <option
-              key={index}
-              value={index}
-            >
-              {question}
+          <select
+            name="faq"
+            value={formData.faq}
+            onChange={handleChange}
+          >
+            <option value="">
+              Select Question
             </option>
 
-          ))}
-        </select>
+            {questions.map((question, index) => (
+              <option
+                key={index}
+                value={index}
+              >
+                {question}
+              </option>
+            ))}
+          </select>
 
-        {selectedAnswer && (
-          <p className="faqAnswer">
-            {selectedAnswer}
-          </p>
-        )}
-        <input
-          type="text"
-          name="subject"
-          placeholder="Subject"
-          value={formData.subject}
-          onChange={handleChange}
-          onBlur={() =>
-            setTouched(prev=>({
-              ...prev,
-              subject:true
-            }))
-          }
-        />
+          {selectedAnswer && (
+            <p className="faqAnswer">
+              {selectedAnswer}
+            </p>
+          )}
 
+          <input
+            type="text"
+            name="subject"
+            placeholder="Subject"
+            value={formData.subject}
+            onChange={handleChange}
+            onBlur={() =>
+              setTouched((prev) => ({
+                ...prev,
+                subject: true,
+              }))
+            }
+          />
 
-        {(touched.subject || isSubmitted) && errors.subject && (
+          {(touched.subject || isSubmitted) &&
+            errors.subject && (
+              <p className="form_error">
+                {errors.subject}
+              </p>
+            )}
 
-          <p className="form_error">
-            {errors.subject}
-          </p>
+          <textarea
+            rows="6"
+            name="message"
+            placeholder="Your Message"
+            value={formData.message}
+            onChange={handleChange}
+            onBlur={() =>
+              setTouched((prev) => ({
+                ...prev,
+                message: true,
+              }))
+            }
+          />
 
-        )}
-        <textarea
-          rows="6"
-          name="message"
-          placeholder="Your Message"
-          value={formData.message}
-          onChange={handleChange}
-          onBlur={() =>
-            setTouched(prev=>({
-              ...prev,
-              message:true
-            }))
-          }
-        />
-        {(touched.message || isSubmitted) && errors.message && (
+          {(touched.message || isSubmitted) &&
+            errors.message && (
+              <p className="form_error">
+                {errors.message}
+              </p>
+            )}
 
-          <p className="form_error">
-            {errors.message}
-          </p>
+          <button
+            type="submit"
+            className="btn"
+            disabled={isContactLoading}
+          >
+            {isContactLoading ? "Sending..." : "Send Message"}
+          </button>
+        </form>
+      )}
 
-        )}
-        <button
-          type="submit"
-          className="btn"
-        >
-          Send Message
-        </button>
-
-
-      </form>
-
-    )}
-    <Feedback
-      isOpen={modal.open}
-      type={modal.type}
-      title={modal.title}
-      message={modal.message}
-      onClose={closeModal}
-    />
-
-
-  </div>
-);
+      <Feedback
+        isOpen={modal.open}
+        type={modal.type}
+        title={modal.title}
+        message={modal.message}
+        onClose={closeModal}
+      />
+    </div>
+  );
 }
 
 export default ContactForm;

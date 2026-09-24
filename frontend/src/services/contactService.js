@@ -1,17 +1,10 @@
 import axios from "axios";
 
-const API_URL = import.meta.env.VITE_API_URL;
+const API = axios.create({
+  baseURL: import.meta.env.VITE_API_URL,
+  withCredentials: true,
+});
 
 export const contactService = {
-  createContact: async (contactData) => {
-    const response = await axios.post(
-      `${API_URL}/contact`,
-      contactData,
-      {
-        withCredentials: true,
-      }
-    );
-
-    return response.data;
-  },
+  createContact: (data) => API.post("/api/contact", data),
 };
