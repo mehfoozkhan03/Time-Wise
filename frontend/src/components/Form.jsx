@@ -1,18 +1,21 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { useDispatch, useSelector } from 'react-redux';
 
-import ApiCall from '../services/api';
+import { registerUser, loginUser } from "../store/authSlice"
+import { loginAdmin } from "../store/adminAuthSlice"
 import '../styles/Form.css';
-import { useSelector } from 'react-redux';
 
 export const Form = ({
   fields = [],
   button = 'Submit',
-  endpoint,
-  errors = {},
-  onSuccess,
+  endpoint
 }) => {
+
+  const dispatch = useDispatch();
+
+
   // here we have to set our field
   const [form, setForm] = React.useState(() => {
     return fields.reduce((acc, field) => {
@@ -21,11 +24,14 @@ export const Form = ({
     }, {});
   });
 
+
   const { isloading, isError, isAuthenticated, errorMessage } = useSelector(
     (state) => state.auth,
   );
 
   const [showPassword, setShowPassword] = React.useState(false);
+
+   const [errors, serErrors] = React.useState({}); // temp using this this is comming from validator function and it will handle all validation form the only 
 
   /*
    * here we have to set model
@@ -62,15 +68,41 @@ export const Form = ({
     }));
   };
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await ApiCall.post(endpoint, form);
-      console.log('data', response);
-      if (onSuccess) {
-        onSuccess(response);
+
+      let response;
+
+      // response for registration
+      if (endpoint === "/user/signup") {
+        response = await dispatch(registerUser(form))
+        console.log("🚀 ~ handleSubmit ~ response:", response)
       }
+
+      // response for login
+
+      if (endpoint === "/user/login") {
+        response = await dispatch(loginUser(form))
+        console.log("🚀 ~ handleSubmit ~ response:", response)
+      }
+
+      // respones for adminLogin
+
+      if (endpoint === "/admin/login") {
+        response = await dispatch(loginAdmin(form))
+        console.log("🚀 ~ handleSubmit ~ response:", response)
+
+      }
+
+
+      if(response.meta.requeststatus == "fulfilled"){
+        // here we hve to give the successful responese all the endpoint's
+      }
+
+
 
       /*
        * Reset form after successful request
@@ -199,9 +231,8 @@ export const Form = ({
          */
         return (
           <motion.div
-            className={`input-box ${
-              el.type === 'password' ? 'password-box' : ''
-            } ${fieldError ? 'error-active' : ''}`}
+            className={`input-box ${el.type === 'password' ? 'password-box' : ''
+              } ${fieldError ? 'error-active' : ''}`}
             key={el.id || el.name}
             initial={{
               opacity: 0,
