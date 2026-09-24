@@ -31,7 +31,7 @@ export const Form = ({
   });
 
 
-  const { isloading, isError, isAuthenticated, errorMessage } = useSelector(
+  const { isloading } = useSelector(
     (state) => state.auth,
   );
 
@@ -75,6 +75,11 @@ export const Form = ({
 
     setErrors(validationErrors);
 
+    // Stop API call if validation failed
+    if (Object.keys(validationErrors).length > 0) {
+      return;
+    }
+
     try {
 
       let response;
@@ -82,21 +87,18 @@ export const Form = ({
       // response for registration
       if (endpoint === "/user/signup") {
         response = await dispatch(registerUser(form))
-        console.log("🚀 ~ handleSubmit ~ response:", response)
       }
 
       // response for login
 
       if (endpoint === "/user/login") {
         response = await dispatch(loginUser(form))
-        console.log("🚀 ~ handleSubmit ~ response:", response)
       }
 
       // respones for adminLogin
 
       if (endpoint === "/admin/login") {
         response = await dispatch(loginAdmin(form))
-        console.log("🚀 ~ handleSubmit ~ response:", response)
 
       }
 
@@ -258,7 +260,6 @@ export const Form = ({
           updatedForm[field.name] = '';
         }
       });
-      console.log(`🚀 ~ fields:`, fields);
 
       return updatedForm;
     });
@@ -284,7 +285,6 @@ export const Form = ({
       >
         {fields.map((el, index) => {
           const fieldError = errors?.[el.name];
-          console.log(`🚀 ~ fieldError:`, fieldError);
 
           /*
            * =========================

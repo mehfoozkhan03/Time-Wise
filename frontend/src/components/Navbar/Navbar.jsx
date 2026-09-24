@@ -61,13 +61,14 @@ export default function Navbar() {
 
   const confirmLogout = async () => {
     try {
-      setLogoutOpen(false);
-
+      
       await authService.logout();
-
+      
       dispatch(logout());
 
-      navigate("/signup");
+      setLogoutOpen(false);
+
+      navigate("/login");
     } catch (error) {
       console.log(error);
     }
@@ -127,33 +128,33 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
-  const handleScroll = () => {
-    const banner = document.querySelector(".profile_banner");
-    const navbar = document.querySelector(".navbar");
+    const handleScroll = () => {
+      const banner = document.querySelector(".profile_banner");
+      const navbar = document.querySelector(".navbar");
 
-    if (!banner || !navbar) {
-      setOverProfileBanner(false);
-      return;
-    }
+      if (!banner || !navbar) {
+        setOverProfileBanner(false);
+        return;
+      }
 
-    const bannerRect = banner.getBoundingClientRect();
-    const navbarHeight = navbar.offsetHeight;
+      const bannerRect = banner.getBoundingClientRect();
+      const navbarHeight = navbar.offsetHeight;
 
-    const isOverBanner =
-      bannerRect.top <= navbarHeight &&
-      bannerRect.bottom >= 0;
+      const isOverBanner =
+        bannerRect.top <= navbarHeight &&
+        bannerRect.bottom >= 0;
 
-    setOverProfileBanner(isOverBanner);
-  };
+      setOverProfileBanner(isOverBanner);
+    };
 
-  handleScroll();
+    handleScroll();
 
-  window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll);
 
-  return () => {
-    window.removeEventListener("scroll", handleScroll);
-  };
-}, [location.pathname]);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [location.pathname]);
 
   // Notification
   useEffect(() => {
@@ -167,11 +168,10 @@ export default function Navbar() {
 
   return (
     <>
-    <header
-  className={`navbar ${
-    overProfileBanner ? "navbar_over_banner" : ""
-  }`}
->
+      <header
+        className={`navbar ${overProfileBanner ? "navbar_over_banner" : ""
+          }`}
+      >
         {/* =======================
               Logo
         ======================= */}
@@ -246,9 +246,8 @@ export default function Navbar() {
                   notifications.map((notification) => (
                     <div
                       key={notification._id}
-                      className={`notification_item ${
-                        !notification.read ? "unread" : ""
-                      }`}
+                      className={`notification_item ${!notification.read ? "unread" : ""
+                        }`}
                       onClick={() => handleNotificationClick(notification)}
                     >
                       <strong>{notification.title}</strong>
@@ -295,10 +294,10 @@ export default function Navbar() {
                 <h4>
                   {user
                     ? `${user.firstName?.charAt(0).toUpperCase()}${user.firstName?.slice(
-                        1,
-                      )} ${user.lastName?.charAt(0).toUpperCase()}${user.lastName?.slice(
-                        1,
-                      )}`
+                      1,
+                    )} ${user.lastName?.charAt(0).toUpperCase()}${user.lastName?.slice(
+                      1,
+                    )}`
                     : "User"}
                 </h4>
 
