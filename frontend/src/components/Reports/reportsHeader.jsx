@@ -102,7 +102,6 @@ export function ReportsHeader({ dateRange, ranges }) {
               <h1
                 style={{
                   margin: 0,
-                  fontFamily: 'Outfit,sans-serif',
                   fontSize: 26,
                   fontWeight: 700,
                   letterSpacing: '-0.02em',

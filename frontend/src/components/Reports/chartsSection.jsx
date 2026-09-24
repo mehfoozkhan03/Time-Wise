@@ -350,7 +350,6 @@ export function ChartsSection({
                     tick={{
                       fill: "#475569",
                       fontSize: 11,
-                      fontFamily: "JetBrains Mono",
                     }}
                     axisLine={false}
                     tickLine={false}
@@ -360,7 +359,6 @@ export function ChartsSection({
                     tick={{
                       fill: "#475569",
                       fontSize: 11,
-                      fontFamily: "JetBrains Mono",
                     }}
                     axisLine={false}
                     tickLine={false}
@@ -418,7 +416,6 @@ export function ChartsSection({
                     tick={{
                       fill: "#475569",
                       fontSize: 11,
-                      fontFamily: "JetBrains Mono",
                     }}
                     axisLine={false}
                     tickLine={false}
@@ -428,7 +425,6 @@ export function ChartsSection({
                     tick={{
                       fill: "#475569",
                       fontSize: 11,
-                      fontFamily: "JetBrains Mono",
                     }}
                     axisLine={false}
                     tickLine={false}
@@ -554,7 +550,6 @@ export function ChartsSection({
 
                       <span
                         style={{
-                          fontFamily: "JetBrains Mono, monospace",
                           fontSize: 14,
                           fontWeight: 600,
                         }}

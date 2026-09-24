@@ -132,3 +132,41 @@
 .attendance-trend-chart{
     height: 250px;
 }
+
+@media (max-width: 840px) {
+    .dashboardReport-container {
+        padding: 22px;
+    }
+
+    .dashboardReport-grid-content {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboardDepartment-chart-content {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 18px;
+    }
+}
+
+@media (max-width: 430px) {
+    .dashboardReport-container {
+        padding: 14px;
+        gap: 20px;
+    }
+
+    .dashboardReport-attendance-chart,
+    .dashboardReport-department-chart,
+    .dashboardReport-attendance-trend {
+        padding: 16px;
+        border-radius: 14px;
+    }
+
+    .dashboardDepartment-chart-content {
+        grid-template-columns: 1fr;
+        justify-items: center;
+    }
+
+    .department-chart-details {
+        width: 100%;
+    }
+}

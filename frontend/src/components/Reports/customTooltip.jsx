@@ -15,7 +15,6 @@ export function CustomTooltip({ active, payload, label }) {
         style={{
           fontSize: 11,
           marginBottom: 6,
-          fontFamily: "JetBrains Mono, monospace",
         }}
       >
         {label}
@@ -53,7 +52,6 @@ export function CustomTooltip({ active, payload, label }) {
             style={{
               fontSize: 12,
               fontWeight: 600,
-              fontFamily: "JetBrains Mono, monospace",
             }}
           >
             {p.value}

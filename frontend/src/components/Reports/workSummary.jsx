@@ -89,7 +89,6 @@
 
 //             <div
 //               style={{
-//                 fontFamily: "JetBrains Mono, monospace",
 //                 fontSize: 15,
 //                 fontWeight: 600,
 //                 marginBottom: 2,
@@ -248,7 +247,6 @@ export function WorkSummary({ dashboardStats }) {
 
                 <div
                   style={{
-                    fontFamily: "JetBrains Mono, monospace",
                     fontSize: 15,
                     fontWeight: 600,
                     marginBottom: 2,

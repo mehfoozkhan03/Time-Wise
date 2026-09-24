@@ -100,7 +100,6 @@ export function AttendanceHeatmap({ calendarData = [], year, month }) {
               textAlign: "center",
               fontWeight: 600,
               letterSpacing: "0.06em",
-              fontFamily: "JetBrains Mono, monospace",
             }}
           >
             {day}
