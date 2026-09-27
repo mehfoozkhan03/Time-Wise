@@ -66,8 +66,6 @@ export default function Navbar() {
       await authService.logout();
 
       dispatch(logout());
-
-      navigate("/signup");
     } catch (error) {
       console.log(error);
     }

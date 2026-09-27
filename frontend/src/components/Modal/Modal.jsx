@@ -57,6 +57,24 @@ export const Modal = ({ onReady }) => {
     }
   };
 
+  const closeModalRef = React.useRef(closeModal);
+  closeModalRef.current = closeModal;
+
+  React.useEffect(() => {
+    if (!modal.open) return;
+
+    const handleKeyDown = (event) => {
+      if (event.key !== "Enter") return;
+
+      event.preventDefault();
+      event.stopPropagation();
+      closeModalRef.current();
+    };
+
+    window.addEventListener("keydown", handleKeyDown, true);
+    return () => window.removeEventListener("keydown", handleKeyDown, true);
+  }, [modal.open]);
+
   // ==========================================
   // GIVE showModal TO PARENT
   // ==========================================

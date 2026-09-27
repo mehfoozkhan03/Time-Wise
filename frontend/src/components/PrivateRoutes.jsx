@@ -10,7 +10,7 @@ export const PrivateRoutes = ({ children }) => {
     isAuthenticated === undefined ||
     isAuthenticated === null
   ) {
-    return <Navigate to="/signup" replace />;
+    return <Navigate to="/login" replace />;
   } else {
     return children;
   }
