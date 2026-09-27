@@ -204,6 +204,88 @@ export const getAllPosts = async (req, res) => {
   }
 }
 
+
+// =======================================================
+// Get All Posts For Admin
+// =======================================================
+
+export const getAllPostsForAdmin = async (req, res) => {
+  try {
+    const page = Math.max(parseInt(req.query.page) || 1, 1);
+    const limit = Math.max(parseInt(req.query.limit) || 10, 1);
+
+    const sort = req.query.sort || "newest";
+
+    const skip = (page - 1) * limit;
+
+    let sortOption = {
+      createdAt: -1,
+    };
+
+    switch (sort) {
+      case "oldest":
+        sortOption = {
+          createdAt: 1,
+        };
+        break;
+
+      case "popular":
+        sortOption = {
+          likesCount: -1,
+          commentsCount: -1,
+          createdAt: -1,
+        };
+        break;
+
+      default:
+        sortOption = {
+          createdAt: -1,
+        };
+    }
+
+    const totalPosts = await postModel.countDocuments({
+      isDeleted: false,
+    });
+
+    const posts = await postModel
+      .find({
+        isDeleted: false,
+      })
+      .populate(
+        "createdBy",
+        "firstName lastName profileImage designation department"
+      )
+      .sort(sortOption)
+      .skip(skip)
+      .limit(limit);
+
+    const formattedPosts = posts.map((post) => ({
+      ...post.toObject(),
+
+      // Admin doesn't need user-specific like/save status
+      isLiked: false,
+      isSaved: false,
+    }));
+
+    return res.status(200).json({
+      success: true,
+      page,
+      limit,
+      totalPosts,
+      totalPages: Math.ceil(totalPosts / limit),
+      hasMore: page * limit < totalPosts,
+      posts: formattedPosts,
+    });
+  } catch (error) {
+    console.error("Get Admin Posts Error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Unable to fetch admin posts.",
+    });
+  }
+};
+
 // =======================================================
 // Get Single Post
 // =======================================================
@@ -257,6 +339,51 @@ export const getPost = async (req, res) => {
     })
   }
 }
+
+// =======================================================
+// Get Single Post For Admin
+// =======================================================
+
+export const getPostForAdmin = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const post = await postModel
+      .findOne({
+        _id: id,
+        isDeleted: false,
+      })
+      .populate(
+        "createdBy",
+        "firstName lastName profileImage designation department"
+      );
+
+    if (!post) {
+      return res.status(404).json({
+        success: false,
+        message: "Post not found.",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      post: {
+        ...post.toObject(),
+
+        // Admin doesn't need personal like/save status
+        isLiked: false,
+        isSaved: false,
+      },
+    });
+  } catch (error) {
+    console.error("Get Admin Post Error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Unable to fetch post.",
+    });
+  }
+};
 
 // =======================================================
 // Update Post

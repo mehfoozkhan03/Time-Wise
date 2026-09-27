@@ -28,7 +28,7 @@ userRoutes.post("/signup", signup);
 
 userRoutes.post("/logout", logout);
 
-userRoutes.get("/me", auth, authorize("user"), getCurrentUser);
+userRoutes.get("/me", auth, authorize("user", "admin"), getCurrentUser);
 
 userRoutes.get("/profile/:userId", auth, getUserProfile);
 

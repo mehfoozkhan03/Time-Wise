@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import {
   deleteThoughtbyAdmin,
-  fetchPosts,
+  fetchAdminThoughts,
   togglePinThoughtbyAdmin,
 } from "../../../store/postSlice";
 import { fetchAllUser } from "../../../store/adminAuthSlice";
@@ -92,7 +92,7 @@ export const DashboardThuoght = () => {
     if (isLoading || !hasMore) return;
 
     dispatch(
-      fetchPosts({
+      fetchAdminThoughts({
         page: page + 1,
         limit: 10,
       }),
@@ -121,7 +121,7 @@ export const DashboardThuoght = () => {
 
   //# thoughts
   useEffect(() => {
-    dispatch(fetchPosts({ page: 1, limit: 10 }));
+    dispatch(fetchAdminThoughts({ page: 1, limit: 10 }));
     dispatch(fetchAllUser());
   }, [dispatch]);
 

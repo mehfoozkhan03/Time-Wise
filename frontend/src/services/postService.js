@@ -1,38 +1,54 @@
-import api from './api'
+import api from "./api";
 
 export const postService = {
   // =====================================================
   // Posts
   // =====================================================
 
-  getAllPosts(page = 1, limit = 10, sort = 'newest') {
-    return api.get('/posts', {
+  getAllPosts(page = 1, limit = 10, sort = "newest") {
+    return api.get("/posts", {
       params: {
         page,
         limit,
         sort,
       },
-    })
+    });
   },
 
   getPost(id) {
-    return api.get(`/posts/${id}`)
+    return api.get(`/posts/${id}`);
+  },
+
+  //# Get all thought for admin
+  getAllPostsForAdmin(page = 1, limit = 10, sort = "newest") {
+    return api.get("/admin/posts", {
+      params: {
+        page,
+        limit,
+        sort,
+      },
+    });
+  },
+
+  //# get single post for admin
+  getPostForAdmin(id) {
+    return api.get(`/admin/posts/${id}`);
   },
 
   getFeaturedThought() {
-    return api.get('/posts/featured')
+    return api.get("/posts/featured");
   },
 
   createPost(data) {
-    return api.post('/posts', data)
+    return api.post("/posts", data);
   },
 
   updatePost(id, data) {
-    return api.patch(`/posts/${id}`, data)
+    return api.patch(`/posts/${id}`, data);
   },
 
   deletePost(id) {
-    return api.delete(`/posts/${id}`)
+    return api.delete(`/posts/${id}`);
   },
 
   // =====================================================
@@ -40,7 +56,7 @@ export const postService = {
   // =====================================================
 
   togglePostLike(id) {
-    return api.post(`/posts/${id}/like`)
+    return api.post(`/posts/${id}/like`);
   },
 
   // =====================================================
@@ -48,7 +64,7 @@ export const postService = {
   // =====================================================
 
   toggleSavedPost(id) {
-    return api.post(`/posts/${id}/save`)
+    return api.post(`/posts/${id}/save`);
   },
 
   // =====================================================
@@ -61,23 +77,23 @@ export const postService = {
         page,
         limit,
       },
-    })
+    });
   },
 
   createComment(postId, text) {
     return api.post(`/posts/${postId}/comments`, {
       text,
-    })
+    });
   },
 
   updateComment(commentId, text) {
     return api.patch(`/posts/comments/${commentId}`, {
       text,
-    })
+    });
   },
 
   deleteComment(commentId) {
-    return api.delete(`/posts/comments/${commentId}`)
+    return api.delete(`/posts/comments/${commentId}`);
   },
 
   // =====================================================
@@ -85,7 +101,7 @@ export const postService = {
   // =====================================================
 
   toggleCommentLike(commentId) {
-    return api.post(`/posts/comments/${commentId}/like`)
+    return api.post(`/posts/comments/${commentId}/like`);
   },
 
   // =====================================================
@@ -93,18 +109,18 @@ export const postService = {
   // =====================================================
 
   searchPosts(query) {
-    return api.get('/posts/search', {
+    return api.get("/posts/search", {
       params: {
         q: query,
       },
-    })
+    });
   },
 
   getTrendingPosts() {
-    return api.get('/posts/trending')
+    return api.get("/posts/trending");
   },
 
   getTopContributors() {
-    return api.get('/posts/contributors/top')
+    return api.get("/posts/contributors/top");
   },
-}
+};

@@ -1,48 +1,58 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from "react";
 
-import api from '../services/api'
+import api from "../services/api";
+import { useLocation } from "react-router-dom";
 
-const AuthContext = createContext()
+const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null)
+  const location = useLocation();
 
-  const [loading, setLoading] = useState(true)
+  const isAdminPage = location.pathname.startsWith("/adminDashboard");
+
+  const [user, setUser] = useState(null);
+
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (isAdminPage) {
+      setLoading(false);
+      return;
+    }
+
     async function loadUser() {
       try {
-        const res = await api.get('/user/me')
+        const res = await api.get("/user/me");
 
-        setUser(res.data)
+        setUser(res.data);
       } catch {
-        setUser(null)
+        setUser(null);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
     }
-    loadUser()
-  }, [])
+    loadUser();
+  }, [isAdminPage]);
 
   async function login(email, password) {
-    const res = await api.post('/auth/login', {
+    const res = await api.post("/auth/login", {
       email,
       password,
-    })
+    });
 
     localStorage.setItem(
-      'token',
+      "token",
 
       res.data.token,
-    )
+    );
 
-    setUser(res.data.user)
+    setUser(res.data.user);
   }
 
   function logout() {
-    localStorage.removeItem('token')
+    localStorage.removeItem("token");
 
-    setUser(null)
+    setUser(null);
   }
 
   return (
@@ -56,9 +66,9 @@ export function AuthProvider({ children }) {
     >
       {children}
     </AuthContext.Provider>
-  )
+  );
 }
 
 export function useAuth() {
-  return useContext(AuthContext)
+  return useContext(AuthContext);
 }

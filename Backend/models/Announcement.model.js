@@ -43,12 +43,7 @@ const announcementSchema = new mongoose.Schema(
 
     status: {
       type: String,
-      enum: [
-        "Draft",
-        "Published",
-        "Scheduled",
-        "Expired",
-      ],
+      enum: ["Draft", "Published", "Scheduled", "Expired"],
       default: "Draft",
     },
 
@@ -78,21 +73,20 @@ const announcementSchema = new mongoose.Schema(
 
     audience: {
       type: String,
-      enum: [
-        "Everyone",
-        "Department",
-        "Role",
-        "Specific Employees",
-      ],
+      enum: ["Everyone", "Department", "Role", "Specific Employees"],
       default: "Everyone",
     },
 
+    // department: {
+    //   type: mongoose.Schema.Types.ObjectId,
+    //   ref: "Department",
+    //   default: null,
+    // },
     department: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Department",
+      type: String,
       default: null,
     },
-
+    
     role: {
       type: String,
       default: null,
@@ -167,7 +161,7 @@ const announcementSchema = new mongoose.Schema(
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true,
+      // required: true,
     },
 
     updatedBy: {
@@ -179,7 +173,10 @@ const announcementSchema = new mongoose.Schema(
   {
     versionKey: false,
     timestamps: true,
-  }
+  },
 );
 
-export const annoucementModel =  mongoose.model("Announcement", announcementSchema);
+export const annoucementModel = mongoose.model(
+  "Announcement",
+  announcementSchema,
+);
