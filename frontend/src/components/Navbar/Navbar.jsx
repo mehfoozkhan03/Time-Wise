@@ -64,7 +64,7 @@ export default function Navbar() {
       
       await authService.logout();
       
-      dispatch(logout());
+      dispatch(logout()).then(res=>alert(res));
 
       setLogoutOpen(false);
 
