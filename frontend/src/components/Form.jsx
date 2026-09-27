@@ -1,8 +1,7 @@
 
-import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-
+import React, { useState } from "react";
 import ApiCall from "../services/api";
 import "../styles/Form.css";
 
@@ -20,8 +19,10 @@ export const Form = ({
     }, {});
   });
 
-  const [showPassword, setShowPassword] = React.useState(false);
+  // const [showPassword, setShowPassword] = React.useState(false);
+  const [showPassword, setShowPassword] = React.useState({});
   const [loading, setLoading] = React.useState(false);
+  const [openSelect, setOpenSelect] = useState(null);
 
   /*
    * If fields change dynamically,
@@ -73,7 +74,7 @@ export const Form = ({
         fields.reduce((acc, field) => {
           acc[field.name] = "";
           return acc;
-        }, {})
+        }, {}),
       );
     } catch (error) {
       console.log("error", error);
@@ -87,7 +88,7 @@ export const Form = ({
    */
   const getInputType = (field) => {
     if (field.type === "password") {
-      return showPassword ? "text" : "password";
+      return showPassword[field.name] ? "text" : "password";
     }
 
     return field.type;
@@ -118,75 +119,66 @@ export const Form = ({
          * GENDER
          * =========================
          */
-        if (el.name === "gender") {
+        if (el.type === "select") {
+          const isOpen = openSelect === el.name;
+
           return (
             <motion.div
-              className="input-box"
+              className="input-box select-box"
               key={el.id || el.name}
-              initial={{
-                opacity: 0,
-                y: 10,
-              }}
-              animate={{
-                opacity: 1,
-                y: 0,
-              }}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{
                 duration: 0.3,
                 delay: index * 0.05,
               }}
             >
-              <label className="gender-title">
-                {el.name}
-              </label>
+              <button
+                type="button"
+                className={`select-trigger ${isOpen ? "select-open" : ""}`}
+                onClick={() => setOpenSelect(isOpen ? null : el.name)}
+              >
+                <span>{el.name}</span>
 
-              <div className="gender">
-                {Object.entries(el.typeOfGender || {}).map(
-                  ([key, value]) => {
-                    const inputId = `${el.name}-${key}`;
+                <span className="select-arrow">{isOpen ? "▲" : "▼"}</span>
+              </button>
 
-                    return (
-                      <div
-                        className="gender-option"
-                        key={key}
+              <AnimatePresence>
+                {isOpen && (
+                  <motion.div
+                    className="select-options"
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                  >
+                    {el.options.map((option) => (
+                      <button
+                        type="button"
+                        className="select-option"
+                        key={option}
+                        onClick={() => {
+                          setForm((prev) => ({
+                            ...prev,
+                            [el.name]: option,
+                          }));
+
+                          setOpenSelect(null);
+                        }}
                       >
-                        <input
-                          id={inputId}
-                          name={el.name}
-                          type={value.type}
-                          value={key}
-                          checked={form[el.name] === key}
-                          onChange={handleChange}
-                        />
-
-                        <label htmlFor={inputId}>
-                          {key}
-                        </label>
-                      </div>
-                    );
-                  }
+                        {option}
+                      </button>
+                    ))}
+                  </motion.div>
                 )}
-              </div>
+              </AnimatePresence>
 
               <AnimatePresence mode="wait">
                 {fieldError && (
                   <motion.p
                     className="error"
-                    initial={{
-                      opacity: 0,
-                      height: 0,
-                      y: -5,
-                    }}
-                    animate={{
-                      opacity: 1,
-                      height: "auto",
-                      y: 0,
-                    }}
-                    exit={{
-                      opacity: 0,
-                      height: 0,
-                      y: -5,
-                    }}
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
                   >
                     {fieldError}
                   </motion.p>
@@ -231,39 +223,22 @@ export const Form = ({
               required={el.required || false}
             />
 
-            <label htmlFor={el.name}>
-              {el.name}
-            </label>
+            <label htmlFor={el.name}>{el.name}</label>
 
             {el.type === "password" && (
               <motion.span
                 className="eye-icon"
                 onClick={() =>
-                  setShowPassword((prev) => !prev)
+                  setShowPassword((prev) => ({
+                    ...prev,
+                    [el.name]: !prev[el.name],
+                  }))
                 }
                 whileTap={{ scale: 0.9 }}
                 whileHover={{ scale: 1.15 }}
               >
                 <AnimatePresence mode="wait" initial={false}>
-                  {showPassword ? (
-                    <motion.span
-                      key="eye-slash"
-                      initial={{
-                        opacity: 0,
-                        rotate: -20,
-                      }}
-                      animate={{
-                        opacity: 1,
-                        rotate: 0,
-                      }}
-                      exit={{
-                        opacity: 0,
-                        rotate: 20,
-                      }}
-                    >
-                      <FaEyeSlash />
-                    </motion.span>
-                  ) : (
+                  {showPassword[el.name] ? (
                     <motion.span
                       key="eye"
                       initial={{
@@ -280,6 +255,24 @@ export const Form = ({
                       }}
                     >
                       <FaEye />
+                    </motion.span>
+                  ) : (
+                    <motion.span
+                      key="eye-slash"
+                      initial={{
+                        opacity: 0,
+                        rotate: -20,
+                      }}
+                      animate={{
+                        opacity: 1,
+                        rotate: 0,
+                      }}
+                      exit={{
+                        opacity: 0,
+                        rotate: 20,
+                      }}
+                    >
+                      <FaEyeSlash />
                     </motion.span>
                   )}
                 </AnimatePresence>

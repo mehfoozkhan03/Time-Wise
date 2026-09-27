@@ -6,13 +6,13 @@ export const forms = {
     fields: [
       {
         id: 1,
-        name: "email",
+        name: "Email",
         type: "text",
         placeholder: "Enter your Email...",
       },
       {
         id: 2,
-        name: "password",
+        name: "Password",
         type: "password",
         placeholder: "Enter your Password...",
       },
@@ -26,39 +26,45 @@ export const forms = {
     fields: [
       {
         id: 1,
-        name: "firstName",
+        name: "FirstName",
         type: "text",
         placeholder: "Enter your first Name...",
       },
       {
         id: 2,
-        name: "lastName",
+        name: "LastName",
         type: "text",
         placeholder: "Enter your Last Name...",
       },
       {
         id: 3,
-        name: "email",
+        name: "Email",
         type: "text",
         placeholder: "Enter your Email...",
       },
       {
         id: 4,
-        name: "password",
+        name: "Password",
         type: "password",
         placeholder: "Enter your Password...",
       },
       {
         id: 5,
-        name: "confirmPassword",
+        name: "ConfirmPassword",
         type: "password",
         placeholder: "Enter your Confirm Password...",
       },
       {
         id: 6,
-        name: "dob",
+        name: "Dob",
         type: "date",
         placeholder: "",
+      },
+      {
+        id: 7,
+        name: "Gender",
+        type: "select",
+        options: ["Male", "Female", "Other"],
       },
     ],
   },
@@ -70,13 +76,13 @@ export const forms = {
     fields: [
       {
         id: 1,
-        name: "email",
+        name: "Email",
         type: "text",
         placeholder: "Enter your Email...",
       },
       {
         id: 2,
-        name: "password",
+        name: "Password",
         type: "password",
         placeholder: "Enter your Password...",
       },
