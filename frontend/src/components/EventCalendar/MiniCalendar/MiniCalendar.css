@@ -3,10 +3,9 @@
 ========================================== */
 
 .miniCalendarCard .cardBody {
-  display: flex;
-  flex-direction: column;
-
-  gap: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
 /* ==========================================
@@ -14,65 +13,50 @@
 ========================================== */
 
 .miniHeader {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  gap: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
 }
 
 .miniHeader h3 {
-  flex: 1;
-
-  margin: 0;
-
-  text-align: center;
-
-  color: var(--text_primary);
-
-  font-size: 15px;
-  font-weight: 700;
+    flex: 1;
+    margin: 0;
+    text-align: center;
+    color: var(--text_primary);
+    font-size: 15px;
+    font-weight: 700;
 }
 
 .miniHeader button {
-  width: 32px;
-  height: 32px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border: 1px solid var(--border);
-  border-radius: var(--radius_sm);
-
-  background: var(--surface);
-
-  color: var(--text_primary);
-
-  cursor: pointer;
-
-  transition:
-    background var(--transition),
-    border-color var(--transition),
-    color var(--transition),
-    transform var(--transition),
-    box-shadow var(--transition);
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border);
+    border-radius: var(--radius_sm);
+    background: var(--surface);
+    color: var(--text_primary);
+    cursor: pointer;
+    transition:
+        background var(--transition),
+        border-color var(--transition),
+        color var(--transition),
+        transform var(--transition),
+        box-shadow var(--transition);
 }
 
 .miniHeader button:hover {
-  background: var(--primary);
-
-  border-color: var(--primary);
-
-  color: #fff;
-
-  box-shadow: var(--shadow_sm);
-
-  transform: translateY(-2px);
+    background: var(--primary);
+    border-color: var(--primary);
+    color: #fff;
+    box-shadow: var(--shadow_sm);
+    transform: translateY(-2px);
 }
 
 .miniHeader button:active {
-  transform: scale(0.96);
+    transform: scale(0.96);
 }
 
 /* ==========================================
@@ -80,23 +64,19 @@
 ========================================== */
 
 .miniWeekDays {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-
-  gap: 3px;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 3px;
 }
 
 .miniWeekDays span {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  height: 18px;
-
-  color: var(--text_secondary);
-
-  font-size: 10px;
-  font-weight: 600;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 18px;
+    color: var(--text_secondary);
+    font-size: 10px;
+    font-weight: 600;
 }
 
 /* ==========================================
@@ -104,10 +84,9 @@
 ========================================== */
 
 .miniGrid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-
-  gap: 4px;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
 }
 
 /* ==========================================
@@ -115,65 +94,80 @@
 ========================================== */
 
 .miniDay {
-  width: 100%;
-
-  aspect-ratio: 1;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  border: 1px solid transparent;
-  border-radius: var(--radius_sm);
-
-  background: transparent;
-
-  color: var(--text_primary);
-
-  font-size: 11px;
-  font-weight: 600;
-
-  cursor: pointer;
-
-  transition:
-    background var(--transition),
-    border-color var(--transition),
-    color var(--transition),
-    transform var(--transition);
+    width: 100%;
+    aspect-ratio: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid transparent;
+    border-radius: var(--radius_sm);
+    background: transparent;
+    color: var(--text_primary);
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+        background var(--transition),
+        border-color var(--transition),
+        color var(--transition),
+        transform var(--transition),
+        box-shadow var(--transition);
 }
 
 .miniDay:hover {
-  background: var(--surface_hover);
-
-  border-color: var(--border);
-
-  transform: translateY(-1px);
+    background: var(--surface_hover);
+    border-color: var(--border);
+    transform: translateY(-1px);
 }
+
+/* ==========================================
+   Today
+========================================== */
 
 .miniDay.today {
-  background: var(--primary);
-
-  border-color: var(--primary);
-
-  color: #fff;
+    background: var(--primary);
+    border-color: var(--primary);
+    color: #fff;
 }
+
+/* ==========================================
+   Selected Date
+========================================== */
 
 .miniDay.selected {
-  background: var(--primary_hover);
-
-  border-color: var(--primary_hover);
-
-  color: #fff;
+    background: transparent;
+    border-color: var(--primary);
+    color: var(--primary);
+    box-shadow: 0 0 0 1px var(--primary);
 }
+
+/* ==========================================
+   Today + Selected
+========================================== */
+
+.miniDay.today.selected {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: #fff;
+    box-shadow: none;
+}
+
+/* ==========================================
+   Other Month
+========================================== */
 
 .miniDay.otherMonth {
-  opacity: 0.4;
+    opacity: 0.4;
 }
+
+/* ==========================================
+   Focus
+========================================== */
 
 .miniHeader button:focus-visible,
 .miniDay:focus-visible {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
 }
 
 /* ==========================================
@@ -181,34 +175,34 @@
 ========================================== */
 
 @media (max-width: 760px) {
-  .miniCalendarCard .cardBody {
-    gap: 6px;
-  }
+    .miniCalendarCard .cardBody {
+        gap: 6px;
+    }
 
-  .miniHeader h3 {
-    font-size: 14px;
-  }
+    .miniHeader h3 {
+        font-size: 14px;
+    }
 
-  .miniHeader button {
-    width: 30px;
-    height: 30px;
-  }
+    .miniHeader button {
+        width: 30px;
+        height: 30px;
+    }
 
-  .miniWeekDays {
-    gap: 2px;
-  }
+    .miniWeekDays {
+        gap: 2px;
+    }
 
-  .miniWeekDays span {
-    font-size: 9px;
-  }
+    .miniWeekDays span {
+        font-size: 9px;
+    }
 
-  .miniGrid {
-    gap: 3px;
-  }
+    .miniGrid {
+        gap: 3px;
+    }
 
-  .miniDay {
-    font-size: 10px;
-  }
+    .miniDay {
+        font-size: 10px;
+    }
 }
 
 /* ==========================================
@@ -216,34 +210,34 @@
 ========================================== */
 
 @media (max-width: 480px) {
-  .miniCalendarCard .cardBody {
-    gap: 5px;
-  }
+    .miniCalendarCard .cardBody {
+        gap: 5px;
+    }
 
-  .miniHeader {
-    gap: 8px;
-  }
+    .miniHeader {
+        gap: 8px;
+    }
 
-  .miniHeader h3 {
-    font-size: 13px;
-  }
+    .miniHeader h3 {
+        font-size: 13px;
+    }
 
-  .miniHeader button {
-    width: 28px;
-    height: 28px;
-  }
+    .miniHeader button {
+        width: 28px;
+        height: 28px;
+    }
 
-  .miniWeekDays span {
-    font-size: 8px;
-  }
+    .miniWeekDays span {
+        font-size: 8px;
+    }
 
-  .miniGrid {
-    gap: 2px;
-  }
+    .miniGrid {
+        gap: 2px;
+    }
 
-  .miniDay {
-    font-size: 9px;
-  }
+    .miniDay {
+        font-size: 9px;
+    }
 }
 
 /* ==========================================
@@ -251,24 +245,24 @@
 ========================================== */
 
 @media (max-width: 320px) {
-  .miniHeader {
-    gap: 6px;
-  }
+    .miniHeader {
+        gap: 6px;
+    }
 
-  .miniHeader h3 {
-    font-size: 12px;
-  }
+    .miniHeader h3 {
+        font-size: 12px;
+    }
 
-  .miniHeader button {
-    width: 26px;
-    height: 26px;
-  }
+    .miniHeader button {
+        width: 26px;
+        height: 26px;
+    }
 
-  .miniWeekDays span {
-    font-size: 7px;
-  }
+    .miniWeekDays span {
+        font-size: 7px;
+    }
 
-  .miniDay {
-    font-size: 8px;
-  }
+    .miniDay {
+        font-size: 8px;
+    }
 }
