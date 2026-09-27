@@ -64,11 +64,9 @@ export default function Navbar() {
       
       await authService.logout();
       
-      dispatch(logout()).then(res=>alert(res));
+      dispatch(logout());
 
       setLogoutOpen(false);
-
-      navigate("/login");
     } catch (error) {
       console.log(error);
     }
