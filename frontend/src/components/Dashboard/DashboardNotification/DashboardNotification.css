@@ -84,6 +84,30 @@
     font-weight: bold;
 }
 
+@media (max-width: 840px) {
+    .dashboardNotification-container {
+        grid-template-columns: 1fr;
+        padding: 22px;
+        gap: 24px;
+    }
+}
+
+@media (max-width: 430px) {
+    .dashboardNotification-container {
+        padding: 14px;
+        gap: 20px;
+    }
+
+    .create-notification-content,
+    .recent-notification-content {
+        padding: 16px;
+    }
+
+    .recent-notification-content {
+        gap: 10px;
+    }
+}
+
 
 /* Recent Notification */
 .dashboard-recent-notification{

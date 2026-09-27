@@ -30,7 +30,6 @@ export function GoalProgress({ label, current, target, unit, color }) {
         >
           <span
             style={{
-              fontFamily: "JetBrains Mono, monospace",
               fontSize: 13,
               fontWeight: 600,
             }}

@@ -196,6 +196,27 @@
   background: var(--surface_hover);
 }
 
+@media (max-width: 430px) {
+  .feedback_modal {
+    width: calc(100% - 28px);
+    padding: 32px 20px 22px;
+    border-radius: 18px;
+    gap: 14px;
+  }
+
+  .feedback_title {
+    font-size: 22px;
+  }
+
+  .feedback_actions {
+    gap: 8px;
+  }
+
+  .feedback_button {
+    padding: 13px 10px;
+  }
+}
+
 /* ── Animations ────────────────────────────────────────── */
 
 @keyframes feedback_popup {

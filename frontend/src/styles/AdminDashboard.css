@@ -4,6 +4,7 @@
 }
 .dashboard-content{
     width: 100%;
+    min-width: 0;
 }
 .dashboard-header{
     height: 78px;
@@ -43,4 +44,28 @@
     gap: 10px;
     border: 1px solid var(--border);
     border-radius: 10px;
+}
+
+@media (max-width: 840px) {
+    .dashboard-container {
+        flex-direction: column;
+    }
+
+    .dashboard-header {
+        height: auto;
+        min-height: 68px;
+        padding: 16px;
+        gap: 12px;
+    }
+}
+
+@media (max-width: 430px) {
+    .dashboard-header {
+        padding: 12px;
+        flex-wrap: wrap;
+    }
+
+    .header-right {
+        gap: 8px;
+    }
 }
