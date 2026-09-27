@@ -1,6 +1,7 @@
 import { leaveModel } from "../models/Leave.model.js";
 import { leaveBalanceModel } from "../models/LeaveBalance.model.js";
 import { userModel } from "../models/User.model.js";
+import { calendarModel } from "../models/Calendar.model.js";
 
 const leaveBalanceMap = {
   annual: "annual",
@@ -182,6 +183,59 @@ export const cancelLeaveRequest = async (leaveID, userID) => {
   return leave;
 };
 
+const createLeaveCalendarEvents = async (leave, adminID) => {
+  const employee = await userModel.findById(
+    leave.user,
+    "firstName lastName department designation",
+  );
+
+  if (!employee) {
+    throw new Error("Employee associated with leave not found.");
+  }
+
+  const employeeName = `${employee.firstName || ""} ${
+    employee.lastName || ""
+  }`.trim();
+
+  const startDate = new Date(leave.startDate);
+  const endDate = new Date(leave.endDate);
+
+  startDate.setHours(0, 0, 0, 0);
+  endDate.setHours(0, 0, 0, 0);
+
+  const calendarEvents = [];
+
+  const currentDate = new Date(startDate);
+
+  while (currentDate <= endDate) {
+    calendarEvents.push({
+      title: "Leave",
+      description: leave.reason,
+      type: "LEAVE",
+      date: new Date(currentDate),
+      startTime: "",
+      endTime: "",
+      isAllDay: true,
+      employeeId: leave.user,
+      employeeName,
+      department: employee.department || null,
+      designation: employee.designation || null,
+      location: "",
+      priority: "MEDIUM",
+      color: "",
+      visibility: "PRIVATE",
+      leaveId: leave._id,
+      createdBy: adminID,
+      createdByModel: "Admin",
+      isActive: true,
+    });
+
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+
+  return await calendarModel.insertMany(calendarEvents);
+};
+
 export const approveLeaveRequest = async (leaveID, adminID) => {
   const leave = await leaveModel.findById(leaveID);
 
@@ -217,6 +271,8 @@ export const approveLeaveRequest = async (leaveID, adminID) => {
   leave.approvedAt = new Date();
 
   await leave.save();
+
+  await createLeaveCalendarEvents(leave, adminID);
 
   return leave;
 };
