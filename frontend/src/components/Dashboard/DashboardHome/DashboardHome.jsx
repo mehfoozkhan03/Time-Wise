@@ -7,7 +7,6 @@ import {
   FaBullhorn,
   FaChartBar,
 } from "react-icons/fa6";
-import { FaPlus } from "react-icons/fa";
 
 import { Bar } from "react-chartjs-2";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,13 +18,16 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getDashboardStats } from "../../../store/attendanceSlice";
 import {
   fetchAllUser,
   fetchRecentEmployees,
 } from "./../../../store/adminAuthSlice";
-import { fetchPosts } from "../../../store/postSlice";
+import { fetchAdminThoughts } from "../../../store/postSlice";
+import { AnnouncementForm } from "../DashboardAnnouncement/AnnouncementForm/AnnouncementForm";
+import { PulseDot } from "./../../PulseDot/pulseDot";
+
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
@@ -36,6 +38,7 @@ export const DashboardHome = () => {
   );
 
   const { featured, posts } = useSelector((state) => state.post);
+  // console.log("🚀 ~ posts:", posts);
 
   const { stats } = useSelector((state) => state.attendance);
 
@@ -54,6 +57,39 @@ export const DashboardHome = () => {
 
   const thoughtToShow = latestPinnedPost || latestPost;
 
+  //# ====================== Anouncement ===================
+  const [openAnnouncement, setOpenAnnouncement] = useState(false);
+
+  //# Card Style
+  const handleMouseMove = (e) => {
+    const card = e.currentTarget;
+
+    const rect = card.getBoundingClientRect();
+
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+
+    const rotateY = ((x - centerX) / centerX) * 8;
+    const rotateX = -((y - centerY) / centerY) * 8;
+
+    card.style.setProperty("--rotateX", `${rotateX}deg`);
+    card.style.setProperty("--rotateY", `${rotateY}deg`);
+
+    card.style.setProperty("--mouse-x", `${x}px`);
+    card.style.setProperty("--mouse-y", `${y}px`);
+  };
+
+  const resetTilt = (e) => {
+    const card = e.currentTarget;
+
+    card.style.setProperty("--rotateX", "0deg");
+    card.style.setProperty("--rotateY", "0deg");
+  };
+
+  //# Card data
   const cardData = [
     {
       icon: <FaUsers />,
@@ -67,7 +103,6 @@ export const DashboardHome = () => {
       count: stats?.totalPresentToday ?? 0,
       title: "Present Today",
       subTitle: "83.2% attendance",
-      color: "#43746b",
     },
     {
       icon: "❌",
@@ -75,7 +110,6 @@ export const DashboardHome = () => {
       title: "Absent Today",
       subTitle: "4 no-shows flagged",
       color: "#df2033",
-      backgroundColor: "",
     },
     {
       icon: "☕",
@@ -95,23 +129,19 @@ export const DashboardHome = () => {
 
   const actionData = [
     {
-      icon: <FaPlus style={{ color: "#6954b1" }} />,
-      title: "Add Employee",
-    },
-    {
-      icon: <FaBell style={{ color: "#ef9b52" }} />,
+      icon: <FaBell />,
       title: "Send Notification",
     },
     {
-      icon: <FaLightbulb style={{ color: "#ffc844" }} />,
+      icon: <FaLightbulb />,
       title: "Publish Thought",
     },
     {
-      icon: <FaBullhorn style={{ color: "#d13673" }} />,
+      icon: <FaBullhorn />,
       title: "New Announcement",
     },
     {
-      icon: <FaChartBar style={{ color: "#c9d7ba" }} />,
+      icon: <FaChartBar />,
       title: "Generate Report",
     },
   ];
@@ -185,7 +215,7 @@ export const DashboardHome = () => {
     dispatch(fetchAllUser());
     dispatch(fetchRecentEmployees());
     dispatch(getDashboardStats());
-    dispatch(fetchPosts());
+    dispatch(fetchAdminThoughts());
   }, [dispatch]);
 
   return (
@@ -198,13 +228,17 @@ export const DashboardHome = () => {
                 <div
                   className="home-card"
                   key={id}
+                  onMouseMove={handleMouseMove}
+                  onMouseLeave={resetTilt}
                 >
                   <div className="circle-container">
-                    <span style={{ color: el.color }}>{el.icon}</span>
-                    <div
-                      className="home-circle"
-                      style={{ background: el.color }}
-                    ></div>
+                    <span
+                      className="home-card-action-icon"
+                      style={{ color: el.color }}
+                    >
+                      {el.icon}
+                    </span>
+                    <PulseDot className="home-circle" {...el} />
                   </div>
                   <div>
                     <h1>{el.count}</h1>
@@ -218,35 +252,41 @@ export const DashboardHome = () => {
                 </div>
               ))}
           </div>
-          <div className="home-thought">
-            <div className="home-thought-heading">
-              <FaLightbulb style={{ color: "#ffc844", fontSize: "18px" }} />
-              <span>THOUGHT OF THE DAY</span>
-            </div>
-
-            <p>
-              {thoughtToShow
-                ? `"${thoughtToShow.content}"`
-                : "No thought available."}
-            </p>
-
-            <div className="thought-avatar-container">
-              <div className="thought-avatar">
-                {thoughtToShow?.createdBy?.firstName?.[0] || ""}
-                {thoughtToShow?.createdBy?.lastName?.[0] || ""}
+          <div className="home-thought-container">
+            <div
+              className="home-thought"
+              onMouseMove={handleMouseMove}
+              onMouseLeave={resetTilt}
+            >
+              <div className="home-thought-heading">
+                <FaLightbulb style={{ color: "#ffc844", fontSize: "18px" }} />
+                <span>THOUGHT OF THE DAY</span>
               </div>
 
-              <span style={{ opacity: "0.6", fontSize: "14px" }}>
+              <p>
                 {thoughtToShow
-                  ? `${thoughtToShow.createdBy?.firstName || ""} ${
-                      thoughtToShow.createdBy?.lastName || ""
-                    }${
-                      thoughtToShow.createdBy?.designation
-                        ? ` - ${thoughtToShow.createdBy.designation}`
-                        : ""
-                    }`
-                  : "No author"}
-              </span>
+                  ? `"${thoughtToShow.content}"`
+                  : "No thought available."}
+              </p>
+
+              <div className="thought-avatar-container">
+                <div className="thought-avatar">
+                  {thoughtToShow?.createdBy?.firstName?.[0] || ""}
+                  {thoughtToShow?.createdBy?.lastName?.[0] || ""}
+                </div>
+
+                <span style={{ opacity: "0.6", fontSize: "14px" }}>
+                  {thoughtToShow
+                    ? `${thoughtToShow.createdBy?.firstName || ""} ${
+                        thoughtToShow.createdBy?.lastName || ""
+                      }${
+                        thoughtToShow.createdBy?.designation
+                          ? ` - ${thoughtToShow.createdBy.designation}`
+                          : ""
+                      }`
+                    : "No author"}
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -258,9 +298,14 @@ export const DashboardHome = () => {
               <div
                 className="add-employe"
                 key={id}
+                onClick={() => {
+                  if (el.title === "New Announcement") {
+                    setOpenAnnouncement(true);
+                  }
+                }}
               >
                 {el.icon}
-                <span>{el.title}</span>
+                <span style={{ color: "#fff" }}>{el.title}</span>
               </div>
             ))}
         </div>
@@ -297,7 +342,7 @@ export const DashboardHome = () => {
                         background:
                           el.attendanceStatus === "Present"
                             ? "#12352F"
-                            : "#351A21",
+                            : "#f24545",
                         border:
                           el.attendanceStatus === "Present"
                             ? "1px solid #2F8F83"
@@ -310,7 +355,7 @@ export const DashboardHome = () => {
                           background:
                             el.attendanceStatus === "Present"
                               ? "#22C55E"
-                              : "#EF4444",
+                              : "#000",
                         }}
                       ></div>
                       <span
@@ -318,7 +363,8 @@ export const DashboardHome = () => {
                           color:
                             el.attendanceStatus === "Present"
                               ? "#5EE7C4"
-                              : "#FF6B7A",
+                              : "#000",
+                          fontWeight: 600,
                         }}
                       >
                         {el.attendanceStatus}
@@ -343,6 +389,10 @@ export const DashboardHome = () => {
           </div>
         </div>
       </div>
+
+      {openAnnouncement && (
+        <AnnouncementForm onClose={() => setOpenAnnouncement(false)} />
+      )}
     </>
   );
 };

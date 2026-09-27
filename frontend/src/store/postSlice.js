@@ -20,6 +20,23 @@ export const fetchPosts = createAsyncThunk(
   },
 );
 
+//# Fetch all thought for admin
+export const fetchAdminThoughts = createAsyncThunk(
+  "post/fetchAdminThoughts",
+
+  async ({ page = 1, limit = 10, sort = "newest" } = {}, thunkAPI) => {
+    try {
+      const { data } = await postService.getAllPostsForAdmin(page, limit, sort);
+
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Unable to fetch admin thoughts",
+      );
+    }
+  },
+);
+
 export const fetchPost = createAsyncThunk(
   "post/fetchPost",
   async (id, thunkAPI) => {
@@ -356,6 +373,32 @@ const postSlice = createSlice({
         state.loading = false;
         state.isError = true;
         state.errorMessage = action.payload;
+      })
+
+      //# fetching all thoughts for admin
+      .addCase(fetchAdminThoughts.pending, (state) => {
+        state.loading = true;
+        state.isError = null;
+      })
+
+      .addCase(fetchAdminThoughts.fulfilled, (state, action) => {
+        state.loading = false;
+
+        const { page, posts, hasMore } = action.payload;
+
+        if (page === 1) {
+          state.posts = posts;
+        } else {
+          state.posts = [...state.posts, ...posts];
+        }
+
+        state.page = page;
+        state.hasMore = hasMore;
+      })
+
+      .addCase(fetchAdminThoughts.rejected, (state, action) => {
+        state.loading = false;
+        state.isError = action.payload;
       })
 
       // ======================================================
