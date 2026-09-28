@@ -34,7 +34,7 @@ userRoutes.get("/profile/:userId", auth, getUserProfile);
 
 userRoutes.patch("/activity", auth, authorize("user"), updateActivity);
 
-userRoutes.patch("/theme", auth, authorize("user"), updateTheme);
+userRoutes.patch("/theme", auth, authorize("user", "admin"), updateTheme);
 
 userRoutes.patch("/social-links", auth, authorize("user"), updateSocialLinks);
 

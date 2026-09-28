@@ -72,6 +72,13 @@ export const DashboardSidebar = () => {
             <span>Attendance</span>
           </NavLink>
           <NavLink
+            to="appearence"
+            className="dashboard-appearence dashboard-navlink"
+          >
+            <MdOutlineWatchLater style={{ color: "#60A5FA" }} />
+            <span>Appearance</span>
+          </NavLink>
+          <NavLink
             to="leave"
             className="dashboard-leave dashboard-navlink"
           >

@@ -55,9 +55,31 @@ export function ThemeProvider({ children }) {
 
   const user = useSelector((state) => state.auth.user);
 
+  // const changeTheme = (theme) => {
+  //   dispatch(updateTheme(theme));
+  // };
+
   const changeTheme = (theme) => {
-    dispatch(updateTheme(theme));
-  };
+  const html = document.documentElement;
+
+  if (theme === "dark") {
+    html.classList.add("dark");
+  } else if (theme === "light") {
+    html.classList.remove("dark");
+  } else {
+    const systemDark = window.matchMedia(
+      "(prefers-color-scheme: dark)"
+    ).matches;
+
+    if (systemDark) {
+      html.classList.add("dark");
+    } else {
+      html.classList.remove("dark");
+    }
+  }
+
+  dispatch(updateTheme(theme));
+};
 
   useEffect(() => {
     // if (!user) return;

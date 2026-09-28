@@ -52,7 +52,6 @@ export const DashboardAnnouncement = () => {
         </div>
         <AnnouncementStats />
         <AnnouncementFilter />
-        {/* <AnnouncementCard /> */}
 
         {/* ================= ANNOUNCEMENTS ================= */}
 
