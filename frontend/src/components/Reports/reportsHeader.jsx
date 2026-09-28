@@ -1,21 +1,16 @@
 
 import { useDispatch } from 'react-redux';
-import { setDateRange } from '../../store/reportsSlice';
-import { useState, useEffect } from 'react';
+import { setDateRange, setCustomDateRange } from '../../store/reportsSlice';
 import Skeleton from '../../components/Skeleton/Skeleton';
 
-export function ReportsHeader({ dateRange, ranges }) {
+export function ReportsHeader({
+  dateRange,
+  ranges,
+  isLoading = false,
+  customStartDate = '',
+  customEndDate = '',
+}) {
   const dispatch = useDispatch();
-
-  const [showSkeleton, setShowSkeleton] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowSkeleton(false);
-    }, 1500);
-
-    return () => clearTimeout(timer);
-  }, []);
 
   return (
     <div
@@ -28,7 +23,7 @@ export function ReportsHeader({ dateRange, ranges }) {
         justifyContent: 'space-between',
       }}
     >
-      {showSkeleton ? (
+      {isLoading ? (
         <>
           {/* Left */}
           <div>
@@ -150,12 +145,47 @@ export function ReportsHeader({ dateRange, ranges }) {
                     cursor: 'pointer',
                     fontSize: 12.5,
                     fontWeight: 500,
+                    background: dateRange === r.id ? 'var(--primary)' : 'transparent',
+                    color: dateRange === r.id ? '#fff' : 'var(--text_primary)',
                   }}
                 >
                   {r.label}
                 </button>
               ))}
             </div>
+
+            {dateRange === 'custom' && (
+              <div className="reports_custom_range">
+                <label>
+                  From
+                  <input
+                    type="date"
+                    value={customStartDate}
+                    max={customEndDate || undefined}
+                    onChange={(event) =>
+                      dispatch(setCustomDateRange({
+                        startDate: event.target.value,
+                        endDate: customEndDate,
+                      }))
+                    }
+                  />
+                </label>
+                <label>
+                  To
+                  <input
+                    type="date"
+                    value={customEndDate}
+                    min={customStartDate || undefined}
+                    onChange={(event) =>
+                      dispatch(setCustomDateRange({
+                        startDate: customStartDate,
+                        endDate: event.target.value,
+                      }))
+                    }
+                  />
+                </label>
+              </div>
+            )}
 
             <button
               style={{

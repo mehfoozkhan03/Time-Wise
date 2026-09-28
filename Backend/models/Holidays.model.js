@@ -71,6 +71,8 @@ holidaySchema.index(
   }
 );
 
+holidaySchema.index({ isActive: 1, date: 1 });
+
 export const holidayModel = mongoose.model(
   "Holiday",
   holidaySchema

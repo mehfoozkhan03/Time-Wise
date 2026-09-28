@@ -1,4 +1,4 @@
-import { useMemo, useEffect } from "react";
+import { useMemo, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import "./reports.css";
@@ -18,10 +18,8 @@ import { GoalsSection } from "../../components/Reports/goalsSection";
 import { ChartsSection } from "../../components/Reports/chartsSection";
 import { ReportsHeader } from "../../components/Reports/reportsHeader";
 import { KPISection } from "../../components/Reports/kpiSection";
-import {
-  getAttendanceHistory,
-  getDashboardStats,
-} from "../../services/reportsService";
+import { getAttendanceReport } from "../../services/reportsService";
+import { roundHours } from "../../components/Reports/formatHours";
 
 // Main App
 
@@ -30,6 +28,8 @@ export function Reports() {
 
   const {
     dateRange,
+    customStartDate,
+    customEndDate,
     searchLog,
     statusFilter,
     activeTab,
@@ -37,22 +37,50 @@ export function Reports() {
     attendanceLog,
   } = useSelector((state) => state.reports);
 
+  const [reportCalendar, setReportCalendar] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState("");
+
   // console.log("Dashboard Stats:", dashboardStats);
 
   useEffect(() => {
-    const loadReports = async () => {
-      try {
-        const stats = await getDashboardStats();
-        const history = await getAttendanceHistory();
-        dispatch(setDashboardStats(stats));
-        dispatch(setAttendanceLog(history));
-      } catch (error) {
-        console.error(error);
-      }
-    };
+    if (dateRange === "custom" && (!customStartDate || !customEndDate)) {
+      setIsLoading(false);
+      dispatch(setAttendanceLog([]));
+      setReportCalendar([]);
+      return undefined;
+    }
 
-    loadReports();
-  }, [dispatch]);
+    const controller = new AbortController();
+    let cancelled = false;
+    setIsLoading(true);
+    setLoadError("");
+
+    getAttendanceReport({
+      range: dateRange,
+      from: customStartDate,
+      to: customEndDate,
+      signal: controller.signal,
+    })
+      .then((report) => {
+        if (cancelled) return;
+        dispatch(setDashboardStats(report.stats));
+        dispatch(setAttendanceLog(report.attendance));
+        setReportCalendar(report.calendar);
+      })
+      .catch((error) => {
+        if (cancelled || error.code === "ERR_CANCELED") return;
+        setLoadError(error.response?.data?.message || "Unable to load reports.");
+      })
+      .finally(() => {
+        if (!cancelled) setIsLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+      controller.abort();
+    };
+  }, [dispatch, dateRange, customStartDate, customEndDate]);
 
   const formatTime = (time) => {
     if (!time) return "—";
@@ -65,11 +93,15 @@ export function Reports() {
   };
 
   const formatDate = (date) => {
+    if (typeof date === "string" && /^\d{4}-\d{2}-\d{2}$/.test(date)) {
+      const [year, month, day] = date.split("-").map(Number);
+      return new Date(year, month - 1, day).toLocaleDateString("en-GB");
+    }
     return new Date(date).toLocaleDateString("en-GB");
   };
 
   const secondsToHours = (seconds) => {
-    return +(seconds / 3600).toFixed(1);
+    return roundHours(seconds / 3600);
   };
 
   const secondsToMinutes = (seconds) => {
@@ -82,12 +114,12 @@ export function Reports() {
         const hours = secondsToHours(item.totalWorkingSeconds);
 
         return {
-          date: formatDate(item.date),
+          date: formatDate(item.dateKey || item.date),
           checkin: formatTime(item.checkInTime),
           checkout: formatTime(item.checkOutTime),
           hours,
           breakDuration: secondsToMinutes(item.totalBreakSeconds),
-          overtime: Math.max(0, +(hours - 8).toFixed(1)),
+          overtime: roundHours(Math.max(0, (item.totalWorkingSeconds || 0) / 3600 - 8)),
           status: item.status,
           notes: item.notes,
         };
@@ -95,7 +127,7 @@ export function Reports() {
       .filter((e) => {
         const matchSearch =
           e.date.toLowerCase().includes(searchLog.toLowerCase()) ||
-          e.notes.toLowerCase().includes(searchLog.toLowerCase());
+          String(e.notes || "").toLowerCase().includes(searchLog.toLowerCase());
 
         const matchStatus =
           statusFilter === "all" ||
@@ -126,15 +158,15 @@ export function Reports() {
       }),
 
       hours: history.map(
-        (item) => +(item.totalWorkingSeconds / 3600).toFixed(1),
+        (item) => roundHours((item.totalWorkingSeconds || 0) / 3600),
       ),
 
       daily: history.map(
-        (item) => +(item.totalWorkingSeconds / 3600).toFixed(1),
+        (item) => roundHours((item.totalWorkingSeconds || 0) / 3600),
       ),
 
       overtime: history.map((item) =>
-        Math.max(0, +(item.totalWorkingSeconds / 3600 - 8).toFixed(1)),
+        roundHours(Math.max(0, (item.totalWorkingSeconds || 0) / 3600 - 8)),
       ),
 
       productivity: history.map((item) =>
@@ -199,23 +231,9 @@ export function Reports() {
     }
 
     // Overall KPI values
-    const totalHours = history.reduce(
-      (sum, item) => sum + item.totalWorkingSeconds / 3600,
-      0,
-    );
-
-    const averageDailyHours = +(totalHours / history.length).toFixed(1);
-
-    const overtimeHours = +history
-      .reduce((sum, item) => {
-        const hrs = item.totalWorkingSeconds / 3600;
-        return sum + Math.max(0, hrs - 8);
-      }, 0)
-      .toFixed(1);
-
-    const leavesTaken = history.filter(
-      (item) => item.status === "Leave",
-    ).length;
+    const averageDailyHours = dashboardStats.averageDailyHours || 0;
+    const overtimeHours = dashboardStats.overtimeHours || 0;
+    const leavesTaken = dashboardStats.leavesTaken || 0;
 
     // Last 7 vs Previous 7
     const current = history.slice(-7);
@@ -242,9 +260,9 @@ export function Reports() {
             : 0,
       ) * 100;
 
-    const hoursCurrent = avg(current, (i) => i.totalWorkingSeconds / 3600);
+    const hoursCurrent = roundHours(avg(current, (i) => i.totalWorkingSeconds / 3600));
 
-    const hoursPrevious = avg(previous, (i) => i.totalWorkingSeconds / 3600);
+    const hoursPrevious = roundHours(avg(previous, (i) => i.totalWorkingSeconds / 3600));
 
     const productivityCurrent = avg(
       current,
@@ -256,15 +274,15 @@ export function Reports() {
       (i) => (i.totalWorkingSeconds / (8 * 3600)) * 100,
     );
 
-    const overtimeCurrent = current.reduce((sum, i) => {
+    const overtimeCurrent = roundHours(current.reduce((sum, i) => {
       const h = i.totalWorkingSeconds / 3600;
       return sum + Math.max(0, h - 8);
-    }, 0);
+    }, 0));
 
-    const overtimePrevious = previous.reduce((sum, i) => {
+    const overtimePrevious = roundHours(previous.reduce((sum, i) => {
       const h = i.totalWorkingSeconds / 3600;
       return sum + Math.max(0, h - 8);
-    }, 0);
+    }, 0));
 
     const checkInCurrent = avg(current, (i) => {
       if (!i.checkInTime) return 0;
@@ -287,13 +305,13 @@ export function Reports() {
 
       streakTrend: dashboardStats.dayStreak,
 
-      monthlyHoursTrend: +(hoursCurrent - hoursPrevious).toFixed(1),
+      monthlyHoursTrend: roundHours(hoursCurrent - hoursPrevious),
 
       productivityTrend: +(productivityCurrent - productivityPrevious).toFixed(
         1,
       ),
 
-      overtimeTrend: +(overtimeCurrent - overtimePrevious).toFixed(1),
+      overtimeTrend: roundHours(overtimeCurrent - overtimePrevious),
 
       checkInTrend: +(checkInPrevious - checkInCurrent).toFixed(0),
 
@@ -303,13 +321,15 @@ export function Reports() {
     };
   }, [attendanceLog, dashboardStats]);
 
+  const rangeLabel = ranges.find((range) => range.id === dateRange)?.label || "Selected range";
+
   const dynamicInsights = [
     {
       icon: dashboardStats.attendancePercentage >= 90 ? "📈" : "⚠️",
       type: dashboardStats.attendancePercentage >= 90 ? "positive" : "neutral",
       text:
         dashboardStats.attendancePercentage >= 90
-          ? `Excellent attendance rate of ${dashboardStats.attendancePercentage}% this month.`
+          ? `Excellent attendance rate of ${dashboardStats.attendancePercentage}% for ${rangeLabel.toLowerCase()}.`
           : `Attendance rate is ${dashboardStats.attendancePercentage}%. Try to improve consistency.`,
     },
 
@@ -337,7 +357,7 @@ export function Reports() {
       text:
         dashboardStats.weeklyGoalScore >= 100
           ? "Congratulations! You've achieved your weekly goal."
-          : `${dashboardStats.weeklyHoursRemaining} hours remain to complete this week's goal.`,
+          : `${roundHours(dashboardStats.weeklyHoursRemaining)} hours remain to complete this week's goal.`,
     },
 
     {
@@ -385,12 +405,26 @@ export function Reports() {
           zIndex: 1,
         }}
       >
-        <ReportsHeader dateRange={dateRange} ranges={ranges} />
+        <ReportsHeader
+          dateRange={dateRange}
+          ranges={ranges}
+          isLoading={isLoading}
+          customStartDate={customStartDate}
+          customEndDate={customEndDate}
+        />
+
+        {loadError && (
+          <p role="alert" className="reports_error">
+            {loadError}
+          </p>
+        )}
 
         <KPISection
           sparklineData={sparklineData}
           dashboardStats={dashboardStats}
           kpiMetrics={kpiMetrics}
+          isLoading={isLoading}
+          rangeLabel={rangeLabel}
         />
         {/* ── Two-column: Work Summary + Performance Insights ── */}
         <div
@@ -402,9 +436,9 @@ export function Reports() {
           }}
           className="report_2_div"
         >
-          <WorkSummary dashboardStats={dashboardStats} />
+          <WorkSummary dashboardStats={dashboardStats} isLoading={isLoading} rangeLabel={rangeLabel} />
 
-          <PerformanceInsights insights={dynamicInsights} />
+          <PerformanceInsights insights={dynamicInsights} isLoading={isLoading} />
         </div>
         <ChartsSection
           activeTab={activeTab}
@@ -412,6 +446,9 @@ export function Reports() {
           setTab={(tab) => dispatch(setActiveTab(tab))}
           attendanceLog={attendanceLog}
           dashboardStats={dashboardStats}
+          calendarData={reportCalendar}
+          rangeLabel={rangeLabel}
+          isLoading={isLoading}
         />
         {/* ── Goals & Badges ── */}
         <div
@@ -419,15 +456,15 @@ export function Reports() {
             margin: "21px  0",
           }}
         >
-          <GoalsSection dashboardStats={dashboardStats} />
+          <GoalsSection dashboardStats={dashboardStats} isLoading={isLoading} />
         </div>
         <AttendanceLog
-          attendanceLog={attendanceLog}
           filteredLog={filteredLog}
           searchLog={searchLog}
           statusFilter={statusFilter}
           onSearchChange={(value) => dispatch(setSearchLog(value))}
           onStatusChange={(value) => dispatch(setStatusFilter(value))}
+          isLoading={isLoading}
         />
       </div>
     </div>

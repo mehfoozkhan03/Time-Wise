@@ -1,3 +1,5 @@
+import { formatHours } from "./formatHours";
+
 export function CustomTooltip({ active, payload, label }) {
   if (!active || !payload?.length) return null;
 
@@ -54,7 +56,7 @@ export function CustomTooltip({ active, payload, label }) {
               fontWeight: 600,
             }}
           >
-            {p.value}
+            {typeof p.value === "number" ? formatHours(p.value) : p.value}
             {typeof p.value === "number" &&
             p.name?.toLowerCase().includes("score")
               ? "pts"

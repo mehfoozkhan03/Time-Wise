@@ -1,27 +1,16 @@
-import { useState, useEffect } from "react";
 import Skeleton from "../../components/Skeleton/Skeleton";
 import { statusConfig } from "./statusConfig";
 
-export function AttendanceHeatmap({ calendarData = [], year, month }) {
-
-  const [showSkeleton, setShowSkeleton] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowSkeleton(false);
-    }, 1500);
-
-    return () => clearTimeout(timer);
-  }, []);
+export function AttendanceHeatmap({ calendarData = [], isLoading = false }) {
 
   const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-  // July 2026 starts on Wednesday
-  const startOffset = new Date(year, month, 1).getDay();
-
+  const firstDate = calendarData[0]?.date;
+  const [year, month, day] = (firstDate || "").split("-").map(Number);
+  const startOffset = firstDate ? new Date(year, month - 1, day).getDay() : 0;
   const cells = [...Array(startOffset).fill(null), ...calendarData];
   
-  if (showSkeleton) {
+  if (isLoading) {
   return (
     <div>
 
@@ -51,7 +40,7 @@ export function AttendanceHeatmap({ calendarData = [], year, month }) {
           gap: 3,
         }}
       >
-        {[...Array(35)].map((_, i) => (
+        {[...Array(Math.max(35, Math.ceil(cells.length / 7) * 7))].map((_, i) => (
           <Skeleton
             key={i}
             width="100%"
@@ -117,37 +106,21 @@ export function AttendanceHeatmap({ calendarData = [], year, month }) {
         {cells.map((cell, index) => (
           <div
             key={index}
-            title={
-              !cell
-                ? ""
-                : cell.status === "inactive"
-                  ? `${cell.day} ${new Date(year, month).toLocaleString(
-                      "en-US",
-                      {
-                        month: "short",
-                      },
-                    )}`
-                  : `${cell.day} ${new Date(year, month).toLocaleString(
-                      "en-US",
-                      {
-                        month: "short",
-                      },
-                    )} — ${statusConfig[cell.status].label}`
-            }
+            title={!cell ? "" : `${cell.date} — ${statusConfig[cell.status]?.label || cell.status}`}
             style={{
               aspectRatio: "1",
               borderRadius: 5,
               background: cell
                 ? cell.status === "inactive" || cell.status === "weekend"
-                  ? statusConfig[cell.status].bg
-                  : `${statusConfig[cell.status].dot}`
+                  ? statusConfig[cell.status]?.bg
+                  : statusConfig[cell.status]?.dot || "transparent"
                 : "transparent",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               fontSize: 15,
               fontWeight: 500,
-              color: cell ? statusConfig[cell.status].text : "#000",
+              color: cell ? statusConfig[cell.status]?.text || "#000" : "#000",
               cursor: "default",
               transition: "transform 0.15s",
             }}

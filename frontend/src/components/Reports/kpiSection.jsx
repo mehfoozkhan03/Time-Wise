@@ -1,28 +1,20 @@
 
 import { KPICard } from './kpiCard';
 import useCountUp from '../../components/UseCount/Count';
-import { useState, useEffect } from "react";
 import Skeleton from "../../components/Skeleton/Skeleton";
+import { formatHours } from "./formatHours";
 
 export function KPISection({
   sparklineData,
   dashboardStats = {},
   kpiMetrics = {},
+  isLoading = false,
+  rangeLabel = "This Month",
 }) {
   const attendance = useCountUp(dashboardStats?.attendancePercentage || 0);
   const dayStreak = useCountUp(dashboardStats?.dayStreak || 0);
   const monthlyHours = useCountUp(dashboardStats?.monthlyHours || 0);
   const productivity = useCountUp(dashboardStats?.productivity || 0);
-
-  const [showSkeleton, setShowSkeleton] = useState(true);
-
-useEffect(() => {
-  const timer = setTimeout(() => {
-    setShowSkeleton(false);
-  }, 1500);
-
-  return () => clearTimeout(timer);
-}, []);
 
   return (
     <div
@@ -34,7 +26,7 @@ useEffect(() => {
         marginBottom: 28,
       }}
     >
-      {showSkeleton ? (
+      {isLoading ? (
         [...Array(8)].map((_, index) => (
           <div
             key={index}
@@ -87,19 +79,19 @@ useEffect(() => {
           <KPICard
             icon="🕐"
             label="Total Working hrs"
-            value={(monthlyHours || 0).toFixed(1)}
+            value={formatHours(monthlyHours)}
             unit="h"
             trend={kpiMetrics?.monthlyHoursTrend ?? 0}
             trendSuffix="h"
             sparkData={sparklineData?.hours}
             sparkColor="#6366f1"
-            sub="This Month"
+            sub={rangeLabel}
           />
 
           <KPICard
             icon="⏱"
             label="Avg Daily Hours"
-            value={kpiMetrics?.averageDailyHours ?? 0}
+            value={formatHours(kpiMetrics?.averageDailyHours)}
             unit="h/day"
             trend={kpiMetrics?.monthlyHoursTrend ?? 0}
             trendSuffix="h"
@@ -111,13 +103,13 @@ useEffect(() => {
           <KPICard
             icon="💪"
             label="Overtime Hours"
-            value={kpiMetrics?.overtimeHours ?? 0}
+            value={formatHours(kpiMetrics?.overtimeHours)}
             unit="h"
             trend={kpiMetrics?.overtimeTrend ?? 0}
             trendSuffix="h"
             sparkData={sparklineData?.overtime}
             sparkColor="#8b5cf6"
-            sub="This month"
+            sub={rangeLabel}
           />
 
           <KPICard
@@ -139,7 +131,7 @@ useEffect(() => {
             trend={kpiMetrics?.leaveTrend ?? 0}
             sparkData={sparklineData?.leaves}
             sparkColor="#ef4444"
-            sub="8 days remaining"
+            sub={`${dashboardStats?.leavesRemaining ?? 0} days remaining`}
           />
 
           <KPICard

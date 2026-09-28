@@ -1,23 +1,13 @@
 
 import { SectionLabel } from "./sectionLabel";
-import { useState, useEffect } from "react";
 import Skeleton from "../../components/Skeleton/Skeleton";
 
-export function PerformanceInsights({ insights }) {
-const [showSkeleton, setShowSkeleton] = useState(true);
-
-useEffect(() => {
-  const timer = setTimeout(() => {
-    setShowSkeleton(false);
-  }, 1500);
-
-  return () => clearTimeout(timer);
-}, []);
+export function PerformanceInsights({ insights, isLoading = false }) {
 
   return (
   <div className="glass-card" style={{ padding: 24 }}>
 
-    {showSkeleton ? (
+    {isLoading ? (
       <div style={{ marginBottom: 20 }}>
         <Skeleton
           width="220px"
@@ -35,7 +25,7 @@ useEffect(() => {
         gap: 10,
       }}
     >
-     {showSkeleton
+     {isLoading
   ? [...Array(6)].map((_, i) => (
       <div
         key={i}

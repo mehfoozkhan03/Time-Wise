@@ -98,4 +98,10 @@ leaveSchema.index({
   createdAt: -1,
 });
 
+leaveSchema.index({
+  user: 1,
+  status: 1,
+  startDate: 1,
+});
+
 export const leaveModel = mongoose.model("Leave", leaveSchema);

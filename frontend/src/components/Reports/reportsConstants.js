@@ -13,14 +13,3 @@ export const chartTabs = [
   { id: "donut", label: "Distribution" },
   { id: "productivity", label: "Productivity" },
 ];
-
-export const summaryItems = [
-  { label: "Total Days Worked", value: "19", icon: "📅" },
-  { label: "Late Arrivals", value: "1", icon: "⏰" },
-  { label: "Early Check-outs", value: "0", icon: "🏃" },
-  { label: "Longest Streak", value: "14 days", icon: "🏆" },
-  { label: "Current Streak", value: "18 days", icon: "🔥" },
-  { label: "Total Break Time", value: "13h 42m", icon: "☕" },
-  { label: "Avg Break Duration", value: "43 min", icon: "⏱" },
-  { label: "Total Productive hrs", value: "158.4h", icon: "💡" },
-];
