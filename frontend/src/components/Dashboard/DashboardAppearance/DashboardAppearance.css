@@ -1,0 +1,110 @@
+.dahsboard-appearance-container {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.dahsboard-appearance-heading {
+    padding-top: 20px;
+}
+
+.dahsboard-appearance-heading>h2 {
+    font-size: 18px;
+}
+
+.dahsboard-appearance-heading>p {
+    font-size: 12px;
+}
+
+/* Theme */
+.dahsboard-theme-container {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    border-radius: 10px;
+    background-color: var(--surface);
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+}
+
+.dahsboard-theme-heading {
+    padding-bottom: 10px;
+}
+
+.dahsboard-theme-heading>h3 {
+    font-size: 16px;
+}
+
+.dahsboard-theme-mode {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    align-content: center;
+}
+
+.dahsboard-theme-mode>div {
+    height: 110px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    border: 1px solid var(--border);
+    border-radius: 15px;
+}
+
+.dahsboard-theme-mode>div>p {
+    font-size: 13px;
+}
+
+.dahsboard-mode-icon {
+    font-size: 20px;
+}
+
+.dahsboard-light-mode,
+.dahsboard-dark-mode,
+.dahsboard-system-mode {
+    border: 2px solid transparent;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.dahsboard-active-theme {
+    border: 2px solid var(--primary);
+    background-color: var(--primary);
+}
+
+.dahsboard-active-theme .dahsboard-mode-icon,
+.dahsboard-active-theme p {
+    color: var(--text_primary);
+}
+
+@media (max-width: 430px) {
+    .dahsboard-appearance-container {
+        padding: 13px 21px;
+    }
+
+    .dahsboard-appearance-heading {
+        padding: 0;
+    }
+
+    .dahsboard-theme-container {
+        padding: 21px 11px;
+    }
+
+    .dahsboard-theme-mode {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 11px;
+        width: 100%;
+    }
+
+    .dahsboard-theme-mode>div {
+        height: 51px;
+        flex-direction: row;
+        width: 100%;
+    }
+}

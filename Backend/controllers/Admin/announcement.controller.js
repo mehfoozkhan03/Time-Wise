@@ -130,7 +130,7 @@ export const createAnnouncement = async (req, res) => {
         "firstName lastName profileImage designation department"
       )
       .populate("updatedBy", "firstName lastName")
-      .populate("department");
+      ;
 
     return res.status(201).json({
       success: true,
@@ -231,7 +231,7 @@ export const getAllAnnouncements = async (req, res) => {
           "firstName lastName profileImage designation department"
         )
         .populate("updatedBy", "firstName lastName")
-        .populate("department")
+        
         .sort(sortOption)
         .skip(skip)
         .limit(limitNumber)
@@ -284,7 +284,7 @@ export const getAnnouncementById = async (req, res) => {
         "firstName lastName profileImage designation department"
       )
       .populate("updatedBy", "firstName lastName")
-      .populate("department")
+      
       .populate(
         "specificEmployees",
         "firstName lastName profileImage designation department"
@@ -501,8 +501,7 @@ export const updateAnnouncement = async (req, res) => {
           "createdBy",
           "firstName lastName profileImage designation department"
         )
-        .populate("updatedBy", "firstName lastName")
-        .populate("department");
+        .populate("updatedBy", "firstName lastName");
 
     return res.status(200).json({
       success: true,

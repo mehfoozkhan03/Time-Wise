@@ -54,7 +54,9 @@ import DashboardCalendar from '../components/Dashboard/DashboardCalendar/Dashboa
 import { Signup } from '../pages/Signup';
 import {Login} from "../pages/Login";
 import {AdminLogin} from "../pages/AdminLogin";
+import { DashboardAppearance } from '../components/Dashboard/DashboardAppearance/DashboardAppearance';
 // import {AdminLogin} from "../pages/AdminLogin";
+import { AdminThemeProvider } from './../context/AdminThemeContext';
 
 
 export const AppRoutes = () => {
@@ -165,7 +167,7 @@ export const AppRoutes = () => {
 
           {/* ================= SETTINGS ================= */}
 
-          <Route path="/settings" element={<Settings />}>
+          <Route path="/settings" element={<PrivateRoutes><Settings /></PrivateRoutes>}>
             <Route index element={<Navigate to="profile" replace />} />
             <Route path="profile" element={<Profile />} />
             <Route path="attendance" element={<SettingAttendance />} />
@@ -193,13 +195,14 @@ export const AppRoutes = () => {
         {/* ================= Admin Layout ================= */}
         {/* <Route path="/admin/login" element={<SignUpPage />} /> */}
 
-        <Route element={<AdminPrivateRoutes><AdminLayout /></AdminPrivateRoutes>}>
+        <Route element={<AdminPrivateRoutes><AdminThemeProvider><AdminLayout /></AdminThemeProvider></AdminPrivateRoutes>}>
           {/* ================= ADMIN DASHBOARD ================= */}
           <Route path="/adminDashboard" element={<AdminDashboard />}>
             <Route index element={<DashboardHome />} />
             <Route path="adminDashboard" element={<DashboardHome />} />
             <Route path="employee" element={<DashboardEmployee />} />
             <Route path="attendance" element={<DashboardAttendance />} />
+            <Route path="appearence" element={<DashboardAppearance />} />
             <Route path="leave" element={<DashboardLeave />} />
             <Route path="calendar" element={<DashboardCalendar />} />
             <Route path="thought" element={<DashboardThuoght />} />

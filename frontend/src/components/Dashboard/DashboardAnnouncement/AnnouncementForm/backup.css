@@ -1,0 +1,809 @@
+.announcementForm-section{
+    width: 50%;
+    max-height: 90vh;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    z-index: 999;
+    background-color: var(--surface);
+    border-radius: 20px;
+    border: 1px solid var(--border);
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+}
+
+.announcementForm-container{
+    flex: 1;
+    min-height: 0;
+
+    padding: 10px 30px 30px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    /* border-bottom: 1px solid var(--border);
+    padding-bottom: 30px; */
+
+    overflow-y: auto;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+}
+
+.announcementForm-overlay {
+    position: fixed;
+    inset: 0;
+
+    background: rgba(0, 0, 0, 0.9);
+
+    z-index: 1;
+}
+
+/* announcementForm-heading */
+.announcementForm-heading{
+    padding: 15px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+}
+
+.announcementForm-heading>h3{
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--text_primary);
+}
+
+.close-announcementForm{
+    font-size: 20px;
+    cursor: context-menu;
+}
+
+/* Basic Information */
+.announcementForm-basinInformation{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.announcementForm-basinInformation>h3{
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--text_secondary);
+}
+
+.basinInformation-content{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.basinInformation-content>div{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.basinInformation-content label{
+    font-size: 14px;
+}
+
+.basinInformation-content input{
+    padding: 12px 15px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    outline: none;
+    background: transparent;
+    caret-color: var(--text_primary);
+    color: var(--text_primary);
+}
+
+.basinInformation-content input::placeholder{
+    opacity: 0.5;
+}
+
+.basinInformation-category{
+    display: grid !important;
+    gap: 12px !important;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.basinInformation-category>div{
+    display: flex;
+    flex-direction: column !important;
+    gap: 7px;
+}
+
+.basinInformation-category-dropdown{
+    padding: 10px 20px;
+}
+
+.basinInformation-priority>div{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5px;
+    
+}
+
+.basinInformation-category label{
+    font-size: 14px;
+}
+
+/* .basinInformation-priority>div>div{
+    border: 1px solid var(--border);
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    font-size: 13px;
+} */
+
+.basinInformation-priority > div > button {
+    border: 1px solid var(--border);
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    font-size: 13px;
+    background: transparent;
+    color: var(--text_primary);
+    cursor: pointer;
+}
+
+.basinInformation-priority > div > button.active {
+    background: var(--primary);
+    color: #fff;
+    border-color: var(--primary);
+}
+
+.basinInformation-description>textarea{
+    background: transparent;
+    resize: none;
+    padding: 10px 15px;
+    border-radius: 10px;
+    color: var(--text_primary);
+    caret-color: var(--text_primary);
+}
+
+.basinInformation-description>textarea::placeholder{
+    opacity: .5;
+}
+
+/* Publishing */
+/* .announcementForm-publishing{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.announcementForm-publishing h3{
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text_secondary);
+}
+
+.announcementForm-publish-content{
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.announcementForm-publish-content>div{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+} */
+
+
+/* ================================
+   PUBLISHING
+================================ */
+
+.announcementForm-publishing {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+
+/* ================================
+   PUBLISHING OPTIONS
+   Draft / Publish Now / Schedule
+================================ */
+
+.announcementForm-publish-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.announcementForm-publish-content h3 {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text_secondary);
+}
+
+
+/* Buttons container */
+
+.announcementForm-publish-content > div {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+
+/* Publishing buttons */
+
+.announcementForm-publish-content > div > button {
+    width: 100%;
+
+    padding: 10px;
+
+    border: 1px solid var(--border);
+    border-radius: 10px;
+
+    background: transparent;
+    color: var(--text_primary);
+
+    font-size: 13px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+
+/* Hover */
+
+.announcementForm-publish-content > div > button:hover {
+    border-color: var(--primary);
+}
+
+
+/* Active button */
+
+.announcementForm-publish-content > div > button.active {
+    background: var(--primary);
+    color: #fff;
+    border-color: var(--primary);
+}
+
+
+/* ================================
+   EXPIRY DATE / TIME
+================================ */
+
+.announcementForm-expiry {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+
+/* Individual expiry field */
+
+.announcementForm-expiry > div {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+
+/* Labels */
+
+.announcementForm-expiry h3 {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--text_primary);
+    margin: 0;
+}
+
+
+/* Date / Time inputs */
+
+.announcementForm-expiry input {
+    width: 100%;
+
+    padding: 10px;
+
+    border-radius: 10px;
+    border: 1px solid var(--border);
+
+    outline: none;
+
+    background: transparent;
+    color: var(--text_primary);
+
+    font-size: 14px;
+}
+
+
+/* Placeholder */
+
+.announcementForm-expiry input::placeholder {
+    opacity: 0.5;
+}
+
+
+/* Calendar icon */
+
+.announcementForm-expiry input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+}
+
+
+/* Focus */
+
+.announcementForm-expiry input:focus {
+    border-color: var(--primary);
+}
+
+/* .announcementForm-publish-content>div>div{
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    padding: 10px;
+    border-radius: 10px;
+} */
+
+.announcementForm-publish-content > div > button {
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    padding: 10px;
+    border-radius: 10px;
+    background: transparent;
+    color: var(--text_primary);
+    cursor: pointer;
+}
+
+.announcementForm-publish-content > div > button.active {
+    background: var(--primary);
+    color: #fff;
+    border-color: var(--primary);
+}
+
+.announcementForm-expiry{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.announcementForm-expiry>div{
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.announcementForm-expiry h3{
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--text_primary);
+}
+
+.announcementForm-expiry input{
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text_primary);
+}
+
+.announcementForm-expiry input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
+
+/* Audience */
+.announcementForm-audience{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.announcementForm-audience-heading>h3{
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--text_secondary);
+}
+.announcementForm-audience-heading>span{
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--text_secondary);
+}
+
+.announcementForm-audience-type{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+/* .announcementForm-audience-type>div{
+    border: 1px solid var(--border);
+    padding: 12px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    color: var(--text_secondary);
+} */
+
+.announcementForm-audience-type > button {
+    border: 1px solid var(--border);
+    padding: 12px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    color: var(--text_secondary);
+    background: transparent;
+    cursor: pointer;
+}
+
+.announcementForm-audience-type > button.active {
+    background: var(--primary);
+    color: #fff;
+    border-color: var(--primary);
+}
+
+/* Attachements */
+.announcementForm-attachements{
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.attachment-label{
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text_secondary);
+}
+
+.announcementForm-attachements>div{
+    padding: 25px 20px;
+    border: 2px dashed var(--border);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.announcementAttachment-upload-icon svg{
+    color: var(--text_secondary);
+}
+
+.upload-main-text{
+    color: var(--text_primary);
+    font-size: 14px;
+}
+
+.upload-browse>span{
+    color: rgb(81, 203, 81);
+    font-size: 12px;
+}
+
+.upload-types{
+    color: var(--text_secondary);
+    font-size: 11px;
+}
+
+/* Action button */
+.announcementForm-action{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.announcementForm-action>div{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.announcementForm-action h3{
+    font-size: 16px;
+    color: var(--text_secondary);
+    font-weight: 400;
+}
+
+.announcementForm-action span{
+    color: var(--text_secondary);
+}
+
+.announcementForm-switchBtn{
+    padding: 3px;
+    border: 1px solid var(--text_primary);
+    width: 45px;
+    border-radius: 20px;
+}
+
+.announcementForm-switchBtn>div{
+    height: 13px;
+    width: 13px;
+    border-radius: 50%;
+    background: var(--text_primary);
+}
+
+/* Pin */
+.announcementForm-pin>h3{
+    font-size: 16px;
+    color: var(--text_secondary);
+    font-weight: 400;
+}
+.announcementForm-pin>div{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.announcementForm-pin span{
+    font-size: 12px;
+    color: var(--text_secondary);
+    opacity: 0.5;
+}
+
+/* Footer */
+
+.announcementForm-footer>div:nth-child(1){
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.announcementForm-footer>div:nth-child(1)>div{
+    border: 1px solid var(--border);
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 14px;
+    color: var(--text_secondary);
+}
+
+.announcementForm-footer>div:nth-child(2){
+    background: var(--primary);
+    padding: 10px 20px;
+    border-radius: 10px;
+    color: #fff;
+}
+
+.announcementForm-footer {
+    flex-shrink: 0;
+
+    width: 100%;
+
+    background: var(--surface);
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 20px 30px;
+
+    border-top: 1px solid var(--border);
+}
+
+
+.announcementForm-audience > input {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    outline: none;
+    background: transparent;
+    color: var(--text_primary);
+    caret-color: var(--text_primary);
+}
+
+.announcementForm-audience > input::placeholder {
+    opacity: 0.5;
+}
+
+.announcementForm-switchBtn {
+    padding: 3px;
+    border: 1px solid var(--text_primary);
+    width: 45px;
+    height: 21px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.announcementForm-switchBtn > div {
+    height: 13px;
+    width: 13px;
+    border-radius: 50%;
+    background: var(--text_primary);
+    transition: 0.2s ease;
+}
+
+.announcementForm-switchBtn.active {
+    background: var(--primary);
+    border-color: var(--primary);
+}
+
+.announcementForm-switchBtn.active > div {
+    transform: translateX(22px);
+    background: #fff;
+}
+
+.action-button-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 5px;
+}
+
+.action-button-fields input {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    outline: none;
+    background: transparent;
+    color: var(--text_primary);
+    caret-color: var(--text_primary);
+}
+
+.action-button-fields input::placeholder {
+    opacity: 0.5;
+}
+
+.selected-files {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.selected-files > div {
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 12px;
+    color: var(--text_secondary);
+}
+
+/* 
+.announcementForm-footer > div:nth-child(1) > button {
+    border: 1px solid var(--border);
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 14px;
+    color: var(--text_secondary);
+    background: transparent;
+    cursor: pointer;
+}
+
+
+.announcementForm-footer > button {
+    background: var(--primary);
+    padding: 10px 20px;
+    border-radius: 10px;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.announcementForm-footer button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.close-announcementForm {
+    font-size: 20px;
+    cursor: pointer;
+} */
+
+
+
+/* ================================
+   FOOTER
+================================ */
+
+.announcementForm-footer {
+    flex-shrink: 0;
+    width: 100%;
+    background: var(--surface);
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 20px 30px;
+    border-top: 1px solid var(--border);
+}
+
+
+/* ================================
+   CANCEL / SAVE DRAFT / PREVIEW
+================================ */
+
+.announcementForm-footer > div:not(.announcement-form-error) {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.announcementForm-footer > div:not(.announcement-form-error) > div {
+    border: 1px solid var(--border);
+    padding: 10px 20px;
+    border-radius: 10px;
+
+    font-size: 14px;
+    color: var(--text_secondary);
+
+    background: transparent;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.announcementForm-footer > div:not(.announcement-form-error) > div:hover {
+    background: var(--primary);
+    color: #fff;
+    border-color: var(--primary);
+}
+
+
+/* ================================
+   ERROR
+================================ */
+
+.announcement-form-error {
+    color: #ef4444;
+    font-size: 13px;
+}
+
+
+/* ================================
+   PUBLISH ANNOUNCEMENT
+================================ */
+
+.announcementForm-footer > button {
+    background: var(--primary);
+
+    padding: 10px 20px;
+
+    border-radius: 10px;
+    border: none;
+
+    color: #fff;
+    font-size: 14px;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.announcementForm-footer > button:hover {
+    opacity: 0.9;
+}
+
+
+/* ================================
+   DISABLED
+================================ */
+
+.announcementForm-footer > button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
