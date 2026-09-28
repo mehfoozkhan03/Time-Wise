@@ -259,48 +259,45 @@ select:is(:-webkit-autofill, :autofill) {
   color: var(--primary);
 }
 
-
-/* ===========================
-   PASSWORD
-=========================== */
-
 .password-box {
   position: relative;
 }
 
-
 .password-box input {
-  padding-right: 45px;
+  padding-right: 50px;
 }
-
 
 .eye-icon {
   position: absolute;
 
-  right: 15px;
-  top: 25px;
+  top: 50%;
+  right: 14px;
 
-  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transform: translateY(-50%) !important;
+
+  color: var(--label-color);
+  font-size: 17px;
 
   cursor: pointer;
 
-  color: var(--label-color);
-
-  font-size: 18px;
-
-  transition: 0.3s;
-
-  z-index: 2;
+  z-index: 5;
 }
-
 
 .eye-icon:hover {
   color: var(--primary);
 
-  transform:
-    translateY(-50%)
-    scale(1.15);
+  /* position bilkul same rahegi */
+  transform: translateY(-50%) !important;
 }
+
+
 
 
 /* ===========================
@@ -360,6 +357,165 @@ select:is(:-webkit-autofill, :autofill) {
   margin-left: 2px;
 }
 
+/* ===========================
+   SELECT
+=========================== */
+
+.select-box {
+  position: relative;
+}
+
+.select-box select {
+  width: 100%;
+  height: 50px;
+
+  padding: 8px 15px;
+
+  border: 1px solid var(--border);
+  border-radius: 8px;
+
+  outline: none;
+
+  background: var(--input-bg);
+  color: var(--input-text);
+
+  font-size: 16px;
+
+  cursor: pointer;
+
+  transition: 0.3s;
+}
+
+.select-box select:hover {
+  border-color: var(--primary);
+}
+
+.select-box select:focus {
+  border-color: var(--primary);
+
+  box-shadow: 0 0 0 4px var(--focus-shadow);
+}
+
+.select-label {
+  position: absolute;
+
+  top: 0;
+  left: 15px;
+
+  padding: 0 5px;
+
+  background: var(--input-bg);
+
+  color: var(--primary);
+
+  font-size: 15px;
+
+  transform: translateY(-50%);
+
+  pointer-events: none;
+}
+
+/* ===========================
+   CUSTOM GENDER DROPDOWN
+=========================== */
+
+.select-box {
+  position: relative;
+  width: 100%;
+}
+
+/* Dropdown trigger */
+.select-trigger {
+  width: 100%;
+  height: 50px;
+
+  padding: 0 15px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  border: 1px solid var(--border);
+  border-radius: 8px;
+
+  background: var(--input-bg);
+  color: var(--input-text);
+
+  font-family: inherit;
+  font-size: 15px;
+
+  cursor: pointer;
+
+  outline: none;
+
+  transition: 0.3s ease;
+}
+
+.select-trigger:hover {
+  border-color: var(--primary);
+}
+
+.select-trigger.select-open {
+  border-color: var(--primary);
+
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.select-arrow {
+  font-size: 11px;
+  color: var(--label-color);
+}
+
+/* Dropdown options container */
+.select-options {
+  position: absolute;
+
+  top: 50px;
+  left: 0;
+
+  width: 100%;
+
+  background: var(--input-bg);
+
+  border: 1px solid var(--primary);
+  border-top: none;
+
+  border-radius: 0 0 8px 8px;
+
+  overflow: hidden;
+
+  z-index: 20;
+
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Individual option */
+.select-option {
+  width: 100%;
+
+  padding: 12px 15px;
+
+  border: none;
+
+  background: transparent;
+
+  color: var(--input-text);
+
+  font-family: inherit;
+  font-size: 15px;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.select-option:hover {
+  background: var(--primary);
+  color: white;
+}
 
 /* ===========================
    RESPONSIVE

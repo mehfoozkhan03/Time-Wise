@@ -1,54 +1,46 @@
-import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from "react-router-dom"
+import React from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
-import { validateForm } from '../utils/validation';
-import { Modal } from "../components/Modal/Modal"
-import { registerUser, loginUser } from "../store/authSlice"
-import { loginAdmin } from "../store/adminAuthSlice"
-import '../styles/Form.css';
+import { validateForm } from "../utils/validation";
+import { Modal } from "../components/Modal/Modal";
+import { registerUser, loginUser } from "../store/authSlice";
+import { loginAdmin } from "../store/adminAuthSlice";
+import "../styles/Form.css";
 
-export const Form = ({
-  fields = [],
-  button = 'Submit',
-  endpoint
-}) => {
-
-  const navigate = useNavigate()
-
+export const Form = ({ fields = [], button = "Submit", endpoint }) => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const showModalRef = React.useRef();
 
-  const showModalRef = React.useRef()
-
-  // here we have to set our field
+  // Form state
   const [form, setForm] = React.useState(() => {
     return fields.reduce((acc, field) => {
-      acc[field.name] = '';
+      acc[field.name] = "";
       return acc;
     }, {});
   });
 
+  const { isloading } = useSelector((state) => state.auth);
 
-  const { isloading } = useSelector(
-    (state) => state.auth,
-  );
+  const [showPassword, setShowPassword] = React.useState({});
+  const [openSelect, setOpenSelect] = React.useState(null);
+  const [errors, setErrors] = React.useState({});
 
-  const [showPassword, setShowPassword] = React.useState(false);
-
-  const [errors, setErrors] = React.useState({}); // temp using this this is comming from validator function and it will handle all validation form the only 
-
-  // 👇 DEFINE IT HERE
+  // Reset the complete form
   const resetForm = () => {
     setForm(
       fields.reduce((acc, field) => {
-        acc[field.name] = '';
+        acc[field.name] = "";
         return acc;
-      }, {})
+      }, {}),
     );
 
     setErrors({});
+    setShowPassword({});
+    setOpenSelect(null);
   };
 
   const handleChange = (e) => {
@@ -61,16 +53,17 @@ export const Form = ({
 
     setErrors((prev) => ({
       ...prev,
-      [name]: '',
+      [name]: "",
     }));
   };
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const validationErrors = validateForm(form, fields);
+    console.log("form", form);
+    console.log("endpoint", endpoint);
 
+    const validationErrors = validateForm(form, fields);
     setErrors(validationErrors);
 
     // Stop API call if validation failed
@@ -79,55 +72,39 @@ export const Form = ({
     }
 
     try {
-
       let response;
 
-      // response for registration
+      // Registration
       if (endpoint === "/user/signup") {
-        response = await dispatch(registerUser(form))
+        response = await dispatch(registerUser(form));
       }
 
-      // response for login
-
+      // User login
       if (endpoint === "/user/login") {
-        response = await dispatch(loginUser(form))
+        response = await dispatch(loginUser(form));
       }
 
-      // respones for adminLogin
-
+      // Admin login
       if (endpoint === "/admin/login") {
-        response = await dispatch(loginAdmin(form))
-
+        response = await dispatch(loginAdmin(form));
       }
-
 
       if (!response) return;
 
       // ==========================================
       // SUCCESS
       // ==========================================
-
       if (response.meta.requestStatus === "fulfilled") {
-
         // -------------------------------
         // SIGNUP SUCCESS
         // -------------------------------
-
         if (endpoint === "/user/signup") {
           showModalRef.current({
             variant: "success",
-
-            title:
-              response.payload?.title ||
-              "Registration Successful",
-
+            title: response.payload?.title || "Registration Successful",
             message:
-              response.payload?.message ||
-              "Account created successfully.",
-
-            description:
-              "Please log in with your credentials.",
-
+              response.payload?.message || "Account created successfully.",
+            description: "Please log in with your credentials.",
             onCloseCb: () => {
               resetForm();
             },
@@ -139,27 +116,16 @@ export const Form = ({
         // -------------------------------
         // LOGIN SUCCESS
         // -------------------------------
-
-        if (
-          endpoint === "/user/login" ||
-          endpoint === "/admin/login"
-        ) {
+        if (endpoint === "/user/login" || endpoint === "/admin/login") {
           showModalRef.current({
             variant: "success",
-
-            title:
-              response.payload?.title ||
-              "Login Successful",
-
+            title: response.payload?.title || "Login Successful",
             message:
-              response.payload?.message ||
-              "You have logged in successfully.",
-
+              response.payload?.message || "You have logged in successfully.",
             description:
               endpoint === "/admin/login"
                 ? "Welcome back to the Admin Dashboard!"
                 : "Welcome back to TimeWise!",
-
             onCloseCb: () => {
               resetForm();
 
@@ -178,36 +144,18 @@ export const Form = ({
       // ==========================================
       // ERROR
       // ==========================================
-
       const errorData = response.payload || {};
 
       showModalRef.current({
         variant: "error",
-
         title:
           errorData?.title ||
           (endpoint === "/user/signup"
             ? "Registration Failed"
             : "Login Failed"),
-
-        message:
-          errorData?.message ||
-          "An unexpected error occurred.",
-
-        reason:
-          errorData?.reason ||
-          "Please check your details and try again.",
+        message: errorData?.message || "An unexpected error occurred.",
+        reason: errorData?.reason || "Please check your details and try again.",
       });
-
-      /*
-       * Reset form after successful request
-       */
-      setForm(
-        fields.reduce((acc, field) => {
-          acc[field.name] = '';
-          return acc;
-        }, {}),
-      );
 
       setErrors({});
     } catch (error) {
@@ -215,44 +163,34 @@ export const Form = ({
 
       showModalRef.current({
         variant: "error",
-
         title:
-          endpoint === "/user/signup"
-            ? "Registration Failed"
-            : "Login Failed",
-
-        message:
-          error?.message ||
-          "An unexpected error occurred.",
-
-        reason:
-          "Please check your connection and try again.",
+          endpoint === "/user/signup" ? "Registration Failed" : "Login Failed",
+        message: error?.message || "An unexpected error occurred.",
+        reason: "Please check your connection and try again.",
       });
     }
   };
 
-  /*
-   * Password field
-   */
+  // Password field type
   const getInputType = (field) => {
-    if (field.type === 'password') {
-      return showPassword ? 'text' : 'password';
+    if (field.type === "password") {
+      return showPassword[field.name] ? "text" : "password";
     }
+
     return field.type;
   };
 
   /*
- * If fields change dynamically,
- * make sure newly added fields are also added to form state.
- */
-
+   * If fields change dynamically,
+   * make sure newly added fields are also added to form state.
+   */
   React.useEffect(() => {
     setForm((prev) => {
       const updatedForm = { ...prev };
 
       fields.forEach((field) => {
         if (!(field.name in updatedForm)) {
-          updatedForm[field.name] = '';
+          updatedForm[field.name] = "";
         }
       });
 
@@ -275,7 +213,7 @@ export const Form = ({
         }}
         transition={{
           duration: 0.35,
-          ease: 'easeOut',
+          ease: "easeOut",
         }}
       >
         {fields.map((el, index) => {
@@ -283,13 +221,17 @@ export const Form = ({
 
           /*
            * =========================
-           * GENDER
+           * CUSTOM SELECT
            * =========================
            */
-          if (el.name === 'gender') {
+          if (el.type === "select") {
+            const isOpen = openSelect === el.name;
+
             return (
               <motion.div
-                className="input-box"
+                className={`input-box select-box ${
+                  fieldError ? "error-active" : ""
+                }`}
                 key={el.id || el.name}
                 initial={{
                   opacity: 0,
@@ -304,28 +246,57 @@ export const Form = ({
                   delay: index * 0.05,
                 }}
               >
-                <label className="gender-title">{el.name}</label>
+                <button
+                  type="button"
+                  className={`select-trigger ${isOpen ? "select-open" : ""}`}
+                  onClick={() => setOpenSelect(isOpen ? null : el.name)}
+                >
+                  <span>{form[el.name] || el.name}</span>
+                  <span className="select-arrow">{isOpen ? "▲" : "▼"}</span>
+                </button>
 
-                <div className="gender">
-                  {Object.entries(el.typeOfGender || {}).map(([key, value]) => {
-                    const inputId = `${el.name}-${key}`;
+                <AnimatePresence>
+                  {isOpen && (
+                    <motion.div
+                      className="select-options"
+                      initial={{
+                        opacity: 0,
+                        height: 0,
+                      }}
+                      animate={{
+                        opacity: 1,
+                        height: "auto",
+                      }}
+                      exit={{
+                        opacity: 0,
+                        height: 0,
+                      }}
+                    >
+                      {(el.options || []).map((option) => (
+                        <button
+                          type="button"
+                          className="select-option"
+                          key={option}
+                          onClick={() => {
+                            setForm((prev) => ({
+                              ...prev,
+                              [el.name]: option,
+                            }));
 
-                    return (
-                      <div className="gender-option" key={key}>
-                        <input
-                          id={inputId}
-                          name={el.name}
-                          type={value.type}
-                          value={key}
-                          checked={form[el.name] === key}
-                          onChange={handleChange}
-                        />
+                            setErrors((prev) => ({
+                              ...prev,
+                              [el.name]: "",
+                            }));
 
-                        <label htmlFor={inputId}>{key}</label>
-                      </div>
-                    );
-                  })}
-                </div>
+                            setOpenSelect(null);
+                          }}
+                        >
+                          {option}
+                        </button>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
 
                 <AnimatePresence mode="wait">
                   {fieldError && (
@@ -338,7 +309,7 @@ export const Form = ({
                       }}
                       animate={{
                         opacity: 1,
-                        height: 'auto',
+                        height: "auto",
                         y: 0,
                       }}
                       exit={{
@@ -362,8 +333,9 @@ export const Form = ({
            */
           return (
             <motion.div
-              className={`input-box ${el.type === 'password' ? 'password-box' : ''
-                } ${fieldError ? 'error-active' : ''}`}
+              className={`input-box ${
+                el.type === "password" ? "password-box" : ""
+              } ${fieldError ? "error-active" : ""}`}
               key={el.id || el.name}
               initial={{
                 opacity: 0,
@@ -380,45 +352,31 @@ export const Form = ({
             >
               <input
                 id={el.name}
-                
                 type={getInputType(el)}
                 name={el.name}
                 placeholder=""
-                value={form[el.name] || ''}
+                value={form[el.name] || ""}
                 onChange={handleChange}
-                autoComplete={el.autoComplete || 'off'}
+                autoComplete={el.autoComplete || "off"}
                 required={el.required || false}
               />
 
               <label htmlFor={el.name}>{el.name}</label>
 
-              {el.type === 'password' && (
+              {el.type === "password" && (
                 <motion.span
                   className="eye-icon"
-                  onClick={() => setShowPassword((prev) => !prev)}
+                  onClick={() =>
+                    setShowPassword((prev) => ({
+                      ...prev,
+                      [el.name]: !prev[el.name],
+                    }))
+                  }
                   whileTap={{ scale: 0.9 }}
                   whileHover={{ scale: 1.15 }}
                 >
                   <AnimatePresence mode="wait" initial={false}>
-                    {showPassword ? (
-                      <motion.span
-                        key="eye-slash"
-                        initial={{
-                          opacity: 0,
-                          rotate: -20,
-                        }}
-                        animate={{
-                          opacity: 1,
-                          rotate: 0,
-                        }}
-                        exit={{
-                          opacity: 0,
-                          rotate: 20,
-                        }}
-                      >
-                        <FaEyeSlash />
-                      </motion.span>
-                    ) : (
+                    {showPassword[el.name] ? (
                       <motion.span
                         key="eye"
                         initial={{
@@ -436,6 +394,24 @@ export const Form = ({
                       >
                         <FaEye />
                       </motion.span>
+                    ) : (
+                      <motion.span
+                        key="eye-slash"
+                        initial={{
+                          opacity: 0,
+                          rotate: -20,
+                        }}
+                        animate={{
+                          opacity: 1,
+                          rotate: 0,
+                        }}
+                        exit={{
+                          opacity: 0,
+                          rotate: 20,
+                        }}
+                      >
+                        <FaEyeSlash />
+                      </motion.span>
                     )}
                   </AnimatePresence>
                 </motion.span>
@@ -452,7 +428,7 @@ export const Form = ({
                     }}
                     animate={{
                       opacity: 1,
-                      height: 'auto',
+                      height: "auto",
                       y: 0,
                     }}
                     exit={{
@@ -480,15 +456,15 @@ export const Form = ({
             scale: 0.98,
           }}
         >
-          {isloading ? 'Loading...' : button}
+          {isloading ? "Loading..." : button}
         </motion.button>
       </motion.form>
+
       <Modal
         onReady={(showModal) => {
           showModalRef.current = showModal;
         }}
       />
     </>
-
   );
 };

@@ -67,6 +67,9 @@ export default function Navbar() {
       dispatch(logout());
 
       setLogoutOpen(false);
+      
+      navigate("/login");
+
     } catch (error) {
       console.log(error);
     }

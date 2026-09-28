@@ -21,7 +21,7 @@ export default function Footer() {
 
           <div className="footer_brand_text">
             <h3>Smarter Employee Management</h3>
-        
+
             <p>
               TimeWise streamlines attendance tracking, leave management,
               employee collaboration, productivity monitoring, and workplace
@@ -48,7 +48,7 @@ export default function Footer() {
 
             <p>
               <FaEnvelope />
-              <span>support@timewise.com</span>
+              <span>supporttimewise@gmail.com</span>
             </p>
 
             <p>Mon - Fri • 9:00 AM - 6:00 PM</p>

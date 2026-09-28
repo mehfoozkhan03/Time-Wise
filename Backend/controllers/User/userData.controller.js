@@ -190,6 +190,7 @@ export const login = async (req, res) => {
     });
 
     const user = userData.toObject();
+    console.log("🚀 ~ user:", user);
 
     delete user.password;
 

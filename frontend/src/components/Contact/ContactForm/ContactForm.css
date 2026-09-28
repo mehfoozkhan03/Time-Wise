@@ -135,6 +135,45 @@
   gap: 20px;
 }
 
+/* =========================================
+   Custom Select - Contact Form Theme
+========================================= */
+
+.formPart .customSelectTrigger {
+  background: var(--bg) !important;
+  color: var(--text_primary) !important;
+  border-color: transparent;
+}
+
+.formPart .customSelectTrigger:hover {
+  background: var(--surface_hover) !important;
+  border-color: var(--primary);
+}
+
+.formPart .customSelect.open .customSelectTrigger {
+  background: var(--surface_hover) !important;
+  border-color: var(--primary);
+}
+
+.formPart .customSelectMenu {
+  background: var(--bg) !important;
+  border-color: var(--border);
+}
+
+.formPart .customSelectOption {
+  background: transparent;
+  color: var(--text_primary);
+}
+
+.formPart .customSelectOption:hover {
+  background: var(--surface_hover);
+  color: var(--primary);
+}
+
+.formPart .customSelectOption.selected {
+  background: rgba(41, 163, 224, 0.12);
+  color: var(--primary);
+}
 @media (max-width: 840px) {
   .inputs {
     flex-direction: column;

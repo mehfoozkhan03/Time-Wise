@@ -103,6 +103,12 @@ const calendarSchema = new mongoose.Schema(
       required: true,
     },
 
+    leaveId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Leave",
+      default: null,
+    },
+
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
@@ -136,4 +142,7 @@ const calendarSchema = new mongoose.Schema(
   },
 );
 
-export const calendarModel = mongoose.model("CalendarEvent", calendarSchema);
+export const calendarModel = mongoose.model(
+  "CalendarEvent",
+  calendarSchema,
+);

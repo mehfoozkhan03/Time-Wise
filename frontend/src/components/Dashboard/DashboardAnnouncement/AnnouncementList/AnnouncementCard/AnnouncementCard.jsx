@@ -1,3 +1,4 @@
+import { useDispatch } from "react-redux";
 import "./AnnouncementCard.css";
 
 import {
@@ -16,56 +17,13 @@ import {
   FaDownload,
   FaArrowRight,
 } from "react-icons/fa6";
+import { deleteAnnouncement } from "../../../../../store/announcementSlice";
 
-// const announcements = [
-//   {
-//     id: 1,
-//     isPinned: true,
-//     category: "Policy",
-//     priority: "Important",
-//     status: "Published",
-
-//     title: "Updated Attendance Policy",
-
-//     description:
-//       "The updated attendance policy will take effect from October 1st. Please review the new working hours, late check-in, and leave guidelines carefully.",
-
-//     audience: "Everyone",
-//     publishedDate: "Sep 20, 2026",
-//     postedBy: "Admin",
-//     expiresDate: "Sep 30, 2026",
-
-//     attachment: {
-//       name: "Attendance-Policy.pdf",
-//       size: "2.4 MB",
-//     },
-
-//     viewLink: "View Policy",
-//   },
-
-//   {
-//     id: 2,
-//     isPinned: false,
-//     category: null,
-//     priority: "Urgent",
-//     status: "Published",
-
-//     title: "Complete Your Employee Profile",
-
-//     description:
-//       "All employees must complete their digital employee profile by September 30th. Missing information may affect payroll and leave processing.",
-
-//     audience: "Everyone",
-//     publishedDate: "Sep 10, 2026",
-//     postedBy: "HR Team",
-//     expiresDate: "Sep 30, 2026",
-
-//     attachment: null,
-//     viewLink: null,
-//   },
-// ];
 
 export const AnnouncementCard = ({ announcements = [] }) => {
+
+  const dispatch = useDispatch();
+
   const handleEdit = (announcement) => {
     console.log("Edit:", announcement);
   };
@@ -82,8 +40,20 @@ export const AnnouncementCard = ({ announcements = [] }) => {
     console.log("Preview:", announcement);
   };
 
-  const handleDelete = (announcement) => {
-    console.log("Delete:", announcement);
+
+  //# Delete 
+  const handleDelete = async (announcement) => {
+    const confirmed = window.confirm(
+      `Are you sure you want to delete "${announcement.title}"?`,
+    );
+
+    if (!confirmed) return;
+
+    try {
+      await dispatch(deleteAnnouncement(announcement._id)).unwrap();
+    } catch (error) {
+      console.error("Delete announcement error:", error);
+    }
   };
 
   return (
