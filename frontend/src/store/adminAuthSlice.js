@@ -171,6 +171,26 @@ export const fetchTodayAttendance = createAsyncThunk(
   },
 );
 
+
+//# ===================== Delete Employee account from database ======================== 
+export const deleteUser = createAsyncThunk(
+  "adminAuth/deleteUser",
+  async (userId, { rejectWithValue }) => {
+    try {
+      const response = await adminAuthService.deleteUser(userId);
+
+      return {
+        userId,
+        ...response.data,
+      };
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to delete user"
+      );
+    }
+  }
+);
+
 const initialState = {
   isAuthenticated: document.cookie
     .split("; ")
