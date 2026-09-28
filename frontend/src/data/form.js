@@ -32,14 +32,14 @@ export const forms = {
     fields: [
       {
         id: 1,
-        name: "first name",
+        name: "firstName",
         type: "text",
         placeholder: "Enter your first Name...",
         ...nameValidation("First name"),
       },
       {
         id: 2,
-        name: "last name",
+        name: "lastName",
         type: "text",
         placeholder: "Enter your Last Name...",
         ...nameValidation("Last name"),
