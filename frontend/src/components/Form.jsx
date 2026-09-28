@@ -51,7 +51,6 @@ export const Form = ({
     setErrors({});
   };
 
-
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -69,7 +68,6 @@ export const Form = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
 
     const validationErrors = validateForm(form, fields);
 
@@ -201,8 +199,6 @@ export const Form = ({
           "Please check your details and try again.",
       });
 
-
-
       /*
        * Reset form after successful request
        */
@@ -249,7 +245,6 @@ export const Form = ({
  * If fields change dynamically,
  * make sure newly added fields are also added to form state.
  */
-
 
   React.useEffect(() => {
     setForm((prev) => {
@@ -385,6 +380,7 @@ export const Form = ({
             >
               <input
                 id={el.name}
+                
                 type={getInputType(el)}
                 name={el.name}
                 placeholder=""
