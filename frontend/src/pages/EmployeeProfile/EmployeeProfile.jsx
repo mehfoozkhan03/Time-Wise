@@ -76,7 +76,7 @@ export default function EmployeeProfile() {
               <span>Role</span>
 
               <h4>
-                {"employee" ??
+                {"Employee" ??
                   user?.role?.charAt(0).toUpperCase() + user.role.slice(1)}
               </h4>
             </div>
