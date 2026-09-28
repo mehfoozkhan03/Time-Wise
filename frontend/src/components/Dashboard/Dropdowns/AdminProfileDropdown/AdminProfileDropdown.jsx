@@ -34,6 +34,88 @@ export const AdminProfile = () => {
 
   const dropdownRef = useRef(null);
 
+  //# Change Admin Password
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+
+  const [passwordData, setPasswordData] = useState({
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
+
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
+
+  const handlePasswordChange = (e) => {
+    const { name, value } = e.target;
+
+    setPasswordData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const closePasswordModal = () => {
+    if (isChangingPassword) return;
+
+    setShowPasswordModal(false);
+
+    setPasswordData({
+      currentPassword: "",
+      newPassword: "",
+      confirmPassword: "",
+    });
+  };
+
+  const handleChangePassword = async () => {
+    const { currentPassword, newPassword, confirmPassword } = passwordData;
+
+    if (!currentPassword.trim()) {
+      alert("Please enter your current password.");
+      return;
+    }
+
+    if (!newPassword.trim()) {
+      alert("Please enter your new password.");
+      return;
+    }
+
+    if (newPassword.length < 6) {
+      alert("New password must be at least 6 characters.");
+      return;
+    }
+
+    if (!confirmPassword.trim()) {
+      alert("Please confirm your new password.");
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      alert("New passwords do not match.");
+      return;
+    }
+
+    if (currentPassword === newPassword) {
+      alert("New password must be different from your current password.");
+      return;
+    }
+
+    try {
+      setIsChangingPassword(true);
+
+      await adminAuthService.changeOwnPassword(currentPassword, newPassword);
+
+      alert("Password changed successfully.");
+
+      closePasswordModal();
+    } catch (error) {
+      console.error("Admin password change failed:", error);
+
+      alert(error?.response?.data?.message || "Failed to change password.");
+    } finally {
+      setIsChangingPassword(false);
+    }
+  };
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -92,7 +174,19 @@ export const AdminProfile = () => {
             <span>Account Settings</span>
           </button>
 
-          <button className="admin-dropdown-item">
+          <button
+            className="admin-dropdown-item"
+            onClick={() => {
+              setShowPasswordModal(true);
+              setIsOpen(false);
+
+              setPasswordData({
+                currentPassword: "",
+                newPassword: "",
+                confirmPassword: "",
+              });
+            }}
+          >
             <FiLock />
             <span>Change Password</span>
           </button>
@@ -106,6 +200,84 @@ export const AdminProfile = () => {
             <FiLogOut />
             <span>Logout</span>
           </button>
+        </div>
+      )}
+      {showPasswordModal && (
+        <div className="admin-password-modal-overlay">
+          <div className="admin-password-modal">
+            <div className="admin-password-icon">
+              <FiLock />
+            </div>
+
+            <h3>Change Password</h3>
+
+            <p className="admin-password-description">
+              Enter your current password and choose a new password.
+            </p>
+
+            {/* CURRENT PASSWORD */}
+            <div className="admin-password-input-group">
+              <label>Current Password</label>
+
+              <input
+                type="password"
+                name="currentPassword"
+                value={passwordData.currentPassword}
+                onChange={handlePasswordChange}
+                placeholder="Enter current password"
+                disabled={isChangingPassword}
+              />
+            </div>
+
+            {/* NEW PASSWORD */}
+            <div className="admin-password-input-group">
+              <label>New Password</label>
+
+              <input
+                type="password"
+                name="newPassword"
+                value={passwordData.newPassword}
+                onChange={handlePasswordChange}
+                placeholder="Enter new password"
+                disabled={isChangingPassword}
+              />
+            </div>
+
+            {/* CONFIRM PASSWORD */}
+            <div className="admin-password-input-group">
+              <label>Confirm New Password</label>
+
+              <input
+                type="password"
+                name="confirmPassword"
+                value={passwordData.confirmPassword}
+                onChange={handlePasswordChange}
+                placeholder="Confirm new password"
+                disabled={isChangingPassword}
+              />
+            </div>
+
+            {/* BUTTONS */}
+            <div className="admin-password-modal-actions">
+              <button
+                type="button"
+                className="admin-password-cancel"
+                onClick={closePasswordModal}
+                disabled={isChangingPassword}
+              >
+                Cancel
+              </button>
+
+              <button
+                type="button"
+                className="admin-password-confirm"
+                onClick={handleChangePassword}
+                disabled={isChangingPassword}
+              >
+                {isChangingPassword ? "Changing..." : "Change Password"}
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

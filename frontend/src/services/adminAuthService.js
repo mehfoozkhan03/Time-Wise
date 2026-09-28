@@ -76,4 +76,12 @@ export const adminAuthService = {
       newPassword,
     });
   },
+
+  //# Change Admin Password
+  changeOwnPassword(currentPassword, newPassword) {
+    return API.patch("/admin/change-password", {
+      currentPassword,
+      newPassword,
+    });
+  },
 };
