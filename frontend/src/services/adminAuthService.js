@@ -59,4 +59,9 @@ export const adminAuthService = {
   deleteThoughtbyAdmin(postId) {
     return API.delete(`/admin/delete/thoughts/${postId}`);
   },
+
+  //# Get featured thought for admin home page 
+  getFeaturedThought() {
+    return API.get("/admin/posts/featured");
+  },
 };

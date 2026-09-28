@@ -1,4 +1,16 @@
+import { useEffect, useState } from "react";
+
+
+import { getDashboardStats } from "../../../store/attendanceSlice";
+import {
+  fetchAllUser,
+  fetchRecentEmployees,
+} from "./../../../store/adminAuthSlice";
+import { AnnouncementForm } from "../DashboardAnnouncement/AnnouncementForm/AnnouncementForm";
+import { PulseDot } from "./../../PulseDot/pulseDot";
+import { fetchFeaturedThoughtForAdmin } from "../../../store/postSlice";
 import "./DashboardHome.css";
+
 
 import {
   FaUsers,
@@ -18,18 +30,11 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { useEffect, useRef, useState } from "react";
-import { getDashboardStats } from "../../../store/attendanceSlice";
-import {
-  fetchAllUser,
-  fetchRecentEmployees,
-} from "./../../../store/adminAuthSlice";
-import { fetchAdminThoughts } from "../../../store/postSlice";
-import { AnnouncementForm } from "../DashboardAnnouncement/AnnouncementForm/AnnouncementForm";
-import { PulseDot } from "./../../PulseDot/pulseDot";
 
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
+
+
 
 export const DashboardHome = () => {
   const dispatch = useDispatch();
@@ -37,25 +42,12 @@ export const DashboardHome = () => {
     (state) => state.adminAuth,
   );
 
-  const { featured, posts } = useSelector((state) => state.post);
-  // console.log("🚀 ~ posts:", posts);
+  //# ================ Featured thought or Pinned thought =================
+  const { featured } = useSelector((state) => state.post);
 
   const { stats } = useSelector((state) => state.attendance);
 
   const totalAbsentToday = (totalUsers || 0) - (stats?.totalPresentToday || 0);
-
-  //# Pin thought
-  const latestPinnedPost =
-    [...(posts || [])]
-      .filter((post) => post.isPinned === true && post.isDeleted !== true)
-      .sort((a, b) => new Date(b.pinnedAt) - new Date(a.pinnedAt))[0] || null;
-
-  const latestPost =
-    [...(posts || [])]
-      .filter((post) => post.isDeleted !== true)
-      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0] || null;
-
-  const thoughtToShow = latestPinnedPost || latestPost;
 
   //# ====================== Anouncement ===================
   const [openAnnouncement, setOpenAnnouncement] = useState(false);
@@ -215,7 +207,7 @@ export const DashboardHome = () => {
     dispatch(fetchAllUser());
     dispatch(fetchRecentEmployees());
     dispatch(getDashboardStats());
-    dispatch(fetchAdminThoughts());
+    dispatch(fetchFeaturedThoughtForAdmin())
   }, [dispatch]);
 
   return (
@@ -238,7 +230,10 @@ export const DashboardHome = () => {
                     >
                       {el.icon}
                     </span>
-                    <PulseDot className="home-circle" {...el} />
+                    <PulseDot
+                      className="home-circle"
+                      {...el}
+                    />
                   </div>
                   <div>
                     <h1>{el.count}</h1>
@@ -264,24 +259,22 @@ export const DashboardHome = () => {
               </div>
 
               <p>
-                {thoughtToShow
-                  ? `"${thoughtToShow.content}"`
-                  : "No thought available."}
+                {featured ? `"${featured.content}"` : "No thought available."}
               </p>
 
               <div className="thought-avatar-container">
                 <div className="thought-avatar">
-                  {thoughtToShow?.createdBy?.firstName?.[0] || ""}
-                  {thoughtToShow?.createdBy?.lastName?.[0] || ""}
+                  {featured?.createdBy?.firstName?.[0] || ""}
+                  {featured?.createdBy?.lastName?.[0] || ""}
                 </div>
 
                 <span style={{ opacity: "0.6", fontSize: "14px" }}>
-                  {thoughtToShow
-                    ? `${thoughtToShow.createdBy?.firstName || ""} ${
-                        thoughtToShow.createdBy?.lastName || ""
+                  {featured
+                    ? `${featured.createdBy?.firstName || ""} ${
+                        featured.createdBy?.lastName || ""
                       }${
-                        thoughtToShow.createdBy?.designation
-                          ? ` - ${thoughtToShow.createdBy.designation}`
+                        featured.createdBy?.designation
+                          ? ` - ${featured.createdBy.designation}`
                           : ""
                       }`
                     : "No author"}
