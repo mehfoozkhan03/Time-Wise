@@ -511,7 +511,8 @@ export const getFeaturedThought = async (req, res) => {
   try {
     let featuredPost = await postModel
       .findOne({
-        isFeatured: true,
+        // isFeatured: true,
+        isPinned: true,
         isDeleted: false,
       })
       .populate(

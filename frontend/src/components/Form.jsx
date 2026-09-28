@@ -64,7 +64,6 @@ export const Form = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("form", form);
     console.log("endpoint", endpoint);
 
     const validationErrors = validateForm(form, fields);
