@@ -10,14 +10,14 @@ export const forms = {
     fields: [
       {
         id: 1,
-        name: "Email",
+        name: "email",
         type: "text",
         placeholder: "Enter your Email...",
         ...emailValidation,
       },
       {
         id: 2,
-        name: "Password",
+        name: "password",
         type: "password",
         placeholder: "Enter your Password...",
         ...passwordValidation,
