@@ -221,7 +221,7 @@ const createLeaveCalendarEvents = async (leave, adminID) => {
       department: employee.department || null,
       designation: employee.designation || null,
       location: "",
-      priority: "MEDIUM",
+      priority: "HIGH",
       color: "",
       visibility: "PRIVATE",
       leaveId: leave._id,
