@@ -7,7 +7,7 @@
     border: 1px solid var(--border);
 }
 .dashboard-logo{
-    padding: 20px;
+    padding: 8px 20px;
     border-bottom: 1px solid var(--border);
     display: flex;
     align-items: center;

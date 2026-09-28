@@ -9,6 +9,9 @@ import {
   HiOutlineShare,
   HiOutlineEllipsisHorizontal,
 } from "react-icons/hi2";
+
+import { fetchPosts } from './../../../../store/postSlice';
+
 import {
   clearCommunityProfile,
   fetchCommunityProfile,
@@ -43,16 +46,16 @@ export const CommunityProfileCard = () => {
   );
 
   // ================= Fetch Profile =================
-
   useEffect(() => {
-    if (userId) {
-      dispatch(fetchCommunityProfile(userId));
-    }
+  if (userId) {
+    dispatch(fetchCommunityProfile(userId));
+    dispatch(fetchPosts());
+  }
 
-    return () => {
-      dispatch(clearCommunityProfile());
-    };
-  }, [userId, dispatch]);
+  return () => {
+    dispatch(clearCommunityProfile());
+  };
+}, [userId, dispatch]);
 
   // ================= Loading =================
 
