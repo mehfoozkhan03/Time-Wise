@@ -60,7 +60,7 @@ export const forms = {
       },
       {
         id: 5,
-        name: "confirmPassword",
+        name: "confirm password",
         type: "password",
         placeholder: "Enter your Confirm Password...",
         ...passwordValidation,
@@ -70,6 +70,12 @@ export const forms = {
         name: "dob",
         type: "date",
         placeholder: "",
+      },
+      {
+        id: 7,
+        name: "gender",
+        type: "select",
+        options: ["Male", "Female", "Other"],
       },
     ],
   },
