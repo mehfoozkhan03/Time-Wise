@@ -292,6 +292,134 @@
   background: transparent;
 }
 
+
+
+/* Password Change */
+.password-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 9999;
+}
+
+.password-modal {
+  width: 420px;
+  max-width: calc(100% - 40px);
+
+  background: #fff;
+  border-radius: 14px;
+  padding: 30px;
+
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+}
+
+.password-modal-icon {
+  width: 55px;
+  height: 55px;
+
+  margin: 0 auto 16px;
+
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #fff4d6;
+  color: #fdcb4b;
+
+  font-size: 24px;
+}
+
+.password-modal h3 {
+  margin: 0;
+  text-align: center;
+  font-size: 20px;
+  color: #222;
+}
+
+.password-modal-user {
+  margin: 10px 0 24px;
+  text-align: center;
+  font-size: 14px;
+  color: #777;
+}
+
+.password-input-group {
+  margin-bottom: 18px;
+}
+
+.password-input-group label {
+  display: block;
+  margin-bottom: 7px;
+
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+}
+
+.password-input-group input {
+  width: 100%;
+  box-sizing: border-box;
+
+  padding: 11px 13px;
+
+  border: 1px solid #ddd;
+  border-radius: 7px;
+
+  outline: none;
+  font-size: 14px;
+}
+
+.password-input-group input:focus {
+  border-color: #fdcb4b;
+}
+
+.password-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+
+  margin-top: 25px;
+}
+
+.password-modal-actions button {
+  min-width: 110px;
+
+  padding: 10px 16px;
+
+  border: none;
+  border-radius: 7px;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.password-modal-cancel {
+  background: #eee;
+  color: #444;
+}
+
+.password-modal-confirm {
+  background: #fdcb4b;
+  color: #222;
+}
+
+.password-modal-actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+
+
+
 @media (max-width: 1000px) {
   .employee-management-header {
     align-items: flex-start;

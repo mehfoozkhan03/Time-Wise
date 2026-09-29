@@ -19,13 +19,8 @@ const RightSidebar = () => {
     ).values(),
   ].slice(0, 5);
 
-  //# Pin thought
-  const latestPinnedPost =
-    [...posts]
-      .filter((post) => post.isPinned === true && post.isDeleted !== true)
-      .sort((a, b) => new Date(b.pinnedAt) - new Date(a.pinnedAt))[0] || null;
-
-  const featuredMessage = latestPinnedPost?.content || featured?.content;
+//# Pin thought or Feature thought
+  const featuredMessage = featured?.content;
 
   return (
     <aside className="right-sidebar">
@@ -37,29 +32,13 @@ const RightSidebar = () => {
 
           <h3>Featured Thought</h3>
         </div>
-
-        {/* {featured ? (
-          <>
-            <p>{featured.content}</p>
-
-            <small>
-              — {featured.createdBy?.firstName} {featured.createdBy?.lastName}
-            </small>
-          </>
-        ) : (
-          <p>No featured thought today.</p>
-        )} */}
         {featuredMessage ? (
           <>
             <p>{featuredMessage}</p>
 
             <small>
               —{" "}
-              {latestPinnedPost
-                ? `${latestPinnedPost.createdBy?.firstName || ""} ${
-                    latestPinnedPost.createdBy?.lastName || ""
-                  }`
-                : `${featured?.createdBy?.firstName || ""} ${
+              {`${featured?.createdBy?.firstName || ""} ${
                     featured?.createdBy?.lastName || ""
                   }`}
             </small>

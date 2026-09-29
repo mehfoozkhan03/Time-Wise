@@ -289,6 +289,22 @@ export const deleteThoughtbyAdmin = createAsyncThunk(
   },
 );
 
+//# =================== Get featured thought or Pinned thought for Admin Home page =================
+export const fetchFeaturedThoughtForAdmin = createAsyncThunk(
+  "post/fetchFeaturedThoughtForAdmin",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await adminAuthService.getFeaturedThought();
+
+      return response.data.featuredThought;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || "Unable to fetch featured thought",
+      );
+    }
+  },
+);
+
 // ======================================================
 // INITIAL STATE
 // ======================================================
@@ -687,6 +703,11 @@ const postSlice = createSlice({
         state.loading = false;
         state.isError = true;
         state.errorMessage = action.payload;
+      })
+
+      //# ================== Get featured thought for Admin Home Page ================
+      .addCase(fetchFeaturedThoughtForAdmin.fulfilled, (state, action) => {
+        state.featured = action.payload;
       });
   },
 });

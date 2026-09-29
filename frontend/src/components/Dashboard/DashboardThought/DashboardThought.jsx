@@ -16,6 +16,7 @@ export const DashboardThuoght = () => {
   const { posts, page, hasMore, isLoading } = useSelector(
     (state) => state.post,
   );
+  console.log("🚀 ~ posts:", posts);
 
   const formatTimeAgo = (date) => {
     if (!date) return "";

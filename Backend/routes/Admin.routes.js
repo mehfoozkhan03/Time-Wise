@@ -20,12 +20,21 @@ import {
   adminDeleteThought,
   togglePinThought,
 } from "../controllers/Admin/adminThought.controller.js";
+import { deleteUser } from "../controllers/Admin/deleteUser.controller.js";
+import { changeUserPassword } from "../controllers/Admin/changeEmployeePassword.controller.js";
+import { changeOwnPassword } from "../controllers/Admin/changeAdminPassword.controller.js";
 
 const adminRoutes = express.Router();
 
 adminRoutes.post("/adminlogin", admin_login);
 
 adminRoutes.post("/logout", adminAuth, adminLogout);
+
+adminRoutes.delete("/users/:id",  adminAuth,  deleteUser);
+
+adminRoutes.patch("/change-password",  adminAuth,  changeOwnPassword);
+
+adminRoutes.patch("/users/:id/password",  adminAuth,  changeUserPassword);
 
 adminRoutes.get("/users", adminAuth, getAllUser);
 

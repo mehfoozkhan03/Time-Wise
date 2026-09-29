@@ -10,13 +10,13 @@ import { FaKey } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 
 import {
+  deleteUser,
   fetchAllUser,
   loadLessUsers,
   updateUser,
   updateUserRole,
 } from "../../../store/adminAuthSlice";
 
-// import { authService } from "../../../services/authService";
 import { adminAuthService } from "../../../services/adminAuthService";
 
 import { useEffect, useRef, useState } from "react";
@@ -156,7 +156,7 @@ export const DashboardEmployee = () => {
 
   const handleDesignationChange = async (userId, designation) => {
     try {
-      await authService.updateUserDesignation(userId, designation);
+      await adminAuthService.updateUserDesignation(userId, designation);
 
       dispatch(
         fetchAllUser({
@@ -334,6 +334,133 @@ export const DashboardEmployee = () => {
           error ||
           "Failed to update employee. Please try again.",
       );
+    }
+  };
+
+  //# =================== Delete Employee Account ======================
+  const handleDeleteUser = async (userId) => {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this employee?",
+    );
+
+    if (!confirmed) return;
+
+    try {
+      await dispatch(deleteUser(userId)).unwrap();
+
+      alert("Employee deleted successfully.");
+
+      // Refresh employee list
+      dispatch(
+        fetchAllUser({
+          page: 1,
+          department: selectedDepartment,
+          status: selectedStatus,
+          search,
+        }),
+      );
+    } catch (error) {
+      console.error("Delete employee failed:", error);
+
+      alert(error || "Failed to delete employee.");
+    }
+  };
+
+  //# Change Employee password by Admin
+  const [passwordModal, setPasswordModal] = useState({
+    open: false,
+    userId: null,
+    userName: "",
+  });
+
+  const [passwordData, setPasswordData] = useState({
+    newPassword: "",
+    confirmPassword: "",
+  });
+
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
+
+  //# Change password Modal
+  const openPasswordModal = (user) => {
+    setPasswordModal({
+      open: true,
+      userId: user._id,
+      userName: `${user.firstName} ${user.lastName}`,
+    });
+
+    setPasswordData({
+      newPassword: "",
+      confirmPassword: "",
+    });
+  };
+
+  //# Close Modal
+  const closePasswordModal = () => {
+    if (isChangingPassword) return;
+
+    setPasswordModal({
+      open: false,
+      userId: null,
+      userName: "",
+    });
+
+    setPasswordData({
+      newPassword: "",
+      confirmPassword: "",
+    });
+  };
+
+  const handlePasswordChange = (e) => {
+    const { name, value } = e.target;
+
+    setPasswordData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleChangePassword = async () => {
+    const { newPassword, confirmPassword } = passwordData;
+
+    if (!newPassword.trim()) {
+      alert("Please enter a new password.");
+      return;
+    }
+
+    if (newPassword.length < 6) {
+      alert("Password must be at least 6 characters.");
+      return;
+    }
+
+    if (!confirmPassword.trim()) {
+      alert("Please confirm the new password.");
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      alert("Passwords do not match.");
+      return;
+    }
+
+    try {
+      setIsChangingPassword(true);
+
+      await adminAuthService.changeUserPassword(
+        passwordModal.userId,
+        newPassword,
+      );
+
+      alert("Employee password changed successfully.");
+
+      closePasswordModal();
+    } catch (error) {
+      console.error("Change password failed:", error);
+
+      alert(
+        error?.response?.data?.message || "Failed to change employee password.",
+      );
+    } finally {
+      setIsChangingPassword(false);
     }
   };
 
@@ -735,7 +862,11 @@ export const DashboardEmployee = () => {
 
                           {/* DELETE */}
 
-                          <div>
+                          <div
+                            className="dashboardEmployee-delete"
+                            onClick={() => handleDeleteUser(el._id)}
+                            style={{ cursor: "pointer" }}
+                          >
                             <MdDelete
                               style={{
                                 color: "#c44261",
@@ -746,7 +877,77 @@ export const DashboardEmployee = () => {
 
                           {/* KEY */}
 
-                          <div>
+                          {passwordModal.open && (
+                            <div className="password-modal-overlay">
+                              <div className="password-modal">
+                                <div className="password-modal-icon">
+                                  <FaKey />
+                                </div>
+
+                                <h3>Change Employee Password</h3>
+
+                                <p className="password-modal-user">
+                                  Change password for{" "}
+                                  <strong>{passwordModal.userName}</strong>
+                                </p>
+
+                                <div className="password-input-group">
+                                  <label>New Password</label>
+
+                                  <input
+                                    type="password"
+                                    name="newPassword"
+                                    value={passwordData.newPassword}
+                                    onChange={handlePasswordChange}
+                                    placeholder="Enter new password"
+                                    disabled={isChangingPassword}
+                                  />
+                                </div>
+
+                                <div className="password-input-group">
+                                  <label>Confirm Password</label>
+
+                                  <input
+                                    type="password"
+                                    name="confirmPassword"
+                                    value={passwordData.confirmPassword}
+                                    onChange={handlePasswordChange}
+                                    placeholder="Confirm new password"
+                                    disabled={isChangingPassword}
+                                  />
+                                </div>
+
+                                <div className="password-modal-actions">
+                                  <button
+                                    type="button"
+                                    className="password-modal-cancel"
+                                    onClick={closePasswordModal}
+                                    disabled={isChangingPassword}
+                                  >
+                                    Cancel
+                                  </button>
+
+                                  <button
+                                    type="button"
+                                    className="password-modal-confirm"
+                                    onClick={handleChangePassword}
+                                    disabled={isChangingPassword}
+                                  >
+                                    {isChangingPassword
+                                      ? "Changing..."
+                                      : "Change Password"}
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          )}
+
+                          <div
+                            className="dashboardEmployee-key"
+                            onClick={() => openPasswordModal(el)}
+                            title="Change Password"
+                            style={{ cursor: "pointer" }}
+                          >
                             <FaKey
                               style={{
                                 color: "#fdcb4b",

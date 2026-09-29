@@ -59,4 +59,29 @@ export const adminAuthService = {
   deleteThoughtbyAdmin(postId) {
     return API.delete(`/admin/delete/thoughts/${postId}`);
   },
+
+  //# Get featured thought for admin home page
+  getFeaturedThought() {
+    return API.get("/admin/posts/featured");
+  },
+
+  //# Delete employee by admin
+  deleteUser: async (userId) => {
+    return await API.delete(`/admin/users/${userId}`);
+  },
+
+  //# Change employee password by Admin
+  changeUserPassword(userId, newPassword) {
+    return API.patch(`/admin/users/${userId}/password`, {
+      newPassword,
+    });
+  },
+
+  //# Change Admin Password
+  changeOwnPassword(currentPassword, newPassword) {
+    return API.patch("/admin/change-password", {
+      currentPassword,
+      newPassword,
+    });
+  },
 };

@@ -80,3 +80,51 @@ export const adminDeleteThought = async (req, res) => {
     });
   }
 };
+
+
+
+//# Featured thought for Admin home page 
+export const getFeaturedThoughtForAdmin = async (req, res) => {
+  try {
+    let featuredPost = await postModel
+      .findOne({
+        isPinned: true,
+        isDeleted: false,
+      })
+      .populate(
+        "createdBy",
+        "firstName lastName profileImage designation department"
+      )
+      .sort({
+        pinnedAt: -1,
+      });
+
+    // No pinned thought → latest thought
+    if (!featuredPost) {
+      featuredPost = await postModel
+        .findOne({
+          type: "thought",
+          isDeleted: false,
+        })
+        .populate(
+          "createdBy",
+          "firstName lastName profileImage designation department"
+        )
+        .sort({
+          createdAt: -1,
+        });
+    }
+
+    return res.status(200).json({
+      success: true,
+      featuredThought: featuredPost || null,
+    });
+  } catch (error) {
+    console.error("Admin Featured Thought Error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Unable to fetch featured thought.",
+    });
+  }
+};
