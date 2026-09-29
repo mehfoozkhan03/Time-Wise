@@ -1,4 +1,3 @@
-
 // import Skeleton from "../../../components/Skeleton/Skeleton";
 // import "./HeroSection.css";
 // import useCountUp from "../../../components/UseCount/Count";
@@ -163,7 +162,6 @@
 
 //     return () => clearInterval(interval);
 //   }, []);
-
 
 //   const capitalize = (text) => {
 //     if (!text) return "";
@@ -337,14 +335,9 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { getDashboardStats } from "../../../store/dashboardSlice";
 
-import {
-  FaFire,
-  FaCalendarAlt,
-  FaClock,
-} from "react-icons/fa";
+import { FaFire, FaCalendarAlt, FaClock } from "react-icons/fa";
 
 export default function HeroSection() {
-
   const dispatch = useDispatch();
 
   /* ==========================================
@@ -353,28 +346,18 @@ export default function HeroSection() {
 
   const [time, setTime] = useState(new Date());
 
-
   /* ==========================================
      AUTH DATA
   ========================================== */
 
-  const {
-    user,
-    isLoading,
-  } = useSelector((state) => state.auth);
-
+  const { user, isLoading } = useSelector((state) => state.auth);
 
   /* ==========================================
      DASHBOARD DATA
   ========================================== */
 
-  const {
-    stats: dashboardStats,
-    loading: dashboardLoading = false,
-  } = useSelector(
-    (state) => state.dashboard || {}
-  );
-
+  const { stats: dashboardStats, loading: dashboardLoading = false } =
+    useSelector((state) => state.dashboard || {});
 
   /* ==========================================
      GREETING STATES
@@ -389,7 +372,6 @@ export default function HeroSection() {
   const [isDeleting, setIsDeleting] = useState(false);
 
   const [charIndex, setCharIndex] = useState(0);
-
 
   /* ==========================================
      LANGUAGES
@@ -418,13 +400,11 @@ export default function HeroSection() {
     "ru",
   ];
 
-
   /* ==========================================
      GREETING
   ========================================== */
 
   const greeting = () => {
-
     const hour = time.getHours();
 
     if (hour >= 5 && hour < 12) {
@@ -442,55 +422,33 @@ export default function HeroSection() {
     return "Good Night";
   };
 
-
   /* ==========================================
      DASHBOARD STATS
   ========================================== */
 
   const stats = {
+    dayStreak: Number(dashboardStats?.dayStreak) || 0,
 
-    dayStreak:
-      Number(dashboardStats?.dayStreak) || 0,
+    longestStreak: Number(dashboardStats?.longestStreak) || 0,
 
-    longestStreak:
-      Number(dashboardStats?.longestStreak) || 0,
+    attendancePercentage: Number(dashboardStats?.attendancePercentage) || 0,
 
-    attendancePercentage:
-      Number(
-        dashboardStats?.attendancePercentage
-      ) || 0,
+    weeklyHours: Number(dashboardStats?.weeklyHours) || 0,
 
-    weeklyHours:
-      Number(dashboardStats?.weeklyHours) || 0,
+    monthlyHours: Number(dashboardStats?.monthlyHours) || 0,
 
-    monthlyHours:
-      Number(dashboardStats?.monthlyHours) || 0,
+    productivity: Number(dashboardStats?.productivity) || 0,
 
-    productivity:
-      Number(dashboardStats?.productivity) || 0,
+    weeklyTarget: Number(dashboardStats?.weeklyTarget) || 40,
 
-    weeklyTarget:
-      Number(dashboardStats?.weeklyTarget) || 40,
+    weeklyHoursRemaining: Number(dashboardStats?.weeklyHoursRemaining) || 40,
 
-    weeklyHoursRemaining:
-      Number(
-        dashboardStats?.weeklyHoursRemaining
-      ) || 40,
+    weeklyGoalPercentage: Number(dashboardStats?.weeklyGoalPercentage) || 0,
 
-    weeklyGoalPercentage:
-      Number(
-        dashboardStats?.weeklyGoalPercentage
-      ) || 0,
+    averageCheckIn: dashboardStats?.averageCheckIn || "--:--",
 
-    averageCheckIn:
-      dashboardStats?.averageCheckIn || "--:--",
-
-    averageBreakDuration:
-      Number(
-        dashboardStats?.averageBreakDuration
-      ) || 0,
+    averageBreakDuration: Number(dashboardStats?.averageBreakDuration) || 0,
   };
-
 
   /* ==========================================
      GET CURRENT GREETING
@@ -498,279 +456,175 @@ export default function HeroSection() {
 
   const currentGreeting = greeting();
 
-
   /* ==========================================
      TRANSLATION TYPING EFFECT
   ========================================== */
 
   useEffect(() => {
-
     if (!translations.length) {
       return;
     }
 
-    const text =
-      translations[languageIndex];
+    const text = translations[languageIndex];
 
     const timeout = setTimeout(
       () => {
-
         if (!isDeleting) {
-
           if (charIndex < text.length) {
+            setDisplayText(text.substring(0, charIndex + 1));
 
-            setDisplayText(
-              text.substring(
-                0,
-                charIndex + 1
-              )
-            );
-
-            setCharIndex(
-              (prev) => prev + 1
-            );
-
+            setCharIndex((prev) => prev + 1);
           } else {
-
             setTimeout(() => {
               setIsDeleting(true);
             }, 1500);
-
           }
-
         } else {
-
           if (charIndex > 0) {
+            setDisplayText(text.substring(0, charIndex - 1));
 
-            setDisplayText(
-              text.substring(
-                0,
-                charIndex - 1
-              )
-            );
-
-            setCharIndex(
-              (prev) => prev - 1
-            );
-
+            setCharIndex((prev) => prev - 1);
           } else {
-
             setIsDeleting(false);
 
-            setLanguageIndex(
-              (prev) =>
-                (prev + 1) %
-                translations.length
-            );
-
+            setLanguageIndex((prev) => (prev + 1) % translations.length);
           }
-
         }
-
       },
 
-      isDeleting ? 40 : 80
+      isDeleting ? 40 : 80,
     );
 
     return () => clearTimeout(timeout);
-
-  }, [
-    charIndex,
-    isDeleting,
-    languageIndex,
-    translations,
-  ]);
-
+  }, [charIndex, isDeleting, languageIndex, translations]);
 
   /* ==========================================
      TRANSLATE GREETING
   ========================================== */
 
   const translateGreeting = async () => {
-
-    const text =
-      `${currentGreeting},`;
+    const text = `${currentGreeting},`;
 
     try {
+      const translated = await Promise.all(
+        languages.map(async (lang) => {
+          if (lang === "en") {
+            return `${text}`;
+          }
 
-      const translated =
-        await Promise.all(
+          const response = await fetch(
+            `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${lang}&dt=t&q=${encodeURIComponent(
+              text,
+            )}`,
+          );
 
-          languages.map(
-            async (lang) => {
+          const data = await response.json();
 
-              if (lang === "en") {
-                return `${text}`;
-              }
-
-              const response =
-                await fetch(
-                  `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${lang}&dt=t&q=${encodeURIComponent(
-                    text
-                  )}`
-                );
-
-              const data =
-                await response.json();
-
-              return data[0][0][0];
-            }
-          )
-        );
+          return data[0][0][0];
+        }),
+      );
 
       setTranslations(translated);
 
       setLanguageIndex(0);
-
     } catch (err) {
-
       console.error(err);
 
       setTranslations([text]);
-
     }
   };
-
 
   /* ==========================================
      TRANSLATION EFFECT
   ========================================== */
 
   useEffect(() => {
-
     translateGreeting();
-
   }, [currentGreeting]);
-
 
   /* ==========================================
      RESET TYPING
   ========================================== */
 
   useEffect(() => {
-
     setCharIndex(0);
 
     setDisplayText("");
 
     setIsDeleting(false);
-
   }, [languageIndex]);
-
 
   /* ==========================================
      COUNT UP
   ========================================== */
 
-  const attendance =
-    useCountUp(
-      stats.attendancePercentage
-    );
+  const attendance = useCountUp(stats.attendancePercentage);
 
-  const weeklyHours =
-    useCountUp(
-      stats.weeklyHours
-    );
+  const weeklyHours = useCountUp(stats.weeklyHours);
 
-  const productivity =
-    useCountUp(
-      stats.productivity
-    );
+  const productivity = useCountUp(stats.productivity);
 
-  const dayStreak =
-    useCountUp(
-      stats.dayStreak
-    );
-
+  const dayStreak = useCountUp(stats.dayStreak);
 
   /* ==========================================
      FETCH DASHBOARD DATA
   ========================================== */
 
   useEffect(() => {
-
     dispatch(getDashboardStats());
-
   }, [dispatch]);
-
 
   /* ==========================================
      LIVE CLOCK
   ========================================== */
 
   useEffect(() => {
+    const interval = setInterval(() => {
+      setTime(new Date());
+    }, 1000);
 
-    const interval =
-      setInterval(() => {
-
-        setTime(new Date());
-
-      }, 1000);
-
-    return () =>
-      clearInterval(interval);
-
+    return () => clearInterval(interval);
   }, []);
-
 
   /* ==========================================
      CAPITALIZE
   ========================================== */
 
   const capitalize = (text) => {
-
     if (!text) {
       return "";
     }
 
-    return (
-      text.charAt(0).toUpperCase() +
-      text.slice(1)
-    );
+    return text.charAt(0).toUpperCase() + text.slice(1);
   };
-
 
   /* ==========================================
      BACKEND BASED SKELETON
   ========================================== */
 
   const showSkeleton =
-    isLoading ||
-    dashboardLoading ||
-    !user ||
-    !dashboardStats;
-
+    isLoading || dashboardLoading || !user || !dashboardStats;
 
   /* ==========================================
      SKELETON UI
   ========================================== */
 
   if (showSkeleton) {
-
     return (
-
       <section className="hero">
-
         {/* ==================================
             LEFT SIDE
         ================================== */}
 
         <div className="hero_left">
-
-          <Skeleton
-            width="220px"
-            height="35px"
-          />
+          <Skeleton width="220px" height="35px" />
 
           <div
             style={{
               marginTop: 15,
             }}
           >
-            <Skeleton
-              width="180px"
-              height="30px"
-            />
+            <Skeleton width="180px" height="30px" />
           </div>
 
           <div
@@ -778,12 +632,8 @@ export default function HeroSection() {
               marginTop: 15,
             }}
           >
-            <Skeleton
-              width="260px"
-              height="18px"
-            />
+            <Skeleton width="260px" height="18px" />
           </div>
-
 
           {/* DATE + TIME */}
 
@@ -794,28 +644,17 @@ export default function HeroSection() {
               marginTop: "25px",
             }}
           >
+            <Skeleton width="170px" height="18px" />
 
-            <Skeleton
-              width="170px"
-              height="18px"
-            />
-
-            <Skeleton
-              width="140px"
-              height="18px"
-            />
-
+            <Skeleton width="140px" height="18px" />
           </div>
-
         </div>
-
 
         {/* ==================================
             RIGHT CARD
         ================================== */}
 
         <Card className="hero_right">
-
           {/* USER / STAT */}
 
           <div
@@ -826,37 +665,20 @@ export default function HeroSection() {
               marginBottom: "30px",
             }}
           >
-
-            <Skeleton
-              width="55px"
-              height="55px"
-              radius="50%"
-            />
+            <Skeleton width="55px" height="55px" radius="50%" />
 
             <div>
-
-              <Skeleton
-                width="70px"
-                height="28px"
-              />
+              <Skeleton width="70px" height="28px" />
 
               <div
                 style={{
                   marginTop: 10,
                 }}
               >
-
-                <Skeleton
-                  width="100px"
-                  height="16px"
-                />
-
+                <Skeleton width="100px" height="16px" />
               </div>
-
             </div>
-
           </div>
-
 
           {/* PROGRESS STATS */}
 
@@ -867,218 +689,119 @@ export default function HeroSection() {
               gap: "18px",
             }}
           >
+            {[1, 2, 3].map((item) => (
+              <div
+                key={item}
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Skeleton width="120px" height="18px" />
 
-            {[1, 2, 3].map(
-              (item) => (
-
-                <div
-                  key={item}
-                  style={{
-                    display: "flex",
-                    justifyContent:
-                      "space-between",
-                  }}
-                >
-
-                  <Skeleton
-                    width="120px"
-                    height="18px"
-                  />
-
-                  <Skeleton
-                    width="60px"
-                    height="18px"
-                  />
-
-                </div>
-
-              )
-            )}
-
+                <Skeleton width="60px" height="18px" />
+              </div>
+            ))}
           </div>
-
         </Card>
-
       </section>
     );
   }
-
 
   /* ==========================================
      ACTUAL UI
   ========================================== */
 
   return (
-
     <section className="hero">
-
       {/* ======================================
           LEFT
       ====================================== */}
 
       <div className="hero_left">
-
         <div id="tour-hero-greeting">
-
           <h1>
-
             {displayText}
 
-            <span className="typing-cursor">
-              |
-            </span>
-
+            <span className="typing-cursor">|</span>
           </h1>
-
 
           <h1 className="hero_name">
-
-            {capitalize(
-              user?.firstName
-            ) || "Employee"}.
-
+            {capitalize(user?.firstName) || "Employee"}.
           </h1>
 
-
           <p>
-
-            {user?.designation &&
-            user?.department
+            {user?.designation && user?.department
               ? `${user.designation} • ${user.department}`
               : "Let's make today productive."}
-
           </p>
-
         </div>
-
 
         {/* DATE + TIME */}
 
-        <div
-          className="hero_info"
-          id="tour-hero-info"
-        >
-
+        <div className="hero_info" id="tour-hero-info">
           <div>
-
             <FaCalendarAlt />
 
             <span>
-
-              {time.toLocaleDateString(
-                "en-US",
-                {
-                  weekday: "long",
-                  month: "long",
-                  day: "numeric",
-                }
-              )}
-
+              {time.toLocaleDateString("en-US", {
+                weekday: "long",
+                month: "long",
+                day: "numeric",
+              })}
             </span>
-
           </div>
 
-
           <div>
-
             <FaClock />
 
             <span>
-
-              {time.toLocaleTimeString(
-                "en-US",
-                {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                  second: "2-digit",
-                  hour12: true,
-                }
-              )}
-
+              {time.toLocaleTimeString("en-US", {
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+                hour12: true,
+              })}
             </span>
-
           </div>
-
         </div>
-
       </div>
-
 
       {/* ======================================
           RIGHT CARD
       ====================================== */}
 
       <Card className="hero_right">
-
-        <div
-          className="hero_stat"
-          id="tour-hero-stat"
-        >
-
+        <div className="hero_stat" id="tour-hero-stat">
           <FaFire className="fire" />
 
           <div>
+            <h2>{dayStreak}</h2>
 
-            <h2>
-              {dayStreak}
-            </h2>
-
-            <p>
-              Day Streak
-            </p>
-
+            <p>Day Streak</p>
           </div>
-
         </div>
 
-
-        <div
-          className="hero_progress"
-          id="tour-hero-progress"
-        >
-
+        <div className="hero_progress" id="tour-hero-progress">
           <div>
+            <span>Attendance</span>
 
-            <span>
-              Attendance
-            </span>
-
-            <strong>
-              {attendance}%
-            </strong>
-
+            <strong>{attendance}%</strong>
           </div>
 
-
           <div>
+            <span>Weekly Hours</span>
 
-            <span>
-              Weekly Hours
-            </span>
-
-            <strong>
-              {weeklyHours}h
-            </strong>
-
+            <strong>{weeklyHours}h</strong>
           </div>
 
-
           <div>
+            <span>Productivity</span>
 
-            <span>
-              Productivity
-            </span>
-
-            <strong>
-              {productivity}%
-            </strong>
-
+            <strong>{productivity}%</strong>
           </div>
-
         </div>
-
       </Card>
-
     </section>
   );
 }

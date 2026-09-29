@@ -56,14 +56,14 @@ export default function AttendanceHistory() {
   const [currentMonth, setCurrentMonth] = useState(null);
 
   //skeleton//
-  const [showSkeleton, setShowSkeleton] = useState(true);
+  /*   const [showSkeleton, setShowSkeleton] = useState(true);
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowSkeleton(false);
     }, 1500);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, []); */
   //skeleton//
 
   // Jab months load ho jaye to latest month select karo
@@ -127,7 +127,7 @@ export default function AttendanceHistory() {
   }, []);
   return (
     <section className="attendance_history">
-      {showSkeleton ? (
+      {loading ? (
         <>
           <div className="attendance_history_header">
             <div>
