@@ -1,0 +1,534 @@
+/* ===========================
+   GLOBAL
+=========================== */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: sans-serif;
+}
+
+
+/* ===========================
+   Chrome Autofill
+=========================== */
+
+input:is(:-webkit-autofill, :autofill),
+textarea:is(:-webkit-autofill, :autofill),
+select:is(:-webkit-autofill, :autofill) {
+  -webkit-text-fill-color: var(--input-text) !important;
+
+  -webkit-box-shadow:
+    0 0 0px 1000px var(--input-bg) inset !important;
+
+  box-shadow:
+    0 0 0px 1000px var(--input-bg) inset !important;
+
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+
+/* ===========================
+   AUTH CONTAINER
+=========================== */
+
+.sing_login {
+  min-height: 90vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 40px 20px;
+
+  background: var(--bg);
+
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+
+/* ===========================
+   AUTH CARD
+=========================== */
+
+.login-page {
+  width: 400px;
+  max-width: 100%;
+
+  padding: 35px 40px;
+
+  background: var(--card_login);
+
+  border: 1px solid var(--border);
+  border-radius: 15px;
+
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.15),
+    0 8px 20px rgba(0, 0, 0, 0.08);
+
+  transition: 0.35s;
+}
+
+
+.login-page:hover {
+  transform: translateY(-5px);
+
+  box-shadow:
+    0 30px 60px rgba(0, 0, 0, 0.2),
+    0 10px 30px rgba(79, 70, 229, 0.15);
+}
+
+
+/* ===========================
+   AUTH HEADING
+=========================== */
+
+.login-page h2 {
+  text-align: center;
+
+  margin-bottom: 30px;
+
+  font-size: 28px;
+  font-weight: 700;
+
+  background: linear-gradient(
+    90deg,
+    var(--primary),
+    #6366f1
+  );
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+
+/* ===========================
+   FORM
+=========================== */
+
+.form {
+  width: 100%;
+
+  margin: 0;
+  padding: 0;
+
+  background: transparent;
+
+  border: none;
+  border-radius: 0;
+
+  box-shadow: none;
+
+  animation: fade 0.4s ease;
+}
+
+
+/* ===========================
+   AUTH MESSAGE
+=========================== */
+
+.message {
+  margin-top: 20px;
+
+  text-align: center;
+
+  color: var(--label-color);
+
+  font-size: 14px;
+}
+
+
+.message span {
+  color: var(--primary);
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.3s;
+}
+
+
+.message span:hover {
+  color: var(--buttonhover);
+  text-decoration: underline;
+}
+
+
+/* ===========================
+   FORM ANIMATION
+=========================== */
+
+@keyframes fade {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+
+/* ===========================
+   INPUT BOX
+=========================== */
+
+.input-box {
+  position: relative;
+  margin-bottom: 15px;
+}
+
+
+/* ===========================
+   INPUT
+=========================== */
+
+.input-box input {
+  width: 100%;
+  height: 50px;
+
+  padding: 8px 15px;
+
+  border: 1px solid var(--border);
+  border-radius: 8px;
+
+  outline: none;
+
+  background: var(--input-bg);
+  color: var(--input-text);
+
+  font-size: 16px;
+
+  transition: 0.3s;
+}
+
+
+.input-box input:hover {
+  border-color: var(--primary);
+}
+
+
+.input-box input:focus {
+  border-color: var(--primary);
+
+  box-shadow:
+    0 0 0 4px var(--focus-shadow);
+}
+
+
+/* ===========================
+   FLOATING LABEL
+=========================== */
+
+.input-box > label:not(.gender-title) {
+  position: absolute;
+
+  top: 15px;
+  left: 15px;
+
+  padding: 0 5px;
+
+  background: var(--input-bg);
+
+  color: var(--label-color);
+
+  font-size: 16px;
+
+  pointer-events: none;
+
+  transition: 0.3s;
+}
+
+
+.input-box input:focus + label,
+.input-box input:not(:placeholder-shown) + label {
+  top: 0;
+
+  transform: translateY(-50%);
+
+  font-size: 15px;
+
+  color: var(--primary);
+}
+
+.password-box {
+  position: relative;
+}
+
+.password-box input {
+  padding-right: 50px;
+}
+
+.eye-icon {
+  position: absolute;
+
+  top: 50%;
+  right: 14px;
+
+  width: 24px;
+  height: 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transform: translateY(-50%) !important;
+
+  color: var(--label-color);
+  font-size: 17px;
+
+  cursor: pointer;
+
+  z-index: 5;
+}
+
+.eye-icon:hover {
+  color: var(--primary);
+
+  /* position bilkul same rahegi */
+  transform: translateY(-50%) !important;
+}
+
+
+
+
+/* ===========================
+   BUTTON
+=========================== */
+
+.loginsumit {
+  width: 100%;
+  height: 52px;
+
+  border: none;
+  border-radius: 8px;
+
+  background: var(--button);
+
+  color: #fff;
+
+  cursor: pointer;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  letter-spacing: 1px;
+
+  text-transform: uppercase;
+
+  transition: 0.3s;
+}
+
+
+.loginsumit:hover {
+  background: var(--buttonhover);
+
+  transform: translateY(-2px);
+}
+
+
+.loginsumit:disabled {
+  opacity: 0.7;
+
+  cursor: not-allowed;
+
+  transform: none;
+}
+
+
+/* ===========================
+   ERROR
+=========================== */
+
+.error {
+  color: #ff4d4f;
+
+  font-size: 14px;
+
+  margin-top: 5px;
+  margin-left: 2px;
+}
+
+/* ===========================
+   SELECT
+=========================== */
+
+.select-box {
+  position: relative;
+}
+
+.select-box select {
+  width: 100%;
+  height: 50px;
+
+  padding: 8px 15px;
+
+  border: 1px solid var(--border);
+  border-radius: 8px;
+
+  outline: none;
+
+  background: var(--input-bg);
+  color: var(--input-text);
+
+  font-size: 16px;
+
+  cursor: pointer;
+
+  transition: 0.3s;
+}
+
+.select-box select:hover {
+  border-color: var(--primary);
+}
+
+.select-box select:focus {
+  border-color: var(--primary);
+
+  box-shadow: 0 0 0 4px var(--focus-shadow);
+}
+
+.select-label {
+  position: absolute;
+
+  top: 0;
+  left: 15px;
+
+  padding: 0 5px;
+
+  background: var(--input-bg);
+
+  color: var(--primary);
+
+  font-size: 15px;
+
+  transform: translateY(-50%);
+
+  pointer-events: none;
+}
+
+/* ===========================
+   CUSTOM GENDER DROPDOWN
+=========================== */
+
+.select-box {
+  position: relative;
+  width: 100%;
+}
+
+/* Dropdown trigger */
+.select-trigger {
+  width: 100%;
+  height: 50px;
+
+  padding: 0 15px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  border: 1px solid var(--border);
+  border-radius: 8px;
+
+  background: var(--input-bg);
+  color: var(--input-text);
+
+  font-family: inherit;
+  font-size: 15px;
+
+  cursor: pointer;
+
+  outline: none;
+
+  transition: 0.3s ease;
+}
+
+.select-trigger:hover {
+  border-color: var(--primary);
+}
+
+.select-trigger.select-open {
+  border-color: var(--primary);
+
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.select-arrow {
+  font-size: 11px;
+  color: var(--label-color);
+}
+
+/* Dropdown options container */
+.select-options {
+  position: absolute;
+
+  top: 50px;
+  left: 0;
+
+  width: 100%;
+
+  background: var(--input-bg);
+
+  border: 1px solid var(--primary);
+  border-top: none;
+
+  border-radius: 0 0 8px 8px;
+
+  overflow: hidden;
+
+  z-index: 20;
+
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Individual option */
+.select-option {
+  width: 100%;
+
+  padding: 12px 15px;
+
+  border: none;
+
+  background: transparent;
+
+  color: var(--input-text);
+
+  font-family: inherit;
+  font-size: 15px;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.select-option:hover {
+  background: var(--primary);
+  color: white;
+}
+
+/* ===========================
+   RESPONSIVE
+=========================== */
+
+@media (max-width: 500px) {
+
+  .login-page {
+    width: 100%;
+    padding: 30px 25px;
+  }
+
+  .sing_login {
+    padding: 30px 15px;
+  }
+}

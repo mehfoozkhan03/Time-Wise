@@ -16,6 +16,8 @@ import notificationRoute from "./routes/Notification.routes.js";
 import leaveRoutes from "./routes/Leave.routes.js";
 import aiRoutes from "./routes/Ai.routes.js";
 import { adminRoutes } from "./routes/Admin.routes.js";
+import { adminThoughtRoute } from "./routes/AdminThought.route.js";
+import { announcementRoutes } from "./routes/Announcement.route.js";
 
 dotenv.config();
 
@@ -44,7 +46,11 @@ server.use(express.json(), express.text(), cookieParser());
 // ================= Routes =================
 
 //# Admin Route 
-server.use("/admin", adminRoutes)
+server.use("/admin", adminRoutes);
+
+server.use("/admin/posts", adminThoughtRoute);
+
+server.use("/admin", announcementRoutes);
 
 //# User Route 
 server.use("/user", userRoutes);

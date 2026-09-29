@@ -15,7 +15,7 @@ export const loginAdmin = createAsyncThunk(
         error.response?.data?.message || "Admin Login Failed",
       );
     }
-  },
+    },
 );
 
 //# ========================== Fetch all users =========================

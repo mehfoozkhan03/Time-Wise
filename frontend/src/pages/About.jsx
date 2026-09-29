@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import "../styles/About.css";
+import { useSelector } from "react-redux";
 
+import "../styles/About.css";
 import AboutHero from "../components/About/AboutHero/AboutHero";
 import Mission from "../components/About/Mission/Mission";
 import Team from "../components/About/Team/Team";
@@ -10,43 +11,34 @@ import CTA from "../components/About/CTA/CTA";
 import AboutSkeleton from "../components/About/Skeleton/AboutSkeleton";
 
 function About() {
+//   const { isLoading } = useSelector();
+  const [loading, setLoading] = useState(true);
 
-    const [loading,setLoading] =
-        useState(true);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1100);
 
-    useEffect(() => {
+    return () => clearTimeout(timer);
+  }, []);
 
-        const timer =
-            setTimeout(() => {
+  if (loading) return <AboutSkeleton />;
 
-                setLoading(false);
+  return (
+    <>
+      <AboutHero />
 
-            },1100);
+      <Mission />
 
-        return () =>
-            clearTimeout(timer);
+      <Team />
 
-    },[]);
+      <Testimonials />
 
-    if(loading)
-        return <AboutSkeleton/>;
+      <CoreValues />
 
-    return (
-
-        <>
-            <AboutHero/>
-
-            <Mission/>
-
-            <Team/>
-
-            <Testimonials/>
-
-            <CoreValues/>
-
-            <CTA/>
-        </>
-    );
+      <CTA />
+    </>
+  );
 }
 
 export default About;

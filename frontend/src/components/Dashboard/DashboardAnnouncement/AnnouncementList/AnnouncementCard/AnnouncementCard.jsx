@@ -1,5 +1,5 @@
+import { useDispatch } from "react-redux";
 import "./AnnouncementCard.css";
-
 
 import {
   FaThumbtack,
@@ -17,57 +17,13 @@ import {
   FaDownload,
   FaArrowRight,
 } from "react-icons/fa6";
+import { deleteAnnouncement } from "../../../../../store/announcementSlice";
 
 
-const announcements = [
-  {
-    id: 1,
-    isPinned: true,
-    category: "Policy",
-    priority: "Important",
-    status: "Published",
+export const AnnouncementCard = ({ announcements = [] }) => {
 
-    title: "Updated Attendance Policy",
+  const dispatch = useDispatch();
 
-    description:
-      "The updated attendance policy will take effect from October 1st. Please review the new working hours, late check-in, and leave guidelines carefully.",
-
-    audience: "Everyone",
-    publishedDate: "Sep 20, 2026",
-    postedBy: "Admin",
-    expiresDate: "Sep 30, 2026",
-
-    attachment: {
-      name: "Attendance-Policy.pdf",
-      size: "2.4 MB",
-    },
-
-    viewLink: "View Policy",
-  },
-
-  {
-    id: 2,
-    isPinned: false,
-    category: null,
-    priority: "Urgent",
-    status: "Published",
-
-    title: "Complete Your Employee Profile",
-
-    description:
-      "All employees must complete their digital employee profile by September 30th. Missing information may affect payroll and leave processing.",
-
-    audience: "Everyone",
-    publishedDate: "Sep 10, 2026",
-    postedBy: "HR Team",
-    expiresDate: "Sep 30, 2026",
-
-    attachment: null,
-    viewLink: null,
-  },
-];
-
-export const AnnouncementCard = () => {
   const handleEdit = (announcement) => {
     console.log("Edit:", announcement);
   };
@@ -84,14 +40,27 @@ export const AnnouncementCard = () => {
     console.log("Preview:", announcement);
   };
 
-  const handleDelete = (announcement) => {
-    console.log("Delete:", announcement);
+
+  //# Delete 
+  const handleDelete = async (announcement) => {
+    const confirmed = window.confirm(
+      `Are you sure you want to delete "${announcement.title}"?`,
+    );
+
+    if (!confirmed) return;
+
+    try {
+      await dispatch(deleteAnnouncement(announcement._id)).unwrap();
+    } catch (error) {
+      console.error("Delete announcement error:", error);
+    }
   };
 
   return (
     <div className="announcement-list">
       {announcements.map((announcement) => {
         const {
+          _id,
           isPinned,
           category,
           priority,
@@ -99,25 +68,23 @@ export const AnnouncementCard = () => {
           title,
           description,
           audience,
-          publishedDate,
-          postedBy,
-          expiresDate,
-          attachment,
-          viewLink,
+          publishedAt,
+          createdBy,
+          expiryDate,
+          attachments,
+          actionButton,
         } = announcement;
 
         return (
           <article
             className="announcement-card"
-            key={announcement.id}
+            key={announcement._id}
           >
             {/* ================= TOP SECTION ================= */}
 
             <div className="announcement-top">
-
               {/* Badges */}
               <div className="announcement-badges">
-
                 {isPinned && (
                   <span className="badge pinned-badge">
                     <FaThumbtack />
@@ -126,9 +93,7 @@ export const AnnouncementCard = () => {
                 )}
 
                 {category && (
-                  <span className="badge category-badge">
-                    {category}
-                  </span>
+                  <span className="badge category-badge">{category}</span>
                 )}
 
                 {priority && (
@@ -139,91 +104,82 @@ export const AnnouncementCard = () => {
                     {priority.toUpperCase()}
                   </span>
                 )}
-
               </div>
 
               {/* Status */}
-              <span
-                className={`announcement-status ${status.toLowerCase()}`}
-              >
+              <span className={`announcement-status ${status.toLowerCase()}`}>
                 <FaRegCircleCheck />
                 {status}
               </span>
-
             </div>
 
             {/* ================= CONTENT ================= */}
 
             <div className="announcement-content">
-
               <h3>{title}</h3>
 
               <p>{description}</p>
-
             </div>
 
             {/* ================= META ================= */}
 
             <div className="announcement-meta">
-
-              <span>
-                <FaGlobe />
-                {audience}
-              </span>
-
               <span>
                 <FaRegCalendar />
-                {publishedDate}
+                {publishedAt
+                  ? new Date(publishedAt).toLocaleDateString()
+                  : "Not published"}
               </span>
 
               <span>
                 <FaRegUser />
-                Posted by {postedBy}
+                Posted by{" "}
+                {createdBy
+                  ? `${createdBy.firstName || ""} ${createdBy.lastName || ""}`.trim()
+                  : "Admin"}
               </span>
 
               <span>
                 <FaRegClock />
-                Expires {expiresDate}
+                {expiryDate
+                  ? `Expires ${new Date(expiryDate).toLocaleDateString()}`
+                  : "No expiry"}
               </span>
-
             </div>
 
             {/* ================= ATTACHMENT ================= */}
 
-            {attachment && (
+            {attachments?.length > 0 && (
               <>
                 <div className="announcement-attachment">
-
                   <div className="attachment-left">
-
                     <div className="attachment-icon">
                       <FaRegFilePdf />
                     </div>
 
                     <div className="attachment-info">
-
                       <span className="attachment-name">
-                        {attachment.name}
+                        {attachments.name}
                       </span>
 
                       <span className="attachment-size">
-                        {attachment.size}
+                        {attachments.size}
                       </span>
-
                     </div>
-
                   </div>
 
                   <button className="download-button">
                     <FaDownload />
                     Download
                   </button>
-
                 </div>
 
-                {viewLink && (
-                  <button className="view-policy-button">
-                    {viewLink}
+                {actionButton?.enabled && actionButton?.url && (
+                  <button
+                    className="view-policy-button"
+                    onClick={() => window.open(actionButton.url, "_blank")}
+                  >
+                    {actionButton.label || "View Details"}
                     <FaArrowRight />
                   </button>
                 )}
@@ -233,37 +189,26 @@ export const AnnouncementCard = () => {
             {/* ================= ACTIONS ================= */}
 
             <div className="announcement-actions">
-
               <div className="action-left">
-
-                <button
-                  onClick={() => handleEdit(announcement)}
-                >
+                <button onClick={() => handleEdit(announcement)}>
                   <FaRegPenToSquare />
                   Edit
                 </button>
 
-                <button
-                  onClick={() => handlePin(announcement)}
-                >
+                <button onClick={() => handlePin(announcement)}>
                   <FaThumbtack />
                   {isPinned ? "Unpin" : "Pin"}
                 </button>
 
-                <button
-                  onClick={() => handleStats(announcement)}
-                >
+                <button onClick={() => handleStats(announcement)}>
                   <FaChartSimple />
                   View Stats
                 </button>
 
-                <button
-                  onClick={() => handlePreview(announcement)}
-                >
+                <button onClick={() => handlePreview(announcement)}>
                   <FaRegEye />
                   Preview
                 </button>
-
               </div>
 
               <button
@@ -273,9 +218,7 @@ export const AnnouncementCard = () => {
                 <FaRegTrashCan />
                 Delete
               </button>
-
             </div>
-
           </article>
         );
       })}

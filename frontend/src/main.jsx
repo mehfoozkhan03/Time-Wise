@@ -1,27 +1,30 @@
-import React from 'react';
+import React from "react";
 
-import ReactDOM from 'react-dom/client';
+import ReactDOM from "react-dom/client";
 
-import App from './App';
+import App from "./App";
 
-import './styles/global.css';
+import "./styles/global.css";
 
-import { ThemeProvider } from './context/ThemeContext';
+import { ThemeProvider } from "./context/ThemeContext";
 
-import { AuthProvider } from './context/AuthContext';
+import { AuthProvider } from "./context/AuthContext";
 
-import { Provider } from 'react-redux';
+import { Provider } from "react-redux";
 
-import store from '../src/store/store.js';
+import store from "../src/store/store.js";
+import { BrowserRouter } from "react-router-dom";
 
-ReactDOM.createRoot(document.getElementById('root')).render(
+ReactDOM.createRoot(document.getElementById("root")).render(
   <>
     <Provider store={store}>
-      <ThemeProvider>
-        <AuthProvider>
-          <App />
-        </AuthProvider>
-      </ThemeProvider>
+      <BrowserRouter>
+        <ThemeProvider>
+          <AuthProvider>
+            <App />
+          </AuthProvider>
+        </ThemeProvider>
+      </BrowserRouter>
     </Provider>
   </>,
 );

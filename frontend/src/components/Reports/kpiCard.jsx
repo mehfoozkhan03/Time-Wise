@@ -93,7 +93,6 @@ export function KPICard(props) {
             >
               <span
                 style={{
-                  fontFamily: "Outfit, sans-serif",
                   fontSize: 28,
                   fontWeight: 700,
                   lineHeight: 1,

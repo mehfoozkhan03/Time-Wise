@@ -21,7 +21,6 @@ export function SectionLabel({ children }) {
       <h2
         style={{
           margin: 0,
-          fontFamily: "Outfit, sans-serif",
           fontSize: 17,
           fontWeight: 600,
           letterSpacing: "-0.01em",

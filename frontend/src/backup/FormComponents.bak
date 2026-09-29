@@ -1,0 +1,532 @@
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
+import "../styles/Form.css";
+
+// Your Redux actions
+// user import 
+import {
+  registerUser,
+  loginUser,
+} from "../store/authSlice";
+
+// admin import 
+import { loginAdmin } from "../store/adminAuthSlice"
+
+
+// Your Feedback modal
+import { Feedback } from "../pages/FeedBack";
+
+const Form = ({
+  fields,
+  button,
+  isRegister = false,
+  isAdminLogin = false,
+}) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  // =====================================================
+  // INITIAL FORM DATA
+  // =====================================================
+
+  const initialFormData = fields.reduce((acc, field) => {
+    acc[field.name] = "";
+    return acc;
+  }, {});
+
+  // =====================================================
+  // FORM STATE
+  // =====================================================
+
+  const [formData, setFormData] = useState(initialFormData);
+  const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+
+  // =====================================================
+  // MODAL STATE
+  // =====================================================
+
+  const [modal, setModal] = useState({
+    open: false,
+    variant: "",
+    title: "",
+    message: "",
+    description: "",
+    reason: "",
+    onCloseCb: null,
+  });
+
+  // =====================================================
+  // REGEX
+  // =====================================================
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  const nameRegex = /^[A-Za-z\s]{2,50}$/;
+
+  const passwordRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+  // =====================================================
+  // SHOW MODAL
+  // =====================================================
+
+  const showModal = ({
+    variant,
+    title,
+    message,
+    description = "",
+    reason = "",
+    onCloseCb = null,
+  }) => {
+    setModal({
+      open: true,
+      variant,
+      title,
+      message,
+      description,
+      reason,
+      onCloseCb,
+    });
+  };
+
+  // =====================================================
+  // CLOSE MODAL
+  // =====================================================
+
+  const closeModal = () => {
+    const cb = modal.onCloseCb;
+
+    setModal({
+      open: false,
+      variant: "",
+      title: "",
+      message: "",
+      description: "",
+      reason: "",
+      onCloseCb: null,
+    });
+
+    if (cb) {
+      cb();
+    }
+  };
+
+  // =====================================================
+  // RESET FORM
+  // =====================================================
+
+  const resetForm = () => {
+    setFormData(initialFormData);
+    setErrors({});
+  };
+
+  // =====================================================
+  // HANDLE CHANGE
+  // =====================================================
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    // Remove error when user starts correcting the field
+    setErrors((prev) => ({
+      ...prev,
+      [name]: "",
+    }));
+  };
+
+  // =====================================================
+  // LOGIN VALIDATION
+  // =====================================================
+
+  const validateLogin = () => {
+    const newErrors = {};
+    let isValid = true;
+
+    if (!formData.email?.trim()) {
+      newErrors.email = "Email is required";
+      isValid = false;
+    } else if (!emailRegex.test(formData.email)) {
+      newErrors.email = "Invalid email";
+      isValid = false;
+    }
+
+    if (!formData.password) {
+      newErrors.password = "Password is required";
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+
+    return isValid;
+  };
+
+  // =====================================================
+  // SIGNUP VALIDATION
+  // =====================================================
+
+  const validateSignup = () => {
+    const newErrors = {};
+    let isValid = true;
+
+    // ---------------------------------------------
+    // First Name
+    // ---------------------------------------------
+
+    if (!formData.firstName?.trim()) {
+      newErrors.firstName = "First name is required";
+      isValid = false;
+    } else if (!nameRegex.test(formData.firstName)) {
+      newErrors.firstName = "First name should be 2-50 letters";
+      isValid = false;
+    }
+
+    // ---------------------------------------------
+    // Last Name
+    // ---------------------------------------------
+
+    if (!formData.lastName?.trim()) {
+      newErrors.lastName = "Last name is required";
+      isValid = false;
+    } else if (!nameRegex.test(formData.lastName)) {
+      newErrors.lastName = "Last name should be 2-50 letters";
+      isValid = false;
+    }
+
+    // ---------------------------------------------
+    // Email
+    // ---------------------------------------------
+
+    if (!formData.email?.trim()) {
+      newErrors.email = "Email is required";
+      isValid = false;
+    } else if (!emailRegex.test(formData.email)) {
+      newErrors.email = "Invalid email";
+      isValid = false;
+    }
+
+    // ---------------------------------------------
+    // Password
+    // ---------------------------------------------
+
+    if (!formData.password) {
+      newErrors.password = "Password is required";
+      isValid = false;
+    } else if (!passwordRegex.test(formData.password)) {
+      newErrors.password =
+        "Password must be 8+ characters with uppercase, lowercase, number & special character";
+
+      isValid = false;
+    }
+
+    // ---------------------------------------------
+    // Confirm Password
+    // ---------------------------------------------
+
+    if (!formData.confirmPassword) {
+      newErrors.confirmPassword = "Confirm password is required";
+      isValid = false;
+    } else if (formData.password !== formData.confirmPassword) {
+      newErrors.confirmPassword = "Passwords do not match";
+      isValid = false;
+    }
+
+    // ---------------------------------------------
+    // DOB
+    // ---------------------------------------------
+
+    if (!formData.dob) {
+      newErrors.dob = "Date of birth is required";
+      isValid = false;
+    }
+
+    // ---------------------------------------------
+    // Gender
+    // ---------------------------------------------
+
+    if (!formData.gender) {
+      newErrors.gender = "Gender is required";
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+
+    return isValid;
+  };
+
+  // =====================================================
+  // FORM SUBMISSION
+  // =====================================================
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // ---------------------------------------------
+    // VALIDATION
+    // ---------------------------------------------
+
+    const isValid = isRegister
+      ? validateSignup()
+      : validateLogin();
+
+    if (!isValid) return;
+
+    setIsLoading(true);
+
+    try {
+      let result;
+
+      // =================================================
+      // REGISTER
+      // =================================================
+
+      if (isRegister) {
+        result = await dispatch(
+          registerUser({
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            email: formData.email,
+            password: formData.password,
+            dob: formData.dob,
+            gender: formData.gender,
+          }),
+        );
+      }
+
+      // =================================================
+      // LOGIN
+      // =================================================
+
+      else {
+        if (isAdminLogin) {
+          result = await dispatch(
+            loginAdmin({
+              email: formData.email,
+              password: formData.password,
+            }),
+          );
+        } else {
+          result = await dispatch(
+            loginUser({
+              email: formData.email,
+              password: formData.password,
+            }),
+          );
+        }
+      }
+
+      // =================================================
+      // SUCCESS
+      // =================================================
+
+      if (result.meta.requestStatus === "fulfilled") {
+        // ---------------------------------------------
+        // Registration Success
+        // ---------------------------------------------
+
+        if (isRegister) {
+          showModal({
+            variant: "success",
+
+            title:
+              result.payload?.title ||
+              "Registration Successful",
+
+            message:
+              result.payload?.message ||
+              "Account created successfully.",
+
+            description:
+              "Please log in with your credentials.",
+
+            onCloseCb: () => {
+              resetForm();
+
+              // Change registration → login
+              // Parent should control this if needed
+            },
+          });
+        }
+
+        // ---------------------------------------------
+        // Login Success
+        // ---------------------------------------------
+
+        else {
+          showModal({
+            variant: "success",
+
+            title:
+              result.payload?.title ||
+              "Login Successful",
+
+            message:
+              result.payload?.message ||
+              "You have logged in successfully.",
+
+            description:
+              "Welcome back to TimeWise!",
+
+            onCloseCb: () => {
+              if (isAdminLogin) {
+                navigate("/adminDashboard");
+              } else {
+                navigate("/");
+              }
+            },
+          });
+        }
+      }
+
+      // =================================================
+      // ERROR
+      // =================================================
+
+      else {
+        const errorData = result.payload || {};
+
+        showModal({
+          variant: "error",
+
+          title:
+            errorData?.title ||
+            (isRegister
+              ? "Registration Failed"
+              : "Login Failed"),
+
+          message:
+            errorData?.message ||
+            "An unexpected error occurred.",
+
+          reason:
+            errorData?.reason ||
+            "Please check your details and try again.",
+        });
+      }
+    } catch (error) {
+      console.error("Form submission error:", error);
+
+      const errorTitle = isRegister
+        ? "Registration Failed"
+        : "Login Failed";
+
+      const errorMessage =
+        error?.message ||
+        "An unexpected error occurred.";
+
+      const errorReason =
+        "Please check your connection and try again.";
+
+      showModal({
+        variant: "error",
+        title: errorTitle,
+        message: errorMessage,
+        reason: errorReason,
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // =====================================================
+  // JSX
+  // =====================================================
+
+  return (
+    <>
+      <form className="form" onSubmit={handleSubmit}>
+        {fields.map((el) => (
+          <div className="input-box" key={el.id}>
+            {el.name !== "gender" ? (
+              <>
+                <input
+                  id={el.name}
+                  type={el.type}
+                  name={el.name}
+                  placeholder=""
+                  value={formData[el.name] || ""}
+                  onChange={handleChange}
+                />
+
+                <label htmlFor={el.name}>
+                  {el.name}
+                </label>
+              </>
+            ) : (
+              <>
+                <label className="gender-title">
+                  {el.name}
+                </label>
+
+                <div className="gender">
+                  {Object.entries(el.typeOfGender).map(
+                    ([key, value]) => (
+                      <div
+                        className="gender-option"
+                        key={key}
+                      >
+                        <input
+                          id={`${el.name}-${key}`}
+                          name={el.name}
+                          type={value.type}
+                          value={key}
+                          checked={
+                            formData[el.name] === key
+                          }
+                          onChange={handleChange}
+                        />
+
+                        <label
+                          htmlFor={`${el.name}-${key}`}
+                        >
+                          {key}
+                        </label>
+                      </div>
+                    ),
+                  )}
+                </div>
+              </>
+            )}
+
+            {errors?.[el.name] && (
+              <p className="error">
+                {errors[el.name]}
+              </p>
+            )}
+          </div>
+        ))}
+
+        <button
+          type="submit"
+          className="loginsumit"
+          disabled={isLoading}
+        >
+          {isLoading ? "Please wait..." : button}
+        </button>
+      </form>
+
+      {/* =================================================
+          FEEDBACK MODAL
+      ================================================= */}
+
+      <Feedback
+        isOpen={modal.open}
+        variant={modal.variant}
+        title={modal.title}
+        message={modal.message}
+        reason={modal.reason}
+        description={modal.description}
+        onClose={closeModal}
+      />
+    </>
+  );
+};
+
+export  {Form};

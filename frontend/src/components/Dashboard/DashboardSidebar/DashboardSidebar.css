@@ -75,3 +75,55 @@
     font-size: 15px;
     color: red;
 }
+
+@media (max-width: 840px) {
+    .dashboardSidebar-container {
+        position: relative;
+        width: 100%;
+        height: auto;
+        overflow: visible;
+        background: var(--bg);
+    }
+
+    .dashboard-logo {
+        padding: 12px 18px;
+    }
+
+    .dashboardSidebar-list {
+        flex-direction: row;
+        overflow-x: auto;
+        border-top: 1px solid var(--border);
+        scrollbar-width: thin;
+    }
+
+    .dashboard-navlink {
+        flex: 0 0 auto;
+        gap: 8px;
+        padding: 10px 12px;
+    }
+
+    .dashboard-logout {
+        display: flex;
+        gap: 8px;
+        padding: 8px 12px;
+    }
+
+    .dashboard-logout > div {
+        gap: 8px;
+        padding: 8px 10px;
+    }
+}
+
+@media (max-width: 430px) {
+    .dashboard-navlink {
+        padding: 9px 10px;
+    }
+
+    .dashboard-navlink > span {
+        font-size: 12px;
+    }
+
+    .collapse > span {
+        display: none;
+    }
+}

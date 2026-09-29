@@ -1,5 +1,3 @@
-
-
 import { SectionLabel } from "./sectionLabel";
 import { StatusPill } from "./statusPill";
 import { useState, useEffect } from "react";
@@ -146,7 +144,6 @@ useEffect(() => {
                 fontSize: 13,
                 outline: "none",
                 width: 200,
-                fontFamily: "DM Sans, sans-serif",
               }}
             />
           </div>
@@ -163,7 +160,6 @@ useEffect(() => {
               fontSize: 13,
               cursor: "pointer",
               outline: "none",
-              fontFamily: "DM Sans, sans-serif",
             }}
           >
             <option value="all">All Statuses</option>
@@ -207,7 +203,6 @@ useEffect(() => {
                     letterSpacing: "0.07em",
                     borderBottom: "1px solid rgba(255,255,255,0.06)",
                     whiteSpace: "nowrap",
-                    fontFamily: "JetBrains Mono, monospace",
                   }}
                 >
                   {h}
@@ -244,7 +239,6 @@ useEffect(() => {
                   style={{
                     padding: "12px 12px",
                     color: "var(--text-primary)",
-                    fontFamily: "JetBrains Mono, monospace",
                     fontWeight: 500,
                   }}
                 >
@@ -254,7 +248,6 @@ useEffect(() => {
                   style={{
                     padding: "12px 12px",
                     color: "var(--text-primary)",
-                    fontFamily: "JetBrains Mono, monospace",
                     fontWeight: 500,
                   }}
                 >
@@ -264,7 +257,6 @@ useEffect(() => {
                   {row.hours > 0 ? (
                     <span
                       style={{
-                        fontFamily: "JetBrains Mono, monospace",
                         fontSize: 13,
                         fontWeight: 600,
                         color: row.hours >= 8 ? "#10b981" : "#f59e0b",
@@ -280,7 +272,6 @@ useEffect(() => {
                   style={{
                     padding: "12px 12px",
                     color: "var(--text-pimary)",
-                    fontFamily: "JetBrains Mono, monospace",
                     fontSize: 12,
                   }}
                 >
@@ -290,7 +281,6 @@ useEffect(() => {
                   {row.overtime > 0 ? (
                     <span
                       style={{
-                        fontFamily: "JetBrains Mono, monospace",
                         fontSize: 12,
                         color: "#8b5cf6",
                         fontWeight: 600,

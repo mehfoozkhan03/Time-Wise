@@ -1,4 +1,4 @@
-import { BrowserRouter, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -22,8 +22,10 @@ function AppContent() {
   const showAdminBot = Boolean(isAdminAuthenticated && isAdminPage && !isLoginPage);
 
   useEffect(() => {
-    dispatch(fetchCurrentUser());
-  }, [dispatch]);
+  if (isAdminAuthenticated) return;
+
+  dispatch(fetchCurrentUser());
+}, [dispatch, isAdminAuthenticated]);
 
   useEffect(() => {
     if (!user?._id) return;
@@ -63,5 +65,5 @@ function AppContent() {
 }
 
 export default function App() {
-  return <BrowserRouter><AppContent /></BrowserRouter>;
+  return <AppContent />;
 }

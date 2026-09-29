@@ -161,3 +161,43 @@
   opacity: 0.6;
   cursor: not-allowed;
 }
+
+@media (max-width: 840px) {
+  .dashboardThoughtManagement-container {
+    padding: 22px;
+    gap: 22px;
+  }
+
+  .dashboardThought-image {
+    height: min(450px, 55vw);
+  }
+}
+
+@media (max-width: 430px) {
+  .dashboardThoughtManagement-container {
+    padding: 14px;
+    gap: 18px;
+  }
+
+  .dashboardThought-content {
+    padding: 14px;
+    gap: 14px;
+    border-radius: 14px;
+  }
+
+  .dashboardThought-upper {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 14px;
+    padding-bottom: 14px;
+  }
+
+  .thought-request {
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+
+  .dashboardThought-image {
+    height: 240px;
+  }
+}

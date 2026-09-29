@@ -291,3 +291,54 @@
   color: var(--text_primary);
   background: transparent;
 }
+
+@media (max-width: 1000px) {
+  .employee-management-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .employe-search-filter {
+    flex-wrap: wrap;
+  }
+
+  .dashboardEmployee-searchbar {
+    width: 100%;
+  }
+
+  .dashboardEmployee-department,
+  .dashboardEmployee-filter {
+    width: calc(50% - 8px);
+  }
+
+  .dahboardEmployee-details {
+    overflow-x: auto;
+  }
+
+  .dashboardEmployee-header,
+  .employee-users-container {
+    min-width: 900px;
+  }
+}
+
+@media (max-width: 600px) {
+  .dashboardEmployee-container {
+    padding: 16px;
+  }
+
+  .employee-management-right {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .dashboardEmployee-department,
+  .dashboardEmployee-filter {
+    width: 100%;
+  }
+
+  .employeeDashboard-loadmore-btn > button {
+    width: 100%;
+    padding: 12px 18px;
+  }
+}

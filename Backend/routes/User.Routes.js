@@ -28,13 +28,13 @@ userRoutes.post("/signup", signup);
 
 userRoutes.post("/logout", logout);
 
-userRoutes.get("/me", auth, authorize("user"), getCurrentUser);
+userRoutes.get("/me", auth, authorize("user", "admin"), getCurrentUser);
 
 userRoutes.get("/profile/:userId", auth, getUserProfile);
 
 userRoutes.patch("/activity", auth, authorize("user"), updateActivity);
 
-userRoutes.patch("/theme", auth, authorize("user"), updateTheme);
+userRoutes.patch("/theme", auth, authorize("user", "admin"), updateTheme);
 
 userRoutes.patch("/social-links", auth, authorize("user"), updateSocialLinks);
 

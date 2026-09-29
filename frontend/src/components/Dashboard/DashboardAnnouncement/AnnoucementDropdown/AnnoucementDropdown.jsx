@@ -7,6 +7,7 @@ export const AnnoucementDropdown = ({
   value,
   onChange,
   placeholder = "Select",
+  className = "",
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -34,10 +35,10 @@ export const AnnoucementDropdown = ({
   };
 
   return (
-    <div className="custom_dropdown" ref={dropdownRef}>
+    <div className="custom_dropdown" ref={dropdownRef} >
       <button
         type="button"
-        className={`dropdown_trigger ${isOpen ? "active" : ""}`}
+        className={`dropdown_trigger ${className} ${isOpen ? "active" : ""}`}
         onClick={() => setIsOpen((prev) => !prev)}
       >
         <span>{value || placeholder}</span>

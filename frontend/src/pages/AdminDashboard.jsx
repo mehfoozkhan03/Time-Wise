@@ -33,6 +33,11 @@ export default function AdminDashboard() {
       icon: <MdOutlineWatchLater />,
       color: '#60A5FA',
     },
+    '/adminDashboard/appearence': {
+      title: 'Appearance',
+      icon: <MdOutlineWatchLater />,
+      color: '#60A5FA',
+    },
     '/adminDashboard/leave': {
       title: 'Leave',
       icon: <MdEventAvailable />,

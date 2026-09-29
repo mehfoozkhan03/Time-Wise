@@ -371,7 +371,6 @@ export default function TodayWork() {
 
         <div className="today_action">{renderButton()}</div>
 
-        <div className="today_action">{renderButton()}</div>
 
         {/* ============================================= */}
         {/* WEEKEND / HOLIDAY OVERLAY */}
