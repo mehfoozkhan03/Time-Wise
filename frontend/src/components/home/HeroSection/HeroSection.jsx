@@ -1,1084 +1,352 @@
-
-// import Skeleton from "../../../components/Skeleton/Skeleton";
-// import "./HeroSection.css";
-// import useCountUp from "../../../components/UseCount/Count";
-// import Card from "../../Card/Card";
-// import { useState, useEffect } from "react";
-// import { useDispatch, useSelector } from "react-redux";
-// import { getDashboardStats } from "../../../store/dashboardSlice";
-
-// import { FaFire, FaCalendarAlt, FaClock } from "react-icons/fa";
-
-// export default function HeroSection() {
-//   const dispatch = useDispatch();
-
-//   const [time, setTime] = useState(new Date());
-
-//   const { user, isLoading } = useSelector((state) => state.auth);
-
-//   const [displayText, setDisplayText] = useState("");
-
-//   const [translations, setTranslations] = useState([]);
-
-//   const [languageIndex, setLanguageIndex] = useState(0);
-
-//   const [isDeleting, setIsDeleting] = useState(false);
-
-//   const [charIndex, setCharIndex] = useState(0);
-//   const [showSkeleton, setShowSkeleton] = useState(true);
-
-//   const languages = [
-//     "en",
-//     "hi",
-//     "mr",
-//     "gu",
-//     "ta",
-//     "te",
-//     "kn",
-//     "ml",
-//     "bn",
-//     "pa",
-//     "ur",
-//     "ar",
-//     "es",
-//     "cz",
-//     "ja",
-//     "fr",
-//     "vi",
-//     "ko",
-//     "it",
-//     "ru",
-//   ];
-
-//   const greeting = () => {
-//     const hour = time.getHours();
-
-//     if (hour >= 5 && hour < 12) return "Good Morning";
-//     if (hour >= 12 && hour < 17) return "Good Afternoon";
-//     if (hour >= 17 && hour < 20) return "Good Evening";
-
-//     return "Good Night";
-//   };
-
-//  const dashboardStats = useSelector((state) => state.dashboard?.stats)
-
-//  const stats = {
-//    dayStreak: Number(dashboardStats?.dayStreak) || 0,
-//    longestStreak: Number(dashboardStats?.longestStreak) || 0,
-//    attendancePercentage: Number(dashboardStats?.attendancePercentage) || 0,
-//    weeklyHours: Number(dashboardStats?.weeklyHours) || 0,
-//    monthlyHours: Number(dashboardStats?.monthlyHours) || 0,
-//    productivity: Number(dashboardStats?.productivity) || 0,
-//    weeklyTarget: Number(dashboardStats?.weeklyTarget) || 40,
-//    weeklyHoursRemaining: Number(dashboardStats?.weeklyHoursRemaining) || 40,
-//    weeklyGoalPercentage: Number(dashboardStats?.weeklyGoalPercentage) || 0,
-//    averageCheckIn: dashboardStats?.averageCheckIn || '--:--',
-//    averageBreakDuration: Number(dashboardStats?.averageBreakDuration) || 0,
-//  }
-
-//   useEffect(() => {
-//     if (!translations.length) return;
-
-//     const text = translations[languageIndex];
-
-//     const timeout = setTimeout(
-//       () => {
-//         if (!isDeleting) {
-//           if (charIndex < text.length) {
-//             setDisplayText(text.substring(0, charIndex + 1));
-//             setCharIndex((prev) => prev + 1);
-//           } else {
-//             setTimeout(() => {
-//               setIsDeleting(true);
-//             }, 1500);
-//           }
-//         } else {
-//           if (charIndex > 0) {
-//             setDisplayText(text.substring(0, charIndex - 1));
-//             setCharIndex((prev) => prev - 1);
-//           } else {
-//             setIsDeleting(false);
-//             setLanguageIndex((prev) => (prev + 1) % translations.length);
-//           }
-//         }
-//       },
-//       isDeleting ? 40 : 80,
-//     );
-
-//     return () => clearTimeout(timeout);
-//   }, [charIndex, isDeleting, languageIndex, translations]);
-
-//   const translateGreeting = async () => {
-//     const text = `${currentGreeting},`;
-
-//     try {
-//       const translated = await Promise.all(
-//         languages.map(async (lang) => {
-//           if (lang === "en") return `${text}`;
-
-//           const response = await fetch(
-//             `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${lang}&dt=t&q=${encodeURIComponent(
-//               text,
-//             )}`,
-//           );
-
-//           const data = await response.json();
-
-//           return data[0][0][0];
-//         }),
-//       );
-
-//       setTranslations(translated);
-//       setLanguageIndex(0);
-//     } catch (err) {
-//       console.error(err);
-//       setTranslations([text]);
-//     }
-//   };
-
-//   const currentGreeting = greeting();
-
-//   useEffect(() => {
-//     translateGreeting();
-//   }, [currentGreeting]);
-
-//   useEffect(() => {
-//     setCharIndex(0);
-//     setDisplayText("");
-//     setIsDeleting(false);
-//   }, [languageIndex]);
-
-//   const attendance = useCountUp(stats.attendancePercentage);
-//   const weeklyHours = useCountUp(stats.weeklyHours);
-//   const productivity = useCountUp(stats.productivity);
-//   const dayStreak = useCountUp(stats.dayStreak);
-//   useEffect(() => {
-//     dispatch(getDashboardStats());
-//   }, [dispatch]);
-
-//   useEffect(() => {
-//     const interval = setInterval(() => {
-//       setTime(new Date());
-//     }, 1000);
-
-//     return () => clearInterval(interval);
-//   }, []);
-
-
-//   const capitalize = (text) => {
-//     if (!text) return "";
-
-//     return text.charAt(0).toUpperCase() + text.slice(1);
-//   };
-
-// //skeleton//
-
-//    useEffect(() => {
-//   const timer = setTimeout(() => {
-//     setShowSkeleton(false);
-//   }, 1500); // 1.5 second
-
-//   return () => clearTimeout(timer);
-// }, []);
-
-//  if (isLoading || showSkeleton){
-//   return (
-//     <section className="hero">
-//       {/* Left Side */}
-//       <div className="hero_left">
-//         <Skeleton width="220px" height="35px" />
-
-//         <div style={{ marginTop: 15 }}>
-//           <Skeleton width="180px" height="30px" />
-//         </div>
-
-//         <div style={{ marginTop: 15 }}>
-//           <Skeleton width="260px" height="18px" />
-//         </div>
-
-//         <div
-//           style={{
-//             display: "flex",
-//             gap: "20px",
-//             marginTop: "25px",
-//           }}
-//         >
-//           <Skeleton width="170px" height="18px" />
-//           <Skeleton width="140px" height="18px" />
-//         </div>
-//       </div>
-
-//       {/* Right Card */}
-//       <Card className="hero_right">
-//         <div
-//           style={{
-//             display: "flex",
-//             alignItems: "center",
-//             gap: "15px",
-//             marginBottom: "30px",
-//           }}
-//         >
-//           <Skeleton width="55px" height="55px" radius="50%" />
-
-//           <div>
-//             <Skeleton width="70px" height="28px" />
-//             <div style={{ marginTop: 10 }}>
-//               <Skeleton width="100px" height="16px" />
-//             </div>
-//           </div>
-//         </div>
-
-//         <div
-//           style={{
-//             display: "flex",
-//             flexDirection: "column",
-//             gap: "18px",
-//           }}
-//         >
-//           {[1, 2, 3].map((item) => (
-//             <div
-//               key={item}
-//               style={{
-//                 display: "flex",
-//                 justifyContent: "space-between",
-//               }}
-//             >
-//               <Skeleton width="120px" height="18px" />
-//               <Skeleton width="60px" height="18px" />
-//             </div>
-//           ))}
-//         </div>
-//       </Card>
-//     </section>
-//   );
-// }
-// //skeleton//
-
-//   return (
-//     <section className="hero">
-//       <div className="hero_left">
-//         <div id="tour-hero-greeting">
-//           <h1>
-//             {displayText}
-//             <span className="typing-cursor">|</span>
-//           </h1>
-//           <h1 className="hero_name">
-//             {capitalize(user?.firstName) || "Employee"}.
-//           </h1>
-
-//           <p>
-//             {user?.designation && user?.department
-//               ? `${user.designation} • ${user.department}`
-//               : "Let's make today productive."}
-//           </p>
-//         </div>
-
-//         <div className="hero_info" id="tour-hero-info">
-//           <div>
-//             <FaCalendarAlt />
-//             <span>
-//               {time.toLocaleDateString("en-US", {
-//                 weekday: "long",
-//                 month: "long",
-//                 day: "numeric",
-//               })}
-//             </span>
-//           </div>
-
-//           <div>
-//             <FaClock />
-//             <span>
-//               {time.toLocaleTimeString("en-US", {
-//                 hour: "2-digit",
-//                 minute: "2-digit",
-//                 second: "2-digit",
-//                 hour12: true,
-//               })}
-//             </span>
-//           </div>
-//         </div>
-//       </div>
-
-//       <Card className="hero_right">
-//         <div className="hero_stat" id="tour-hero-stat">
-//           <FaFire className="fire" />
-//           <div>
-//             <h2>{dayStreak}</h2>
-//             <p>Day Streak</p>
-//           </div>
-//         </div>
-
-//         <div className="hero_progress" id="tour-hero-progress">
-//           <div>
-//             <span>Attendance</span>
-//             <strong>{attendance}%</strong>
-//           </div>
-//           <div>
-//             <span>Weekly Hours</span>
-//             <strong>{weeklyHours}h</strong>
-//           </div>
-//           <div>
-//             <span>Productivity</span>
-//             <strong>{productivity}%</strong>
-//           </div>
-//         </div>
-//       </Card>
-//     </section>
-//   );
-// }
-
-import Skeleton from "../../../components/Skeleton/Skeleton";
-import "./HeroSection.css";
-import useCountUp from "../../../components/UseCount/Count";
-import Card from "../../Card/Card";
-
-import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-
-import { getDashboardStats } from "../../../store/dashboardSlice";
-
-import {
-  FaFire,
-  FaCalendarAlt,
-  FaClock,
-} from "react-icons/fa";
+import Skeleton from '../../../components/Skeleton/Skeleton'
+import './HeroSection.css'
+import useCountUp from '../../../components/UseCount/Count'
+import Card from '../../Card/Card'
+import { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { getDashboardStats } from '../../../store/dashboardSlice'
+import { FaFire, FaCalendarAlt, FaClock } from 'react-icons/fa'
 
 export default function HeroSection() {
+  const dispatch = useDispatch()
 
-  const dispatch = useDispatch();
+  /* ========================================== TIME ========================================== */
+  const [time, setTime] = useState(new Date())
 
-  /* ==========================================
-     TIME
-  ========================================== */
+  /* ========================================== AUTH DATA ========================================== */
+  const { user, isLoading } = useSelector((state) => state.auth)
 
-  const [time, setTime] = useState(new Date());
+  /* ========================================== DASHBOARD DATA ========================================== */
+  const { stats: dashboardStats, loading: dashboardLoading = false } =
+    useSelector((state) => state.dashboard || {})
 
+  /* ========================================== GREETING STATES ========================================== */
+  const [displayText, setDisplayText] = useState('')
+  const [translations, setTranslations] = useState([])
+  const [languageIndex, setLanguageIndex] = useState(0)
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [charIndex, setCharIndex] = useState(0)
 
-  /* ==========================================
-     AUTH DATA
-  ========================================== */
-
-  const {
-    user,
-    isLoading,
-  } = useSelector((state) => state.auth);
-
-
-  /* ==========================================
-     DASHBOARD DATA
-  ========================================== */
-
-  const {
-    stats: dashboardStats,
-    loading: dashboardLoading = false,
-  } = useSelector(
-    (state) => state.dashboard || {}
-  );
-
-
-  /* ==========================================
-     GREETING STATES
-  ========================================== */
-
-  const [displayText, setDisplayText] = useState("");
-
-  const [translations, setTranslations] = useState([]);
-
-  const [languageIndex, setLanguageIndex] = useState(0);
-
-  const [isDeleting, setIsDeleting] = useState(false);
-
-  const [charIndex, setCharIndex] = useState(0);
-
-
-  /* ==========================================
-     LANGUAGES
-  ========================================== */
-
+  /* ========================================== LANGUAGES ========================================== */
   const languages = [
-    "en",
-    "hi",
-    "mr",
-    "gu",
-    "ta",
-    "te",
-    "kn",
-    "ml",
-    "bn",
-    "pa",
-    "ur",
-    "ar",
-    "es",
-    "cz",
-    "ja",
-    "fr",
-    "vi",
-    "ko",
-    "it",
-    "ru",
-  ];
+    'en',
+    'hi',
+    'mr',
+    'gu',
+    'ta',
+    'te',
+    'kn',
+    'ml',
+    'bn',
+    'pa',
+    'ur',
+    'ar',
+    'es',
+    'cz',
+    'ja',
+    'fr',
+    'vi',
+    'ko',
+    'it',
+    'ru',
+  ]
 
-
-  /* ==========================================
-     GREETING
-  ========================================== */
-
+  /* ========================================== GREETING ========================================== */
   const greeting = () => {
-
-    const hour = time.getHours();
-
+    const hour = time.getHours()
     if (hour >= 5 && hour < 12) {
-      return "Good Morning";
+      return 'Good Morning'
     }
-
     if (hour >= 12 && hour < 17) {
-      return "Good Afternoon";
+      return 'Good Afternoon'
     }
-
     if (hour >= 17 && hour < 20) {
-      return "Good Evening";
+      return 'Good Evening'
     }
+    return 'Good Night'
+  }
 
-    return "Good Night";
-  };
-
-
-  /* ==========================================
-     DASHBOARD STATS
-  ========================================== */
-
+  /* ========================================== DASHBOARD STATS ========================================== */
   const stats = {
+    dayStreak: Number(dashboardStats?.dayStreak) || 0,
+    longestStreak: Number(dashboardStats?.longestStreak) || 0,
+    attendancePercentage: Number(dashboardStats?.attendancePercentage) || 0,
+    weeklyHours: Number(dashboardStats?.weeklyHours) || 0,
+    monthlyHours: Number(dashboardStats?.monthlyHours) || 0,
+    productivity: Number(dashboardStats?.productivity) || 0,
+    weeklyTarget: Number(dashboardStats?.weeklyTarget) || 40,
+    weeklyHoursRemaining: Number(dashboardStats?.weeklyHoursRemaining) || 40,
+    weeklyGoalPercentage: Number(dashboardStats?.weeklyGoalPercentage) || 0,
+    averageCheckIn: dashboardStats?.averageCheckIn || '--:--',
+    averageBreakDuration: Number(dashboardStats?.averageBreakDuration) || 0,
+  }
 
-    dayStreak:
-      Number(dashboardStats?.dayStreak) || 0,
+  /* ========================================== WEEKLY HOURS FORMATTER
+   * Converts decimal hours into human-readable format:
+   * 0.1666 hours (10 min) -> "10m"
+   * 0.75 hours (45 min)   -> "45m"
+   * 1.0 hours (60 min)    -> "1hr"
+   * 1.1666 hours (70 min) -> "1hr 10m"
+   * 2.5833 hours (155 min)-> "2hr 35m"
+   * ========================================== */
+  const formatWeeklyHours = (hours) => {
+    const numericHours = Number(hours) || 0
+    const totalMinutes = Math.round(numericHours * 60)
+    const wholeHours = Math.floor(totalMinutes / 60)
+    const minutes = totalMinutes % 60
 
-    longestStreak:
-      Number(dashboardStats?.longestStreak) || 0,
-
-    attendancePercentage:
-      Number(
-        dashboardStats?.attendancePercentage
-      ) || 0,
-
-    weeklyHours:
-      Number(dashboardStats?.weeklyHours) || 0,
-
-    monthlyHours:
-      Number(dashboardStats?.monthlyHours) || 0,
-
-    productivity:
-      Number(dashboardStats?.productivity) || 0,
-
-    weeklyTarget:
-      Number(dashboardStats?.weeklyTarget) || 40,
-
-    weeklyHoursRemaining:
-      Number(
-        dashboardStats?.weeklyHoursRemaining
-      ) || 40,
-
-    weeklyGoalPercentage:
-      Number(
-        dashboardStats?.weeklyGoalPercentage
-      ) || 0,
-
-    averageCheckIn:
-      dashboardStats?.averageCheckIn || "--:--",
-
-    averageBreakDuration:
-      Number(
-        dashboardStats?.averageBreakDuration
-      ) || 0,
-  };
-
-
-  /* ==========================================
-     GET CURRENT GREETING
-  ========================================== */
-
-  const currentGreeting = greeting();
-
-
-  /* ==========================================
-     TRANSLATION TYPING EFFECT
-  ========================================== */
-
-  useEffect(() => {
-
-    if (!translations.length) {
-      return;
+    // If less than 1 hour, show only minutes
+    if (wholeHours === 0) {
+      return `${minutes}m`
     }
 
-    const text =
-      translations[languageIndex];
+    // If exactly on the hour, show only hours
+    if (minutes === 0) {
+      return `${wholeHours}hr`
+    }
+
+    // Otherwise show hours and minutes
+    return `${wholeHours}hr ${minutes}m`
+  }
+
+  /* ========================================== GET CURRENT GREETING ========================================== */
+  const currentGreeting = greeting()
+
+  /* ========================================== TRANSLATION TYPING EFFECT ========================================== */
+  useEffect(() => {
+    if (!translations.length) {
+      return
+    }
+
+    const text = translations[languageIndex]
 
     const timeout = setTimeout(
       () => {
-
         if (!isDeleting) {
-
           if (charIndex < text.length) {
-
-            setDisplayText(
-              text.substring(
-                0,
-                charIndex + 1
-              )
-            );
-
-            setCharIndex(
-              (prev) => prev + 1
-            );
-
+            setDisplayText(text.substring(0, charIndex + 1))
+            setCharIndex((prev) => prev + 1)
           } else {
-
             setTimeout(() => {
-              setIsDeleting(true);
-            }, 1500);
-
+              setIsDeleting(true)
+            }, 1500)
           }
-
         } else {
-
           if (charIndex > 0) {
-
-            setDisplayText(
-              text.substring(
-                0,
-                charIndex - 1
-              )
-            );
-
-            setCharIndex(
-              (prev) => prev - 1
-            );
-
+            setDisplayText(text.substring(0, charIndex - 1))
+            setCharIndex((prev) => prev - 1)
           } else {
-
-            setIsDeleting(false);
-
-            setLanguageIndex(
-              (prev) =>
-                (prev + 1) %
-                translations.length
-            );
-
+            setIsDeleting(false)
+            setLanguageIndex((prev) => (prev + 1) % translations.length)
           }
-
         }
-
       },
+      isDeleting ? 40 : 80,
+    )
 
-      isDeleting ? 40 : 80
-    );
+    return () => clearTimeout(timeout)
+  }, [charIndex, isDeleting, languageIndex, translations])
 
-    return () => clearTimeout(timeout);
-
-  }, [
-    charIndex,
-    isDeleting,
-    languageIndex,
-    translations,
-  ]);
-
-
-  /* ==========================================
-     TRANSLATE GREETING
-  ========================================== */
-
+  /* ========================================== TRANSLATE GREETING ========================================== */
   const translateGreeting = async () => {
-
-    const text =
-      `${currentGreeting},`;
+    const text = `${currentGreeting},`
 
     try {
+      const translated = await Promise.all(
+        languages.map(async (lang) => {
+          if (lang === 'en') {
+            return `${text}`
+          }
 
-      const translated =
-        await Promise.all(
-
-          languages.map(
-            async (lang) => {
-
-              if (lang === "en") {
-                return `${text}`;
-              }
-
-              const response =
-                await fetch(
-                  `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${lang}&dt=t&q=${encodeURIComponent(
-                    text
-                  )}`
-                );
-
-              const data =
-                await response.json();
-
-              return data[0][0][0];
-            }
+          const response = await fetch(
+            `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${lang}&dt=t&q=${encodeURIComponent(text)}`,
           )
-        );
 
-      setTranslations(translated);
+          const data = await response.json()
+          return data[0][0][0]
+        }),
+      )
 
-      setLanguageIndex(0);
-
+      setTranslations(translated)
+      setLanguageIndex(0)
     } catch (err) {
-
-      console.error(err);
-
-      setTranslations([text]);
-
+      console.error(err)
+      setTranslations([text])
     }
-  };
-
-
-  /* ==========================================
-     TRANSLATION EFFECT
-  ========================================== */
-
-  useEffect(() => {
-
-    translateGreeting();
-
-  }, [currentGreeting]);
-
-
-  /* ==========================================
-     RESET TYPING
-  ========================================== */
-
-  useEffect(() => {
-
-    setCharIndex(0);
-
-    setDisplayText("");
-
-    setIsDeleting(false);
-
-  }, [languageIndex]);
-
-
-  /* ==========================================
-     COUNT UP
-  ========================================== */
-
-  const attendance =
-    useCountUp(
-      stats.attendancePercentage
-    );
-
-  const weeklyHours =
-    useCountUp(
-      stats.weeklyHours
-    );
-
-  const productivity =
-    useCountUp(
-      stats.productivity
-    );
-
-  const dayStreak =
-    useCountUp(
-      stats.dayStreak
-    );
-
-
-  /* ==========================================
-     FETCH DASHBOARD DATA
-  ========================================== */
-
-  useEffect(() => {
-
-    dispatch(getDashboardStats());
-
-  }, [dispatch]);
-
-
-  /* ==========================================
-     LIVE CLOCK
-  ========================================== */
-
-  useEffect(() => {
-
-    const interval =
-      setInterval(() => {
-
-        setTime(new Date());
-
-      }, 1000);
-
-    return () =>
-      clearInterval(interval);
-
-  }, []);
-
-
-  /* ==========================================
-     CAPITALIZE
-  ========================================== */
-
-  const capitalize = (text) => {
-
-    if (!text) {
-      return "";
-    }
-
-    return (
-      text.charAt(0).toUpperCase() +
-      text.slice(1)
-    );
-  };
-
-
-  /* ==========================================
-     BACKEND BASED SKELETON
-  ========================================== */
-
-  const showSkeleton =
-    isLoading ||
-    dashboardLoading ||
-    !user ||
-    !dashboardStats;
-
-
-  /* ==========================================
-     SKELETON UI
-  ========================================== */
-
-  if (showSkeleton) {
-
-    return (
-
-      <section className="hero">
-
-        {/* ==================================
-            LEFT SIDE
-        ================================== */}
-
-        <div className="hero_left">
-
-          <Skeleton
-            width="220px"
-            height="35px"
-          />
-
-          <div
-            style={{
-              marginTop: 15,
-            }}
-          >
-            <Skeleton
-              width="180px"
-              height="30px"
-            />
-          </div>
-
-          <div
-            style={{
-              marginTop: 15,
-            }}
-          >
-            <Skeleton
-              width="260px"
-              height="18px"
-            />
-          </div>
-
-
-          {/* DATE + TIME */}
-
-          <div
-            style={{
-              display: "flex",
-              gap: "20px",
-              marginTop: "25px",
-            }}
-          >
-
-            <Skeleton
-              width="170px"
-              height="18px"
-            />
-
-            <Skeleton
-              width="140px"
-              height="18px"
-            />
-
-          </div>
-
-        </div>
-
-
-        {/* ==================================
-            RIGHT CARD
-        ================================== */}
-
-        <Card className="hero_right">
-
-          {/* USER / STAT */}
-
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "15px",
-              marginBottom: "30px",
-            }}
-          >
-
-            <Skeleton
-              width="55px"
-              height="55px"
-              radius="50%"
-            />
-
-            <div>
-
-              <Skeleton
-                width="70px"
-                height="28px"
-              />
-
-              <div
-                style={{
-                  marginTop: 10,
-                }}
-              >
-
-                <Skeleton
-                  width="100px"
-                  height="16px"
-                />
-
-              </div>
-
-            </div>
-
-          </div>
-
-
-          {/* PROGRESS STATS */}
-
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "18px",
-            }}
-          >
-
-            {[1, 2, 3].map(
-              (item) => (
-
-                <div
-                  key={item}
-                  style={{
-                    display: "flex",
-                    justifyContent:
-                      "space-between",
-                  }}
-                >
-
-                  <Skeleton
-                    width="120px"
-                    height="18px"
-                  />
-
-                  <Skeleton
-                    width="60px"
-                    height="18px"
-                  />
-
-                </div>
-
-              )
-            )}
-
-          </div>
-
-        </Card>
-
-      </section>
-    );
   }
 
+  /* ========================================== TRANSLATION EFFECT ========================================== */
+  useEffect(() => {
+    translateGreeting()
+  }, [currentGreeting])
 
-  /* ==========================================
-     ACTUAL UI
-  ========================================== */
+  /* ========================================== RESET TYPING ========================================== */
+  useEffect(() => {
+    setCharIndex(0)
+    setDisplayText('')
+    setIsDeleting(false)
+  }, [languageIndex])
 
+  /* ========================================== COUNT UP ========================================== */
+  const attendance = useCountUp(stats.attendancePercentage)
+  const weeklyHours = useCountUp(stats.weeklyHours)
+  const productivity = useCountUp(stats.productivity)
+  const dayStreak = useCountUp(stats.dayStreak)
+
+  /* ========================================== FETCH DASHBOARD DATA ========================================== */
+  useEffect(() => {
+    dispatch(getDashboardStats())
+  }, [dispatch])
+
+  /* ========================================== LIVE CLOCK ========================================== */
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTime(new Date())
+    }, 1000)
+
+    return () => clearInterval(interval)
+  }, [])
+
+  /* ========================================== CAPITALIZE ========================================== */
+  const capitalize = (text) => {
+    if (!text) {
+      return ''
+    }
+    return text.charAt(0).toUpperCase() + text.slice(1)
+  }
+
+  /* ========================================== BACKEND BASED SKELETON ========================================== */
+  const showSkeleton = isLoading || dashboardLoading || !user || !dashboardStats
+
+  /* ========================================== SKELETON UI ========================================== */
+  if (showSkeleton) {
+    return (
+      <section className="hero">
+        {/* ================================== LEFT SIDE ================================== */}
+        <div className="hero_left">
+          <Skeleton width="220px" height="35px" />
+          <div style={{ marginTop: 15 }}>
+            <Skeleton width="180px" height="30px" />
+          </div>
+          <div style={{ marginTop: 15 }}>
+            <Skeleton width="260px" height="18px" />
+          </div>
+          {/* DATE + TIME */}
+          <div style={{ display: 'flex', gap: '20px', marginTop: '25px' }}>
+            <Skeleton width="170px" height="18px" />
+            <Skeleton width="140px" height="18px" />
+          </div>
+        </div>
+
+        {/* ================================== RIGHT CARD ================================== */}
+        <Card className="hero_right">
+          {/* USER / STAT */}
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '15px',
+              marginBottom: '30px',
+            }}
+          >
+            <Skeleton width="55px" height="55px" radius="50%" />
+            <div>
+              <Skeleton width="70px" height="28px" />
+              <div style={{ marginTop: 10 }}>
+                <Skeleton width="100px" height="16px" />
+              </div>
+            </div>
+          </div>
+
+          {/* PROGRESS STATS */}
+          <div
+            style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}
+          >
+            {[1, 2, 3].map((item) => (
+              <div
+                key={item}
+                style={{ display: 'flex', justifyContent: 'space-between' }}
+              >
+                <Skeleton width="120px" height="18px" />
+                <Skeleton width="60px" height="18px" />
+              </div>
+            ))}
+          </div>
+        </Card>
+      </section>
+    )
+  }
+
+  /* ========================================== ACTUAL UI ========================================== */
   return (
-
     <section className="hero">
-
-      {/* ======================================
-          LEFT
-      ====================================== */}
-
+      {/* ====================================== LEFT ====================================== */}
       <div className="hero_left">
-
         <div id="tour-hero-greeting">
-
           <h1>
-
-            {displayText}
-
-            <span className="typing-cursor">
-              |
-            </span>
-
+            {displayText} <span className="typing-cursor"> | </span>
           </h1>
-
-
           <h1 className="hero_name">
-
-            {capitalize(
-              user?.firstName
-            ) || "Employee"}.
-
+            {capitalize(user?.firstName) || 'Employee'}.
           </h1>
-
-
           <p>
-
-            {user?.designation &&
-            user?.department
+            {user?.designation && user?.department
               ? `${user.designation} • ${user.department}`
               : "Let's make today productive."}
-
           </p>
-
         </div>
-
 
         {/* DATE + TIME */}
-
-        <div
-          className="hero_info"
-          id="tour-hero-info"
-        >
-
+        <div className="hero_info" id="tour-hero-info">
           <div>
-
             <FaCalendarAlt />
-
             <span>
-
-              {time.toLocaleDateString(
-                "en-US",
-                {
-                  weekday: "long",
-                  month: "long",
-                  day: "numeric",
-                }
-              )}
-
+              {time.toLocaleDateString('en-US', {
+                weekday: 'long',
+                month: 'long',
+                day: 'numeric',
+              })}
             </span>
-
           </div>
-
-
           <div>
-
             <FaClock />
-
             <span>
-
-              {time.toLocaleTimeString(
-                "en-US",
-                {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                  second: "2-digit",
-                  hour12: true,
-                }
-              )}
-
+              {time.toLocaleTimeString('en-US', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: true,
+              })}
             </span>
-
           </div>
-
         </div>
-
       </div>
 
-
-      {/* ======================================
-          RIGHT CARD
-      ====================================== */}
-
+      {/* ====================================== RIGHT CARD ====================================== */}
       <Card className="hero_right">
-
-        <div
-          className="hero_stat"
-          id="tour-hero-stat"
-        >
-
+        <div className="hero_stat" id="tour-hero-stat">
           <FaFire className="fire" />
-
           <div>
-
-            <h2>
-              {dayStreak}
-            </h2>
-
-            <p>
-              Day Streak
-            </p>
-
+            <h2> {dayStreak} </h2>
+            <p> Day Streak </p>
           </div>
-
         </div>
 
-
-        <div
-          className="hero_progress"
-          id="tour-hero-progress"
-        >
-
+        <div className="hero_progress" id="tour-hero-progress">
           <div>
-
-            <span>
-              Attendance
-            </span>
-
-            <strong>
-              {attendance}%
-            </strong>
-
+            <span> Attendance </span>
+            <strong> {attendance}% </strong>
           </div>
-
-
           <div>
-
-            <span>
-              Weekly Hours
-            </span>
-
-            <strong>
-              {weeklyHours}h
-            </strong>
-
+            <span> Weekly Hours </span>
+            <strong> {formatWeeklyHours(weeklyHours)} </strong>
           </div>
-
-
           <div>
-
-            <span>
-              Productivity
-            </span>
-
-            <strong>
-              {productivity}%
-            </strong>
-
+            <span> Productivity </span>
+            <strong> {productivity}% </strong>
           </div>
-
         </div>
-
       </Card>
-
     </section>
-  );
+  )
 }
