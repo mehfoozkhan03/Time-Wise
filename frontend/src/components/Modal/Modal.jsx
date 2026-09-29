@@ -155,5 +155,3 @@ export const Modal = ({
     />
   );
 };
-
-// Every system has its weakness. This bug's weakness is that it fails under specific edge cases, and I'm going to find them.
