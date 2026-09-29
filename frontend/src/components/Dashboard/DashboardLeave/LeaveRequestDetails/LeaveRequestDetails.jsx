@@ -17,6 +17,7 @@ import {
 import "./LeaveRequestDetails.css";
 
 import { fetchAdminLeaveById } from "../../../../store/leaveSlice";
+import { Modal } from "../../../Modal/Modal";
 
 const leaveTypeLabels = {
   annual: "Annual Leave",
@@ -119,11 +120,13 @@ export default function LeaveRequestDetails({
   const statusClass = currentRequest.status?.toLowerCase() || "";
 
   return (
-    <div className="leave_details_overlay" onClick={onClose}>
-      <div
-        className="leave_details_modal"
-        onClick={(event) => event.stopPropagation()}
-      >
+    <Modal
+      isOpen
+      overlayClassName="leave_details_overlay"
+      className="leave_details_modal"
+      onOverlayClick={onClose}
+      onContentClick={(event) => event.stopPropagation()}
+    >
         <div className="leave_details_header">
           <div>
             <span className="leave_details_eyebrow">Leave Request</span>
@@ -282,7 +285,6 @@ export default function LeaveRequestDetails({
             </div>
           )}
         </div>
-      </div>
-    </div>
+    </Modal>
   );
 }

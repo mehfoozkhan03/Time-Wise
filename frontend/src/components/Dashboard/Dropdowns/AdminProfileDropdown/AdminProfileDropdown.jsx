@@ -13,6 +13,7 @@ import { adminAuthService } from "../../../../services/adminAuthService";
 import { adminLogout } from "../../../../store/adminAuthSlice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { Modal } from "../../../Modal/Modal";
 
 export const AdminProfile = () => {
   const dispatch = useDispatch();
@@ -203,8 +204,7 @@ export const AdminProfile = () => {
         </div>
       )}
       {showPasswordModal && (
-        <div className="admin-password-modal-overlay">
-          <div className="admin-password-modal">
+        <Modal isOpen overlayClassName="admin-password-modal-overlay" className="admin-password-modal">
             <div className="admin-password-icon">
               <FiLock />
             </div>
@@ -277,8 +277,7 @@ export const AdminProfile = () => {
                 {isChangingPassword ? "Changing..." : "Change Password"}
               </button>
             </div>
-          </div>
-        </div>
+        </Modal>
       )}
     </div>
   );

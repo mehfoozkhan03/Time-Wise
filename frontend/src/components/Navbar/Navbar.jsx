@@ -9,7 +9,7 @@ import { logout } from "../../store/authSlice";
 import { authService } from "../../services/authService";
 import { useTheme } from "../../context/ThemeContext";
 import { fetchNotifications } from ".././../store/notificationSlice";
-import { Feedback } from "../../pages/FeedBack";
+import { Modal } from "../Modal/Modal";
 
 export default function Navbar() {
   const { notifications, loading } = useSelector((state) => state.notification);
@@ -350,7 +350,7 @@ export default function Navbar() {
         </div>
       </header>
 
-      <Feedback
+      <Modal
         isOpen={logoutOpen}
         variant="logout"
         title={getLogoutContent().title}

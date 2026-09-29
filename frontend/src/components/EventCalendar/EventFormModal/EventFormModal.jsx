@@ -5,6 +5,7 @@ import { memo, useEffect, useRef, useCallback } from "react";
 import { FaTimes, FaPlus, FaEdit } from "react-icons/fa";
 
 import EventForm from "./EventForm";
+import { Modal } from "../../Modal/Modal";
 
 function EventFormModal({
   mode = "CREATE",
@@ -64,18 +65,14 @@ function EventFormModal({
   );
 
   return (
-    <div
-      className="eventFormOverlay"
-      onClick={handleOverlayClick}
-      role="presentation"
+    <Modal
+      isOpen
+      overlayClassName="eventFormOverlay"
+      className="eventFormModal"
+      onOverlayClick={handleOverlayClick}
+      onContentClick={handleModalClick}
+      ariaLabelledBy="event-form-title"
     >
-      <div
-        className="eventFormModal"
-        onClick={handleModalClick}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="event-form-title"
-      >
         <div className="eventFormHeader">
           <div className="eventFormTitle">
             <div className="eventFormIcon">
@@ -116,8 +113,7 @@ function EventFormModal({
             onCancel={handleClose}
           />
         </div>
-      </div>
-    </div>
+    </Modal>
   );
 }
 

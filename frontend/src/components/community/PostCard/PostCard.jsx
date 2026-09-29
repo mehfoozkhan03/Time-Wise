@@ -20,6 +20,7 @@ import CommentSection from '../CommentSection/CommentSection'
 import PostMenu from '../PostMenu/PostMenu'
 import EditPostModal from '../EditPostModal/EditPostModal'
 import DeletePostModal from '../DeletePostModal/DeletePostModal'
+import { Modal } from '../../Modal/Modal'
 
 import './PostCard.css'
 
@@ -375,14 +376,13 @@ const PostCard = ({ post }) => {
       ==================================================== */}
 
       {selectedImageIndex !== null && (
-        <div
-          className="post-image-modal"
-          onClick={() => setSelectedImageIndex(null)}
+        <Modal
+          isOpen
+          overlayClassName="post-image-modal"
+          className="post-image-modal-content"
+          onOverlayClick={() => setSelectedImageIndex(null)}
+          onContentClick={(event) => event.stopPropagation()}
         >
-          <div
-            className="post-image-modal-content"
-            onClick={(event) => event.stopPropagation()}
-          >
             <button
               type="button"
               className="post-image-modal-close"
@@ -427,8 +427,7 @@ const PostCard = ({ post }) => {
                 </button>
               </div>
             )}
-          </div>
-        </div>
+        </Modal>
       )}
 
       {/* ====================================================

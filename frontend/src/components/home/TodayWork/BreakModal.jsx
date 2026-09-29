@@ -1,11 +1,10 @@
 import './BreakModal.css'
 
 import { FaCoffee, FaPlay, FaExclamationTriangle } from 'react-icons/fa'
+import { Modal } from '../../Modal/Modal'
 
 export default function BreakModal({ isOpen, onResume, breakSeconds }) {
   const BREAK_LIMIT = 30 * 60
-
-  if (!isOpen) return null
 
   const formatTime = (value) => {
     const safeValue = Math.max(Math.floor(value), 0)
@@ -21,12 +20,13 @@ export default function BreakModal({ isOpen, onResume, breakSeconds }) {
   const hasExceededLimit = breakSeconds >= BREAK_LIMIT
 
   return (
-    <div className="break_overlay">
-      <div
-        className={`break_modal ${
+    <Modal
+      isOpen={isOpen}
+      overlayClassName="break_overlay"
+      className={`break_modal ${
           hasExceededLimit ? 'break_limit_reached' : ''
         }`}
-      >
+    >
         <div className="break_icon">
           {hasExceededLimit ? <FaExclamationTriangle /> : <FaCoffee />}
         </div>
@@ -57,7 +57,6 @@ export default function BreakModal({ isOpen, onResume, breakSeconds }) {
           <FaPlay />
           Resume Work
         </button>
-      </div>
-    </div>
+    </Modal>
   )
 }

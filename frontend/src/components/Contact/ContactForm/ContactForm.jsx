@@ -6,7 +6,7 @@ import CustomSelect from "../../../components/Common/CustomSelect/CustomSelect";
 
 import "./ContactForm.css";
 
-import { Feedback } from "../../../pages/FeedBack";
+import { Modal } from "../../Modal/Modal";
 import { createContact } from "../../../store/contactSlice";
 
 function ContactForm() {
@@ -293,9 +293,9 @@ function ContactForm() {
         </form>
       )}
 
-      <Feedback
+      <Modal
         isOpen={modal.open}
-        type={modal.type}
+        variant={modal.type}
         title={modal.title}
         message={modal.message}
         onClose={closeModal}

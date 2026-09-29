@@ -9,6 +9,7 @@ import {
 
 import CustomSelect from "../../../Common/CustomSelect/CustomSelect";
 import { submitLeave } from "../../../../store/leaveSlice";
+import { Modal } from "../../../Modal/Modal";
 
 import "./ApplyLeave.css";
 
@@ -186,14 +187,13 @@ const ApplyLeave = ({ onClose, onSuccess }) => {
   };
 
   return (
-    <div
-      className="applyLeave-overlay"
-      onMouseDown={handleClose}
+    <Modal
+      isOpen
+      overlayClassName="applyLeave-overlay"
+      className="applyLeave-modal"
+      onOverlayMouseDown={handleClose}
+      onContentMouseDown={(event) => event.stopPropagation()}
     >
-      <div
-        className="applyLeave-modal"
-        onMouseDown={(event) => event.stopPropagation()}
-      >
         <div className="applyLeave-header">
           <div className="applyLeave-heading">
             <div className="applyLeave-heading-icon">
@@ -348,8 +348,7 @@ const ApplyLeave = ({ onClose, onSuccess }) => {
             </button>
           </div>
         </form>
-      </div>
-    </div>
+    </Modal>
   );
 };
 

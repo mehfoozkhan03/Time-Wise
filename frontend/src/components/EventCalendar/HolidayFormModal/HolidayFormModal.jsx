@@ -5,6 +5,7 @@ import { memo, useEffect, useRef, useCallback } from "react";
 import { FaTimes, FaEdit, FaUmbrellaBeach } from "react-icons/fa";
 
 import HolidayForm from "./HolidayForm";
+import { Modal } from "../../Modal/Modal";
 
 function HolidayFormModal({
   mode = "CREATE",
@@ -62,18 +63,14 @@ function HolidayFormModal({
   );
 
   return (
-    <div
-      className="holidayFormOverlay"
-      onClick={handleOverlayClick}
-      role="presentation"
+    <Modal
+      isOpen
+      overlayClassName="holidayFormOverlay"
+      className="holidayFormModal"
+      onOverlayClick={handleOverlayClick}
+      onContentClick={handleModalClick}
+      ariaLabelledBy="holiday-form-title"
     >
-      <div
-        className="holidayFormModal"
-        onClick={handleModalClick}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="holiday-form-title"
-      >
         <div className="holidayFormHeader">
           <div className="holidayFormTitle">
             <div className="holidayFormIcon">
@@ -114,8 +111,7 @@ function HolidayFormModal({
             onCancel={handleClose}
           />
         </div>
-      </div>
-    </div>
+    </Modal>
   );
 }
 

@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux'
 import { deleteExistingPost } from '../../../store/postSlice'
 
 import './DeletePostModal.css'
+import { Modal } from '../../Modal/Modal'
 
 const DeletePostModal = ({ postId, onClose }) => {
   const dispatch = useDispatch()
@@ -18,8 +19,7 @@ const DeletePostModal = ({ postId, onClose }) => {
   }
 
   return (
-    <div className="modal-overlay">
-      <div className="delete-modal">
+    <Modal isOpen overlayClassName="modal-overlay" className="delete-modal">
         <h2>Delete Post?</h2>
 
         <p>This action cannot be undone.</p>
@@ -31,8 +31,7 @@ const DeletePostModal = ({ postId, onClose }) => {
             Delete
           </button>
         </div>
-      </div>
-    </div>
+    </Modal>
   )
 }
 

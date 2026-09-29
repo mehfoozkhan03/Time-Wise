@@ -4,7 +4,7 @@ import { Bot, X, Send, Sparkles, Trash2 } from "lucide-react";
 import api from "../../services/api";
 import { aiBotAccessService } from "../../services/aiBotAccessService";
 import "./chatBot.css";
-import { Feedback } from "../../pages/FeedBack";
+import { Modal } from "../Modal/Modal";
 
 export function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
@@ -348,7 +348,7 @@ export function Chatbot() {
         </button>
       </div>
 
-      <Feedback
+      <Modal
         isOpen={showClearModal}
         variant="error"
         title="Clear conversation?"
