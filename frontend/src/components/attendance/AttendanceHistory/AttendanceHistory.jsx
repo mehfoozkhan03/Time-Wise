@@ -66,6 +66,8 @@ export default function AttendanceHistory() {
   }, []);
   //skeleton//
 
+
+
   // Jab months load ho jaye to latest month select karo
 
   useEffect(() => {
@@ -231,7 +233,7 @@ export default function AttendanceHistory() {
             <>
               <div className="attendance_month_header">
                 <div className="month_title">
-                  <h2>{currentMonth}</h2>
+                 <h2>{groupedHistory[currentMonth]?.label}</h2>
                 </div>
 
                 <div className="month_actions">
@@ -278,8 +280,8 @@ export default function AttendanceHistory() {
                     </tr>
                   </thead>
 
-                  <tbody>
-                    {groupedHistory[currentMonth]?.map((record) => (
+                <tbody>
+  {groupedHistory[currentMonth]?.records?.map((record) => (
                       <tr key={record._id}>
                         <td>{formatDate(record.date)}</td>
                         <td>{formatTime(record.checkInTime)}</td>
