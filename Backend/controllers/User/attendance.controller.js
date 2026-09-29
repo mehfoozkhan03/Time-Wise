@@ -11,6 +11,7 @@ import { attendanceModel } from "../../models/Attendance.model.js";
 import { holidayModel } from "../../models/Holidays.model.js";
 
 import { getAttendanceStats } from "../../services/attendanceStats.service.js";
+import { getEmployeeReport } from "../../services/reports.service.js";
 
 // =======================================================
 // Helpers
@@ -629,6 +630,28 @@ export const getDashboardStats = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Internal Server Error.",
+    });
+  }
+};
+
+export const getEmployeeAttendanceReport = async (req, res) => {
+  try {
+    const data = await getEmployeeReport(req.user.userID, req.query);
+
+    return res.status(200).json({
+      success: true,
+      data,
+    });
+  } catch (error) {
+    const status = error.message?.includes("date") || error.message?.includes("range")
+      ? 400
+      : 500;
+
+    console.error("Attendance Report Error:", error);
+
+    return res.status(status).json({
+      success: false,
+      message: error.message || "Failed to fetch attendance report.",
     });
   }
 };

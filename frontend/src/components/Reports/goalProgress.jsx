@@ -1,3 +1,5 @@
+import { formatHours } from "./formatHours";
+
 export function GoalProgress({ label, current, target, unit, color }) {
   const pct = Math.min((current / target) * 100, 100);
   const exceeded = current >= target;
@@ -34,7 +36,7 @@ export function GoalProgress({ label, current, target, unit, color }) {
               fontWeight: 600,
             }}
           >
-            {current}
+            {unit === "hrs" ? formatHours(current) : current}
             <span>
               {" "}
               / {target} {unit}

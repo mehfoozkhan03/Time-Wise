@@ -1,29 +1,20 @@
 import { SectionLabel } from "./sectionLabel";
 import { StatusPill } from "./statusPill";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Skeleton from "../../components/Skeleton/Skeleton";
+import { formatHours } from "./formatHours";
 
 export function AttendanceLog({
-  attendanceLog,
   filteredLog,
   searchLog,
   statusFilter,
   onSearchChange,
   onStatusChange,
+  isLoading = false,
 }) {
   const recordsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(1);
   
-  const [showSkeleton, setShowSkeleton] = useState(true);
-
-useEffect(() => {
-  const timer = setTimeout(() => {
-    setShowSkeleton(false);
-  }, 1500);
-
-  return () => clearTimeout(timer);
-}, []);
-
   const totalPages = Math.ceil(filteredLog.length / recordsPerPage);
 
   const startIndex = (currentPage - 1) * recordsPerPage;
@@ -31,7 +22,7 @@ useEffect(() => {
 
   const currentRecords = filteredLog.slice(startIndex, endIndex);
 
-    if (showSkeleton) {
+    if (isLoading) {
   return (
     <div className="glass-card" style={{ padding: 24 }}>
 
@@ -262,7 +253,7 @@ useEffect(() => {
                         color: row.hours >= 8 ? "#10b981" : "#f59e0b",
                       }}
                     >
-                      {row.hours}h
+                      {formatHours(row.hours)}h
                     </span>
                   ) : (
                     <span style={{ color: "var(--text-primary)" }}>0h</span>
@@ -286,7 +277,7 @@ useEffect(() => {
                         fontWeight: 600,
                       }}
                     >
-                      +{row.overtime}h
+                      +{formatHours(row.overtime)}h
                     </span>
                   ) : (
                     <span style={{ color: "var(--text-primary)" }}>—</span>

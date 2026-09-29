@@ -1,11 +1,15 @@
 import api from "./api";
 
-export const getDashboardStats = async () => {
-  const response = await api.get("/attendance/dashboard-stats");
-  return response.data.stats;
-};
+export const getAttendanceReport = async ({
+  range = "month",
+  from,
+  to,
+  signal,
+} = {}) => {
+  const { data } = await api.get("/attendance/reports", {
+    params: { range, from, to },
+    signal,
+  });
 
-export const getAttendanceHistory = async () => {
-  const response = await api.get("/attendance/history");
-  return response.data.attendance;
+  return data.data;
 };

@@ -9,6 +9,7 @@ import {
   getTodayAttendance,
   getAttendanceHistory,
   getDashboardStats,
+  getEmployeeAttendanceReport,
 } from '../controllers/User/attendance.controller.js';
 
 const attendanceRouter = express.Router();
@@ -26,5 +27,7 @@ attendanceRouter.get('/today', auth,authorize("user"), getTodayAttendance);
 attendanceRouter.get('/history', auth,authorize("user"), getAttendanceHistory);
 
 attendanceRouter.get('/dashboard-stats', auth,authorize("user"), getDashboardStats);
+
+attendanceRouter.get('/reports', auth, authorize("user"), getEmployeeAttendanceReport);
 
 export { attendanceRouter };

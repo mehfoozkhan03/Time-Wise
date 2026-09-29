@@ -11,6 +11,11 @@ const reportsSlice = createSlice({
       state.dateRange = action.payload;
     },
 
+    setCustomDateRange(state, action) {
+      state.customStartDate = action.payload.startDate;
+      state.customEndDate = action.payload.endDate;
+    },
+
     setSearchLog(state, action) {
       state.searchLog = action.payload;
     },
@@ -31,55 +36,17 @@ const reportsSlice = createSlice({
       state.attendanceLog = action.payload;
     },
 
-    setDailyHoursData(state, action) {
-      state.dailyHoursData = action.payload;
-    },
-
-    setWeeklyData(state, action) {
-      state.weeklyData = action.payload;
-    },
-
-    setProductivityData(state, action) {
-      state.productivityData = action.payload;
-    },
-
-    setAttendanceDistribution(state, action) {
-      state.attendanceDistribution = action.payload;
-    },
-
-    setCalendarData(state, action) {
-      state.calendarData = action.payload;
-    },
-
-    setBadges(state, action) {
-      state.badges = action.payload;
-    },
-
-    setGoals(state, action) {
-      state.goals = action.payload;
-    },
-
-    setInsights(state, action) {
-      state.insights = action.payload;
-    },
   },
 });
 
 export const {
   setDateRange,
+  setCustomDateRange,
   setSearchLog,
   setStatusFilter,
   setActiveTab,
   setDashboardStats,
   setAttendanceLog,
-  setDailyHoursData,
-  setWeeklyData,
-  setProductivityData,
-  setAttendanceDistribution,
-  setCalendarData,
-  setBadges,
-  setGoals,
-  setInsights,
 } = reportsSlice.actions;
 
 export default reportsSlice.reducer;

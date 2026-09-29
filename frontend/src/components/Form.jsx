@@ -10,11 +10,7 @@ import { registerUser, loginUser } from "../store/authSlice";
 import { loginAdmin } from "../store/adminAuthSlice";
 import "../styles/Form.css";
 
-export const Form = ({
-  fields = [],
-  button = "Submit",
-  endpoint,
-}) => {
+export const Form = ({ fields = [], button = "Submit", endpoint }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const showModalRef = React.useRef();
@@ -39,7 +35,7 @@ export const Form = ({
       fields.reduce((acc, field) => {
         acc[field.name] = "";
         return acc;
-      }, {})
+      }, {}),
     );
 
     setErrors({});
@@ -104,14 +100,10 @@ export const Form = ({
         if (endpoint === "/user/signup") {
           showModalRef.current({
             variant: "success",
-            title:
-              response.payload?.title ||
-              "Registration Successful",
+            title: response.payload?.title || "Registration Successful",
             message:
-              response.payload?.message ||
-              "Account created successfully.",
-            description:
-              "Please log in with your credentials.",
+              response.payload?.message || "Account created successfully.",
+            description: "Please log in with your credentials.",
             onCloseCb: () => {
               resetForm();
             },
@@ -123,18 +115,12 @@ export const Form = ({
         // -------------------------------
         // LOGIN SUCCESS
         // -------------------------------
-        if (
-          endpoint === "/user/login" ||
-          endpoint === "/admin/login"
-        ) {
+        if (endpoint === "/user/login" || endpoint === "/admin/login") {
           showModalRef.current({
             variant: "success",
-            title:
-              response.payload?.title ||
-              "Login Successful",
+            title: response.payload?.title || "Login Successful",
             message:
-              response.payload?.message ||
-              "You have logged in successfully.",
+              response.payload?.message || "You have logged in successfully.",
             description:
               endpoint === "/admin/login"
                 ? "Welcome back to the Admin Dashboard!"
@@ -166,12 +152,8 @@ export const Form = ({
           (endpoint === "/user/signup"
             ? "Registration Failed"
             : "Login Failed"),
-        message:
-          errorData?.message ||
-          "An unexpected error occurred.",
-        reason:
-          errorData?.reason ||
-          "Please check your details and try again.",
+        message: errorData?.message || "An unexpected error occurred.",
+        reason: errorData?.reason || "Please check your details and try again.",
       });
 
       setErrors({});
@@ -181,14 +163,9 @@ export const Form = ({
       showModalRef.current({
         variant: "error",
         title:
-          endpoint === "/user/signup"
-            ? "Registration Failed"
-            : "Login Failed",
-        message:
-          error?.message ||
-          "An unexpected error occurred.",
-        reason:
-          "Please check your connection and try again.",
+          endpoint === "/user/signup" ? "Registration Failed" : "Login Failed",
+        message: error?.message || "An unexpected error occurred.",
+        reason: "Please check your connection and try again.",
       });
     }
   };
@@ -239,7 +216,7 @@ export const Form = ({
         }}
       >
         {fields.map((el, index) => {
-          const fieldError = errors?.[el.name];       
+          const fieldError = errors?.[el.name];
 
           /*
            * =========================
@@ -270,17 +247,11 @@ export const Form = ({
               >
                 <button
                   type="button"
-                  className={`select-trigger ${
-                    isOpen ? "select-open" : ""
-                  }`}
-                  onClick={() =>
-                    setOpenSelect(isOpen ? null : el.name)
-                  }
+                  className={`select-trigger ${isOpen ? "select-open" : ""}`}
+                  onClick={() => setOpenSelect(isOpen ? null : el.name)}
                 >
                   <span>{form[el.name] || el.name}</span>
-                  <span className="select-arrow">
-                    {isOpen ? "▲" : "▼"}
-                  </span>
+                  <span className="select-arrow">{isOpen ? "▲" : "▼"}</span>
                 </button>
 
                 <AnimatePresence>

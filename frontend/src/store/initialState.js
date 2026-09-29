@@ -1,6 +1,10 @@
 const initialState = {
   dateRange: "month",
 
+  customStartDate: "",
+
+  customEndDate: "",
+
   searchLog: "",
 
   statusFilter: "all",
@@ -32,21 +36,6 @@ const initialState = {
 
   attendanceLog: [],
 
-  dailyHoursData: [],
-
-  weeklyData: [],
-
-  productivityData: [],
-
-  attendanceDistribution: [],
-
-  calendarData: [],
-
-  badges: [],
-
-  goals: [],
-
-  insights: [],
 };
 
 export default initialState;

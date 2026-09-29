@@ -4,8 +4,6 @@ import {
   PieChart,
   Pie,
   Cell,
-  LineChart,
-  Line,
   ResponsiveContainer,
   AreaChart,
   Area,
@@ -23,8 +21,8 @@ import { SectionLabel } from "./sectionLabel";
 import { CustomTooltip } from "./CustomTooltip";
 import { AttendanceHeatmap } from "./attendanceHeatmap";
 import useCountUp from "../../components/UseCount/Count";
-import { useState, useEffect } from "react";
 import Skeleton from "../../components/Skeleton/Skeleton";
+import { roundHours } from "./formatHours";
 
 function EmptyChart({ message = "No data available" }) {
   return (
@@ -62,87 +60,51 @@ export function ChartsSection({
   setTab,
   attendanceLog,
   dashboardStats,
+  calendarData = [],
+  rangeLabel = "Selected range",
+  isLoading = false,
 }) {
   const productivity = useCountUp(
     activeTab === "productivity" ? (dashboardStats?.productivity ?? 0) : 0,
   );
 
-  const filtered = (attendanceLog ?? []).filter(
-    (item) => item.status !== "Holiday",
-  );
-
-
-  const dynamicDailyHoursData = filtered.map((item) => ({
-    day: new Date(item.date).toLocaleDateString("en-US", {
+  const records = attendanceLog ?? [];
+  const dateKey = (item) => item.dateKey;
+  const formatDateLabel = (key) => {
+    const [year, month, day] = key.split("-").map(Number);
+    return new Date(year, month - 1, day).toLocaleDateString("en-US", {
       month: "short",
       day: "numeric",
-    }),
-    hours: Number((item.totalWorkingSeconds / 3600).toFixed(1)),
+    });
+  };
+
+  const dynamicDailyHoursData = records.map((item) => ({
+    day: formatDateLabel(dateKey(item)),
+    hours: roundHours((item.totalWorkingSeconds || 0) / 3600),
     target: 8,
   }));
 
-
-  const weeklyMap = {};
-
-  (attendanceLog ?? []).forEach((item) => {
-    const date = new Date(item.date);
-
-    const month = date.toLocaleString("en-US", {
-      month: "short",
-    });
-
-    const weekNumber = Math.ceil(date.getDate() / 7);
-    const weekLabel = `${month} W${weekNumber}`;
-
-    if (!weeklyMap[weekLabel]) {
-      weeklyMap[weekLabel] = {
-        week: weekLabel,
-        actual: 0,
-        target: 40,
-      };
-    }
-
-    weeklyMap[weekLabel].actual += item.totalWorkingSeconds / 3600;
-  });
-
-  const dynamicWeeklyData = Object.values(weeklyMap).map((week) => ({
-    ...week,
-    actual: Number(week.actual.toFixed(1)),
-  }));
-
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  const records = attendanceLog ?? [];
-
-  // Find the employee's first attendance day
-  const firstAttendanceDate =
-    records.length > 0
-      ? new Date(
-          Math.min(...records.map((item) => new Date(item.date).getTime())),
-        )
-      : null;
-
-  if (firstAttendanceDate) {
-    firstAttendanceDate.setHours(0, 0, 0, 0);
-  }
-
-  const currentDate = new Date();
-
-  const currentYear = currentDate.getFullYear();
-  const currentMonth = currentDate.getMonth(); // 0 = Jan
-
-  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-
-  const attendanceMap = new Map();
-
+  const weeklyMap = new Map();
   records.forEach((item) => {
-    const date = new Date(item.date);
-
-    const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
-
-    attendanceMap.set(key, item); // YYYY-MM-DD
+    const key = dateKey(item);
+    const [year, month, day] = key.split("-").map(Number);
+    const start = new Date(year, month - 1, day);
+    const weekday = start.getDay();
+    start.setDate(start.getDate() + (weekday === 0 ? -6 : 1 - weekday));
+    const weekKey = `${start.getFullYear()}-${String(start.getMonth() + 1).padStart(2, "0")}-${String(start.getDate()).padStart(2, "0")}`;
+    const week = weeklyMap.get(weekKey) || {
+      week: formatDateLabel(weekKey),
+      actual: 0,
+      target: 40,
+    };
+    week.actual += (item.totalWorkingSeconds || 0) / 3600;
+    weeklyMap.set(weekKey, week);
   });
+
+  const dynamicWeeklyData = [...weeklyMap.values()].map((week) => ({
+    ...week,
+    actual: roundHours(week.actual),
+  }));
 
   const statusCount = {
     present: 0,
@@ -153,12 +115,9 @@ export function ChartsSection({
     "half day": 0,
   };
 
-  (records ?? []).forEach((item) => {
-    const status = item.status.toLowerCase();
-
-    if (statusCount.hasOwnProperty(status)) {
-      statusCount[status]++;
-    }
+  calendarData.forEach((item) => {
+    const status = String(item.status || "").toLowerCase();
+    if (Object.hasOwn(statusCount, status)) statusCount[status] += 1;
   });
 
   const dynamicAttendanceDistribution = [
@@ -194,59 +153,6 @@ export function ChartsSection({
     },
   ].filter((item) => item.value > 0);
 
-  const dynamicCalendarData = Array.from(
-    { length: daysInMonth },
-    (_, index) => {
-      const day = index + 1;
-
-      const currentDate = new Date(currentYear, currentMonth, day);
-      currentDate.setHours(0, 0, 0, 0);
-
-      const isWeekend =
-        currentDate.getDay() === 0 || currentDate.getDay() === 6;
-
-      const dateKey = `${currentYear}-${String(currentMonth + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-
-      const attendance = attendanceMap.get(dateKey);
-
-      if (isWeekend) {
-        return {
-          day,
-          status: "weekend",
-        };
-      }
-
-      if (attendance) {
-        return {
-          day,
-          status: attendance.status.toLowerCase(),
-        };
-      }
-
-      // Before employee joined
-      if (firstAttendanceDate && currentDate < firstAttendanceDate) {
-        return {
-          day,
-          status: "inactive",
-        };
-      }
-
-      // Future weekdays
-      if (currentDate > today) {
-        return {
-          day,
-          status: "inactive",
-        };
-      }
-
-      // Missing weekday between joining and today
-      return {
-        day,
-        status: "absent",
-      };
-    },
-  );
-
   const hasDailyData = dynamicDailyHoursData.some((item) => item.hours > 0);
 
   const hasWeeklyData = dynamicWeeklyData.some((item) => item.actual > 0);
@@ -255,16 +161,8 @@ export function ChartsSection({
 
   const hasProductivityData = (dashboardStats?.productivity ?? 0) > 0;
 
-  const hasHeatmapData = attendanceLog.length > 0;
-  const [showSkeleton, setShowSkeleton] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowSkeleton(false);
-    }, 1500);
-
-    return () => clearTimeout(timer);
-  }, []);
+  const hasHeatmapData = calendarData.length > 0;
+  const showSkeleton = isLoading;
 
   return (
     <div
@@ -325,7 +223,7 @@ export function ChartsSection({
                 style={{ marginBottom: "20px" }}
               />
             ) : (
-              <SectionLabel>Daily Working Hours — July 2026</SectionLabel>
+              <SectionLabel>Daily Working Hours — {rangeLabel}</SectionLabel>
             )}
             {hasDailyData ? (
               <ResponsiveContainer width="100%" height={280}>
@@ -398,7 +296,7 @@ export function ChartsSection({
         {/* ---------------- WEEKLY HOURS ---------------- */}
         {activeTab === "weekly" && (
           <div>
-            <SectionLabel>Weekly Hours vs Target — Last 8 Weeks</SectionLabel>
+            <SectionLabel>Weekly Hours vs Target — {rangeLabel}</SectionLabel>
 
             {hasWeeklyData ? (
               <ResponsiveContainer width="100%" height={280}>
@@ -457,13 +355,12 @@ export function ChartsSection({
         {/* ---------------- ATTENDANCE HEATMAP ---------------- */}
         {activeTab === "heatmap" && (
           <div>
-            <SectionLabel>Attendance Calendar — July 2026</SectionLabel>
+            <SectionLabel>Attendance Calendar — {rangeLabel}</SectionLabel>
 
             {hasHeatmapData ? (
               <AttendanceHeatmap
-                calendarData={dynamicCalendarData}
-                year={currentYear}
-                month={currentMonth}
+                calendarData={calendarData}
+                isLoading={isLoading}
               />
             ) : (
               <EmptyChart message="No attendance records found." />
@@ -474,7 +371,7 @@ export function ChartsSection({
         {/* ---------------- DONUT CHART ---------------- */}
         {activeTab === "donut" && (
           <div>
-            <SectionLabel>Attendance Distribution — July 2026</SectionLabel>
+            <SectionLabel>Attendance Distribution — {rangeLabel}</SectionLabel>
 
             {hasAttendanceData ? (
               <div

@@ -63,6 +63,48 @@
   color: var(--primary);
 }
 
+.reports_custom_range {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.reports_custom_range label {
+  display: grid;
+  gap: 5px;
+  color: var(--text_secondary);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.reports_custom_range input[type="date"] {
+  min-height: 38px;
+  padding: 7px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius_sm);
+  background: var(--input-bg);
+  color: var(--input-text);
+  font: inherit;
+  color-scheme: light;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.reports_custom_range input[type="date"]:focus-visible {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--focus-shadow);
+}
+
+html.dark .reports_custom_range input[type="date"] {
+  color-scheme: dark;
+}
+
+.reports_custom_range input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.75;
+}
+
 /* Card glass effect */
 .glass-card,
 .workDiv {
@@ -530,12 +572,6 @@
       min-height: 34px;
     }
     
-    /* BADGES */
-    
-    .badges-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-    
     body {
       overflow-x: scroll;
       scrollbar-width: none;
@@ -871,12 +907,6 @@
     min-height: 38px;
   }
 
-        /* BADGES */
-    
-        .badges-grid {
-          grid-template-columns: repeat(2, 1fr);
-        }
-    
         body {
           overflow-x: scroll;
           scrollbar-width: none;
@@ -1158,12 +1188,6 @@
         .pagination button {
           min-width: 40px;
           min-height: 40px;
-  }
-
-        /* BADGES — 3 columns on tablet */
-    
-        .badges-grid {
-          grid-template-columns: repeat(3, 1fr);
   }
 
   body {

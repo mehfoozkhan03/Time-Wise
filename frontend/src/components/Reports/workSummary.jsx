@@ -115,10 +115,10 @@
 
 import { SectionLabel } from "./sectionLabel";
 import useCountUp from "../../components/UseCount/Count";
-import { useState, useEffect } from "react";
 import Skeleton from "../../components/Skeleton/Skeleton";
+import { formatHours } from "./formatHours";
 
-export function WorkSummary({ dashboardStats }) {
+export function WorkSummary({ dashboardStats, isLoading = false, rangeLabel = "This Month" }) {
   const weeklyHours = useCountUp(dashboardStats.weeklyHours);
   const monthlyHours = useCountUp(dashboardStats.monthlyHours);
   const productivity = useCountUp(dashboardStats.productivity);
@@ -128,25 +128,15 @@ export function WorkSummary({ dashboardStats }) {
   const averageBreakDuration = useCountUp(dashboardStats.averageBreakDuration);
   const weeklyGoalPercentage = useCountUp(dashboardStats.weeklyGoalPercentage);
 
-  const [showSkeleton, setShowSkeleton] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowSkeleton(false);
-    }, 1500);
-
-    return () => clearTimeout(timer);
-  }, []);
-
   const dynamicSummaryItems = [
     {
       label: "Weekly Hours",
-      value: `${weeklyHours}h`,
+      value: `${formatHours(weeklyHours)}h`,
       icon: "📅",
     },
     {
-      label: "Monthly Hours",
-      value: `${monthlyHours}h`,
+      label: `Hours (${rangeLabel})`,
+      value: `${formatHours(monthlyHours)}h`,
       icon: "🕐",
     },
     {
@@ -184,7 +174,7 @@ export function WorkSummary({ dashboardStats }) {
   return (
     <div className="glass-card" style={{ padding: 24 }}>
       
-      {showSkeleton ? (
+      {isLoading ? (
         <div style={{ marginBottom: "20px" }}>
           <Skeleton width="180px" height="26px" radius="6px" />
         </div>
@@ -200,7 +190,7 @@ export function WorkSummary({ dashboardStats }) {
           gap: 13,
         }}
       >
-        {showSkeleton
+        {isLoading
           ? [...Array(8)].map((_, index) => (
               <div
                 key={index}

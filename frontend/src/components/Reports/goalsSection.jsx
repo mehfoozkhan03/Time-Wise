@@ -1,25 +1,14 @@
 import { SectionLabel } from "./sectionLabel";
 import { GoalProgress } from "./goalProgress";
 import useCountUp from "../../components/UseCount/Count";
-import { useState, useEffect } from "react";
 import Skeleton from "../../components/Skeleton/Skeleton";
 
-export function GoalsSection({ dashboardStats }) {
+export function GoalsSection({ dashboardStats, isLoading = false }) {
   // console.log("Goals dashboardStats:", dashboardStats);
   const weeklyHours = useCountUp(dashboardStats?.weeklyHours ?? 0);
   const attendance = useCountUp(dashboardStats?.attendancePercentage ?? 0);
   const productivity = useCountUp(dashboardStats?.productivity ?? 0);
   const monthlyHours = useCountUp(dashboardStats?.monthlyHours ?? 0);
-
-  const [showSkeleton, setShowSkeleton] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowSkeleton(false);
-    }, 1500);
-
-    return () => clearTimeout(timer);
-  }, []);
 
   const goals = [
     {
@@ -55,7 +44,7 @@ export function GoalsSection({ dashboardStats }) {
 
   return (
     <div className="glass-card" style={{ padding: 24 }}>
-      {showSkeleton ? (
+      {isLoading ? (
         <div style={{ marginBottom: 20 }}>
           <Skeleton width="170px" height="24px" />
         </div>
@@ -63,7 +52,7 @@ export function GoalsSection({ dashboardStats }) {
         <SectionLabel>Goals & Targets</SectionLabel>
       )}
 
-      {showSkeleton
+      {isLoading
         ? [...Array(4)].map((_, index) => (
             <div
               key={index}
