@@ -1,17 +1,40 @@
 import { useSelector } from "react-redux";
-
-import { FaLightbulb, FaHeart, FaUserFriends } from "react-icons/fa";
-
+import {
+  FaLightbulb,
+  FaHeart,
+  FaUserFriends,
+  FaChevronDown,
+  FaChevronUp,
+} from "react-icons/fa";
 import { IoTrendingUp } from "react-icons/io5";
+import { useEffect, useRef, useState } from "react";
 
 import "./RightSidebar.css";
 
 const RightSidebar = () => {
   const { featured, posts } = useSelector((state) => state.post);
 
+  // ==========================================
+  // FEATURED THOUGHT STATE
+  // ==========================================
+
+  const [isThoughtExpanded, setIsThoughtExpanded] = useState(false);
+
+  const [isThoughtLong, setIsThoughtLong] = useState(false);
+
+  const thoughtRef = useRef(null);
+
+  // ==========================================
+  // TRENDING POSTS
+  // ==========================================
+
   const trendingPosts = [...posts]
     .sort((a, b) => (b.likesCount || 0) - (a.likesCount || 0))
     .slice(0, 5);
+
+  // ==========================================
+  // CONTRIBUTORS
+  // ==========================================
 
   const contributors = [
     ...new Map(
@@ -19,36 +42,133 @@ const RightSidebar = () => {
     ).values(),
   ].slice(0, 5);
 
-//# Pin thought or Feature thought
+  // ==========================================
+  // LATEST PINNED THOUGHT
+  // ==========================================
+
+  //# Pin thought or Feature thought
   const featuredMessage = featured?.content;
+
+  useEffect(() => {
+    setIsThoughtExpanded(false);
+
+    if (!featuredMessage || !thoughtRef.current) {
+      setIsThoughtLong(false);
+      return;
+    }
+
+    const checkThoughtHeight = () => {
+      const element = thoughtRef.current;
+
+      if (!element) return;
+
+      // Get computed line height
+      const computedStyle = window.getComputedStyle(element);
+
+      let lineHeight = parseFloat(computedStyle.lineHeight);
+
+      // Fallback if line-height is "normal"
+      if (isNaN(lineHeight)) {
+        const fontSize = parseFloat(computedStyle.fontSize) || 16;
+
+        lineHeight = fontSize * 1.6;
+      }
+
+      // Six lines
+      const maxHeight = lineHeight * 6;
+
+      // Temporarily remove clamp to determine
+      // the natural height of the full thought
+      const previousDisplay = element.style.display;
+
+      const previousWebkitLineClamp = element.style.webkitLineClamp;
+
+      const previousOverflow = element.style.overflow;
+
+      element.style.display = "block";
+      element.style.webkitLineClamp = "unset";
+      element.style.overflow = "visible";
+
+      const fullHeight = element.scrollHeight;
+
+      // Restore original styles
+      element.style.display = previousDisplay;
+
+      element.style.webkitLineClamp = previousWebkitLineClamp;
+
+      element.style.overflow = previousOverflow;
+
+      setIsThoughtLong(fullHeight > maxHeight + 5);
+    };
+
+    // Allow browser to finish rendering first
+    const timeout = setTimeout(checkThoughtHeight, 50);
+
+    window.addEventListener("resize", checkThoughtHeight);
+
+    return () => {
+      clearTimeout(timeout);
+
+      window.removeEventListener("resize", checkThoughtHeight);
+    };
+  }, [featuredMessage]);
 
   return (
     <aside className="right-sidebar">
-      {/* Featured Thought */}
+      {/* ======================================
+          FEATURED THOUGHT
+      ====================================== */}
 
-      <section className="card right-sidebar-card">
+      <section className="card right-sidebar-card featured-thought-sidebar">
         <div className="right-sidebar-title">
           <FaLightbulb />
 
           <h3>Featured Thought</h3>
         </div>
         {featuredMessage ? (
-          <>
-            <p>{featuredMessage}</p>
+          <div className="featured-thought-content">
+            {/* THOUGHT */}
+            <div
+              ref={thoughtRef}
+              className={`featured-thought-text ${
+                isThoughtExpanded ? "expanded" : "collapsed"
+              }`}
+            >
+              {featuredMessage}
+            </div>
 
-            <small>
+            {/* LOAD MORE */}
+            {isThoughtLong && (
+              <button
+                type="button"
+                className="featured-thought-toggle"
+                onClick={() => setIsThoughtExpanded((prev) => !prev)}
+                aria-expanded={isThoughtExpanded}
+              >
+                <span>{isThoughtExpanded ? "Show less" : "Load more"}</span>
+
+                {isThoughtExpanded ? <FaChevronUp /> : <FaChevronDown />}
+              </button>
+            )}
+
+            {/* AUTHOR */}
+            <small className="featured-thought-author">
               —{" "}
-              {`${featured?.createdBy?.firstName || ""} ${
+              {featured
+                ? `${featured.createdBy?.firstName || ""} ${featured.createdBy?.lastName || ""}`.trim()
+                : `${featured?.createdBy?.firstName || ""} ${
                     featured?.createdBy?.lastName || ""
-                  }`}
+                  }`.trim()}
             </small>
-          </>
+          </div>
         ) : (
-          <p>No featured thought today.</p>
+          <p className="featured-thought-empty">No featured thought today.</p>
         )}
       </section>
 
-      {/* Trending */}
+      {/* ======================================
+          TRENDING POSTS
+      ====================================== */}
 
       <section className="card right-sidebar-card">
         <div className="right-sidebar-title">
@@ -62,10 +182,7 @@ const RightSidebar = () => {
             <small>No trending posts.</small>
           ) : (
             trendingPosts.map((post) => (
-              <div
-                key={post._id}
-                className="trending-item"
-              >
+              <div key={post._id} className="trending-item">
                 <div>
                   <strong>
                     {post.createdBy?.firstName} {post.createdBy?.lastName}
@@ -89,7 +206,9 @@ const RightSidebar = () => {
         </div>
       </section>
 
-      {/* Contributors */}
+      {/* ======================================
+          TOP CONTRIBUTORS
+      ====================================== */}
 
       <section className="card right-sidebar-card">
         <div className="right-sidebar-title">
@@ -103,10 +222,7 @@ const RightSidebar = () => {
             <small>No contributors yet.</small>
           ) : (
             contributors.map((person) => (
-              <div
-                key={person._id}
-                className="contributor-item"
-              >
+              <div key={person._id} className="contributor-item">
                 <div className="contributor-avatar">
                   {`${person.firstName?.[0] || ""}${
                     person.lastName?.[0] || ""

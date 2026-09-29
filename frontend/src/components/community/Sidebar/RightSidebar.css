@@ -1,35 +1,35 @@
+/* ==========================================
+   RIGHT SIDEBAR
+========================================== */
+
 .right-sidebar {
-  width: 100%;
   display: flex;
   flex-direction: column;
-  position: sticky;
-  top: 90px;
-  align-self: flex-start;
-  gap: 20px;
+  gap: 22px;
+  width: 100%;
 }
+
+
+/* ==========================================
+   SIDEBAR CARD
+========================================== */
 
 .right-sidebar-card {
-  padding: 20px;
-  background: var(--card);
-  border: 1px solid var(--card-border);
-  border-radius: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  box-shadow: var(--shadow_sm);
-  transition: all var(--transition);
+  padding: 24px;
+  border-radius: 18px;
+  overflow: hidden;
 }
 
-.right-sidebar-card:hover {
-  box-shadow: var(--shadow_md);
-}
+
+/* ==========================================
+   SIDEBAR TITLE
+========================================== */
 
 .right-sidebar-title {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--divider);
+  gap: 12px;
+  margin-bottom: 22px;
 }
 
 .right-sidebar-title svg {
@@ -40,132 +40,406 @@
 
 .right-sidebar-title h3 {
   margin: 0;
-  font-size: 0.95rem;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+
+/* ==========================================
+   FEATURED THOUGHT
+========================================== */
+
+.featured-thought-content {
+  position: relative;
+  width: 100%;
+}
+
+
+/* ==========================================
+   THOUGHT TEXT
+========================================== */
+
+.featured-thought-text {
+  position: relative;
+
+  font-size: 15px;
+  line-height: 1.65;
   font-weight: 600;
-  color: var(--text_primary);
+
+  color: var(--text-secondary);
+
+  word-break: break-word;
+  overflow-wrap: anywhere;
+
+  transition:
+    max-height 0.35s ease,
+    opacity 0.25s ease;
 }
 
-.right-sidebar-card p {
-  color: var(--text_secondary);
-  line-height: 1.6;
-  font-size: 0.9rem;
-  margin: 0;
+
+/* ==========================================
+   COLLAPSED THOUGHT
+========================================== */
+
+.featured-thought-text.collapsed {
+  display: -webkit-box;
+
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 6;
+
+  overflow: hidden;
 }
 
-.right-sidebar-card > small {
-  color: var(--text_secondary);
-  font-size: 0.82rem;
+
+/* ==========================================
+   FADE AT BOTTOM OF LONG THOUGHT
+========================================== */
+
+.featured-thought-text.collapsed::after {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  height: 45px;
+
+  pointer-events: none;
+
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--card)
+  );
+}
+
+
+/* ==========================================
+   EXPANDED THOUGHT
+========================================== */
+
+.featured-thought-text.expanded {
+  display: block;
+  overflow: visible;
+
+  -webkit-line-clamp: unset;
+}
+
+
+/* ==========================================
+   LOAD MORE / SHOW LESS BUTTON
+========================================== */
+
+.featured-thought-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+
+  margin-top: 12px;
+  padding: 7px 12px;
+
+  border: 1px solid var(--border);
+  border-radius: 999px;
+
+  background: transparent;
+  color: var(--primary);
+
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.featured-thought-toggle:hover {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #ffffff;
+
+  transform: translateY(-1px);
+}
+
+.featured-thought-toggle:active {
+  transform: translateY(0);
+}
+
+.featured-thought-toggle svg {
+  font-size: 9px;
+}
+
+
+/* ==========================================
+   FEATURED THOUGHT AUTHOR
+========================================== */
+
+.featured-thought-author {
+  display: block;
+
+  margin-top: 18px;
+
+  color: var(--text-secondary);
+
+  font-size: 13px;
   font-style: italic;
+  font-weight: 600;
+
+  text-align: right;
 }
+
+
+/* ==========================================
+   EMPTY FEATURED THOUGHT
+========================================== */
+
+.featured-thought-empty {
+  margin: 0;
+
+  color: var(--text-secondary);
+
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+
+/* ==========================================
+   SIDEBAR LIST
+========================================== */
 
 .right-sidebar-list {
   display: flex;
   flex-direction: column;
-  gap: 6px;
 }
+
+
+/* ==========================================
+   TRENDING ITEM
+========================================== */
 
 .trending-item {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 8px 10px;
-  border-radius: 12px;
-  transition: 0.2s ease;
-  gap: 12px;
+  justify-content: space-between;
+
+  gap: 14px;
+
+  padding: 13px 0;
+
+  border-bottom: 1px solid var(--border);
 }
 
-.trending-item:hover {
-  background: var(--surface);
+.trending-item:first-child {
+  padding-top: 0;
+}
+
+.trending-item:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
 }
 
 .trending-item > div {
-  flex: 1;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .trending-item strong {
-  display: block;
-  color: var(--text_primary);
-  font-size: 0.85rem;
-  margin-bottom: 2px;
-  font-weight: 600;
+  font-size: 13px;
+  font-weight: 700;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .trending-item small {
-  color: var(--text_secondary);
-  font-size: 0.78rem;
   display: block;
+
+  max-width: 170px;
+
+  color: var(--text-secondary);
+
+  font-size: 12px;
+  line-height: 1.4;
+
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
-.trending-item span {
-  color: var(--primary);
-  font-weight: 600;
-  font-size: 0.82rem;
+.trending-item > span {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 5px;
+
   flex-shrink: 0;
+
+  color: #38bdf8;
+
+  font-size: 12px;
+  font-weight: 600;
 }
 
-.trending-item span svg {
-  font-size: 13px;
+.trending-item > span svg {
+  font-size: 11px;
 }
+
+
+/* ==========================================
+   CONTRIBUTORS
+========================================== */
 
 .contributor-item {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 8px 10px;
-  border-radius: 12px;
-  transition: 0.2s ease;
+
+  padding: 12px 0;
+
+  border-bottom: 1px solid var(--border);
 }
 
-.contributor-item:hover {
-  background: var(--surface);
+.contributor-item:first-child {
+  padding-top: 0;
 }
+
+.contributor-item:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+
+/* ==========================================
+   CONTRIBUTOR AVATAR
+========================================== */
 
 .contributor-avatar {
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--primary), #7c3aed);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
-  font-weight: 700;
-  font-size: 13px;
+
+  width: 38px;
+  height: 38px;
+
   flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background: var(--primary);
+  color: #ffffff;
+
+  font-size: 12px;
+  font-weight: 700;
 }
 
+
+/* ==========================================
+   CONTRIBUTOR INFO
+========================================== */
+
 .contributor-info {
-  flex: 1;
   min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
 }
 
 .contributor-info strong {
-  display: block;
-  color: var(--text_primary);
-  font-size: 0.85rem;
-  font-weight: 600;
+  font-size: 13px;
+  font-weight: 700;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .contributor-info small {
-  color: var(--text_secondary);
-  font-size: 0.78rem;
+  color: var(--text-secondary);
+
+  font-size: 11px;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-@media (max-width: 1400px) {
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width: 1100px) {
   .right-sidebar-card {
-    padding: 16px;
+    padding: 20px;
+  }
+
+  .featured-thought-text {
+    font-size: 14px;
   }
 }
 
-@media (max-width: 1150px) {
+
+@media (max-width: 900px) {
   .right-sidebar {
-    display: none;
+    gap: 18px;
+  }
+
+  .right-sidebar-card {
+    padding: 20px;
+  }
+}
+
+
+@media (max-width: 768px) {
+  .right-sidebar {
+    width: 100%;
+  }
+
+  .featured-thought-text {
+    font-size: 15px;
+  }
+
+  .trending-item small {
+    max-width: 220px;
+  }
+}
+
+
+@media (max-width: 480px) {
+  .right-sidebar-card {
+    padding: 18px;
+    border-radius: 16px;
+  }
+
+  .right-sidebar-title {
+    margin-bottom: 18px;
+  }
+
+  .right-sidebar-title h3 {
+    font-size: 16px;
+  }
+
+  .featured-thought-text {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .featured-thought-author {
+    margin-top: 15px;
+    font-size: 12px;
+  }
+
+  .featured-thought-toggle {
+    font-size: 11px;
+    padding: 6px 11px;
   }
 }
