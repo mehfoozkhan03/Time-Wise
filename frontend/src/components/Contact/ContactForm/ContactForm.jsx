@@ -12,9 +12,7 @@ import { createContact } from "../../../store/contactSlice";
 function ContactForm() {
   const dispatch = useDispatch();
 
-  const { isLoading: isContactLoading } = useSelector(
-    (state) => state.contact
-  );
+  const { isLoading: isContactLoading } = useSelector((state) => state.contact);
 
   const questions = [
     "What is your return policy?",
@@ -94,9 +92,7 @@ function ContactForm() {
     }
 
     if (name === "faq") {
-      setSelectedAnswer(
-        value !== "" ? answers[Number(value)] : ""
-      );
+      setSelectedAnswer(value !== "" ? answers[Number(value)] : "");
     }
   };
 
@@ -138,16 +134,11 @@ function ContactForm() {
 
     const contactData = {
       ...formData,
-      faq:
-        formData.faq !== ""
-          ? questions[Number(formData.faq)]
-          : "",
+      faq: formData.faq !== "" ? questions[Number(formData.faq)] : "",
     };
 
     try {
-      const response = await dispatch(
-        createContact(contactData)
-      ).unwrap();
+      const response = await dispatch(createContact(contactData)).unwrap();
 
       setModal({
         open: true,
@@ -175,8 +166,7 @@ function ContactForm() {
         open: true,
         type: "error",
         title: "Failed!",
-        message:
-          error || "Something went wrong. Please try again.",
+        message: error || "Something went wrong. Please try again.",
       });
     }
   };
@@ -192,42 +182,18 @@ function ContactForm() {
       {loading ? (
         <div className="contactFormSkeleton">
           <div className="inputs">
-            <Skeleton
-              width="100%"
-              height="45px"
-              radius="8px"
-            />
+            <Skeleton width="100%" height="45px" radius="8px" />
 
-            <Skeleton
-              width="100%"
-              height="45px"
-              radius="8px"
-            />
+            <Skeleton width="100%" height="45px" radius="8px" />
           </div>
 
-          <Skeleton
-            width="100%"
-            height="45px"
-            radius="8px"
-          />
+          <Skeleton width="100%" height="45px" radius="8px" />
 
-          <Skeleton
-            width="100%"
-            height="45px"
-            radius="8px"
-          />
+          <Skeleton width="100%" height="45px" radius="8px" />
 
-          <Skeleton
-            width="100%"
-            height="120px"
-            radius="8px"
-          />
+          <Skeleton width="100%" height="120px" radius="8px" />
 
-          <Skeleton
-            width="180px"
-            height="45px"
-            radius="10px"
-          />
+          <Skeleton width="180px" height="45px" radius="10px" />
         </div>
       ) : (
         <form onSubmit={submit} noValidate>
@@ -248,9 +214,7 @@ function ContactForm() {
               />
 
               {(touched.name || isSubmitted) && errors.name && (
-                <p className="form_error">
-                  {errors.name}
-                </p>
+                <p className="form_error">{errors.name}</p>
               )}
             </div>
 
@@ -270,9 +234,7 @@ function ContactForm() {
               />
 
               {(touched.email || isSubmitted) && errors.email && (
-                <p className="form_error">
-                  {errors.email}
-                </p>
+                <p className="form_error">{errors.email}</p>
               )}
             </div>
           </div>
@@ -287,11 +249,7 @@ function ContactForm() {
             placeholder="Select Question"
           />
 
-          {selectedAnswer && (
-            <p className="faqAnswer">
-              {selectedAnswer}
-            </p>
-          )}
+          {selectedAnswer && <p className="faqAnswer">{selectedAnswer}</p>}
 
           <input
             type="text"
@@ -307,12 +265,9 @@ function ContactForm() {
             }
           />
 
-          {(touched.subject || isSubmitted) &&
-            errors.subject && (
-              <p className="form_error">
-                {errors.subject}
-              </p>
-            )}
+          {(touched.subject || isSubmitted) && errors.subject && (
+            <p className="form_error">{errors.subject}</p>
+          )}
 
           <textarea
             rows="6"
@@ -328,18 +283,11 @@ function ContactForm() {
             }
           />
 
-          {(touched.message || isSubmitted) &&
-            errors.message && (
-              <p className="form_error">
-                {errors.message}
-              </p>
-            )}
+          {(touched.message || isSubmitted) && errors.message && (
+            <p className="form_error">{errors.message}</p>
+          )}
 
-          <button
-            type="submit"
-            className="btn"
-            disabled={isContactLoading}
-          >
+          <button type="submit" className="btn" disabled={isContactLoading}>
             {isContactLoading ? "Sending..." : "Send Message"}
           </button>
         </form>
