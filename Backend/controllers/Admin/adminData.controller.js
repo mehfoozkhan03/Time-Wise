@@ -58,7 +58,7 @@ export const admin_login = async (req, res) => {
       },
       process.env.PrivateKey,
       {
-        expiresIn: "1d",
+        expiresIn: "12h",
       },
     );
 
@@ -66,7 +66,7 @@ export const admin_login = async (req, res) => {
       httpOnly: false,
       secure: false,
       sameSite: "Lax",
-      maxAge: 24 * 60 * 60 * 1000,
+      maxAge: (24 / 2) * 60 * 60 * 1000,
     });
 
     const user = admin.toObject();
@@ -109,7 +109,6 @@ export const admin_login = async (req, res) => {
   }
 };
 
-
 export const adminLogout = async (req, res) => {
   try {
     res.clearCookie("adminToken", {
@@ -139,11 +138,9 @@ export const adminLogout = async (req, res) => {
   }
 };
 
-
 //# ========================= Get All Usres ============================
 
 export const getAllUser = async (req, res) => {
-  
   try {
     const page = Number(req.query.page) || 1;
     const limit = Number(req.query.limit) || 26;
@@ -242,7 +239,6 @@ export const getAllUser = async (req, res) => {
     });
   }
 };
-
 
 // ================= Today's Attendance - Admin =================
 

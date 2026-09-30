@@ -6,7 +6,7 @@ dotenv.config();
 import { userModel } from "../../models/User.model.js";
 import { AdminModel } from "../../models/Admin.model.js";
 
-// ================= Validation =================
+// ================= Validation ===============
 
 const validateSignup = (body) => {
   return (
@@ -21,7 +21,7 @@ const validateLogin = (body) => {
   return body.email?.trim() && body.password?.trim();
 };
 
-// ================= Signup =================
+// ================= Signup ===============
 
 export const signup = async (req, res) => {
   try {
@@ -130,7 +130,7 @@ export const signup = async (req, res) => {
   }
 };
 
-// ================= User Login =================
+// ================= User Login ===============
 
 export const login = async (req, res) => {
   try {
@@ -178,7 +178,7 @@ export const login = async (req, res) => {
       },
       process.env.PrivateKey,
       {
-        expiresIn: "1d",
+        expiresIn: "12h",
       },
     );
 
@@ -186,7 +186,7 @@ export const login = async (req, res) => {
       httpOnly: false,
       secure: false,
       sameSite: "Lax",
-      maxAge: 24 * 60 * 60 * 1000,
+      maxAge: (24 / 2) * 60 * 60 * 1000,
     });
 
     const user = userData.toObject();
@@ -240,8 +240,7 @@ export const login = async (req, res) => {
   }
 };
 
-
-// ================= Current User =================
+// ================= Current User ===============
 
 export const getCurrentUser = async (req, res) => {
   try {
@@ -312,7 +311,7 @@ export const updateActivity = async (req, res) => {
   }
 };
 
-// ================= Community User Profile =================
+// ================= Community User Profile ===============
 
 export const getUserProfile = async (req, res) => {
   try {
