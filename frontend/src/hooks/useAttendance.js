@@ -22,6 +22,15 @@ export default function useAttendance() {
     isWorkingDay,
     isHoliday,
     holiday,
+
+    // ===================================================
+    // CHANGED:
+    // Read approved-leave information from Redux.
+    // The backend is responsible for determining whether
+    // the employee is actually on approved leave.
+    // ===================================================
+    isOnLeave,
+    leave,
   } = useSelector((state) => state.attendance)
 
   const [currentTime, setCurrentTime] = useState(new Date())
@@ -151,6 +160,14 @@ export default function useAttendance() {
     isWorkingDay,
     isHoliday,
     holiday,
+
+    // ===================================================
+    // CHANGED:
+    // Expose leave information to components such as
+    // TodayWork.jsx without adding another API request.
+    // ===================================================
+    isOnLeave,
+    leave,
 
     checkIn: handleCheckIn,
     startBreak: handleStartBreak,

@@ -35,6 +35,12 @@ export default function TodayWork() {
     isWorkingDay,
     isHoliday,
     holiday,
+
+    // Added:
+    // useAttendance now exposes approved leave information
+    // from the backend attendance response.
+    isOnLeave,
+    leave,
   } = useAttendance();
 
   const [showBreakModal, setShowBreakModal] = useState(false);
@@ -65,7 +71,15 @@ export default function TodayWork() {
   // Attendance Day State
   // =====================================================
 
-  const attendanceDisabled = !isWorkingDay || isHoliday;
+  // Updated:
+  // Attendance actions are disabled when today is:
+  // 1. A non-working day / weekend
+  // 2. A holiday
+  // 3. An approved employee leave day
+  //
+  // The backend is still the final authority and will reject
+  // attendance actions even if the frontend state is bypassed.
+  const attendanceDisabled = !isWorkingDay || isHoliday || isOnLeave;
 
   // =====================================================
   // Break Actions
@@ -83,11 +97,13 @@ export default function TodayWork() {
   // Status
   // =====================================================
 
-  /* ==========================================
-     STATUS
-  ========================================== */
-
   const getStatus = () => {
+    // Approved leave takes priority over the generic
+    // non-working-day state.
+    if (isOnLeave) {
+      return "On Leave";
+    }
+
     if (attendanceDisabled) {
       if (isHoliday) {
         return "Holiday";
@@ -142,11 +158,9 @@ export default function TodayWork() {
   // Buttons
   // =====================================================
 
-  /* ==========================================
-     ACTION BUTTON
-  ========================================== */
-
   const renderButton = () => {
+    // No attendance action is available on:
+    // weekend, holiday, or approved leave.
     if (attendanceDisabled) {
       return null;
     }
@@ -267,17 +281,6 @@ export default function TodayWork() {
   // =====================================================
 
   return (
-    // <>
-    //   <Card
-    //     className={`today_work ${
-    //       attendanceDisabled ? 'today_work_disabled' : ''
-    //     }`}
-    //     id="tour-today-work"
-    //   >
-    //     <div className="today_header">
-    //       <div>
-    //         <h2>Today's Work</h2>
-
     <>
       <Card
         className={`today_work ${
@@ -371,10 +374,9 @@ export default function TodayWork() {
 
         <div className="today_action">{renderButton()}</div>
 
-
-        {/* ============================================= */}
-        {/* WEEKEND / HOLIDAY OVERLAY */}
-        {/* ============================================= */}
+        {/* =============================================
+            WEEKEND / HOLIDAY / LEAVE OVERLAY
+        ============================================= */}
 
         {attendanceDisabled && (
           <div className="today_disabled_overlay">
@@ -382,13 +384,23 @@ export default function TodayWork() {
 
             <div className="today_disabled_message">
               <div className="today_disabled_title">
-                {isHoliday ? "Today is a Holiday" : "It's the Weekend"}
+                {isOnLeave
+                  ? "You are on Leave"
+                  : isHoliday
+                    ? "Today is a Holiday"
+                    : "It's the Weekend"}
               </div>
 
               <div className="today_disabled_subtitle">
-                {isHoliday
-                  ? holiday?.title || "Attendance is not required today."
-                  : "Attendance is not required on weekends."}
+                {isOnLeave
+                  ? leave?.leaveType
+                    ? `${leave.leaveType} leave approved for today.`
+                    : leave?.reason
+                      ? leave.reason
+                      : "Attendance is not required while you are on approved leave."
+                  : isHoliday
+                    ? holiday?.title || "Attendance is not required today."
+                    : "Attendance is not required on weekends."}
               </div>
             </div>
           </div>

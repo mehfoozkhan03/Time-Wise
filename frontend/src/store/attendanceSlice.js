@@ -125,6 +125,15 @@ const initialState = {
 
   holiday: null,
 
+  // =====================================================
+  // CHANGED:
+  // Store approved-leave information returned by the
+  // backend so the UI can disable attendance actions.
+  // =====================================================
+  isOnLeave: false,
+
+  leave: null,
+
   history: [],
 
   loading: false,
@@ -152,6 +161,12 @@ const attendanceSlice = createSlice({
       state.isHoliday = false
 
       state.holiday = null
+
+      // CHANGED:
+      // Reset leave information when attendance state is cleared.
+      state.isOnLeave = false
+
+      state.leave = null
 
       state.history = []
 
@@ -182,6 +197,14 @@ const attendanceSlice = createSlice({
         state.isHoliday = action.payload.isHoliday ?? false
 
         state.holiday = action.payload.holiday || null
+
+        // CHANGED:
+        // Store the approved-leave status returned by the backend.
+        // This allows the UI to distinguish leave from holidays
+        // and normal non-working days.
+        state.isOnLeave = action.payload.isOnLeave ?? false
+
+        state.leave = action.payload.leave || null
       })
 
       .addCase(getTodayAttendance.rejected, (state, action) => {
@@ -227,12 +250,19 @@ const attendanceSlice = createSlice({
 
         state.today = action.payload
 
-        // Check-in is only allowed on a working day.
+        // Check-in can only succeed on an allowed working day.
         state.isWorkingDay = true
 
         state.isHoliday = false
 
         state.holiday = null
+
+        // CHANGED:
+        // A successful check-in means the employee is not
+        // being treated as on approved leave for this state.
+        state.isOnLeave = false
+
+        state.leave = null
       })
 
       .addCase(checkIn.rejected, (state, action) => {
