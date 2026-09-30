@@ -8,6 +8,7 @@ import {
 } from "react-icons/md";
 
 import { cancelLeaveRequest } from "../../../../store/leaveSlice";
+import { Modal } from "../../../Modal/Modal";
 
 import "./LeaveDetails.css";
 
@@ -83,14 +84,13 @@ const LeaveDetails = ({
   };
 
   return (
-    <div
-      className="leaveDetails-overlay"
-      onMouseDown={handleClose}
+    <Modal
+      isOpen
+      overlayClassName="leaveDetails-overlay"
+      className="leaveDetails-modal"
+      onOverlayMouseDown={handleClose}
+      onContentMouseDown={(event) => event.stopPropagation()}
     >
-      <div
-        className="leaveDetails-modal"
-        onMouseDown={(event) => event.stopPropagation()}
-      >
         <div className="leaveDetails-header">
           <div className="leaveDetails-heading">
             <div className="leaveDetails-title-row">
@@ -285,8 +285,7 @@ const LeaveDetails = ({
             </div>
           )}
         </div>
-      </div>
-    </div>
+    </Modal>
   );
 };
 

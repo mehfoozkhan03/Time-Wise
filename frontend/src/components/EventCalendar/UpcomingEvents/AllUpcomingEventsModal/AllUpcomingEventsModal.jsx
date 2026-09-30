@@ -6,6 +6,7 @@ import { FaTimes, FaCalendarAlt } from "react-icons/fa";
 
 import EventItem from "../../../Common/EventItem/EventItem";
 import EmptyState from "../../../Common/EmptyState/EmptyState";
+import { Modal } from "../../../Modal/Modal";
 
 function AllUpcomingEventsModal({ events = [], onClose, onEventClick }) {
   /* =========================================
@@ -80,19 +81,15 @@ function AllUpcomingEventsModal({ events = [], onClose, onEventClick }) {
   );
 
   return (
-    <div
-      className="allUpcomingOverlay"
-      onClick={handleOverlayClick}
-      role="presentation"
+    <Modal
+      isOpen
+      overlayClassName="allUpcomingOverlay"
+      className="allUpcomingModal"
+      onOverlayClick={handleOverlayClick}
+      onContentClick={handleModalClick}
+      ariaLabelledBy="all-upcoming-title"
+      tabIndex={-1}
     >
-      <div
-        className="allUpcomingModal"
-        onClick={handleModalClick}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="all-upcoming-title"
-        tabIndex={-1}
-      >
         {/* =========================================
             Header
         ========================================= */}
@@ -160,8 +157,7 @@ function AllUpcomingEventsModal({ events = [], onClose, onEventClick }) {
             </div>
           )}
         </div>
-      </div>
-    </div>
+    </Modal>
   );
 }
 

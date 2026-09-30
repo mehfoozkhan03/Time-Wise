@@ -3,6 +3,7 @@ import "./AttendanceHistory.css";
 import { FaChevronLeft, FaChevronRight, FaCalendarAlt } from "react-icons/fa";
 import Skeleton from "../../../components/Skeleton/Skeleton";
 import useAttendance from "../../../hooks/useAttendance";
+import { Modal } from "../../Modal/Modal";
 
 export default function AttendanceHistory() {
   const { history, loading, error, fetchAttendanceHistory } = useAttendance();
@@ -306,11 +307,13 @@ export default function AttendanceHistory() {
           )}
 
           {showMonthModal && (
-            <div
-              className="month_modal_overlay"
-              onClick={() => setShowMonthModal(false)}
+            <Modal
+              isOpen
+              overlayClassName="month_modal_overlay"
+              className="month_modal"
+              onOverlayClick={() => setShowMonthModal(false)}
+              onContentClick={(event) => event.stopPropagation()}
             >
-              <div className="month_modal" onClick={(e) => e.stopPropagation()}>
                 <div className="month_modal_header">
                   <h3>Select Month</h3>
 
@@ -335,19 +338,17 @@ export default function AttendanceHistory() {
                     </button>
                   ))}
                 </div>
-              </div>
-            </div>
+            </Modal>
           )}
 
           {noDataMonth && (
-            <div
-              className="no_data_modal_overlay"
-              onClick={() => setNoDataMonth(null)}
+            <Modal
+              isOpen
+              overlayClassName="no_data_modal_overlay"
+              className="no_data_modal"
+              onOverlayClick={() => setNoDataMonth(null)}
+              onContentClick={(event) => event.stopPropagation()}
             >
-              <div
-                className="no_data_modal"
-                onClick={(e) => e.stopPropagation()}
-              >
                 <div className="no_data_icon">📅</div>
 
                 <h3>No Attendance Data</h3>
@@ -363,8 +364,7 @@ export default function AttendanceHistory() {
                 >
                   OK
                 </button>
-              </div>
-            </div>
+            </Modal>
           )}
         </>
       )}

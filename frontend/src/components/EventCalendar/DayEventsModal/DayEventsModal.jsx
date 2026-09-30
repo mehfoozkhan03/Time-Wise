@@ -7,6 +7,7 @@ import { FaTimes, FaCalendarAlt } from "react-icons/fa";
 import EventItem from "../../Common/EventItem/EventItem";
 
 import { formatFullDate } from "../../../utils/dateUtils";
+import { Modal } from "../../Modal/Modal";
 
 function DayEventsModal({ date, events = [], onClose, onEventClick }) {
   const closeButtonRef = useRef(null);
@@ -49,18 +50,14 @@ function DayEventsModal({ date, events = [], onClose, onEventClick }) {
   );
 
   return (
-    <div
-      className="dayEventsOverlay"
-      onClick={handleOverlayClick}
-      role="presentation"
+    <Modal
+      isOpen
+      overlayClassName="dayEventsOverlay"
+      className="dayEventsModal"
+      onOverlayClick={handleOverlayClick}
+      onContentClick={handleModalClick}
+      ariaLabelledBy="day-events-title"
     >
-      <div
-        className="dayEventsModal"
-        onClick={handleModalClick}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="day-events-title"
-      >
         <div className="dayEventsHeader">
           <div className="dayEventsTitle">
             <FaCalendarAlt />
@@ -98,8 +95,7 @@ function DayEventsModal({ date, events = [], onClose, onEventClick }) {
             />
           ))}
         </div>
-      </div>
-    </div>
+    </Modal>
   );
 }
 

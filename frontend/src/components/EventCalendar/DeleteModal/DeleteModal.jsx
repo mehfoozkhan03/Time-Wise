@@ -3,6 +3,7 @@ import "./DeleteModal.css";
 import { memo, useEffect, useRef, useCallback } from "react";
 
 import { FaTrash, FaTimes, FaExclamationTriangle } from "react-icons/fa";
+import { Modal } from "../../Modal/Modal";
 
 function DeleteModal({
   title = "Delete Item",
@@ -58,18 +59,14 @@ function DeleteModal({
   }, [isDeleting, onConfirm]);
 
   return (
-    <div
-      className="deleteOverlay"
-      onClick={handleOverlayClick}
-      role="presentation"
+    <Modal
+      isOpen
+      overlayClassName="deleteOverlay"
+      className="deleteModal"
+      onOverlayClick={handleOverlayClick}
+      onContentClick={handleModalClick}
+      ariaLabelledBy="delete-title"
     >
-      <div
-        className="deleteModal"
-        onClick={handleModalClick}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="delete-title"
-      >
         <div className="deleteHeader">
           <div className="deleteIcon">
             <FaExclamationTriangle />
@@ -113,8 +110,7 @@ function DeleteModal({
             {isDeleting ? "Deleting..." : deleteLabel}
           </button>
         </div>
-      </div>
-    </div>
+    </Modal>
   );
 }
 

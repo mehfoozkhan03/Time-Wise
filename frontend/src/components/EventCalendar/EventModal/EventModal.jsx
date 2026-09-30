@@ -20,6 +20,7 @@ import { EVENT_CONFIG } from "../../../data/eventConfig";
 import { formatFullDate, formatTime } from "../../../utils/dateUtils";
 
 import InfoRow from "../../Common/InfoRow/InfoRow";
+import { Modal } from "../../Modal/Modal";
 
 function EventModal({
   event,
@@ -161,19 +162,15 @@ function EventModal({
   const Icon = config.icon;
 
   return (
-    <div
-      className="eventModalOverlay"
-      onClick={handleOverlayClick}
-      role="presentation"
+    <Modal
+      isOpen
+      overlayClassName="eventModalOverlay"
+      className="eventModal"
+      onOverlayClick={handleOverlayClick}
+      onContentClick={handleModalClick}
+      ariaLabelledBy="event-modal-title"
+      ariaDescribedBy="event-modal-description"
     >
-      <div
-        className="eventModal"
-        onClick={handleModalClick}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="event-modal-title"
-        aria-describedby="event-modal-description"
-      >
         <div className="modalHeader">
           <div className="modalTitle">
             <div
@@ -291,8 +288,7 @@ function EventModal({
             )}
           </div>
         )}
-      </div>
-    </div>
+    </Modal>
   );
 }
 

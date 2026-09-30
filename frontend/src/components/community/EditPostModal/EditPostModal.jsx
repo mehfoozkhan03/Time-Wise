@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux'
 import { updateExistingPost } from '../../../store/postSlice'
 
 import './EditPostModal.css'
+import { Modal } from '../../Modal/Modal'
 
 const EditPostModal = ({ post, onClose }) => {
   const dispatch = useDispatch()
@@ -36,8 +37,7 @@ const EditPostModal = ({ post, onClose }) => {
   }
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-card">
+    <Modal isOpen overlayClassName="modal-overlay" className="modal-card">
         <h2>Edit Post</h2>
 
         <textarea value={text} onChange={(e) => setText(e.target.value)} />
@@ -52,8 +52,7 @@ const EditPostModal = ({ post, onClose }) => {
             {loading ? 'Saving...' : 'Save'}
           </button>
         </div>
-      </div>
-    </div>
+    </Modal>
   )
 }
 

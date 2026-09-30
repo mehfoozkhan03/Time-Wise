@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { FaTimes, FaExclamationTriangle, FaBan } from "react-icons/fa";
 
 import "./RejectLeaveModal.css";
+import { Modal } from "../../../Modal/Modal";
 
 import { rejectAdminLeave } from "../../../../store/leaveSlice";
 
@@ -120,11 +121,13 @@ export default function RejectLeaveModal({
   };
 
   return (
-    <div className="reject_leave_overlay" onClick={onClose}>
-      <div
-        className="reject_leave_modal"
-        onClick={(event) => event.stopPropagation()}
-      >
+    <Modal
+      isOpen
+      overlayClassName="reject_leave_overlay"
+      className="reject_leave_modal"
+      onOverlayClick={onClose}
+      onContentClick={(event) => event.stopPropagation()}
+    >
         <div className="reject_leave_header">
           <div className="reject_leave_header_icon">
             <FaBan />
@@ -215,7 +218,6 @@ export default function RejectLeaveModal({
             </div>
           </form>
         </div>
-      </div>
-    </div>
+    </Modal>
   );
 }

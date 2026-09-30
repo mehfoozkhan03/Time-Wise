@@ -24,6 +24,7 @@ import { useEffect, useRef, useState } from "react";
 import { DepartmentDropdown } from "../Dropdowns/DepartmentDropdown/DepartmentDropdown";
 import { DesignationDropdown } from "../Dropdowns/DesignationDropdown/DesignationDropdown";
 import { RoleDropdown } from "../Dropdowns/RoleDropdown/RoleDropdown";
+import { Modal } from "../../Modal/Modal";
 
 const departments = [
   "All",
@@ -878,8 +879,7 @@ export const DashboardEmployee = () => {
                           {/* KEY */}
 
                           {passwordModal.open && (
-                            <div className="password-modal-overlay">
-                              <div className="password-modal">
+                            <Modal isOpen overlayClassName="password-modal-overlay" className="password-modal">
                                 <div className="password-modal-icon">
                                   <FaKey />
                                 </div>
@@ -938,8 +938,7 @@ export const DashboardEmployee = () => {
                                       : "Change Password"}
                                   </button>
                                 </div>
-                              </div>
-                            </div>
+                            </Modal>
                           )}
 
                           <div

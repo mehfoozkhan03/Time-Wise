@@ -1,4 +1,5 @@
 import "./AnnouncementForm.css";
+import { Modal } from "../../../Modal/Modal";
 import { AnnoucementDropdown } from "../AnnoucementDropdown/AnnoucementDropdown";
 
 import { useEffect, useState } from "react";
@@ -188,9 +189,11 @@ export const AnnouncementForm = ({ onClose }) => {
   }, []);
 
   return (
-    <>
-      <div className="announcementForm-overlay"></div>
-      <section className="announcementForm-section">
+    <Modal
+      isOpen
+      overlayClassName="announcementForm-overlay"
+      className="announcementForm-section"
+    >
         <div className="announcementForm-container">
           <div className="announcementForm-heading">
             <h3>Create New Announcement</h3>
@@ -515,8 +518,7 @@ export const AnnouncementForm = ({ onClose }) => {
         </div>
 
         {showPreview && (
-          <div className="announcement-preview-overlay">
-            <div className="announcement-preview">
+          <Modal isOpen overlayClassName="announcement-preview-overlay" className="announcement-preview">
               <div className="announcement-preview-header">
                 <h3>Announcement Preview</h3>
 
@@ -569,10 +571,8 @@ export const AnnouncementForm = ({ onClose }) => {
                   Back to Edit
                 </button>
               </div>
-            </div>
-          </div>
+          </Modal>
         )}
-      </section>
-    </>
+    </Modal>
   );
 };
