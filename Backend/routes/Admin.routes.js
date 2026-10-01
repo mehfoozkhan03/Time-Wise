@@ -15,7 +15,11 @@ import {
   getAIBotAccessSettings,
   updateAIBotAccessSettings,
 } from "../controllers/Admin/aiBotAccess.controller.js";
-import { askAdminAI } from "../controllers/Admin/adminAI.controller.js";
+import {
+  askAdminAI,
+  clearAdminAIConversation,
+  getAdminAIConversation,
+} from "../controllers/Admin/adminAI.controller.js";
 import {
   adminDeleteThought,
   togglePinThought,
@@ -56,6 +60,8 @@ adminRoutes.patch("/thoughts/:id/pin", adminAuth, togglePinThought);
 
 adminRoutes.get("/ai-bot-access", adminAuth, getAIBotAccessSettings);
 adminRoutes.put("/ai-bot-access", adminAuth, updateAIBotAccessSettings);
+adminRoutes.get("/admin-ai/chat", adminAuth, getAdminAIConversation);
 adminRoutes.post("/admin-ai/chat", adminAuth, askAdminAI);
+adminRoutes.delete("/admin-ai/chat", adminAuth, clearAdminAIConversation);
 
 export { adminRoutes };

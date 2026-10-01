@@ -15,19 +15,19 @@ function ContactForm() {
   const { isLoading: isContactLoading } = useSelector((state) => state.contact);
 
   const questions = [
-    "What is your return policy?",
-    "Do you offer customer support?",
-    "How long does shipping take?",
-    "Can I cancel my order?",
-    "How can I contact support?",
+    "How do I track my working hours?",
+    "Where can I view my attendance history?",
+    "How can I view or download my work reports?",
+    "How do I manage my projects and tasks?",
+    "How can I get help with my Time-Wise account?",
   ];
 
   const answers = [
-    "You can return any product within 30 days of purchase.",
-    "Yes, 24/7 customer support is available via email and chat.",
-    "Our standard delivery time is between 3-7 business days.",
-    "Yes, you can update or cancel your order before it is dispatched.",
-    "You can contact us through email, phone, or the contact form below.",
+    "Use the timer on your dashboard to start and stop tracking your work session. Your tracked time is included in your reports.",
+    "Open the Attendance section to review your attendance records and working hours.",
+    "Open the Reports section to review your work hours, attendance, and project activity for the selected date range.",
+    "Use the Projects section to organize your projects and tasks, then associate your tracked work with the relevant project.",
+    "Choose this topic and describe the issue in your message. Our team will use the email address you provide to follow up.",
   ];
 
   const [formData, setFormData] = useState({

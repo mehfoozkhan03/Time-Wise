@@ -10,6 +10,7 @@ import { AdminChatBot } from './components/AdminChatBot/AdminChatBot';
 import { socket } from './socket/socket';
 import { addNotification } from './store/notificationSlice';
 import { ScrollToTopButton } from './components/ScrollToTop/scrollToTop';
+import { FloatingControlsProvider } from './context/FloatingControlsContext';
 
 function AppContent() {
   const dispatch = useDispatch();
@@ -53,14 +54,14 @@ function AppContent() {
   // {isAdminAuthenticated && <AdminChatBot />}
 
   return (
-    <>
+    <FloatingControlsProvider>
       <ScrollTop />
       <ScrollToTopButton />
       <AppRoutes />
 
       {showEmployeeBot && <Chatbot />}
       {showAdminBot && <AdminChatBot />}
-    </>
+    </FloatingControlsProvider>
   );
 }
 

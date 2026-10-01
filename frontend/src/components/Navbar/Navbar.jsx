@@ -10,6 +10,7 @@ import { authService } from "../../services/authService";
 import { useTheme } from "../../context/ThemeContext";
 import { fetchNotifications } from ".././../store/notificationSlice";
 import { Modal } from "../Modal/Modal";
+import { checkOut, endBreak, getTodayAttendance } from "../../store/attendanceSlice";
 
 export default function Navbar() {
   const { notifications, loading } = useSelector((state) => state.notification);
@@ -55,49 +56,54 @@ export default function Navbar() {
   const [overProfileBanner, setOverProfileBanner] = useState(false);
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [logoutOpen, setLogoutOpen] = useState(false);
+  const [logoutWithCheckout, setLogoutWithCheckout] = useState(false);
+  const [logoutLoading, setLogoutLoading] = useState(false);
+  const [logoutError, setLogoutError] = useState("");
 
   const notificationRef = useRef(null);
   const profileRef = useRef(null);
 
   const confirmLogout = async () => {
+    if (logoutLoading) return;
+    setLogoutLoading(true);
+    setLogoutError("");
+
     try {
-      
+      if (logoutWithCheckout) {
+        const todayResponse = await dispatch(getTodayAttendance()).unwrap();
+        const attendance = todayResponse?.attendance;
+
+        if (attendance?.checkInTime && !attendance.checkOutTime) {
+          const breaks = attendance.breaks || [];
+          const currentBreak = breaks[breaks.length - 1];
+
+          if (currentBreak?.breakStart && !currentBreak.breakEnd) {
+            await dispatch(endBreak()).unwrap();
+          }
+
+          await dispatch(checkOut()).unwrap();
+        }
+      }
+
       await authService.logout();
-      
       dispatch(logout());
-
       setLogoutOpen(false);
-      
       navigate("/login");
-
     } catch (error) {
-      console.log(error);
+      setLogoutError(
+        typeof error === "string"
+          ? error
+          : error.response?.data?.message || "Unable to log out. Please try again.",
+      );
+      setLogoutOpen(true);
+    } finally {
+      setLogoutLoading(false);
     }
   };
 
-  const getLogoutContent = () => {
-    const today = new Date().getDay();
-
-    const firstName =
-      user?.firstName?.charAt(0).toUpperCase() + user?.firstName?.slice(1) ||
-      "User";
-
-    if (today >= 1 && today <= 4) {
-      return {
-        title: `Goodbye, ${firstName}! 👋`,
-        message:
-          "That's a wrap for today! Great work. Take some time to relax and recharge — We'll be ready for another productive day tomorrow.",
-        button: "Logout & Relax",
-      };
-    }
-
-    return {
-      title: `Goodbye, ${firstName}! 👋`,
-      message:
-        "You've wrapped up another productive week. Enjoy your weekend, relax, and come back refreshed. We'll see you on Monday!",
-      button: "Start My Weekend",
-    };
-  };
+  const firstName =
+    user?.firstName?.charAt(0).toUpperCase() + user?.firstName?.slice(1) ||
+    "User";
 
   // Close everything on route change
   useEffect(() => {
@@ -329,6 +335,8 @@ export default function Navbar() {
                 <button
                   onClick={() => {
                     setProfileOpen(false);
+                    setLogoutWithCheckout(false);
+                    setLogoutError("");
                     setLogoutOpen(true);
                   }}
                 >
@@ -352,14 +360,76 @@ export default function Navbar() {
 
       <Modal
         isOpen={logoutOpen}
-        variant="logout"
-        title={getLogoutContent().title}
-        message={getLogoutContent().message}
-        confirmText={getLogoutContent().button}
-        cancelText="Stay Logged In"
-        onClose={() => setLogoutOpen(false)}
-        onConfirm={confirmLogout}
-      />
+        onClose={() => {
+          if (!logoutLoading) setLogoutOpen(false);
+        }}
+        onOverlayClick={() => {
+          if (!logoutLoading) setLogoutOpen(false);
+        }}
+        onContentClick={(event) => event.stopPropagation()}
+      >
+        <div className="logout_choice_content">
+          <div className="feedback_icon feedback_icon--logout">
+            <span className="feedback_wave" role="img" aria-label="Goodbye">👋</span>
+          </div>
+          <h2 className="feedback_title">Log out, {firstName}?</h2>
+          <p className="feedback_message">Choose how to finish your attendance before logging out.</p>
+
+          <fieldset className="logout_attendance_options" disabled={logoutLoading}>
+            <legend>Attendance</legend>
+            <label className="logout_attendance_choice">
+              <input
+                type="radio"
+                name="logout-attendance"
+                checked={!logoutWithCheckout}
+                onChange={() => setLogoutWithCheckout(false)}
+              />
+              <span>
+                <strong>Without checkout</strong>
+                <small>Log out without recording a check-out.</small>
+              </span>
+            </label>
+            <label className="logout_attendance_choice">
+              <input
+                type="radio"
+                name="logout-attendance"
+                checked={logoutWithCheckout}
+                onChange={() => setLogoutWithCheckout(true)}
+              />
+              <span>
+                <strong>With checkout</strong>
+                <small>Check out automatically, then log out.</small>
+              </span>
+            </label>
+          </fieldset>
+
+          {logoutError && <p className="logout_choice_error" role="alert">{logoutError}</p>}
+
+          <div className="feedback_actions">
+            <button
+              className="feedback_button feedback_button--cancel"
+              type="button"
+              disabled={logoutLoading}
+              onClick={() => setLogoutOpen(false)}
+            >
+              Stay Logged In
+            </button>
+            <button
+              className="feedback_button feedback_button--logout"
+              type="button"
+              disabled={logoutLoading}
+              onClick={confirmLogout}
+            >
+              {logoutLoading
+                ? logoutWithCheckout
+                  ? "Checking out..."
+                  : "Logging out..."
+                : "Log Out"}
+            </button>
+          </div>
+        </div>
+      </Modal>
+
     </>
   );
 }

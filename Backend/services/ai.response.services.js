@@ -153,7 +153,27 @@ const formatCalendarAnswer = (data, entity, dateReference) => {
 
   const isHoliday = entity === "holiday" || entity === "festival";
 
-  const filteredData = isHoliday ? keepOneDatePerHoliday(data) : data;
+  let filteredData = isHoliday ? keepOneDatePerHoliday(data) : data;
+
+  // An open-ended holiday question (for example, "When is the next
+  // holiday?") should show only the nearest one or two upcoming dates.
+  // Explicit date ranges such as "this year" continue to show their matches.
+  if (isHoliday && dateReference === "none") {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    filteredData = filteredData
+      .filter((item) => {
+        const date = new Date(item?.date);
+        if (Number.isNaN(date.getTime())) return false;
+        date.setHours(0, 0, 0, 0);
+        return date >= today;
+      })
+      .slice(0, 2);
+
+    if (filteredData.length === 0) {
+      return "No upcoming holidays were found.";
+    }
+  }
 
   if (filteredData.length === 0) {
     return "No matching information was found.";

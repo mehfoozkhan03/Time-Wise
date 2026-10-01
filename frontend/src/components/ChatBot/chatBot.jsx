@@ -5,6 +5,7 @@ import api from "../../services/api";
 import { aiBotAccessService } from "../../services/aiBotAccessService";
 import "./chatBot.css";
 import { Modal } from "../Modal/Modal";
+import { useFloatingControls } from "../../context/FloatingControlsContext";
 
 export function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,6 +14,7 @@ export function Chatbot() {
   const [isClearing, setIsClearing] = useState(false);
   const [showWelcomeTooltip, setShowWelcomeTooltip] = useState(true);
   const [isBlocked, setIsBlocked] = useState(null);
+  const { hideOnIdle } = useFloatingControls();
 
   const chatBodyRef = useRef(null);
 
@@ -310,7 +312,7 @@ export function Chatbot() {
         </div>
 
         {/* Welcome Tooltip */}
-        {showWelcomeTooltip && !isOpen && (
+        {showWelcomeTooltip && !isOpen && !hideOnIdle && (
           <div className="ai_welcome_tooltip">
             <div className="ai_welcome_tooltip_content">
               <span className="ai_welcome_tooltip_icon">👋</span>
@@ -328,7 +330,7 @@ export function Chatbot() {
         {/* Floating AI Button */}
         <button
           type="button"
-          className="ai_assistant_btn"
+          className={`ai_assistant_btn ${hideOnIdle && !isOpen ? "idle_hidden" : ""}`}
           onClick={() => {
             setShowWelcomeTooltip(false);
             setIsOpen((prev) => !prev);

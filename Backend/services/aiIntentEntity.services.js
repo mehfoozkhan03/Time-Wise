@@ -802,14 +802,14 @@ const detectByKeywords = (message) => {
     };
   }
 
-  // 3. Holiday word, no date -> this year's holidays
+  // 3. Holiday word, no date -> nearest upcoming holidays
   if (mentionsHolidayWord) {
     return {
       intent: "holiday",
       action: "find",
       entity: "holiday",
       period: "none",
-      dateReference: "this_year",
+      dateReference: "none",
       search: "none",
       confidence: 0.9,
     };
