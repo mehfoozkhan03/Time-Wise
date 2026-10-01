@@ -31,4 +31,5 @@
     border: none;
     outline: none;
     background: transparent;
+    color: var(--text_primary);
 }

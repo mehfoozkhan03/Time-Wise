@@ -7,7 +7,24 @@ import { annoucementModel } from "../../models/Announcement.model.js";
 
 export const createAnnouncement = async (req, res) => {
   try {
-    const {title, category, priority, description, status, publishedAt, scheduledAt, expiryDate, expiryTime, audience, department, role, specificEmployees, attachments, actionButton, isPinned} = req.body;
+    const {
+      title,
+      category,
+      priority,
+      description,
+      status,
+      publishedAt,
+      scheduledAt,
+      expiryDate,
+      expiryTime,
+      audience,
+      department,
+      role,
+      specificEmployees,
+      attachments,
+      actionButton,
+      isPinned,
+    } = req.body;
 
     // Basic validation
     if (!title?.trim()) {
@@ -44,7 +61,7 @@ export const createAnnouncement = async (req, res) => {
     // Validate specific employees
     if (audience === "Specific Employees" && specificEmployees?.length) {
       const invalidEmployee = specificEmployees.some(
-        (id) => !mongoose.Types.ObjectId.isValid(id)
+        (id) => !mongoose.Types.ObjectId.isValid(id),
       );
 
       if (invalidEmployee) {
@@ -78,7 +95,7 @@ export const createAnnouncement = async (req, res) => {
       finalPublishedAt = new Date();
     }
 
-    //# Creating announcement 
+    //# Creating announcement
     const announcement = await annoucementModel.create({
       title: title.trim(),
       category,
@@ -95,20 +112,12 @@ export const createAnnouncement = async (req, res) => {
 
       audience: audience || "Everyone",
 
-      department:
-        audience === "Department" && department
-          ? department
-          : null,
+      department: audience === "Department" && department ? department : null,
 
-      role:
-        audience === "Role" && role
-          ? role
-          : null,
+      role: audience === "Role" && role ? role : null,
 
       specificEmployees:
-        audience === "Specific Employees"
-          ? specificEmployees || []
-          : [],
+        audience === "Specific Employees" ? specificEmployees || [] : [],
 
       attachments: attachments || [],
 
@@ -127,11 +136,9 @@ export const createAnnouncement = async (req, res) => {
       .findById(announcement._id)
       .populate(
         "createdBy",
-        "firstName lastName profileImage designation department"
+        "firstName lastName profileImage designation department",
       )
-      .populate("updatedBy", "firstName lastName")
-      ;
-
+      .populate("updatedBy", "firstName lastName");
     return res.status(201).json({
       success: true,
       message: "Announcement created successfully.",
@@ -148,7 +155,6 @@ export const createAnnouncement = async (req, res) => {
   }
 };
 
-
 // ============================================================
 // GET ALL ANNOUNCEMENTS
 // ============================================================
@@ -161,6 +167,7 @@ export const getAllAnnouncements = async (req, res) => {
       status,
       category,
       priority,
+      audience,
       search,
       sort = "newest",
     } = req.query;
@@ -183,6 +190,11 @@ export const getAllAnnouncements = async (req, res) => {
     // Priority filter
     if (priority) {
       filter.priority = priority;
+    }
+
+    // Audience filter
+    if (audience) {
+      filter.audience = audience;
     }
 
     // Search
@@ -214,6 +226,10 @@ export const getAllAnnouncements = async (req, res) => {
       };
     }
 
+    if (sort === "az") {
+      sortOption = { title: 1 };
+    }
+
     if (sort === "priority") {
       sortOption = {
         priority: -1,
@@ -228,10 +244,10 @@ export const getAllAnnouncements = async (req, res) => {
         .find(filter)
         .populate(
           "createdBy",
-          "firstName lastName profileImage designation department"
+          "firstName lastName profileImage designation department",
         )
         .populate("updatedBy", "firstName lastName")
-        
+
         .sort(sortOption)
         .skip(skip)
         .limit(limitNumber)
@@ -261,7 +277,6 @@ export const getAllAnnouncements = async (req, res) => {
   }
 };
 
-
 // ============================================================
 // GET SINGLE ANNOUNCEMENT
 // ============================================================
@@ -281,13 +296,13 @@ export const getAnnouncementById = async (req, res) => {
       .findById(id)
       .populate(
         "createdBy",
-        "firstName lastName profileImage designation department"
+        "firstName lastName profileImage designation department",
       )
       .populate("updatedBy", "firstName lastName")
-      
+
       .populate(
         "specificEmployees",
-        "firstName lastName profileImage designation department"
+        "firstName lastName profileImage designation department",
       );
 
     if (!announcement) {
@@ -311,7 +326,6 @@ export const getAnnouncementById = async (req, res) => {
     });
   }
 };
-
 
 // ============================================================
 // UPDATE ANNOUNCEMENT
@@ -451,10 +465,7 @@ export const updateAnnouncement = async (req, res) => {
     }
 
     if (department !== undefined) {
-      if (
-        department &&
-        !mongoose.Types.ObjectId.isValid(department)
-      ) {
+      if (department && !mongoose.Types.ObjectId.isValid(department)) {
         return res.status(400).json({
           success: false,
           message: "Invalid department ID.",
@@ -484,24 +495,18 @@ export const updateAnnouncement = async (req, res) => {
       updateData.isPinned = isPinned;
     }
 
-    updateData.updatedBy =
-      req.admin?.userID || req.user?.userID;
+    updateData.updatedBy = req.admin?.userID || req.user?.userID;
 
-    const updatedAnnouncement =
-      await annoucementModel
-        .findByIdAndUpdate(
-          id,
-          updateData,
-          {
-            new: true,
-            runValidators: true,
-          }
-        )
-        .populate(
-          "createdBy",
-          "firstName lastName profileImage designation department"
-        )
-        .populate("updatedBy", "firstName lastName");
+    const updatedAnnouncement = await annoucementModel
+      .findByIdAndUpdate(id, updateData, {
+        new: true,
+        runValidators: true,
+      })
+      .populate(
+        "createdBy",
+        "firstName lastName profileImage designation department",
+      )
+      .populate("updatedBy", "firstName lastName");
 
     return res.status(200).json({
       success: true,
@@ -518,7 +523,6 @@ export const updateAnnouncement = async (req, res) => {
     });
   }
 };
-
 
 // ============================================================
 // DELETE ANNOUNCEMENT
@@ -561,7 +565,6 @@ export const deleteAnnouncement = async (req, res) => {
   }
 };
 
-
 // ============================================================
 // PUBLISH ANNOUNCEMENT
 // ============================================================
@@ -597,8 +600,7 @@ export const publishAnnouncement = async (req, res) => {
     announcement.publishedAt = new Date();
     announcement.scheduledAt = null;
 
-    announcement.updatedBy =
-      req.admin?.userID || req.user?.userID;
+    announcement.updatedBy = req.admin?.userID || req.user?.userID;
 
     await announcement.save();
 
@@ -617,7 +619,6 @@ export const publishAnnouncement = async (req, res) => {
     });
   }
 };
-
 
 // ============================================================
 // SCHEDULE ANNOUNCEMENT
@@ -671,8 +672,7 @@ export const scheduleAnnouncement = async (req, res) => {
     announcement.scheduledAt = scheduleDate;
     announcement.publishedAt = null;
 
-    announcement.updatedBy =
-      req.admin?.userID || req.user?.userID;
+    announcement.updatedBy = req.admin?.userID || req.user?.userID;
 
     await announcement.save();
 
@@ -691,7 +691,6 @@ export const scheduleAnnouncement = async (req, res) => {
     });
   }
 };
-
 
 // ============================================================
 // PIN / UNPIN ANNOUNCEMENT
@@ -719,8 +718,7 @@ export const togglePinAnnouncement = async (req, res) => {
 
     announcement.isPinned = !announcement.isPinned;
 
-    announcement.updatedBy =
-      req.admin?.userID || req.user?.userID;
+    announcement.updatedBy = req.admin?.userID || req.user?.userID;
 
     await announcement.save();
 

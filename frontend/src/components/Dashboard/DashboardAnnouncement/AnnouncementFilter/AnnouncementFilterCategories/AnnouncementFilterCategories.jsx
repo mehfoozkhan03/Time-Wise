@@ -1,8 +1,6 @@
-import { useState } from "react";
 import { AnnoucementDropdown } from "../../AnnoucementDropdown/AnnoucementDropdown";
 
-export const AnnoucementFilterCategories = () => {
-  const [category, setCategory] = useState("All Categories");
+export const AnnoucementFilterCategories = ({ category, setCategory }) => {
 
   const categoriesOpt = [
     "All Categories",
