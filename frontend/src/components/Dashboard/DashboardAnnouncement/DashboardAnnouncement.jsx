@@ -18,6 +18,9 @@ export const DashboardAnnouncement = () => {
   );
 
   const [openAnnouncement, setOpenAnnouncement] = useState(false);
+  
+  //# This is for announcement edit
+  const [editingAnnouncement, setEditingAnnouncement] = useState(null);
 
   //# Selected category
   const [category, setCategory] = useState("All Categories");
@@ -35,7 +38,7 @@ export const DashboardAnnouncement = () => {
   const [sort, setSort] = useState("Newest First");
 
   //# Search
-    const [search, setSearch] = useState("");
+  const [search, setSearch] = useState("");
 
   //# Fetch announcements whenever category changes
   useEffect(() => {
@@ -82,6 +85,7 @@ export const DashboardAnnouncement = () => {
     dispatch(fetchAnnouncements(params));
   }, [dispatch, category, status, priority, audience, sort, search]);
 
+
   return (
     <>
       <div className="dashboardAnnouncement-container">
@@ -100,6 +104,14 @@ export const DashboardAnnouncement = () => {
 
           {openAnnouncement && (
             <AnnouncementForm onClose={() => setOpenAnnouncement(false)} />
+          )}
+
+          {editingAnnouncement && (
+            <AnnouncementForm
+              mode="edit"
+              announcement={editingAnnouncement}
+              onClose={() => setEditingAnnouncement(null)}
+            />
           )}
         </div>
         <AnnouncementStats />
@@ -129,7 +141,10 @@ export const DashboardAnnouncement = () => {
             No matching announcements found.
           </div>
         ) : (
-          <AnnouncementCard announcements={announcements} />
+          <AnnouncementCard
+            announcements={announcements}
+            onEdit={setEditingAnnouncement}
+          />
         )}
       </div>
     </>

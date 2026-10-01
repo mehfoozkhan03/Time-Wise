@@ -220,6 +220,13 @@ export const getAllAnnouncements = async (req, res) => {
       createdAt: -1,
     };
 
+    if (sort === "newest") {
+      sortOption = {
+        isPinned: -1,
+        createdAt: -1,
+      };
+    }
+
     if (sort === "oldest") {
       sortOption = {
         createdAt: 1,
@@ -716,7 +723,42 @@ export const togglePinAnnouncement = async (req, res) => {
       });
     }
 
-    announcement.isPinned = !announcement.isPinned;
+    // ==============================
+    // UNPIN
+    // ==============================
+    if (announcement.isPinned) {
+      announcement.isPinned = false;
+
+      announcement.updatedBy = req.admin?.userID || req.user?.userID;
+
+      await announcement.save();
+
+      return res.status(200).json({
+        success: true,
+        message: "Announcement unpinned successfully.",
+        announcement,
+      });
+    }
+
+    // ==============================
+    // PIN
+    // ==============================
+
+    // First unpin any existing pinned announcement
+    await annoucementModel.updateMany(
+      {
+        isPinned: true,
+        _id: { $ne: id },
+      },
+      {
+        $set: {
+          isPinned: false,
+        },
+      },
+    );
+
+    // Now pin the selected announcement
+    announcement.isPinned = true;
 
     announcement.updatedBy = req.admin?.userID || req.user?.userID;
 
@@ -724,9 +766,7 @@ export const togglePinAnnouncement = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      message: announcement.isPinned
-        ? "Announcement pinned successfully."
-        : "Announcement unpinned successfully.",
+      message: "Announcement pinned successfully.",
       announcement,
     });
   } catch (error) {
