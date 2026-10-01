@@ -10,7 +10,7 @@ import {
   signup,
   updateActivity,
 } from "../controllers/User/userData.controller.js";
-import { updateTheme } from "./../controllers/User/theme.controller.js";
+import { getTheme, updateTheme } from "./../controllers/User/theme.controller.js";
 import { updateSocialLinks } from "../controllers/User/socialLinks.controller.js";
 import { updateEmergencyContact } from "../controllers/User/emergencyContact.controller.js";
 
@@ -33,6 +33,8 @@ userRoutes.get("/me", auth, authorize("user", "admin"), getCurrentUser);
 userRoutes.get("/profile/:userId", auth, getUserProfile);
 
 userRoutes.patch("/activity", auth, authorize("user"), updateActivity);
+
+userRoutes.get("/theme", auth, getTheme);
 
 userRoutes.patch("/theme", auth, authorize("user", "admin"), updateTheme);
 

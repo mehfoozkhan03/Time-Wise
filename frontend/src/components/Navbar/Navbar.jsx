@@ -7,7 +7,7 @@ import { markNotificationAsRead } from "../../services/notificationServices";
 import "./Navbar.css";
 import { logout } from "../../store/authSlice";
 import { authService } from "../../services/authService";
-import { useTheme } from "../../context/ThemeContext";
+// import { useTheme } from "../../context/ThemeContext";
 import { fetchNotifications } from ".././../store/notificationSlice";
 import { Modal } from "../Modal/Modal";
 import { checkOut, endBreak, getTodayAttendance } from "../../store/attendanceSlice";
@@ -44,10 +44,18 @@ export default function Navbar() {
     (notification) => !notification.read,
   ).length;
 
-  const { resolvedTheme } = useTheme();
-
   const location = useLocation();
   const { user } = useSelector((state) => state.auth);
+
+  //# Theme
+  const currentTheme = useSelector((state) => state.theme.theme);
+
+  const resolvedTheme =
+    currentTheme === "system"
+      ? window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? "dark"
+        : "light"
+      : currentTheme;
 
   const isHome = location.pathname === "/";
 
@@ -148,8 +156,7 @@ export default function Navbar() {
       const navbarHeight = navbar.offsetHeight;
 
       const isOverBanner =
-        bannerRect.top <= navbarHeight &&
-        bannerRect.bottom >= 0;
+        bannerRect.top <= navbarHeight && bannerRect.bottom >= 0;
 
       setOverProfileBanner(isOverBanner);
     };
@@ -176,8 +183,7 @@ export default function Navbar() {
   return (
     <>
       <header
-        className={`navbar ${overProfileBanner ? "navbar_over_banner" : ""
-          }`}
+        className={`navbar ${overProfileBanner ? "navbar_over_banner" : ""}`}
       >
         {/* =======================
               Logo
@@ -253,8 +259,9 @@ export default function Navbar() {
                   notifications.map((notification) => (
                     <div
                       key={notification._id}
-                      className={`notification_item ${!notification.read ? "unread" : ""
-                        }`}
+                      className={`notification_item ${
+                        !notification.read ? "unread" : ""
+                      }`}
                       onClick={() => handleNotificationClick(notification)}
                     >
                       <strong>{notification.title}</strong>
@@ -301,10 +308,10 @@ export default function Navbar() {
                 <h4>
                   {user
                     ? `${user.firstName?.charAt(0).toUpperCase()}${user.firstName?.slice(
-                      1,
-                    )} ${user.lastName?.charAt(0).toUpperCase()}${user.lastName?.slice(
-                      1,
-                    )}`
+                        1,
+                      )} ${user.lastName?.charAt(0).toUpperCase()}${user.lastName?.slice(
+                        1,
+                      )}`
                     : "User"}
                 </h4>
 

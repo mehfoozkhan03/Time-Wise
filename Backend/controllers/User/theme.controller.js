@@ -1,5 +1,5 @@
 
-// ================= Theme Update =================
+//# ================= Theme Update =================
 
 import { userModel } from "../../models/User.model.js";
 
@@ -64,6 +64,44 @@ export const updateTheme = async (req, res) => {
       success: false,
       title: "Something Went Wrong",
       message: "An unexpected error occurred while updating your theme.",
+      reason:
+        process.env.NODE_ENV === "development"
+          ? error.message
+          : "Please try again in a few moments.",
+    });
+  }
+};
+
+
+
+//# ================= Get Theme =================
+
+export const getTheme = async (req, res) => {
+  try {
+    const user = await userModel
+      .findById(req.user.userID)
+      .select("theme");
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        title: "Account Not Found",
+        message: "No account was found.",
+        reason: "Your account may have been deleted or is inaccessible.",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      theme: user.theme,
+    });
+  } catch (error) {
+    console.error("Get Theme Error:", error);
+
+    return res.status(500).json({
+      success: false,
+      title: "Something Went Wrong",
+      message: "An unexpected error occurred while getting your theme.",
       reason:
         process.env.NODE_ENV === "development"
           ? error.message

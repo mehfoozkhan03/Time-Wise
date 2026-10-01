@@ -19,10 +19,6 @@ export const authService = {
 
   getUserProfile: (userId) => api.get(`/user/profile/${userId}`),
 
-  updateTheme(theme) {
-    return api.patch("/user/theme", { theme });
-  },
-
   updateActivity() {
     return api.patch("/user/activity");
   },

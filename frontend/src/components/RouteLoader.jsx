@@ -7,7 +7,6 @@ function RouteLoader() {
   const location = useLocation();
 
   const { isLoading } = useSelector((state) => state.auth);
-  console.log("Loading", isLoading)
 
   if (isLoading) {
     return <Loader />;

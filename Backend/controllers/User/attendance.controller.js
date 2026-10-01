@@ -721,9 +721,7 @@ export const getAttendanceHistory = async (req, res) => {
   }
 };
 
-// =======================================================
-// Dashboard Stats
-// =======================================================
+//# ====================== Dashboard Stats =====================
 
 export const getDashboardStats = async (req, res) => {
   try {

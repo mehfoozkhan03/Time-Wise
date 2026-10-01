@@ -1,13 +1,20 @@
+import { useSelector } from 'react-redux';
 import { Link } from "react-router-dom";
 
 import { FaLinkedin, FaGithub, FaEnvelope, FaHeart } from "react-icons/fa";
-import { useTheme } from "../../context/ThemeContext";
 import "./Footer.css";
 
 export default function Footer() {
   const year = new Date().getFullYear();
 
-  const { resolvedTheme } = useTheme();
+  const currentTheme = useSelector((state) => state.theme.theme);
+
+  const resolvedTheme =
+    currentTheme === "system"
+      ? window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? "dark"
+        : "light"
+      : currentTheme;
 
   return (
     <footer className="footer">

@@ -1,24 +1,28 @@
+import { useSelector } from "react-redux";
+
+
 import { FaLinkedin, FaGithub, FaHeart, FaEnvelope } from "react-icons/fa";
-import { useTheme } from "../../context/ThemeContext";
 
 import "./AdminFooter.css";
 
 export default function AdminFooter() {
   const year = new Date().getFullYear();
-  const { resolvedTheme } = useTheme();
+  const currentTheme = useSelector((state) => state.theme.theme);
+
+  const resolvedTheme =
+    currentTheme === "system"
+      ? window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? "dark"
+        : "light"
+      : currentTheme;
 
   return (
     <footer className="admin_footer">
       <div className="admin_footer_container">
-
         {/* Logo */}
         <div className="admin_footer_brand">
           <img
-            src={
-              resolvedTheme === "dark"
-                ? "/Logo_F.svg"
-                : "/Logo_F_Light.svg"
-            }
+            src={resolvedTheme === "dark" ? "/Logo_F.svg" : "/Logo_F_Light.svg"}
             alt="Logo"
             className="admin_footer_logo"
           />
@@ -67,7 +71,6 @@ export default function AdminFooter() {
             <FaLinkedin />
           </a>
         </div>
-
       </div>
     </footer>
   );

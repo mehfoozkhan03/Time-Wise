@@ -56,7 +56,6 @@ import {Login} from "../pages/Login";
 import {AdminLogin} from "../pages/AdminLogin";
 import { DashboardAppearance } from '../components/Dashboard/DashboardAppearance/DashboardAppearance';
 // import {AdminLogin} from "../pages/AdminLogin";
-import { AdminThemeProvider } from './../context/AdminThemeContext';
 
 
 export const AppRoutes = () => {
@@ -195,7 +194,7 @@ export const AppRoutes = () => {
         {/* ================= Admin Layout ================= */}
         {/* <Route path="/admin/login" element={<SignUpPage />} /> */}
 
-        <Route element={<AdminPrivateRoutes><AdminThemeProvider><AdminLayout /></AdminThemeProvider></AdminPrivateRoutes>}>
+        <Route element={<AdminPrivateRoutes><AdminLayout /></AdminPrivateRoutes>}>
           {/* ================= ADMIN DASHBOARD ================= */}
           <Route path="/adminDashboard" element={<AdminDashboard />}>
             <Route index element={<DashboardHome />} />
