@@ -1,4 +1,3 @@
-import { useTheme } from "../../../context/ThemeContext";
 import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 
@@ -16,20 +15,10 @@ import { MdEventAvailable } from "react-icons/md";
 export const SettingSidebar = () => {
   const { user } = useSelector((state) => state.auth);
 
-  const { resolvedTheme } = useTheme();
-
   return (
     <>
       <div className="settingSidebar-container">
         <div className="settingSidebar-content">
-          <div className="settingSidebar-logo">
-            <img
-              src={
-                resolvedTheme === "dark" ? "/Logo_N.svg" : "/Logo_N_Light.svg"
-              }
-              alt="Logo"
-            />
-          </div>
           <div className="settingSidebar-list">
             <p className="settings-heading">SETTINGS</p>
             <div className="settingSidebar-list-content">
@@ -48,11 +37,14 @@ export const SettingSidebar = () => {
                 <span>Attendance</span>
               </NavLink>
 
-              <NavLink to="leave" className="settingSidebar-link">
-              <MdEventAvailable className="settingSidebar-icon" />
-              <span>Leave</span>
+              <NavLink
+                to="leave"
+                className="settingSidebar-link"
+              >
+                <MdEventAvailable className="settingSidebar-icon" />
+                <span>Leave</span>
               </NavLink>
-              
+
               <NavLink
                 to="appearance"
                 className="appearance settingSidebar-link"
@@ -60,7 +52,10 @@ export const SettingSidebar = () => {
                 <RiPaletteLine className="settingSidebar-icon" />
                 <span>Appearance</span>
               </NavLink>
-              <NavLink to="calendar" className="settingSidebar-link">
+              <NavLink
+                to="calendar"
+                className="settingSidebar-link"
+              >
                 <FaCalendarAlt className="settingSidebar-icon" />
                 <span>Calendar</span>
               </NavLink>
@@ -71,7 +66,10 @@ export const SettingSidebar = () => {
                 <MdNotifications className="settingSidebar-icon" />
                 <span>Notifications</span>
               </NavLink>
-              <NavLink to="security" className="security settingSidebar-link">
+              <NavLink
+                to="security"
+                className="security settingSidebar-link"
+              >
                 <FaLock className="settingSidebar-icon" />
                 <span>Security</span>
               </NavLink>

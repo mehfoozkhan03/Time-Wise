@@ -26,6 +26,7 @@ import Footer from "../components/Footer/Footer";
 import AdminFooter from "../components/AdminFooter/AdminFooter";
 
 import { ActivityTracker } from "../hooks/ActivityTracker";
+import { ThemeApplier } from "../components/ThemeApplier/ThemeApplier";
 
 export default function MainLayout() {
   const location = useLocation();
@@ -34,6 +35,7 @@ export default function MainLayout() {
 
   return (
     <>
+      <ThemeApplier />
       <Navbar />
       {!isAdminPage && <ActivityTracker />}
 

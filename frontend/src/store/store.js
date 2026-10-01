@@ -14,6 +14,8 @@ import holidayReducer from "./holidaySlice";
 import communityProfileReducer from "./communityProfileSlice";
 import contactReducer from "./contactSlice";
 import { announcementReducer } from "./announcementSlice";
+import { themeReducer } from "./themeSlice";
+import { adminThemeReducer } from "./adminThemeSlice";
 
 const store = configureStore({
   reducer: {
@@ -42,7 +44,12 @@ const store = configureStore({
     communityProfile: communityProfileReducer,
 
     contact: contactReducer,
+
     announcement: announcementReducer,
+
+    theme: themeReducer,
+
+    adminTheme: adminThemeReducer,
   },
 });
 

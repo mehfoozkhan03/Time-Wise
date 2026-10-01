@@ -1,11 +1,26 @@
+import { useDispatch, useSelector } from "react-redux";
+
+
 import { MdOutlineLightMode } from "react-icons/md";
 import { MdOutlineDarkMode } from "react-icons/md";
 import { CiLaptop } from "react-icons/ci";
+
 import "./DashboardAppearance.css";
-import { useAdminTheme } from "../../../context/AdminThemeContext";
+import { setAdminTheme, updateAdminTheme } from "../../../store/adminThemeSlice";
+
 
 export const DashboardAppearance = () => {
-  const { adminTheme, changeAdminTheme } = useAdminTheme();
+  const dispatch = useDispatch();
+
+  const theme = useSelector((state) => state.adminTheme.theme);
+
+  const changeTheme = (newTheme) => {
+    // Immediately update UI
+    dispatch(setAdminTheme(newTheme));
+
+    // Save to backend
+    dispatch(updateAdminTheme(newTheme));
+  };
 
   return (
     <>
@@ -23,27 +38,27 @@ export const DashboardAppearance = () => {
           <div className="dahsboard-theme-mode">
             <div
               className={`dahsboard-light-mode ${
-                adminTheme === "light" ? "dahsboard-active-theme" : ""
+                theme === "light" ? "dahsboard-active-theme" : ""
               }`}
-              onClick={() => changeAdminTheme("light")}
+              onClick={() => changeTheme("light")}
             >
               <MdOutlineLightMode className="dahsboard-mode-icon" />
               <p>Light</p>
             </div>
             <div
               className={`dahsboard-dark-mode ${
-                adminTheme === "dark" ? "dahsboard-active-theme" : ""
+                theme === "dark" ? "dahsboard-active-theme" : ""
               }`}
-              onClick={() => changeAdminTheme("dark")}
+              onClick={() => changeTheme("dark")}
             >
               <MdOutlineDarkMode className="dahsboard-mode-icon" />
               <p>Dark</p>
             </div>
             <div
               className={`dahsboard-system-mode ${
-                adminTheme === "system" ? "dahsboard-active-theme" : ""
+                theme === "system" ? "dahsboard-active-theme" : ""
               }`}
-              onClick={() => changeAdminTheme("system")}
+              onClick={() => changeTheme("system")}
             >
               <CiLaptop className="dahsboard-mode-icon" />
               <p>System</p>

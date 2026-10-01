@@ -23,12 +23,18 @@ import {
 import { deleteUser } from "../controllers/Admin/deleteUser.controller.js";
 import { changeUserPassword } from "../controllers/Admin/changeEmployeePassword.controller.js";
 import { changeOwnPassword } from "../controllers/Admin/changeAdminPassword.controller.js";
+import { getAdminTheme, updateAdminTheme } from "../controllers/Admin/adminTheme.controller.js";
+
 
 const adminRoutes = express.Router();
 
 adminRoutes.post("/adminlogin", admin_login);
 
 adminRoutes.post("/logout", adminAuth, adminLogout);
+
+adminRoutes.get("/theme", adminAuth, getAdminTheme);
+
+adminRoutes.patch("/theme", adminAuth, updateAdminTheme);
 
 adminRoutes.delete("/users/:id",  adminAuth,  deleteUser);
 

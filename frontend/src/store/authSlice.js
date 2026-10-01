@@ -94,23 +94,6 @@ export const registerUser = createAsyncThunk(
   },
 );
 
-//# ================ Theme ====================
-export const updateTheme = createAsyncThunk(
-  "auth/updateTheme",
-  async (theme, thunkAPI) => {
-    try {
-      const { data } = await authService.updateTheme(theme);
-      return data.theme;
-    } catch (error) {
-      const errorData = error.response?.data;
-
-      return thunkAPI.rejectWithValue(
-        errorData?.message || error.message || "Failed to update theme",
-      );
-    }
-  },
-);
-
 //# =================== Update Social Links ====================
 export const updateSocialLinks = createAsyncThunk(
   "auth/updateSocialLinks",
@@ -240,11 +223,11 @@ const authSlice = createSlice({
 
       // ================= Theme Update =================
 
-      .addCase(updateTheme.fulfilled, (state, action) => {
-        if (state.user) {
-          state.user.theme = action.payload;
-        }
-      })
+      // .addCase(updateTheme.fulfilled, (state, action) => {
+      //   if (state.user) {
+      //     state.user.theme = action.payload;
+      //   }
+      // })
 
       //# =============== Social Links ===================
       .addCase(updateSocialLinks.fulfilled, (state, action) => {
