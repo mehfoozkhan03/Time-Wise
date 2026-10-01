@@ -239,18 +239,25 @@ export default function Performance() {
     loading
   } = useSelector((state) => state.dashboard || {});
 
+  const attendancePercentage = Number(
+    stats.overallAttendancePercentage ?? stats.attendancePercentage,
+  ) || 0;
+  const productivityScore = Number(
+    stats.overallProductivity ?? stats.productivity,
+  ) || 0;
+
 
   const attendanceSubtitle = () => {
-    if (stats.attendancePercentage >= 98)
+    if (attendancePercentage >= 98)
       return '⭐ Outstanding attendance';
 
-    if (stats.attendancePercentage >= 95)
+    if (attendancePercentage >= 95)
       return 'Excellent consistency';
 
-    if (stats.attendancePercentage >= 90)
+    if (attendancePercentage >= 90)
       return 'Great attendance';
 
-    if (stats.attendancePercentage >= 80)
+    if (attendancePercentage >= 80)
       return 'Good attendance';
 
     return 'Needs improvement';
@@ -258,13 +265,13 @@ export default function Performance() {
 
 
   const productivitySubtitle = () => {
-    if (stats.productivity >= 95)
+    if (productivityScore >= 95)
       return '🔥 Exceptional productivity';
 
-    if (stats.productivity >= 85)
+    if (productivityScore >= 85)
       return '👍 Above average productivity';
 
-    if (stats.productivity >= 70)
+    if (productivityScore >= 70)
       return '⚡ Consistent performance';
 
     return '📈 Improving steadily';
@@ -313,13 +320,13 @@ export default function Performance() {
 
   const attendanceColor = () => {
 
-    if (stats.attendancePercentage >= 95)
+    if (attendancePercentage >= 95)
       return '#22c55e';
 
-    if (stats.attendancePercentage >= 80)
+    if (attendancePercentage >= 80)
       return '#84cc16';
 
-    if (stats.attendancePercentage >= 60)
+    if (attendancePercentage >= 60)
       return '#f59e0b';
 
     return '#ef4444';
@@ -339,10 +346,10 @@ export default function Performance() {
 
 
   const attendance =
-    useCountUp(stats.attendancePercentage);
+    useCountUp(attendancePercentage);
 
   const productivity =
-    useCountUp(stats.productivity);
+    useCountUp(productivityScore);
 
   const weeklyHours =
     useCountUp(stats.weeklyHours);
@@ -357,7 +364,7 @@ export default function Performance() {
       title: 'Attendance',
       value: `${attendance}%`,
       subtitle: attendanceSubtitle(),
-      progress: stats.attendancePercentage,
+      progress: attendancePercentage,
       color: attendanceColor(),
       icon: <FaCalendarCheck />,
     },
@@ -366,7 +373,7 @@ export default function Performance() {
       title: 'Productivity',
       value: `${productivity}%`,
       subtitle: productivitySubtitle(),
-      progress: stats.productivity,
+      progress: productivityScore,
       color: '#29A3E0',
       icon: <FaBullseye />,
     },

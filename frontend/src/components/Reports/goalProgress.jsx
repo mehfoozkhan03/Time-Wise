@@ -1,6 +1,6 @@
 import { formatHours } from "./formatHours";
 
-export function GoalProgress({ label, current, target, unit, color }) {
+export function GoalProgress({ label, current, target, unit, color, showGoalMet = true }) {
   const pct = Math.min((current / target) * 100, 100);
   const exceeded = current >= target;
 
@@ -43,7 +43,7 @@ export function GoalProgress({ label, current, target, unit, color }) {
             </span>
           </span>
 
-          {exceeded && (
+          {showGoalMet && exceeded && (
             <span
               style={{
                 fontSize: 10,

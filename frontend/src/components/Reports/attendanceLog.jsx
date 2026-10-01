@@ -158,7 +158,6 @@ export function AttendanceLog({
             <option value="late">Late</option>
             <option value="absent">Absent</option>
             <option value="leave">Leave</option>
-            <option value="holiday">Holiday</option>
           </select>
         </div>
       </div>

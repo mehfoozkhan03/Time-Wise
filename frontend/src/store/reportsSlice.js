@@ -9,6 +9,10 @@ const reportsSlice = createSlice({
   reducers: {
     setDateRange(state, action) {
       state.dateRange = action.payload;
+      if (action.payload === "custom") {
+        state.customStartDate = "";
+        state.customEndDate = "";
+      }
     },
 
     setCustomDateRange(state, action) {

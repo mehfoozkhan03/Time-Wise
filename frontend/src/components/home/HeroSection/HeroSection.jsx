@@ -70,10 +70,14 @@ export default function HeroSection() {
   const stats = {
     dayStreak: Number(dashboardStats?.dayStreak) || 0,
     longestStreak: Number(dashboardStats?.longestStreak) || 0,
-    attendancePercentage: Number(dashboardStats?.attendancePercentage) || 0,
+    attendancePercentage: Number(
+      dashboardStats?.overallAttendancePercentage ?? dashboardStats?.attendancePercentage,
+    ) || 0,
     weeklyHours: Number(dashboardStats?.weeklyHours) || 0,
     monthlyHours: Number(dashboardStats?.monthlyHours) || 0,
-    productivity: Number(dashboardStats?.productivity) || 0,
+    productivity: Number(
+      dashboardStats?.overallProductivity ?? dashboardStats?.productivity,
+    ) || 0,
     weeklyTarget: Number(dashboardStats?.weeklyTarget) || 40,
     weeklyHoursRemaining: Number(dashboardStats?.weeklyHoursRemaining) || 40,
     weeklyGoalPercentage: Number(dashboardStats?.weeklyGoalPercentage) || 0,

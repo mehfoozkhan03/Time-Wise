@@ -1,0 +1,6 @@
+export const ATTENDANCE_BLOCKING_HOLIDAY_TYPES = Object.freeze([
+  "HOLIDAY",
+  "GOVERNMENT_HOLIDAY",
+  "COMPANY_HOLIDAY",
+  "FESTIVAL",
+]);

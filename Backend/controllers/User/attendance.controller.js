@@ -2,6 +2,9 @@ import {
   getTodayRange,
   getMinutesSinceMidnight,
   timeStringToMinutes,
+  getIndiaDateKey,
+  getIndiaWeekday,
+  getIndiaMonthStart,
 } from "../../utils/attendanceHelper.js";
 
 import { attendanceConfig } from "../../config/attendanceConfig.js";
@@ -15,6 +18,7 @@ import { leaveModel } from "../../models/Leave.model.js";
 
 import { getAttendanceStats } from "../../services/attendanceStats.service.js";
 import { getEmployeeReport } from "../../services/reports.service.js";
+import { ATTENDANCE_BLOCKING_HOLIDAY_TYPES } from "../../config/attendanceRules.js";
 
 // =======================================================
 // Attendance Rules
@@ -31,28 +35,16 @@ import { getEmployeeReport } from "../../services/reports.service.js";
 // Attendance remains allowed for:
 // - OPTIONAL_HOLIDAY
 // - OBSERVANCE
-const ATTENDANCE_BLOCKING_HOLIDAY_TYPES = [
-  "HOLIDAY",
-  "GOVERNMENT_HOLIDAY",
-  "COMPANY_HOLIDAY",
-  "FESTIVAL",
-];
-
 // =======================================================
 // Helpers
 // =======================================================
 
 const getDateKey = (date) => {
-  const value = new Date(date);
-
-  return `${value.getFullYear()}-${String(value.getMonth() + 1).padStart(
-    2,
-    "0",
-  )}-${String(value.getDate()).padStart(2, "0")}`;
+  return getIndiaDateKey(date);
 };
 
 const isConfiguredWorkingDay = (date = new Date()) => {
-  return attendanceConfig.workingDays.includes(date.getDay());
+  return attendanceConfig.workingDays.includes(getIndiaWeekday(date));
 };
 
 const getTodayHoliday = async () => {
@@ -677,13 +669,8 @@ export const getAttendanceHistory = async (req, res) => {
     // Generate working days for current month up to today
     const now = new Date();
 
-    const startDate = new Date(now.getFullYear(), now.getMonth(), 1);
-
-    startDate.setHours(0, 0, 0, 0);
-
-    const endDate = new Date(now);
-
-    endDate.setHours(23, 59, 59, 999);
+    const startDate = getIndiaMonthStart(now);
+    const endDate = getTodayRange(now).endOfDay;
 
     const completeHistory = [...history];
 
@@ -714,7 +701,7 @@ export const getAttendanceHistory = async (req, res) => {
         });
       }
 
-      currentDate.setDate(currentDate.getDate() + 1);
+      currentDate.setUTCDate(currentDate.getUTCDate() + 1);
     }
 
     // Sort descending by date

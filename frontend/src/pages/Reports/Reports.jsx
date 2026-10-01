@@ -46,8 +46,6 @@ export function Reports() {
   useEffect(() => {
     if (dateRange === "custom" && (!customStartDate || !customEndDate)) {
       setIsLoading(false);
-      dispatch(setAttendanceLog([]));
-      setReportCalendar([]);
       return undefined;
     }
 
@@ -456,7 +454,7 @@ export function Reports() {
             margin: "21px  0",
           }}
         >
-          <GoalsSection dashboardStats={dashboardStats} isLoading={isLoading} />
+          <GoalsSection dashboardStats={dashboardStats} isLoading={isLoading} showGoalMet={dateRange !== "custom"} />
         </div>
         <AttendanceLog
           filteredLog={filteredLog}

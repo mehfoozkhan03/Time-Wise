@@ -1,16 +1,44 @@
 import { attendanceConfig } from '../config/attendanceConfig.js'
 import { holidayModel } from '../models/Holidays.model.js'
+import { ATTENDANCE_BLOCKING_HOLIDAY_TYPES } from '../config/attendanceRules.js'
+
+export const INDIA_TIME_ZONE = 'Asia/Kolkata'
+
+const getIndiaDateParts = (date = new Date()) => {
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: INDIA_TIME_ZONE,
+    year: 'numeric', month: '2-digit', day: '2-digit', weekday: 'long',
+  }).formatToParts(new Date(date))
+  return Object.fromEntries(parts.map(({ type, value }) => [type, value]))
+}
+
+export const getIndiaDateKey = (date = new Date()) => {
+  const parts = getIndiaDateParts(date)
+  return `${parts.year}-${parts.month}-${parts.day}`
+}
+
+export const getIndiaWeekday = (date = new Date()) => {
+  const weekday = getIndiaDateParts(date).weekday
+  return ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].indexOf(weekday)
+}
+
+export const getIndiaMidnight = (date = new Date()) => {
+  const parts = getIndiaDateParts(date)
+  return new Date(Date.UTC(Number(parts.year), Number(parts.month) - 1, Number(parts.day), -5, -30))
+}
+
+export const getIndiaMonthStart = (date = new Date()) => {
+  const parts = getIndiaDateParts(date)
+  return new Date(Date.UTC(Number(parts.year), Number(parts.month) - 1, 1, -5, -30))
+}
 
 // =======================================================
 // Date Ranges
 // =======================================================
 
 export const getTodayRange = (date = new Date()) => {
-  const startOfDay = new Date(date)
-  startOfDay.setHours(0, 0, 0, 0)
-
-  const endOfDay = new Date(date)
-  endOfDay.setHours(23, 59, 59, 999)
+  const startOfDay = getIndiaMidnight(date)
+  const endOfDay = new Date(startOfDay.getTime() + 24 * 60 * 60 * 1000 - 1)
 
   return {
     startOfDay,
@@ -19,19 +47,17 @@ export const getTodayRange = (date = new Date()) => {
 }
 
 export const getWeekRange = (date = new Date()) => {
-  const weekStart = new Date(date)
-
-  const day = weekStart.getDay()
+  const weekStart = getIndiaMidnight(date)
+  const day = getIndiaWeekday(date)
 
   const diff = day === 0 ? -6 : 1 - day
 
-  weekStart.setDate(weekStart.getDate() + diff)
-  weekStart.setHours(0, 0, 0, 0)
+  weekStart.setUTCDate(weekStart.getUTCDate() + diff)
 
   const weekEnd = new Date(weekStart)
 
-  weekEnd.setDate(weekEnd.getDate() + 6)
-  weekEnd.setHours(23, 59, 59, 999)
+  weekEnd.setUTCDate(weekEnd.getUTCDate() + 7)
+  weekEnd.setUTCMilliseconds(weekEnd.getUTCMilliseconds() - 1)
 
   return {
     weekStart,
@@ -40,13 +66,11 @@ export const getWeekRange = (date = new Date()) => {
 }
 
 export const getMonthRange = (date = new Date()) => {
-  const monthStart = new Date(date.getFullYear(), date.getMonth(), 1)
-
-  monthStart.setHours(0, 0, 0, 0)
-
-  const monthEnd = new Date(date.getFullYear(), date.getMonth() + 1, 0)
-
-  monthEnd.setHours(23, 59, 59, 999)
+  const parts = getIndiaDateParts(date)
+  const year = Number(parts.year)
+  const month = Number(parts.month)
+  const monthStart = new Date(Date.UTC(year, month - 1, 1, -5, -30))
+  const monthEnd = new Date(Date.UTC(year, month, 1, -5, -30) - 1)
 
   return {
     monthStart,
@@ -59,7 +83,12 @@ export const getMonthRange = (date = new Date()) => {
 // =======================================================
 
 export const getMinutesSinceMidnight = (date = new Date()) => {
-  return date.getHours() * 60 + date.getMinutes()
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: INDIA_TIME_ZONE, hour: '2-digit', minute: '2-digit', hourCycle: 'h23',
+  }).formatToParts(new Date(date))
+  const hour = Number(parts.find((part) => part.type === 'hour')?.value || 0)
+  const minute = Number(parts.find((part) => part.type === 'minute')?.value || 0)
+  return hour * 60 + minute
 }
 
 export const timeStringToMinutes = (time) => {
@@ -73,7 +102,7 @@ export const timeStringToMinutes = (time) => {
 // =======================================================
 
 export const isWeekdayWorkingDay = (date = new Date()) => {
-  return attendanceConfig.workingDays.includes(date.getDay())
+  return attendanceConfig.workingDays.includes(getIndiaWeekday(date))
 }
 
 // =======================================================
@@ -89,6 +118,7 @@ export const isHoliday = async (date = new Date()) => {
       $lte: endOfDay,
     },
     isActive: true,
+    type: { $in: ATTENDANCE_BLOCKING_HOLIDAY_TYPES },
   })
 
   return Boolean(holiday)
@@ -102,7 +132,7 @@ export const isHoliday = async (date = new Date()) => {
   A date counts as an attendance working day only when:
 
   1. It is configured as a working day
-  2. It is NOT an active holiday
+  2. It is NOT an active attendance-blocking holiday
 
   This is the main rule used by attendance calculations.
 */
@@ -130,6 +160,7 @@ export const getHolidayForDate = async (date = new Date()) => {
       $lte: endOfDay,
     },
     isActive: true,
+    type: { $in: ATTENDANCE_BLOCKING_HOLIDAY_TYPES },
   })
 }
 

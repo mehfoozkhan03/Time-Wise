@@ -3,6 +3,7 @@ import { attendanceModel } from "../models/Attendance.model.js";
 import { holidayModel } from "../models/Holidays.model.js";
 import { leaveBalanceModel } from "../models/LeaveBalance.model.js";
 import { leaveModel } from "../models/Leave.model.js";
+import { ATTENDANCE_BLOCKING_HOLIDAY_TYPES } from "../config/attendanceRules.js";
 
 const TIME_ZONE = "Asia/Kolkata";
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -185,7 +186,11 @@ export const getEmployeeReport = async (userID, query = {}) => {
           .lean(),
     attendanceModel.find({ user: userID }).select("date status").sort({ date: 1 }).lean(),
     holidayModel
-      .find({ isActive: true, date: { $lt: holidayEndAt } })
+      .find({
+        isActive: true,
+        type: { $in: ATTENDANCE_BLOCKING_HOLIDAY_TYPES },
+        date: { $lt: holidayEndAt },
+      })
       .select("date")
       .lean(),
     leaveModel

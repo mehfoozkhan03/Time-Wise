@@ -3,7 +3,7 @@ import { GoalProgress } from "./goalProgress";
 import useCountUp from "../../components/UseCount/Count";
 import Skeleton from "../../components/Skeleton/Skeleton";
 
-export function GoalsSection({ dashboardStats, isLoading = false }) {
+export function GoalsSection({ dashboardStats, isLoading = false, showGoalMet = true }) {
   // console.log("Goals dashboardStats:", dashboardStats);
   const weeklyHours = useCountUp(dashboardStats?.weeklyHours ?? 0);
   const attendance = useCountUp(dashboardStats?.attendancePercentage ?? 0);
@@ -78,7 +78,7 @@ export function GoalsSection({ dashboardStats, isLoading = false }) {
               <Skeleton width="100%" height="10px" radius="10px" />{" "}
             </div>
           ))
-        : goals.map((goal) => <GoalProgress key={goal.label} {...goal} />)}
+        : goals.map((goal) => <GoalProgress key={goal.label} {...goal} showGoalMet={showGoalMet} />)}
     </div>
   );
 }

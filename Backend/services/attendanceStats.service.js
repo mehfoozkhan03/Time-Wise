@@ -6,6 +6,8 @@ import { attendanceModel } from '../models/Attendance.model.js'
 
 import { holidayModel } from '../models/Holidays.model.js'
 import { userModel } from '../models/User.model.js'
+import { leaveModel } from '../models/Leave.model.js'
+import { ATTENDANCE_BLOCKING_HOLIDAY_TYPES } from '../config/attendanceRules.js'
 
 // =======================================================
 // Constants
@@ -436,6 +438,7 @@ export const getAttendanceStats = async (userID) => {
   const holidays = await holidayModel
     .find({
       isActive: true,
+      type: { $in: ATTENDANCE_BLOCKING_HOLIDAY_TYPES },
     })
     .select('date')
     .lean()
@@ -541,6 +544,86 @@ export const getAttendanceStats = async (userID) => {
   }, 0)
 
   const totalWorkingHours = formatWorkingHours(totalWorkingSeconds)
+
+  const firstAttendanceDate = attendanceHistory.length
+    ? getIndiaMidnight(attendanceHistory[attendanceHistory.length - 1].date)
+    : indiaToday
+  const approvedLeaves = await leaveModel.find({
+    user: userID,
+    status: 'Approved',
+    startDate: { $lte: todayEnd },
+    endDate: { $gte: firstAttendanceDate },
+  }).select('startDate endDate').lean()
+  const approvedLeaveDates = new Set()
+
+  approvedLeaves.forEach((leave) => {
+    let date = getIndiaMidnight(leave.startDate)
+    const leaveEnd = getIndiaMidnight(leave.endDate)
+    while (date <= leaveEnd) {
+      approvedLeaveDates.add(getDateKey(date))
+      date = addDays(date, 1)
+    }
+  })
+
+  let overallWorkingDays = 0
+  for (
+    let date = new Date(firstAttendanceDate);
+    date <= indiaToday;
+    date = addDays(date, 1)
+  ) {
+    if (
+      isAttendanceWorkingDay(date) &&
+      !approvedLeaveDates.has(getDateKey(date))
+    ) {
+      overallWorkingDays += 1
+    }
+  }
+
+  const overallAttendanceCredits = validAttendanceHistory.reduce((total, record) => {
+    if (approvedLeaveDates.has(getDateKey(record.date))) return total
+    if (record.status === 'Present') return total + 1
+    if (record.status === 'Late') return total + 0.75
+    if (record.status === 'Half Day') return total + 0.5
+    return total
+  }, 0)
+  const overallAttendancePercentage = overallWorkingDays
+    ? Math.min(Math.round((overallAttendanceCredits / overallWorkingDays) * 100), 100)
+    : 0
+  const overallAttendedRecords = validAttendanceHistory.filter((record) =>
+    ['Present', 'Late', 'Half Day'].includes(record.status) &&
+    !approvedLeaveDates.has(getDateKey(record.date)),
+  )
+  const overallPunctualityCredits = overallAttendedRecords.reduce((total, record) => {
+    if (record.status === 'Present') return total + 1
+    if (record.status === 'Late') return total + 0.5
+    return total
+  }, 0)
+  const overallPunctuality = overallAttendedRecords.length
+    ? Math.round((overallPunctualityCredits / overallAttendedRecords.length) * 100)
+    : 100
+  const overallAverageBreakMinutes = overallAttendedRecords.length
+    ? Math.round(
+        overallAttendedRecords.reduce((total, record) => total + (record.totalBreakSeconds || 0), 0) /
+          overallAttendedRecords.length / 60,
+      )
+    : 0
+  const overallBreakScore = overallAverageBreakMinutes > attendanceConfig.maxBreakMinutes
+    ? Math.max(0, 100 - (overallAverageBreakMinutes - attendanceConfig.maxBreakMinutes) * 2)
+    : 100
+  const averageWeeklyHours = overallWorkingDays
+    ? (totalWorkingSeconds / 3600) /
+      (overallWorkingDays / attendanceConfig.workingDays.length)
+    : 0
+  const overallWeeklyGoalScore = Math.min(
+    (averageWeeklyHours / attendanceConfig.requiredWeeklyHours) * 100,
+    100,
+  )
+  const overallProductivity = Math.round(
+    overallWeeklyGoalScore * 0.5 +
+      overallAttendancePercentage * 0.2 +
+      overallPunctuality * 0.2 +
+      overallBreakScore * 0.1,
+  )
 
   // =====================================================
   // Average Daily Working Hours
@@ -878,6 +961,7 @@ export const getAttendanceStats = async (userID) => {
     longestStreak,
 
     attendancePercentage,
+    overallAttendancePercentage,
 
     weeklyHours,
     monthlyHours,
@@ -891,6 +975,7 @@ export const getAttendanceStats = async (userID) => {
     totalOvertimeHours,
 
     productivity,
+    overallProductivity,
 
     punctuality,
     breakScore,

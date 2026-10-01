@@ -83,10 +83,10 @@
   padding: 7px 10px;
   border: 1px solid var(--border);
   border-radius: var(--radius_sm);
-  background: var(--input-bg);
-  color: var(--input-text);
+  background: #111318;
+  color: #f5f7fa;
   font: inherit;
-  color-scheme: light;
+  color-scheme: dark;
   transition: border-color var(--transition), box-shadow var(--transition);
 }
 
@@ -96,13 +96,9 @@
   box-shadow: 0 0 0 3px var(--focus-shadow);
 }
 
-html.dark .reports_custom_range input[type="date"] {
-  color-scheme: dark;
-}
-
 .reports_custom_range input[type="date"]::-webkit-calendar-picker-indicator {
   cursor: pointer;
-  opacity: 0.75;
+  opacity: 0.9;
 }
 
 /* Card glass effect */
