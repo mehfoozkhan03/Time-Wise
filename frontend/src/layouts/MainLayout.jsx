@@ -1,24 +1,3 @@
-// import { Outlet } from "react-router-dom";
-
-// import Navbar from "../components/Navbar/Navbar";
-// import Footer from "./../components/Footer/Footer";
-// import { ActivityTracker } from "../hooks/ActivityTracker";
-
-// export default function MainLayout() {
-//   return (
-//     <>
-//       <Navbar />
-//       <ActivityTracker />
-//       <main className="main_layout">
-//         <Outlet />
-//       </main>
-
-//       <Footer />
-//     </>
-//   );
-// }
-
-
 import { Outlet, useLocation } from "react-router-dom";
 
 import Navbar from "../components/Navbar/Navbar";
@@ -26,7 +5,7 @@ import Footer from "../components/Footer/Footer";
 import AdminFooter from "../components/AdminFooter/AdminFooter";
 
 import { ActivityTracker } from "../hooks/ActivityTracker";
-import { ThemeApplier } from "../components/ThemeApplier/ThemeApplier";
+import { ThemeApplier } from "../ThemeApplier/ThemeApplier";
 
 export default function MainLayout() {
   const location = useLocation();
@@ -44,7 +23,6 @@ export default function MainLayout() {
       </main>
 
       <Footer />
-      {/* {isAdminPage ? <AdminFooter />:  <Footer />} */}
     </>
   );
 }

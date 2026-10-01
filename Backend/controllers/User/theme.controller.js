@@ -1,5 +1,5 @@
 
-// ================= Theme Update =================
+//# ================= Theme Update =================
 
 import { userModel } from "../../models/User.model.js";
 
@@ -74,7 +74,7 @@ export const updateTheme = async (req, res) => {
 
 
 
-// ================= Get Theme =================
+//# ================= Get Theme =================
 
 export const getTheme = async (req, res) => {
   try {

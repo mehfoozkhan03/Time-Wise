@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 import AdminFooter from "../components/AdminFooter/AdminFooter";
-import { AdminThemeApplier } from "../components/ThemeApplier/AdminThemeApplier";
+import { AdminThemeApplier } from "../ThemeApplier/AdminThemeApplier";
 
 
 export const AdminLayout = () => {

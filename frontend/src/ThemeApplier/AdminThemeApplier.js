@@ -1,8 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-
-import { getAdminTheme } from "../../store/adminThemeSlice";
+import { getAdminTheme } from "../store/adminThemeSlice";
 
 export const AdminThemeApplier = () => {
   const dispatch = useDispatch();

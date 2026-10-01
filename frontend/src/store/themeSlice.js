@@ -4,7 +4,22 @@ import {
   getTheme as getThemeApi,
 } from "./../services/themeService";
 
-// Update theme in backend
+//# ================= Getting theme from backend ================= 
+export const getTheme = createAsyncThunk(
+  "theme/getTheme",
+  async (_, { rejectWithValue }) => {
+    try {
+      const data = await getThemeApi();
+      return data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to load theme",
+      );
+    }
+  },
+);
+
+//# =================== Update theme in backend ===================
 export const updateTheme = createAsyncThunk(
   "theme/updateTheme",
 
@@ -21,19 +36,6 @@ export const updateTheme = createAsyncThunk(
   },
 );
 
-export const getTheme = createAsyncThunk(
-  "theme/getTheme",
-  async (_, { rejectWithValue }) => {
-    try {
-      const data = await getThemeApi();
-      return data;
-    } catch (error) {
-      return rejectWithValue(
-        error.response?.data?.message || "Failed to load theme",
-      );
-    }
-  },
-);
 
 const themeSlice = createSlice({
   name: "theme",
@@ -54,13 +56,13 @@ const themeSlice = createSlice({
   extraReducers: (builder) => {
     builder
 
-      // Updating theme started
+      //# Updating theme started
       .addCase(updateTheme.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
 
-      // Theme successfully updated
+      //# Theme successfully updated
       .addCase(updateTheme.fulfilled, (state, action) => {
         state.loading = false;
         state.error = null;
@@ -68,7 +70,7 @@ const themeSlice = createSlice({
         state.theme = action.payload.theme;
       })
 
-      // Theme update failed
+      //# Theme update failed
       .addCase(updateTheme.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getTheme } from "../../store/themeSlice";
+import { getTheme } from "../store/themeSlice";
 
 export const ThemeApplier = () => {
   const dispatch = useDispatch();
@@ -39,5 +39,5 @@ export const ThemeApplier = () => {
     };
   }, [theme]);
 
-  return null;
+  // return null;
 };
