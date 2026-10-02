@@ -57,7 +57,7 @@ export const loginUser = createAsyncThunk(
   },
 );
 
-//# =================== Register User =================== 
+//# =================== Register User ===================
 export const registerUser = createAsyncThunk(
   "auth/registerUser",
   async (userData, thunkAPI) => {
@@ -131,12 +131,32 @@ export const updateEmergencyContact = createAsyncThunk(
   },
 );
 
+//# ================= Update Profile =================
+
+export const updateProfile = createAsyncThunk(
+  "auth/updateProfile",
+  async (profileData, thunkAPI) => {
+    try {
+      const { data } = await authService.updateProfile(profileData);
+
+      return data.user;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message ||
+          error.message ||
+          "Failed to update profile",
+      );
+    }
+  },
+);
+
 const initialState = {
   isAuthenticated: document.cookie
     .split("; ")
     .some((cookie) => cookie.startsWith("token=")),
 
   isLoading: false,
+  isUpdatingProfile: false,
   isError: false,
   errorMessage: "",
 };
@@ -247,6 +267,27 @@ const authSlice = createSlice({
         }
       })
       .addCase(updateEmergencyContact.rejected, (state, action) => {
+        state.isError = true;
+        state.errorMessage = action.payload;
+      })
+
+      //# ================= Profile Update =================
+      .addCase(updateProfile.pending, (state) => {
+        state.isUpdatingProfile = true;
+        state.isError = false;
+        state.errorMessage = "";
+      })
+
+      .addCase(updateProfile.fulfilled, (state, action) => {
+        state.isUpdatingProfile = false;
+        state.isError = false;
+        state.errorMessage = "";
+
+        state.user = action.payload;
+      })
+
+      .addCase(updateProfile.rejected, (state, action) => {
+        state.isUpdatingProfile = false;
         state.isError = true;
         state.errorMessage = action.payload;
       });

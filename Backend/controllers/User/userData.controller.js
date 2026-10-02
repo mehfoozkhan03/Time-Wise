@@ -290,6 +290,122 @@ export const getCurrentUser = async (req, res) => {
   }
 };
 
+
+//# ================= Update User Profile =================
+
+export const updateProfile = async (req, res) => {
+  try {
+    const userId = req.user.userID;
+
+    const {
+      firstName,
+      lastName,
+      email,
+      phone,
+      address,
+      bio,
+    } = req.body;
+
+    // ================= Validation =================
+
+    if (!firstName?.trim()) {
+      return res.status(400).json({
+        success: false,
+        message: "First name is required.",
+      });
+    }
+
+    if (!lastName?.trim()) {
+      return res.status(400).json({
+        success: false,
+        message: "Last name is required.",
+      });
+    }
+
+    if (!email?.trim()) {
+      return res.status(400).json({
+        success: false,
+        message: "Email is required.",
+      });
+    }
+
+    // ================= Check Email =================
+
+    const existingUser = await userModel.findOne({
+      email: email.trim().toLowerCase(),
+      _id: { $ne: userId },
+    });
+
+    if (existingUser) {
+      return res.status(409).json({
+        success: false,
+        message: "This email is already being used by another account.",
+      });
+    }
+
+    // ================= Update =================
+
+    const updatedUser = await userModel
+      .findByIdAndUpdate(
+        userId,
+        {
+          firstName: firstName.trim(),
+          lastName: lastName.trim(),
+          email: email.trim().toLowerCase(),
+          phone: phone?.trim() || "",
+          address: address?.trim() || "",
+          bio: bio?.trim() || "",
+        },
+        {
+          new: true,
+          runValidators: true,
+        },
+      )
+      .select("-password");
+
+    if (!updatedUser) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found.",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Profile updated successfully.",
+      user: updatedUser,
+    });
+  } catch (error) {
+    console.error("Update Profile Error:", error);
+
+    if (error.code === 11000) {
+      return res.status(409).json({
+        success: false,
+        message: "This email is already in use.",
+      });
+    }
+
+    if (error.name === "ValidationError") {
+      return res.status(400).json({
+        success: false,
+        message: "Please check your input.",
+        reason: Object.values(error.errors)
+          .map((err) => err.message)
+          .join(", "),
+      });
+    }
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to update profile.",
+      reason:
+        process.env.NODE_ENV === "development"
+          ? error.message
+          : "Please try again later.",
+    });
+  }
+}; 
+
 // ================= User Status ==================
 export const updateActivity = async (req, res) => {
   try {
