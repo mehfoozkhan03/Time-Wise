@@ -12,12 +12,13 @@ const GENERAL_EVENT_TYPES = [
   EVENT_TYPES.FESTIVAL,
   EVENT_TYPES.SPECIAL_EVENT,
   EVENT_TYPES.WORK_EVENT,
+  EVENT_TYPES.BIRTHDAY,
 ];
 
 const INITIAL_FORM = {
   title: "",
   description: "",
-  type: EVENT_TYPES.WORK_EVENT,
+  type: EVENT_TYPES.MEETING,
   date: "",
   startTime: "",
   endTime: "",

@@ -16,6 +16,7 @@ const EVENT_OPTIONS = [
   { value: EVENT_TYPES.DEADLINE, label: "Deadline" },
   { value: EVENT_TYPES.TRAINING, label: "Training" },
   { value: EVENT_TYPES.CLIENT_MEETING, label: "Client Meeting" },
+  { value: EVENT_TYPES.BIRTHDAY, label: "Birthday" },
 ];
 
 const PRIORITY_OPTIONS = [
@@ -30,6 +31,7 @@ const GENERAL_EVENT_TYPES = [
   EVENT_TYPES.FESTIVAL,
   EVENT_TYPES.SPECIAL_EVENT,
   EVENT_TYPES.WORK_EVENT,
+  EVENT_TYPES.BIRTHDAY,
 ];
 
 const requiresEmployee = (type, isAdmin) => {

@@ -28,6 +28,7 @@ const GENERAL_EVENT_TYPES = [
   "FESTIVAL",
   "SPECIAL_EVENT",
   "WORK_EVENT",
+  "BIRTHDAY",
 ];
 
 const PUBLIC_EVENT_TYPES = [
@@ -37,6 +38,7 @@ const PUBLIC_EVENT_TYPES = [
   "SPECIAL_EVENT",
   "MEETING",
   "WORK_EVENT",
+  "BIRTHDAY",
 ];
 
 const getVisibility = (type) => {
