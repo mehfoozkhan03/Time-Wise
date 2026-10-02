@@ -24,6 +24,7 @@ import { TbColorFilter } from "react-icons/tb";
 
 import { adminAuthService } from "../../../services/adminAuthService";
 import { adminLogout } from "../../../store/adminAuthSlice";
+import { useState } from "react";
 
 export const DashboardSidebar = () => {
   const dispatch = useDispatch();
@@ -41,9 +42,18 @@ export const DashboardSidebar = () => {
     }
   };
 
+  //# Collapse
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
+  const handleCollapse = () => {
+    setIsCollapsed((prev) => !prev);
+  };
+
   return (
     <>
-      <div className="dashboardSidebar-container">
+      <div
+        className={`dashboardSidebar-container ${isCollapsed ? "collapsed" : ""}`}
+      >
         <div className="dashboard-logo">
           <img
             src="/Logo_N.svg"
@@ -131,7 +141,10 @@ export const DashboardSidebar = () => {
           </NavLink>
         </div>
         <div className="dashboard-logout">
-          <div className="collapse">
+          <div
+            className="collapse"
+            onClick={handleCollapse}
+          >
             <IoIosArrowRoundBack />
             <span>Collapse</span>
           </div>
