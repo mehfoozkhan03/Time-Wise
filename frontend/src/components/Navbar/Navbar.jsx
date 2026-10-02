@@ -10,7 +10,6 @@ import { authService } from "../../services/authService";
 // import { useTheme } from "../../context/ThemeContext";
 import { fetchNotifications } from ".././../store/notificationSlice";
 import { Modal } from "../Modal/Modal";
-import { checkOut, endBreak, getTodayAttendance } from "../../store/attendanceSlice";
 
 export default function Navbar() {
   const { notifications, loading } = useSelector((state) => state.notification);
@@ -64,10 +63,7 @@ export default function Navbar() {
   const [overProfileBanner, setOverProfileBanner] = useState(false);
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [logoutOpen, setLogoutOpen] = useState(false);
-  const [logoutLegacyOpen, setLogoutLegacyOpen] = useState(false);
-  const [logoutWithCheckout, setLogoutWithCheckout] = useState(false);
   const [logoutLoading, setLogoutLoading] = useState(false);
-  const [checkingAttendance, setCheckingAttendance] = useState(false);
   const [logoutError, setLogoutError] = useState("");
 
   const notificationRef = useRef(null);
@@ -79,26 +75,9 @@ export default function Navbar() {
     setLogoutError("");
 
     try {
-      if (logoutWithCheckout) {
-        const todayResponse = await dispatch(getTodayAttendance()).unwrap();
-        const attendance = todayResponse?.attendance;
-
-        if (attendance?.checkInTime && !attendance.checkOutTime) {
-          const breaks = attendance.breaks || [];
-          const currentBreak = breaks[breaks.length - 1];
-
-          if (currentBreak?.breakStart && !currentBreak.breakEnd) {
-            await dispatch(endBreak()).unwrap();
-          }
-
-          await dispatch(checkOut()).unwrap();
-        }
-      }
-
       await authService.logout();
       dispatch(logout());
       setLogoutOpen(false);
-      setLogoutLegacyOpen(false);
       navigate("/login");
     } catch (error) {
       setLogoutError(
@@ -126,32 +105,11 @@ export default function Navbar() {
     };
   };
 
-  const openLogoutPrompt = async () => {
+  const openLogoutPrompt = () => {
     setProfileOpen(false);
     setLogoutOpen(false);
-    setLogoutLegacyOpen(false);
-    setLogoutWithCheckout(false);
     setLogoutError("");
-    setCheckingAttendance(true);
-
-    try {
-      const todayResponse = await dispatch(getTodayAttendance()).unwrap();
-      const attendance = todayResponse?.attendance;
-      const isCheckedIn = Boolean(attendance?.checkInTime && !attendance.checkOutTime);
-
-      setLogoutOpen(isCheckedIn);
-      setLogoutLegacyOpen(!isCheckedIn);
-    } catch (error) {
-      setLogoutError(
-        typeof error === "string"
-          ? error
-          : error.response?.data?.message || "Unable to check today's attendance. Choose how to log out.",
-      );
-      setLogoutOpen(true);
-      setLogoutLegacyOpen(false);
-    } finally {
-      setCheckingAttendance(false);
-    }
+    setLogoutOpen(true);
   };
 
   // Close everything on route change
@@ -382,9 +340,9 @@ export default function Navbar() {
 
                 <button
                   onClick={openLogoutPrompt}
-                  disabled={checkingAttendance || logoutLoading}
+                  disabled={logoutLoading}
                 >
-                  {checkingAttendance ? "Checking attendance..." : "Logout"}
+                  Logout
                 </button>
               </div>
             )}
@@ -404,78 +362,6 @@ export default function Navbar() {
 
       <Modal
         isOpen={logoutOpen}
-        onClose={() => {
-          if (!logoutLoading) setLogoutOpen(false);
-        }}
-        onOverlayClick={() => {
-          if (!logoutLoading) setLogoutOpen(false);
-        }}
-        onContentClick={(event) => event.stopPropagation()}
-      >
-        <div className="logout_choice_content">
-          <div className="feedback_icon feedback_icon--logout">
-            <span className="feedback_wave" role="img" aria-label="Goodbye">👋</span>
-          </div>
-          <h2 className="feedback_title">Log out, {firstName}?</h2>
-          <p className="feedback_message">Choose how to finish your attendance before logging out.</p>
-
-          <fieldset className="logout_attendance_options" disabled={logoutLoading}>
-            <legend>Attendance</legend>
-            <label className="logout_attendance_choice">
-              <input
-                type="radio"
-                name="logout-attendance"
-                checked={!logoutWithCheckout}
-                onChange={() => setLogoutWithCheckout(false)}
-              />
-              <span>
-                <strong>Without checkout</strong>
-                <small>Log out without recording a check-out.</small>
-              </span>
-            </label>
-            <label className="logout_attendance_choice">
-              <input
-                type="radio"
-                name="logout-attendance"
-                checked={logoutWithCheckout}
-                onChange={() => setLogoutWithCheckout(true)}
-              />
-              <span>
-                <strong>With checkout</strong>
-                <small>Check out automatically, then log out.</small>
-              </span>
-            </label>
-          </fieldset>
-
-          {logoutError && <p className="logout_choice_error" role="alert">{logoutError}</p>}
-
-          <div className="feedback_actions">
-            <button
-              className="feedback_button feedback_button--cancel"
-              type="button"
-              disabled={logoutLoading}
-              onClick={() => setLogoutOpen(false)}
-            >
-              Stay Logged In
-            </button>
-            <button
-              className="feedback_button feedback_button--logout"
-              type="button"
-              disabled={logoutLoading}
-              onClick={confirmLogout}
-            >
-              {logoutLoading
-                ? logoutWithCheckout
-                  ? "Checking out..."
-                  : "Logging out..."
-                : "Log Out"}
-            </button>
-          </div>
-        </div>
-      </Modal>
-
-      <Modal
-        isOpen={logoutLegacyOpen}
         variant="logout"
         title={getLogoutContent().title}
         message={logoutError || getLogoutContent().message}
@@ -483,7 +369,7 @@ export default function Navbar() {
         cancelText="Stay Logged In"
         onClose={() => {
           if (!logoutLoading) {
-            setLogoutLegacyOpen(false);
+            setLogoutOpen(false);
             setLogoutError("");
           }
         }}
