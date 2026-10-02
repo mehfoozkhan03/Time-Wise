@@ -53,9 +53,4 @@ const store = configureStore({
   },
 });
 
-store.subscribe(() => {
-  const { hasSeenTour } = store.getState().tour;
-  localStorage.setItem("tw_tour_seen", JSON.stringify(hasSeenTour));
-});
-
 export default store;

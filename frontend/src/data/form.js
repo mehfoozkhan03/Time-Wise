@@ -26,13 +26,13 @@ export const forms = {
     fields: [
       {
         id: 1,
-        name: "firstName",
+        name: "firstName", // First Name
         type: "text",
         placeholder: "Enter your first Name...",
       },
       {
         id: 2,
-        name: "lastName",
+        name: "lastName", // Last Name
         type: "text",
         placeholder: "Enter your Last Name...",
       },
