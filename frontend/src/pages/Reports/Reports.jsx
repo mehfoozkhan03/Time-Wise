@@ -1,4 +1,4 @@
-import { useMemo, useEffect, useState } from "react";
+import { useMemo, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import "./reports.css";
@@ -40,6 +40,7 @@ export function Reports() {
   const [reportCalendar, setReportCalendar] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState("");
+  const hasLoadedReports = useRef(false);
 
   // console.log("Dashboard Stats:", dashboardStats);
 
@@ -51,7 +52,8 @@ export function Reports() {
 
     const controller = new AbortController();
     let cancelled = false;
-    setIsLoading(true);
+    // Loading is only for the first report fetch. Range changes keep the
+    // current page visible while the next result is fetched.
     setLoadError("");
 
     getAttendanceReport({
@@ -71,7 +73,10 @@ export function Reports() {
         setLoadError(error.response?.data?.message || "Unable to load reports.");
       })
       .finally(() => {
-        if (!cancelled) setIsLoading(false);
+        if (!cancelled) {
+          hasLoadedReports.current = true;
+          setIsLoading(false);
+        }
       });
 
     return () => {
@@ -79,6 +84,12 @@ export function Reports() {
       controller.abort();
     };
   }, [dispatch, dateRange, customStartDate, customEndDate]);
+
+  // Reports are cached in Redux, so keep them visible if this page remounts
+  // while a different range is being requested. Skeletons are only for the
+  // very first load when there is no report data to display yet.
+  const showInitialSkeletons =
+    isLoading && !hasLoadedReports.current && attendanceLog.length === 0;
 
   const formatTime = (time) => {
     if (!time) return "—";
@@ -406,7 +417,7 @@ export function Reports() {
         <ReportsHeader
           dateRange={dateRange}
           ranges={ranges}
-          isLoading={isLoading}
+          isLoading={showInitialSkeletons}
           customStartDate={customStartDate}
           customEndDate={customEndDate}
         />
@@ -421,7 +432,7 @@ export function Reports() {
           sparklineData={sparklineData}
           dashboardStats={dashboardStats}
           kpiMetrics={kpiMetrics}
-          isLoading={isLoading}
+          isLoading={showInitialSkeletons}
           rangeLabel={rangeLabel}
         />
         {/* ── Two-column: Work Summary + Performance Insights ── */}
@@ -434,9 +445,9 @@ export function Reports() {
           }}
           className="report_2_div"
         >
-          <WorkSummary dashboardStats={dashboardStats} isLoading={isLoading} rangeLabel={rangeLabel} />
+          <WorkSummary dashboardStats={dashboardStats} isLoading={showInitialSkeletons} rangeLabel={rangeLabel} />
 
-          <PerformanceInsights insights={dynamicInsights} isLoading={isLoading} />
+          <PerformanceInsights insights={dynamicInsights} isLoading={showInitialSkeletons} />
         </div>
         <ChartsSection
           activeTab={activeTab}
@@ -446,7 +457,7 @@ export function Reports() {
           dashboardStats={dashboardStats}
           calendarData={reportCalendar}
           rangeLabel={rangeLabel}
-          isLoading={isLoading}
+          isLoading={showInitialSkeletons}
         />
         {/* ── Goals & Badges ── */}
         <div
@@ -454,7 +465,7 @@ export function Reports() {
             margin: "21px  0",
           }}
         >
-          <GoalsSection dashboardStats={dashboardStats} isLoading={isLoading} showGoalMet={dateRange !== "custom"} />
+          <GoalsSection dashboardStats={dashboardStats} isLoading={showInitialSkeletons} showGoalMet={dateRange !== "custom"} />
         </div>
         <AttendanceLog
           filteredLog={filteredLog}
@@ -462,7 +473,7 @@ export function Reports() {
           statusFilter={statusFilter}
           onSearchChange={(value) => dispatch(setSearchLog(value))}
           onStatusChange={(value) => dispatch(setStatusFilter(value))}
-          isLoading={isLoading}
+          isLoading={showInitialSkeletons}
         />
       </div>
     </div>
