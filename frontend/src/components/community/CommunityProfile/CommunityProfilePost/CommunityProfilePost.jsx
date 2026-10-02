@@ -10,8 +10,9 @@ import {
   HiOutlineEllipsisHorizontal,
   HiOutlineChevronDown,
 } from "react-icons/hi2";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import { fetchUserPosts } from "../../../../store/postSlice";
 
 export const CommunityProfilePosts = () => {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -41,19 +42,44 @@ export const CommunityProfilePosts = () => {
     "Most Discussed",
   ];
 
+  const sortMap = {
+    "All Posts": "newest",
+    "Most Recent": "newest",
+    "Most Liked": "likes",
+    "Most Discussed": "comments",
+  };
+
   const handleFilterChange = (filter) => {
     setSelectedFilter(filter);
     setShowDropdown(false);
   };
 
   // All POSTS
+  const dispatch = useDispatch();
   const { userId } = useParams();
 
-  const { posts } = useSelector((state) => state.post);
+  const {
+    userPosts,
+    userPostsTotal,
+    userPostsLoading,
+    userPostsHasMore,
+    userPostsPage,
+  } = useSelector((state) => state.post);
 
-  const profilePosts =
-    posts?.filter((post) => String(post.createdBy?._id) === String(userId)) ||
-    [];
+  useEffect(() => {
+    if (!userId) return;
+
+    const sort = sortMap[selectedFilter];
+
+    dispatch(
+      fetchUserPosts({
+        userId,
+        page: 1,
+        limit: 10,
+        sort,
+      }),
+    );
+  }, [dispatch, userId, selectedFilter]);
 
   return (
     <section className="community-posts">
@@ -62,7 +88,7 @@ export const CommunityProfilePosts = () => {
       <div className="community-posts-header">
         <div className="community-posts-title">
           <h3>Posts</h3>
-          <span>({profilePosts.length})</span>
+          <span>({userPostsTotal})</span>
         </div>
 
         {/* ================= DROPDOWN ================= */}
@@ -112,8 +138,10 @@ export const CommunityProfilePosts = () => {
       {/* ================= POSTS ================= */}
 
       <div className="community-posts-list">
-        {profilePosts.length > 0 ? (
-          profilePosts.map((post) => (
+        {userPostsLoading && userPosts.length === 0 ? (
+          <p>Loading posts...</p>
+        ) : userPosts.length > 0 ? (
+          userPosts.map((post) => (
             <article
               className="community-post"
               key={post._id}
@@ -225,6 +253,24 @@ export const CommunityProfilePosts = () => {
           </div>
         )}
       </div>
+
+      {userPostsHasMore && !userPostsLoading && (
+        <button
+          type="button"
+          onClick={() => {
+            dispatch(
+              fetchUserPosts({
+                userId,
+                page: userPostsPage + 1,
+                limit: 10,
+                sort: sortMap[selectedFilter],
+              }),
+            );
+          }}
+        >
+          Load More
+        </button>
+      )}
     </section>
   );
 };

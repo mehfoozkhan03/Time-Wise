@@ -123,4 +123,15 @@ export const postService = {
   getTopContributors() {
     return api.get("/posts/contributors/top");
   },
+
+  //# User community profile filter on posts 
+  getUserPosts(userId, page = 1, limit = 10, sort = "newest") {
+    return api.get(`/posts/user/${userId}`, {
+      params: {
+        page,
+        limit,
+        sort,
+      },
+    });
+  },
 };

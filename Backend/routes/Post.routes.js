@@ -6,6 +6,7 @@ import {
   getAllPosts,
   getFeaturedThought,
   getPost,
+  getPostsByUser,
   updatePost,
 } from '../controllers/User/post.controller.js'
 
@@ -52,6 +53,9 @@ router.post(
 router.get('/', getAllPosts)
 
 router.get('/featured', getFeaturedThought)
+
+//# User Profile Posts
+router.get("/user/:userId", getPostsByUser);
 
 // router.get('/trending', getTrendingPosts)
 

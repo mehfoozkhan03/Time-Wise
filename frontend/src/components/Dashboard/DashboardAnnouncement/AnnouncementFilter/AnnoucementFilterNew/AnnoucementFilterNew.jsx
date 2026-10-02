@@ -1,9 +1,7 @@
-import { useState } from "react";
 import { AnnoucementDropdown } from "../../AnnoucementDropdown/AnnoucementDropdown";
 import "./AnnoucementFilterNew.css";
 
-export const AnnouncementFilterNew = () => {
-  const [newest, setNewest] = useState("Newest First");
+export const AnnouncementFilterNew = ({ sort, setSort }) => {
 
   const newestOpt = ["Newest First", "Oldest First", "A-Z"];
 
@@ -11,8 +9,8 @@ export const AnnouncementFilterNew = () => {
     <>
       <AnnoucementDropdown
         options={newestOpt}
-        value={newest}
-        onChange={setNewest}
+        value={sort}
+        onChange={setSort}
       />
     </>
   );

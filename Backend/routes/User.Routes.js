@@ -9,6 +9,7 @@ import {
   logout,
   signup,
   updateActivity,
+  updateProfile
 } from "../controllers/User/userData.controller.js";
 import { getTheme, updateTheme } from "./../controllers/User/theme.controller.js";
 import { updateSocialLinks } from "../controllers/User/socialLinks.controller.js";
@@ -29,6 +30,8 @@ userRoutes.post("/signup", signup);
 userRoutes.post("/logout", logout);
 
 userRoutes.get("/me", auth, authorize("user", "admin"), getCurrentUser);
+
+userRoutes.patch("/profile", auth, authorize("user"), updateProfile);
 
 userRoutes.get("/profile/:userId", auth, getUserProfile);
 
