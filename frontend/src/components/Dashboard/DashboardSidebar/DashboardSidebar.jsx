@@ -1,4 +1,5 @@
 import { NavLink, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 import "./DashboardSidebar.css";
 import "../../../styles/global.css";
@@ -19,8 +20,9 @@ import {
   FaChartBar,
   FaGear,
 } from "react-icons/fa6";
+import { TbColorFilter } from "react-icons/tb";
+
 import { adminAuthService } from "../../../services/adminAuthService";
-import { useDispatch } from "react-redux";
 import { adminLogout } from "../../../store/adminAuthSlice";
 
 export const DashboardSidebar = () => {
@@ -75,7 +77,7 @@ export const DashboardSidebar = () => {
             to="appearence"
             className="dashboard-appearence dashboard-navlink"
           >
-            <MdOutlineWatchLater style={{ color: "#60A5FA" }} />
+            <TbColorFilter style={{ color: "#60A5FA" }} />
             <span>Appearance</span>
           </NavLink>
           <NavLink

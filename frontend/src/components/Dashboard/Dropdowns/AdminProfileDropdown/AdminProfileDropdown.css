@@ -8,24 +8,18 @@
   display: flex;
   align-items: center;
   gap: 10px;
-
   min-width: 180px;
-
   padding: 8px 10px;
-
-  background: #11161d;
-  border: 1px solid #303945;
+  background: var(--bg);
+  border: 1px solid var(--border);
   border-radius: 12px;
-
-  color: #fff;
-
+  color: var(--text_primary);
   cursor: pointer;
-
   transition: 0.2s ease;
 }
 
 .admin-profile-btn:hover {
-  background: #171d25;
+  background: var(--surface_hover);
 }
 
 /* Avatar */
@@ -33,20 +27,14 @@
 .admin-avatar {
   width: 36px;
   height: 36px;
-
   border-radius: 50%;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   background: linear-gradient(135deg, var(--primary), var(--primary_hover));
-
   color: white;
-
   font-size: 16px;
   font-weight: 500;
-
   flex-shrink: 0;
 }
 
@@ -71,15 +59,14 @@
 
 .admin-profile-info span {
   font-size: 12px;
-  color: #8d98a8;
-
+  color: var(--text_secondary);
   margin-top: 2px;
 }
 
 /* Chevron */
 
 .admin-chevron {
-  color: #c7cbd1;
+  color: var(--text_primary);
   transition: transform 0.2s ease;
 }
 
@@ -91,21 +78,14 @@
 
 .admin-profile-dropdown {
   position: absolute;
-
   top: calc(100% + 8px);
   right: 0;
-
   width: 240px;
-
   padding: 8px;
-
-  background: #11161d;
-
-  border: 1px solid #303945;
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 12px;
-
   box-shadow: 0 12px 35px rgba(0, 0, 0, 0.35);
-
   z-index: 1000;
 }
 
@@ -114,9 +94,7 @@
 .admin-dropdown-header {
   display: flex;
   align-items: center;
-
   gap: 10px;
-
   padding: 10px;
 }
 
@@ -127,13 +105,12 @@
 
 .admin-dropdown-header strong {
   font-size: 14px;
-  color: #fff;
+  color: var(--text_primary);
 }
 
 .admin-dropdown-header span {
   font-size: 12px;
-  color: #8d98a8;
-
+  color: var(--text_secondary);
   margin-top: 2px;
 }
 
@@ -141,9 +118,7 @@
 
 .admin-dropdown-divider {
   height: 1px;
-
-  background: #29313c;
-
+  background: var(--border);
   margin: 6px 0;
 }
 
@@ -151,27 +126,17 @@
 
 .admin-dropdown-item {
   width: 100%;
-
   display: flex;
   align-items: center;
-
   gap: 12px;
-
   padding: 10px;
-
   background: transparent;
   border: none;
-
   border-radius: 8px;
-
-  color: #c7cbd1;
-
+  color: var(--text_secondary);
   font-size: 14px;
-
   cursor: pointer;
-
   text-align: left;
-
   transition: 0.2s ease;
 }
 
@@ -181,7 +146,7 @@
 }
 
 .admin-dropdown-item:hover {
-  background: #1b222c;
+  background: var(--primary_hover);
   color: #fff;
 }
 
@@ -197,79 +162,50 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
+/* Overlay */
 .admin-password-modal-overlay {
   position: fixed;
   inset: 0;
-
   background: rgba(0, 0, 0, 0.6);
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   z-index: 99999;
 }
 
 .admin-password-modal {
   width: 420px;
   max-width: calc(100% - 40px);
-
   background: #fff;
-
   border-radius: 14px;
-
   padding: 30px;
-
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
 }
 
 .admin-password-icon {
   width: 55px;
   height: 55px;
-
   margin: 0 auto 15px;
-
   border-radius: 50%;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   background: #fff4d6;
-
   color: #fdcb4b;
-
   font-size: 24px;
 }
 
 .admin-password-modal h3 {
   margin: 0;
-
   text-align: center;
-
   font-size: 20px;
-
   color: #222;
 }
 
 .admin-password-description {
   margin: 10px 0 25px;
-
   text-align: center;
-
   font-size: 14px;
-
   color: #777;
 }
 
@@ -279,29 +215,19 @@
 
 .admin-password-input-group label {
   display: block;
-
   margin-bottom: 7px;
-
   font-size: 14px;
-
   font-weight: 500;
-
   color: #333;
 }
 
 .admin-password-input-group input {
   width: 100%;
-
   box-sizing: border-box;
-
   padding: 11px 13px;
-
   border: 1px solid #ddd;
-
   border-radius: 7px;
-
   outline: none;
-
   font-size: 14px;
 }
 
@@ -311,44 +237,32 @@
 
 .admin-password-modal-actions {
   display: flex;
-
   justify-content: flex-end;
-
   gap: 12px;
-
   margin-top: 25px;
 }
 
 .admin-password-modal-actions button {
   min-width: 110px;
-
   padding: 10px 16px;
-
   border: none;
-
   border-radius: 7px;
-
   font-size: 14px;
-
   font-weight: 600;
-
   cursor: pointer;
 }
 
 .admin-password-cancel {
   background: #eee;
-
   color: #444;
 }
 
 .admin-password-confirm {
   background: #fdcb4b;
-
   color: #222;
 }
 
 .admin-password-modal-actions button:disabled {
   opacity: 0.6;
-
   cursor: not-allowed;
 }

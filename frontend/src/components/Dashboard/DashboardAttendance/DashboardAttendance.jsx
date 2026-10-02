@@ -131,7 +131,7 @@ export const DashboardAttendance = () => {
 
                   <div>{el.workingHours}</div>
 
-                  <div className="dashboardAttendance-status">
+                  <div className={`dashboardAttendance-status ${el.status?.toLowerCase()}`}>
                     <div></div>
                     <span>{el.status}</span>
                   </div>

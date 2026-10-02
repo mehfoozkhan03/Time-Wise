@@ -209,7 +209,7 @@ const initialState = {
   totalUsers: 0,
 
   currentPage: 0,
-  limit: 26,
+  limit: 10,
   search: "",
 
   todayAttendance: [],

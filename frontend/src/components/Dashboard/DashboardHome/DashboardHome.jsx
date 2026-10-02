@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 
-
 import { getDashboardStats } from "../../../store/attendanceSlice";
 import {
   fetchAllUser,
@@ -10,7 +9,6 @@ import { AnnouncementForm } from "../DashboardAnnouncement/AnnouncementForm/Anno
 import { PulseDot } from "./../../PulseDot/pulseDot";
 import { fetchFeaturedThoughtForAdmin } from "../../../store/postSlice";
 import "./DashboardHome.css";
-
 
 import {
   FaUsers,
@@ -31,10 +29,7 @@ import {
   Legend,
 } from "chart.js";
 
-
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
-
-
 
 export const DashboardHome = () => {
   const dispatch = useDispatch();
@@ -207,7 +202,7 @@ export const DashboardHome = () => {
     dispatch(fetchAllUser());
     dispatch(fetchRecentEmployees());
     dispatch(getDashboardStats());
-    dispatch(fetchFeaturedThoughtForAdmin())
+    dispatch(fetchFeaturedThoughtForAdmin());
   }, [dispatch]);
 
   return (
@@ -297,7 +292,7 @@ export const DashboardHome = () => {
                   }
                 }}
               >
-                {el.icon}
+                <span className="add-employee-icon">{el.icon}</span>
                 <span style={{ color: "#fff" }}>{el.title}</span>
               </div>
             ))}
@@ -330,38 +325,23 @@ export const DashboardHome = () => {
                       </div>
                     </div>
                     <div
-                      className="recent-dot-container"
-                      style={{
-                        background:
-                          el.attendanceStatus === "Present"
-                            ? "#12352F"
-                            : "#f24545",
-                        border:
-                          el.attendanceStatus === "Present"
-                            ? "1px solid #2F8F83"
-                            : "1px solid #8F4652",
-                      }}
+                      className={`recent-dot-container ${
+                        el.attendanceStatus === "Present"
+                          ? "attendance-present"
+                          : "attendance-absent"
+                      }`}
                     >
-                      <div
-                        className="recent-dot"
-                        style={{
-                          background:
-                            el.attendanceStatus === "Present"
-                              ? "#22C55E"
-                              : "#000",
-                        }}
-                      ></div>
-                      <span
-                        style={{
-                          color:
-                            el.attendanceStatus === "Present"
-                              ? "#5EE7C4"
-                              : "#000",
-                          fontWeight: 600,
-                        }}
-                      >
-                        {el.attendanceStatus}
-                      </span>
+                      <PulseDot
+                        color={
+                          el.attendanceStatus === "Present"
+                            ? "var(--attendance-present-dot)"
+                            : "var(--attendance-absent-dot)"
+                        }
+                        size="8px"
+                        speed="2.5s"
+                        scale="2.5"
+                      />
+                      <span>{el.attendanceStatus}</span>
                     </div>
                   </div>
                 ))}
