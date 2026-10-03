@@ -40,7 +40,10 @@ export const AnnouncementForm = ({
 
     status: "Published",
     publishedAt: null,
-    scheduledAt: null,
+
+    scheduledAt: "",
+    scheduledDate: "",
+    scheduledTime: "",
 
     expiryDate: "",
     expiryTime: "",
@@ -72,7 +75,7 @@ export const AnnouncementForm = ({
 
   //# This is for edit form
 
-  const saveAnnouncement = async (status) => {
+  const saveAnnouncement = async () => {
     if (!formData.title.trim()) {
       alert("Please enter announcement title.");
       return;
@@ -83,17 +86,35 @@ export const AnnouncementForm = ({
       return;
     }
 
+    if (
+      formData.status === "Scheduled" &&
+      (!formData.scheduledDate || !formData.scheduledTime)
+    ) {
+      alert("Scheduled date and time are required.");
+      return;
+    }
+
+    const scheduledAt =
+      formData.status === "Scheduled" &&
+      formData.scheduledDate &&
+      formData.scheduledTime
+        ? new Date(
+            `${formData.scheduledDate}T${formData.scheduledTime}`,
+          ).toISOString()
+        : null;
+
     const data = {
       ...formData,
 
       title: formData.title.trim(),
       description: formData.description.trim(),
 
-      status,
+      status: formData.status,
 
-      publishedAt: status === "Published" ? new Date().toISOString() : null,
+      publishedAt:
+        formData.status === "Published" ? new Date().toISOString() : null,
 
-      scheduledAt: status === "Scheduled" ? formData.scheduledAt : null,
+      scheduledAt,
 
       department:
         formData.audience === "Department" ? formData.department || null : null,
@@ -135,11 +156,14 @@ export const AnnouncementForm = ({
   };
 
   const handlePublish = () => {
-    saveAnnouncement("Published");
+    saveAnnouncement();
   };
 
   const handleSaveDraft = () => {
-    saveAnnouncement("Draft");
+    setFormData((prev) => ({
+      ...prev,
+      status: "Draft",
+    }));
   };
 
   const [showPreview, setShowPreview] = useState(false);
@@ -169,15 +193,45 @@ export const AnnouncementForm = ({
   //# This is for edit
   useEffect(() => {
     if (mode === "edit" && announcement) {
+      const pad = (value) => String(value).padStart(2, "0");
+
+      let scheduledDate = "";
+      let scheduledTime = "";
+
+      // Convert saved scheduledAt into date + time
+      if (announcement.scheduledAt) {
+        const scheduled = new Date(announcement.scheduledAt);
+
+        if (!isNaN(scheduled.getTime())) {
+          scheduledDate = `${scheduled.getFullYear()}-${pad(
+            scheduled.getMonth() + 1,
+          )}-${pad(scheduled.getDate())}`;
+
+          scheduledTime = `${pad(
+            scheduled.getHours(),
+          )}:${pad(scheduled.getMinutes())}`;
+        }
+      }
+
       setFormData({
         title: announcement.title || "",
+
         category: announcement.category || "Company",
+
         priority: announcement.priority || "Normal",
+
         description: announcement.description || "",
 
         status: announcement.status || "Draft",
+
         publishedAt: announcement.publishedAt || null,
+
         scheduledAt: announcement.scheduledAt || null,
+
+        // IMPORTANT
+        scheduledDate,
+
+        scheduledTime,
 
         expiryDate: announcement.expiryDate
           ? new Date(announcement.expiryDate).toISOString().split("T")[0]
@@ -203,7 +257,9 @@ export const AnnouncementForm = ({
 
         actionButton: {
           enabled: announcement.actionButton?.enabled || false,
+
           label: announcement.actionButton?.label || "",
+
           url: announcement.actionButton?.url || "",
         },
 
@@ -338,6 +394,35 @@ export const AnnouncementForm = ({
                 Schedule
               </button>
             </div>
+            {/* Scheduled Data and Time Input */}
+            {formData.status === "Scheduled" && (
+              <div className="announcement-schedule-fields">
+                <div>
+                  <label htmlFor="scheduledDate">Scheduled Date</label>
+
+                  <input
+                    type="date"
+                    id="scheduledDate"
+                    name="scheduledDate"
+                    value={formData.scheduledDate}
+                    min={new Date().toISOString().split("T")[0]}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="scheduledTime">Scheduled Time</label>
+
+                  <input
+                    type="time"
+                    id="scheduledTime"
+                    name="scheduledTime"
+                    value={formData.scheduledTime}
+                    onChange={handleChange}
+                  />
+                </div>
+              </div>
+            )}
           </div>
           <div className="announcementForm-expiry">
             <div>

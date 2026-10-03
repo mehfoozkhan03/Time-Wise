@@ -69,16 +69,27 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-
   padding: 5px 10px;
-
   border-radius: 7px;
-  border: 1px solid #7ee0bd;
-
-  color: #269b78;
-  background: var(--bg);
-
+  border: 1px solid var(--border);
+  color: #fff;
+  background: var(--button);
   font-size: 14px;
+}
+
+.announcement-status.published{
+  background: var(--status-published-bg);
+  color: var(--status-published-text);
+}
+
+.announcement-status.draft{
+  background: var(--status-draft-bg);
+  color: var(--status-draft-text);
+}
+
+.announcement-status.scheduled{
+  background: var(--status-scheduled-bg);
+  color: var(--status-scheduled-text);
 }
 
 /* ================= CONTENT ================= */
@@ -116,7 +127,6 @@
   display: inline-flex;
   align-items: center;
   gap: 7px;
-
   color: #91a0b5;
   font-size: 14px;
 }

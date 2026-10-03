@@ -136,6 +136,20 @@
   --attendance-absent-dot: #fff;
   --attendance-absent-border: #FCA5A5;
 
+
+  /* ==========================
+     ANNOUNCEMENT STATUS - LIGHT
+  ========================== */
+
+  --status-published-bg: #DCFCE7;
+  --status-published-text: #166534;
+
+  --status-draft-bg: #F3F4F6;
+  --status-draft-text: #4B5563;
+
+  --status-scheduled-bg: #DBEAFE;
+  --status-scheduled-text: #1E40AF;
+
 }
 
 
@@ -259,9 +273,9 @@ html.dark {
 
 
   /* Input */
-  --input-bg: #ffffff;
+  /* --input-bg: #ffffff;
   --input-text: #2c2f3a;
-  --label-color: #6e7a88;
+  --label-color: #6e7a88; */
 
   /* Overlay */
   --overlay: rgba(255, 255, 255, 0.15);
@@ -274,7 +288,7 @@ html.dark {
   --attendance-present-text: #fff;
 
   --attendance-absent-bg: #7F1D1D;
-  --attendance-absent-text: #FCA5A5;
+  --attendance-absent-text: #fff;
 
   --attendance-late-bg: #78350F;
   --attendance-late-text: #FCD34D;
@@ -289,6 +303,20 @@ html.dark {
   --attendance-present-border: #22C55E;
   --attendance-absent-dot: #fff;
   --attendance-absent-border: #EF4444;
+
+
+  /* ==========================
+     ANNOUNCEMENT STATUS - DARK
+  ========================== */
+
+  --status-published-bg: #14532D;
+  --status-published-text: #86EFAC;
+
+  --status-draft-bg: #374151;
+  --status-draft-text: #D1D5DB;
+
+  --status-scheduled-bg: #1E3A8A;
+  --status-scheduled-text: #93C5FD;
 }
 
 
