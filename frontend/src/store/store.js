@@ -16,6 +16,7 @@ import contactReducer from "./contactSlice";
 import { announcementReducer } from "./announcementSlice";
 import { themeReducer } from "./themeSlice";
 import { adminThemeReducer } from "./adminThemeSlice";
+import adminReportReducer from "./adminReportSlice";
 
 const store = configureStore({
   reducer: {
@@ -50,6 +51,8 @@ const store = configureStore({
     theme: themeReducer,
 
     adminTheme: adminThemeReducer,
+
+    adminReport: adminReportReducer,
   },
 });
 
