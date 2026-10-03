@@ -354,6 +354,7 @@ const initialState = {
   userPostsTotal: 0,
   userPostsTotalLikes: 0,
   userPostsTotalComments: 0,
+  monthlyActivity: [],
   userPostsLoading: false,
   userPostsError: false,
   userPostsPage: 1,
@@ -757,6 +758,7 @@ const postSlice = createSlice({
           totalPosts,
           totalLikesReceived,
           totalComments,
+          monthlyActivity,
           totalPages,
           hasMore,
         } = action.payload;
@@ -771,6 +773,7 @@ const postSlice = createSlice({
         state.userPostsTotal = totalPosts;
         state.userPostsTotalLikes = totalLikesReceived;
         state.userPostsTotalComments = totalComments;
+        state.monthlyActivity = monthlyActivity || [];
 
         // Pagination
         state.userPostsPage = page;

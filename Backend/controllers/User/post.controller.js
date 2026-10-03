@@ -794,12 +794,30 @@ export const getPostsByUser = async (req, res) => {
     const totalLikesReceived = totals[0]?.totalLikes || 0;
     const totalComments = totals[0]?.totalComments || 0;
 
-    console.log("PROFILE STATS:", {
-      userId,
-      totalPosts,
-      totalLikesReceived,
-      totalComments,
-    });
+    //# Monthly Activity in Community Profile 
+    const monthlyActivity = await postModel.aggregate([
+      {
+        $match: {
+          createdBy: new mongoose.Types.ObjectId(userId),
+          isDeleted: false,
+        },
+      },
+      {
+        $group: {
+          _id: {
+            month: { $month: "$createdAt" },
+            year: { $year: "$createdAt" },
+          },
+          posts: { $sum: 1 },
+        },
+      },
+      {
+        $sort: {
+          "_id.year": 1,
+          "_id.month": 1,
+        },
+      },
+    ]);
 
     // ==========================================
     // PAGINATED POSTS
@@ -870,6 +888,8 @@ export const getPostsByUser = async (req, res) => {
       totalLikesReceived,
 
       totalComments,
+
+      monthlyActivity,
 
       totalPages: Math.ceil(totalPosts / limit),
 

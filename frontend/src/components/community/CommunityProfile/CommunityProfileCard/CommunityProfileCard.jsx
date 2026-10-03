@@ -10,7 +10,6 @@ import {
   HiOutlineEllipsisHorizontal,
 } from "react-icons/hi2";
 
-
 import {
   clearCommunityProfile,
   fetchCommunityProfile,
@@ -113,6 +112,19 @@ export const CommunityProfileCard = () => {
     },
   ];
 
+  //# Handle share profile button
+  const handleShareProfile = async () => {
+    try {
+      const profileUrl = `${window.location.origin}/community/profile/${userId}`;
+
+      await navigator.clipboard.writeText(profileUrl);
+
+      alert("Profile URL copied to clipboard!");
+    } catch (error) {
+      console.error("Failed to copy profile URL:", error);
+    }
+  };
+
   return (
     <>
       {/* ================= Profile Card ================= */}
@@ -164,7 +176,10 @@ export const CommunityProfileCard = () => {
                 <span>Message</span>
               </button>
 
-              <button className="community-profile-button community-profile-button-share">
+              <button
+                className="community-profile-button community-profile-button-share"
+                onClick={handleShareProfile}
+              >
                 <HiOutlineShare />
 
                 <span>Share Profile</span>
