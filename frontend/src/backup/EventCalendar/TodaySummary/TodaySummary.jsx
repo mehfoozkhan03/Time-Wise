@@ -1,0 +1,94 @@
+import "./TodaySummary.css";
+
+import { memo, useMemo } from "react";
+
+import { FaChartPie, FaRegCalendarCheck } from "react-icons/fa";
+
+import Card from "../../Common/CalendarCard/Card";
+import EmptyState from "../../Common/EmptyState/EmptyState";
+
+import { EVENT_CONFIG } from "../../../data/eventConfig";
+import { getTodaySummary } from "../../../utils/eventUtils";
+
+function TodaySummary({ events = [] }) {
+  /* =========================================
+     Today's Summary
+  ========================================= */
+
+  const summaryData = useMemo(() => {
+    return getTodaySummary(events, EVENT_CONFIG).filter(
+      (item) => item.config && item.count > 0,
+    );
+  }, [events]);
+
+  const hasEvents = summaryData.length > 0;
+
+  return (
+    <Card
+      title="Today's Summary"
+      icon={<FaChartPie />}
+      className="summaryCard"
+    >
+      {!hasEvents ? (
+        <EmptyState
+          icon={<FaRegCalendarCheck />}
+          title="No Events Today"
+          description="No scheduled events for today."
+        />
+      ) : (
+        <div
+          className="summaryList"
+          role="list"
+          aria-label="Today's Event Summary"
+        >
+          {summaryData.map((item) => {
+            const Icon = item.config.icon;
+
+            return (
+              <div
+                key={item.type}
+                className="summaryItem"
+                role="listitem"
+              >
+                <div className="summaryLeft">
+                  <div
+                    className="summaryIcon"
+                    style={{
+                      "--summary-color": item.config.color,
+                    }}
+                    aria-hidden="true"
+                  >
+                    <Icon />
+                  </div>
+
+                  <div className="summaryContent">
+                    <span className="summaryTitle">
+                      {item.config.label}
+                    </span>
+
+                    <small>
+                      {item.count === 1 ? "1 Event Today" : `${item.count} Events Today`}
+                    </small>
+                  </div>
+                </div>
+
+                <strong
+                  className="summaryCount"
+                  aria-label={`${item.count} ${item.config.label} event${
+                    item.count === 1 ? "" : "s"
+                  }`}
+                >
+                  {item.count}
+                </strong>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </Card>
+  );
+}
+
+TodaySummary.displayName = "TodaySummary";
+
+export default memo(TodaySummary);

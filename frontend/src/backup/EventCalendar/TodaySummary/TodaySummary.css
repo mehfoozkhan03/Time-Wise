@@ -1,0 +1,280 @@
+/* ==========================================
+   Today Summary
+========================================== */
+
+.summaryCard .cardBody {
+  display: flex;
+  flex-direction: column;
+
+  gap: 12px;
+}
+
+/* ==========================================
+   List
+========================================== */
+
+.summaryList {
+  display: flex;
+  flex-direction: column;
+
+  gap: 8px;
+}
+
+/* ==========================================
+   Item
+========================================== */
+
+.summaryItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 10px;
+
+  padding: 10px 0;
+
+  border-bottom: 1px solid var(--border);
+
+  transition:
+    border-color var(--transition),
+    transform var(--transition);
+}
+
+.summaryItem:last-child {
+  padding-bottom: 0;
+
+  border-bottom: none;
+}
+
+.summaryItem:hover {
+  transform: translateX(2px);
+}
+
+/* ==========================================
+   Left
+========================================== */
+
+.summaryLeft {
+  display: flex;
+  align-items: center;
+
+  flex: 1;
+  min-width: 0;
+
+  gap: 10px;
+}
+
+/* ==========================================
+   Icon
+========================================== */
+
+.summaryIcon {
+  width: 32px;
+  height: 32px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  flex-shrink: 0;
+
+  border-radius: var(--radius_sm);
+
+  background: var(--summary-color);
+
+  color: #fff;
+
+  font-size: 13px;
+}
+
+/* ==========================================
+   Content
+========================================== */
+
+.summaryContent {
+  display: flex;
+  flex-direction: column;
+
+  min-width: 0;
+}
+
+.summaryTitle {
+  margin: 0;
+
+  color: var(--text_primary);
+
+  font-size: 13px;
+  font-weight: 600;
+
+  line-height: 1.2;
+}
+
+.summaryContent small {
+  margin-top: 2px;
+
+  color: var(--text_secondary);
+
+  font-size: 10px;
+}
+
+/* ==========================================
+   Count
+========================================== */
+
+.summaryCount {
+  min-width: 30px;
+  height: 24px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 0 8px;
+
+  border-radius: 999px;
+
+  background: var(--surface_hover);
+
+  color: var(--primary);
+
+  font-size: 11px;
+  font-weight: 700;
+
+  transition:
+    background var(--transition),
+    color var(--transition);
+}
+
+/* ==========================================
+   760px
+========================================== */
+
+@media (max-width: 760px) {
+  .summaryCard .cardBody {
+    gap: 10px;
+  }
+
+  .summaryList {
+    gap: 6px;
+  }
+
+  .summaryItem {
+    gap: 8px;
+
+    padding: 9px 0;
+  }
+
+  .summaryLeft {
+    gap: 8px;
+  }
+
+  .summaryIcon {
+    width: 30px;
+    height: 30px;
+
+    font-size: 12px;
+  }
+
+  .summaryTitle {
+    font-size: 12px;
+  }
+
+  .summaryContent small {
+    font-size: 9px;
+  }
+
+  .summaryCount {
+    min-width: 28px;
+    height: 22px;
+
+    font-size: 10px;
+  }
+}
+
+/* ==========================================
+   480px
+========================================== */
+
+@media (max-width: 480px) {
+  .summaryCard .cardBody {
+    gap: 8px;
+  }
+
+  .summaryList {
+    gap: 5px;
+  }
+
+  .summaryItem {
+    gap: 6px;
+
+    padding: 8px 0;
+  }
+
+  .summaryLeft {
+    gap: 6px;
+  }
+
+  .summaryIcon {
+    width: 28px;
+    height: 28px;
+
+    font-size: 11px;
+  }
+
+  .summaryTitle {
+    font-size: 11px;
+  }
+
+  .summaryContent small {
+    font-size: 8px;
+  }
+
+  .summaryCount {
+    min-width: 26px;
+    height: 20px;
+
+    padding: 0 6px;
+
+    font-size: 9px;
+  }
+}
+
+/* ==========================================
+   320px
+========================================== */
+
+@media (max-width: 320px) {
+  .summaryCard .cardBody {
+    gap: 6px;
+  }
+
+  .summaryList {
+    gap: 4px;
+  }
+
+  .summaryItem {
+    padding: 7px 0;
+  }
+
+  .summaryIcon {
+    width: 24px;
+    height: 24px;
+
+    font-size: 10px;
+  }
+
+  .summaryTitle {
+    font-size: 10px;
+  }
+
+  .summaryContent small {
+    font-size: 8px;
+  }
+
+  .summaryCount {
+    min-width: 24px;
+    height: 18px;
+
+    font-size: 8px;
+  }
+}

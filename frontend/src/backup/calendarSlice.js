@@ -2,14 +2,6 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { calendarService } from "../services/calendarService";
 
 /* =========================================
-   GET AUTH TYPE
-========================================= */
-
-const getAuthType = (authType) => {
-  return authType === "admin" ? "admin" : "user";
-};
-
-/* =========================================
    SORT EVENTS
 ========================================= */
 
@@ -31,22 +23,16 @@ const sortEvents = (events) => {
 
 export const fetchEvents = createAsyncThunk(
   "calendar/fetchEvents",
-  async ({ authType = "user" } = {}, thunkAPI) => {
+  async (_, thunkAPI) => {
     try {
-      const requestAuthType = getAuthType(authType);
-
-      const response = await calendarService.getEvents(
-        {},
-        requestAuthType,
-      );
-
+      const response = await calendarService.getEvents();
       return response.data.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(
-        error.response?.data?.message || "Failed to fetch events.",
+        error.response?.data?.message || "Failed to fetch events."
       );
     }
-  },
+  }
 );
 
 /* =========================================
@@ -55,22 +41,16 @@ export const fetchEvents = createAsyncThunk(
 
 export const createEvent = createAsyncThunk(
   "calendar/createEvent",
-  async ({ eventData, authType = "user" }, thunkAPI) => {
+  async (eventData, thunkAPI) => {
     try {
-      const requestAuthType = getAuthType(authType);
-
-      const response = await calendarService.createEvent(
-        eventData,
-        requestAuthType,
-      );
-
+      const response = await calendarService.createEvent(eventData);
       return response.data.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(
-        error.response?.data?.message || "Failed to create event.",
+        error.response?.data?.message || "Failed to create event."
       );
     }
-  },
+  }
 );
 
 /* =========================================
@@ -79,23 +59,16 @@ export const createEvent = createAsyncThunk(
 
 export const updateEvent = createAsyncThunk(
   "calendar/updateEvent",
-  async ({ id, data, authType = "user" }, thunkAPI) => {
+  async ({ id, data }, thunkAPI) => {
     try {
-      const requestAuthType = getAuthType(authType);
-
-      const response = await calendarService.updateEvent(
-        id,
-        data,
-        requestAuthType,
-      );
-
+      const response = await calendarService.updateEvent(id, data);
       return response.data.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(
-        error.response?.data?.message || "Failed to update event.",
+        error.response?.data?.message || "Failed to update event."
       );
     }
-  },
+  }
 );
 
 /* =========================================
@@ -104,19 +77,16 @@ export const updateEvent = createAsyncThunk(
 
 export const deleteEvent = createAsyncThunk(
   "calendar/deleteEvent",
-  async ({ id, authType = "user" }, thunkAPI) => {
+  async (id, thunkAPI) => {
     try {
-      const requestAuthType = getAuthType(authType);
-
-      await calendarService.deleteEvent(id, requestAuthType);
-
+      await calendarService.deleteEvent(id);
       return id;
     } catch (error) {
       return thunkAPI.rejectWithValue(
-        error.response?.data?.message || "Failed to delete event.",
+        error.response?.data?.message || "Failed to delete event."
       );
     }
-  },
+  }
 );
 
 /* =========================================
@@ -219,7 +189,7 @@ const calendarSlice = createSlice({
         state.success = true;
 
         const index = state.events.findIndex(
-          (event) => event._id === action.payload._id,
+          (event) => event._id === action.payload._id
         );
 
         if (index !== -1) {
@@ -251,7 +221,7 @@ const calendarSlice = createSlice({
         state.success = true;
 
         state.events = state.events.filter(
-          (event) => event._id !== action.payload,
+          (event) => event._id !== action.payload
         );
       })
 

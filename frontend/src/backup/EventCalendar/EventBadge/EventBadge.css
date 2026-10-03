@@ -1,0 +1,141 @@
+/* ======================================
+   EventBadge
+
+   Styling is inherited from EventItem.css
+   using variant="compact".
+
+   This file is intentionally kept empty.
+====================================== */
+/* .eventBadge{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    padding:10px;
+
+    background:#313846;
+
+    border-left:4px solid var(--event-color);
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.eventBadge:hover{
+
+    transform:translateX(4px);
+
+    background:#394255;
+
+} */
+/* 
+.eventAvatar{
+
+    width:34px;
+
+    height:34px;
+
+    border-radius:50%;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    color:white;
+
+    font-size:12px;
+
+    font-weight:700;
+
+    flex-shrink:0;
+
+}
+
+.eventTypeIcon{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    color:var(--event-color);
+
+    font-size:13px;
+
+}
+
+.eventContent{
+
+    flex:1;
+
+    overflow:hidden;
+
+}
+
+.eventContent h5{
+
+    color:white;
+
+    font-size:12px;
+
+    font-weight:600;
+
+    overflow:hidden;
+
+    white-space:nowrap;
+
+    text-overflow:ellipsis;
+
+}
+
+.eventMeta{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    margin-top:4px;
+
+    font-size:11px;
+
+    color:#94a3b8;
+
+}
+
+@media(max-width:768px){
+
+.eventBadge{
+
+    padding:8px;
+
+}
+
+.eventAvatar{
+
+    width:28px;
+
+    height:28px;
+
+    font-size:10px;
+
+}
+
+.eventContent h5{
+
+    font-size:11px;
+
+}
+
+} */
