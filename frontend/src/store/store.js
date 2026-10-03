@@ -15,6 +15,7 @@ import communityProfileReducer from "./communityProfileSlice";
 import contactReducer from "./contactSlice";
 import { announcementReducer } from "./announcementSlice";
 import { themeReducer } from "./themeSlice";
+import adminDashboardHomeSlice from "./adminDashboardHomeSlice";
 import { adminThemeReducer } from "./adminThemeSlice";
 import adminReportReducer from "./adminReportSlice";
 
@@ -49,6 +50,8 @@ const store = configureStore({
     announcement: announcementReducer,
 
     theme: themeReducer,
+
+    adminDashboardHome: adminDashboardHomeSlice,
 
     adminTheme: adminThemeReducer,
 

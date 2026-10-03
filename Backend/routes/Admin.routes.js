@@ -29,6 +29,7 @@ import { changeUserPassword } from "../controllers/Admin/changeEmployeePassword.
 import { changeOwnPassword } from "../controllers/Admin/changeAdminPassword.controller.js";
 import { getAdminTheme, updateAdminTheme } from "../controllers/Admin/adminTheme.controller.js";
 import { getAdminAttendanceTrendReport, getAdminDepartmentHeadcountReport, getAdminWeeklyAttendanceReport } from "../controllers/Admin/adminReportController.js";
+import { getAdminDashboardStatsController } from "../controllers/Admin/adminDashboardHome.controller.js";
 
 
 const adminRoutes = express.Router();
@@ -60,6 +61,9 @@ adminRoutes.patch("/:userId/role", adminAuth, updateRole);
 adminRoutes.put("/users/:userId", adminAuth, updateUser);
 
 adminRoutes.get("/attendance/today", adminAuth, getAllTodayAttendance);
+
+//# Dashboard Home
+adminRoutes.get( "/dashboard-stats", adminAuth, getAdminDashboardStatsController); 
 
 //# Admin Report & Analytic
 adminRoutes.get( "/reports/weekly-attendance", adminAuth, getAdminWeeklyAttendanceReport);

@@ -5,7 +5,6 @@ import { attendanceConfig } from '../config/attendanceConfig.js'
 import { attendanceModel } from '../models/Attendance.model.js'
 
 import { holidayModel } from '../models/Holidays.model.js'
-import { userModel } from '../models/User.model.js'
 import { leaveModel } from '../models/Leave.model.js'
 import { ATTENDANCE_BLOCKING_HOLIDAY_TYPES } from '../config/attendanceRules.js'
 
@@ -243,44 +242,6 @@ export const getAttendanceStats = async (userID) => {
   const todayEnd = endOfDay(now)
 
   // =====================================================
-  // Today's Attendance - All Employees
-  // =====================================================
-
-  const totalPresentToday = await attendanceModel.countDocuments({
-    date: {
-      $gte: todayStart,
-      $lte: todayEnd,
-    },
-    checkInTime: {
-      $ne: null,
-    },
-  })
-
-  const totalOnBreakToday = await attendanceModel.countDocuments({
-    date: {
-      $gte: todayStart,
-      $lte: todayEnd,
-    },
-    breaks: {
-      $elemMatch: {
-        breakStart: { $ne: null },
-        breakEnd: null,
-      },
-    },
-  })
-
-  const totalLateCheckInsToday = await attendanceModel.countDocuments({
-    date: {
-      $gte: todayStart,
-      $lte: todayEnd,
-    },
-    checkInTime: {
-      $ne: null,
-    },
-    status: 'Late',
-  })
-
-  // =====================================================
   // Today's Attendance Records
   // =====================================================
 
@@ -386,50 +347,6 @@ export const getAttendanceStats = async (userID) => {
   )
 
   const monthEnd = new Date(nextMonthStart.getTime() - 1)
-
-  // =====================================================
-  // Weekly Attendance Chart
-  // =====================================================
-
-  const totalEmployees = await userModel.countDocuments()
-
-  const weeklyCompanyAttendance = await attendanceModel.find({
-    date: {
-      $gte: weekStart,
-      $lte: weekEnd,
-    },
-  })
-
-  const weeklyAttendanceChart = []
-
-  for (let i = 6; i >= 0; i--) {
-    const date = addDays(indiaToday, -i)
-
-    const dayStart = startOfDay(date)
-    const dayEnd = endOfDay(date)
-
-    const dayAttendance = weeklyCompanyAttendance.filter(
-      (record) => record.date >= dayStart && record.date <= dayEnd,
-    )
-
-    const present = dayAttendance.filter(
-      (record) =>
-        record.checkInTime &&
-        ['Present', 'Late', 'Half Day'].includes(record.status),
-    ).length
-
-    const absent = Math.max(totalEmployees - present, 0)
-
-    weeklyAttendanceChart.push({
-      day: new Intl.DateTimeFormat('en-US', {
-        timeZone: INDIA_TIME_ZONE,
-        weekday: 'short',
-      }).format(date),
-
-      present,
-      absent,
-    })
-  }
 
   // =====================================================
   // Active Holidays
@@ -988,13 +905,5 @@ export const getAttendanceStats = async (userID) => {
 
     averageCheckIn,
     averageBreakDuration,
-
-    totalPresentToday,
-
-    totalOnBreakToday,
-
-    totalLateCheckInsToday,
-
-    weeklyAttendanceChart,
   }
 }

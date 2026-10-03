@@ -1,25 +1,15 @@
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 
-import { getDashboardStats } from "../../../store/attendanceSlice";
-import {
-  fetchAllUser,
-  fetchRecentEmployees,
-} from "./../../../store/adminAuthSlice";
+import { fetchAllUser, fetchRecentEmployees } from "./../../../store/adminAuthSlice";
 import { AnnouncementForm } from "../DashboardAnnouncement/AnnouncementForm/AnnouncementForm";
 import { PulseDot } from "./../../PulseDot/pulseDot";
 import { fetchFeaturedThoughtForAdmin } from "../../../store/postSlice";
 import "./DashboardHome.css";
 
-import {
-  FaUsers,
-  FaLightbulb,
-  FaBell,
-  FaBullhorn,
-  FaChartBar,
-} from "react-icons/fa6";
+import { FaUsers, FaLightbulb, FaBell, FaBullhorn, FaChartBar } from "react-icons/fa6";
 
 import { Bar } from "react-chartjs-2";
-import { useDispatch, useSelector } from "react-redux";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -28,6 +18,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { fetchAdminDashboardHomeStats } from "../../../store/adminDashboardHomeSlice";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
@@ -40,7 +31,7 @@ export const DashboardHome = () => {
   //# ================ Featured thought or Pinned thought =================
   const { featured } = useSelector((state) => state.post);
 
-  const { stats } = useSelector((state) => state.attendance);
+  const { stats } = useSelector((state) => state.adminDashboardHome);
 
   const totalAbsentToday = (totalUsers || 0) - (stats?.totalPresentToday || 0);
 
@@ -202,7 +193,7 @@ export const DashboardHome = () => {
   useEffect(() => {
     dispatch(fetchAllUser());
     dispatch(fetchRecentEmployees());
-    dispatch(getDashboardStats());
+    dispatch(fetchAdminDashboardHomeStats());
     dispatch(fetchFeaturedThoughtForAdmin());
   }, [dispatch]);
 
