@@ -71,6 +71,25 @@ const userSchema = new mongoose.Schema(
       default: null,
     },
 
+    phone: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    address: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    bio: {
+      type: String,
+      default: "",
+      trim: true,
+      maxlength: 500,
+    },
+
     theme: {
       type: String,
       enum: ["light", "dark", "system"],

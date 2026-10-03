@@ -1,4 +1,5 @@
 import React from "react";
+import { createPortal } from "react-dom";
 import { Feedback } from "../../pages/FeedBack";
 
 const FeedbackModalController = ({ onReady }) => {
@@ -71,7 +72,7 @@ const FeedbackModalController = ({ onReady }) => {
     onReady?.(showModal);
   }, [onReady, showModal]);
 
-  return (
+  return createPortal(
     <Feedback
       isOpen={modal.open}
       variant={modal.variant}
@@ -80,7 +81,8 @@ const FeedbackModalController = ({ onReady }) => {
       reason={modal.reason}
       description={modal.description}
       onClose={closeModal}
-    />
+    />,
+    document.body,
   );
 };
 

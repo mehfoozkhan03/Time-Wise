@@ -1,33 +1,66 @@
 import "./AnnouncementFilter.css";
 
 import { CiSearch } from "react-icons/ci";
-import { AnnoucementFilterCategories } from "./AnnouncementFilterCategories/AnnoucementFilterCategories";
-import { AnnouncementFilterStatus } from './AnnouncementFilterStatus/AnnoucementFilterStatus';
+import { AnnoucementFilterCategories } from "./AnnouncementFilterCategories/AnnouncementFilterCategories";
+import { AnnouncementFilterStatus } from "./AnnouncementFilterStatus/AnnoucementFilterStatus";
 import { AnnoucementFilterPriorities } from "./AnnoucementFilterPriorities/AnnoucementFilterPriorities";
 import { AnnouncementFilterAudience } from "./AnnoucementFilterAudience/AnnoucementFilterAudience";
-import { AnnouncementFilterNew } from './AnnoucementFilterNew/AnnoucementFilterNew';
+import { AnnouncementFilterNew } from "./AnnoucementFilterNew/AnnoucementFilterNew";
 
-export const AnnouncementFilter = () => {
-    return (
-        <>
-            <section className="announcementFilter-section">
-                <div className="announcementFilter-content">
-                    <div className="announcementFilter-search">
-                        <CiSearch />
-                        <input type="search" placeholder="Search announcements..." />
-                    </div>
+export const AnnouncementFilter = ({
+  category,
+  setCategory,
+  status,
+  setStatus,
+  priority,
+  setPriority,
+  audience,
+  setAudience,
+  sort,
+  setSort,
+  search,
+  setSearch,
+}) => {
+  return (
+    <>
+      <section className="announcementFilter-section">
+        <div className="announcementFilter-content">
+          <div className="announcementFilter-search">
+            <CiSearch />
+            <input
+              type="search"
+              placeholder="Search by title or description"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </div>
 
-                    <AnnoucementFilterCategories />
+          <AnnoucementFilterCategories
+            category={category}
+            setCategory={setCategory}
+          />
 
-                    <AnnouncementFilterStatus />
+          <AnnouncementFilterStatus
+            status={status}
+            setStatus={setStatus}
+          />
 
-                    <AnnoucementFilterPriorities />
+          <AnnoucementFilterPriorities
+            priority={priority}
+            setPriority={setPriority}
+          />
 
-                    <AnnouncementFilterAudience />
+          <AnnouncementFilterAudience
+            audience={audience}
+            setAudience={setAudience}
+          />
 
-                    <AnnouncementFilterNew />
-                </div>
-            </section>
-        </>
-    )
-}
+          <AnnouncementFilterNew
+            sort={sort}
+            setSort={setSort}
+          />
+        </div>
+      </section>
+    </>
+  );
+};

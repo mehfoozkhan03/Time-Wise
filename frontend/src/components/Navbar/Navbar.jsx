@@ -64,8 +64,10 @@ export default function Navbar() {
   const [overProfileBanner, setOverProfileBanner] = useState(false);
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [logoutOpen, setLogoutOpen] = useState(false);
+  const [logoutLegacyOpen, setLogoutLegacyOpen] = useState(false);
   const [logoutWithCheckout, setLogoutWithCheckout] = useState(false);
   const [logoutLoading, setLogoutLoading] = useState(false);
+  const [checkingAttendance, setCheckingAttendance] = useState(false);
   const [logoutError, setLogoutError] = useState("");
 
   const notificationRef = useRef(null);
@@ -96,6 +98,7 @@ export default function Navbar() {
       await authService.logout();
       dispatch(logout());
       setLogoutOpen(false);
+      setLogoutLegacyOpen(false);
       navigate("/login");
     } catch (error) {
       setLogoutError(
@@ -103,7 +106,6 @@ export default function Navbar() {
           ? error
           : error.response?.data?.message || "Unable to log out. Please try again.",
       );
-      setLogoutOpen(true);
     } finally {
       setLogoutLoading(false);
     }
@@ -112,6 +114,45 @@ export default function Navbar() {
   const firstName =
     user?.firstName?.charAt(0).toUpperCase() + user?.firstName?.slice(1) ||
     "User";
+
+  const getLogoutContent = () => {
+    const today = new Date().getDay();
+    return {
+      title: `Goodbye, ${firstName}! 👋`,
+      message: today >= 1 && today <= 4
+        ? "That's a wrap for today! Great work. Take some time to relax and recharge — we'll be ready for another productive day tomorrow."
+        : "You've wrapped up another productive week. Enjoy your weekend, relax, and come back refreshed. We'll see you on Monday!",
+      button: today >= 1 && today <= 4 ? "Logout & Relax" : "Start My Weekend",
+    };
+  };
+
+  const openLogoutPrompt = async () => {
+    setProfileOpen(false);
+    setLogoutOpen(false);
+    setLogoutLegacyOpen(false);
+    setLogoutWithCheckout(false);
+    setLogoutError("");
+    setCheckingAttendance(true);
+
+    try {
+      const todayResponse = await dispatch(getTodayAttendance()).unwrap();
+      const attendance = todayResponse?.attendance;
+      const isCheckedIn = Boolean(attendance?.checkInTime && !attendance.checkOutTime);
+
+      setLogoutOpen(isCheckedIn);
+      setLogoutLegacyOpen(!isCheckedIn);
+    } catch (error) {
+      setLogoutError(
+        typeof error === "string"
+          ? error
+          : error.response?.data?.message || "Unable to check today's attendance. Choose how to log out.",
+      );
+      setLogoutOpen(true);
+      setLogoutLegacyOpen(false);
+    } finally {
+      setCheckingAttendance(false);
+    }
+  };
 
   // Close everything on route change
   useEffect(() => {
@@ -340,14 +381,10 @@ export default function Navbar() {
                 </NavLink>
 
                 <button
-                  onClick={() => {
-                    setProfileOpen(false);
-                    setLogoutWithCheckout(false);
-                    setLogoutError("");
-                    setLogoutOpen(true);
-                  }}
+                  onClick={openLogoutPrompt}
+                  disabled={checkingAttendance || logoutLoading}
                 >
-                  Logout
+                  {checkingAttendance ? "Checking attendance..." : "Logout"}
                 </button>
               </div>
             )}
@@ -436,6 +473,22 @@ export default function Navbar() {
           </div>
         </div>
       </Modal>
+
+      <Modal
+        isOpen={logoutLegacyOpen}
+        variant="logout"
+        title={getLogoutContent().title}
+        message={logoutError || getLogoutContent().message}
+        confirmText={logoutLoading ? "Logging out..." : getLogoutContent().button}
+        cancelText="Stay Logged In"
+        onClose={() => {
+          if (!logoutLoading) {
+            setLogoutLegacyOpen(false);
+            setLogoutError("");
+          }
+        }}
+        onConfirm={confirmLogout}
+      />
 
     </>
   );

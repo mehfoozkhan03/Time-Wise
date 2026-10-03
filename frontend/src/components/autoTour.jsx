@@ -1,21 +1,30 @@
-import { useEffect } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
 
 import { useTour } from "../hooks/useTour";
 import { tourSteps } from "../tour/tourSteps";
 
 export function AutoTour() {
-  const hasSeenTour = useSelector((s) => s.tour.hasSeenTour);
-  const { triggerTour } = useTour(tourSteps());
+  const { user, isAuthenticated, isLoading } = useSelector((state) => state.auth);
+  const userId = user?._id;
+  const seenKey = userId ? `tw_tour_seen_${userId}` : null;
+  const steps = useMemo(() => tourSteps(), []);
+  const markTourSeen = useCallback(() => {
+    if (seenKey) localStorage.setItem(seenKey, "true");
+  }, [seenKey]);
+  const { triggerTour } = useTour(steps, markTourSeen);
 
   useEffect(() => {
-    // Only fire if user has never seen the tour
-    if (!hasSeenTour) {
-      // Small delay so all DOM elements are fully mounted
-      const timer = setTimeout(() => triggerTour(), 800);
-      return () => clearTimeout(timer);
+    if (!isAuthenticated || isLoading || !userId || localStorage.getItem(seenKey) === "true") {
+      return undefined;
     }
-  }, []); // ← empty array = runs only once on mount
 
-  return null; // renders nothing
+    const timer = setTimeout(() => {
+      triggerTour();
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [isAuthenticated, isLoading, seenKey, triggerTour, userId]);
+
+  return null;
 }

@@ -1,11 +1,11 @@
 import { useEffect, useRef, useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
 import "../App.css";
 import { startTour, endTour, setCurrentStep } from "../store/tourSlice";
 
-export function useTour(steps, config = {}) {
+export function useTour(steps, onTourEnd) {
   const dispatch = useDispatch();
   const driverRef = useRef(null);
 
@@ -16,7 +16,6 @@ export function useTour(steps, config = {}) {
       overlayOpacity: 0.75,
       smoothScroll: true,
       allowClose: true, // ← must be true
-      ...config,
       steps,
       onHighlightStarted: (_el, step, { index }) => {
         dispatch(setCurrentStep(index));
@@ -28,9 +27,10 @@ export function useTour(steps, config = {}) {
       },
       onDestroyed: () => {
         dispatch(endTour());
+        onTourEnd?.();
       },
     });
-  }, [steps]);
+  }, [dispatch, onTourEnd, steps]);
 
   const triggerTour = useCallback(() => {
     dispatch(startTour());

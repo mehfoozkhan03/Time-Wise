@@ -32,7 +32,7 @@ export default function ScrollProgressBar() {
   }, []);
 
   return (
-    <div className="scroll_progress">
+    <div className="scroll_progress" id="tour-progress-bar">
       <div ref={barRef} className="scroll_progress_bar" />
     </div>
   );

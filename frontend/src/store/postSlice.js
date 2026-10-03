@@ -305,6 +305,28 @@ export const fetchFeaturedThoughtForAdmin = createAsyncThunk(
   },
 );
 
+//# ================ All User post on Community Profile Page Filter =====================
+export const fetchUserPosts = createAsyncThunk(
+  "post/fetchUserPosts",
+
+  async ({ userId, page = 1, limit = 10, sort = "newest" }, thunkAPI) => {
+    try {
+      const { data } = await postService.getUserPosts(
+        userId,
+        page,
+        limit,
+        sort,
+      );
+
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Unable to fetch user posts",
+      );
+    }
+  },
+);
+
 // ======================================================
 // INITIAL STATE
 // ======================================================
@@ -327,6 +349,16 @@ const initialState = {
 
   isError: false,
   errorMessage: "",
+
+  userPosts: [],
+  userPostsTotal: 0,
+  userPostsTotalLikes: 0,
+  userPostsTotalComments: 0,
+  userPostsLoading: false,
+  userPostsError: false,
+  userPostsPage: 1,
+  userPostsTotalPages: 1,
+  userPostsHasMore: true,
 };
 
 // ======================================================
@@ -708,6 +740,47 @@ const postSlice = createSlice({
       //# ================== Get featured thought for Admin Home Page ================
       .addCase(fetchFeaturedThoughtForAdmin.fulfilled, (state, action) => {
         state.featured = action.payload;
+      })
+
+      //# Community Profile Post Filter
+      .addCase(fetchUserPosts.pending, (state) => {
+        state.userPostsLoading = true;
+        state.userPostsError = false;
+      })
+
+      .addCase(fetchUserPosts.fulfilled, (state, action) => {
+        state.userPostsLoading = false;
+
+        const {
+          page,
+          posts,
+          totalPosts,
+          totalLikesReceived,
+          totalComments,
+          totalPages,
+          hasMore,
+        } = action.payload;
+
+        if (page === 1) {
+          state.userPosts = posts;
+        } else {
+          state.userPosts.push(...posts);
+        }
+
+        // Total profile statistics
+        state.userPostsTotal = totalPosts;
+        state.userPostsTotalLikes = totalLikesReceived;
+        state.userPostsTotalComments = totalComments;
+
+        // Pagination
+        state.userPostsPage = page;
+        state.userPostsTotalPages = totalPages;
+        state.userPostsHasMore = hasMore;
+      })
+
+      .addCase(fetchUserPosts.rejected, (state, action) => {
+        state.userPostsLoading = false;
+        state.userPostsError = true;
       });
   },
 });

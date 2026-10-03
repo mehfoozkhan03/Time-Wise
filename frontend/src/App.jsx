@@ -51,7 +51,7 @@ function AppContent() {
       socket.off('new-notification');
     };
   }, [dispatch]);
-  // {isAdminAuthenticated && <AdminChatBot />}
+  {isAdminAuthenticated && <AdminChatBot />}
 
   return (
     <FloatingControlsProvider>

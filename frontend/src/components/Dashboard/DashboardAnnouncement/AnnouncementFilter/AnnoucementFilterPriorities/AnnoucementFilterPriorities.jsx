@@ -1,9 +1,8 @@
-import { useState } from "react";
 import { AnnoucementDropdown } from "../../AnnoucementDropdown/AnnoucementDropdown";
 import "./AnnoucementFilterPriorities.css";
 
-export const AnnoucementFilterPriorities = () => {
-    const [priority, setPriority] = useState("All Priorities");
+export const AnnoucementFilterPriorities = ({priority,
+  setPriority,}) => {
 
     const priorityOpt = [
         "All Priorities",

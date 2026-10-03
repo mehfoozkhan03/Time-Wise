@@ -17,19 +17,24 @@ import {
   FaDownload,
   FaArrowRight,
 } from "react-icons/fa6";
-import { deleteAnnouncement } from "../../../../../store/announcementSlice";
+import {
+  deleteAnnouncement,
+  togglePinAnnouncement,
+} from "../../../../../store/announcementSlice";
 
-
-export const AnnouncementCard = ({ announcements = [] }) => {
-
+export const AnnouncementCard = ({ announcements = [], onEdit }) => {
   const dispatch = useDispatch();
 
   const handleEdit = (announcement) => {
-    console.log("Edit:", announcement);
+    onEdit(announcement);
   };
 
-  const handlePin = (announcement) => {
-    console.log("Pin:", announcement);
+  const handlePin = async (announcement) => {
+    try {
+      await dispatch(togglePinAnnouncement(announcement._id)).unwrap();
+    } catch (error) {
+      console.error("Pin announcement error:", error);
+    }
   };
 
   const handleStats = (announcement) => {
@@ -40,8 +45,7 @@ export const AnnouncementCard = ({ announcements = [] }) => {
     console.log("Preview:", announcement);
   };
 
-
-  //# Delete 
+  //# Delete
   const handleDelete = async (announcement) => {
     const confirmed = window.confirm(
       `Are you sure you want to delete "${announcement.title}"?`,

@@ -17,6 +17,11 @@ export const authService = {
     return api.get("/user/me");
   },
 
+  //# Update profile from setting 
+  updateProfile(data) {
+    return api.patch("/user/profile", data);
+  },
+
   getUserProfile: (userId) => api.get(`/user/profile/${userId}`),
 
   updateActivity() {
@@ -26,7 +31,7 @@ export const authService = {
   updateSocialLinks(socialLinks) {
     return api.patch("/user/social-links", socialLinks);
   },
-  
+
   updateEmergencyContact(emergencyContact) {
     return api.patch("/user/emergency-contact", emergencyContact);
   },
