@@ -26,6 +26,7 @@ import { DesignationDropdown } from "../Dropdowns/DesignationDropdown/Designatio
 import { RoleDropdown } from "../Dropdowns/RoleDropdown/RoleDropdown";
 import { Modal } from "../../Modal/Modal";
 import { PulseDot } from "../../PulseDot/pulseDot";
+import { useNavigate } from "react-router-dom";
 
 const departments = [
   "All",
@@ -59,6 +60,7 @@ const employeeRoles = ["Admin", "Manager", "Employee"];
 
 export const DashboardEmployee = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { users, totalUsers, isLoading, search, currentPage } = useSelector(
     (state) => state.adminAuth,
@@ -816,7 +818,12 @@ export const DashboardEmployee = () => {
                         <>
                           {/* VIEW */}
 
-                          <div className="dashboardEmployee-view">
+                          <div
+                            className="dashboardEmployee-view"
+                            onClick={() =>
+                              navigate(`/admin/employee/${el._id}`)
+                            }
+                          >
                             <FaEyeSlash
                               style={{
                                 color: "#479ef5",
