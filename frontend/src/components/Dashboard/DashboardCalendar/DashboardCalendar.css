@@ -1,12 +1,75 @@
+/* ==========================================
+   Dashboard Calendar
+========================================== */
+
 .dashboardCalendar {
     width: 100%;
     min-width: 0;
+
     padding: 20px;
+
     box-sizing: border-box;
+
+    overflow-x: hidden;
+
+    background: transparent;
 }
+
+/* ==========================================
+   Calendar Container
+========================================== */
+
+.dashboardCalendar > * {
+    width: 100%;
+    min-width: 0;
+}
+
+/* ==========================================
+   1200px
+========================================== */
+
+@media (max-width: 1200px) {
+    .dashboardCalendar {
+        padding: 18px;
+    }
+}
+
+/* ==========================================
+   760px
+========================================== */
+
+@media (max-width: 760px) {
+    .dashboardCalendar {
+        padding: 14px;
+    }
+}
+
+/* ==========================================
+   600px
+========================================== */
 
 @media (max-width: 600px) {
     .dashboardCalendar {
         padding: 12px;
+    }
+}
+
+/* ==========================================
+   480px
+========================================== */
+
+@media (max-width: 480px) {
+    .dashboardCalendar {
+        padding: 10px;
+    }
+}
+
+/* ==========================================
+   320px
+========================================== */
+
+@media (max-width: 320px) {
+    .dashboardCalendar {
+        padding: 8px;
     }
 }
