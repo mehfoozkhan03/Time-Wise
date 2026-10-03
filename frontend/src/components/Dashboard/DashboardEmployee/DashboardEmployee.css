@@ -23,6 +23,7 @@
   padding: 10px 15px;
   border-radius: 10px;
   background: var(--button);
+  cursor: pointer;
 }
 .employee-management-right > span {
   color: #fff;
@@ -427,7 +428,30 @@
   cursor: not-allowed;
 }
 
+/* Add Employee */
+.add-employee-scroll {
+  max-height: 80vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 8px;
+}
 
+.add-employee-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.add-employee-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.add-employee-scroll::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 10px;
+}
+
+.add-employee-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--buttonhover);
+}
 
 
 @media (max-width: 1000px) {

@@ -27,6 +27,8 @@ import { RoleDropdown } from "../Dropdowns/RoleDropdown/RoleDropdown";
 import { Modal } from "../../Modal/Modal";
 import { PulseDot } from "../../PulseDot/pulseDot";
 import { useNavigate } from "react-router-dom";
+import { Form } from "../../Form";
+import { forms } from "../../../data/form";
 
 const departments = [
   "All",
@@ -66,6 +68,9 @@ export const DashboardEmployee = () => {
     (state) => state.adminAuth,
   );
 
+  //# Admin can create employee
+  const [showAddEmployee, setShowAddEmployee] = useState(false);
+
   //# Search Employee by Name
   const [searchInput, setSearchInput] = useState("");
 
@@ -100,6 +105,20 @@ export const DashboardEmployee = () => {
 
   const handleSearch = () => {
     dispatch(
+      fetchAllUser({
+        page: 1,
+        department: selectedDepartment,
+        status: selectedStatus,
+        search: searchInput.trim(),
+      }),
+    );
+  };
+
+  //# ============= Admin: Create Employee ===============
+  const handleEmployeeCreated = async () => {
+    setShowAddEmployee(false);
+
+    await dispatch(
       fetchAllUser({
         page: 1,
         department: selectedDepartment,
@@ -484,7 +503,10 @@ export const DashboardEmployee = () => {
             </span>
           </div>
 
-          <div className="employee-management-right">
+          <div
+            className="employee-management-right"
+            onClick={() => setShowAddEmployee(true)}
+          >
             <FaPlus style={{ color: "#fff" }} />
 
             <span>Add Employee</span>
@@ -988,6 +1010,23 @@ export const DashboardEmployee = () => {
           )}
         </div>
       </div>
+
+      {showAddEmployee && (
+        <Modal
+          isOpen={showAddEmployee}
+          onClose={() => setShowAddEmployee(false)}
+          className="add-employee-modal"
+        >
+          <div className="add-employee-scroll">
+            <Form
+              fields={forms.adminEmployee.fields}
+              button={forms.adminEmployee.button}
+              endpoint={forms.adminEmployee.endpoint}
+              onSuccess={handleEmployeeCreated}
+            />
+          </div>
+        </Modal>
+      )}
     </>
   );
 };

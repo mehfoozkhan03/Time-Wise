@@ -30,6 +30,7 @@ import { changeOwnPassword } from "../controllers/Admin/changeAdminPassword.cont
 import { getAdminTheme, updateAdminTheme } from "../controllers/Admin/adminTheme.controller.js";
 import { getAdminAttendanceTrendReport, getAdminDepartmentHeadcountReport, getAdminWeeklyAttendanceReport } from "../controllers/Admin/adminReportController.js";
 import { getAdminDashboardStatsController } from "../controllers/Admin/adminDashboardHome.controller.js";
+import { createEmployee } from "../controllers/Admin/createEmployee.controller.js";
 
 
 const adminRoutes = express.Router();
@@ -49,6 +50,9 @@ adminRoutes.patch("/change-password",  adminAuth,  changeOwnPassword);
 adminRoutes.patch("/users/:id/password",  adminAuth,  changeUserPassword);
 
 adminRoutes.get("/users", adminAuth, getAllUser);
+
+//# This is for create employee by admin
+adminRoutes.post("/employees", adminAuth, createEmployee); 
 
 adminRoutes.get("/recent-employees", adminAuth, getRecentEmployees);
 

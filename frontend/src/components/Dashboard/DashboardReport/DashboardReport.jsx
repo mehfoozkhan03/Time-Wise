@@ -48,12 +48,6 @@ export const DashboardReport = () => {
     dispatch(fetchAdminAttendanceTrend());
   }, [dispatch]);
 
-  // Attendance Chart
-  // const labels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-  // const present = [150, 180, 90, 120, 150, 180, 120];
-  // const absent = [5, 35, 65, 95, 125, 155, 185];
-  // const late = [5, 35, 65, 95, 125, 155, 185];
-
   const labels = weeklyAttendance.map((item) => item.day);
 
   const present = weeklyAttendance.map((item) => item.present);
@@ -138,6 +132,7 @@ export const DashboardReport = () => {
           "#36A2EB",
           "#FFCD56",
           "#FF6384",
+          "#339adc"
         ],
         hoverOffset: 6,
       },
@@ -162,7 +157,6 @@ export const DashboardReport = () => {
   };
 
   // Attendance Trend
-  // const labels2 = ["W1", "W2", "W3", "W4", "W5", "W6", "W7", "W8"];
   const labels2 = attendanceTrend.map((item) => item.week);
   const attendanceRates = attendanceTrend.map((item) => item.attendanceRate);
   const data2 = {
@@ -248,6 +242,7 @@ export const DashboardReport = () => {
                               "#3fb690",
                               "#ffcc56",
                               "#fe6383",
+                              "#339adc"
                             ][index % 5],
                           }}
                         ></div>
