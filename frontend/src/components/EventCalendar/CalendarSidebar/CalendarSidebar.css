@@ -1,9 +1,13 @@
+/* ==========================================
+   Calendar Sidebar
+========================================== */
+
 .calendarSidebar {
   display: flex;
   flex-direction: column;
 
   width: 100%;
-  height:730px;
+  height: 730px;
   max-height: 100%;
 
   gap: 16px;
@@ -20,19 +24,32 @@
 
 .calendarSidebar > * {
   width: 100%;
-  
+
   min-height: auto;
 }
+
+/* ==========================================
+   Sidebar Cards
+========================================== */
 
 .calendarSidebar .card {
   width: 100%;
   min-height: 370px;
+
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius_md);
+  box-shadow: var(--shadow_sm);
 
   transition:
     background var(--transition),
     border-color var(--transition),
     box-shadow var(--transition);
 }
+
+/* ==========================================
+   Scrollbar
+========================================== */
 
 .calendarSidebar::-webkit-scrollbar {
   width: 6px;
@@ -42,11 +59,17 @@
   background: var(--border);
 
   border-radius: 999px;
+
+  transition: background var(--transition);
 }
 
 .calendarSidebar::-webkit-scrollbar-thumb:hover {
   background: var(--text_secondary);
 }
+
+/* ==========================================
+   Responsive - Large Tablet
+========================================== */
 
 @media (max-width: 1200px) {
   .calendarSidebar {
@@ -65,6 +88,10 @@
   }
 }
 
+/* ==========================================
+   Responsive - Tablet
+========================================== */
+
 @media (max-width: 760px) {
   .calendarSidebar {
     gap: 16px;
@@ -79,6 +106,10 @@
   }
 }
 
+/* ==========================================
+   Responsive - Mobile
+========================================== */
+
 @media (max-width: 480px) {
   .calendarSidebar {
     gap: 14px;
@@ -87,10 +118,14 @@
   }
 }
 
+/* ==========================================
+   Responsive - Small Mobile
+========================================== */
+
 @media (max-width: 320px) {
   .calendarSidebar {
     gap: 12px;
 
     margin-top: 14px;
   }
-}
+} 

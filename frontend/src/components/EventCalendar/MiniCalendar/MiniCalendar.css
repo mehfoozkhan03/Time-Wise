@@ -22,23 +22,36 @@
 .miniHeader h3 {
     flex: 1;
     margin: 0;
+
     text-align: center;
+
     color: var(--text_primary);
+
+    font-family: "Poppins", sans-serif;
     font-size: 15px;
-    font-weight: 700;
+    font-weight: 600;
+
+    line-height: 1.3;
 }
 
 .miniHeader button {
     width: 32px;
     height: 32px;
+
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid var(--border);
+
+    flex-shrink: 0;
+
+    border: 1px solid var(--card-border);
     border-radius: var(--radius_sm);
+
     background: var(--surface);
     color: var(--text_primary);
+
     cursor: pointer;
+
     transition:
         background var(--transition),
         border-color var(--transition),
@@ -50,13 +63,24 @@
 .miniHeader button:hover {
     background: var(--primary);
     border-color: var(--primary);
-    color: #fff;
+
+    color: var(--text-inverse);
+
     box-shadow: var(--shadow_sm);
+
     transform: translateY(-2px);
 }
 
 .miniHeader button:active {
     transform: scale(0.96);
+}
+
+.miniHeader button:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+
+    box-shadow:
+        0 0 0 4px var(--focus-shadow);
 }
 
 /* ==========================================
@@ -65,7 +89,9 @@
 
 .miniWeekDays {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
+
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+
     gap: 3px;
 }
 
@@ -73,10 +99,16 @@
     display: flex;
     justify-content: center;
     align-items: center;
+
     height: 18px;
+
     color: var(--text_secondary);
+
+    font-family: "Inter", sans-serif;
     font-size: 10px;
     font-weight: 600;
+
+    line-height: 1;
 }
 
 /* ==========================================
@@ -85,7 +117,9 @@
 
 .miniGrid {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
+
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+
     gap: 4px;
 }
 
@@ -96,16 +130,23 @@
 .miniDay {
     width: 100%;
     aspect-ratio: 1;
+
     display: flex;
     justify-content: center;
     align-items: center;
+
     border: 1px solid transparent;
     border-radius: var(--radius_sm);
+
     background: transparent;
     color: var(--text_primary);
+
+    font-family: "Inter", sans-serif;
     font-size: 11px;
     font-weight: 600;
+
     cursor: pointer;
+
     transition:
         background var(--transition),
         border-color var(--transition),
@@ -116,8 +157,15 @@
 
 .miniDay:hover {
     background: var(--surface_hover);
-    border-color: var(--border);
+    border-color: var(--card-border);
+
     transform: translateY(-1px);
+
+    box-shadow: var(--shadow_sm);
+}
+
+.miniDay:active {
+    transform: scale(0.96);
 }
 
 /* ==========================================
@@ -127,7 +175,17 @@
 .miniDay.today {
     background: var(--primary);
     border-color: var(--primary);
-    color: #fff;
+
+    color: var(--text-inverse);
+
+    box-shadow: var(--shadow_sm);
+}
+
+.miniDay.today:hover {
+    background: var(--primary_hover);
+    border-color: var(--primary_hover);
+
+    color: var(--text-inverse);
 }
 
 /* ==========================================
@@ -136,9 +194,21 @@
 
 .miniDay.selected {
     background: transparent;
+
     border-color: var(--primary);
+
     color: var(--primary);
-    box-shadow: 0 0 0 1px var(--primary);
+
+    box-shadow:
+        0 0 0 1px var(--primary);
+}
+
+.miniDay.selected:hover {
+    background: var(--tag-bg);
+
+    border-color: var(--primary);
+
+    color: var(--primary_hover);
 }
 
 /* ==========================================
@@ -147,9 +217,17 @@
 
 .miniDay.today.selected {
     background: var(--primary);
+
     border-color: var(--primary);
-    color: #fff;
+
+    color: var(--text-inverse);
+
     box-shadow: none;
+}
+
+.miniDay.today.selected:hover {
+    background: var(--primary_hover);
+    border-color: var(--primary_hover);
 }
 
 /* ==========================================
@@ -160,14 +238,20 @@
     opacity: 0.4;
 }
 
+.miniDay.otherMonth:hover {
+    opacity: 0.65;
+}
+
 /* ==========================================
    Focus
 ========================================== */
 
-.miniHeader button:focus-visible,
 .miniDay:focus-visible {
     outline: 2px solid var(--primary);
     outline-offset: 2px;
+
+    box-shadow:
+        0 0 0 4px var(--focus-shadow);
 }
 
 /* ==========================================

@@ -1,215 +1,246 @@
-.calendarHeader{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
+/* ==========================================
+   Calendar Header
+========================================== */
 
-    gap:20px;
+.calendarHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
-    padding:20px 24px;
+  gap: 20px;
 
-    background:var(--surface);
+  padding: 20px 24px;
 
-    border:1px solid var(--border);
-    border-radius:var(--radius_lg);
+  background: var(--card);
 
-    box-shadow:var(--shadow_sm);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius_md);
 
-    transition:
-        background var(--transition),
-        border-color var(--transition),
-        box-shadow var(--transition);
+  box-shadow: var(--shadow_sm);
+
+  transition:
+    background var(--transition),
+    border-color var(--transition),
+    box-shadow var(--transition);
 }
 
-.headerTitle{
-    display:flex;
-    flex-direction:column;
+/* ==========================================
+   Header Title
+========================================== */
 
-    gap:4px;
+.headerTitle {
+  display: flex;
+  flex-direction: column;
 
-    min-width:0;
+  gap: 4px;
+
+  min-width: 0;
 }
 
-.headerTitle h2{
-    margin:0;
+.headerTitle h2 {
+  margin: 0;
 
-    color:var(--text_primary);
+  color: var(--text_primary);
 
-    font-size:28px;
-    font-weight:700;
-    line-height:1.2;
+  font-family: "Poppins", sans-serif;
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.2;
 }
 
-.headerActions{
-    display:flex;
-    align-items:center;
-    justify-content:flex-end;
+/* ==========================================
+   Header Actions
+========================================== */
 
-    gap:12px;
+.headerActions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 
-    flex-wrap:wrap;
+  gap: 12px;
+
+  flex-wrap: wrap;
 }
+
+/* ==========================================
+   Header Buttons
+========================================== */
 
 .navBtn,
 .todayBtn,
 .createEventBtn,
-.createHolidayBtn{
-    display:inline-flex;
-    justify-content:center;
-    align-items:center;
+.createHolidayBtn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
 
-    gap:8px;
+  gap: 8px;
 
-    min-width:46px;
-    height:44px;
+  min-width: 46px;
+  height: 44px;
 
-    padding:0 18px;
+  padding: 0 18px;
 
-    border:1px solid var(--border);
-    border-radius:12px;
+  border: 1px solid transparent;
+  border-radius: var(--radius_sm);
 
-    background:var(--bg);
+  background: var(--button);
 
-    color:var(--text_primary);
+  color: var(--text-inverse);
 
-    font-size:.92rem;
-    font-weight:600;
-    font-family:inherit;
+  font-family: "Inter", sans-serif;
+  font-size: 0.92rem;
+  font-weight: 600;
 
-    cursor:pointer;
+  cursor: pointer;
 
-    text-decoration:none;
-    white-space:nowrap;
+  text-decoration: none;
+  white-space: nowrap;
 
-    transition:
-        background var(--transition),
-        border-color var(--transition),
-        color var(--transition),
-        transform var(--transition),
-        box-shadow var(--transition);
+  transition:
+    background var(--transition),
+    border-color var(--transition),
+    color var(--transition),
+    transform var(--transition),
+    box-shadow var(--transition);
 }
 
 .navBtn:hover,
 .todayBtn:hover,
 .createEventBtn:hover,
-.createHolidayBtn:hover{
-    background:var(--primary);
+.createHolidayBtn:hover {
+  background: var(--buttonhover);
 
-    color:#fff;
+  color: var(--text-inverse);
 
-    border-color:var(--primary);
+  border-color: transparent;
 
-    box-shadow:var(--shadow_sm);
+  box-shadow: var(--shadow_sm);
 
-    transform:translateY(-2px);
+  transform: translateY(-2px);
 }
 
 .navBtn:active,
 .todayBtn:active,
 .createEventBtn:active,
-.createHolidayBtn:active{
-    transform:scale(.97);
+.createHolidayBtn:active {
+  transform: scale(0.97);
 }
 
 .navBtn:focus-visible,
 .todayBtn:focus-visible,
 .createEventBtn:focus-visible,
-.createHolidayBtn:focus-visible{
-    outline:2px solid var(--primary);
-    outline-offset:2px;
+.createHolidayBtn:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+
+  box-shadow: 0 0 0 4px var(--focus-shadow);
 }
 
 .navBtn:disabled,
 .todayBtn:disabled,
 .createEventBtn:disabled,
-.createHolidayBtn:disabled{
-    opacity:.55;
-    cursor:not-allowed;
+.createHolidayBtn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+
+  transform: none;
 }
 
-@media (max-width:760px){
+/* ==========================================
+   Responsive - Tablet
+========================================== */
 
-    .calendarHeader{
-        flex-direction:column;
-        align-items:stretch;
+@media (max-width: 760px) {
+  .calendarHeader {
+    flex-direction: column;
+    align-items: stretch;
 
-        gap:18px;
+    gap: 18px;
 
-        padding:18px;
-    }
+    padding: 18px;
+  }
 
-    .headerTitle{
-        text-align:center;
-    }
+  .headerTitle {
+    text-align: center;
+  }
 
-    .headerTitle h2{
-        font-size:24px;
-    }
+  .headerTitle h2 {
+    font-size: 24px;
+  }
 
-    .headerActions{
-        justify-content:center;
-        gap:10px;
-    }
+  .headerActions {
+    justify-content: center;
 
-    .navBtn,
-    .todayBtn,
-    .createEventBtn,
-    .createHolidayBtn{
-        height:42px;
-        padding:0 16px;
-    }
+    gap: 10px;
+  }
+
+  .navBtn,
+  .todayBtn,
+  .createEventBtn,
+  .createHolidayBtn {
+    height: 42px;
+    padding: 0 16px;
+  }
 }
 
-@media (max-width:480px){
+/* ==========================================
+   Responsive - Mobile
+========================================== */
 
-    .calendarHeader{
-        gap:16px;
-        padding:16px;
-    }
+@media (max-width: 480px) {
+  .calendarHeader {
+    gap: 16px;
+    padding: 16px;
+  }
 
-    .headerTitle h2{
-        font-size:21px;
-    }
+  .headerTitle h2 {
+    font-size: 21px;
+  }
 
-    .headerActions{
-        display:grid;
-        grid-template-columns:repeat(2,1fr);
+  .headerActions {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
 
-        gap:8px;
-    }
+    gap: 8px;
+  }
 
-    .navBtn,
-    .todayBtn,
-    .createEventBtn,
-    .createHolidayBtn{
-        width:100%;
-        height:40px;
+  .navBtn,
+  .todayBtn,
+  .createEventBtn,
+  .createHolidayBtn {
+    width: 100%;
+    height: 40px;
 
-        padding:0 12px;
+    padding: 0 12px;
 
-        font-size:13px;
-    }
+    font-size: 13px;
+  }
 }
 
-@media (max-width:320px){
+/* ==========================================
+   Responsive - Small Mobile
+========================================== */
 
-    .calendarHeader{
-        padding:12px;
-    }
+@media (max-width: 320px) {
+  .calendarHeader {
+    padding: 12px;
+  }
 
-    .headerTitle h2{
-        font-size:18px;
-    }
+  .headerTitle h2 {
+    font-size: 18px;
+  }
 
-    .headerActions{
-        grid-template-columns:1fr;
-    }
+  .headerActions {
+    grid-template-columns: 1fr;
+  }
 
-    .navBtn,
-    .todayBtn,
-    .createEventBtn,
-    .createHolidayBtn{
-        height:38px;
+  .navBtn,
+  .todayBtn,
+  .createEventBtn,
+  .createHolidayBtn {
+    height: 38px;
 
-        font-size:12px;
-    }
+    font-size: 12px;
+  }
 }

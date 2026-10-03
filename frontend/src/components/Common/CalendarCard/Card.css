@@ -8,10 +8,10 @@
   display: flex;
   flex-direction: column;
 
-  background: var(--surface);
+  background: var(--card);
 
-  border: 1px solid var(--border);
-  border-radius: var(--radius_lg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius_md);
 
   box-shadow: var(--shadow_sm);
 
@@ -25,7 +25,7 @@
 }
 
 .card:hover {
-  background: var(--surface_hover);
+  background: var(--card-hover);
 
   border-color: var(--primary);
 
@@ -68,8 +68,9 @@
 
   color: var(--text_primary);
 
+  font-family: "Poppins", sans-serif;
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 600;
 
   line-height: 1.3;
 }
@@ -86,7 +87,7 @@
 
   border-radius: var(--radius_sm);
 
-  background: var(--bg);
+  background: var(--surface);
 
   border: 1px solid var(--border);
 
@@ -98,6 +99,14 @@
     background var(--transition),
     border-color var(--transition),
     color var(--transition);
+}
+
+.cardIcon:hover {
+  background: var(--surface_hover);
+
+  border-color: var(--primary);
+
+  color: var(--primary_hover);
 }
 
 /* ==========================================
@@ -118,6 +127,7 @@
 /* ==========================================
    Responsive
 ========================================== */
+
 /* ==========================================
    760px
 ========================================== */
