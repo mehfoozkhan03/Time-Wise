@@ -3,11 +3,13 @@ import "./EventCalendar.css";
 import { useMemo, useState, useCallback, useEffect } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
+
 import { useNavigate } from "react-router-dom";
 
 import { FaLock, FaArrowLeft } from "react-icons/fa";
 
 import useCalendar from "../../hooks/useCalendar";
+
 import useEventFilter from "../../hooks/useEventFilter";
 
 import { EVENT_TYPES } from "../../data/eventTypes";
@@ -31,19 +33,26 @@ import { fetchRecentEmployees } from "../../store/adminAuthSlice";
 import { mapHolidayList } from "../../utils/holidayMapper";
 
 import CalendarHeader from "./CalendarHeader/CalendarHeader";
+
 import CalendarGrid from "./CalendarGrid/CalendarGrid";
+
 import CalendarSidebar from "./CalendarSidebar/CalendarSidebar";
+
 import EventFilters from "./EventFilters/EventFilters";
+
 import EventModal from "./EventModal/EventModal";
 
 import EventFormModal from "./EventFormModal/EventFormModal";
+
 import HolidayFormModal from "./HolidayFormModal/HolidayFormModal";
+
 import DeleteModal from "./DeleteModal/DeleteModal";
+
 import DayEventsModal from "./DayEventsModal/DayEventsModal";
 
 import CalendarSkeleton from "../Common/CalendarSkeleton/CalendarSkeleton";
 
-export default function EventCalendar() {
+export default function EventCalendar({ isAdmin = false }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -61,16 +70,33 @@ export default function EventCalendar() {
 
   const { user, recentEmployees = [] } = useSelector((state) => state.auth);
 
-  const { isAuthenticated: isAdmin } = useSelector((state) => state.adminAuth);
+  /* =========================================
+     CALENDAR AUTH TYPE
+  ========================================= */
+
+  const authType = isAdmin ? "admin" : "user";
+
+  /* =========================================
+     FETCH CALENDAR DATA
+  ========================================= */
 
   useEffect(() => {
-    dispatch(fetchEvents());
+    dispatch(
+      fetchEvents({
+        authType,
+      }),
+    );
+
     dispatch(fetchHolidays());
 
     if (isAdmin) {
       dispatch(fetchRecentEmployees());
     }
-  }, [dispatch, isAdmin]);
+  }, [dispatch, authType, isAdmin]);
+
+  /* =========================================
+     CALENDAR HOOK
+  ========================================= */
 
   const {
     currentDate,
@@ -81,13 +107,23 @@ export default function EventCalendar() {
     goToToday,
   } = useCalendar();
 
+  /* =========================================
+     MAP HOLIDAYS
+  ========================================= */
+
   const mappedHolidays = useMemo(() => {
     return mapHolidayList(holidays);
   }, [holidays]);
 
+  /* =========================================
+     COMBINE EVENTS + HOLIDAYS
+  ========================================= */
+
   const allEvents = useMemo(() => {
     const calendarEvents = Array.isArray(events) ? events : [];
-    const holidayEvents = Array.isArray(mappedHolidays) ? mappedHolidays : [];
+    const holidayEvents = Array.isArray(mappedHolidays)
+      ? mappedHolidays
+      : [];
 
     return [...calendarEvents, ...holidayEvents].sort((a, b) => {
       const dateDiff = new Date(a.date) - new Date(b.date);
@@ -99,6 +135,10 @@ export default function EventCalendar() {
       return (a.startTime || "").localeCompare(b.startTime || "");
     });
   }, [events, mappedHolidays]);
+
+  /* =========================================
+     CURRENT MONTH EVENTS
+  ========================================= */
 
   const currentMonthEvents = useMemo(() => {
     return allEvents.filter((event) => {
@@ -114,6 +154,10 @@ export default function EventCalendar() {
       );
     });
   }, [allEvents, currentDate]);
+
+  /* =========================================
+     WEEKEND COUNT
+  ========================================= */
 
   const weekendCount = useMemo(() => {
     const year = currentDate.getFullYear();
@@ -135,27 +179,44 @@ export default function EventCalendar() {
     return count;
   }, [currentDate]);
 
+  /* =========================================
+     MODAL STATES
+  ========================================= */
+
   const [selectedEvent, setSelectedEvent] = useState(null);
+
   const [selectedHoliday, setSelectedHoliday] = useState(null);
 
   const [dayEvents, setDayEvents] = useState([]);
+
   const [dayEventsModalOpen, setDayEventsModalOpen] = useState(false);
 
   const [formMode, setFormMode] = useState("CREATE");
 
   const [eventFormOpen, setEventFormOpen] = useState(false);
+
   const [holidayFormOpen, setHolidayFormOpen] = useState(false);
+
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
   const [deleteTarget, setDeleteTarget] = useState(null);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+
   const [isDeleting, setIsDeleting] = useState(false);
+
+  /* =========================================
+     DAY EVENTS
+  ========================================= */
 
   const handleMoreEvents = useCallback((day, events) => {
     setDayEvents(events);
     setDayEventsModalOpen(true);
   }, []);
+
+  /* =========================================
+     EVENT MODAL
+  ========================================= */
 
   const handleEventClick = useCallback((event) => {
     setSelectedEvent(event);
@@ -165,17 +226,29 @@ export default function EventCalendar() {
     setSelectedEvent(null);
   }, []);
 
+  /* =========================================
+     CREATE EVENT
+  ========================================= */
+
   const handleCreateEvent = useCallback(() => {
     setFormMode("CREATE");
     setSelectedEvent(null);
     setEventFormOpen(true);
   }, []);
 
+  /* =========================================
+     CREATE HOLIDAY
+  ========================================= */
+
   const handleCreateHoliday = useCallback(() => {
     setFormMode("CREATE");
     setSelectedHoliday(null);
     setHolidayFormOpen(true);
   }, []);
+
+  /* =========================================
+     EDIT RECORD
+  ========================================= */
 
   const handleEditRecord = useCallback((record) => {
     setFormMode("EDIT");
@@ -191,15 +264,27 @@ export default function EventCalendar() {
     }
   }, []);
 
+  /* =========================================
+     CLOSE EVENT FORM
+  ========================================= */
+
   const handleCloseEventForm = useCallback(() => {
     setEventFormOpen(false);
     setSelectedEvent(null);
   }, []);
 
+  /* =========================================
+     CLOSE HOLIDAY FORM
+  ========================================= */
+
   const handleCloseHolidayForm = useCallback(() => {
     setHolidayFormOpen(false);
     setSelectedHoliday(null);
   }, []);
+
+  /* =========================================
+     DELETE EVENT
+  ========================================= */
 
   const handleDeleteEvent = useCallback((record) => {
     setDeleteTarget(record);
@@ -207,10 +292,18 @@ export default function EventCalendar() {
     setSelectedEvent(null);
   }, []);
 
+  /* =========================================
+     CLOSE DELETE MODAL
+  ========================================= */
+
   const handleCloseDeleteModal = useCallback(() => {
     setDeleteModalOpen(false);
     setDeleteTarget(null);
   }, []);
+
+  /* =========================================
+     SUBMIT EVENT
+  ========================================= */
 
   const handleSubmitEvent = useCallback(
     async (formData) => {
@@ -222,10 +315,16 @@ export default function EventCalendar() {
             updateEvent({
               id: selectedEvent._id,
               data: formData,
+              authType,
             }),
           ).unwrap();
         } else {
-          await dispatch(createEvent(formData)).unwrap();
+          await dispatch(
+            createEvent({
+              eventData: formData,
+              authType,
+            }),
+          ).unwrap();
         }
 
         handleCloseEventForm();
@@ -236,8 +335,18 @@ export default function EventCalendar() {
         setIsSubmitting(false);
       }
     },
-    [dispatch, formMode, selectedEvent, handleCloseEventForm],
+    [
+      dispatch,
+      formMode,
+      selectedEvent,
+      authType,
+      handleCloseEventForm,
+    ],
   );
+
+  /* =========================================
+     SUBMIT HOLIDAY
+  ========================================= */
 
   const handleSubmitHoliday = useCallback(
     async (formData) => {
@@ -266,6 +375,10 @@ export default function EventCalendar() {
     [dispatch, formMode, selectedHoliday, handleCloseHolidayForm],
   );
 
+  /* =========================================
+     CONFIRM DELETE
+  ========================================= */
+
   const handleConfirmDelete = useCallback(async () => {
     if (!deleteTarget) {
       return;
@@ -277,7 +390,12 @@ export default function EventCalendar() {
       if (deleteTarget.isHoliday) {
         await dispatch(deleteHoliday(deleteTarget._id)).unwrap();
       } else {
-        await dispatch(deleteEvent(deleteTarget._id)).unwrap();
+        await dispatch(
+          deleteEvent({
+            id: deleteTarget._id,
+            authType,
+          }),
+        ).unwrap();
       }
 
       handleCloseDeleteModal();
@@ -286,7 +404,16 @@ export default function EventCalendar() {
     } finally {
       setIsDeleting(false);
     }
-  }, [deleteTarget, dispatch, handleCloseDeleteModal]);
+  }, [
+    deleteTarget,
+    dispatch,
+    authType,
+    handleCloseDeleteModal,
+  ]);
+
+  /* =========================================
+     FILTERS
+  ========================================= */
 
   const {
     filters,
@@ -298,8 +425,17 @@ export default function EventCalendar() {
     filteredEvents,
   } = useEventFilter(allEvents, currentDate);
 
+  /* =========================================
+     STATUS
+  ========================================= */
+
   const isLoading = loading || holidayStatus === "loading";
+
   const hasError = error || holidayError;
+
+  /* =========================================
+     PERMISSIONS
+  ========================================= */
 
   const checkPermissions = useCallback(
     (record) => {
@@ -341,13 +477,25 @@ export default function EventCalendar() {
 
   const { canEdit, canDelete } = checkPermissions(selectedEvent);
 
+  /* =========================================
+     GO BACK
+  ========================================= */
+
   const handleGoBack = useCallback(() => {
-    navigate("/settings");
-  }, [navigate]);
+    navigate(isAdmin ? "/adminDashboard" : "/settings");
+  }, [navigate, isAdmin]);
+
+  /* =========================================
+     LOADING
+  ========================================= */
 
   if (isLoading) {
     return <CalendarSkeleton />;
   }
+
+  /* =========================================
+     ERROR
+  ========================================= */
 
   if (hasError) {
     return (
@@ -377,6 +525,10 @@ export default function EventCalendar() {
       </section>
     );
   }
+
+  /* =========================================
+     CALENDAR
+  ========================================= */
 
   return (
     <section className="eventCalendar">

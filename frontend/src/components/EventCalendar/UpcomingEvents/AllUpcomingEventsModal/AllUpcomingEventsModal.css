@@ -13,6 +13,7 @@
   padding: 24px;
 
   background: rgba(15, 23, 42, 0.55);
+
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
 
@@ -40,6 +41,13 @@
   border-radius: var(--radius_lg);
 
   box-shadow: var(--shadow_lg);
+
+  animation: fade_in 0.25s ease;
+
+  transition:
+    background var(--transition),
+    border-color var(--transition),
+    box-shadow var(--transition);
 }
 
 /* ==========================================================
@@ -83,13 +91,16 @@
 
   flex-shrink: 0;
 
-  border-radius: 12px;
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius_md);
 
   background: var(--tag-bg);
 
-  color: var(--primary);
+  color: var(--tag-text);
 
   font-size: 18px;
+
+  box-shadow: var(--shadow_sm);
 }
 
 .allUpcomingHeading {
@@ -106,6 +117,7 @@
 
   color: var(--text_primary);
 
+  font-family: "Poppins", sans-serif;
   font-size: 1.2rem;
   font-weight: 600;
 
@@ -115,8 +127,11 @@
 .allUpcomingCount {
   color: var(--text_secondary);
 
+  font-family: "Inter", sans-serif;
   font-size: 0.85rem;
   font-weight: 500;
+
+  line-height: 1.3;
 }
 
 /* ==========================================================
@@ -133,25 +148,45 @@
 
   flex-shrink: 0;
 
-  border-radius: 12px;
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius_sm);
 
-  background: transparent;
+  background: var(--surface);
 
   color: var(--text_secondary);
 
   cursor: pointer;
 
-  transition: var(--transition);
+  transition:
+    background var(--transition),
+    border-color var(--transition),
+    color var(--transition),
+    box-shadow var(--transition),
+    transform var(--transition);
 }
 
 .closeBtn:hover {
-  background: var(--surface);
+  background: var(--surface_hover);
 
-  color: var(--primary);
+  border-color: var(--primary);
+
+  color: var(--primary_hover);
+
+  box-shadow: var(--shadow_sm);
+
+  transform: rotate(90deg);
+}
+
+.closeBtn:active {
+  transform: rotate(90deg) scale(0.96);
 }
 
 .closeBtn:focus-visible {
-  box-shadow: 0 0 0 4px var(--focus-shadow);
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+
+  box-shadow:
+    0 0 0 4px var(--focus-shadow);
 }
 
 /* ==========================================================
@@ -164,6 +199,12 @@
   overflow-y: auto;
 
   padding: 20px;
+
+  scrollbar-width: thin;
+
+  scrollbar-color:
+    var(--border)
+    transparent;
 }
 
 /* ==========================================================
@@ -186,10 +227,10 @@
   border-radius: var(--radius_md);
 
   transition:
-    background 0.25s ease,
-    border-color 0.25s ease,
-    transform 0.25s ease,
-    box-shadow 0.25s ease;
+    background var(--transition),
+    border-color var(--transition),
+    transform var(--transition),
+    box-shadow var(--transition);
 }
 
 .allUpcomingItem:hover {
@@ -218,6 +259,8 @@
   background: var(--border);
 
   border-radius: 999px;
+
+  transition: background var(--transition);
 }
 
 .allUpcomingBody::-webkit-scrollbar-thumb:hover {
@@ -290,8 +333,11 @@
     width: 100%;
     max-height: 92vh;
 
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
+    border-radius:
+      var(--radius_lg)
+      var(--radius_lg)
+      0
+      0;
   }
 
   .allUpcomingHeader {

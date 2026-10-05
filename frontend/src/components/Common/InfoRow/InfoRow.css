@@ -10,9 +10,9 @@
 
   padding: 14px 16px;
 
-  background: var(--surface);
+  background: var(--card);
 
-  border: 1px solid var(--border);
+  border: 1px solid var(--card-border);
 
   border-radius: var(--radius_md);
 
@@ -26,7 +26,7 @@
 }
 
 .infoRow:hover {
-  background: var(--surface_hover);
+  background: var(--card-hover);
 
   border-color: var(--primary);
 
@@ -51,7 +51,7 @@
 
   border-radius: 50%;
 
-  background: var(--bg);
+  background: var(--surface);
 
   border: 1px solid var(--border);
 
@@ -63,6 +63,14 @@
     background var(--transition),
     border-color var(--transition),
     color var(--transition);
+}
+
+.infoIcon:hover {
+  background: var(--surface_hover);
+
+  border-color: var(--primary);
+
+  color: var(--primary_hover);
 }
 
 /* ==========================================
@@ -81,14 +89,19 @@
 .infoLabel {
   color: var(--text_secondary);
 
+  font-family: "Inter", sans-serif;
   font-size: 12px;
+  font-weight: 500;
 }
 
 .infoValue {
   color: var(--text_primary);
 
+  font-family: "Inter", sans-serif;
   font-size: 14px;
   font-weight: 600;
+
+  line-height: 1.4;
 
   word-break: break-word;
 }

@@ -33,7 +33,7 @@
 
   padding: 10px 0;
 
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--divider);
 
   transition:
     border-color var(--transition),
@@ -47,6 +47,8 @@
 }
 
 .summaryItem:hover {
+  border-color: var(--card-border);
+
   transform: translateX(2px);
 }
 
@@ -82,7 +84,7 @@
 
   background: var(--summary-color);
 
-  color: #fff;
+  color: var(--text-inverse);
 
   font-size: 13px;
 }
@@ -103,6 +105,7 @@
 
   color: var(--text_primary);
 
+  font-family: "Poppins", sans-serif;
   font-size: 13px;
   font-weight: 600;
 
@@ -114,7 +117,10 @@
 
   color: var(--text_secondary);
 
+  font-family: "Inter", sans-serif;
   font-size: 10px;
+
+  line-height: 1.3;
 }
 
 /* ==========================================
@@ -129,20 +135,48 @@
   justify-content: center;
   align-items: center;
 
+  flex-shrink: 0;
+
   padding: 0 8px;
 
+  border: 1px solid var(--card-border);
   border-radius: 999px;
 
-  background: var(--surface_hover);
+  background: var(--tag-bg);
 
-  color: var(--primary);
+  color: var(--tag-text);
 
+  font-family: "Inter", sans-serif;
   font-size: 11px;
   font-weight: 700;
 
   transition:
     background var(--transition),
-    color var(--transition);
+    border-color var(--transition),
+    color var(--transition),
+    transform var(--transition);
+}
+
+.summaryCount:hover {
+  background: var(--surface_hover);
+
+  border-color: var(--primary);
+
+  color: var(--primary);
+
+  transform: translateY(-1px);
+}
+
+/* ==========================================
+   Focus
+========================================== */
+
+.summaryItem:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+
+  box-shadow:
+    0 0 0 4px var(--focus-shadow);
 }
 
 /* ==========================================

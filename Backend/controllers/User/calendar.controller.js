@@ -4,6 +4,10 @@ import { calendarModel } from "../../models/Calendar.model.js";
 import { userModel } from "../../models/User.model.js";
 import { AdminModel } from "../../models/Admin.model.js";
 
+// ============================================================
+// EVENT TYPE CONFIGURATION
+// ============================================================
+
 const ADMIN_EVENT_TYPES = [
   "PRESENT",
   "LEAVE",
@@ -28,6 +32,7 @@ const GENERAL_EVENT_TYPES = [
   "FESTIVAL",
   "SPECIAL_EVENT",
   "WORK_EVENT",
+  "BIRTHDAY",
 ];
 
 const PUBLIC_EVENT_TYPES = [
@@ -37,7 +42,12 @@ const PUBLIC_EVENT_TYPES = [
   "SPECIAL_EVENT",
   "MEETING",
   "WORK_EVENT",
+  "BIRTHDAY",
 ];
+
+// ============================================================
+// VISIBILITY HELPERS
+// ============================================================
 
 const getVisibility = (type) => {
   if (PUBLIC_EVENT_TYPES.includes(type)) {
@@ -62,6 +72,10 @@ const getEmployeeName = (employee) => {
 
   return `${employee.firstName || ""} ${employee.lastName || ""}`.trim();
 };
+
+// ============================================================
+// AUTHENTICATED ACCOUNT HELPER
+// ============================================================
 
 const getLoggedInAccount = async (req) => {
   if (req.user?.userID) {
@@ -97,6 +111,10 @@ const getLoggedInAccount = async (req) => {
   return null;
 };
 
+// ============================================================
+// GET ALL EVENTS
+// ============================================================
+
 export const getAllEvents = async (req, res) => {
   try {
     const auth = await getLoggedInAccount(req);
@@ -112,15 +130,46 @@ export const getAllEvents = async (req, res) => {
       isActive: true,
     };
 
+    // ----------------------------------------------------------
+    // ADMIN
+    // ----------------------------------------------------------
+    // Admin can see every active calendar event.
+    // ----------------------------------------------------------
+
     if (!auth.isAdmin) {
+      // --------------------------------------------------------
+      // EMPLOYEE
+      // --------------------------------------------------------
+      //
+      // Employees can see:
+      //
+      // 1. Their own events
+      // 2. Public events created by an Admin
+      //
+      // IMPORTANT:
+      // We do NOT use:
+      //
+      //   { visibility: "PUBLIC" }
+      //
+      // by itself because an employee-owned event may also have
+      // PUBLIC visibility (for example, MEETING/BIRTHDAY).
+      //
+      // Checking createdByModel prevents another employee's
+      // event from leaking to the current employee.
+      // --------------------------------------------------------
+
       query = {
         isActive: true,
         $or: [
           {
-            visibility: "PUBLIC",
+            employeeId: auth.account._id,
           },
           {
-            employeeId: auth.account._id,
+            createdByModel: "Admin",
+            visibility: "PUBLIC",
+            type: {
+              $in: PUBLIC_EVENT_TYPES,
+            },
           },
         ],
       };
@@ -142,6 +191,10 @@ export const getAllEvents = async (req, res) => {
     });
   }
 };
+
+// ============================================================
+// GET EVENT BY ID
+// ============================================================
 
 export const getEventById = async (req, res) => {
   try {
@@ -166,16 +219,35 @@ export const getEventById = async (req, res) => {
       });
     }
 
-    if (
-      !auth.isAdmin &&
-      event.visibility === "PRIVATE" &&
-      event.employeeId &&
-      event.employeeId.toString() !== auth.account._id.toString()
-    ) {
-      return res.status(403).json({
-        success: false,
-        message: "Access denied.",
-      });
+    // ----------------------------------------------------------
+    // EMPLOYEE ACCESS CONTROL
+    // ----------------------------------------------------------
+    //
+    // Admin can access any active event.
+    //
+    // Employee:
+    // - Can access their own event.
+    // - Can access an Admin-created PUBLIC event.
+    // - Cannot access another employee's event, regardless of
+    //   its visibility value.
+    // ----------------------------------------------------------
+
+    if (!auth.isAdmin) {
+      const isOwnEvent =
+        event.employeeId &&
+        event.employeeId.toString() === auth.account._id.toString();
+
+      const isAdminPublicEvent =
+        event.createdByModel === "Admin" &&
+        event.visibility === "PUBLIC" &&
+        PUBLIC_EVENT_TYPES.includes(event.type);
+
+      if (!isOwnEvent && !isAdminPublicEvent) {
+        return res.status(403).json({
+          success: false,
+          message: "Access denied.",
+        });
+      }
     }
 
     return res.status(200).json({
@@ -191,6 +263,10 @@ export const getEventById = async (req, res) => {
     });
   }
 };
+
+// ============================================================
+// CREATE EVENT
+// ============================================================
 
 export const createEvent = async (req, res) => {
   try {
@@ -217,6 +293,10 @@ export const createEvent = async (req, res) => {
       isAllDay,
     } = req.body;
 
+    // ----------------------------------------------------------
+    // EMPLOYEE CREATE
+    // ----------------------------------------------------------
+
     if (auth.isEmployee) {
       if (!EMPLOYEE_EVENT_TYPES.includes(type)) {
         return res.status(403).json({
@@ -234,15 +314,20 @@ export const createEvent = async (req, res) => {
         date,
         startTime,
         endTime,
+
+        // Always attach the event to the logged-in employee.
         employeeId: employee._id,
         employeeName: getEmployeeName(employee),
         department: employee.department,
         designation: employee.designation,
+
         location,
         priority,
         color,
         isAllDay,
+
         visibility: getVisibility(type),
+
         createdBy: employee._id,
         createdByModel: "User",
       });
@@ -253,6 +338,10 @@ export const createEvent = async (req, res) => {
         data: event,
       });
     }
+
+    // ----------------------------------------------------------
+    // ADMIN CREATE
+    // ----------------------------------------------------------
 
     if (!ADMIN_EVENT_TYPES.includes(type)) {
       return res.status(403).json({
@@ -295,15 +384,19 @@ export const createEvent = async (req, res) => {
       date,
       startTime,
       endTime,
+
       employeeId: employee ? employee._id : null,
       employeeName: employee ? getEmployeeName(employee) : "",
       department: employee ? employee.department : null,
       designation: employee ? employee.designation : null,
+
       location,
       priority,
       color,
       isAllDay,
+
       visibility: getVisibility(type),
+
       createdBy: auth.account._id,
       createdByModel: "Admin",
     });
@@ -322,6 +415,10 @@ export const createEvent = async (req, res) => {
     });
   }
 };
+
+// ============================================================
+// UPDATE EVENT
+// ============================================================
 
 export const updateEvent = async (req, res) => {
   try {
@@ -342,6 +439,10 @@ export const updateEvent = async (req, res) => {
         message: "Event not found.",
       });
     }
+
+    // ----------------------------------------------------------
+    // EMPLOYEE UPDATE
+    // ----------------------------------------------------------
 
     if (auth.isEmployee) {
       const employee = auth.account;
@@ -396,6 +497,10 @@ export const updateEvent = async (req, res) => {
         data: event,
       });
     }
+
+    // ----------------------------------------------------------
+    // ADMIN UPDATE
+    // ----------------------------------------------------------
 
     const newType = req.body.type || event.type;
 
@@ -474,6 +579,10 @@ export const updateEvent = async (req, res) => {
   }
 };
 
+// ============================================================
+// DELETE EVENT
+// ============================================================
+
 export const deleteEvent = async (req, res) => {
   try {
     const auth = await getLoggedInAccount(req);
@@ -493,6 +602,10 @@ export const deleteEvent = async (req, res) => {
         message: "Event not found.",
       });
     }
+
+    // ----------------------------------------------------------
+    // EMPLOYEE DELETE
+    // ----------------------------------------------------------
 
     if (auth.isEmployee) {
       const employee = auth.account;
@@ -525,6 +638,10 @@ export const deleteEvent = async (req, res) => {
         message: "Event deleted successfully.",
       });
     }
+
+    // ----------------------------------------------------------
+    // ADMIN DELETE
+    // ----------------------------------------------------------
 
     event.isActive = false;
     event.updatedBy = auth.account._id;

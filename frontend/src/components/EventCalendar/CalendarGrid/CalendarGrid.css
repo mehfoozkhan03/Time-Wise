@@ -8,6 +8,10 @@
   min-width: 0;
 }
 
+/* ==========================================
+   Week Header
+========================================== */
+
 .weekHeader {
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
@@ -28,12 +32,17 @@
 
   color: var(--text_secondary);
 
+  font-family: "Inter", sans-serif;
   font-size: 13px;
-  font-weight: 700;
+  font-weight: 600;
 
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
+
+/* ==========================================
+   Calendar Grid
+========================================== */
 
 .calendarGrid {
   display: grid;
@@ -43,6 +52,10 @@
 
   width: 100%;
 }
+
+/* ==========================================
+   Responsive - Large Tablet
+========================================== */
 
 @media (max-width: 1200px) {
   .calendarWrapper {
@@ -54,6 +67,10 @@
     gap: 8px;
   }
 }
+
+/* ==========================================
+   Responsive - Tablet
+========================================== */
 
 @media (max-width: 760px) {
   .calendarWrapper {
@@ -76,6 +93,10 @@
   }
 }
 
+/* ==========================================
+   Responsive - Mobile
+========================================== */
+
 @media (max-width: 480px) {
   .calendarWrapper {
     gap: 8px;
@@ -96,6 +117,10 @@
     letter-spacing: 0;
   }
 }
+
+/* ==========================================
+   Responsive - Small Mobile
+========================================== */
 
 @media (max-width: 320px) {
   .weekHeader,

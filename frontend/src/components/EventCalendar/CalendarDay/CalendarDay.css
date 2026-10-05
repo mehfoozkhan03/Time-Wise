@@ -1,3 +1,7 @@
+/* ==========================================
+   Calendar Day
+========================================== */
+
 .calendarDay {
   display: flex;
   flex-direction: column;
@@ -5,9 +9,9 @@
   min-height: 92px;
   padding: 8px;
 
-  background: var(--surface);
+  background: var(--card);
 
-  border: 1px solid var(--border);
+  border: 1px solid var(--card-border);
   border-radius: var(--radius_md);
 
   box-shadow: var(--shadow_sm);
@@ -22,7 +26,7 @@
 }
 
 .calendarDay:hover {
-  background: var(--surface_hover);
+  background: var(--card-hover);
 
   border-color: var(--primary);
 
@@ -36,39 +40,51 @@
   outline-offset: 3px;
 }
 
+/* ==========================================
+   Weekend
+========================================== */
+
 .calendarDay.weekend {
-  background: var(--surface);
-  border-color: var(--border);
+  background: var(--card);
+  border-color: var(--card-border);
 }
 
 .calendarDay.weekend:hover {
-  background: var(--surface_hover);
+  background: var(--card-hover);
   border-color: var(--primary);
 }
+
+/* ==========================================
+   Sunday
+========================================== */
 
 .calendarDay.sunday {
   background: color-mix(
     in srgb,
-    var(--primary) 20%,
-    var(--surface)
+    var(--primary) 10%,
+    var(--card)
   );
 
   border-color: color-mix(
     in srgb,
     var(--primary) 25%,
-    var(--border)
+    var(--card-border)
   );
 }
 
 .calendarDay.sunday:hover {
   background: color-mix(
     in srgb,
-    var(--primary) 15%,
-    var(--surface)
+    var(--primary) 14%,
+    var(--card)
   );
 
   border-color: var(--primary);
 }
+
+/* ==========================================
+   Day Header
+========================================== */
 
 .dayHeader {
   display: flex;
@@ -76,6 +92,10 @@
 
   margin-bottom: 8px;
 }
+
+/* ==========================================
+   Day Number
+========================================== */
 
 .dayNumber {
   width: 30px;
@@ -89,6 +109,7 @@
 
   color: var(--text_primary);
 
+  font-family: "Inter", sans-serif;
   font-size: 13px;
   font-weight: 600;
 
@@ -102,9 +123,13 @@
   color: var(--primary);
 }
 
+/* ==========================================
+   Today
+========================================== */
+
 .calendarDay.today .dayNumber {
   background: var(--primary);
-  color: #fff;
+  color: var(--text-inverse);
 
   box-shadow:
     0 2px 8px rgba(41, 163, 224, 0.25);
@@ -112,35 +137,47 @@
 
 .calendarDay.sunday.today .dayNumber {
   background: var(--primary);
-  color: #fff;
+  color: var(--text-inverse);
 
   box-shadow:
-    0 0 0 2px var(--surface),
+    0 0 0 2px var(--card),
     0 0 0 4px var(--primary),
     0 2px 8px rgba(41, 163, 224, 0.25);
 }
+
+/* ==========================================
+   Selected Day
+========================================== */
 
 .calendarDay.selected {
   border-color: var(--primary);
 
   box-shadow:
-    0 0 0 2px rgba(41, 163, 224, 0.18),
+    0 0 0 2px var(--focus-shadow),
     var(--shadow_sm);
 }
 
 .calendarDay.sunday.selected {
   background: color-mix(
     in srgb,
-    var(--primary) 13%,
-    var(--surface)
+    var(--primary) 12%,
+    var(--card)
   );
 
   border-color: var(--primary);
 }
 
+/* ==========================================
+   Other Month
+========================================== */
+
 .calendarDay.otherMonth {
   opacity: 0.45;
 }
+
+/* ==========================================
+   Events
+========================================== */
 
 .dayEvents {
   display: flex;
@@ -158,6 +195,10 @@
   flex: 1;
 }
 
+/* ==========================================
+   More Events
+========================================== */
+
 .moreEvents {
   margin-top: auto;
 
@@ -170,6 +211,7 @@
 
   color: var(--primary);
 
+  font-family: "Inter", sans-serif;
   font-size: 11px;
   font-weight: 600;
 
@@ -188,6 +230,8 @@
     var(--primary) 8%,
     transparent
   );
+
+  color: var(--primary_hover);
 }
 
 .moreEvents:focus-visible {
@@ -198,6 +242,10 @@
 .calendarDay.sunday .moreEvents {
   color: var(--primary);
 }
+
+/* ==========================================
+   Responsive - Tablet
+========================================== */
 
 @media (max-width: 760px) {
   .calendarDay {
@@ -226,6 +274,10 @@
   }
 }
 
+/* ==========================================
+   Responsive - Mobile
+========================================== */
+
 @media (max-width: 480px) {
   .calendarDay {
     min-height: 72px;
@@ -251,6 +303,10 @@
     padding: 2px;
   }
 }
+
+/* ==========================================
+   Responsive - Small Mobile
+========================================== */
 
 @media (max-width: 320px) {
   .calendarDay {

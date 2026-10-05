@@ -5,7 +5,7 @@ import "./DashboardCalendar.css";
 const DashboardCalendar = () => {
   return (
     <div className="dashboardCalendar">
-      <EventCalendar />
+      <EventCalendar isAdmin={true} />
     </div>
   );
 };

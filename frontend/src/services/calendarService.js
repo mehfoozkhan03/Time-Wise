@@ -16,6 +16,20 @@ const API = axios.create({
 const BASE_URL = "/calendar";
 
 /* =========================================
+   Authentication Helper
+========================================= */
+
+const getAuthHeaders = (authType) => {
+  if (!authType) {
+    return {};
+  }
+
+  return {
+    "x-auth-type": authType,
+  };
+};
+
+/* =========================================
    Calendar Service
 ========================================= */
 
@@ -24,32 +38,45 @@ export const calendarService = {
        Get All Events
     ========================================= */
 
-  getEvents: (params = {}) =>
+  getEvents: (params = {}, authType) =>
     API.get(BASE_URL, {
       params,
+      headers: getAuthHeaders(authType),
     }),
 
   /* =========================================
        Get Single Event
     ========================================= */
 
-  getEventById: (id) => API.get(`${BASE_URL}/${id}`),
+  getEventById: (id, authType) =>
+    API.get(`${BASE_URL}/${id}`, {
+      headers: getAuthHeaders(authType),
+    }),
 
   /* =========================================
        Create Event
     ========================================= */
 
-  createEvent: (data) => API.post(BASE_URL, data),
+  createEvent: (data, authType) =>
+    API.post(BASE_URL, data, {
+      headers: getAuthHeaders(authType),
+    }),
 
   /* =========================================
        Update Event
     ========================================= */
 
-  updateEvent: (id, data) => API.put(`${BASE_URL}/${id}`, data),
+  updateEvent: (id, data, authType) =>
+    API.put(`${BASE_URL}/${id}`, data, {
+      headers: getAuthHeaders(authType),
+    }),
 
   /* =========================================
        Delete Event
     ========================================= */
 
-  deleteEvent: (id) => API.delete(`${BASE_URL}/${id}`),
+  deleteEvent: (id, authType) =>
+    API.delete(`${BASE_URL}/${id}`, {
+      headers: getAuthHeaders(authType),
+    }),
 };
