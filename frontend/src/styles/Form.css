@@ -54,10 +54,10 @@ select:is(:-webkit-autofill, :autofill) {
 =========================== */
 
 .login-page {
-  width: 400px;
+  width:385px;
   max-width: 100%;
 
-  padding: 35px 40px;
+  padding:25px 35px;
 
   background: var(--card_login);
 
@@ -91,9 +91,9 @@ select:is(:-webkit-autofill, :autofill) {
 .login-page h2 {
   text-align: center;
 
-  margin-bottom: 30px;
+  margin-bottom:20px;
 
-  font-size: 28px;
+  font-size: 25px;
   font-weight: 700;
 
   background: linear-gradient(

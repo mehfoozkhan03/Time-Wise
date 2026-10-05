@@ -10,6 +10,17 @@ import { registerUser, loginUser } from "../store/authSlice";
 import { loginAdmin } from "../store/adminAuthSlice";
 import "../styles/Form.css";
 
+//toUpperCase 
+const formatLabel = (text) => {
+  if (!text) return "";
+
+  return text
+    .replace(/([A-Z])/g, " $1")
+    .replace(/^./, (char) => char.toUpperCase())
+    .trim();
+};
+
+
 export const Form = ({ fields = [], button = "Submit", endpoint }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -360,7 +371,8 @@ export const Form = ({ fields = [], button = "Submit", endpoint }) => {
                 required={el.required || false}
               />
 
-              <label htmlFor={el.name}>{el.name}</label>
+              {/* <label htmlFor={el.name}>{el.name}</label> */}
+              <label htmlFor={el.name}>{formatLabel(el.name)}</label>
 
               {el.type === "password" && (
                 <motion.span
