@@ -56,6 +56,7 @@ const RightSidebar = () => {
   // ==========================================
 
   const featuredMessage = latestPinnedPost?.content || featured?.content || ''
+  
 
   // ==========================================
   // CHECK WHETHER THOUGHT IS LONG
@@ -168,7 +169,8 @@ const RightSidebar = () => {
               </button>
             )}
 
-            {/* AUTHOR */}
+            {/* AUTHOR
+            */}
             <small className="featured-thought-author">
               —{' '}
               {latestPinnedPost
