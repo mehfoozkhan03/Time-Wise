@@ -151,7 +151,8 @@ const RightSidebar = () => {
               </button>
             )}
 
-            {/* AUTHOR */}
+            {/* AUTHOR
+            */}
             <small className="featured-thought-author">
               —{" "}
               {featured

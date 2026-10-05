@@ -86,6 +86,7 @@
 
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 6;
+  line-clamp: 6;
 
   overflow: hidden;
 }
@@ -125,6 +126,7 @@
   overflow: visible;
 
   -webkit-line-clamp: unset;
+  line-clamp: unset;
 }
 
 
