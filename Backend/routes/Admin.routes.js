@@ -28,7 +28,7 @@ import { deleteUser } from "../controllers/Admin/deleteUser.controller.js";
 import { changeUserPassword } from "../controllers/Admin/changeEmployeePassword.controller.js";
 import { changeOwnPassword } from "../controllers/Admin/changeAdminPassword.controller.js";
 import { getAdminTheme, updateAdminTheme } from "../controllers/Admin/adminTheme.controller.js";
-import { getAdminAttendanceTrendReport, getAdminDepartmentHeadcountReport, getAdminWeeklyAttendanceReport } from "../controllers/Admin/adminReportController.js";
+import { getAdminAttendanceTrendReport, getAdminDepartmentHeadcountReport, getAdminWeeklyAttendanceReport } from "../controllers/Admin/adminReport.controller.js";
 import { getAdminDashboardStatsController } from "../controllers/Admin/adminDashboardHome.controller.js";
 import { createEmployee } from "../controllers/Admin/createEmployee.controller.js";
 
