@@ -71,10 +71,8 @@
     color: var(--text_primary);
 }
 .dashboardAttendance-status{
-    width: 80px;
+    width: 100px;
     height: 25px;
-    /* background-color: #1b4641;
-    border: 1px solid #2c6f68; */
     border-radius: 20px;
     display: flex;
     align-items: center;
@@ -149,6 +147,16 @@
   height: 7px;
   border-radius: 50%;
   background: var(--attendance-leave-text);
+}
+
+/* ================= HALF DAY ================= */
+
+.dashboardAttendance-status.half-day{
+  background: var(--attendance-halfday-bg);
+}
+
+.dashboardAttendance-status.half-day>span {
+  color: var(--attendance-halfday-text);
 }
 
 

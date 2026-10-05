@@ -2,6 +2,7 @@ import "./DashboardAttendance.css";
 import { getDashboardStats } from "./../../../store/dashboardSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
+import { PulseDot } from './../../PulseDot/pulseDot';
 import {
   fetchAllUser,
   fetchTodayAttendance,
@@ -131,8 +132,8 @@ export const DashboardAttendance = () => {
 
                   <div>{el.workingHours}</div>
 
-                  <div className={`dashboardAttendance-status ${el.status?.toLowerCase()}`}>
-                    <div></div>
+                  <div className={`dashboardAttendance-status ${el.status?.toLowerCase().replace(/\s+/g, "-")}`}>
+                    <PulseDot className={`dashboardAttendance-pulse ${el.status?.toLowerCase().replace(/\s+/g, "-")}`} />
                     <span>{el.status}</span>
                   </div>
                 </div>
