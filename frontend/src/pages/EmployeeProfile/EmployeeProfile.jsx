@@ -1,20 +1,24 @@
 import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 import "./EmployeeProfile.css";
 import QuickStats from "../../components/employee/QuickStats/QuickStats";
 import PerformanceSummary from "../../components/employee/PerformanceSummary/PerformanceSummary";
-import RecentActivity from "../../components/employee/RecentActivity/RecentActivity";
 import { Achievements } from "../../components/employee/Achievements/Achievements";
+import RecentActivity from "../../components/employee/RecentActivity/RecentActivity";
 import { LeaveSummary } from "../../components/employee/LeaveSummary/LeaveSummary";
 import { EmergencyContact } from "../../components/employee/EmergencyContact/EmergencyContact";
 import { SocialLinks } from "../../components/employee/SocialLinks/SocialLinks";
 import { PulseDot } from "../../components/PulseDot/pulseDot";
-import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
 import { authService } from "../../services/authService";
 
-export default function EmployeeProfile() {
-  const { userId } = useParams();
+import { MdClose } from "react-icons/md";
+
+export default function EmployeeProfile({ userId: propUserId, onClose }) {
+  const { userId: routeUserId } = useParams();
+  const userId = propUserId || routeUserId;
+
   const [viewedUser, setViewedUser] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -62,6 +66,16 @@ export default function EmployeeProfile() {
 
   return (
     <main className="employee_profile">
+      {onClose && (
+        <button
+          type="button"
+          className="employee-profile-close"
+          onClick={onClose}
+          aria-label="Close employee profile"
+        >
+          <MdClose />
+        </button>
+      )}
       <section className="profile_hero">
         <div className="profile_banner" />
 

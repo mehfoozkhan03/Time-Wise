@@ -287,6 +287,37 @@
   color: var(--text_secondary);
   font-size: .82rem;
 }
+
+/* Close modal button */
+.employee-profile-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 20;
+
+  width: 36px;
+  height: 36px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid var(--border);
+  border-radius: 50%;
+
+  background: var(--surface);
+  color: var(--text_primary);
+
+  font-size: 22px;
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.employee-profile-close:hover {
+  transform: rotate(90deg);
+}
+
 /* ================= RESPONSIVE ================= */
 
 @media (max-width: 430px) {

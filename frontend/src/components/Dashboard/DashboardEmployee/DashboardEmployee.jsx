@@ -1,9 +1,16 @@
 import "./DashboardEmployee.css";
 
-import { FaPlus } from "react-icons/fa6";
+import { FaCheck, FaPlus } from "react-icons/fa6";
 import { FaSearch } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
-import { MdEdit, MdDelete, MdCheck, MdClose } from "react-icons/md";
+import {
+  MdEdit,
+  MdDelete,
+  MdCheck,
+  MdClose,
+  MdOutlineClose,
+} from "react-icons/md";
+import { IoClose } from "react-icons/io5";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { FaKey } from "react-icons/fa";
 
@@ -26,9 +33,9 @@ import { DesignationDropdown } from "../Dropdowns/DesignationDropdown/Designatio
 import { RoleDropdown } from "../Dropdowns/RoleDropdown/RoleDropdown";
 import { Modal } from "../../Modal/Modal";
 import { PulseDot } from "../../PulseDot/pulseDot";
-import { useNavigate } from "react-router-dom";
 import { Form } from "../../Form";
 import { forms } from "../../../data/form";
+import EmployeeProfile from "../../../pages/EmployeeProfile/EmployeeProfile";
 
 const departments = [
   "All",
@@ -62,7 +69,6 @@ const employeeRoles = ["Admin", "Manager", "Employee"];
 
 export const DashboardEmployee = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const { users, totalUsers, isLoading, search, currentPage } = useSelector(
     (state) => state.adminAuth,
@@ -70,6 +76,9 @@ export const DashboardEmployee = () => {
 
   //# Admin can create employee
   const [showAddEmployee, setShowAddEmployee] = useState(false);
+
+  //# Show the Employee details modal
+  const [selectedEmployeeId, setSelectedEmployeeId] = useState(null);
 
   //# Search Employee by Name
   const [searchInput, setSearchInput] = useState("");
@@ -361,19 +370,20 @@ export const DashboardEmployee = () => {
   };
 
   //# =================== Delete Employee Account ======================
-  const handleDeleteUser = async (userId) => {
-    const confirmed = window.confirm(
-      "Are you sure you want to delete this employee?",
-    );
-
-    if (!confirmed) return;
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteUserId, setDeleteUserId] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const handleDeleteUser = async () => {
+    if (!deleteUserId) return;
 
     try {
-      await dispatch(deleteUser(userId)).unwrap();
+      setIsDeleting(true);
 
-      alert("Employee deleted successfully.");
+      await dispatch(deleteUser(deleteUserId)).unwrap();
 
-      // Refresh employee list
+      setShowDeleteModal(false);
+      setDeleteUserId(null);
+
       dispatch(
         fetchAllUser({
           page: 1,
@@ -382,10 +392,24 @@ export const DashboardEmployee = () => {
           search,
         }),
       );
+
+      showModalRef.current({
+        variant: "success",
+        title: "Employee Deleted",
+        message: "Employee deleted successfully.",
+        description: "The employee has been removed from the employee list.",
+      });
     } catch (error) {
       console.error("Delete employee failed:", error);
 
-      alert(error || "Failed to delete employee.");
+      showModalRef.current({
+        variant: "error",
+        title: "Delete Failed",
+        message: error?.message || "Failed to delete employee.",
+        description: "Something went wrong while deleting the employee.",
+      });
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -486,6 +510,19 @@ export const DashboardEmployee = () => {
       setIsChangingPassword(false);
     }
   };
+
+  //# Modal scroll
+  useEffect(() => {
+    if (selectedEmployeeId) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [selectedEmployeeId]);
 
   return (
     <>
@@ -798,20 +835,9 @@ export const DashboardEmployee = () => {
                             className="employee-save-action"
                             onClick={() => handleSaveEdit(el._id)}
                           >
-                            <MdCheck
-                              style={{
-                                color: "#4caf50",
-                                fontSize: "17px",
-                              }}
-                            />
+                            <FaCheck />
 
-                            <span
-                              style={{
-                                color: "#4caf50",
-                              }}
-                            >
-                              Save
-                            </span>
+                            <span>Save</span>
                           </div>
 
                           {/* CANCEL */}
@@ -820,20 +846,9 @@ export const DashboardEmployee = () => {
                             className="employee-cancel-action"
                             onClick={handleCancelEdit}
                           >
-                            <MdClose
-                              style={{
-                                color: "#e05252",
-                                fontSize: "17px",
-                              }}
-                            />
+                            <MdOutlineClose />
 
-                            <span
-                              style={{
-                                color: "#e05252",
-                              }}
-                            >
-                              Cancel
-                            </span>
+                            <span>Cancel</span>
                           </div>
                         </>
                       ) : (
@@ -842,9 +857,7 @@ export const DashboardEmployee = () => {
 
                           <div
                             className="dashboardEmployee-view"
-                            onClick={() =>
-                              navigate(`/admin/employee/${el._id}`)
-                            }
+                            onClick={() => setSelectedEmployeeId(el._id)}
                           >
                             <FaEyeSlash
                               style={{
@@ -888,7 +901,10 @@ export const DashboardEmployee = () => {
 
                           <div
                             className="dashboardEmployee-delete"
-                            onClick={() => handleDeleteUser(el._id)}
+                            onClick={() => {
+                              setDeleteUserId(el._id);
+                              setShowDeleteModal(true);
+                            }}
                             style={{ cursor: "pointer" }}
                           >
                             <MdDelete
@@ -898,6 +914,22 @@ export const DashboardEmployee = () => {
                               }}
                             />
                           </div>
+
+                          <Modal
+                            isOpen={showDeleteModal}
+                            onClose={() => {
+                              setShowDeleteModal(false);
+                              setDeleteUserId(null);
+                            }}
+                            variant="warning"
+                            title="Delete Employee?"
+                            message="Are you sure you want to delete this employee?"
+                            description="This action cannot be undone."
+                            onConfirm={handleDeleteUser}
+                            confirmText={isDeleting ? "Deleting..." : "Delete"}
+                            cancelText="Cancel"
+                            showActions={true}
+                          />
 
                           {/* KEY */}
 
@@ -1026,6 +1058,23 @@ export const DashboardEmployee = () => {
             />
           </div>
         </Modal>
+      )}
+
+      {selectedEmployeeId && (
+        <div
+          className="employee-profile-overlay"
+          onClick={() => setSelectedEmployeeId(null)}
+        >
+          <div
+            className="employee-profile-modal"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <EmployeeProfile
+              userId={selectedEmployeeId}
+              onClose={() => setSelectedEmployeeId(null)}
+            />
+          </div>
+        </div>
       )}
     </>
   );

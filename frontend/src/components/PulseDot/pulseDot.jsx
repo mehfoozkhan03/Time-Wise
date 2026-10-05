@@ -21,7 +21,6 @@ export function PulseDot({
     <span
       className={`pulse_dot_wrapper ${className}`.trim()}
       style={{
-        "--pulse-dot-color": `var(--attendance-pulse-color, ${color})`,
         "--pulse-dot-color": color,
         "--pulse-dot-size": size,
         "--pulse-dot-speed": speed,

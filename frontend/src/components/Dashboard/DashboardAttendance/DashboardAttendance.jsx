@@ -2,7 +2,7 @@ import "./DashboardAttendance.css";
 import { getDashboardStats } from "./../../../store/dashboardSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { PulseDot } from './../../PulseDot/pulseDot';
+import { PulseDot } from "./../../PulseDot/pulseDot";
 import {
   fetchAllUser,
   fetchTodayAttendance,
@@ -104,36 +104,42 @@ export const DashboardAttendance = () => {
                     </div>
 
                     <div>
-                      <p
-                        style={{
-                          fontSize: "14px",
-                          textTransform: "capitalize",
-                        }}
-                      >
+                      <p className="dashboardAttendance-userName">
                         {el.name}
                       </p>
 
-                      <span
-                        style={{
-                          fontSize: "11px",
-                          opacity: "0.7",
-                        }}
-                      >
+                      <span className="dashboardAttendance-department">
                         {el.department}
                       </span>
                     </div>
                   </div>
 
-                  <div style={{ color: "#4a9f91" }}>{el.checkIn}</div>
+                  <div className="dashboardAttendance-checkIn">{el.checkIn}</div>
 
-                  <div>{el.breakTime}</div>
+                  <div className="dashboardAttendance-breakTime">{el.breakTime}</div>
 
-                  <div>{el.checkOut}</div>
+                  <div className="dashboardAttendance-checkoutTime">{el.checkOut}</div>
 
-                  <div>{el.workingHours}</div>
+                  <div className="dashboardAttendance-workingHrs">{el.workingHours}</div>
 
-                  <div className={`dashboardAttendance-status ${el.status?.toLowerCase().replace(/\s+/g, "-")}`}>
-                    <PulseDot className={`dashboardAttendance-pulse ${el.status?.toLowerCase().replace(/\s+/g, "-")}`} />
+                  <div
+                    className={`dashboardAttendance-status ${el.status?.toLowerCase().replace(/\s+/g, "-")}`}
+                  >
+                    <PulseDot
+                      color={
+                        el.status?.toLowerCase() === "present"
+                          ? "#fff"
+                          : el.status?.toLowerCase() === "absent"
+                            ? "#EF4444"
+                            : el.status?.toLowerCase() === "late"
+                              ? "#F59E0B"
+                              : el.status?.toLowerCase() === "half day"
+                                ? "#F59E0B"
+                                : el.status?.toLowerCase() === "leave"
+                                  ? "#3B82F6"
+                                  : "#6B7280"
+                      }
+                    />
                     <span>{el.status}</span>
                   </div>
                 </div>

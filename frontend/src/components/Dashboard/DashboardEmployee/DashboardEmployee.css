@@ -188,7 +188,7 @@
   color: #fff;
 }
 
-.dashboardEmployee-name{
+.dashboardEmployee-name {
   width: 80%;
 }
 .dashboardEmployee-name > p {
@@ -226,7 +226,7 @@
   border-radius: 20px;
 }
 
-.dashboardEmployee-status.active{
+.dashboardEmployee-status.active {
   background: var(--primary);
   color: #fff;
   border: 1px solid var(--border);
@@ -272,13 +272,48 @@
   background: var(--buttonhover);
 }
 
-
 /* dashboardEmployee-edit */
 .dashboardEmployee-edit,
 .dashboardEmployee-view,
 .employee-cancel-action,
-.employee-save-action{
+.employee-save-action {
   cursor: pointer;
+}
+
+.employee-save-action,
+.employee-cancel-action {
+  /* background: var(--primary); */
+  padding: 7px 15px;
+  border-radius: 7px;
+}
+
+.employee-save-action {
+  background: var(--button);
+}
+
+.employee-cancel-action {
+  background: var(--attendance-absent-bg);
+}
+
+.employee-save-action > span,
+.employee-cancel-action > span {
+  color: var(--text_primary);
+}
+.employee-save-action > svg {
+  color: var(--text_primary);
+  font-size: 16px;
+}
+
+/* .employee-cancel-action>svg{
+  }
+
+.employee-cancel-action > span {
+  color: var(--text_primary);
+} */
+
+.employee-save-action > span,
+.employee-cancel-action > span {
+  font-weight: 700;
 }
 
 /* Edit Name */
@@ -302,8 +337,6 @@
   color: var(--text_primary);
   background: transparent;
 }
-
-
 
 /* Password Change */
 .password-modal-overlay {
@@ -453,7 +486,50 @@
   background: var(--buttonhover);
 }
 
+/* Employee details modal */
+.employee-profile-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 30px;
+
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+
+  overflow: hidden;
+}
+
+.employee-profile-modal {
+  position: relative;
+  width: min(1200px, 95vw);
+  max-height: 92vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+}
+
+.employee-profile-modal::-webkit-scrollbar {
+  width: 6px;
+}
+
+.employee-profile-modal::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.employee-profile-modal::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 10px;
+}
+
+/* Resonsive */
 @media (max-width: 1000px) {
   .employee-management-header {
     align-items: flex-start;

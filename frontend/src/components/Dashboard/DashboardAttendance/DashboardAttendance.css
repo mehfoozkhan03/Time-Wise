@@ -40,14 +40,43 @@
     display: grid;
     grid-template-columns: repeat(6, 1fr);
     justify-content: space-between;
+    align-items: center;
 }
 .dashboardAttendance-users>div:not(:last-child){
     border-bottom: 1px solid var(--border);
 }
-.dashboardAttendance-users>div>div{
-    color: #717c8f;
-    font-size: 14px;
+
+.dashboardAttendance-userName{
+  font-size: 14px;
+  text-transform: capitalize;
+  color: var(--text_primary);
 }
+
+.dashboardAttendance-department{
+  font-size: 11px;
+  color: var(--text_secondary);
+}
+
+.dashboardAttendance-checkIn{
+  color: var(--primary);
+  font-size: 14px;
+}
+
+.dashboardAttendance-breakTime{
+  color: #f59e0b;
+  font-size: 14px;
+}
+
+.dashboardAttendance-checkoutTime{
+  color: var(--attendance-absent-bg);
+  font-size: 14px;
+}
+
+.dashboardAttendance-workingHrs{
+  color: #f59e0b;
+  font-size: 14px;
+}
+
 .dashboardAttendance-users>div>div:nth-child(1){
     display: flex;
     gap: 10px;
@@ -69,7 +98,11 @@
     justify-content: center;
     text-transform: uppercase;
     color: var(--text_primary);
+    background: var(--primary);
+    font-weight: 700;
 }
+
+/* Attendance Status */
 .dashboardAttendance-status{
     width: 100px;
     height: 25px;
@@ -80,65 +113,44 @@
     gap: 10px;
 }
 .dashboardAttendance-status>span{
-    color: #4fa595;
     font-size: 12px;
-}
-.dashboardAttendance-status>div{
-    height: 5px;
-    width: 5px;
-    border-radius: 50%;
-    background-color: #4fa595;
+    font-weight: 600;
 }
 
 /* ================= PRESENT ================= */
-
 .dashboardAttendance-status.present {
   background: var(--attendance-present-bg);
+}
+
+.dashboardAttendance-status.present>span{
   color: var(--attendance-present-text);
-}
 
-.dashboardAttendance-status.present > div {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--attendance-present-dot);
 }
-
 
 /* ================= ABSENT ================= */
-
 .dashboardAttendance-status.absent {
   background: var(--attendance-absent-bg);
+}
+
+.dashboardAttendance-status.absent>span{
   color: var(--attendance-absent-text);
 }
 
-.dashboardAttendance-status.absent > div {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--attendance-absent-dot);
-}
-
-
 /* ================= LATE ================= */
-
 .dashboardAttendance-status.late {
   background: var(--attendance-late-bg);
+}
+
+.dashboardAttendance-status.late>span{
   color: var(--attendance-late-text);
 }
 
-.dashboardAttendance-status.late > div {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--attendance-late-text);
-}
-
-
 /* ================= LEAVE ================= */
-
 .dashboardAttendance-status.leave {
   background: var(--attendance-leave-bg);
+}
+
+.dashboardAttendance-status.leave>span{
   color: var(--attendance-leave-text);
 }
 
@@ -150,7 +162,6 @@
 }
 
 /* ================= HALF DAY ================= */
-
 .dashboardAttendance-status.half-day{
   background: var(--attendance-halfday-bg);
 }
@@ -159,20 +170,7 @@
   color: var(--attendance-halfday-text);
 }
 
-
-/* ================= NEUTRAL ================= */
-
-.dashboardAttendance-status.neutral {
-  background: var(--attendance-neutral-bg);
-  color: var(--attendance-neutral-text);
-}
-
-.dashboardAttendance-status.neutral > div {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--attendance-neutral-text);
-}
+/* No attendance */
 
 .dashboardAttendance-users > .no-attendance {
   width: 100%;
