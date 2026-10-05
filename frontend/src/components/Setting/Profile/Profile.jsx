@@ -86,8 +86,11 @@ export const Profile = () => {
           </div>
         </div>
 
-        {/* Avatar Skeleton */}
+        {/* =========================
+            Avatar Skeleton
+        ========================= */}
         <div className="setting-avtar-main-container">
+
           <div className="setting-avatar-heading">
             <Skeleton
               width="80px"
@@ -123,11 +126,14 @@ export const Profile = () => {
                   height="16px"
                 />
               </div>
+
             </div>
           </div>
         </div>
 
-        {/* Personal Information Skeleton */}
+        {/* =========================
+            Personal Information
+        ========================= */}
         <div className="personal-information-container">
           <div className="personal-information-heading">
             <Skeleton
@@ -145,6 +151,7 @@ export const Profile = () => {
                     height="16px"
                   />
 
+                  {/* Input */}
                   <div
                     style={{
                       display: "flex",
@@ -153,6 +160,7 @@ export const Profile = () => {
                       marginTop: "8px",
                     }}
                   >
+
                     <Skeleton
                       width="20px"
                       height="20px"
@@ -164,12 +172,15 @@ export const Profile = () => {
                       height="40px"
                       radius="6px"
                     />
+
                   </div>
                 </div>
               ))}
             </div>
 
-            {/* Bio Skeleton */}
+            {/* =========================
+                Bio Skeleton
+            ========================= */}
             <div className="bio">
               <Skeleton
                 width="40px"
@@ -187,7 +198,9 @@ export const Profile = () => {
           </div>
         </div>
 
-        {/* Save Changes Skeleton */}
+        {/* =========================
+            Save Changes Skeleton
+        ========================= */}
         <div
           className="save_changes"
           style={{
@@ -206,24 +219,36 @@ export const Profile = () => {
             height="40px"
             radius="8px"
           />
+
         </div>
       </div>
     );
   }
 
-  // =========================
-  // ORIGINAL UI
-  // =========================
+  // ==========================================
+  // USER DATA
+  // ==========================================
+
+  const fullName = `${user.firstName || ""} ${
+    user.lastName || ""
+  }`.trim();
+
+  const initials =
+    `${user.firstName?.[0] || ""}${user.lastName?.[0] || ""}`.toUpperCase();
+
   return (
     <div className="setting-profile-container">
       {/* Profile Heading */}
       <div className="setting-profile_heading">
+
         <h3>Profile</h3>
 
         <p>Manage your personal information and public profile.</p>
       </div>
 
-      {/* Avatar */}
+      {/* =========================
+          Avatar
+      ========================= */}
       <div className="setting-avtar-main-container">
         <div className="setting-avatar-heading">
           <h2>Avatar</h2>
@@ -232,11 +257,7 @@ export const Profile = () => {
         <div className="setting-profile-card">
           <div className="setting-avatar-container">
             <div className="setting-avatar">
-              {user
-                ? `${user.firstName?.[0] ?? ""}${
-                    user.lastName?.[0] ?? ""
-                  }`.toUpperCase()
-                : "U"}
+              {initials || "U"}
             </div>
 
             <label
@@ -256,17 +277,12 @@ export const Profile = () => {
 
           <div className="setting-profile-info">
             <h2>
-              {user
-                ? `${user.firstName
-                    ?.charAt(0)
-                    .toUpperCase()}${user.firstName?.slice(1)} ${
-                    user.lastName?.charAt(0).toUpperCase() +
-                    user.lastName?.slice(1)
-                  }`
-                : "User"}
+              {fullName || "User"}
             </h2>
 
-            <p>JPG, PNG or WebP · Max 5 MB</p>
+            <p>
+              JPG, PNG or WebP · Max 5 MB
+            </p>
 
             <label
               htmlFor="photo"
@@ -278,7 +294,9 @@ export const Profile = () => {
         </div>
       </div>
 
-      {/* Personal Information */}
+      {/* =========================
+          Personal Information
+      ========================= */}
       <div className="personal-information-container">
         <div className="personal-information-heading">
           <h2>Personal Information</h2>
@@ -295,31 +313,27 @@ export const Profile = () => {
               <label htmlFor="name">Full name</label>
 
               <div>
+
                 <CiUser />
 
                 <input
+                  id="name"
                   type="text"
                   placeholder="Your full name"
-                  value={
-                    user
-                      ? `${user.firstName
-                          ?.charAt(0)
-                          .toUpperCase()}${user.firstName?.slice(1)} ${
-                          user.lastName?.charAt(0).toUpperCase() +
-                          user.lastName?.slice(1)
-                        }`
-                      : "User"
-                  }
+                  value={fullName || "User"}
                   readOnly
                 />
+
               </div>
+
             </div>
 
-            {/* Email */}
+            {/* Work Email */}
             <div>
               <label htmlFor="email">Work email</label>
 
               <div>
+
                 <MdOutlineEmail />
 
                 <input
@@ -330,7 +344,9 @@ export const Profile = () => {
                   value={formData.email}
                   onChange={handleChange}
                 />
+
               </div>
+
             </div>
 
             {/* Phone */}
@@ -338,6 +354,7 @@ export const Profile = () => {
               <label htmlFor="phone">Phone Number</label>
 
               <div>
+
                 <FaPhoneAlt />
 
                 <input
@@ -348,7 +365,9 @@ export const Profile = () => {
                   value={formData.phone}
                   onChange={handleChange}
                 />
+
               </div>
+
             </div>
 
             {/* Location */}
@@ -356,6 +375,7 @@ export const Profile = () => {
               <label htmlFor="address">Address</label>
 
               <div>
+
                 <MdLocationOn />
 
                 <input
@@ -366,11 +386,15 @@ export const Profile = () => {
                   value={formData.address}
                   onChange={handleChange}
                 />
+
               </div>
+
             </div>
           </div>
 
-          {/* Bio */}
+          {/* =========================
+              Bio
+          ========================= */}
           <div className="bio">
             <label htmlFor="bio">Bio</label>
 
@@ -386,7 +410,9 @@ export const Profile = () => {
         </form>
       </div>
 
-      {/* Save Changes */}
+      {/* =========================
+          Save Changes
+      ========================= */}
       <div className="save_changes">
         <div>
           <div>

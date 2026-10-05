@@ -16,6 +16,16 @@ export const Form = ({
   endpoint,
   onSuccess,
 }) => {
+//toUpperCase 
+const formatLabel = (text) => {
+  if (!text) return "";
+
+  return text
+    .replace(/([A-Z])/g, " $1")
+    .replace(/^./, (char) => char.toUpperCase())
+    .trim();
+};
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const showModalRef = React.useRef();
@@ -434,7 +444,8 @@ export const Form = ({
                 required={el.required || false}
               />
 
-              <label htmlFor={el.name}>{el.name}</label>
+              {/* <label htmlFor={el.name}>{el.name}</label> */}
+              <label htmlFor={el.name}>{formatLabel(el.name)}</label>
 
               {el.type === "password" && (
                 <motion.span
