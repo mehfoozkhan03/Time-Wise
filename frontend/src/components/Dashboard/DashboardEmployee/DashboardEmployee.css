@@ -22,10 +22,11 @@
   border: 1px solid var(--border);
   padding: 10px 15px;
   border-radius: 10px;
-  background-color: #07254c;
+  background: var(--button);
+  cursor: pointer;
 }
 .employee-management-right > span {
-  color: #3b99c8;
+  color: #fff;
   font-size: 14px;
   font-weight: 600;
 }
@@ -178,12 +179,13 @@
   gap: 10px;
 }
 .dashboardEmploye-avatar {
-  height: 40px;
-  width: 20%;
+  height: 45px;
+  width: 25%;
   border-radius: 50%;
   border: 1px solid var(--border);
   background-color: var(--primary);
   font-weight: 700;
+  color: #fff;
 }
 
 .dashboardEmployee-name{
@@ -223,13 +225,22 @@
   gap: 10px;
   border-radius: 20px;
 }
-.dashboardEmployee-status > div {
-  height: 5px;
-  width: 5px;
-  border-radius: 50%;
+
+.dashboardEmployee-status.active{
+  background: var(--primary);
+  color: #fff;
+  border: 1px solid var(--border);
 }
+
+.dashboardEmployee-status.inactive {
+  background: var(--attendance-absent-bg);
+  color: #fff;
+  border: 1px solid var(--border);
+}
+
 .dashboardEmployee-status > span {
   font-size: 11px;
+  color: #fff;
 }
 .dashboardEmployee-actions {
   display: flex;
@@ -253,12 +264,12 @@
   padding: 14px 50px;
   border-radius: 10px;
   font-size: 16px;
-  background-color: var(--primary);
-  color: var(--text_primary);
+  background: var(--button);
+  color: #fff;
 }
 
 .employeeDashboard-loadmore-btn > button:hover {
-  background-color: var(--primary_hover);
+  background: var(--buttonhover);
 }
 
 
@@ -417,7 +428,30 @@
   cursor: not-allowed;
 }
 
+/* Add Employee */
+.add-employee-scroll {
+  max-height: 80vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 8px;
+}
 
+.add-employee-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.add-employee-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.add-employee-scroll::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 10px;
+}
+
+.add-employee-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--buttonhover);
+}
 
 
 @media (max-width: 1000px) {

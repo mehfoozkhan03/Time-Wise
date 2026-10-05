@@ -195,6 +195,7 @@ export const AppRoutes = () => {
         {/* <Route path="/admin/login" element={<SignUpPage />} /> */}
 
         <Route element={<AdminPrivateRoutes><AdminLayout /></AdminPrivateRoutes>}>
+        <Route path="/admin/employee/:userId" element={<EmployeeProfile />}/>
           {/* ================= ADMIN DASHBOARD ================= */}
           <Route path="/adminDashboard" element={<AdminDashboard />}>
             <Route index element={<DashboardHome />} />

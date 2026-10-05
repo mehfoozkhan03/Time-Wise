@@ -100,17 +100,21 @@
   color: var(--text_secondary);
 }
 
-/* ========= ACTIVITY CHART ======== */
+
+/* ========== ACTIVITY CHART ========== */
+
 .communityProfile-activity {
   width: 100%;
 }
 
 .communityProfile-activity-bars {
+  width: 100%;
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  gap: 5px;
-  padding: 0 1px;
+  gap: 6px;
+  padding: 0 2px;
+  box-sizing: border-box;
 }
 
 .communityProfile-activity-item {
@@ -129,71 +133,28 @@
   display: flex;
   align-items: flex-end;
   justify-content: center;
+  box-sizing: border-box;
 }
 
 .communityProfile-activity-bar {
-  width: 22px;
+  width: 18px;
   max-width: 100%;
-  min-height: 15px;
-  border-radius: 4px 4px 2px 2px;
+  max-height: 70px;
+  min-height: 0;
+  border-radius: 5px 5px 2px 2px;
   background: #3196c3;
+  cursor: pointer;
+  box-sizing: border-box;
+
   transition:
     height 0.3s ease,
-    background-color 0.2s ease,
-    transform 0.2s ease;
-}
-
-.communityProfile-activity-item:nth-child(1) .communityProfile-activity-bar {
-  background: #52a7df;
-}
-
-.communityProfile-activity-item:nth-child(2) .communityProfile-activity-bar {
-  background: #4ca5ce;
-}
-
-.communityProfile-activity-item:nth-child(3) .communityProfile-activity-bar {
-  background: #3196c3;
-}
-
-.communityProfile-activity-item:nth-child(4) .communityProfile-activity-bar {
-  background: #2d8eb9;
-}
-
-.communityProfile-activity-item:nth-child(5) .communityProfile-activity-bar {
-  background: #369bc6;
-}
-
-.communityProfile-activity-item:nth-child(6) .communityProfile-activity-bar {
-  background: #3aa0cc;
-}
-
-.communityProfile-activity-item:nth-child(7) .communityProfile-activity-bar {
-  background: #3297c2;
-}
-
-.communityProfile-activity-item:nth-child(8) .communityProfile-activity-bar {
-  background: #3aa0cc;
-}
-
-.communityProfile-activity-item:nth-child(9) .communityProfile-activity-bar {
-  background: #3297c2;
-}
-
-.communityProfile-activity-item:nth-child(10) .communityProfile-activity-bar {
-  background: #2c8eb8;
-}
-
-.communityProfile-activity-item:nth-child(11) .communityProfile-activity-bar {
-  background: #369dc8;
-}
-
-.communityProfile-activity-item:nth-child(12) .communityProfile-activity-bar {
-  background: #3399c5;
+    transform 0.2s ease,
+    filter 0.2s ease;
 }
 
 .communityProfile-activity-bar:hover {
-  transform: translateY(-2px);
-  filter: brightness(1.12);
+  transform: translateY(-3px);
+  filter: brightness(1.15);
 }
 
 .communityProfile-activity-day {
@@ -202,6 +163,7 @@
   font-size: 11px;
   line-height: 1;
   font-weight: 500;
+  user-select: none;
 }
 
 /* ======== MONTHS ======== */

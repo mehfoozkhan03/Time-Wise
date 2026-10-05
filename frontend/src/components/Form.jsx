@@ -7,10 +7,15 @@ import { useNavigate } from "react-router-dom";
 import { validateForm } from "../utils/validation";
 import { Modal } from "../components/Modal/Modal";
 import { registerUser, loginUser } from "../store/authSlice";
-import { loginAdmin } from "../store/adminAuthSlice";
+import { createEmployee, loginAdmin } from "../store/adminAuthSlice";
 import "../styles/Form.css";
 
-export const Form = ({ fields = [], button = "Submit", endpoint }) => {
+export const Form = ({
+  fields = [],
+  button = "Submit",
+  endpoint,
+  onSuccess,
+}) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const showModalRef = React.useRef();
@@ -88,6 +93,32 @@ export const Form = ({ fields = [], button = "Submit", endpoint }) => {
         response = await dispatch(loginAdmin(form));
       }
 
+      //# Admin can add employee
+      if (endpoint === "/admin/employees") {
+        const { ["confirm password"]: _, ...employeeData } = form;
+
+        response = await dispatch(createEmployee(employeeData));
+
+        if (createEmployee.fulfilled.match(response)) {
+          showModalRef.current({
+            variant: "success",
+            title: response.payload?.title || "Employee Created Successfully",
+            message:
+              response.payload?.message ||
+              "Employee has been created successfully.",
+            description: "The employee has been added to the employee list.",
+            onCloseCb: () => {
+              resetForm();
+
+              // Close parent Add Employee modal
+              onSuccess?.(response);
+            },
+          });
+
+          return;
+        }
+      }
+
       if (!response) return;
 
       // ==========================================
@@ -143,27 +174,70 @@ export const Form = ({ fields = [], button = "Submit", endpoint }) => {
       // ==========================================
       // ERROR
       // ==========================================
+      // const errorData = response.payload || {};
+
+      // showModalRef.current({
+      //   variant: "error",
+      //   title:
+      //     errorData?.title ||
+      //     (endpoint === "/user/signup"
+      //       ? "Registration Failed"
+      //       : "Login Failed"),
+      //   message: errorData?.message || "An unexpected error occurred.",
+      //   reason: errorData?.reason || "Please check your details and try again.",
+      // });
+
       const errorData = response.payload || {};
+
+      let errorTitle = "Request Failed";
+
+      if (endpoint === "/user/signup") {
+        errorTitle = "Registration Failed";
+      } else if (endpoint === "/user/login") {
+        errorTitle = "Login Failed";
+      } else if (endpoint === "/admin/login") {
+        errorTitle = "Admin Login Failed";
+      } else if (endpoint === "/admin/employees") {
+        errorTitle = "Employee Creation Failed";
+      }
 
       showModalRef.current({
         variant: "error",
-        title:
-          errorData?.title ||
-          (endpoint === "/user/signup"
-            ? "Registration Failed"
-            : "Login Failed"),
+        title: errorData?.title || errorTitle,
         message: errorData?.message || "An unexpected error occurred.",
         reason: errorData?.reason || "Please check your details and try again.",
       });
 
       setErrors({});
+      // } catch (error) {
+      //   console.error("Form submission error:", error);
+
+      //   showModalRef.current({
+      //     variant: "error",
+      //     title:
+      //       endpoint === "/user/signup" ? "Registration Failed" : "Login Failed",
+      //     message: error?.message || "An unexpected error occurred.",
+      //     reason: "Please check your connection and try again.",
+      //   });
+      // }
     } catch (error) {
       console.error("Form submission error:", error);
 
+      let errorTitle = "Request Failed";
+
+      if (endpoint === "/user/signup") {
+        errorTitle = "Registration Failed";
+      } else if (endpoint === "/user/login") {
+        errorTitle = "Login Failed";
+      } else if (endpoint === "/admin/login") {
+        errorTitle = "Admin Login Failed";
+      } else if (endpoint === "/admin/employees") {
+        errorTitle = "Employee Creation Failed";
+      }
+
       showModalRef.current({
         variant: "error",
-        title:
-          endpoint === "/user/signup" ? "Registration Failed" : "Login Failed",
+        title: errorTitle,
         message: error?.message || "An unexpected error occurred.",
         reason: "Please check your connection and try again.",
       });
@@ -374,7 +448,10 @@ export const Form = ({ fields = [], button = "Submit", endpoint }) => {
                   whileTap={{ scale: 0.9 }}
                   whileHover={{ scale: 1.15 }}
                 >
-                  <AnimatePresence mode="wait" initial={false}>
+                  <AnimatePresence
+                    mode="wait"
+                    initial={false}
+                  >
                     {showPassword[el.name] ? (
                       <motion.span
                         key="eye"

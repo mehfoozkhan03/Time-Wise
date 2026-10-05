@@ -28,6 +28,9 @@ import { deleteUser } from "../controllers/Admin/deleteUser.controller.js";
 import { changeUserPassword } from "../controllers/Admin/changeEmployeePassword.controller.js";
 import { changeOwnPassword } from "../controllers/Admin/changeAdminPassword.controller.js";
 import { getAdminTheme, updateAdminTheme } from "../controllers/Admin/adminTheme.controller.js";
+import { getAdminAttendanceTrendReport, getAdminDepartmentHeadcountReport, getAdminWeeklyAttendanceReport } from "../controllers/Admin/adminReportController.js";
+import { getAdminDashboardStatsController } from "../controllers/Admin/adminDashboardHome.controller.js";
+import { createEmployee } from "../controllers/Admin/createEmployee.controller.js";
 
 
 const adminRoutes = express.Router();
@@ -48,6 +51,9 @@ adminRoutes.patch("/users/:id/password",  adminAuth,  changeUserPassword);
 
 adminRoutes.get("/users", adminAuth, getAllUser);
 
+//# This is for create employee by admin
+adminRoutes.post("/employees", adminAuth, createEmployee); 
+
 adminRoutes.get("/recent-employees", adminAuth, getRecentEmployees);
 
 adminRoutes.patch("/:userId/department", adminAuth, updateUserDepartment);
@@ -59,6 +65,14 @@ adminRoutes.patch("/:userId/role", adminAuth, updateRole);
 adminRoutes.put("/users/:userId", adminAuth, updateUser);
 
 adminRoutes.get("/attendance/today", adminAuth, getAllTodayAttendance);
+
+//# Dashboard Home
+adminRoutes.get( "/dashboard-stats", adminAuth, getAdminDashboardStatsController); 
+
+//# Admin Report & Analytic
+adminRoutes.get( "/reports/weekly-attendance", adminAuth, getAdminWeeklyAttendanceReport);
+adminRoutes.get( "/reports/department-headcount", adminAuth, getAdminDepartmentHeadcountReport);
+adminRoutes.get( "/reports/attendance-trend", adminAuth, getAdminAttendanceTrendReport); 
 
 adminRoutes.delete("/delete/thoughts/:id", adminAuth, adminDeleteThought);
 

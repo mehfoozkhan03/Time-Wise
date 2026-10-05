@@ -258,31 +258,22 @@
 
 .announcementForm-publish-content > div {
   display: grid;
-
   grid-template-columns: repeat(3, 1fr);
-
   gap: 10px;
 }
 
 .announcementForm-publish-content > div > button {
   width: 100%;
-
   padding: 10px;
-
   border: 1px solid var(--border);
   border-radius: 10px;
-
   background: transparent;
   color: var(--text_primary);
-
   font-size: 13px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   cursor: pointer;
-
   transition: 0.2s ease;
 }
 
@@ -298,46 +289,75 @@
   border-color: var(--primary);
 }
 
-/* Expiry */
+/* Scheduled Data and Time Input */
+.announcement-schedule-fields{
+  margin-top: 10px;
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 10px;
+}
 
+.announcement-schedule-fields>div{
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.announcement-schedule-fields label{
+  font-size: 14px;
+}
+
+.announcement-schedule-fields input{
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  outline: none;
+  background: transparent;
+  color: var(--text_primary);
+  font-size: 14px;
+}
+
+.announcement-schedule-fields input::placeholder {
+  opacity: 0.5;
+}
+
+.announcement-schedule-fields input:focus {
+  border-color: var(--primary);
+}
+
+.announcement-schedule-fields input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
+
+/* Expiry */
 .announcementForm-expiry {
   display: grid;
-
   grid-template-columns: repeat(2, 1fr);
-
   gap: 10px;
 }
 
 .announcementForm-expiry > div {
   display: flex;
   flex-direction: column;
-
   gap: 7px;
 }
 
 .announcementForm-expiry h3 {
   margin: 0;
-
   font-size: 14px;
   font-weight: 400;
-
   color: var(--text_primary);
 }
 
 .announcementForm-expiry input {
   width: 100%;
-
   padding: 10px;
-
   border-radius: 10px;
   border: 1px solid var(--border);
-
   outline: none;
-
   background: transparent;
-
   color: var(--text_primary);
-
   font-size: 14px;
 }
 

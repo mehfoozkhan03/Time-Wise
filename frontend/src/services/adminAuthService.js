@@ -12,6 +12,11 @@ export const adminAuthService = {
     return API.post("/admin/logout");
   },
 
+  //# Admin can add employee
+  createEmployee(data) {
+    return API.post("/admin/employees", data);
+  },
+
   getAllUser(page, limit, search = "", department = "All", status = "All") {
     return API.get(
       `/admin/users?page=${page}&limit=${limit}&search=${encodeURIComponent(

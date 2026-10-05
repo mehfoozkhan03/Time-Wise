@@ -15,7 +15,23 @@ export const loginAdmin = createAsyncThunk(
         error.response?.data?.message || "Admin Login Failed",
       );
     }
-    },
+  },
+);
+
+//# ================= Create Employee =================
+export const createEmployee = createAsyncThunk(
+  "adminAuth/createEmployee",
+  async (employeeData, { rejectWithValue }) => {
+    try {
+      const response = await adminAuthService.createEmployee(employeeData);
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to create employee",
+      );
+    }
+  },
 );
 
 //# ========================== Fetch all users =========================
@@ -171,8 +187,7 @@ export const fetchTodayAttendance = createAsyncThunk(
   },
 );
 
-
-//# ===================== Delete Employee account from database ======================== 
+//# ===================== Delete Employee account from database ========================
 export const deleteUser = createAsyncThunk(
   "adminAuth/deleteUser",
   async (userId, { rejectWithValue }) => {
@@ -185,10 +200,10 @@ export const deleteUser = createAsyncThunk(
       };
     } catch (error) {
       return rejectWithValue(
-        error.response?.data?.message || "Failed to delete user"
+        error.response?.data?.message || "Failed to delete user",
       );
     }
-  }
+  },
 );
 
 const initialState = {
@@ -209,7 +224,7 @@ const initialState = {
   totalUsers: 0,
 
   currentPage: 0,
-  limit: 26,
+  limit: 10,
   search: "",
 
   todayAttendance: [],
@@ -266,6 +281,25 @@ const adminAuthSlice = createSlice({
         state.isLoading = false;
         state.isAuthenticated = false;
         state.admin = null;
+        state.isError = true;
+        state.errorMessage = action.payload;
+      })
+
+      //# ================= Admin can Create Employee =================
+      .addCase(createEmployee.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+        state.errorMessage = "";
+      })
+
+      .addCase(createEmployee.fulfilled, (state) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.errorMessage = "";
+      })
+
+      .addCase(createEmployee.rejected, (state, action) => {
+        state.isLoading = false;
         state.isError = true;
         state.errorMessage = action.payload;
       })

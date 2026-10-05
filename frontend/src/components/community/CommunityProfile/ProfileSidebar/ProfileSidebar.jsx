@@ -5,22 +5,40 @@ import { useSelector } from "react-redux";
 
 export const ProfileSidebar = () => {
   const sidebarDetails = useSelector((state) => state.communityProfile.profile);
-  console.log("🚀 ~ sidebarDetails:", sidebarDetails);
 
-  const activityData = [
-    { day: "J", value: 30 },
-    { day: "F", value: 55 },
-    { day: "M", value: 68 },
-    { day: "A", value: 48 },
-    { day: "M", value: 58 },
-    { day: "J", value: 74 },
-    { day: "J", value: 56 },
-    { day: "A", value: 76 },
-    { day: "S", value: 58 },
-    { day: "O", value: 54 },
-    { day: "N", value: 76 },
-    { day: "D", value: 60 },
+  const {
+    userPostsTotal = 0,
+    userPostsTotalLikes = 0,
+    monthlyActivity = [],
+  } = useSelector((state) => state.post);
+
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
   ];
+
+  const activityData = months.map((month, index) => {
+    const monthNumber = index + 1;
+
+    const found = monthlyActivity.find(
+      (item) => item._id.month === monthNumber,
+    );
+
+    return {
+      month,
+      posts: found?.posts || 0,
+    };
+  });
 
   const fullName =
     `${sidebarDetails?.firstName || ""} ${sidebarDetails?.lastName || ""}`.trim();
@@ -94,9 +112,9 @@ export const ProfileSidebar = () => {
         {/* Activity Summary */}
 
         <p className="communityProfile-sidebar-summary">
-          <strong>24</strong> posts
+          <strong>{userPostsTotal}</strong> posts
           <span> • </span>
-          <strong>186</strong> likes received
+          <strong>{userPostsTotalLikes}</strong> likes received
         </p>
 
         {/* Chart */}
@@ -106,19 +124,22 @@ export const ProfileSidebar = () => {
             {activityData.map((item, index) => (
               <div
                 className="communityProfile-activity-item"
-                key={`${item.day}-${index}`}
+                key={`${item.month}-${index}`}
               >
                 <div className="communityProfile-activity-bar-wrapper">
                   <div
                     className="communityProfile-activity-bar"
+                    title={`${item.month}: ${item.posts} ${
+                      item.posts === 1 ? "post" : "posts"
+                    }`}
                     style={{
-                      height: `${item.value}px`,
+                      height: `${Math.min(item.posts * 20, 70)}px`,
                     }}
                   />
                 </div>
 
                 <span className="communityProfile-activity-day">
-                  {item.day}
+                  {item.month.charAt(0)}
                 </span>
               </div>
             ))}

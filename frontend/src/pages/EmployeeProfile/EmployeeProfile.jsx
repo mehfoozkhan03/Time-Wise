@@ -9,9 +9,37 @@ import { LeaveSummary } from "../../components/employee/LeaveSummary/LeaveSummar
 import { EmergencyContact } from "../../components/employee/EmergencyContact/EmergencyContact";
 import { SocialLinks } from "../../components/employee/SocialLinks/SocialLinks";
 import { PulseDot } from "../../components/PulseDot/pulseDot";
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { authService } from "../../services/authService";
 
 export default function EmployeeProfile() {
-  const { user } = useSelector((state) => state.auth);
+  const { userId } = useParams();
+  const [viewedUser, setViewedUser] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        setLoading(true);
+
+        const response = await authService.getUserProfile(userId);
+
+        setViewedUser(response.data.user || response.data);
+      } catch (error) {
+        console.error("Failed to fetch employee profile:", error);
+        setViewedUser(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (userId) {
+      fetchProfile();
+    }
+  }, [userId]);
+  const { user: loggedInUser } = useSelector((state) => state.auth);
+  const user = userId ? viewedUser : loggedInUser;
 
   if (!user) {
     return (
@@ -41,14 +69,19 @@ export default function EmployeeProfile() {
           <div className="profile_header">
             <div className="profile_avatar">
               {user.profileImage ? (
-                <img src={user.profileImage} alt={fullName} />
+                <img
+                  src={user.profileImage}
+                  alt={fullName}
+                />
               ) : (
                 initials
               )}
             </div>
 
             <div className="profile_text">
-              <span className="profile_tag">My Profile</span>
+              <span className="profile_tag">
+                {userId ? "Employee Profile" : "My Profile"}
+              </span>
 
               <h1>{fullName}</h1>
 
@@ -76,7 +109,9 @@ export default function EmployeeProfile() {
               <span>Role</span>
 
               <h4>
-                {user?.role ? user.role.charAt(0).toUpperCase() + user.role.slice(1) : "Employee"}
+                {user?.role
+                  ? user.role.charAt(0).toUpperCase() + user.role.slice(1)
+                  : "Employee"}
               </h4>
             </div>
 

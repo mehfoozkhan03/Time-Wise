@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from "react";
+import { formatDistanceToNow } from "date-fns";
+
 import "./CommunityProfilePost.css";
 
 import {
@@ -52,6 +54,19 @@ export const CommunityProfilePosts = () => {
   const handleFilterChange = (filter) => {
     setSelectedFilter(filter);
     setShowDropdown(false);
+  };
+
+  //# Handle Share button
+  const handleShare = async (postId) => {
+    try {
+      const postUrl = `${window.location.origin}/community/post/${postId}`;
+
+      await navigator.clipboard.writeText(postUrl);
+
+      alert("Post URL copied to clipboard!");
+    } catch (error) {
+      console.error("Failed to copy post URL:", error);
+    }
   };
 
   // All POSTS
@@ -173,7 +188,11 @@ export const CommunityProfilePosts = () => {
 
                       <span className="community-post-dot">•</span>
 
-                      <span>{post.timeAgo || "Recently"}</span>
+                      <span>
+                        {formatDistanceToNow(new Date(post.createdAt), {
+                          addSuffix: true,
+                        })}
+                      </span>
 
                       {post.isEdited && (
                         <>
@@ -238,7 +257,10 @@ export const CommunityProfilePosts = () => {
                   </button>
                 </div>
 
-                <button className="community-post-share">
+                <button
+                  className="community-post-share"
+                  onClick={() => handleShare(post._id)}
+                >
                   <HiOutlineShare />
 
                   <span>Share</span>

@@ -27,11 +27,12 @@
     align-items: center;
     gap: 5px;
     border-radius: 10px;
-    border: 1px solid #327e61;
-    background-color: #192d2d;
+    border: 1px solid var(--border);
+    background: var(--button);
+    cursor: pointer;
 }
 .dashboardAnnouncement-new>span{
-    color: #42a47f;
+    color: #fff;
     font-size: 14px;
     font-weight: bold;
 }

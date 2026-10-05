@@ -98,7 +98,7 @@ export const DashboardAnnouncement = () => {
             className="dashboardAnnouncement-new"
             onClick={() => setOpenAnnouncement(true)}
           >
-            <FaPlus style={{ color: "#42a47f" }} />
+            <FaPlus style={{ color: "#fff" }} />
             <span>New Announcement</span>
           </div>
 

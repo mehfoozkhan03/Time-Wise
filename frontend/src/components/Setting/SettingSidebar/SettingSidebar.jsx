@@ -5,12 +5,12 @@ import "./SettingSidebar.css";
 import { FaRegUser } from "react-icons/fa";
 import { MdOutlineWatchLater } from "react-icons/md";
 import { MdNotifications } from "react-icons/md";
-import { RiPaletteLine } from "react-icons/ri";
 import { FaLock } from "react-icons/fa";
 import { GoDatabase } from "react-icons/go";
 import { MdOutlineContactSupport } from "react-icons/md";
 import { FaCalendarAlt } from "react-icons/fa";
 import { MdEventAvailable } from "react-icons/md";
+import { TbColorFilter } from "react-icons/tb";
 
 export const SettingSidebar = () => {
   const { user } = useSelector((state) => state.auth);
@@ -38,6 +38,14 @@ export const SettingSidebar = () => {
               </NavLink>
 
               <NavLink
+                to="appearance"
+                className="appearance settingSidebar-link"
+              >
+                <TbColorFilter className="settingSidebar-icon" />
+                <span>Appearance</span>
+              </NavLink>
+
+              <NavLink
                 to="leave"
                 className="settingSidebar-link"
               >
@@ -45,13 +53,6 @@ export const SettingSidebar = () => {
                 <span>Leave</span>
               </NavLink>
 
-              <NavLink
-                to="appearance"
-                className="appearance settingSidebar-link"
-              >
-                <RiPaletteLine className="settingSidebar-icon" />
-                <span>Appearance</span>
-              </NavLink>
               <NavLink
                 to="calendar"
                 className="settingSidebar-link"

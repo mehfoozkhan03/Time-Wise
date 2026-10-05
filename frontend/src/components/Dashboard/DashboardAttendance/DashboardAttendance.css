@@ -71,10 +71,8 @@
     color: var(--text_primary);
 }
 .dashboardAttendance-status{
-    width: 80px;
+    width: 100px;
     height: 25px;
-    background-color: #1b4641;
-    border: 1px solid #2c6f68;
     border-radius: 20px;
     display: flex;
     align-items: center;
@@ -90,6 +88,90 @@
     width: 5px;
     border-radius: 50%;
     background-color: #4fa595;
+}
+
+/* ================= PRESENT ================= */
+
+.dashboardAttendance-status.present {
+  background: var(--attendance-present-bg);
+  color: var(--attendance-present-text);
+}
+
+.dashboardAttendance-status.present > div {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--attendance-present-dot);
+}
+
+
+/* ================= ABSENT ================= */
+
+.dashboardAttendance-status.absent {
+  background: var(--attendance-absent-bg);
+  color: var(--attendance-absent-text);
+}
+
+.dashboardAttendance-status.absent > div {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--attendance-absent-dot);
+}
+
+
+/* ================= LATE ================= */
+
+.dashboardAttendance-status.late {
+  background: var(--attendance-late-bg);
+  color: var(--attendance-late-text);
+}
+
+.dashboardAttendance-status.late > div {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--attendance-late-text);
+}
+
+
+/* ================= LEAVE ================= */
+
+.dashboardAttendance-status.leave {
+  background: var(--attendance-leave-bg);
+  color: var(--attendance-leave-text);
+}
+
+.dashboardAttendance-status.leave > div {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--attendance-leave-text);
+}
+
+/* ================= HALF DAY ================= */
+
+.dashboardAttendance-status.half-day{
+  background: var(--attendance-halfday-bg);
+}
+
+.dashboardAttendance-status.half-day>span {
+  color: var(--attendance-halfday-text);
+}
+
+
+/* ================= NEUTRAL ================= */
+
+.dashboardAttendance-status.neutral {
+  background: var(--attendance-neutral-bg);
+  color: var(--attendance-neutral-text);
+}
+
+.dashboardAttendance-status.neutral > div {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--attendance-neutral-text);
 }
 
 .dashboardAttendance-users > .no-attendance {

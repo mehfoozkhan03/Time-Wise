@@ -25,6 +25,10 @@ import { DepartmentDropdown } from "../Dropdowns/DepartmentDropdown/DepartmentDr
 import { DesignationDropdown } from "../Dropdowns/DesignationDropdown/DesignationDropdown";
 import { RoleDropdown } from "../Dropdowns/RoleDropdown/RoleDropdown";
 import { Modal } from "../../Modal/Modal";
+import { PulseDot } from "../../PulseDot/pulseDot";
+import { useNavigate } from "react-router-dom";
+import { Form } from "../../Form";
+import { forms } from "../../../data/form";
 
 const departments = [
   "All",
@@ -58,10 +62,14 @@ const employeeRoles = ["Admin", "Manager", "Employee"];
 
 export const DashboardEmployee = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { users, totalUsers, isLoading, search, currentPage } = useSelector(
     (state) => state.adminAuth,
   );
+
+  //# Admin can create employee
+  const [showAddEmployee, setShowAddEmployee] = useState(false);
 
   //# Search Employee by Name
   const [searchInput, setSearchInput] = useState("");
@@ -97,6 +105,20 @@ export const DashboardEmployee = () => {
 
   const handleSearch = () => {
     dispatch(
+      fetchAllUser({
+        page: 1,
+        department: selectedDepartment,
+        status: selectedStatus,
+        search: searchInput.trim(),
+      }),
+    );
+  };
+
+  //# ============= Admin: Create Employee ===============
+  const handleEmployeeCreated = async () => {
+    setShowAddEmployee(false);
+
+    await dispatch(
       fetchAllUser({
         page: 1,
         department: selectedDepartment,
@@ -481,8 +503,11 @@ export const DashboardEmployee = () => {
             </span>
           </div>
 
-          <div className="employee-management-right">
-            <FaPlus style={{ color: "#6954b1" }} />
+          <div
+            className="employee-management-right"
+            onClick={() => setShowAddEmployee(true)}
+          >
+            <FaPlus style={{ color: "#fff" }} />
 
             <span>Add Employee</span>
           </div>
@@ -746,27 +771,20 @@ export const DashboardEmployee = () => {
                     {/* ========================= STATUS =========================*/}
 
                     <div
-                      className="dashboardEmployee-status"
-                      style={{
-                        background: el.isOnline ? "#12352F" : "#351A21",
-                        border: el.isOnline
-                          ? "1px solid #2F8F83"
-                          : "1px solid #8F4652",
-                      }}
+                      className={`dashboardEmployee-status ${el.isOnline ? "active" : "inactive"}`}
                     >
-                      <div
-                        style={{
-                          background: el.isOnline ? "#22C55E" : "#EF4444",
-                        }}
-                      ></div>
+                      <PulseDot
+                        color={
+                          el.isOnline === "Present"
+                            ? "var(--attendance-present-dot)"
+                            : "var(--attendance-absent-dot)"
+                        }
+                        size="5px"
+                        speed="2.5s"
+                        scale="2.5"
+                      />
 
-                      <span
-                        style={{
-                          color: el.isOnline ? "#5EE7C4" : "#FF6B7A",
-                        }}
-                      >
-                        {el.isOnline ? "Active" : "Inactive"}
-                      </span>
+                      <span>{el.isOnline ? "Active" : "Inactive"}</span>
                     </div>
 
                     {/* ACTIONS */}
@@ -822,7 +840,12 @@ export const DashboardEmployee = () => {
                         <>
                           {/* VIEW */}
 
-                          <div className="dashboardEmployee-view">
+                          <div
+                            className="dashboardEmployee-view"
+                            onClick={() =>
+                              navigate(`/admin/employee/${el._id}`)
+                            }
+                          >
                             <FaEyeSlash
                               style={{
                                 color: "#479ef5",
@@ -879,65 +902,69 @@ export const DashboardEmployee = () => {
                           {/* KEY */}
 
                           {passwordModal.open && (
-                            <Modal isOpen overlayClassName="password-modal-overlay" className="password-modal">
-                                <div className="password-modal-icon">
-                                  <FaKey />
-                                </div>
+                            <Modal
+                              isOpen
+                              overlayClassName="password-modal-overlay"
+                              className="password-modal"
+                            >
+                              <div className="password-modal-icon">
+                                <FaKey />
+                              </div>
 
-                                <h3>Change Employee Password</h3>
+                              <h3>Change Employee Password</h3>
 
-                                <p className="password-modal-user">
-                                  Change password for{" "}
-                                  <strong>{passwordModal.userName}</strong>
-                                </p>
+                              <p className="password-modal-user">
+                                Change password for{" "}
+                                <strong>{passwordModal.userName}</strong>
+                              </p>
 
-                                <div className="password-input-group">
-                                  <label>New Password</label>
+                              <div className="password-input-group">
+                                <label>New Password</label>
 
-                                  <input
-                                    type="password"
-                                    name="newPassword"
-                                    value={passwordData.newPassword}
-                                    onChange={handlePasswordChange}
-                                    placeholder="Enter new password"
-                                    disabled={isChangingPassword}
-                                  />
-                                </div>
+                                <input
+                                  type="password"
+                                  name="newPassword"
+                                  value={passwordData.newPassword}
+                                  onChange={handlePasswordChange}
+                                  placeholder="Enter new password"
+                                  disabled={isChangingPassword}
+                                />
+                              </div>
 
-                                <div className="password-input-group">
-                                  <label>Confirm Password</label>
+                              <div className="password-input-group">
+                                <label>Confirm Password</label>
 
-                                  <input
-                                    type="password"
-                                    name="confirmPassword"
-                                    value={passwordData.confirmPassword}
-                                    onChange={handlePasswordChange}
-                                    placeholder="Confirm new password"
-                                    disabled={isChangingPassword}
-                                  />
-                                </div>
+                                <input
+                                  type="password"
+                                  name="confirmPassword"
+                                  value={passwordData.confirmPassword}
+                                  onChange={handlePasswordChange}
+                                  placeholder="Confirm new password"
+                                  disabled={isChangingPassword}
+                                />
+                              </div>
 
-                                <div className="password-modal-actions">
-                                  <button
-                                    type="button"
-                                    className="password-modal-cancel"
-                                    onClick={closePasswordModal}
-                                    disabled={isChangingPassword}
-                                  >
-                                    Cancel
-                                  </button>
+                              <div className="password-modal-actions">
+                                <button
+                                  type="button"
+                                  className="password-modal-cancel"
+                                  onClick={closePasswordModal}
+                                  disabled={isChangingPassword}
+                                >
+                                  Cancel
+                                </button>
 
-                                  <button
-                                    type="button"
-                                    className="password-modal-confirm"
-                                    onClick={handleChangePassword}
-                                    disabled={isChangingPassword}
-                                  >
-                                    {isChangingPassword
-                                      ? "Changing..."
-                                      : "Change Password"}
-                                  </button>
-                                </div>
+                                <button
+                                  type="button"
+                                  className="password-modal-confirm"
+                                  onClick={handleChangePassword}
+                                  disabled={isChangingPassword}
+                                >
+                                  {isChangingPassword
+                                    ? "Changing..."
+                                    : "Change Password"}
+                                </button>
+                              </div>
                             </Modal>
                           )}
 
@@ -983,6 +1010,23 @@ export const DashboardEmployee = () => {
           )}
         </div>
       </div>
+
+      {showAddEmployee && (
+        <Modal
+          isOpen={showAddEmployee}
+          onClose={() => setShowAddEmployee(false)}
+          className="add-employee-modal"
+        >
+          <div className="add-employee-scroll">
+            <Form
+              fields={forms.adminEmployee.fields}
+              button={forms.adminEmployee.button}
+              endpoint={forms.adminEmployee.endpoint}
+              onSuccess={handleEmployeeCreated}
+            />
+          </div>
+        </Modal>
+      )}
     </>
   );
 };
