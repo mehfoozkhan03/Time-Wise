@@ -282,7 +282,6 @@
 
 .employee-save-action,
 .employee-cancel-action {
-  /* background: var(--primary); */
   padding: 7px 15px;
   border-radius: 7px;
 }
@@ -303,13 +302,6 @@
   color: var(--text_primary);
   font-size: 16px;
 }
-
-/* .employee-cancel-action>svg{
-  }
-
-.employee-cancel-action > span {
-  color: var(--text_primary);
-} */
 
 .employee-save-action > span,
 .employee-cancel-action > span {
