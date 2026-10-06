@@ -9,7 +9,7 @@ import {
   createHoliday,
   updateHoliday,
   deleteHoliday,
-} from "../controllers/User/holiday.controller.js";
+} from "../controllers/Admin/holiday.controller.js";
 
 const holidayRouter = express.Router();
 
