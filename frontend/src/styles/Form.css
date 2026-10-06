@@ -17,13 +17,13 @@
 input:is(:-webkit-autofill, :autofill),
 textarea:is(:-webkit-autofill, :autofill),
 select:is(:-webkit-autofill, :autofill) {
-  -webkit-text-fill-color: var(--input-text) !important;
+  -webkit-text-fill-color: var(--login-input-text) !important;
 
   -webkit-box-shadow:
-    0 0 0px 1000px var(--input-bg) inset !important;
+    0 0 0px 1000px var(--login-input-bg) inset !important;
 
   box-shadow:
-    0 0 0px 1000px var(--input-bg) inset !important;
+    0 0 0px 1000px var(--login-input-bg) inset !important;
 
   transition: background-color 5000s ease-in-out 0s;
 }
@@ -137,7 +137,7 @@ select:is(:-webkit-autofill, :autofill) {
 
   text-align: center;
 
-  color: var(--label-color);
+  color: var(--login-label-color);
 
   font-size: 14px;
 }
@@ -202,8 +202,8 @@ select:is(:-webkit-autofill, :autofill) {
 
   outline: none;
 
-  background: var(--input-bg);
-  color: var(--input-text);
+  background: var(--login-input-bg);
+  color: var(--login-input-text);
 
   font-size: 16px;
 
@@ -236,9 +236,9 @@ select:is(:-webkit-autofill, :autofill) {
 
   padding: 0 5px;
 
-  background: var(--input-bg);
+  background: var(--login-input-bg);
 
-  color: var(--label-color);
+  color: var(--login-label-color);
 
   font-size: 16px;
 
@@ -282,7 +282,7 @@ select:is(:-webkit-autofill, :autofill) {
 
   transform: translateY(-50%) !important;
 
-  color: var(--label-color);
+  color: var(--login-label-color);
   font-size: 17px;
 
   cursor: pointer;
@@ -376,8 +376,8 @@ select:is(:-webkit-autofill, :autofill) {
 
   outline: none;
 
-  background: var(--input-bg);
-  color: var(--input-text);
+  background: var(--login-input-bg);
+  color: var(--login-input-text);
 
   font-size: 16px;
 
@@ -404,7 +404,7 @@ select:is(:-webkit-autofill, :autofill) {
 
   padding: 0 5px;
 
-  background: var(--input-bg);
+  background: var(--login-input-bg);
 
   color: var(--primary);
 
@@ -438,8 +438,8 @@ select:is(:-webkit-autofill, :autofill) {
   border: 1px solid var(--border);
   border-radius: 8px;
 
-  background: var(--input-bg);
-  color: var(--input-text);
+  background: var(--login-input-bg);
+  color: var(--login-input-text);
 
   font-family: inherit;
   font-size: 15px;
@@ -464,7 +464,7 @@ select:is(:-webkit-autofill, :autofill) {
 
 .select-arrow {
   font-size: 11px;
-  color: var(--label-color);
+  color: var(--login-label-color);
 }
 
 /* Dropdown options container */
@@ -476,7 +476,7 @@ select:is(:-webkit-autofill, :autofill) {
 
   width: 100%;
 
-  background: var(--input-bg);
+  background: var(--login-input-bg);
 
   border: 1px solid var(--primary);
   border-top: none;
@@ -500,7 +500,7 @@ select:is(:-webkit-autofill, :autofill) {
 
   background: transparent;
 
-  color: var(--input-text);
+  color: var(--login-input-text);
 
   font-family: inherit;
   font-size: 15px;
