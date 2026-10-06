@@ -103,9 +103,9 @@
   --card_login-shadow: rgba(0, 0, 0, 0.06);
 
   /* Input */
-  --input-bg: #ffffff;
-  --input-text: #2c2f3a;
-  --label-color: #6e7a88;
+  --login-input-bg: #ffffff;
+  --login-input-text: #2c2f3a;
+  --login-label-color: #6e7a88;
 
   /* Overlay */
   --overlay: rgba(255, 255, 255, 0.15);
@@ -257,9 +257,9 @@ html.dark {
   --card_login-shadow: rgba(0, 0, 0, 0.06);
 
   /* Input */
-  --input-bg: #10151d;
-  --input-text: #eef3f8;
-  --label-color: #9ca8b7;
+  --login-input-bg: #10151d;
+  --login-input-text: #eef3f8;
+  --login-label-color: #9ca8b7;
 
   /* Overlay */
   --overlay: rgba(255, 255, 255, 0.15);
@@ -394,12 +394,12 @@ select {
   transition: var(--transition);
 }
 
-input:focus,
+/* input:focus,
 textarea:focus,
 select:focus {
   border-color: var(--primary);
   box-shadow: 0 0 0 4px var(--focus-shadow);
-}
+} */
 
 input::placeholder,
 textarea::placeholder {
