@@ -1,6 +1,6 @@
 import express from "express";
 
-import { auth } from "../middleware/AuthMiddleware.js";
+import { adminAuth } from "../middleware/adminAuth.js";
 
 import {
   getAllEvents,
@@ -8,18 +8,18 @@ import {
   createEvent,
   updateEvent,
   deleteEvent,
-} from "../controllers/User/calendar.controller.js";
+} from "../controllers/Admin/calendar.controller.js";
 
 const router = express.Router();
 
 // ============================================================
-// EMPLOYEE / USER CALENDAR AUTHENTICATION
+// ADMIN CALENDAR AUTHENTICATION
 // ============================================================
 
-router.use(auth);
+router.use(adminAuth);
 
 // ============================================================
-// EMPLOYEE / USER CALENDAR ROUTES
+// ADMIN CALENDAR ROUTES
 // ============================================================
 
 // Get all calendar events

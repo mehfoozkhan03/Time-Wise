@@ -54,6 +54,7 @@ import CalendarSkeleton from "../Common/CalendarSkeleton/CalendarSkeleton";
 
 export default function EventCalendar({ isAdmin = false }) {
   const dispatch = useDispatch();
+
   const navigate = useNavigate();
 
   const {
@@ -68,7 +69,9 @@ export default function EventCalendar({ isAdmin = false }) {
     error: holidayError,
   } = useSelector((state) => state.holiday);
 
-  const { user, recentEmployees = [] } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.auth);
+
+  const { recentEmployees = [] } = useSelector((state) => state.adminAuth);
 
   /* =========================================
      CALENDAR AUTH TYPE
@@ -121,9 +124,8 @@ export default function EventCalendar({ isAdmin = false }) {
 
   const allEvents = useMemo(() => {
     const calendarEvents = Array.isArray(events) ? events : [];
-    const holidayEvents = Array.isArray(mappedHolidays)
-      ? mappedHolidays
-      : [];
+
+    const holidayEvents = Array.isArray(mappedHolidays) ? mappedHolidays : [];
 
     return [...calendarEvents, ...holidayEvents].sort((a, b) => {
       const dateDiff = new Date(a.date) - new Date(b.date);
@@ -161,6 +163,7 @@ export default function EventCalendar({ isAdmin = false }) {
 
   const weekendCount = useMemo(() => {
     const year = currentDate.getFullYear();
+
     const month = currentDate.getMonth();
 
     const daysInMonth = new Date(year, month + 1, 0).getDate();
@@ -169,6 +172,7 @@ export default function EventCalendar({ isAdmin = false }) {
 
     for (let day = 1; day <= daysInMonth; day += 1) {
       const date = new Date(year, month, day);
+
       const dayOfWeek = date.getDay();
 
       if (dayOfWeek === 0 || dayOfWeek === 6) {
@@ -211,6 +215,7 @@ export default function EventCalendar({ isAdmin = false }) {
 
   const handleMoreEvents = useCallback((day, events) => {
     setDayEvents(events);
+
     setDayEventsModalOpen(true);
   }, []);
 
@@ -232,7 +237,9 @@ export default function EventCalendar({ isAdmin = false }) {
 
   const handleCreateEvent = useCallback(() => {
     setFormMode("CREATE");
+
     setSelectedEvent(null);
+
     setEventFormOpen(true);
   }, []);
 
@@ -242,7 +249,9 @@ export default function EventCalendar({ isAdmin = false }) {
 
   const handleCreateHoliday = useCallback(() => {
     setFormMode("CREATE");
+
     setSelectedHoliday(null);
+
     setHolidayFormOpen(true);
   }, []);
 
@@ -252,14 +261,18 @@ export default function EventCalendar({ isAdmin = false }) {
 
   const handleEditRecord = useCallback((record) => {
     setFormMode("EDIT");
+
     setSelectedEvent(null);
+
     setSelectedHoliday(null);
 
     if (record.isHoliday) {
       setSelectedHoliday(record);
+
       setHolidayFormOpen(true);
     } else {
       setSelectedEvent(record);
+
       setEventFormOpen(true);
     }
   }, []);
@@ -270,6 +283,7 @@ export default function EventCalendar({ isAdmin = false }) {
 
   const handleCloseEventForm = useCallback(() => {
     setEventFormOpen(false);
+
     setSelectedEvent(null);
   }, []);
 
@@ -279,6 +293,7 @@ export default function EventCalendar({ isAdmin = false }) {
 
   const handleCloseHolidayForm = useCallback(() => {
     setHolidayFormOpen(false);
+
     setSelectedHoliday(null);
   }, []);
 
@@ -288,7 +303,9 @@ export default function EventCalendar({ isAdmin = false }) {
 
   const handleDeleteEvent = useCallback((record) => {
     setDeleteTarget(record);
+
     setDeleteModalOpen(true);
+
     setSelectedEvent(null);
   }, []);
 
@@ -298,6 +315,7 @@ export default function EventCalendar({ isAdmin = false }) {
 
   const handleCloseDeleteModal = useCallback(() => {
     setDeleteModalOpen(false);
+
     setDeleteTarget(null);
   }, []);
 
@@ -328,6 +346,7 @@ export default function EventCalendar({ isAdmin = false }) {
         }
 
         handleCloseEventForm();
+
         setFormMode("CREATE");
       } catch (error) {
         console.error("Failed to save event:", error);
@@ -335,13 +354,7 @@ export default function EventCalendar({ isAdmin = false }) {
         setIsSubmitting(false);
       }
     },
-    [
-      dispatch,
-      formMode,
-      selectedEvent,
-      authType,
-      handleCloseEventForm,
-    ],
+    [dispatch, formMode, selectedEvent, authType, handleCloseEventForm],
   );
 
   /* =========================================
@@ -365,6 +378,7 @@ export default function EventCalendar({ isAdmin = false }) {
         }
 
         handleCloseHolidayForm();
+
         setFormMode("CREATE");
       } catch (error) {
         console.error("Failed to save holiday:", error);
@@ -404,12 +418,7 @@ export default function EventCalendar({ isAdmin = false }) {
     } finally {
       setIsDeleting(false);
     }
-  }, [
-    deleteTarget,
-    dispatch,
-    authType,
-    handleCloseDeleteModal,
-  ]);
+  }, [deleteTarget, dispatch, authType, handleCloseDeleteModal]);
 
   /* =========================================
      FILTERS

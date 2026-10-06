@@ -1,11 +1,36 @@
+import mongoose from "mongoose";
+
 import { calendarModel } from "../../models/Calendar.model.js";
 import { userModel } from "../../models/User.model.js";
 
 // ============================================================
-// EMPLOYEE EVENT TYPE CONFIGURATION
+// ADMIN EVENT TYPE CONFIGURATION
 // ============================================================
 
-const EMPLOYEE_EVENT_TYPES = ["PERSONAL", "MEETING", "BIRTHDAY"];
+const ADMIN_EVENT_TYPES = [
+  "PRESENT",
+  "LEAVE",
+  "HOLIDAY",
+  "GOVERNMENT_HOLIDAY",
+  "FESTIVAL",
+  "SPECIAL_EVENT",
+  "WORK_EVENT",
+  "REVIEW",
+  "DEADLINE",
+  "CLIENT_MEETING",
+  "TRAINING",
+  "MEETING",
+  "PERSONAL",
+];
+
+const GENERAL_EVENT_TYPES = [
+  "HOLIDAY",
+  "GOVERNMENT_HOLIDAY",
+  "FESTIVAL",
+  "SPECIAL_EVENT",
+  "WORK_EVENT",
+  "BIRTHDAY",
+];
 
 const PUBLIC_EVENT_TYPES = [
   "HOLIDAY",
@@ -29,6 +54,10 @@ const getVisibility = (type) => {
   return "PRIVATE";
 };
 
+const requiresEmployee = (type) => {
+  return !GENERAL_EVENT_TYPES.includes(type);
+};
+
 const getEmployeeName = (employee) => {
   if (!employee) {
     return "";
@@ -47,51 +76,16 @@ const getEmployeeName = (employee) => {
 
 export const getAllEvents = async (req, res) => {
   try {
-    if (!req.user?.userID) {
+    if (!req.admin?.adminID) {
       return res.status(404).json({
         success: false,
         message: "Account not found.",
       });
     }
-
-    const employee = await userModel.findById(req.user.userID);
-
-    if (!employee) {
-      return res.status(404).json({
-        success: false,
-        message: "Account not found.",
-      });
-    }
-
-    // ----------------------------------------------------------
-    // EMPLOYEE EVENT VISIBILITY
-    // ----------------------------------------------------------
-    //
-    // Employees can see:
-    //
-    // 1. Their own events
-    // 2. Public events created by an Admin
-    //
-    // We intentionally check createdByModel === "Admin".
-    // This prevents another employee's PUBLIC event from
-    // appearing in the current employee's calendar.
-    // ----------------------------------------------------------
 
     const events = await calendarModel
       .find({
         isActive: true,
-        $or: [
-          {
-            employeeId: employee._id,
-          },
-          {
-            createdByModel: "Admin",
-            visibility: "PUBLIC",
-            type: {
-              $in: PUBLIC_EVENT_TYPES,
-            },
-          },
-        ],
       })
       .sort({ date: 1 });
 
@@ -116,16 +110,7 @@ export const getAllEvents = async (req, res) => {
 
 export const getEventById = async (req, res) => {
   try {
-    if (!req.user?.userID) {
-      return res.status(404).json({
-        success: false,
-        message: "Account not found.",
-      });
-    }
-
-    const employee = await userModel.findById(req.user.userID);
-
-    if (!employee) {
+    if (!req.admin?.adminID) {
       return res.status(404).json({
         success: false,
         message: "Account not found.",
@@ -138,34 +123,6 @@ export const getEventById = async (req, res) => {
       return res.status(404).json({
         success: false,
         message: "Event not found.",
-      });
-    }
-
-    // ----------------------------------------------------------
-    // EMPLOYEE ACCESS CONTROL
-    // ----------------------------------------------------------
-    //
-    // Employee can access:
-    //
-    // - Their own event
-    // - An Admin-created PUBLIC event
-    //
-    // Employee cannot access another employee's event.
-    // ----------------------------------------------------------
-
-    const isOwnEvent =
-      event.employeeId &&
-      event.employeeId.toString() === employee._id.toString();
-
-    const isAdminPublicEvent =
-      event.createdByModel === "Admin" &&
-      event.visibility === "PUBLIC" &&
-      PUBLIC_EVENT_TYPES.includes(event.type);
-
-    if (!isOwnEvent && !isAdminPublicEvent) {
-      return res.status(403).json({
-        success: false,
-        message: "Access denied.",
       });
     }
 
@@ -189,16 +146,7 @@ export const getEventById = async (req, res) => {
 
 export const createEvent = async (req, res) => {
   try {
-    if (!req.user?.userID) {
-      return res.status(404).json({
-        success: false,
-        message: "Account not found.",
-      });
-    }
-
-    const employee = await userModel.findById(req.user.userID);
-
-    if (!employee) {
+    if (!req.admin?.adminID) {
       return res.status(404).json({
         success: false,
         message: "Account not found.",
@@ -212,6 +160,7 @@ export const createEvent = async (req, res) => {
       date,
       startTime,
       endTime,
+      employeeId,
       location,
       priority,
       color,
@@ -219,22 +168,49 @@ export const createEvent = async (req, res) => {
     } = req.body;
 
     // ----------------------------------------------------------
-    // VALIDATE EMPLOYEE EVENT TYPE
+    // VALIDATE ADMIN EVENT TYPE
     // ----------------------------------------------------------
 
-    if (!EMPLOYEE_EVENT_TYPES.includes(type)) {
+    if (!ADMIN_EVENT_TYPES.includes(type)) {
       return res.status(403).json({
         success: false,
-        message: "You cannot create this type of event.",
+        message: "Invalid event type.",
       });
     }
 
     // ----------------------------------------------------------
-    // CREATE EMPLOYEE EVENT
+    // EMPLOYEE ASSIGNMENT
     // ----------------------------------------------------------
-    //
-    // employeeId is ALWAYS taken from the authenticated user.
-    // The client cannot create an event for another employee.
+
+    let employee = null;
+
+    if (requiresEmployee(type)) {
+      if (!employeeId) {
+        return res.status(400).json({
+          success: false,
+          message: "Employee is required for this event type.",
+        });
+      }
+
+      if (!mongoose.Types.ObjectId.isValid(employeeId)) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid employee ID.",
+        });
+      }
+
+      employee = await userModel.findById(employeeId);
+
+      if (!employee) {
+        return res.status(404).json({
+          success: false,
+          message: "Employee not found.",
+        });
+      }
+    }
+
+    // ----------------------------------------------------------
+    // CREATE ADMIN EVENT
     // ----------------------------------------------------------
 
     const event = await calendarModel.create({
@@ -245,10 +221,10 @@ export const createEvent = async (req, res) => {
       startTime,
       endTime,
 
-      employeeId: employee._id,
-      employeeName: getEmployeeName(employee),
-      department: employee.department,
-      designation: employee.designation,
+      employeeId: employee ? employee._id : null,
+      employeeName: employee ? getEmployeeName(employee) : "",
+      department: employee ? employee.department : null,
+      designation: employee ? employee.designation : null,
 
       location,
       priority,
@@ -257,8 +233,8 @@ export const createEvent = async (req, res) => {
 
       visibility: getVisibility(type),
 
-      createdBy: employee._id,
-      createdByModel: "User",
+      createdBy: req.admin.adminID,
+      createdByModel: "Admin",
     });
 
     return res.status(201).json({
@@ -282,16 +258,7 @@ export const createEvent = async (req, res) => {
 
 export const updateEvent = async (req, res) => {
   try {
-    if (!req.user?.userID) {
-      return res.status(404).json({
-        success: false,
-        message: "Account not found.",
-      });
-    }
-
-    const employee = await userModel.findById(req.user.userID);
-
-    if (!employee) {
+    if (!req.admin?.adminID) {
       return res.status(404).json({
         success: false,
         message: "Account not found.",
@@ -308,32 +275,20 @@ export const updateEvent = async (req, res) => {
     }
 
     // ----------------------------------------------------------
-    // OWN EVENT CHECK
+    // VALIDATE EVENT TYPE
     // ----------------------------------------------------------
 
-    if (
-      !event.employeeId ||
-      event.employeeId.toString() !== employee._id.toString()
-    ) {
+    const newType = req.body.type || event.type;
+
+    if (!ADMIN_EVENT_TYPES.includes(newType)) {
       return res.status(403).json({
         success: false,
-        message: "You can only update your own events.",
+        message: "Invalid event type.",
       });
     }
 
     // ----------------------------------------------------------
-    // EVENT TYPE CHECK
-    // ----------------------------------------------------------
-
-    if (!EMPLOYEE_EVENT_TYPES.includes(event.type)) {
-      return res.status(403).json({
-        success: false,
-        message: "You cannot update this event.",
-      });
-    }
-
-    // ----------------------------------------------------------
-    // UPDATE EVENT DATA
+    // UPDATE BASIC EVENT DATA
     // ----------------------------------------------------------
 
     event.title = req.body.title ?? event.title;
@@ -346,28 +301,54 @@ export const updateEvent = async (req, res) => {
     event.color = req.body.color ?? event.color;
     event.isAllDay = req.body.isAllDay ?? event.isAllDay;
 
+    event.type = newType;
+    event.visibility = getVisibility(newType);
+
     // ----------------------------------------------------------
-    // OPTIONAL EVENT TYPE UPDATE
+    // HANDLE EMPLOYEE ASSIGNMENT
     // ----------------------------------------------------------
 
-    if (req.body.type) {
-      if (!EMPLOYEE_EVENT_TYPES.includes(req.body.type)) {
-        return res.status(403).json({
+    if (requiresEmployee(newType)) {
+      if (!req.body.employeeId) {
+        return res.status(400).json({
           success: false,
-          message: "Invalid event type.",
+          message: "Employee is required for this event type.",
         });
       }
 
-      event.type = req.body.type;
-      event.visibility = getVisibility(req.body.type);
+      if (!mongoose.Types.ObjectId.isValid(req.body.employeeId)) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid employee ID.",
+        });
+      }
+
+      const employee = await userModel.findById(req.body.employeeId);
+
+      if (!employee) {
+        return res.status(404).json({
+          success: false,
+          message: "Employee not found.",
+        });
+      }
+
+      event.employeeId = employee._id;
+      event.employeeName = getEmployeeName(employee);
+      event.department = employee.department || null;
+      event.designation = employee.designation || null;
+    } else {
+      event.employeeId = null;
+      event.employeeName = "";
+      event.department = null;
+      event.designation = null;
     }
 
     // ----------------------------------------------------------
-    // UPDATED BY EMPLOYEE
+    // UPDATED BY ADMIN
     // ----------------------------------------------------------
 
-    event.updatedBy = employee._id;
-    event.updatedByModel = "User";
+    event.updatedBy = req.admin.adminID;
+    event.updatedByModel = "Admin";
 
     await event.save();
 
@@ -392,16 +373,7 @@ export const updateEvent = async (req, res) => {
 
 export const deleteEvent = async (req, res) => {
   try {
-    if (!req.user?.userID) {
-      return res.status(404).json({
-        success: false,
-        message: "Account not found.",
-      });
-    }
-
-    const employee = await userModel.findById(req.user.userID);
-
-    if (!employee) {
+    if (!req.admin?.adminID) {
       return res.status(404).json({
         success: false,
         message: "Account not found.",
@@ -418,37 +390,12 @@ export const deleteEvent = async (req, res) => {
     }
 
     // ----------------------------------------------------------
-    // OWN EVENT CHECK
-    // ----------------------------------------------------------
-
-    if (
-      !event.employeeId ||
-      event.employeeId.toString() !== employee._id.toString()
-    ) {
-      return res.status(403).json({
-        success: false,
-        message: "You can only delete your own events.",
-      });
-    }
-
-    // ----------------------------------------------------------
-    // EVENT TYPE CHECK
-    // ----------------------------------------------------------
-
-    if (!EMPLOYEE_EVENT_TYPES.includes(event.type)) {
-      return res.status(403).json({
-        success: false,
-        message: "You cannot delete this event.",
-      });
-    }
-
-    // ----------------------------------------------------------
     // SOFT DELETE
     // ----------------------------------------------------------
 
     event.isActive = false;
-    event.updatedBy = employee._id;
-    event.updatedByModel = "User";
+    event.updatedBy = req.admin.adminID;
+    event.updatedByModel = "Admin";
 
     await event.save();
 
