@@ -2,14 +2,6 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { calendarService } from "../services/calendarService";
 
 /* =========================================
-   GET AUTH TYPE
-========================================= */
-
-const getAuthType = (authType) => {
-  return authType === "admin" ? "admin" : "user";
-};
-
-/* =========================================
    SORT EVENTS
 ========================================= */
 
@@ -33,12 +25,7 @@ export const fetchEvents = createAsyncThunk(
   "calendar/fetchEvents",
   async ({ authType = "user" } = {}, thunkAPI) => {
     try {
-      const requestAuthType = getAuthType(authType);
-
-      const response = await calendarService.getEvents(
-        {},
-        requestAuthType,
-      );
+      const response = await calendarService.getEvents({}, authType);
 
       return response.data.data;
     } catch (error) {
@@ -57,11 +44,9 @@ export const createEvent = createAsyncThunk(
   "calendar/createEvent",
   async ({ eventData, authType = "user" }, thunkAPI) => {
     try {
-      const requestAuthType = getAuthType(authType);
-
       const response = await calendarService.createEvent(
         eventData,
-        requestAuthType,
+        authType,
       );
 
       return response.data.data;
@@ -81,12 +66,10 @@ export const updateEvent = createAsyncThunk(
   "calendar/updateEvent",
   async ({ id, data, authType = "user" }, thunkAPI) => {
     try {
-      const requestAuthType = getAuthType(authType);
-
       const response = await calendarService.updateEvent(
         id,
         data,
-        requestAuthType,
+        authType,
       );
 
       return response.data.data;
@@ -106,9 +89,7 @@ export const deleteEvent = createAsyncThunk(
   "calendar/deleteEvent",
   async ({ id, authType = "user" }, thunkAPI) => {
     try {
-      const requestAuthType = getAuthType(authType);
-
-      await calendarService.deleteEvent(id, requestAuthType);
+      await calendarService.deleteEvent(id, authType);
 
       return id;
     } catch (error) {

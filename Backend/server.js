@@ -9,12 +9,16 @@ import { Connection } from "./config/db.js";
 import { userRoutes } from "./routes/User.routes.js";
 import postRoutes from "./routes/Post.routes.js";
 import { attendanceRouter } from "./routes/Attendance.routes.js";
+
 import calendarRoutes from "./routes/Calendar.routes.js";
+import adminCalendarRoutes from "./routes/AdminCalendar.routes.js";
+
 import holidayRouter from "./routes/Holiday.routes.js";
 import { contactRoute } from "./routes/Contact.routes.js";
 import notificationRoute from "./routes/Notification.routes.js";
 import leaveRoutes from "./routes/Leave.routes.js";
 import aiRoutes from "./routes/Ai.routes.js";
+
 import { adminRoutes } from "./routes/Admin.routes.js";
 import { adminThoughtRoute } from "./routes/AdminThought.route.js";
 import { announcementRoutes } from "./routes/Announcement.route.js";
@@ -45,21 +49,25 @@ server.use(express.json(), express.text(), cookieParser());
 
 // ================= Routes =================
 
-//# Admin Route 
+//# Admin Route
 server.use("/admin", adminRoutes);
 
 server.use("/admin/posts", adminThoughtRoute);
 
 server.use("/admin", announcementRoutes);
 
-//# User Route 
+//# Admin Calendar Route
+server.use("/admin/calendar", adminCalendarRoutes);
+
+//# User Route
 server.use("/user", userRoutes);
 
 server.use("/posts", postRoutes);
 
 server.use("/attendance", attendanceRouter);
 
-server.use('/calendar', calendarRoutes);
+//# Employee/User Calendar Route
+server.use("/calendar", calendarRoutes);
 
 server.use("/holiday", holidayRouter);
 

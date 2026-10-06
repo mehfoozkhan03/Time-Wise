@@ -18,7 +18,7 @@ const GENERAL_EVENT_TYPES = [
 const INITIAL_FORM = {
   title: "",
   description: "",
-  type: EVENT_TYPES.MEETING,
+  type: "",
   date: "",
   startTime: "",
   endTime: "",
