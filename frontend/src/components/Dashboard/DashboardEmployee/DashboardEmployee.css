@@ -308,7 +308,7 @@
   font-weight: 700;
 }
 
-/* Edit Name */
+/* ==================== EDIT EMPLOYEE NAME======================= */
 .employee-edit-name {
   display: flex;
   align-items: center;
@@ -317,6 +317,137 @@
   border-radius: 6px;
   overflow: hidden;
   background: var(--bg);
+}
+
+.dashboardEmployee-name-editable {
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+  width: fit-content;
+  padding: 5px 10px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.dashboardEmployee-name-editable:hover {
+  opacity: 0.75;
+}
+
+.dashboardEmployee-name-editable p {
+  cursor: pointer;
+}
+
+/* =========================== EDIT EMPLOYEE NAME MODAL ========================== */
+.edit-name-modal {
+  width: 420px;
+  max-width: calc(100vw - 32px);
+  padding: 0;
+  border-radius: 14px;
+  background: var(--surface);
+}
+
+.edit-name-modal-content {
+  padding: 24px;
+}
+
+.edit-name-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.edit-name-modal-header h3 {
+  margin: 0 0 6px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.edit-name-modal-header p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text_secondary);
+}
+
+.edit-name-modal-close {
+  border: none;
+  background: transparent;
+  padding: 4px;
+  cursor: pointer;
+  font-size: 22px;
+  color: red;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+}
+
+/* INPUTS */
+.edit-name-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.edit-name-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.edit-name-input-group label {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.edit-name-input-group input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 11px 13px;
+  border: 1px solid var(--input-border);
+  border-radius: 8px;
+  outline: none;
+  font-size: 14px;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+/* ACTIONS */
+.edit-name-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 26px;
+}
+
+.edit-name-cancel,
+.edit-name-save {
+  border: none;
+  border-radius: 8px;
+  padding: 10px 17px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.edit-name-cancel {
+  background: var(--primary);
+  color: var(--text_primary);
+}
+
+.edit-name-cancel:hover {
+  background: var(--primary_hover);
+}
+
+.edit-name-save {
+  background: var(--button);
+  color: var(--text_primary);
+}
+
+.edit-name-save:hover {
+  background: var(--buttonhover);
 }
 
 .employee-edit-name input {
@@ -335,7 +466,6 @@
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.6);
-
   display: flex;
   align-items: center;
   justify-content: center;
@@ -346,7 +476,6 @@
 .password-modal {
   width: 420px;
   max-width: calc(100% - 40px);
-
   background: #fff;
   border-radius: 14px;
   padding: 30px;
@@ -357,18 +486,13 @@
 .password-modal-icon {
   width: 55px;
   height: 55px;
-
   margin: 0 auto 16px;
-
   border-radius: 50%;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   background: #fff4d6;
   color: #fdcb4b;
-
   font-size: 24px;
 }
 
