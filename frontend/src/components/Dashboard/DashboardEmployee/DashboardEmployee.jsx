@@ -2,7 +2,7 @@ import "./DashboardEmployee.css";
 
 import { FaCheck, FaPlus } from "react-icons/fa6";
 import { FaSearch } from "react-icons/fa";
-import { FaEyeSlash } from "react-icons/fa";
+
 import {
   MdEdit,
   MdDelete,
@@ -12,7 +12,7 @@ import {
 } from "react-icons/md";
 import { IoClose } from "react-icons/io5";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
-import { FaKey } from "react-icons/fa";
+import { FaEye, FaEyeSlash, FaKey } from "react-icons/fa";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -95,6 +95,8 @@ export const DashboardEmployee = () => {
   const dropdownRef = useRef(null);
 
   const statusOptions = ["All", "Active", "Inactive"];
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   //# ========================= EDIT STATE =========================
 
@@ -439,6 +441,9 @@ export const DashboardEmployee = () => {
       newPassword: "",
       confirmPassword: "",
     });
+
+    setShowNewPassword(false);
+    setShowConfirmPassword(false);
   };
 
   //# Close Modal
@@ -554,10 +559,7 @@ export const DashboardEmployee = () => {
         {/* EMPLOYEE FILTER */}
         {/* ========================= */}
 
-        <div
-          ref={dropdownRef}
-          className="employe-search-filter"
-        >
+        <div ref={dropdownRef} className="employe-search-filter">
           {/* SEARCH */}
           <div className="dashboardEmployee-searchbar">
             <div className="dashboardEmployee-input-container">
@@ -573,10 +575,7 @@ export const DashboardEmployee = () => {
               />
             </div>
 
-            <div
-              onClick={handleSearch}
-              className="employee-searchBtn"
-            >
+            <div onClick={handleSearch} className="employee-searchBtn">
               <button type="button">Search</button>
             </div>
           </div>
@@ -951,29 +950,71 @@ export const DashboardEmployee = () => {
                               </p>
 
                               <div className="password-input-group">
-                                <label>New Password</label>
+                                <label htmlFor="newPassword">
+                                  New Password
+                                </label>
 
-                                <input
-                                  type="password"
-                                  name="newPassword"
-                                  value={passwordData.newPassword}
-                                  onChange={handlePasswordChange}
-                                  placeholder="Enter new password"
-                                  disabled={isChangingPassword}
-                                />
+                                <div className="password-field">
+                                  <input
+                                    id="newPassword"
+                                    type={showNewPassword ? "text" : "password"}
+                                    name="newPassword"
+                                    value={passwordData.newPassword}
+                                    onChange={handlePasswordChange}
+                                    placeholder="Enter new password"
+                                    disabled={isChangingPassword}
+                                  />
+
+                                  <button
+                                    type="button"
+                                    className="password-eye"
+                                    onClick={() =>
+                                      setShowNewPassword((prev) => !prev)
+                                    }
+                                    disabled={isChangingPassword}
+                                  >
+                                    {showNewPassword ? (
+                                      <FaEye />
+                                    ) : (
+                                      <FaEyeSlash />
+                                    )}
+                                  </button>
+                                </div>
                               </div>
 
                               <div className="password-input-group">
-                                <label>Confirm Password</label>
+                                <label htmlFor="confirmPassword">
+                                  Confirm Password
+                                </label>
 
-                                <input
-                                  type="password"
-                                  name="confirmPassword"
-                                  value={passwordData.confirmPassword}
-                                  onChange={handlePasswordChange}
-                                  placeholder="Confirm new password"
-                                  disabled={isChangingPassword}
-                                />
+                                <div className="password-field">
+                                  <input
+                                    id="confirmPassword"
+                                    type={
+                                      showConfirmPassword ? "text" : "password"
+                                    }
+                                    name="confirmPassword"
+                                    value={passwordData.confirmPassword}
+                                    onChange={handlePasswordChange}
+                                    placeholder="Confirm new password"
+                                    disabled={isChangingPassword}
+                                  />
+
+                                  <button
+                                    type="button"
+                                    className="password-eye"
+                                    onClick={() =>
+                                      setShowConfirmPassword((prev) => !prev)
+                                    }
+                                    disabled={isChangingPassword}
+                                  >
+                                    {showConfirmPassword ? (
+                                      <FaEye />
+                                    ) : (
+                                      <FaEyeSlash />
+                                    )}
+                                  </button>
+                                </div>
                               </div>
 
                               <div className="password-modal-actions">
@@ -1033,10 +1074,7 @@ export const DashboardEmployee = () => {
           </button>
 
           {users.length < totalUsers && (
-            <button
-              onClick={handleLoadMore}
-              disabled={isLoading}
-            >
+            <button onClick={handleLoadMore} disabled={isLoading}>
               {isLoading ? "Loading..." : "Load More"}
             </button>
           )}

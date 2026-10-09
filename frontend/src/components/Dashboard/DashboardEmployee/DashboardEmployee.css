@@ -329,129 +329,302 @@
   color: var(--text_primary);
   background: transparent;
 }
+/* =========================================================
+   CHANGE PASSWORD MODAL
+========================================================= */
 
-/* Password Change */
+/* ---------- OVERLAY ---------- */
+
 .password-modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.6);
+  position: fixed !important;
+  inset: 0 !important;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 
-  z-index: 9999;
+  padding: 20px;
+
+  background: rgba(15, 23, 42, 0.68) !important;
+  backdrop-filter: blur(7px);
+
+  z-index: 99999 !important;
 }
+
+
+/* ---------- MODAL ---------- */
 
 .password-modal {
-  width: 420px;
-  max-width: calc(100% - 40px);
+  position: relative;
 
-  background: #fff;
-  border-radius: 14px;
-  padding: 30px;
+  width: 440px;
+  max-width: calc(100vw - 32px);
 
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+  padding: 32px;
+
+  background: #ffffff !important;
+
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+
+  box-shadow:
+    0 25px 60px rgba(0, 0, 0, 0.25),
+    0 8px 25px rgba(0, 0, 0, 0.08);
+
+  animation: passwordModalIn 0.25s ease;
 }
 
+
+/* ---------- MODAL ANIMATION ---------- */
+
+@keyframes passwordModalIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+
+/* ---------- ICON ---------- */
+
 .password-modal-icon {
-  width: 55px;
-  height: 55px;
+  width: 58px;
+  height: 58px;
 
-  margin: 0 auto 16px;
-
-  border-radius: 50%;
+  margin: 0 auto 18px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  background: #fff4d6;
-  color: #fdcb4b;
+  border-radius: 16px;
 
-  font-size: 24px;
+  background: #fff7df;
+  color: #f5b82e;
+
+  font-size: 23px;
+
+  box-shadow:
+    0 5px 15px rgba(253, 203, 75, 0.15);
 }
+
+
+/* ---------- TITLE ---------- */
 
 .password-modal h3 {
   margin: 0;
+
   text-align: center;
-  font-size: 20px;
-  color: #222;
+
+  color: #202733;
+
+  font-size: 21px;
+  font-weight: 700;
+
+  letter-spacing: -0.3px;
 }
 
+
+/* ---------- USER TEXT ---------- */
+
 .password-modal-user {
-  margin: 10px 0 24px;
+  margin: 8px 0 28px;
+
   text-align: center;
-  font-size: 14px;
-  color: #777;
+
+  color: #7a8494;
+
+  font-size: 13px;
+  line-height: 1.5;
 }
+
+.password-modal-user strong {
+  color: #3f4856;
+  font-weight: 600;
+}
+
+
+/* =========================================================
+   PASSWORD INPUT
+========================================================= */
 
 .password-input-group {
   margin-bottom: 18px;
 }
 
+
+/* LABEL */
+
 .password-input-group label {
   display: block;
-  margin-bottom: 7px;
 
-  font-size: 14px;
-  font-weight: 500;
-  color: #333;
+  margin-bottom: 8px;
+
+  color: #3b4451;
+
+  font-size: 13px;
+  font-weight: 600;
 }
+
+
+/* INPUT */
 
 .password-input-group input {
   width: 100%;
+  height: 46px;
+
+  padding: 0 14px;
+
   box-sizing: border-box;
 
-  padding: 11px 13px;
+  background: #f8fafc !important;
 
-  border: 1px solid #ddd;
-  border-radius: 7px;
+  border: 1px solid #d8dee7;
+  border-radius: 9px;
 
   outline: none;
+
+  color: #1f2937 !important;
+  -webkit-text-fill-color: #1f2937 !important;
+
   font-size: 14px;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
 }
 
-.password-input-group input:focus {
-  border-color: #fdcb4b;
+
+/* PLACEHOLDER */
+
+.password-input-group input::placeholder {
+  color: #98a2b3;
 }
+
+
+/* HOVER */
+
+.password-input-group input:hover {
+  background: #ffffff !important;
+
+  border-color: #b9c2ce;
+}
+
+
+/* FOCUS */
+
+.password-input-group input:focus {
+  background: #ffffff !important;
+
+  border-color: var(--primary);
+
+  box-shadow:
+    0 0 0 3px
+    color-mix(
+      in srgb,
+      var(--primary) 14%,
+      transparent
+    );
+}
+
+
+/* DISABLED */
+
+.password-input-group input:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+
+/* =========================================================
+   ACTION BUTTONS
+========================================================= */
 
 .password-modal-actions {
   display: flex;
+  align-items: center;
   justify-content: flex-end;
-  gap: 12px;
 
-  margin-top: 25px;
+  gap: 10px;
+
+  margin-top: 28px;
 }
 
-.password-modal-actions button {
-  min-width: 110px;
 
-  padding: 10px 16px;
+/* COMMON BUTTON */
+
+.password-modal-actions button {
+  height: 42px;
+
+  padding: 0 18px;
 
   border: none;
-  border-radius: 7px;
+  border-radius: 8px;
 
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
 
   cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease,
+    opacity 0.2s ease;
 }
+
+
+/* CANCEL */
 
 .password-modal-cancel {
-  background: #eee;
-  color: #444;
+  min-width: 95px;
+
+  background: #eef1f5;
+  color: #4b5563;
 }
+
+.password-modal-cancel:hover {
+  background: #e3e7ed;
+
+  transform: translateY(-1px);
+}
+
+
+/* CHANGE PASSWORD */
 
 .password-modal-confirm {
-  background: #fdcb4b;
-  color: #222;
+  min-width: 145px;
+
+  background: var(--button);
+  color: #ffffff;
 }
 
-.password-modal-actions button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+.password-modal-confirm:hover {
+  background: var(--buttonhover);
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 6px 15px rgba(0, 0, 0, 0.14);
 }
+
+
+/* DISABLED */
+
+.password-modal-actions button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+
+  transform: none;
+  box-shadow: none;
+}
+
 
 /* Add Employee */
 .add-employee-scroll {
@@ -520,6 +693,679 @@
   background: var(--border);
   border-radius: 10px;
 }
+
+
+/* =========================================================
+   ADD EMPLOYEE MODAL - CLEAN BORDER & CARD
+========================================================= */
+
+/* OVERLAY */
+.employee-profile-overlay {
+  position: fixed !important;
+  inset: 0 !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  padding: 25px !important;
+
+  background: rgba(0, 0, 0, 0.62) !important;
+  backdrop-filter: blur(5px) !important;
+
+  z-index: 9999 !important;
+}
+/* =========================================================
+   PASSWORD INPUT GROUP
+========================================================= */
+
+.password-input-group {
+  width: 100%;
+  margin-bottom: 18px;
+}
+
+.password-input-group label {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: #374151;
+
+  font-size: 13px;
+  font-weight: 600;
+}
+
+
+/* =========================================================
+   PASSWORD FIELD
+========================================================= */
+
+.password-field {
+  position: relative;
+
+  width: 100%;
+}
+
+
+/* INPUT */
+
+.password-field input {
+  display: block;
+
+  width: 100% !important;
+  height: 46px;
+
+  box-sizing: border-box;
+
+  padding: 0 44px 0 13px !important;
+
+  border: 1px solid #d9dee7 !important;
+  border-radius: 8px !important;
+
+  outline: none;
+
+  background: #f8fafc !important;
+
+  color: #1f2937 !important;
+  -webkit-text-fill-color: #1f2937 !important;
+
+  font-size: 13px;
+
+  transition: 0.2s ease;
+}
+
+
+/* PLACEHOLDER */
+
+.password-field input::placeholder {
+  color: #9ca3af !important;
+  opacity: 1;
+}
+
+
+/* HOVER */
+
+.password-field input:hover {
+  border-color: #c4ccd7 !important;
+}
+
+
+/* FOCUS */
+
+.password-field input:focus {
+  background: #fff !important;
+
+  border-color: var(--primary) !important;
+
+  box-shadow: 0 0 0 3px
+    color-mix(
+      in srgb,
+      var(--primary) 12%,
+      transparent
+    );
+}
+
+
+/* =========================================================
+   EYE BUTTON
+========================================================= */
+
+.password-eye {
+  position: absolute;
+
+  top: 50%;
+  right: 10px;
+
+  width: 30px;
+  height: 30px;
+
+  padding: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transform: translateY(-50%);
+
+  border: none !important;
+  background: transparent !important;
+
+  color: #7b8794;
+
+  font-size: 15px;
+
+  cursor: pointer;
+
+  z-index: 2;
+}
+
+.password-eye:hover {
+  color: var(--primary);
+}
+
+.password-eye:focus {
+  outline: none;
+}
+
+.password-eye:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* OUTER WRAPPER */
+.employee-profile-modal {
+  position: relative !important;
+
+  width: auto !important;
+  max-width: none !important;
+  max-height: none !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+
+  background: transparent !important;
+
+  border: none !important;
+  border-radius: 0 !important;
+
+  box-shadow: none !important;
+
+  overflow: visible !important;
+}
+
+
+/* =========================================================
+   MAIN MODAL
+========================================================= */
+
+.add-employee-modal {
+  position: relative !important;
+
+  width: 520px !important;
+  max-width: calc(100vw - 40px) !important;
+
+  max-height: 88vh !important;
+
+  background: #ffffff !important;
+
+  /* ⭐ VISIBLE MODAL BORDER */
+  border: 1px solid #cfd6df !important;
+
+  /* ⭐ CLEAN ROUNDED CORNERS */
+  border-radius: 18px !important;
+
+  /* ⭐ PROFESSIONAL SHADOW */
+  box-shadow:
+    0 25px 60px rgba(0, 0, 0, 0.25),
+    0 8px 20px rgba(0, 0, 0, 0.08) !important;
+
+  overflow: hidden !important;
+
+  z-index: 10000 !important;
+}
+
+
+/* =========================================================
+   FORM SCROLL AREA
+========================================================= */
+
+.add-employee-modal .add-employee-scroll {
+  width: 100% !important;
+
+  max-height: 88vh !important;
+
+  box-sizing: border-box !important;
+
+  /* ⭐ SPACE FROM MODAL BORDER */
+  padding: 28px !important;
+
+  background: #ffffff !important;
+
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+
+  scrollbar-width: thin;
+   border-radius:13px;
+  scrollbar-color:
+    var(--primary)
+    transparent;
+}
+
+
+/* =========================================================
+   SCROLLBAR
+========================================================= */
+
+.add-employee-modal .add-employee-scroll::-webkit-scrollbar {
+  width: 5px !important;
+}
+
+.add-employee-modal .add-employee-scroll::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+.add-employee-modal .add-employee-scroll::-webkit-scrollbar-thumb {
+  background: var(--primary) !important;
+
+  border-radius: 10px !important;
+}
+
+.add-employee-modal .add-employee-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--buttonhover) !important;
+}
+
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.add-employee-modal .form {
+  width: 100% !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+
+  background: #ffffff !important;
+
+  border: none !important;
+}
+
+
+/* =========================================================
+   INPUT BOX
+========================================================= */
+
+.add-employee-modal .form .input-box {
+  width: 100% !important;
+
+  margin-bottom: 15px !important;
+
+  box-sizing: border-box !important;
+}
+
+
+/* =========================================================
+   INPUT
+========================================================= */
+
+.add-employee-modal .form .input-box input {
+  width: 100% !important;
+
+  height: 46px !important;
+
+  box-sizing: border-box !important;
+
+  padding: 0 14px !important;
+
+  background: #ffffff !important;
+
+  border: 1px solid #cfd6df !important;
+
+  border-radius: 9px !important;
+
+  color: #222831 !important;
+
+  -webkit-text-fill-color: #222831 !important;
+
+  font-size: 14px !important;
+
+  outline: none !important;
+
+  transition: all 0.2s ease !important;
+}
+
+
+/* INPUT HOVER */
+
+.add-employee-modal
+.form
+.input-box
+input:hover {
+  border-color: #aeb8c5 !important;
+}
+
+
+/* INPUT FOCUS */
+
+.add-employee-modal
+.form
+.input-box
+input:focus {
+  border-color: var(--primary) !important;
+
+  box-shadow:
+    0 0 0 3px
+    color-mix(
+      in srgb,
+      var(--primary) 14%,
+      transparent
+    ) !important;
+}
+
+
+/* =========================================================
+   PASSWORD
+========================================================= */
+
+.add-employee-modal
+.form
+.password-box {
+  position: relative !important;
+}
+
+.add-employee-modal
+.form
+.password-box input {
+  padding-right: 45px !important;
+}
+
+.add-employee-modal
+.form
+.password-box .eye-icon {
+  color: #687386 !important;
+
+  cursor: pointer !important;
+
+  transition: color 0.2s ease;
+}
+
+.add-employee-modal
+.form
+.password-box .eye-icon:hover {
+  color: var(--primary) !important;
+}
+
+
+/* =========================================================
+   SELECT
+========================================================= */
+
+.add-employee-modal
+.form
+.select-box {
+  position: relative !important;
+
+  width: 100% !important;
+
+  margin-bottom: 15px !important;
+
+  z-index: 1 !important;
+}
+
+
+/* OPEN SELECT */
+.add-employee-modal
+.form
+.select-box:has(
+  .select-trigger.select-open
+) {
+  z-index: 100000 !important;
+}
+
+
+/* SELECT BUTTON */
+
+.add-employee-modal
+.form
+.select-trigger {
+  width: 100% !important;
+
+  height: 46px !important;
+
+  box-sizing: border-box !important;
+
+  padding: 0 14px !important;
+
+  display: flex !important;
+
+  align-items: center !important;
+
+  justify-content: space-between !important;
+
+  background: #ffffff !important;
+
+  border: 1px solid #cfd6df !important;
+
+  border-radius: 9px !important;
+
+  color: #222831 !important;
+
+  font-size: 14px !important;
+
+  cursor: pointer !important;
+
+  transition: all 0.2s ease !important;
+}
+
+
+/* SELECT HOVER */
+
+.add-employee-modal
+.form
+.select-trigger:hover {
+  border-color: var(--primary) !important;
+
+  background: #f8fcff !important;
+}
+
+
+/* SELECT OPEN */
+
+.add-employee-modal
+.form
+.select-trigger.select-open {
+  border-color: var(--primary) !important;
+
+  box-shadow:
+    0 0 0 3px
+    color-mix(
+      in srgb,
+      var(--primary) 14%,
+      transparent
+    ) !important;
+}
+
+
+/* =========================================================
+   SELECT DROPDOWN
+========================================================= */
+
+.add-employee-modal
+.form
+.select-options {
+  position: absolute !important;
+
+  top: calc(100% + 5px) !important;
+
+  left: 0 !important;
+
+  width: 100% !important;
+
+  max-height: 190px !important;
+
+  overflow-y: auto !important;
+
+  background: #ffffff !important;
+
+  border: 1px solid #cfd6df !important;
+
+  border-radius: 9px !important;
+
+  box-shadow:
+    0 10px 25px rgba(0, 0, 0, 0.14) !important;
+
+  z-index: 100001 !important;
+}
+
+/* =========================================================
+   SELECT OPTION
+========================================================= */
+
+.add-employee-modal
+.form
+.select-option {
+  min-height: 42px !important;
+
+  padding: 0 14px !important;
+
+  display: flex !important;
+
+  align-items: center !important;
+
+  background: #ffffff !important;
+
+  color: #2c3440 !important;
+
+  font-size: 14px !important;
+
+  cursor: pointer !important;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease !important;
+}
+
+
+/* ⭐ BLUE HOVER */
+
+.add-employee-modal
+.form
+.select-option:hover {
+  background: var(--primary) !important;
+
+  color: #ffffff !important;
+}
+
+
+/* SELECTED */
+
+.add-employee-modal
+.form
+.select-option-active {
+  background: var(--primary) !important;
+
+  color: #ffffff !important;
+
+  font-weight: 500 !important;
+}
+
+
+/* =========================================================
+   SUBMIT BUTTON
+========================================================= */
+
+.add-employee-modal
+.form
+.loginsumit {
+  width: 100% !important;
+
+  height: 46px !important;
+
+  margin-top: 5px !important;
+
+  border: none !important;
+
+  border-radius: 9px !important;
+
+  background: var(--button) !important;
+
+  color: #ffffff !important;
+
+  font-size: 14px !important;
+
+  font-weight: 600 !important;
+
+  cursor: pointer !important;
+
+  transition: all 0.2s ease !important;
+}
+
+.add-employee-modal
+.form
+.loginsumit:hover {
+  background: var(--buttonhover) !important;
+
+  transform: translateY(-1px) !important;
+
+  box-shadow:
+    0 6px 15px rgba(0, 0, 0, 0.15) !important;
+}
+
+
+
+/* ==========================================================
+   DROPDOWN Z-INDEX FIX
+========================================================== */
+
+/* Modal */
+.add-employee-modal {
+  position: relative !important;
+  z-index: 10000 !important;
+  overflow: visible !important;
+}
+
+/* Scroll area */
+.add-employee-modal .add-employee-scroll {
+  position: relative !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+}
+
+/* Normal select */
+.add-employee-modal .form .select-box {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+/* Only opened select */
+.add-employee-modal .form .select-box:has(.select-trigger.select-open) {
+  z-index: 100000 !important;
+}
+
+/* Dropdown list */
+.add-employee-modal .form .select-options {
+  position: absolute !important;
+  top: 44px !important;
+  left: 0 !important;
+  width: 100% !important;
+  z-index: 100001 !important;
+
+  background: #ffffff !important;
+  border: 1px solid var(--primary) !important;
+  border-radius: 0 0 7px 7px !important;
+
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15) !important;
+
+  overflow: hidden !important;
+}
+
+/* ===============================
+   ADD EMPLOYEE INPUT TEXT - BLACK
+================================ */
+
+.add-employee-modal input,
+.add-employee-modal input[type="text"],
+.add-employee-modal input[type="email"],
+.add-employee-modal input[type="password"] {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+  caret-color: #000000 !important;
+}
+
+/* Password specifically */
+.add-employee-modal .password-box input {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+  caret-color: #000000 !important;
+}
+
+/* First name / Last name etc. */
+.add-employee-modal .input-box input {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+
 
 /* Resonsive */
 @media (max-width: 1000px) {
