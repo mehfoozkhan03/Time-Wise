@@ -278,7 +278,36 @@ export const DashboardEmployee = () => {
     });
   };
 
+  // ========================= OPEN NAME MODAL =========================
+  const handleNameClick = () => {
+    if (!editingUserId) return;
+
+    setShowNameModal(true);
+  };
+
+  // ========================= CLOSE NAME MODAL =========================
+  const handleCloseNameModal = () => {
+    setShowNameModal(false);
+  };
+
+  // ========================= SAVE NAME =========================
+  const handleSaveName = () => {
+    if (!editData.firstName.trim()) {
+      alert("First name is required.");
+      return;
+    }
+
+    if (!editData.lastName.trim()) {
+      alert("Last name is required.");
+      return;
+    }
+
+    setShowNameModal(false);
+  };
+
   //# ========================= EDIT INPUT CHANGE =========================
+  // ========================= NAME EDIT MODAL =========================
+  const [showNameModal, setShowNameModal] = useState(false);
 
   const handleEditChange = (e) => {
     const { name, value } = e.target;
@@ -718,26 +747,20 @@ export const DashboardEmployee = () => {
                       </div>
 
                       {/* NAME */}
-
-                      <div className="dashboardEmployee-name">
-                        {isEditing ? (
-                          <div className="employee-edit-name">
-                            <input
-                              type="text"
-                              name="firstName"
-                              value={`${editData.firstName} ${editData.lastName}`}
-                              onChange={handleEditChange}
-                              placeholder="First name"
-                            />
-                          </div>
-                        ) : (
-                          <p>
-                            {el.firstName?.charAt(0).toUpperCase() +
-                              el.firstName?.slice(1)}{" "}
-                            {el.lastName?.charAt(0).toUpperCase() +
-                              el.lastName?.slice(1)}
-                          </p>
-                        )}
+                      <div
+                        className={`dashboardEmployee-name ${
+                          isEditing ? "dashboardEmployee-name-editable" : ""
+                        }`}
+                        onClick={isEditing ? handleNameClick : undefined}
+                      >
+                        <p>
+                          {isEditing
+                            ? `${editData.firstName} ${editData.lastName}`
+                            : `${el.firstName?.charAt(0).toUpperCase() + el.firstName?.slice(1)} ${
+                                el.lastName?.charAt(0).toUpperCase() +
+                                el.lastName?.slice(1)
+                              }`}
+                        </p>
                       </div>
                     </div>
 
@@ -1080,6 +1103,76 @@ export const DashboardEmployee = () => {
           )}
         </div>
       </div>
+
+      {showNameModal && (
+        <Modal
+          isOpen={showNameModal}
+          onClose={handleCloseNameModal}
+          className="edit-name-modal"
+        >
+          <div className="edit-name-modal-content">
+            <div className="edit-name-modal-header">
+              <div>
+                <h3>Edit Employee Name</h3>
+                <p>Update the employee's first and last name.</p>
+              </div>
+
+              <button
+                type="button"
+                className="edit-name-modal-close"
+                onClick={handleCloseNameModal}
+              >
+                <IoClose />
+              </button>
+            </div>
+
+            <div className="edit-name-form">
+              <div className="edit-name-input-group">
+                <label>First Name</label>
+
+                <input
+                  type="text"
+                  name="firstName"
+                  value={editData.firstName}
+                  onChange={handleEditChange}
+                  placeholder="Enter first name"
+                  autoFocus
+                />
+              </div>
+
+              <div className="edit-name-input-group">
+                <label>Last Name</label>
+
+                <input
+                  type="text"
+                  name="lastName"
+                  value={editData.lastName}
+                  onChange={handleEditChange}
+                  placeholder="Enter last name"
+                />
+              </div>
+            </div>
+
+            <div className="edit-name-modal-actions">
+              <button
+                type="button"
+                className="edit-name-cancel"
+                onClick={handleCloseNameModal}
+              >
+                Cancel
+              </button>
+
+              <button
+                type="button"
+                className="edit-name-save"
+                onClick={handleSaveName}
+              >
+                Save Name
+              </button>
+            </div>
+          </div>
+        </Modal>
+      )}
 
       {showAddEmployee && (
         <Modal
