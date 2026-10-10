@@ -6,6 +6,7 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import { attendanceModel } from "../../models/Attendance.model.js";
 import { getTodayRange } from "../../utils/attendanceHelper.js";
+
 dotenv.config();
 
 const validateLogin = (body) => {
@@ -28,6 +29,7 @@ export const admin_login = async (req, res) => {
       email: req.body.email,
       role: "admin",
     });
+
     console.log(`🚀 ~ admin:`, admin);
 
     if (!admin) {
@@ -85,7 +87,6 @@ export const admin_login = async (req, res) => {
   } catch (error) {
     console.error("Admin Login Error:", error);
 
-    // Check if it's a MongoDB connection error
     if (error.name === "MongooseError" || error.message.includes("connect")) {
       return res.status(500).json({
         success: false,
@@ -96,7 +97,6 @@ export const admin_login = async (req, res) => {
       });
     }
 
-    // Generic server error
     return res.status(500).json({
       success: false,
       title: "Something Went Wrong",
@@ -138,7 +138,7 @@ export const adminLogout = async (req, res) => {
   }
 };
 
-//# ========================= Get All Usres ============================
+//# ========================= Get All Users ============================
 
 export const getAllUser = async (req, res) => {
   try {
@@ -150,8 +150,6 @@ export const getAllUser = async (req, res) => {
     const status = req.query.status || "All";
 
     const skip = (page - 1) * limit;
-
-    // ================= Search Filter =================
 
     const filter = {};
 
@@ -172,13 +170,10 @@ export const getAllUser = async (req, res) => {
       ];
     }
 
-    //# ================= Department Filter =================
-
     if (department !== "All") {
       filter.department = department;
     }
 
-    //# ================= Status Filter =================
     const ACTIVE_TIME = 15 * 60 * 1000;
 
     if (status === "Active") {
@@ -195,8 +190,6 @@ export const getAllUser = async (req, res) => {
       };
     }
 
-    //# ================= Get Users =================
-
     const users = await userModel
       .find(filter)
       .select("-password")
@@ -204,11 +197,7 @@ export const getAllUser = async (req, res) => {
       .skip(skip)
       .limit(limit);
 
-    //# ================= Total Users =================
-
     const totalUsers = await userModel.countDocuments(filter);
-
-    //# ================= Online Status =================
 
     const usersWithStatus = users.map((user) => {
       const isOnline =
@@ -236,6 +225,67 @@ export const getAllUser = async (req, res) => {
       success: false,
       message: "Failed to fetch users",
       error: error.message,
+    });
+  }
+};
+
+// ================= Calendar Employee Search =================
+
+export const getCalendarEmployees = async (req, res) => {
+  try {
+    const requestedPage = Number.parseInt(req.query.page, 10) || 1;
+    const requestedLimit = Number.parseInt(req.query.limit, 10) || 20;
+
+    const page = Math.max(1, requestedPage);
+    const limit = Math.min(50, Math.max(1, requestedLimit));
+    const search = String(req.query.search || "").trim();
+
+    const filter = {
+      role: "Employee",
+    };
+
+    if (search) {
+      const escapedSearch = search.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+      const searchRegex = new RegExp(escapedSearch, "i");
+
+      filter.$or = [
+        { firstName: searchRegex },
+        { lastName: searchRegex },
+        { email: searchRegex },
+        { name: searchRegex },
+      ];
+    }
+
+    const skip = (page - 1) * limit;
+
+    const [employees, totalEmployees] = await Promise.all([
+      userModel
+        .find(filter)
+        .select("_id firstName lastName name email role")
+        .sort({ firstName: 1, lastName: 1 })
+        .skip(skip)
+        .limit(limit)
+        .lean(),
+
+      userModel.countDocuments(filter),
+    ]);
+
+    return res.status(200).json({
+      success: true,
+      message: "Calendar employees fetched successfully.",
+      employees,
+      totalEmployees,
+      page,
+      limit,
+      totalPages: Math.ceil(totalEmployees / limit),
+    });
+  } catch (error) {
+    console.error("Get Calendar Employees Error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch Calendar employees.",
     });
   }
 };

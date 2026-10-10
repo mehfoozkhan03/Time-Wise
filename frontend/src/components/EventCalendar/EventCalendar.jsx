@@ -1,60 +1,47 @@
 import "./EventCalendar.css";
-
 import { useMemo, useState, useCallback, useEffect } from "react";
-
+import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-
 import { useNavigate } from "react-router-dom";
-
 import { FaLock, FaArrowLeft } from "react-icons/fa";
-
 import useCalendar from "../../hooks/useCalendar";
-
 import useEventFilter from "../../hooks/useEventFilter";
-
 import { EVENT_TYPES } from "../../data/eventTypes";
-
 import {
   fetchEvents,
   createEvent,
   updateEvent,
   deleteEvent,
 } from "../../store/calendarSlice";
-
 import {
   fetchHolidays,
   createHoliday,
   updateHoliday,
   deleteHoliday,
 } from "../../store/holidaySlice";
-
-import { fetchRecentEmployees } from "../../store/adminAuthSlice";
-
 import { mapHolidayList } from "../../utils/holidayMapper";
-
 import CalendarHeader from "./CalendarHeader/CalendarHeader";
-
 import CalendarGrid from "./CalendarGrid/CalendarGrid";
-
 import CalendarSidebar from "./CalendarSidebar/CalendarSidebar";
-
 import EventFilters from "./EventFilters/EventFilters";
-
 import EventModal from "./EventModal/EventModal";
-
 import EventFormModal from "./EventFormModal/EventFormModal";
-
 import HolidayFormModal from "./HolidayFormModal/HolidayFormModal";
-
 import DeleteModal from "./DeleteModal/DeleteModal";
-
 import DayEventsModal from "./DayEventsModal/DayEventsModal";
-
 import CalendarSkeleton from "../Common/CalendarSkeleton/CalendarSkeleton";
+
+/* =========================================
+   Axios Instance
+========================================= */
+
+const API = axios.create({
+  baseURL: import.meta.env.VITE_API_URL,
+  withCredentials: true,
+});
 
 export default function EventCalendar({ isAdmin = false }) {
   const dispatch = useDispatch();
-
   const navigate = useNavigate();
 
   const {
@@ -71,7 +58,7 @@ export default function EventCalendar({ isAdmin = false }) {
 
   const { user } = useSelector((state) => state.auth);
 
-  const { recentEmployees = [] } = useSelector((state) => state.adminAuth);
+  const [calendarEmployees, setCalendarEmployees] = useState([]);
 
   /* =========================================
      CALENDAR AUTH TYPE
@@ -80,21 +67,71 @@ export default function EventCalendar({ isAdmin = false }) {
   const authType = isAdmin ? "admin" : "user";
 
   /* =========================================
-     FETCH CALENDAR DATA
+     FETCH CALENDAR DATA AND EMPLOYEES
   ========================================= */
 
   useEffect(() => {
-    dispatch(
-      fetchEvents({
-        authType,
-      }),
-    );
+    let isActive = true;
 
+    dispatch(fetchEvents({ authType }));
     dispatch(fetchHolidays());
 
-    if (isAdmin) {
-      dispatch(fetchRecentEmployees());
-    }
+    const loadCalendarEmployees = async () => {
+      if (!isAdmin) {
+        setCalendarEmployees([]);
+        return;
+      }
+
+      try {
+        const limit = 50;
+
+        // Fetch the first page to determine the total number of pages.
+        const firstResponse = await API.get("/admin/calendar-employees", {
+          params: {
+            page: 1,
+            limit,
+          },
+        });
+
+        const firstData = firstResponse.data;
+
+        const allEmployees = Array.isArray(firstData.employees)
+          ? [...firstData.employees]
+          : [];
+
+        const totalPages = Math.max(1, Number(firstData.totalPages) || 1);
+
+        // Fetch remaining pages so no employees are omitted.
+        for (let page = 2; page <= totalPages; page += 1) {
+          const response = await API.get("/admin/calendar-employees", {
+            params: {
+              page,
+              limit,
+            },
+          });
+
+          if (Array.isArray(response.data.employees)) {
+            allEmployees.push(...response.data.employees);
+          }
+        }
+
+        if (isActive) {
+          setCalendarEmployees(allEmployees);
+        }
+      } catch (requestError) {
+        console.error("Failed to fetch Calendar employees:", requestError);
+
+        if (isActive) {
+          setCalendarEmployees([]);
+        }
+      }
+    };
+
+    loadCalendarEmployees();
+
+    return () => {
+      isActive = false;
+    };
   }, [dispatch, authType, isAdmin]);
 
   /* =========================================
@@ -163,16 +200,13 @@ export default function EventCalendar({ isAdmin = false }) {
 
   const weekendCount = useMemo(() => {
     const year = currentDate.getFullYear();
-
     const month = currentDate.getMonth();
-
     const daysInMonth = new Date(year, month + 1, 0).getDate();
 
     let count = 0;
 
     for (let day = 1; day <= daysInMonth; day += 1) {
       const date = new Date(year, month, day);
-
       const dayOfWeek = date.getDay();
 
       if (dayOfWeek === 0 || dayOfWeek === 6) {
@@ -188,25 +222,15 @@ export default function EventCalendar({ isAdmin = false }) {
   ========================================= */
 
   const [selectedEvent, setSelectedEvent] = useState(null);
-
   const [selectedHoliday, setSelectedHoliday] = useState(null);
-
   const [dayEvents, setDayEvents] = useState([]);
-
   const [dayEventsModalOpen, setDayEventsModalOpen] = useState(false);
-
   const [formMode, setFormMode] = useState("CREATE");
-
   const [eventFormOpen, setEventFormOpen] = useState(false);
-
   const [holidayFormOpen, setHolidayFormOpen] = useState(false);
-
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-
   const [deleteTarget, setDeleteTarget] = useState(null);
-
   const [isSubmitting, setIsSubmitting] = useState(false);
-
   const [isDeleting, setIsDeleting] = useState(false);
 
   /* =========================================
@@ -215,7 +239,6 @@ export default function EventCalendar({ isAdmin = false }) {
 
   const handleMoreEvents = useCallback((day, events) => {
     setDayEvents(events);
-
     setDayEventsModalOpen(true);
   }, []);
 
@@ -237,9 +260,7 @@ export default function EventCalendar({ isAdmin = false }) {
 
   const handleCreateEvent = useCallback(() => {
     setFormMode("CREATE");
-
     setSelectedEvent(null);
-
     setEventFormOpen(true);
   }, []);
 
@@ -249,9 +270,7 @@ export default function EventCalendar({ isAdmin = false }) {
 
   const handleCreateHoliday = useCallback(() => {
     setFormMode("CREATE");
-
     setSelectedHoliday(null);
-
     setHolidayFormOpen(true);
   }, []);
 
@@ -261,18 +280,14 @@ export default function EventCalendar({ isAdmin = false }) {
 
   const handleEditRecord = useCallback((record) => {
     setFormMode("EDIT");
-
     setSelectedEvent(null);
-
     setSelectedHoliday(null);
 
     if (record.isHoliday) {
       setSelectedHoliday(record);
-
       setHolidayFormOpen(true);
     } else {
       setSelectedEvent(record);
-
       setEventFormOpen(true);
     }
   }, []);
@@ -283,7 +298,6 @@ export default function EventCalendar({ isAdmin = false }) {
 
   const handleCloseEventForm = useCallback(() => {
     setEventFormOpen(false);
-
     setSelectedEvent(null);
   }, []);
 
@@ -293,7 +307,6 @@ export default function EventCalendar({ isAdmin = false }) {
 
   const handleCloseHolidayForm = useCallback(() => {
     setHolidayFormOpen(false);
-
     setSelectedHoliday(null);
   }, []);
 
@@ -303,9 +316,7 @@ export default function EventCalendar({ isAdmin = false }) {
 
   const handleDeleteEvent = useCallback((record) => {
     setDeleteTarget(record);
-
     setDeleteModalOpen(true);
-
     setSelectedEvent(null);
   }, []);
 
@@ -315,7 +326,6 @@ export default function EventCalendar({ isAdmin = false }) {
 
   const handleCloseDeleteModal = useCallback(() => {
     setDeleteModalOpen(false);
-
     setDeleteTarget(null);
   }, []);
 
@@ -346,7 +356,6 @@ export default function EventCalendar({ isAdmin = false }) {
         }
 
         handleCloseEventForm();
-
         setFormMode("CREATE");
       } catch (error) {
         console.error("Failed to save event:", error);
@@ -378,7 +387,6 @@ export default function EventCalendar({ isAdmin = false }) {
         }
 
         handleCloseHolidayForm();
-
         setFormMode("CREATE");
       } catch (error) {
         console.error("Failed to save holiday:", error);
@@ -439,7 +447,6 @@ export default function EventCalendar({ isAdmin = false }) {
   ========================================= */
 
   const isLoading = loading || holidayStatus === "loading";
-
   const hasError = error || holidayError;
 
   /* =========================================
@@ -601,7 +608,7 @@ export default function EventCalendar({ isAdmin = false }) {
         <EventFormModal
           mode={formMode}
           event={formMode === "EDIT" ? selectedEvent : null}
-          employees={recentEmployees}
+          employees={calendarEmployees}
           isAdmin={isAdmin}
           isSubmitting={isSubmitting}
           onSubmit={handleSubmitEvent}

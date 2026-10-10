@@ -81,6 +81,8 @@ function EventFormFields({
             options={employeeOptions}
             onChange={onChange}
             disabled={isSubmitting}
+            searchable
+            searchPlaceholder="Search employees..."
             placeholder={
               employeeOptions.length
                 ? "Select Employee"
