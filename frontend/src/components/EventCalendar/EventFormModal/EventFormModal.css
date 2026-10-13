@@ -65,11 +65,7 @@
 
   border-bottom: 1px solid var(--divider);
 
-  background: linear-gradient(
-    180deg,
-    var(--card),
-    var(--surface)
-  );
+  background: linear-gradient(180deg, var(--card), var(--surface));
 }
 
 .eventFormTitle {
@@ -175,8 +171,7 @@
   outline: 2px solid var(--primary);
   outline-offset: 2px;
 
-  box-shadow:
-    0 0 0 4px var(--focus-shadow);
+  box-shadow: 0 0 0 4px var(--focus-shadow);
 }
 
 /* ==========================================
@@ -212,6 +207,244 @@
 
 .eventFormBody::-webkit-scrollbar-thumb:hover {
   background: var(--primary);
+}
+
+/* ==========================================
+   Employee Details Overlay
+========================================== */
+
+.employeeDetailsOverlay {
+  position: fixed;
+  inset: 0;
+
+  z-index: 10001;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 24px;
+
+  background: rgba(5, 10, 20, 0.68);
+
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+
+  animation: fade_in 0.2s ease;
+}
+
+/* ==========================================
+   Employee Details Modal
+========================================== */
+
+.employeeDetailsModal {
+  width: min(480px, 100%);
+  max-height: 85vh;
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+
+  background: var(--card);
+
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius_lg);
+
+  box-shadow: var(--shadow_lg);
+
+  animation: fade_in 0.2s ease;
+}
+
+.employeeDetailsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  gap: 16px;
+
+  padding: 22px 24px;
+
+  border-bottom: 1px solid var(--divider);
+
+  background: linear-gradient(180deg, var(--card), var(--surface));
+}
+
+.employeeDetailsHeader h2 {
+  margin: 0;
+
+  color: var(--text_primary);
+
+  font-family: "Poppins", sans-serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+
+  line-height: 1.3;
+}
+
+.employeeDetailsHeader p {
+  margin: 5px 0 0;
+
+  color: var(--text_secondary);
+
+  font-family: "Inter", sans-serif;
+  font-size: 0.88rem;
+}
+
+.employeeDetailsCloseBtn {
+  width: 38px;
+  height: 38px;
+
+  display: grid;
+  place-items: center;
+
+  flex-shrink: 0;
+
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius_sm);
+
+  background: var(--surface);
+
+  color: var(--text_secondary);
+
+  cursor: pointer;
+
+  transition:
+    background var(--transition),
+    border-color var(--transition),
+    color var(--transition),
+    transform var(--transition);
+}
+
+.employeeDetailsCloseBtn:hover {
+  background: var(--surface_hover);
+
+  border-color: var(--primary);
+
+  color: var(--primary_hover);
+
+  transform: rotate(90deg);
+}
+
+.employeeDetailsCloseBtn:focus-visible,
+.employeeDetailsDoneBtn:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 3px;
+}
+
+/* ==========================================
+   Employee Details Fields
+========================================== */
+
+.employeeDetailsBody {
+  display: flex;
+  flex-direction: column;
+
+  gap: 0;
+
+  padding: 10px 24px;
+
+  overflow-y: auto;
+
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.employeeDetailsField {
+  display: flex;
+  flex-direction: column;
+
+  gap: 7px;
+
+  min-width: 0;
+
+  padding: 15px 0;
+
+  border-bottom: 1px solid var(--divider);
+}
+
+.employeeDetailsField:last-child {
+  border-bottom: none;
+}
+
+.employeeDetailsField span {
+  color: var(--text_secondary);
+
+  font-family: "Inter", sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+
+.employeeDetailsField strong {
+  color: var(--text_primary);
+
+  font-family: "Inter", sans-serif;
+  font-size: 0.96rem;
+  font-weight: 600;
+
+  line-height: 1.5;
+
+  overflow-wrap: anywhere;
+}
+
+.employeeDetailsField .employeeDetailsUserId {
+  font-family: monospace;
+  font-size: 0.85rem;
+  font-weight: 500;
+
+  user-select: text;
+}
+
+/* ==========================================
+   Employee Details Footer
+========================================== */
+
+.employeeDetailsFooter {
+  display: flex;
+  justify-content: flex-end;
+
+  padding: 16px 24px 22px;
+
+  border-top: 1px solid var(--divider);
+
+  background: var(--card);
+}
+
+.employeeDetailsDoneBtn {
+  min-width: 100px;
+
+  padding: 10px 20px;
+
+  border: 1px solid var(--button);
+  border-radius: var(--radius_sm);
+
+  background: var(--button);
+
+  color: var(--text-inverse);
+
+  font-family: "Inter", sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background var(--transition),
+    border-color var(--transition),
+    box-shadow var(--transition),
+    transform var(--transition);
+}
+
+.employeeDetailsDoneBtn:hover {
+  background: var(--primary_hover);
+
+  border-color: var(--primary_hover);
+
+  box-shadow: var(--shadow_sm);
+}
+
+.employeeDetailsDoneBtn:active {
+  transform: scale(0.98);
 }
 
 /* ==========================================
@@ -254,6 +487,14 @@
 
   .eventFormBody {
     padding: 20px;
+  }
+
+  .employeeDetailsOverlay {
+    padding: 20px;
+  }
+
+  .employeeDetailsModal {
+    width: min(460px, 100%);
   }
 }
 
@@ -309,6 +550,36 @@
   .eventFormBody {
     padding: 18px;
   }
+
+  .employeeDetailsOverlay {
+    padding: 14px;
+  }
+
+  .employeeDetailsModal {
+    max-height: 90vh;
+
+    border-radius: var(--radius_md);
+  }
+
+  .employeeDetailsHeader {
+    padding: 18px;
+  }
+
+  .employeeDetailsHeader h2 {
+    font-size: 1.12rem;
+  }
+
+  .employeeDetailsBody {
+    padding: 8px 18px;
+  }
+
+  .employeeDetailsField {
+    padding: 13px 0;
+  }
+
+  .employeeDetailsFooter {
+    padding: 14px 18px 18px;
+  }
 }
 
 /* ==========================================
@@ -342,5 +613,29 @@
 
   .eventFormBody {
     padding: 16px;
+  }
+
+  .employeeDetailsOverlay {
+    padding: 10px;
+  }
+
+  .employeeDetailsHeader {
+    padding: 15px;
+  }
+
+  .employeeDetailsHeader h2 {
+    font-size: 1rem;
+  }
+
+  .employeeDetailsBody {
+    padding: 6px 15px;
+  }
+
+  .employeeDetailsField strong {
+    font-size: 0.9rem;
+  }
+
+  .employeeDetailsFooter {
+    padding: 12px 15px 15px;
   }
 }

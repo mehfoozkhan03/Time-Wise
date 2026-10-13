@@ -240,20 +240,24 @@ export const getCalendarEmployees = async (req, res) => {
     const limit = Math.min(50, Math.max(1, requestedLimit));
     const search = String(req.query.search || "").trim();
 
+    // Include both Employees and Managers in Calendar assignments.
     const filter = {
-      role: "Employee",
+      role: {
+        $in: ["Employee", "Manager"],
+      },
     };
 
     if (search) {
       const escapedSearch = search.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-
       const searchRegex = new RegExp(escapedSearch, "i");
 
+      // Search by name, email, or role.
       filter.$or = [
         { firstName: searchRegex },
         { lastName: searchRegex },
         { email: searchRegex },
         { name: searchRegex },
+        { role: searchRegex },
       ];
     }
 
@@ -262,7 +266,9 @@ export const getCalendarEmployees = async (req, res) => {
     const [employees, totalEmployees] = await Promise.all([
       userModel
         .find(filter)
-        .select("_id firstName lastName name email role")
+        .select(
+          "_id firstName lastName name email role department designation",
+        )
         .sort({ firstName: 1, lastName: 1 })
         .skip(skip)
         .limit(limit)

@@ -64,6 +64,7 @@ function EventForm({
   isSubmitting = false,
   onSubmit,
   onCancel,
+  onEmployeeDetails,
 }) {
   const [formData, setFormData] = useState(INITIAL_FORM);
 
@@ -236,6 +237,7 @@ function EventForm({
         employees={employees}
         isAdmin={isAdmin}
         isSubmitting={isSubmitting}
+        onEmployeeDetails={onEmployeeDetails}
       />
 
       <div className="formActions">

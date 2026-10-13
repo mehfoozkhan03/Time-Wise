@@ -1,15 +1,8 @@
 import "./CustomSelect.css";
 
-import {
-  memo,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-import { FaCheck, FaChevronDown, FaSearch } from "react-icons/fa";
+import { FaCheck, FaChevronDown, FaSearch, FaEye } from "react-icons/fa";
 
 function CustomSelect({
   id,
@@ -21,15 +14,16 @@ function CustomSelect({
   placeholder = "Select option",
   searchable = false,
   searchPlaceholder = "Search options...",
+  showOptionDetails = false,
+  onOptionDetails,
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+
   const selectRef = useRef(null);
   const searchInputRef = useRef(null);
 
-  const selectedOption = options.find(
-    (option) => option.value === value,
-  );
+  const selectedOption = options.find((option) => option.value === value);
 
   const filteredOptions = useMemo(() => {
     if (!searchable || !searchTerm.trim()) {
@@ -80,6 +74,20 @@ function CustomSelect({
     [disabled, name, onChange],
   );
 
+  const handleOptionDetails = useCallback(
+    (event, option) => {
+      event.preventDefault();
+      event.stopPropagation();
+
+      if (disabled) {
+        return;
+      }
+
+      onOptionDetails?.(option);
+    },
+    [disabled, onOptionDetails],
+  );
+
   const handleKeyDown = useCallback(
     (event) => {
       if (disabled) {
@@ -116,10 +124,7 @@ function CustomSelect({
 
   useEffect(() => {
     const handleOutsideClick = (event) => {
-      if (
-        selectRef.current &&
-        !selectRef.current.contains(event.target)
-      ) {
+      if (selectRef.current && !selectRef.current.contains(event.target)) {
         setIsOpen(false);
         setSearchTerm("");
       }
@@ -189,38 +194,49 @@ function CustomSelect({
             </div>
           )}
 
-          <div
-            role="listbox"
-            aria-labelledby={id}
-            aria-activedescendant={undefined}
-          >
+          <div role="listbox" aria-labelledby={id}>
             {filteredOptions.length > 0 ? (
               filteredOptions.map((option) => {
                 const isSelected = option.value === value;
 
                 return (
-                  <button
+                  <div
                     key={option.value}
-                    type="button"
-                    className={`customSelectOption ${
+                    className={`customSelectOptionRow ${
                       isSelected ? "selected" : ""
                     }`}
-                    onClick={() => handleSelect(option)}
-                    role="option"
-                    aria-selected={isSelected}
                   >
-                    <span>{option.label}</span>
+                    <button
+                      type="button"
+                      className={`customSelectOption ${
+                        isSelected ? "selected" : ""
+                      }`}
+                      onClick={() => handleSelect(option)}
+                      role="option"
+                      aria-selected={isSelected}
+                    >
+                      <span>{option.label}</span>
 
-                    {isSelected && (
-                      <FaCheck className="customSelectCheck" />
+                      {isSelected && <FaCheck className="customSelectCheck" />}
+                    </button>
+
+                    {showOptionDetails && (
+                      <button
+                        type="button"
+                        className="customSelectDetailsButton"
+                        onClick={(event) => handleOptionDetails(event, option)}
+                        disabled={disabled}
+                        aria-label={`View details for ${option.label}`}
+                        title="View details"
+                      >
+                        <FaEye aria-hidden="true" />
+                      </button>
                     )}
-                  </button>
+                  </div>
                 );
               })
             ) : (
-              <div className="customSelectEmpty">
-                No matching options found
-              </div>
+              <div className="customSelectEmpty">No matching options found</div>
             )}
           </div>
         </div>
