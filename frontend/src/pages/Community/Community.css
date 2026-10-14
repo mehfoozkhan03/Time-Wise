@@ -90,6 +90,34 @@ min-width: 0;
   font-size: 1.2rem;
 }
 
+.community-toolbar-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.community-share-control {
+  flex-shrink: 0;
+}
+
+@media (max-width: 850px) {
+  .community-toolbar {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .community-toolbar-heading {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .community-filters {
+    width: 100%;
+  }
+}
+
 .community-filters {
   display: flex;
   gap: 10px;

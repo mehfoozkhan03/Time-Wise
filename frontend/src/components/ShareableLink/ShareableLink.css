@@ -1,0 +1,99 @@
+
+.shareable-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  min-width: 0;
+  padding: 14px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+
+.shareable-link_info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+
+.shareable-link_icon {
+  flex-shrink: 0;
+  color: var(--primary);
+  font-size: 18px;
+}
+
+.shareable-link_text {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.shareable-link_label {
+  color: var(--text_primary);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.shareable-link_url {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  color: var(--text_secondary);
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.shareable-link_url:hover {
+  color: var(--primary);
+}
+
+.shareable-link_button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  gap: 8px;
+  padding: 10px 13px;
+  color: white;
+  background: var(--primary);
+  border: 1px solid transparent;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.shareable-link_button:hover {
+  background: var(--primary_hover);
+}
+
+.shareable-link_button.is-copied {
+  background: var(--success);
+  color: var(--text_primary);
+}
+
+.shareable-link_error {
+  flex-basis: 100%;
+  font-size: 12px;
+}
+
+@media (max-width: 480px) {
+  .shareable-link {
+    gap: 10px;
+    padding: 12px;
+  }
+
+  .shareable-link_button {
+    padding: 10px;
+  }
+
+  .shareable-link_button span {
+    display: none;
+  }
+}

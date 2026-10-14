@@ -1,7 +1,6 @@
 import express from "express";
 
 import { auth } from "../middleware/AuthMiddleware.js";
-import { adminAuth } from "../middleware/adminAuth.js";
 
 import {
   getAllEvents,
@@ -13,75 +12,29 @@ import {
 
 const router = express.Router();
 
-/* =========================================
-   Calendar Authentication
-========================================= */
+// ============================================================
+// EMPLOYEE / USER CALENDAR AUTHENTICATION
+// ============================================================
 
-const calendarAuth = (req, res, next) => {
-  const authType = req.headers["x-auth-type"];
+router.use(auth);
 
-  /*
-   * Explicit Admin Calendar request
-   */
-  if (authType === "admin") {
-    if (!req.cookies?.adminToken) {
-      return res.status(401).json({
-        success: false,
-        message: "Admin authentication required.",
-      });
-    }
+// ============================================================
+// EMPLOYEE / USER CALENDAR ROUTES
+// ============================================================
 
-    return adminAuth(req, res, next);
-  }
-
-  /*
-   * Explicit Employee/User Calendar request
-   */
-  if (authType === "user") {
-    if (!req.cookies?.token) {
-      return res.status(401).json({
-        success: false,
-        message: "User authentication required.",
-      });
-    }
-
-    return auth(req, res, next);
-  }
-
-  /*
-   * Backward-compatible fallback
-   *
-   * This is used only when the frontend does not
-   * provide an explicit calendar authentication type.
-   */
-  if (req.cookies?.adminToken) {
-    return adminAuth(req, res, next);
-  }
-
-  if (req.cookies?.token) {
-    return auth(req, res, next);
-  }
-
-  return res.status(401).json({
-    success: false,
-    message: "Authentication required.",
-  });
-};
-
-router.use(calendarAuth);
-
-/* =========================================
-   Calendar Routes
-========================================= */
-
+// Get all calendar events
 router.get("/", getAllEvents);
 
+// Get single calendar event
 router.get("/:id", getEventById);
 
+// Create calendar event
 router.post("/", createEvent);
 
+// Update calendar event
 router.put("/:id", updateEvent);
 
+// Delete calendar event
 router.delete("/:id", deleteEvent);
 
-export default router;          
+export default router;

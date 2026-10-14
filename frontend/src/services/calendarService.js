@@ -14,19 +14,14 @@ const API = axios.create({
 ========================================= */
 
 const BASE_URL = "/calendar";
+const ADMIN_BASE_URL = "/admin/calendar";
 
 /* =========================================
-   Authentication Helper
+   Calendar Base URL Helper
 ========================================= */
 
-const getAuthHeaders = (authType) => {
-  if (!authType) {
-    return {};
-  }
-
-  return {
-    "x-auth-type": authType,
-  };
+const getCalendarBaseUrl = (authType) => {
+  return authType === "admin" ? ADMIN_BASE_URL : BASE_URL;
 };
 
 /* =========================================
@@ -38,45 +33,51 @@ export const calendarService = {
        Get All Events
     ========================================= */
 
-  getEvents: (params = {}, authType) =>
-    API.get(BASE_URL, {
+  getEvents: (params = {}, authType) => {
+    const baseUrl = getCalendarBaseUrl(authType);
+
+    return API.get(baseUrl, {
       params,
-      headers: getAuthHeaders(authType),
-    }),
+    });
+  },
 
   /* =========================================
        Get Single Event
     ========================================= */
 
-  getEventById: (id, authType) =>
-    API.get(`${BASE_URL}/${id}`, {
-      headers: getAuthHeaders(authType),
-    }),
+  getEventById: (id, authType) => {
+    const baseUrl = getCalendarBaseUrl(authType);
+
+    return API.get(`${baseUrl}/${id}`);
+  },
 
   /* =========================================
        Create Event
     ========================================= */
 
-  createEvent: (data, authType) =>
-    API.post(BASE_URL, data, {
-      headers: getAuthHeaders(authType),
-    }),
+  createEvent: (data, authType) => {
+    const baseUrl = getCalendarBaseUrl(authType);
+
+    return API.post(baseUrl, data);
+  },
 
   /* =========================================
        Update Event
     ========================================= */
 
-  updateEvent: (id, data, authType) =>
-    API.put(`${BASE_URL}/${id}`, data, {
-      headers: getAuthHeaders(authType),
-    }),
+  updateEvent: (id, data, authType) => {
+    const baseUrl = getCalendarBaseUrl(authType);
+
+    return API.put(`${baseUrl}/${id}`, data);
+  },
 
   /* =========================================
        Delete Event
     ========================================= */
 
-  deleteEvent: (id, authType) =>
-    API.delete(`${BASE_URL}/${id}`, {
-      headers: getAuthHeaders(authType),
-    }),
+  deleteEvent: (id, authType) => {
+    const baseUrl = getCalendarBaseUrl(authType);
+
+    return API.delete(`${baseUrl}/${id}`);
+  },
 };
