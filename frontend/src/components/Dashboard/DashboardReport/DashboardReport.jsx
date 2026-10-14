@@ -132,7 +132,7 @@ export const DashboardReport = () => {
           "#36A2EB",
           "#FFCD56",
           "#FF6384",
-          "#339adc"
+          "#339adc",
         ],
         hoverOffset: 6,
       },
@@ -237,12 +237,12 @@ export const DashboardReport = () => {
                           className="department-chart-box"
                           style={{
                             backgroundColor: [
-                              "#309be3",
-                              "#8b7cf3",
-                              "#3fb690",
-                              "#ffcc56",
-                              "#fe6383",
-                              "#339adc"
+                              "#3FB690",
+                              "#8B7CF3",
+                              "#36A2EB",
+                              "#FFCD56",
+                              "#FF6384",
+                              "#339adc",
                             ][index % 5],
                           }}
                         ></div>
