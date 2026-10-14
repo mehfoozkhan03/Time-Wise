@@ -1,3 +1,6 @@
+
+import { memo } from "react";
+
 function ValueCard({ value }) {
   return (
     <div className="cards">
@@ -10,4 +13,4 @@ function ValueCard({ value }) {
   );
 }
 
-export default ValueCard;
+export default memo(ValueCard);

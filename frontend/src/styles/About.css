@@ -172,10 +172,9 @@
 .mission_card_hero {
   width: min(1300px, 92%);
   margin: 60px auto;
-
-  display: flex;
-  gap: 35px;
-  align-items: stretch;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 30px;
 }
 
 .mission_box {
@@ -267,9 +266,10 @@
 }
 
 .mtm_cards {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   justify-content: center;
-  gap: 28px;
+  gap: 24px;
   margin: 45px auto;
   width: min(1300px, 92%);
 }
@@ -361,9 +361,9 @@
 .user_say_content {
   width: min(1300px, 92%);
   margin: 50px auto;
-
-  display: flex;
-  gap: 28px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
 }
 
 .review {
@@ -436,11 +436,9 @@
 .core_values_wrapper {
   width: min(1300px, 92%);
   margin: 50px auto;
-
-  display: flex;
-  justify-content: center;
-  gap: 30px;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 26px;
 }
 
 .cards {
@@ -613,11 +611,7 @@
 }
 
 /* Two-column card layout */
-.mission_card_hero {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 30px;
-}
+
 
 /* Match screenshot's large cards */
 .mission_skeleton_box {
@@ -708,11 +702,7 @@
 }
 
 /* Same four-column layout as screenshot */
-.core_values_wrapper {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 26px;
-}
+
 
 /* Skeleton card */
 .core_value_skeleton_card {
@@ -771,11 +761,7 @@
 }
 
 /* Keep cards in the same layout as the screenshot */
-.user_say_content {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 24px;
-}
+
 
 /* Individual skeleton card */
 .testimonial_skeleton_card {
@@ -831,102 +817,6 @@
 }
 
 
-/* Skeleton card layout */
-.team_skeleton_card {
-  min-width: 0;
-  min-height: 220px;
-  padding: 24px 18px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  border: 1px solid var(--border, #2c3745);
-  border-radius: 20px;
-  background: var(--surface, #161b22);
-  box-sizing: border-box;
-}
-
-.team_skeleton_name {
-  margin-top: 18px;
-  display: flex;
-  justify-content: center;
-}
-
-.team_skeleton_role {
-  margin-top: 10px;
-  display: flex;
-  justify-content: center;
-}
-
-.team_skeleton_description {
-  width: 100%;
-  margin-top: 8px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-/* Keep the same grid as the actual team cards */
-.mtm_cards {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 24px;
-}
-
-
-.team_skeleton_header {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-}
-
-.team_skeleton_subtitle {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  margin-top: 12px;
-}
-
-/* Keep skeleton cards aligned */
-.team_skeleton_card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  box-sizing: border-box;
-}
-
-.team_skeleton_name {
-  display: flex;
-  justify-content: center;
-  margin-top: 18px;
-}
-
-.team_skeleton_role {
-  display: flex;
-  justify-content: center;
-  margin-top: 10px;
-}
-
-.team_skeleton_description {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 12px;
-}
-
-.team_skeleton_line {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  margin-top: 8px;
-}
-
-
 /* ==========================================
    MOBILE
 ========================================== */
@@ -956,7 +846,7 @@
   .mission_card_hero,
   .user_say_content,
   .mtm_cards {
-    flex-direction: column;
+    grid-template-columns: 1fr;
     width: calc(100% - 30px);
     margin: 35px auto;
   }
@@ -968,7 +858,9 @@
   }
 
   .core_values_wrapper {
-    margin: 35px 15px;
+    grid-template-columns: 1fr;
+    width: calc(100% - 30px);
+    margin: 35px auto;
   }
 
   .cards {
@@ -1011,13 +903,13 @@
 
   .mission_card_hero,
   .user_say_content {
-    flex-direction: column;
+    grid-template-columns: 1fr;
     width: 90%;
   }
 
   .mtm_cards {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 20px;
     width: 90%;
     margin: 40px auto;
@@ -1025,7 +917,7 @@
 
   .core_values_wrapper {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     width: 90%;
   }
 
