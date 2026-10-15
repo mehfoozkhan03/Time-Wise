@@ -1,22 +1,23 @@
 import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 
 import { CiUser } from "react-icons/ci";
-import { MdOutlineEmail } from "react-icons/md";
+import { MdOutlineEmail, MdLocationOn } from "react-icons/md";
 import { FaPhoneAlt } from "react-icons/fa";
-import { MdLocationOn } from "react-icons/md";
 
 import Skeleton from "../../../components/Skeleton/Skeleton";
-
-import "./Profile.css";
-import { useEffect, useState } from "react";
 import { updateProfile } from "../../../store/authSlice";
 
-export const Profile = () => {
-  // const { user, loading } = useSelector((state) => state.auth);
+import "./Profile.css";
 
+export const Profile = () => {
   const dispatch = useDispatch();
 
-  const { user, isLoading, errorMessage } = useSelector((state) => state.auth);
+  const { user, isLoading, errorMessage } = useSelector(
+    (state) => state.auth
+  );
+
+  const [showSkeleton, setShowSkeleton] = useState(true);
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -29,6 +30,16 @@ export const Profile = () => {
 
   const [isDirty, setIsDirty] = useState(false);
 
+  // Skeleton timer
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowSkeleton(false);
+    }, 1500);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Populate profile form
   useEffect(() => {
     if (user) {
       setFormData({
@@ -68,34 +79,23 @@ export const Profile = () => {
   // =========================
   // SKELETON UI
   // =========================
-  if (isLoading && !user) {
+  if (showSkeleton || (!user && isLoading)) {
     return (
-      <div className="setting-profile-container">
-        {/* Profile Heading Skeleton */}
-        <div className="setting-profile_heading">
-          <Skeleton
-            width="100px"
-            height="28px"
-          />
+      <div className="setting-profile-container profile-skeleton">
 
-          <div style={{ marginTop: "10px" }}>
-            <Skeleton
-              width="350px"
-              height="16px"
-            />
+        {/* Profile Heading */}
+        <div className="setting-profile_heading profile-skeleton-header">
+          <Skeleton width="100px" height="28px" />
+
+          <div className="profile-skeleton-subtitle">
+            <Skeleton width="350px" height="16px" />
           </div>
         </div>
 
-        {/* =========================
-            Avatar Skeleton
-        ========================= */}
+        {/* Avatar Section */}
         <div className="setting-avtar-main-container">
-
           <div className="setting-avatar-heading">
-            <Skeleton
-              width="80px"
-              height="24px"
-            />
+            <Skeleton width="80px" height="24px" />
           </div>
 
           <div className="setting-profile-card">
@@ -108,59 +108,32 @@ export const Profile = () => {
             </div>
 
             <div className="setting-profile-info">
-              <Skeleton
-                width="180px"
-                height="24px"
-              />
+              <Skeleton width="180px" height="24px" />
 
-              <div style={{ marginTop: "10px" }}>
-                <Skeleton
-                  width="180px"
-                  height="14px"
-                />
+              <div className="profile-skeleton-gap">
+                <Skeleton width="180px" height="14px" />
               </div>
 
-              <div style={{ marginTop: "12px" }}>
-                <Skeleton
-                  width="100px"
-                  height="16px"
-                />
+              <div className="profile-skeleton-upload">
+                <Skeleton width="100px" height="16px" />
               </div>
-
             </div>
           </div>
         </div>
 
-        {/* =========================
-            Personal Information
-        ========================= */}
+        {/* Personal Information */}
         <div className="personal-information-container">
           <div className="personal-information-heading">
-            <Skeleton
-              width="190px"
-              height="24px"
-            />
+            <Skeleton width="190px" height="24px" />
           </div>
 
           <div className="personal-information-form">
             <div className="top-data">
               {[1, 2, 3, 4].map((item) => (
-                <div key={item}>
-                  <Skeleton
-                    width="100px"
-                    height="16px"
-                  />
+                <div className="profile-skeleton-field" key={item}>
+                  <Skeleton width="110px" height="16px" />
 
-                  {/* Input */}
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "10px",
-                      marginTop: "8px",
-                    }}
-                  >
-
+                  <div className="profile-skeleton-input">
                     <Skeleton
                       width="20px"
                       height="20px"
@@ -169,28 +142,22 @@ export const Profile = () => {
 
                     <Skeleton
                       width="100%"
-                      height="40px"
+                      height="42px"
                       radius="6px"
                     />
-
                   </div>
                 </div>
               ))}
             </div>
 
-            {/* =========================
-                Bio Skeleton
-            ========================= */}
+            {/* Bio */}
             <div className="bio">
-              <Skeleton
-                width="40px"
-                height="16px"
-              />
+              <Skeleton width="40px" height="16px" />
 
-              <div style={{ marginTop: "8px" }}>
+              <div className="profile-skeleton-bio">
                 <Skeleton
                   width="100%"
-                  height="80px"
+                  height="90px"
                   radius="6px"
                 />
               </div>
@@ -198,57 +165,41 @@ export const Profile = () => {
           </div>
         </div>
 
-        {/* =========================
-            Save Changes Skeleton
-        ========================= */}
-        <div
-          className="save_changes"
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <Skeleton
-            width="130px"
-            height="16px"
-          />
+        {/* Save Changes */}
+        <div className="save_changes profile-skeleton-save">
+          <Skeleton width="130px" height="16px" />
 
           <Skeleton
             width="130px"
             height="40px"
             radius="8px"
           />
-
         </div>
       </div>
     );
   }
 
-  // ==========================================
+  // =========================
   // USER DATA
-  // ==========================================
-
-  const fullName = `${user.firstName || ""} ${
-    user.lastName || ""
+  // =========================
+  const fullName = `${user?.firstName || ""} ${
+    user?.lastName || ""
   }`.trim();
 
-  const initials =
-    `${user.firstName?.[0] || ""}${user.lastName?.[0] || ""}`.toUpperCase();
+  const initials = `${user?.firstName?.[0] || ""}${
+    user?.lastName?.[0] || ""
+  }`.toUpperCase();
 
   return (
     <div className="setting-profile-container">
+
       {/* Profile Heading */}
       <div className="setting-profile_heading">
-
         <h3>Profile</h3>
-
         <p>Manage your personal information and public profile.</p>
       </div>
 
-      {/* =========================
-          Avatar
-      ========================= */}
+      {/* Avatar */}
       <div className="setting-avtar-main-container">
         <div className="setting-avatar-heading">
           <h2>Avatar</h2>
@@ -276,13 +227,9 @@ export const Profile = () => {
           </div>
 
           <div className="setting-profile-info">
-            <h2>
-              {fullName || "User"}
-            </h2>
+            <h2>{fullName || "User"}</h2>
 
-            <p>
-              JPG, PNG or WebP · Max 5 MB
-            </p>
+            <p>JPG, PNG or WebP · Max 5 MB</p>
 
             <label
               htmlFor="photo"
@@ -294,26 +241,24 @@ export const Profile = () => {
         </div>
       </div>
 
-      {/* =========================
-          Personal Information
-      ========================= */}
+      {/* Personal Information */}
       <div className="personal-information-container">
         <div className="personal-information-heading">
           <h2>Personal Information</h2>
         </div>
 
         <form
-           id="profile-form"
+          id="profile-form"
           className="personal-information-form"
           onSubmit={handleSubmit}
         >
           <div className="top-data">
+
             {/* Full Name */}
             <div>
               <label htmlFor="name">Full name</label>
 
               <div>
-
                 <CiUser />
 
                 <input
@@ -323,9 +268,7 @@ export const Profile = () => {
                   value={fullName || "User"}
                   readOnly
                 />
-
               </div>
-
             </div>
 
             {/* Work Email */}
@@ -333,7 +276,6 @@ export const Profile = () => {
               <label htmlFor="email">Work email</label>
 
               <div>
-
                 <MdOutlineEmail />
 
                 <input
@@ -344,9 +286,7 @@ export const Profile = () => {
                   value={formData.email}
                   onChange={handleChange}
                 />
-
               </div>
-
             </div>
 
             {/* Phone */}
@@ -354,7 +294,6 @@ export const Profile = () => {
               <label htmlFor="phone">Phone Number</label>
 
               <div>
-
                 <FaPhoneAlt />
 
                 <input
@@ -365,17 +304,14 @@ export const Profile = () => {
                   value={formData.phone}
                   onChange={handleChange}
                 />
-
               </div>
-
             </div>
 
-            {/* Location */}
+            {/* Address */}
             <div>
               <label htmlFor="address">Address</label>
 
               <div>
-
                 <MdLocationOn />
 
                 <input
@@ -386,15 +322,12 @@ export const Profile = () => {
                   value={formData.address}
                   onChange={handleChange}
                 />
-
               </div>
-
             </div>
+
           </div>
 
-          {/* =========================
-              Bio
-          ========================= */}
+          {/* Bio */}
           <div className="bio">
             <label htmlFor="bio">Bio</label>
 
@@ -410,14 +343,12 @@ export const Profile = () => {
         </form>
       </div>
 
-      {/* =========================
-          Save Changes
-      ========================= */}
+      {/* Save Changes */}
       <div className="save_changes">
         <div>
-          <div>
-            <p>{isDirty ? "Unsaved changes" : "All changes saved"}</p>
-          </div>
+          <p>
+            {isDirty ? "Unsaved changes" : "All changes saved"}
+          </p>
         </div>
 
         <button
@@ -429,6 +360,12 @@ export const Profile = () => {
           {isLoading ? "Saving..." : "Save Changes"}
         </button>
       </div>
+
+      {errorMessage && (
+        <p className="profile-error">{errorMessage}</p>
+      )}
     </div>
   );
 };
+
+export default Profile;

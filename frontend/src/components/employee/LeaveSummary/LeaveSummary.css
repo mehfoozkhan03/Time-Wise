@@ -105,6 +105,40 @@
     font-size: 13px;
 }
 
+
+/* Leave Summary Skeleton */
+
+.leave-summary-skeleton .leave-skeleton-heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.leave-summary-skeleton .leaveSummary-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.leave-summary-skeleton .leave-skeleton-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.leave-summary-skeleton .leave-skeleton-details {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.leave-summary-skeleton .pending-leave {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 @media (max-width:430px) {
     .leaveSummary-header {
         flex-direction: column;

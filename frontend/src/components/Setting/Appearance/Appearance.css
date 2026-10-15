@@ -155,6 +155,49 @@
     background-color: blue;
 }
 
+
+/* =========================
+   APPEARANCE SKELETON
+========================= */
+
+.appearance-skeleton-subtitle {
+  margin-top: 10px;
+  max-width: 100%;
+}
+
+.appearance-skeleton .theme-mode {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.appearance-skeleton-theme {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-width: 110px;
+  min-height: 80px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.appearance-skeleton-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 18px 0;
+}
+
+.appearance-skeleton-text {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+
 @media (max-width: 430px) {
     .appearance-container {
         padding: 13px 21px;
