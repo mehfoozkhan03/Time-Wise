@@ -1,5 +1,7 @@
 import ReactDOM from "react-dom/client";
 
+import { StrictMode } from "react";
+
 import App from "./App";
 
 import "./styles/global.css";
@@ -12,7 +14,7 @@ import store from "../src/store/store.js";
 import { BrowserRouter } from "react-router-dom";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <>
+  <StrictMode>
     <Provider store={store}>
       <BrowserRouter>
           <AuthProvider>
@@ -20,5 +22,5 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           </AuthProvider>
       </BrowserRouter>
     </Provider>
-  </>,
+  </StrictMode>,
 );
