@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import Skeleton from "../../../components/Skeleton/Skeleton";
@@ -9,51 +9,65 @@ import "./ContactForm.css";
 import { Modal } from "../../Modal/Modal";
 import { createContact } from "../../../store/contactSlice";
 
+const questions = [
+  "How do I track my working hours?",
+  "Where can I view my attendance history?",
+  "How can I view or download my work reports?",
+  "How do I manage my projects and tasks?",
+  "How can I get help with my Time-Wise account?",
+];
+
+const answers = [
+  "Use the timer on your dashboard to start and stop tracking your work session. Your tracked time is included in your reports.",
+  "Open the Attendance section to review your attendance records and working hours.",
+  "Open the Reports section to review your work hours, attendance, and project activity for the selected date range.",
+  "Use the Projects section to organize your projects and tasks, then associate your tracked work with the relevant project.",
+  "Choose this topic and describe the issue in your message. Our team will use the email address you provide to follow up.",
+];
+
+const initialFormData = {
+  name: "",
+  email: "",
+  faq: "",
+  subject: "",
+  message: "",
+};
+
+const initialModal = {
+  open: false,
+  type: "",
+  title: "",
+  message: "",
+};
+
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 function ContactForm() {
   const dispatch = useDispatch();
+  const formRef = useRef(null);
 
   const { isLoading: isContactLoading } = useSelector((state) => state.contact);
 
-  const questions = [
-    "How do I track my working hours?",
-    "Where can I view my attendance history?",
-    "How can I view or download my work reports?",
-    "How do I manage my projects and tasks?",
-    "How can I get help with my Time-Wise account?",
-  ];
-
-  const answers = [
-    "Use the timer on your dashboard to start and stop tracking your work session. Your tracked time is included in your reports.",
-    "Open the Attendance section to review your attendance records and working hours.",
-    "Open the Reports section to review your work hours, attendance, and project activity for the selected date range.",
-    "Use the Projects section to organize your projects and tasks, then associate your tracked work with the relevant project.",
-    "Choose this topic and describe the issue in your message. Our team will use the email address you provide to follow up.",
-  ];
-
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    faq: "",
-    subject: "",
-    message: "",
-  });
-
-  const [selectedAnswer, setSelectedAnswer] = useState("");
+  const [formData, setFormData] = useState(initialFormData);
   const [errors, setErrors] = useState({});
-
-  const [modal, setModal] = useState({
-    open: false,
-    type: "",
-    title: "",
-    message: "",
-  });
-
+  const [modal, setModal] = useState(initialModal);
   const [touched, setTouched] = useState({});
-
   const [isSubmitted, setIsSubmitted] = useState(false);
-
-  // Skeleton
   const [loading, setLoading] = useState(true);
+
+  const faqOptions = useMemo(
+    () =>
+      questions.map((question, index) => ({
+        value: String(index),
+        label: question,
+      })),
+    [],
+  );
+
+  const selectedAnswer = useMemo(
+    () => (formData.faq !== "" ? answers[Number(formData.faq)] : ""),
+    [formData.faq],
+  );
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -63,13 +77,9 @@ function ContactForm() {
     return () => clearTimeout(timer);
   }, []);
 
-  const closeModal = () =>
-    setModal({
-      open: false,
-      type: "",
-      title: "",
-      message: "",
-    });
+  const closeModal = () => {
+    setModal(initialModal);
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -90,16 +100,11 @@ function ContactForm() {
         [name]: "",
       }));
     }
-
-    if (name === "faq") {
-      setSelectedAnswer(value !== "" ? answers[Number(value)] : "");
-    }
   };
 
-  // ── Validation ────────────────────────────────────────────────────────────
+  // Validation
   const validate = () => {
     const newErrors = {};
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!formData.name.trim()) {
       newErrors.name = "Name is required";
@@ -121,16 +126,28 @@ function ContactForm() {
 
     setErrors(newErrors);
 
-    return Object.keys(newErrors).length === 0;
+    return newErrors;
   };
 
-  // ── Submit ────────────────────────────────────────────────────────────────
+  // Submit
   const submit = async (e) => {
     e.preventDefault();
 
+    if (isContactLoading) return;
+
     setIsSubmitted(true);
 
-    if (!validate()) return;
+    const validationErrors = validate();
+
+    if (Object.keys(validationErrors).length > 0) {
+      const firstInvalidField = ["name", "email", "subject", "message"].find(
+        (field) => validationErrors[field],
+      );
+
+      formRef.current?.querySelector(`[name="${firstInvalidField}"]`)?.focus();
+
+      return;
+    }
 
     const contactData = {
       ...formData,
@@ -149,15 +166,7 @@ function ContactForm() {
           "Thank you for reaching out. We'll get back to you soon.",
       });
 
-      setFormData({
-        name: "",
-        email: "",
-        faq: "",
-        subject: "",
-        message: "",
-      });
-
-      setSelectedAnswer("");
+      setFormData({ ...initialFormData });
       setErrors({});
       setTouched({});
       setIsSubmitted(false);
@@ -170,12 +179,6 @@ function ContactForm() {
       });
     }
   };
-
-  // Custom Select options
-  const faqOptions = questions.map((question, index) => ({
-    value: String(index),
-    label: question,
-  }));
 
   return (
     <div className="formPart">
@@ -196,7 +199,7 @@ function ContactForm() {
           <Skeleton width="180px" height="45px" radius="10px" />
         </div>
       ) : (
-        <form onSubmit={submit} noValidate>
+        <form ref={formRef} onSubmit={submit} noValidate>
           <div className="inputs">
             <div className="input_group">
               <input
