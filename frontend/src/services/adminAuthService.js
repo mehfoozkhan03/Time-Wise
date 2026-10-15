@@ -17,15 +17,33 @@ export const adminAuthService = {
     return API.post("/admin/employees", data);
   },
 
-  getAllUser(page, limit, search = "", department = "All", status = "All") {
-    return API.get(
-      `/admin/users?page=${page}&limit=${limit}&search=${encodeURIComponent(
-        search,
-      )}&department=${encodeURIComponent(
-        department,
-      )}&status=${encodeURIComponent(status)}`,
-    );
-  },
+  // getAllUser(page, limit, search = "", department = "All", status = "All") {
+  //   return API.get(
+  //     `/admin/users?page=${page}&limit=${limit}&search=${encodeURIComponent(
+  //       search,
+  //     )}&department=${encodeURIComponent(
+  //       department,
+  //     )}&status=${encodeURIComponent(status)}`,
+  //   );
+  // },
+
+  getAllUser(
+  page,
+  limit,
+  search = "",
+  department = "All",
+  status = "All",
+  sortBy = "newest",
+) {
+  return API.get(
+    `/admin/users?page=${page}` +
+      `&limit=${limit}` +
+      `&search=${encodeURIComponent(search)}` +
+      `&department=${encodeURIComponent(department)}` +
+      `&status=${encodeURIComponent(status)}` +
+      `&sortBy=${encodeURIComponent(sortBy)}`,
+  );
+},
 
   getRecentEmployees() {
     return API.get("/admin/recent-employees");

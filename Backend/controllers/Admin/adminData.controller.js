@@ -30,8 +30,6 @@ export const admin_login = async (req, res) => {
       role: "admin",
     });
 
-    console.log(`🚀 ~ admin:`, admin);
-
     if (!admin) {
       return res.status(404).json({
         success: false,
