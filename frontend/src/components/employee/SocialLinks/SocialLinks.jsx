@@ -1,24 +1,41 @@
+
 import "./SocialLinks.css";
 
 import { FaGithub, FaLinkedinIn } from "react-icons/fa";
 import { CiGlobe } from "react-icons/ci";
 import { MdArrowRightAlt } from "react-icons/md";
+
 import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { updateSocialLinks } from "../../../store/authSlice";
+import Skeleton from "../../Skeleton/Skeleton";
 
 export const SocialLinks = () => {
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state.auth.user);
+  const authLoading = useSelector(
+    (state) => state.auth.loading
+  );
 
   const [isEditing, setIsEditing] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   const [socialLinks, setSocialLinks] = useState({
-    github: user?.socialLinks?.github || "",
-    linkedin: user?.socialLinks?.linkedin || "",
-    portfolio: user?.socialLinks?.portfolio || "",
+    github: "",
+    linkedin: "",
+    portfolio: "",
   });
+
+  useEffect(() => {
+    if (user) {
+      setSocialLinks({
+        github: user.socialLinks?.github || "",
+        linkedin: user.socialLinks?.linkedin || "",
+        portfolio: user.socialLinks?.portfolio || "",
+      });
+    }
+  }, [user]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -30,15 +47,18 @@ export const SocialLinks = () => {
   };
 
   const handleSave = async () => {
+    setSaving(true);
+
     try {
       await dispatch(updateSocialLinks(socialLinks)).unwrap();
 
       setIsEditing(false);
-
       alert("Social links updated successfully!");
     } catch (error) {
       console.error("Social links update error:", error);
       alert(error || "Failed to update social links");
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -63,10 +83,40 @@ export const SocialLinks = () => {
     },
   ];
 
+  if (authLoading && !user) {
+    return (
+      <section className="socialLink-section socialLink-skeleton">
+        <div className="socialLink-header">
+          <Skeleton width="28px" height="28px" />
+
+          <div className="social-skeleton-heading">
+            <Skeleton width="115px" height="21px" />
+            <Skeleton width="40px" height="16px" />
+          </div>
+        </div>
+
+        <div className="socialLink-content">
+          {[1, 2, 3].map((item) => (
+            <div className="socialLink-list" key={item}>
+              <div className="socialLink-left">
+                <Skeleton width="38px" height="38px" borderRadius="8px" />
+
+                <div className="social-skeleton-info">
+                  <Skeleton width="75px" height="15px" />
+                  <Skeleton width="180px" height="14px" />
+                </div>
+              </div>
+
+              <Skeleton width="20px" height="20px" />
+            </div>
+          ))}
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="socialLink-section">
-      {/* Header */}
-
       <div className="socialLink-header">
         <div>
           <CiGlobe style={{ color: "#459cd1" }} />
@@ -85,14 +135,9 @@ export const SocialLinks = () => {
         </div>
       </div>
 
-      {/* Content */}
-
       <div className="socialLink-content">
-        {socialLinkData.map((item, i) => (
-          <div
-            className="socialLink-list"
-            key={i}
-          >
+        {socialLinkData.map((item) => (
+          <div className="socialLink-list" key={item.fieldName}>
             <div className="socialLink-left">
               <div className="socialLink-icon">{item.icon}</div>
 
@@ -128,15 +173,14 @@ export const SocialLinks = () => {
         ))}
       </div>
 
-      {/* Save */}
-
       {isEditing && (
         <div className="socialLink-actions">
           <button
             type="button"
             onClick={handleSave}
+            disabled={saving}
           >
-            Save Changes
+            {saving ? "Saving..." : "Save Changes"}
           </button>
         </div>
       )}

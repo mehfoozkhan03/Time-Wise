@@ -1,31 +1,20 @@
-function TeamCard({member}) {
 
-    return (
+import { memo } from "react";
 
-        <div className="content">
+function TeamCard({ member }) {
+  return (
+    <div className="content">
+      <div className="mtm_pfp">
+        <p>{member.initials}</p>
+      </div>
 
-            <div className="mtm_pfp">
+      <h3>{member.name}</h3>
 
-                <p>
-                    {member.initials}
-                </p>
+      <span>{member.role}</span>
 
-            </div>
-
-            <h3>
-                {member.name}
-            </h3>
-
-            <span>
-                {member.role}
-            </span>
-
-            <p>
-                {member.quote}
-            </p>
-
-        </div>
-    );
+      <p>{member.quote}</p>
+    </div>
+  );
 }
 
-export default TeamCard;
+export default memo(TeamCard);

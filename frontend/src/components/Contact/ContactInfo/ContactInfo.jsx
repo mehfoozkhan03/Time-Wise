@@ -1,12 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
 import "./ContactInfo.css";
-import {
-  FaEnvelope,
-  FaPhone,
-  FaLocationDot,
-  FaClock,
-} from "react-icons/fa6";
+import { FaEnvelope, FaPhone, FaLocationDot, FaClock } from "react-icons/fa6";
 import Skeleton from "../../../components/Skeleton/Skeleton";
 
 const infoItems = [
@@ -34,7 +29,6 @@ const infoItems = [
 
 function ContactInfo() {
   const [activeIndex, setActiveIndex] = useState(null);
-
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -45,95 +39,60 @@ function ContactInfo() {
     return () => clearTimeout(timer);
   }, []);
 
-  const handleToggle = (index) => {
+  const handleToggle = useCallback((index) => {
     setActiveIndex((prev) => (prev === index ? null : index));
-  };
+  }, []);
 
   return (
     <div className="contactInfo">
       <div className="head">
         {loading ? (
           <>
-            <Skeleton
-              width="350px"
-              height="35px"
-              radius="8px"
-            />
+            <Skeleton width="350px" height="35px" radius="8px" />
 
-            <Skeleton
-              width="250px"
-              height="20px"
-              radius="8px"
-            />
+            <Skeleton width="250px" height="20px" radius="8px" />
           </>
         ) : (
           <>
-            <h1>
-              GET IN TOUCH WITH US
-            </h1>
+            <h1>GET IN TOUCH WITH US</h1>
 
-            <p>
-              At TimeWise, we value every user.
-            </p>
+            <p>At TimeWise, we value every user.</p>
           </>
         )}
       </div>
 
       <div className="info_parent">
-        {loading ? (
-          Array.from({ length: 4 }).map((_, index) => (
-            <div
-              className="infoItem"
-              key={index}
-            >
-              <Skeleton
-                width="50px"
-                height="50px"
-                radius="50%"
-              />
-
-              <div className="infoItem_body">
-                <Skeleton
-                  width="120px"
-                  height="20px"
-                />
-
-                <Skeleton
-                  width="170px"
-                  height="15px"
-                />
-              </div>
-            </div>
-          ))
-        ) : (
-          infoItems.map((item, index) => {
-            const isActive = activeIndex === index;
-
-            return (
-              <div
-                key={index}
-                className={`infoItem ${
-                  isActive ? "infoItem--active" : ""
-                }`}
-                onClick={() => handleToggle(index)}
-              >
-                <span className="infoItem_icon">
-                  {item.icon}
-                </span>
+        {loading
+          ? Array.from({ length: 4 }).map((_, index) => (
+              <div className="infoItem" key={index}>
+                <Skeleton width="50px" height="50px" radius="50%" />
 
                 <div className="infoItem_body">
-                  <h2>
-                    {item.label}
-                  </h2>
+                  <Skeleton width="120px" height="20px" />
 
-                  <p className="infoItem_detail">
-                    {item.detail}
-                  </p>
+                  <Skeleton width="170px" height="15px" />
                 </div>
               </div>
-            );
-          })
-        )}
+            ))
+          : infoItems.map((item, index) => {
+              const isActive = activeIndex === index;
+
+              return (
+                <div
+                  key={item.label}
+                  className={`infoItem ${isActive ? "infoItem--active" : ""}`}
+                  onClick={() => handleToggle(index)}
+                >
+                  <span className="infoItem_icon">{item.icon}</span>
+
+                  <div className="infoItem_body">
+                    <h2>{item.label}</h2>
+
+                    <p className="infoItem_detail">{item.detail}</p>
+                  </div>
+                </div>
+              );
+            })}
       </div>
     </div>
   );
