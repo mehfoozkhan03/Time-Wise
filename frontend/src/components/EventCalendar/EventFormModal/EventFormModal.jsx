@@ -1,6 +1,6 @@
 import "./EventFormModal.css";
 
-import { memo, useEffect, useRef, useCallback } from "react";
+import { memo, useEffect, useRef, useState, useCallback } from "react";
 
 import { FaTimes, FaPlus, FaEdit } from "react-icons/fa";
 
@@ -17,15 +17,40 @@ function EventFormModal({
   onClose,
 }) {
   const closeButtonRef = useRef(null);
+  const detailsCloseButtonRef = useRef(null);
+
+  const [employeeDetails, setEmployeeDetails] = useState(null);
 
   const isEditMode = mode === "EDIT";
 
+  const closeEmployeeDetails = useCallback(() => {
+    setEmployeeDetails(null);
+  }, []);
+
+  const handleEmployeeDetails = useCallback((employee) => {
+    if (employee) {
+      setEmployeeDetails(employee);
+    }
+  }, []);
+
   useEffect(() => {
-    closeButtonRef.current?.focus();
+    if (employeeDetails) {
+      detailsCloseButtonRef.current?.focus();
+    } else {
+      closeButtonRef.current?.focus();
+    }
 
     const handleKeyDown = (event) => {
-      if (event.key === "Escape" && !isSubmitting) {
-        onClose?.();
+      if (event.key === "Escape") {
+        if (employeeDetails) {
+          event.stopPropagation();
+          closeEmployeeDetails();
+          return;
+        }
+
+        if (!isSubmitting) {
+          onClose?.();
+        }
       }
     };
 
@@ -34,7 +59,7 @@ function EventFormModal({
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [onClose, isSubmitting]);
+  }, [employeeDetails, closeEmployeeDetails, onClose, isSubmitting]);
 
   const handleClose = useCallback(() => {
     if (isSubmitting) {
@@ -64,15 +89,32 @@ function EventFormModal({
     [onSubmit],
   );
 
+  const getEmployeeValue = useCallback((employee, fields) => {
+    for (const field of fields) {
+      const value = employee?.[field];
+
+      if (
+        value !== undefined &&
+        value !== null &&
+        String(value).trim() !== ""
+      ) {
+        return String(value);
+      }
+    }
+
+    return "Not available";
+  }, []);
+
   return (
-    <Modal
-      isOpen
-      overlayClassName="eventFormOverlay"
-      className="eventFormModal"
-      onOverlayClick={handleOverlayClick}
-      onContentClick={handleModalClick}
-      ariaLabelledBy="event-form-title"
-    >
+    <>
+      <Modal
+        isOpen
+        overlayClassName="eventFormOverlay"
+        className="eventFormModal"
+        onOverlayClick={handleOverlayClick}
+        onContentClick={handleModalClick}
+        ariaLabelledBy="event-form-title"
+      >
         <div className="eventFormHeader">
           <div className="eventFormTitle">
             <div className="eventFormIcon">
@@ -111,9 +153,98 @@ function EventFormModal({
             isSubmitting={isSubmitting}
             onSubmit={handleSubmit}
             onCancel={handleClose}
+            onEmployeeDetails={handleEmployeeDetails}
           />
         </div>
-    </Modal>
+      </Modal>
+
+      {employeeDetails && (
+        <div
+          className="employeeDetailsOverlay"
+          onClick={(event) => {
+            if (event.target === event.currentTarget) {
+              closeEmployeeDetails();
+            }
+          }}
+        >
+          <section
+            className="employeeDetailsModal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="employee-details-title"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="employeeDetailsHeader">
+              <div>
+                <h2 id="employee-details-title">Employee Details</h2>
+
+                <p>Employee information</p>
+              </div>
+
+              <button
+                ref={detailsCloseButtonRef}
+                type="button"
+                className="employeeDetailsCloseBtn"
+                onClick={closeEmployeeDetails}
+                aria-label="Close employee details"
+              >
+                <FaTimes />
+              </button>
+            </div>
+
+            <div className="employeeDetailsBody">
+              <div className="employeeDetailsField">
+                <span>Full Name</span>
+                <strong>
+                  {getEmployeeValue(employeeDetails, ["name", "fullName"]) !==
+                  "Not available"
+                    ? getEmployeeValue(employeeDetails, ["name", "fullName"])
+                    : [employeeDetails.firstName, employeeDetails.lastName]
+                        .filter(Boolean)
+                        .join(" ") || "Not available"}
+                </strong>
+              </div>
+
+              <div className="employeeDetailsField">
+                <span>User ID</span>
+                <strong className="employeeDetailsUserId">
+                  {getEmployeeValue(employeeDetails, ["_id"])}
+                </strong>
+              </div>
+
+              <div className="employeeDetailsField">
+                <span>Role</span>
+                <strong>{getEmployeeValue(employeeDetails, ["role"])}</strong>
+              </div>
+
+              <div className="employeeDetailsField">
+                <span>Department</span>
+                <strong>
+                  {getEmployeeValue(employeeDetails, ["department"])}
+                </strong>
+              </div>
+
+              <div className="employeeDetailsField">
+                <span>Designation</span>
+                <strong>
+                  {getEmployeeValue(employeeDetails, ["designation"])}
+                </strong>
+              </div>
+            </div>
+
+            <div className="employeeDetailsFooter">
+              <button
+                type="button"
+                className="employeeDetailsDoneBtn"
+                onClick={closeEmployeeDetails}
+              >
+                Close
+              </button>
+            </div>
+          </section>
+        </div>
+      )}
+    </>
   );
 }
 

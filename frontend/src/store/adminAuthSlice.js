@@ -70,6 +70,87 @@ export const fetchAllUser = createAsyncThunk(
   },
 );
 
+//# =================== Fetch All Active Users ======================
+export const fetchActiveUsers = createAsyncThunk(
+  "admin/fetchActiveUsers",
+  async (
+    {
+      page = 1,
+      department = "All",
+      search = "",
+      sortBy = "recently_active",
+    } = {},
+    thunkAPI,
+  ) => {
+    try {
+      const state = thunkAPI.getState();
+
+      const limit = state.adminAuth.limit;
+
+      const response = await adminAuthService.getAllUser(
+        page,
+        limit,
+        search,
+        department,
+        "Active",
+        sortBy,
+      );
+
+      return {
+        users: response.data.users,
+        totalUsers: response.data.totalUsers,
+        page: response.data.page,
+        limit: response.data.limit,
+        sortBy,
+      };
+    } catch (error) {
+      return thunkAPI.rejectWithValue({
+        success: false,
+        title: "Unable to fetch active users",
+        message: error.response?.data?.message || "Something went wrong",
+      });
+    }
+  },
+);
+
+//# ======================= Fetch All Inactive Users =========================
+export const fetchInactiveUsers = createAsyncThunk(
+  "admin/fetchInactiveUsers",
+  async (
+    { page = 1, department = "All", search = "", sortBy = "newest" } = {},
+    thunkAPI,
+  ) => {
+    try {
+      const state = thunkAPI.getState();
+
+      const limit = state.adminAuth.limit;
+
+      const response = await adminAuthService.getAllUser(
+        page,
+        limit,
+        search,
+        department,
+        "Inactive",
+        sortBy,
+      );
+
+      return {
+        users: response.data.users,
+        totalUsers: response.data.totalUsers,
+        page: response.data.page,
+        limit: response.data.limit,
+        sortBy,
+      };
+    } catch (error) {
+      return thunkAPI.rejectWithValue({
+        success: false,
+        title: "Unable to fetch inactive users",
+        message: error.response?.data?.message || "Something went wrong",
+      });
+    }
+  },
+);
+
 //# ==================== Recent Employee ========================
 export const fetchRecentEmployees = createAsyncThunk(
   "auth/fetchRecentEmployees",
@@ -228,6 +309,24 @@ const initialState = {
   search: "",
 
   todayAttendance: [],
+
+  activeUsers: [],
+  inactiveUsers: [],
+
+  activePage: 1,
+  inactivePage: 1,
+
+  activeTotal: 0,
+  inactiveTotal: 0,
+
+  activeLoading: false,
+  inactiveLoading: false,
+
+  activeHasMore: true,
+  inactiveHasMore: true,
+
+  activeSort: "recently_active",
+  inactiveSort: "newest",
 };
 
 const adminAuthSlice = createSlice({
@@ -330,6 +429,62 @@ const adminAuthSlice = createSlice({
         state.isLoading = false;
         state.isError = true;
         state.errorMessage = action.payload;
+      })
+
+      //# ================ Fetch Active User ===============
+      .addCase(fetchActiveUsers.pending, (state) => {
+        state.activeLoading = true;
+      })
+
+      .addCase(fetchActiveUsers.fulfilled, (state, action) => {
+        state.activeLoading = false;
+
+        const { users, totalUsers, page, limit, sortBy } = action.payload;
+
+        if (page === 1) {
+          state.activeUsers = users;
+        } else {
+          state.activeUsers = [...state.activeUsers, ...users];
+        }
+
+        state.activePage = page;
+        state.activeTotal = totalUsers;
+        state.activeSort = sortBy;
+        state.limit = limit;
+
+        state.activeHasMore = state.activeUsers.length < totalUsers;
+      })
+
+      .addCase(fetchActiveUsers.rejected, (state) => {
+        state.activeLoading = false;
+      })
+
+      //# Fetch Inactive users
+      .addCase(fetchInactiveUsers.pending, (state) => {
+        state.inactiveLoading = true;
+      })
+
+      .addCase(fetchInactiveUsers.fulfilled, (state, action) => {
+        state.inactiveLoading = false;
+
+        const { users, totalUsers, page, limit, sortBy } = action.payload;
+
+        if (page === 1) {
+          state.inactiveUsers = users;
+        } else {
+          state.inactiveUsers = [...state.inactiveUsers, ...users];
+        }
+
+        state.inactivePage = page;
+        state.inactiveTotal = totalUsers;
+        state.inactiveSort = sortBy;
+        state.limit = limit;
+
+        state.inactiveHasMore = state.inactiveUsers.length < totalUsers;
+      })
+
+      .addCase(fetchInactiveUsers.rejected, (state) => {
+        state.inactiveLoading = false;
       })
 
       //# ================== Recent Employee ==================

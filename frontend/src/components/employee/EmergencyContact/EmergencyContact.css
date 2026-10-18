@@ -145,7 +145,38 @@
     border: 1px solid var(--border);
     color: var(--text_primary);
 }
+/* Emergency Contact Skeleton */
 
+.emergency-skeleton .emergency-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.emergency-skeleton .emergencyContact-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.emergency-skeleton .emergencyContact-details {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.emergency-skeleton .emergency-skeleton-details {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  min-width: 0;
+}
+
+.emergency-skeleton .emergency-skeleton-field {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
 
 @media (max-width:430px) {
     .emergency-phone-number>div:nth-child(2) {

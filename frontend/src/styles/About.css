@@ -172,10 +172,9 @@
 .mission_card_hero {
   width: min(1300px, 92%);
   margin: 60px auto;
-
-  display: flex;
-  gap: 35px;
-  align-items: stretch;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 30px;
 }
 
 .mission_box {
@@ -267,9 +266,10 @@
 }
 
 .mtm_cards {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   justify-content: center;
-  gap: 28px;
+  gap: 24px;
   margin: 45px auto;
   width: min(1300px, 92%);
 }
@@ -361,9 +361,9 @@
 .user_say_content {
   width: min(1300px, 92%);
   margin: 50px auto;
-
-  display: flex;
-  gap: 28px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
 }
 
 .review {
@@ -436,11 +436,9 @@
 .core_values_wrapper {
   width: min(1300px, 92%);
   margin: 50px auto;
-
-  display: flex;
-  justify-content: center;
-  gap: 30px;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 26px;
 }
 
 .cards {
@@ -591,6 +589,234 @@
   box-shadow: var(--shadow_md);
 }
 
+/* Mission section */
+.mission_section {
+  width: 100%;
+}
+
+/* Centered heading and subtitle */
+.mission_skeleton_header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 54px;
+}
+
+.mission_skeleton_subtitle {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 20px;
+}
+
+/* Two-column card layout */
+
+
+/* Match screenshot's large cards */
+.mission_skeleton_box {
+  min-width: 0;
+  min-height: 316px;
+  padding: 35px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background: var(--surface, #161b22);
+  border: 1px solid var(--border, #2c3745);
+  border-radius: 24px;
+  box-sizing: border-box;
+}
+
+/* Title below icon */
+.mission_skeleton_title {
+  margin-top: 24px;
+  width: 100%;
+}
+
+/* Description lines */
+.mission_skeleton_description {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.mission_skeleton_line {
+  width: 100%;
+}
+
+/* Keep the existing .transform gradient and dimensions */
+.cta_skeleton_content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.cta_skeleton_heading {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 22px;
+}
+
+.cta_skeleton_description {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.cta_skeleton_desc_line {
+  display: flex;
+  justify-content: center;
+}
+
+.cta_skeleton_button {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+/* Light skeleton shades on the blue CTA */
+.cta_skeleton_content .skeleton {
+  background: rgba(255, 255, 255, 0.28);
+}
+
+
+/* Skeleton heading */
+.core_values_skeleton_header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.core_values_skeleton_subtitle {
+  margin-top: 16px;
+}
+
+/* Same four-column layout as screenshot */
+
+
+/* Skeleton card */
+.core_value_skeleton_card {
+  min-width: 0;
+  min-height: 278px;
+  padding: 28px 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background: var(--surface, #161b22);
+  border: 1px solid var(--border, #2c3745);
+  border-radius: 18px;
+  box-sizing: border-box;
+}
+
+/* Title */
+.core_value_skeleton_title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.core_value_skeleton_title_line {
+  display: flex;
+  justify-content: center;
+}
+
+/* Description */
+.core_value_skeleton_description {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+.core_value_skeleton_description_line {
+  display: flex;
+  justify-content: center;
+}
+
+/* Skeleton heading */
+.testimonial_skeleton_header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.testimonial_skeleton_subtitle {
+  margin-top: 16px;
+}
+
+/* Keep cards in the same layout as the screenshot */
+
+
+/* Individual skeleton card */
+.testimonial_skeleton_card {
+  min-width: 0;
+  min-height: 206px;
+  padding: 28px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface, #161b22);
+  border: 1px solid var(--border, #2c3745);
+  border-left: 4px solid var(--primary, #3eb5e8);
+  border-radius: 18px;
+  box-sizing: border-box;
+}
+
+/* Stars */
+.testimonial_skeleton_stars {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+/* Review */
+.testimonial_skeleton_review {
+  display: flex;
+  flex-direction: column;
+  margin-top: 12px;
+  gap: 8px;
+}
+
+.testimonial_skeleton_line {
+  width: 100%;
+}
+
+/* Horizontal divider */
+.testimonial_skeleton_divider {
+  width: 100%;
+  height: 1px;
+  margin-top: 22px;
+  background: var(--border, #2c3745);
+}
+
+/* User details */
+.testimonial_skeleton_user {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 22px;
+}
+
+.testimonial_skeleton_role {
+  margin-top: 6px;
+}
+
+
 /* ==========================================
    MOBILE
 ========================================== */
@@ -620,7 +846,7 @@
   .mission_card_hero,
   .user_say_content,
   .mtm_cards {
-    flex-direction: column;
+    grid-template-columns: 1fr;
     width: calc(100% - 30px);
     margin: 35px auto;
   }
@@ -632,7 +858,9 @@
   }
 
   .core_values_wrapper {
-    margin: 35px 15px;
+    grid-template-columns: 1fr;
+    width: calc(100% - 30px);
+    margin: 35px auto;
   }
 
   .cards {
@@ -675,13 +903,13 @@
 
   .mission_card_hero,
   .user_say_content {
-    flex-direction: column;
+    grid-template-columns: 1fr;
     width: 90%;
   }
 
   .mtm_cards {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 20px;
     width: 90%;
     margin: 40px auto;
@@ -689,7 +917,7 @@
 
   .core_values_wrapper {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     width: 90%;
   }
 

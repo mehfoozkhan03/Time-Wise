@@ -36,3 +36,29 @@
     color:var(--text_secondary);
     font-size:.85rem;
 }
+
+
+/* Recent Activity Skeleton */
+
+.recent-activity-skeleton .activity_item {
+  align-items: flex-start;
+}
+
+.recent-activity-skeleton .activity_dot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.recent-activity-skeleton .activity_content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.recent-activity-skeleton-time {
+  display: flex;
+  align-items: center;
+}

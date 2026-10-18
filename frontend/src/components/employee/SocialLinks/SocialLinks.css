@@ -111,3 +111,48 @@
     border: 1px solid var(--border);
     color: var(--text_secondary);
 }
+
+
+/* Social Links Skeleton */
+
+.socialLink-skeleton .socialLink-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.socialLink-skeleton .social-skeleton-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex: 1;
+}
+
+.socialLink-skeleton .socialLink-content {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.socialLink-skeleton .socialLink-list {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.socialLink-skeleton .socialLink-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  flex: 1;
+}
+
+.socialLink-skeleton .social-skeleton-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}

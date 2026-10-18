@@ -1,0 +1,33 @@
+.share-page-url {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.share-page-url__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 15px;
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  background: var(--card);
+  color: var(--text_primary);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.share-page-url__button:hover {
+  background: var(--surface);
+  color: var(--primary);
+}
+
+.share-page-url__feedback {
+  color: var(--text_secondary);
+  font-size: 0.8rem;
+}

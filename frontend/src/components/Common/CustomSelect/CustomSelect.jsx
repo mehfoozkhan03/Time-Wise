@@ -1,14 +1,8 @@
 import "./CustomSelect.css";
 
-import {
-  memo,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-import { FaCheck, FaChevronDown } from "react-icons/fa";
+import { FaCheck, FaChevronDown, FaSearch, FaEye } from "react-icons/fa";
 
 function CustomSelect({
   id,
@@ -18,20 +12,47 @@ function CustomSelect({
   onChange,
   disabled = false,
   placeholder = "Select option",
+  searchable = false,
+  searchPlaceholder = "Search options...",
+  showOptionDetails = false,
+  onOptionDetails,
 }) {
   const [isOpen, setIsOpen] = useState(false);
-  const selectRef = useRef(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
-  const selectedOption = options.find(
-    (option) => option.value === value,
-  );
+  const selectRef = useRef(null);
+  const searchInputRef = useRef(null);
+
+  const selectedOption = options.find((option) => option.value === value);
+
+  const filteredOptions = useMemo(() => {
+    if (!searchable || !searchTerm.trim()) {
+      return options;
+    }
+
+    const query = searchTerm.trim().toLowerCase();
+
+    return options.filter((option) =>
+      String(option.label ?? "")
+        .toLowerCase()
+        .includes(query),
+    );
+  }, [options, searchable, searchTerm]);
 
   const handleToggle = useCallback(() => {
     if (disabled) {
       return;
     }
 
-    setIsOpen((previous) => !previous);
+    setIsOpen((previous) => {
+      const nextOpen = !previous;
+
+      if (!nextOpen) {
+        setSearchTerm("");
+      }
+
+      return nextOpen;
+    });
   }, [disabled]);
 
   const handleSelect = useCallback(
@@ -48,8 +69,23 @@ function CustomSelect({
       });
 
       setIsOpen(false);
+      setSearchTerm("");
     },
     [disabled, name, onChange],
+  );
+
+  const handleOptionDetails = useCallback(
+    (event, option) => {
+      event.preventDefault();
+      event.stopPropagation();
+
+      if (disabled) {
+        return;
+      }
+
+      onOptionDetails?.(option);
+    },
+    [disabled, onOptionDetails],
   );
 
   const handleKeyDown = useCallback(
@@ -58,31 +94,39 @@ function CustomSelect({
         return;
       }
 
+      if (event.key === "Escape") {
+        event.preventDefault();
+        setIsOpen(false);
+        setSearchTerm("");
+        return;
+      }
+
       if (
         event.key === "Enter" ||
         event.key === " " ||
         event.key === "ArrowDown"
       ) {
+        if (searchable && event.target === searchInputRef.current) {
+          if (event.key === "Enter" && filteredOptions.length === 1) {
+            event.preventDefault();
+            handleSelect(filteredOptions[0]);
+          }
+
+          return;
+        }
+
         event.preventDefault();
         setIsOpen(true);
-        return;
-      }
-
-      if (event.key === "Escape") {
-        event.preventDefault();
-        setIsOpen(false);
       }
     },
-    [disabled],
+    [disabled, searchable, filteredOptions, handleSelect],
   );
 
   useEffect(() => {
     const handleOutsideClick = (event) => {
-      if (
-        selectRef.current &&
-        !selectRef.current.contains(event.target)
-      ) {
+      if (selectRef.current && !selectRef.current.contains(event.target)) {
         setIsOpen(false);
+        setSearchTerm("");
       }
     };
 
@@ -96,8 +140,15 @@ function CustomSelect({
   useEffect(() => {
     if (disabled) {
       setIsOpen(false);
+      setSearchTerm("");
     }
   }, [disabled]);
+
+  useEffect(() => {
+    if (isOpen && searchable) {
+      searchInputRef.current?.focus();
+    }
+  }, [isOpen, searchable]);
 
   return (
     <div
@@ -124,33 +175,70 @@ function CustomSelect({
       </button>
 
       {isOpen && (
-        <div
-          className="customSelectMenu"
-          role="listbox"
-          aria-labelledby={id}
-        >
-          {options.map((option) => {
-            const isSelected = option.value === value;
+        <div className="customSelectMenu">
+          {searchable && (
+            <div className="customSelectSearch">
+              <FaSearch aria-hidden="true" />
 
-            return (
-              <button
-                key={option.value}
-                type="button"
-                className={`customSelectOption ${
-                  isSelected ? "selected" : ""
-                }`}
-                onClick={() => handleSelect(option)}
-                role="option"
-                aria-selected={isSelected}
-              >
-                <span>{option.label}</span>
+              <input
+                ref={searchInputRef}
+                type="text"
+                value={searchTerm}
+                placeholder={searchPlaceholder}
+                aria-label={searchPlaceholder}
+                onChange={(event) => setSearchTerm(event.target.value)}
+                onKeyDown={handleKeyDown}
+                onClick={(event) => event.stopPropagation()}
+                disabled={disabled}
+              />
+            </div>
+          )}
 
-                {isSelected && (
-                  <FaCheck className="customSelectCheck" />
-                )}
-              </button>
-            );
-          })}
+          <div role="listbox" aria-labelledby={id}>
+            {filteredOptions.length > 0 ? (
+              filteredOptions.map((option) => {
+                const isSelected = option.value === value;
+
+                return (
+                  <div
+                    key={option.value}
+                    className={`customSelectOptionRow ${
+                      isSelected ? "selected" : ""
+                    }`}
+                  >
+                    <button
+                      type="button"
+                      className={`customSelectOption ${
+                        isSelected ? "selected" : ""
+                      }`}
+                      onClick={() => handleSelect(option)}
+                      role="option"
+                      aria-selected={isSelected}
+                    >
+                      <span>{option.label}</span>
+
+                      {isSelected && <FaCheck className="customSelectCheck" />}
+                    </button>
+
+                    {showOptionDetails && (
+                      <button
+                        type="button"
+                        className="customSelectDetailsButton"
+                        onClick={(event) => handleOptionDetails(event, option)}
+                        disabled={disabled}
+                        aria-label={`View details for ${option.label}`}
+                        title="View details"
+                      >
+                        <FaEye aria-hidden="true" />
+                      </button>
+                    )}
+                  </div>
+                );
+              })
+            ) : (
+              <div className="customSelectEmpty">No matching options found</div>
+            )}
+          </div>
         </div>
       )}
     </div>

@@ -2,7 +2,7 @@ import "./DashboardEmployee.css";
 
 import { FaCheck, FaPlus } from "react-icons/fa6";
 import { FaSearch } from "react-icons/fa";
-
+import { FaEyeSlash } from "react-icons/fa";
 import {
   MdEdit,
   MdDelete,
@@ -12,7 +12,7 @@ import {
 } from "react-icons/md";
 import { IoClose } from "react-icons/io5";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
-import { FaEye, FaEyeSlash, FaKey } from "react-icons/fa";
+import { FaKey } from "react-icons/fa";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -95,8 +95,6 @@ export const DashboardEmployee = () => {
   const dropdownRef = useRef(null);
 
   const statusOptions = ["All", "Active", "Inactive"];
-  const [showNewPassword, setShowNewPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   //# ========================= EDIT STATE =========================
 
@@ -278,36 +276,7 @@ export const DashboardEmployee = () => {
     });
   };
 
-  // ========================= OPEN NAME MODAL =========================
-  const handleNameClick = () => {
-    if (!editingUserId) return;
-
-    setShowNameModal(true);
-  };
-
-  // ========================= CLOSE NAME MODAL =========================
-  const handleCloseNameModal = () => {
-    setShowNameModal(false);
-  };
-
-  // ========================= SAVE NAME =========================
-  const handleSaveName = () => {
-    if (!editData.firstName.trim()) {
-      alert("First name is required.");
-      return;
-    }
-
-    if (!editData.lastName.trim()) {
-      alert("Last name is required.");
-      return;
-    }
-
-    setShowNameModal(false);
-  };
-
   //# ========================= EDIT INPUT CHANGE =========================
-  // ========================= NAME EDIT MODAL =========================
-  const [showNameModal, setShowNameModal] = useState(false);
 
   const handleEditChange = (e) => {
     const { name, value } = e.target;
@@ -470,9 +439,6 @@ export const DashboardEmployee = () => {
       newPassword: "",
       confirmPassword: "",
     });
-
-    setShowNewPassword(false);
-    setShowConfirmPassword(false);
   };
 
   //# Close Modal
@@ -588,7 +554,10 @@ export const DashboardEmployee = () => {
         {/* EMPLOYEE FILTER */}
         {/* ========================= */}
 
-        <div ref={dropdownRef} className="employe-search-filter">
+        <div
+          ref={dropdownRef}
+          className="employe-search-filter"
+        >
           {/* SEARCH */}
           <div className="dashboardEmployee-searchbar">
             <div className="dashboardEmployee-input-container">
@@ -604,7 +573,10 @@ export const DashboardEmployee = () => {
               />
             </div>
 
-            <div onClick={handleSearch} className="employee-searchBtn">
+            <div
+              onClick={handleSearch}
+              className="employee-searchBtn"
+            >
               <button type="button">Search</button>
             </div>
           </div>
@@ -747,20 +719,26 @@ export const DashboardEmployee = () => {
                       </div>
 
                       {/* NAME */}
-                      <div
-                        className={`dashboardEmployee-name ${
-                          isEditing ? "dashboardEmployee-name-editable" : ""
-                        }`}
-                        onClick={isEditing ? handleNameClick : undefined}
-                      >
-                        <p>
-                          {isEditing
-                            ? `${editData.firstName} ${editData.lastName}`
-                            : `${el.firstName?.charAt(0).toUpperCase() + el.firstName?.slice(1)} ${
-                                el.lastName?.charAt(0).toUpperCase() +
-                                el.lastName?.slice(1)
-                              }`}
-                        </p>
+
+                      <div className="dashboardEmployee-name">
+                        {isEditing ? (
+                          <div className="employee-edit-name">
+                            <input
+                              type="text"
+                              name="firstName"
+                              value={`${editData.firstName} ${editData.lastName}`}
+                              onChange={handleEditChange}
+                              placeholder="First name"
+                            />
+                          </div>
+                        ) : (
+                          <p>
+                            {el.firstName?.charAt(0).toUpperCase() +
+                              el.firstName?.slice(1)}{" "}
+                            {el.lastName?.charAt(0).toUpperCase() +
+                              el.lastName?.slice(1)}
+                          </p>
+                        )}
                       </div>
                     </div>
 
@@ -973,71 +951,29 @@ export const DashboardEmployee = () => {
                               </p>
 
                               <div className="password-input-group">
-                                <label htmlFor="newPassword">
-                                  New Password
-                                </label>
+                                <label>New Password</label>
 
-                                <div className="password-field">
-                                  <input
-                                    id="newPassword"
-                                    type={showNewPassword ? "text" : "password"}
-                                    name="newPassword"
-                                    value={passwordData.newPassword}
-                                    onChange={handlePasswordChange}
-                                    placeholder="Enter new password"
-                                    disabled={isChangingPassword}
-                                  />
-
-                                  <button
-                                    type="button"
-                                    className="password-eye"
-                                    onClick={() =>
-                                      setShowNewPassword((prev) => !prev)
-                                    }
-                                    disabled={isChangingPassword}
-                                  >
-                                    {showNewPassword ? (
-                                      <FaEye />
-                                    ) : (
-                                      <FaEyeSlash />
-                                    )}
-                                  </button>
-                                </div>
+                                <input
+                                  type="password"
+                                  name="newPassword"
+                                  value={passwordData.newPassword}
+                                  onChange={handlePasswordChange}
+                                  placeholder="Enter new password"
+                                  disabled={isChangingPassword}
+                                />
                               </div>
 
                               <div className="password-input-group">
-                                <label htmlFor="confirmPassword">
-                                  Confirm Password
-                                </label>
+                                <label>Confirm Password</label>
 
-                                <div className="password-field">
-                                  <input
-                                    id="confirmPassword"
-                                    type={
-                                      showConfirmPassword ? "text" : "password"
-                                    }
-                                    name="confirmPassword"
-                                    value={passwordData.confirmPassword}
-                                    onChange={handlePasswordChange}
-                                    placeholder="Confirm new password"
-                                    disabled={isChangingPassword}
-                                  />
-
-                                  <button
-                                    type="button"
-                                    className="password-eye"
-                                    onClick={() =>
-                                      setShowConfirmPassword((prev) => !prev)
-                                    }
-                                    disabled={isChangingPassword}
-                                  >
-                                    {showConfirmPassword ? (
-                                      <FaEye />
-                                    ) : (
-                                      <FaEyeSlash />
-                                    )}
-                                  </button>
-                                </div>
+                                <input
+                                  type="password"
+                                  name="confirmPassword"
+                                  value={passwordData.confirmPassword}
+                                  onChange={handlePasswordChange}
+                                  placeholder="Confirm new password"
+                                  disabled={isChangingPassword}
+                                />
                               </div>
 
                               <div className="password-modal-actions">
@@ -1097,82 +1033,15 @@ export const DashboardEmployee = () => {
           </button>
 
           {users.length < totalUsers && (
-            <button onClick={handleLoadMore} disabled={isLoading}>
+            <button
+              onClick={handleLoadMore}
+              disabled={isLoading}
+            >
               {isLoading ? "Loading..." : "Load More"}
             </button>
           )}
         </div>
       </div>
-
-      {showNameModal && (
-        <Modal
-          isOpen={showNameModal}
-          onClose={handleCloseNameModal}
-          className="edit-name-modal"
-        >
-          <div className="edit-name-modal-content">
-            <div className="edit-name-modal-header">
-              <div>
-                <h3>Edit Employee Name</h3>
-                <p>Update the employee's first and last name.</p>
-              </div>
-
-              <button
-                type="button"
-                className="edit-name-modal-close"
-                onClick={handleCloseNameModal}
-              >
-                <IoClose />
-              </button>
-            </div>
-
-            <div className="edit-name-form">
-              <div className="edit-name-input-group">
-                <label>First Name</label>
-
-                <input
-                  type="text"
-                  name="firstName"
-                  value={editData.firstName}
-                  onChange={handleEditChange}
-                  placeholder="Enter first name"
-                  autoFocus
-                />
-              </div>
-
-              <div className="edit-name-input-group">
-                <label>Last Name</label>
-
-                <input
-                  type="text"
-                  name="lastName"
-                  value={editData.lastName}
-                  onChange={handleEditChange}
-                  placeholder="Enter last name"
-                />
-              </div>
-            </div>
-
-            <div className="edit-name-modal-actions">
-              <button
-                type="button"
-                className="edit-name-cancel"
-                onClick={handleCloseNameModal}
-              >
-                Cancel
-              </button>
-
-              <button
-                type="button"
-                className="edit-name-save"
-                onClick={handleSaveName}
-              >
-                Save Name
-              </button>
-            </div>
-          </div>
-        </Modal>
-      )}
 
       {showAddEmployee && (
         <Modal

@@ -49,6 +49,7 @@ function EventFormFields({
   employees = [],
   isAdmin = false,
   isSubmitting = false,
+  onEmployeeDetails,
 }) {
   const employeeOptions = employees
     .filter((employee) => employee?._id)
@@ -59,20 +60,16 @@ function EventFormFields({
         `${employee.firstName || ""} ${employee.lastName || ""}`.trim() ||
         employee.email ||
         "Unnamed Employee",
+      employee,
     }));
 
-  const showEmployeeField = requiresEmployee(
-    formData.type,
-    isAdmin,
-  );
+  const showEmployeeField = requiresEmployee(formData.type, isAdmin);
 
   return (
     <>
       {showEmployeeField && (
         <div className="formGroup">
-          <label htmlFor="employeeId">
-            Assign Employee *
-          </label>
+          <label htmlFor="employeeId">Assign Employee *</label>
 
           <CustomSelect
             id="employeeId"
@@ -81,17 +78,17 @@ function EventFormFields({
             options={employeeOptions}
             onChange={onChange}
             disabled={isSubmitting}
+            searchable
+            searchPlaceholder="Search employees..."
+            showOptionDetails
+            onOptionDetails={(option) => onEmployeeDetails?.(option.employee)}
             placeholder={
-              employeeOptions.length
-                ? "Select Employee"
-                : "No Employees Found"
+              employeeOptions.length ? "Select Employee" : "No Employees Found"
             }
           />
 
           {errors.employeeId && (
-            <small className="errorText">
-              {errors.employeeId}
-            </small>
+            <small className="errorText">{errors.employeeId}</small>
           )}
         </div>
       )}
@@ -110,17 +107,11 @@ function EventFormFields({
           required
         />
 
-        {errors.title && (
-          <small className="errorText">
-            {errors.title}
-          </small>
-        )}
+        {errors.title && <small className="errorText">{errors.title}</small>}
       </div>
 
       <div className="formGroup">
-        <label htmlFor="description">
-          Description
-        </label>
+        <label htmlFor="description">Description</label>
 
         <textarea
           id="description"
@@ -161,17 +152,10 @@ function EventFormFields({
             required
           />
 
-          {errors.date && (
-            <small className="errorText">
-              {errors.date}
-            </small>
-          )}
+          {errors.date && <small className="errorText">{errors.date}</small>}
         </div>
 
-        <label
-          htmlFor="isAllDay"
-          className="checkboxGroup"
-        >
+        <label htmlFor="isAllDay" className="checkboxGroup">
           <input
             id="isAllDay"
             type="checkbox"
@@ -188,9 +172,7 @@ function EventFormFields({
       {!formData.isAllDay && (
         <div className="formRow">
           <div className="formGroup">
-            <label htmlFor="startTime">
-              Start Time
-            </label>
+            <label htmlFor="startTime">Start Time</label>
 
             <input
               id="startTime"
@@ -203,9 +185,7 @@ function EventFormFields({
           </div>
 
           <div className="formGroup">
-            <label htmlFor="endTime">
-              End Time
-            </label>
+            <label htmlFor="endTime">End Time</label>
 
             <input
               id="endTime"
@@ -217,18 +197,14 @@ function EventFormFields({
             />
 
             {errors.endTime && (
-              <small className="errorText">
-                {errors.endTime}
-              </small>
+              <small className="errorText">{errors.endTime}</small>
             )}
           </div>
         </div>
       )}
 
       <div className="formGroup">
-        <label htmlFor="location">
-          Location
-        </label>
+        <label htmlFor="location">Location</label>
 
         <input
           id="location"
@@ -242,9 +218,7 @@ function EventFormFields({
       </div>
 
       <div className="formGroup">
-        <label htmlFor="priority">
-          Priority
-        </label>
+        <label htmlFor="priority">Priority</label>
 
         <CustomSelect
           id="priority"

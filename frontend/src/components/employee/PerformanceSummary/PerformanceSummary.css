@@ -70,6 +70,29 @@
     color: var(--text_primary);
 }
 
+/* Performance Summary Skeleton */
+
+.performance-skeleton-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.performance-skeleton-value {
+  display: flex;
+  align-items: center;
+}
+
+.performance-summary-skeleton .performance_item {
+  min-width: 0;
+}
+
+.performance-summary-skeleton .performance_icon {
+  flex-shrink: 0;
+}
+
+
 @media (max-width: 430px) {
     .performance_grid {
         display: flex;

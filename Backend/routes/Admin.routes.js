@@ -4,6 +4,7 @@ import {
   adminLogout,
   getAllTodayAttendance,
   getAllUser,
+  getCalendarEmployees,
 } from "../controllers/Admin/adminData.controller.js";
 import { getRecentEmployees } from "../controllers/Admin/recentEmployee.controller.js";
 import { updateUserDepartment } from "../controllers/Admin/updateDepartment.controller.js";
@@ -27,11 +28,17 @@ import {
 import { deleteUser } from "../controllers/Admin/deleteUser.controller.js";
 import { changeUserPassword } from "../controllers/Admin/changeEmployeePassword.controller.js";
 import { changeOwnPassword } from "../controllers/Admin/changeAdminPassword.controller.js";
-import { getAdminTheme, updateAdminTheme } from "../controllers/Admin/adminTheme.controller.js";
-import { getAdminAttendanceTrendReport, getAdminDepartmentHeadcountReport, getAdminWeeklyAttendanceReport } from "../controllers/Admin/adminReport.controller.js";
+import {
+  getAdminTheme,
+  updateAdminTheme,
+} from "../controllers/Admin/adminTheme.controller.js";
+import {
+  getAdminAttendanceTrendReport,
+  getAdminDepartmentHeadcountReport,
+  getAdminWeeklyAttendanceReport,
+} from "../controllers/Admin/adminReport.controller.js";
 import { getAdminDashboardStatsController } from "../controllers/Admin/adminDashboardHome.controller.js";
 import { createEmployee } from "../controllers/Admin/createEmployee.controller.js";
-
 
 const adminRoutes = express.Router();
 
@@ -43,16 +50,23 @@ adminRoutes.get("/theme", adminAuth, getAdminTheme);
 
 adminRoutes.patch("/theme", adminAuth, updateAdminTheme);
 
-adminRoutes.delete("/users/:id",  adminAuth,  deleteUser);
+adminRoutes.delete("/users/:id", adminAuth, deleteUser);
 
-adminRoutes.patch("/change-password",  adminAuth,  changeOwnPassword);
+adminRoutes.patch("/change-password", adminAuth, changeOwnPassword);
 
-adminRoutes.patch("/users/:id/password",  adminAuth,  changeUserPassword);
+adminRoutes.patch("/users/:id/password", adminAuth, changeUserPassword);
 
 adminRoutes.get("/users", adminAuth, getAllUser);
 
-//# This is for create employee by admin
-adminRoutes.post("/employees", adminAuth, createEmployee); 
+// Calendar employee search
+adminRoutes.get(
+  "/calendar-employees",
+  adminAuth,
+  getCalendarEmployees,
+);
+
+// Create employee by admin
+adminRoutes.post("/employees", adminAuth, createEmployee);
 
 adminRoutes.get("/recent-employees", adminAuth, getRecentEmployees);
 
@@ -66,13 +80,29 @@ adminRoutes.put("/users/:userId", adminAuth, updateUser);
 
 adminRoutes.get("/attendance/today", adminAuth, getAllTodayAttendance);
 
-//# Dashboard Home
-adminRoutes.get( "/dashboard-stats", adminAuth, getAdminDashboardStatsController); 
+// Dashboard Home
+adminRoutes.get(
+  "/dashboard-stats",
+  adminAuth,
+  getAdminDashboardStatsController,
+);
 
-//# Admin Report & Analytic
-adminRoutes.get( "/reports/weekly-attendance", adminAuth, getAdminWeeklyAttendanceReport);
-adminRoutes.get( "/reports/department-headcount", adminAuth, getAdminDepartmentHeadcountReport);
-adminRoutes.get( "/reports/attendance-trend", adminAuth, getAdminAttendanceTrendReport); 
+// Admin Report & Analytics
+adminRoutes.get(
+  "/reports/weekly-attendance",
+  adminAuth,
+  getAdminWeeklyAttendanceReport,
+);
+adminRoutes.get(
+  "/reports/department-headcount",
+  adminAuth,
+  getAdminDepartmentHeadcountReport,
+);
+adminRoutes.get(
+  "/reports/attendance-trend",
+  adminAuth,
+  getAdminAttendanceTrendReport,
+);
 
 adminRoutes.delete("/delete/thoughts/:id", adminAuth, adminDeleteThought);
 
