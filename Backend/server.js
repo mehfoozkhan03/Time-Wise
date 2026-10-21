@@ -22,6 +22,7 @@ import aiRoutes from "./routes/Ai.routes.js";
 import { adminRoutes } from "./routes/Admin.routes.js";
 import { adminThoughtRoute } from "./routes/AdminThought.route.js";
 import { announcementRoutes } from "./routes/Announcement.route.js";
+import { adminNotificationRoutes } from "./routes/AdminNotification.routes.js";
 
 dotenv.config();
 
@@ -58,6 +59,9 @@ server.use("/admin", announcementRoutes);
 
 //# Admin Calendar Route
 server.use("/admin/calendar", adminCalendarRoutes);
+
+//# Admin Notification Route
+server.use("/admin/notifications", adminNotificationRoutes); 
 
 //# User Route
 server.use("/user", userRoutes);

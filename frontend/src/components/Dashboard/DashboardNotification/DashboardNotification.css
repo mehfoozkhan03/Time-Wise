@@ -185,3 +185,40 @@
     width: 6px;
     border-radius: 50%;
 }
+
+
+.admin-notification-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.admin-notification-form__field label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.admin-notification-form__field input,
+.admin-notification-form__field textarea,
+.admin-notification-form__field select {
+  width: 100%;
+  padding: 11px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: inherit;
+  font: inherit;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.admin-notification-form__field input:focus,
+.admin-notification-form__field textarea:focus,
+.admin-notification-form__field select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgb(37 99 235 / 12%);
+}
+
+.admin-notification-form__field textarea {
+  resize: vertical;
+}
