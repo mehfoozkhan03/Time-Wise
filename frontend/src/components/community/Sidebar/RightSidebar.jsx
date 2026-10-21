@@ -1,143 +1,189 @@
-import { useSelector } from "react-redux";
+import { useSelector } from 'react-redux'
 import {
   FaLightbulb,
   FaHeart,
   FaUserFriends,
   FaChevronDown,
   FaChevronUp,
-} from "react-icons/fa";
-import { IoTrendingUp } from "react-icons/io5";
-import { useEffect, useRef, useState } from "react";
+  FaFileAlt,
+  FaPaperclip,
+} from 'react-icons/fa'
+import { IoTrendingUp } from 'react-icons/io5'
+import { useEffect, useRef, useState } from 'react'
 
-import "./RightSidebar.css";
+import './RightSidebar.css'
+
+// Get images from both the current images array and legacy image field.
+const getPostImages = (post) => {
+  if (Array.isArray(post?.images) && post.images.length > 0) {
+    return post.images
+      .map((image) => (typeof image === 'string' ? { url: image } : image))
+      .filter((image) => image?.url)
+  }
+
+  if (typeof post?.image === 'string' && post.image) {
+    return [{ url: post.image, alt: 'Post image' }]
+  }
+
+  if (post?.image?.url) {
+    return [post.image]
+  }
+
+  return []
+}
+
+const getPostAttachments = (post) =>
+  Array.isArray(post?.attachments)
+    ? post.attachments.filter((attachment) => attachment?.url)
+    : []
 
 const RightSidebar = () => {
-  const { featured, posts } = useSelector((state) => state.post);
+  const { featured, posts = [] } = useSelector((state) => state.post)
 
-  // ==========================================
-  // FEATURED THOUGHT STATE
-  // ==========================================
+  const [isThoughtExpanded, setIsThoughtExpanded] = useState(false)
+  const [isThoughtLong, setIsThoughtLong] = useState(false)
 
-  const [isThoughtExpanded, setIsThoughtExpanded] = useState(false);
-
-  const [isThoughtLong, setIsThoughtLong] = useState(false);
-
-  const thoughtRef = useRef(null);
-
-  // ==========================================
-  // TRENDING POSTS
-  // ==========================================
+  const thoughtRef = useRef(null)
 
   const trendingPosts = [...posts]
     .sort((a, b) => (b.likesCount || 0) - (a.likesCount || 0))
-    .slice(0, 5);
-
-  // ==========================================
-  // CONTRIBUTORS
-  // ==========================================
+    .slice(0, 5)
 
   const contributors = [
     ...new Map(
-      posts.map((post) => [post.createdBy?._id, post.createdBy]),
+      posts
+        .filter((post) => post.createdBy?._id)
+        .map((post) => [post.createdBy._id, post.createdBy]),
     ).values(),
-  ].slice(0, 5);
+  ].slice(0, 5)
 
-  // ==========================================
-  // LATEST PINNED THOUGHT
-  // ==========================================
-
-  //# Pin thought or Feature thought
-  const featuredMessage = featured?.content;
+  const featuredMessage = featured?.content || ''
+  const featuredImages = getPostImages(featured)
+  const featuredAttachments = getPostAttachments(featured)
 
   useEffect(() => {
-    setIsThoughtExpanded(false);
+    setIsThoughtExpanded(false)
 
     if (!featuredMessage || !thoughtRef.current) {
-      setIsThoughtLong(false);
-      return;
+      setIsThoughtLong(false)
+      return
     }
 
     const checkThoughtHeight = () => {
-      const element = thoughtRef.current;
+      const element = thoughtRef.current
+      if (!element) return
 
-      if (!element) return;
+      const computedStyle = window.getComputedStyle(element)
+      let lineHeight = parseFloat(computedStyle.lineHeight)
 
-      // Get computed line height
-      const computedStyle = window.getComputedStyle(element);
-
-      let lineHeight = parseFloat(computedStyle.lineHeight);
-
-      // Fallback if line-height is "normal"
-      if (isNaN(lineHeight)) {
-        const fontSize = parseFloat(computedStyle.fontSize) || 16;
-
-        lineHeight = fontSize * 1.6;
+      if (Number.isNaN(lineHeight)) {
+        lineHeight = (parseFloat(computedStyle.fontSize) || 16) * 1.6
       }
 
-      // Six lines
-      const maxHeight = lineHeight * 6;
+      const maxHeight = lineHeight * 6
+      const previousDisplay = element.style.display
+      const previousWebkitLineClamp = element.style.webkitLineClamp
+      const previousOverflow = element.style.overflow
 
-      // Temporarily remove clamp to determine
-      // the natural height of the full thought
-      const previousDisplay = element.style.display;
+      element.style.display = 'block'
+      element.style.webkitLineClamp = 'unset'
+      element.style.overflow = 'visible'
 
-      const previousWebkitLineClamp = element.style.webkitLineClamp;
+      const fullHeight = element.scrollHeight
 
-      const previousOverflow = element.style.overflow;
+      element.style.display = previousDisplay
+      element.style.webkitLineClamp = previousWebkitLineClamp
+      element.style.overflow = previousOverflow
 
-      element.style.display = "block";
-      element.style.webkitLineClamp = "unset";
-      element.style.overflow = "visible";
+      setIsThoughtLong(fullHeight > maxHeight + 5)
+    }
 
-      const fullHeight = element.scrollHeight;
-
-      // Restore original styles
-      element.style.display = previousDisplay;
-
-      element.style.webkitLineClamp = previousWebkitLineClamp;
-
-      element.style.overflow = previousOverflow;
-
-      setIsThoughtLong(fullHeight > maxHeight + 5);
-    };
-
-    // Allow browser to finish rendering first
-    const timeout = setTimeout(checkThoughtHeight, 50);
-
-    window.addEventListener("resize", checkThoughtHeight);
+    const timeout = setTimeout(checkThoughtHeight, 50)
+    window.addEventListener('resize', checkThoughtHeight)
 
     return () => {
-      clearTimeout(timeout);
+      clearTimeout(timeout)
+      window.removeEventListener('resize', checkThoughtHeight)
+    }
+  }, [featuredMessage])
 
-      window.removeEventListener("resize", checkThoughtHeight);
-    };
-  }, [featuredMessage]);
+  const renderMediaPreview = (post, compact = false) => {
+    const images = getPostImages(post)
+    const attachments = getPostAttachments(post)
+
+    if (!images.length && !attachments.length) return null
+
+    return (
+      <div
+        className={`sidebar-media-preview ${
+          compact ? 'sidebar-media-compact' : ''
+        }`}
+      >
+        {images.length > 0 && (
+          <div className="sidebar-image-preview">
+            {images.slice(0, compact ? 1 : 3).map((image, index) => (
+              <img
+                key={image.publicId || image.url || index}
+                src={image.url}
+                alt={image.alt || 'Post attachment'}
+                loading="lazy"
+              />
+            ))}
+            {images.length > (compact ? 1 : 3) && (
+              <span className="sidebar-media-count">
+                +{images.length - (compact ? 1 : 3)}
+              </span>
+            )}
+          </div>
+        )}
+
+        {attachments.slice(0, compact ? 1 : 3).map((attachment, index) => (
+          <div
+            className="sidebar-file-preview"
+            key={attachment.publicId || attachment.url || index}
+            title={attachment.originalName || 'Attachment'}
+          >
+            <FaFileAlt className="sidebar-file-icon" />
+            <span>{attachment.originalName || 'Attached file'}</span>
+            <FaPaperclip className="sidebar-file-clip" />
+          </div>
+        ))}
+
+        {attachments.length > (compact ? 1 : 3) && (
+          <small className="sidebar-extra-files">
+            +{attachments.length - (compact ? 1 : 3)} more file(s)
+          </small>
+        )}
+      </div>
+    )
+  }
 
   return (
     <aside className="right-sidebar">
-      {/* ======================================
-          FEATURED THOUGHT
-      ====================================== */}
-
+      {/* FEATURED THOUGHT */}
       <section className="card right-sidebar-card featured-thought-sidebar">
         <div className="right-sidebar-title">
           <FaLightbulb />
-
           <h3>Featured Thought</h3>
         </div>
-        {featuredMessage ? (
-          <div className="featured-thought-content">
-            {/* THOUGHT */}
-            <div
-              ref={thoughtRef}
-              className={`featured-thought-text ${
-                isThoughtExpanded ? "expanded" : "collapsed"
-              }`}
-            >
-              {featuredMessage}
-            </div>
 
-            {/* LOAD MORE */}
+        {featured ? (
+          <div className="featured-thought-content">
+            {featuredMessage && (
+              <div
+                ref={thoughtRef}
+                className={`featured-thought-text ${
+                  isThoughtLong
+                    ? isThoughtExpanded
+                      ? 'expanded'
+                      : 'collapsed'
+                    : 'short'
+                }`}
+              >
+                {featuredMessage}
+              </div>
+            )}
+
             {isThoughtLong && (
               <button
                 type="button"
@@ -145,21 +191,18 @@ const RightSidebar = () => {
                 onClick={() => setIsThoughtExpanded((prev) => !prev)}
                 aria-expanded={isThoughtExpanded}
               >
-                <span>{isThoughtExpanded ? "Show less" : "Load more"}</span>
-
+                <span>{isThoughtExpanded ? 'Show less' : 'Load more'}</span>
                 {isThoughtExpanded ? <FaChevronUp /> : <FaChevronDown />}
               </button>
             )}
 
-            {/* AUTHOR
-            */}
+            {renderMediaPreview(featured)}
+
             <small className="featured-thought-author">
-              —{" "}
-              {featured
-                ? `${featured.createdBy?.firstName || ""} ${featured.createdBy?.lastName || ""}`.trim()
-                : `${featured?.createdBy?.firstName || ""} ${
-                    featured?.createdBy?.lastName || ""
-                  }`.trim()}
+              —{' '}
+              {`${featured.createdBy?.firstName || ''} ${
+                featured.createdBy?.lastName || ''
+              }`.trim() || 'Unknown author'}
             </small>
           </div>
         ) : (
@@ -167,14 +210,10 @@ const RightSidebar = () => {
         )}
       </section>
 
-      {/* ======================================
-          TRENDING POSTS
-      ====================================== */}
-
+      {/* TRENDING POSTS */}
       <section className="card right-sidebar-card">
         <div className="right-sidebar-title">
           <IoTrendingUp />
-
           <h3>Trending Posts</h3>
         </div>
 
@@ -182,39 +221,42 @@ const RightSidebar = () => {
           {trendingPosts.length === 0 ? (
             <small>No trending posts.</small>
           ) : (
-            trendingPosts.map((post) => (
-              <div key={post._id} className="trending-item">
-                <div>
-                  <strong>
-                    {post.createdBy?.firstName} {post.createdBy?.lastName}
-                  </strong>
+            trendingPosts.map((post) => {
+              const content = post.content || ''
 
-                  <small>
-                    {post.content.length > 25
-                      ? `${post.content.slice(0, 25)}...`
-                      : post.content}
-                  </small>
+              return (
+                <div key={post._id} className="trending-item">
+                  <div className="trending-item-main">
+                    <strong>
+                      {post.createdBy?.firstName} {post.createdBy?.lastName}
+                    </strong>
+
+                    {content && (
+                      <small>
+                        {content.length > 45
+                          ? `${content.slice(0, 45)}...`
+                          : content}
+                      </small>
+                    )}
+
+                    {renderMediaPreview(post, true)}
+                  </div>
+
+                  <span className="trending-likes">
+                    <FaHeart />
+                    {post.likesCount || 0}
+                  </span>
                 </div>
-
-                <span>
-                  <FaHeart />
-
-                  {post.likesCount || 0}
-                </span>
-              </div>
-            ))
+              )
+            })
           )}
         </div>
       </section>
 
-      {/* ======================================
-          TOP CONTRIBUTORS
-      ====================================== */}
-
+      {/* TOP CONTRIBUTORS */}
       <section className="card right-sidebar-card">
         <div className="right-sidebar-title">
           <FaUserFriends />
-
           <h3>Top Contributors</h3>
         </div>
 
@@ -225,8 +267,8 @@ const RightSidebar = () => {
             contributors.map((person) => (
               <div key={person._id} className="contributor-item">
                 <div className="contributor-avatar">
-                  {`${person.firstName?.[0] || ""}${
-                    person.lastName?.[0] || ""
+                  {`${person.firstName?.[0] || ''}${
+                    person.lastName?.[0] || ''
                   }`.toUpperCase()}
                 </div>
 
@@ -234,8 +276,7 @@ const RightSidebar = () => {
                   <strong>
                     {person.firstName} {person.lastName}
                   </strong>
-
-                  <small>{person.designation || "Employee"}</small>
+                  <small>{person.designation || 'Employee'}</small>
                 </div>
               </div>
             ))
@@ -243,7 +284,7 @@ const RightSidebar = () => {
         </div>
       </section>
     </aside>
-  );
-};
+  )
+}
 
-export default RightSidebar;
+export default RightSidebar
