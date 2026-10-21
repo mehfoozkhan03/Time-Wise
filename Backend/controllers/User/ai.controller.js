@@ -20,6 +20,10 @@ import {
   getNextPending,
 } from "../../services/aiOrchestrator.services.js";
 import { getUserAIBotAccess } from "../../services/aiBotAccess.service.js";
+import { getTimeWiseOverviewReply, isTimeWiseImplementationQuestion, isTimeWiseProductQuestion } from "../../utils/timeWiseOverview.js";
+import { userModel } from "../../models/User.model.js";
+import { getLeaveBalance } from "../../services/leave.service.js";
+import { formatEmployeeProfileAnswer, isProfileDetailsQuestion, isSelfProfileQuestion } from "../../utils/aiProfile.js";
 
 const editDistance = (a, b) => {
   const rows = a.length + 1;
@@ -371,6 +375,74 @@ export const askAI = async (req, res) => {
         success: false,
         message: "WiseBot access has been blocked by your administrator.",
       });
+    }
+
+    if (/\b(password|passcode|authentication token|access token|secret|credential)\b/i.test(message)) {
+      const answer = "For your security, WiseBot can't show passwords or authentication secrets. You can manage or reset your password from Settings > Security.";
+      await addConversationMessage(userID, "user", message.trim());
+      await addConversationMessage(userID, "assistant", answer);
+      return res.status(200).json({ success: true, answer });
+    }
+
+    if (isTimeWiseImplementationQuestion(message)) {
+      const answer = "I can explain TimeWise pages and user-facing features, but I can't provide source code or internal technical details. What would you like to know about using TimeWise?";
+      await addConversationMessage(userID, "user", message.trim());
+      await addConversationMessage(userID, "assistant", answer);
+      return res.status(200).json({ success: true, answer });
+    }
+
+    const asksForLeaveBalance = /\b(leave|annual|sick|casual)\b/i.test(message) &&
+      /\b(balance|remaining|left|available)\b/i.test(message) &&
+      !/\b(how does|how do|how can|how to|explain|describe|feature|policy work)\b/i.test(message);
+    if (asksForLeaveBalance) {
+      const balance = await getLeaveBalance(userID);
+      const types = ["annual", "sick", "casual"].filter((type) =>
+        new RegExp(`\\b${type}\\b`, "i").test(message),
+      );
+      const selectedTypes = types.length ? types : ["annual", "sick", "casual"];
+      const answer = selectedTypes.map((type) => {
+        const item = balance?.[type] || { total: 0, used: 0 };
+        const available = Number(item.total || 0) - Number(item.used || 0);
+        return `${type[0].toUpperCase()}${type.slice(1)} leave: ${available} day${available === 1 ? "" : "s"} available (${item.used || 0} used of ${item.total || 0}).`;
+      }).join(" ");
+      await addConversationMessage(userID, "user", message.trim());
+      await addConversationMessage(userID, "assistant", answer);
+      return res.status(200).json({ success: true, answer });
+    }
+
+    if (isProfileDetailsQuestion(message)) {
+      let answer;
+      if (isSelfProfileQuestion(message)) {
+        const profile = await userModel.findById(userID)
+          .select("firstName lastName name email role department designation dob gender phone address bio socialLinks emergencyContact createdAt")
+          .lean();
+        answer = profile
+          ? formatEmployeeProfileAnswer(profile, message, { full: /\b(profile|personal details|personal information|my details|contact information|contact details|about me|complete details)\b/i.test(message) })
+          : "I couldn't load your profile right now. Please try again.";
+      } else {
+        answer = "WiseBot can provide profile details only for the employee who is signed in. Ask about your own profile, for example: ‘What is my department?’";
+      }
+      await addConversationMessage(userID, "user", message.trim());
+      await addConversationMessage(userID, "assistant", answer);
+      return res.status(200).json({ success: true, answer });
+    }
+
+    if (isTimeWiseProductQuestion(message)) {
+      const conversation = await getConversation(userID);
+      let answer;
+      try {
+        answer = await askTimeWiseAI(message.trim(), {
+          isProductQuestion: true,
+          productRole: "employee",
+        }, conversation.messages);
+      } catch (error) {
+        console.error("WiseBot product question failed:", error.message);
+        answer = getTimeWiseOverviewReply(message, "employee") ||
+          "I can explain TimeWise features, but I don't have enough product information to answer that specific detail. Please check the relevant page or ask your administrator.";
+      }
+      await addConversationMessage(userID, "user", message.trim());
+      await addConversationMessage(userID, "assistant", answer);
+      return res.status(200).json({ success: true, answer });
     }
 
     const quickReply = getGreetingReply(message);

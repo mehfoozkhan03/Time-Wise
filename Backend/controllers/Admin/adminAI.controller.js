@@ -9,6 +9,10 @@ import { getEmployeeReport } from "../../services/reports.service.js";
 import { getIndiaDateKey, getTodayRange, getWeekRange } from "../../utils/attendanceHelper.js";
 import { attendanceConfig } from "../../config/attendanceConfig.js";
 import { ATTENDANCE_BLOCKING_HOLIDAY_TYPES } from "../../config/attendanceRules.js";
+import { askTimeWiseAI } from "../../services/ai.services.js";
+import { getTimeWiseOverviewReply, isTimeWiseImplementationQuestion, isTimeWiseProductQuestion } from "../../utils/timeWiseOverview.js";
+import { formatEmployeeProfileAnswer, isProfileDetailsQuestion } from "../../utils/aiProfile.js";
+import { getLeaveBalance } from "../../services/leave.service.js";
 
 const employeeName = (employee) =>
   `${employee?.firstName || ""} ${employee?.lastName || ""}`.trim() ||
@@ -491,6 +495,14 @@ export const askAdminAI = async (req, res) => {
       return replyWithSavedConversation(req, res, question, "I can't provide stock prices. I can help with employees, attendance, working hours, overtime, productivity, leave requests, calendar events, and upcoming holidays.");
     }
 
+    if (/\b(password|passcode|authentication token|access token|secret|credential)\b/i.test(question)) {
+      return replyWithSavedConversation(req, res, question, "For security, WiseBot can't reveal passwords or authentication secrets. An employee can reset a password from Settings > Security.");
+    }
+
+    if (isTimeWiseImplementationQuestion(question)) {
+      return replyWithSavedConversation(req, res, question, "I can explain TimeWise pages and user-facing features, but I can't provide source code or internal technical details. What would you like to know about using TimeWise?");
+    }
+
     const asksForEmployeeCount =
       (lowerQuestion.includes("how many") || lowerQuestion.includes("count") || lowerQuestion.includes("number of")) &&
       (lowerQuestion.includes("employee") || lowerQuestion.includes("staff"));
@@ -508,6 +520,62 @@ export const askAdminAI = async (req, res) => {
       .lean();
     const employeeIds = employees.map((employee) => employee._id);
     const employee = resolveEmployee(employees, question);
+
+    const asksForLeaveBalance = /\b(leave|annual|sick|casual)\b/i.test(question) &&
+      /\b(balance|remaining|left|available)\b/i.test(question) &&
+      !/\b(how does|how do|how can|how to|explain|describe|feature|policy work)\b/i.test(question);
+    if (asksForLeaveBalance) {
+      if (!employee) {
+        return replyWithSavedConversation(req, res, question, "Please include the employee's full name or registered email so I can check their leave balance in your organisation.");
+      }
+      const balance = await getLeaveBalance(employee._id);
+      const types = ["annual", "sick", "casual"].filter((type) =>
+        new RegExp(`\\b${type}\\b`, "i").test(question),
+      );
+      const selectedTypes = types.length ? types : ["annual", "sick", "casual"];
+      const answer = selectedTypes.map((type) => {
+        const item = balance?.[type] || { total: 0, used: 0 };
+        const available = Number(item.total || 0) - Number(item.used || 0);
+        return `${employeeName(employee)} — ${type} leave: ${available} day${available === 1 ? "" : "s"} available (${item.used || 0} used of ${item.total || 0}).`;
+      }).join(" ");
+      return replyWithSavedConversation(req, res, question, answer);
+    }
+
+    const asksAboutOneEmployee = Boolean(employee) &&
+      /\b(who is|tell me about|details of|details for|profile of|information about|information on)\b/i.test(question) &&
+      !/\b(attendance|present|absent|late|working hours?|overtime|productivity)\b/i.test(question);
+    const asksForEmployeeProfile = isProfileDetailsQuestion(question) || asksAboutOneEmployee;
+    if (asksForEmployeeProfile) {
+      if (!employee) {
+        return replyWithSavedConversation(req, res, question, "Please include the employee's full name or registered email so I can find the profile in your organisation.");
+      }
+      const profile = await userModel.findOne({ _id: employee._id, adminID: req.admin.adminID })
+        .select("firstName lastName name email role department designation dob gender phone address bio socialLinks emergencyContact createdAt")
+        .lean();
+      const fullProfile = /\b(profile|personal details|personal information|employee details|employee information|employee profile|contact information|contact details|details of|details for|information about|information on|all (?:my |employee )?details|full details|complete details|tell me about|who is)\b/i.test(question);
+      const answer = profile
+        ? formatEmployeeProfileAnswer(profile, question, { full: fullProfile })
+        : "I couldn't find that employee in your organisation.";
+      return replyWithSavedConversation(req, res, question, answer);
+    }
+
+    if (isTimeWiseProductQuestion(question)) {
+      const priorConversation = await AdminAIConversation.findOne({ adminID: req.admin.adminID })
+        .select("messages")
+        .lean();
+      let answer;
+      try {
+        answer = await askTimeWiseAI(question, {
+          isProductQuestion: true,
+          productRole: "admin",
+        }, priorConversation?.messages || []);
+      } catch (error) {
+        console.error("Admin WiseBot product question failed:", error.message);
+        answer = getTimeWiseOverviewReply(question, "admin") ||
+          "I can explain TimeWise features, but I don't have enough product information to answer that specific detail. Please check the relevant page or ask your system administrator.";
+      }
+      return replyWithSavedConversation(req, res, question, answer);
+    }
 
     const asksAboutLateEmployees = hasWordWithCommonTypos(lowerQuestion, "late");
     const asksOrganizationAttendance = !employee &&
