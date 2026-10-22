@@ -11,8 +11,13 @@ const leaveSchema = new mongoose.Schema(
 
     leaveType: {
       type: String,
-      enum: ["annual", "sick", "casual"],
+      enum: ["annual", "sick", "casual", "emergency"],
       required: true,
+    },
+
+    emergencyLeaveMonth: {
+      type: String,
+      default: undefined,
     },
 
     startDate: {
@@ -103,5 +108,21 @@ leaveSchema.index({
   status: 1,
   startDate: 1,
 });
+
+leaveSchema.index(
+  {
+    user: 1,
+    emergencyLeaveMonth: 1,
+  },
+  {
+    unique: true,
+    partialFilterExpression: {
+      leaveType: "emergency",
+      emergencyLeaveMonth: {
+        $type: "string",
+      },
+    },
+  },
+);
 
 export const leaveModel = mongoose.model("Leave", leaveSchema);

@@ -1,3 +1,4 @@
+
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -23,6 +24,7 @@ const leaveTypeLabels = {
   annual: "Annual Leave",
   sick: "Sick Leave",
   casual: "Casual Leave",
+  emergency: "Emergency Leave",
 };
 
 const formatDate = (date) => {
@@ -127,164 +129,164 @@ export default function LeaveRequestDetails({
       onOverlayClick={onClose}
       onContentClick={(event) => event.stopPropagation()}
     >
-        <div className="leave_details_header">
-          <div>
-            <span className="leave_details_eyebrow">Leave Request</span>
+      <div className="leave_details_header">
+        <div>
+          <span className="leave_details_eyebrow">Leave Request</span>
 
-            <h2>Request Details</h2>
-          </div>
-
-          <button
-            type="button"
-            className="leave_details_close"
-            onClick={onClose}
-            aria-label="Close"
-          >
-            <FaTimes />
-          </button>
+          <h2>Request Details</h2>
         </div>
 
-        <div className="leave_details_employee">
-          <div className="leave_details_avatar">
-            {getEmployeeInitials(employee)}
-          </div>
+        <button
+          type="button"
+          className="leave_details_close"
+          onClick={onClose}
+          aria-label="Close"
+        >
+          <FaTimes />
+        </button>
+      </div>
 
-          <div className="leave_details_employee_info">
-            <h3>{employeeName}</h3>
+      <div className="leave_details_employee">
+        <div className="leave_details_avatar">
+          {getEmployeeInitials(employee)}
+        </div>
 
+        <div className="leave_details_employee_info">
+          <h3>{employeeName}</h3>
+
+          <span>
+            <FaEnvelope />
+            {employee?.email || "No email available"}
+          </span>
+
+          <div className="leave_details_employee_meta">
             <span>
-              <FaEnvelope />
-              {employee?.email || "No email available"}
+              <FaBuilding />
+              {employee?.department || "Department not available"}
             </span>
 
-            <div className="leave_details_employee_meta">
-              <span>
-                <FaBuilding />
-                {employee?.department || "Department not available"}
-              </span>
-
-              <span>
-                <FaBriefcase />
-                {employee?.designation || "Designation not available"}
-              </span>
-            </div>
+            <span>
+              <FaBriefcase />
+              {employee?.designation || "Designation not available"}
+            </span>
           </div>
         </div>
+      </div>
 
-        <div className="leave_details_status_row">
-          <span className="leave_details_status_label">Current Status</span>
+      <div className="leave_details_status_row">
+        <span className="leave_details_status_label">Current Status</span>
 
-          <span className={`leave_details_status ${statusClass}`}>
-            <span className="leave_details_status_dot" />
-            {currentRequest.status || "Unknown"}
-          </span>
+        <span className={`leave_details_status ${statusClass}`}>
+          <span className="leave_details_status_dot" />
+          {currentRequest.status || "Unknown"}
+        </span>
+      </div>
+
+      <div className="leave_details_section">
+        <div className="leave_details_section_title">
+          <FaFileAlt />
+          <span>Leave Information</span>
         </div>
 
+        <div className="leave_details_grid">
+          <div className="leave_details_item">
+            <span className="leave_details_item_label">Leave Type</span>
+
+            <strong>{formatLeaveType(currentRequest.leaveType)}</strong>
+          </div>
+
+          <div className="leave_details_item">
+            <span className="leave_details_item_label">Total Days</span>
+
+            <strong>
+              {totalDays} {totalDays === 1 ? "Day" : "Days"}
+            </strong>
+          </div>
+
+          <div className="leave_details_item">
+            <span className="leave_details_item_label">Start Date</span>
+
+            <strong>
+              <FaCalendarAlt />
+              {formatDate(currentRequest.startDate)}
+            </strong>
+          </div>
+
+          <div className="leave_details_item">
+            <span className="leave_details_item_label">End Date</span>
+
+            <strong>
+              <FaCalendarAlt />
+              {formatDate(currentRequest.endDate)}
+            </strong>
+          </div>
+
+          <div className="leave_details_item">
+            <span className="leave_details_item_label">Applied On</span>
+
+            <strong>
+              <FaClock />
+              {formatDate(getAppliedDate(currentRequest))}
+            </strong>
+          </div>
+        </div>
+      </div>
+
+      <div className="leave_details_section">
+        <div className="leave_details_section_title">
+          <FaFileAlt />
+          <span>Reason</span>
+        </div>
+
+        <div className="leave_details_reason">
+          {currentRequest.reason || "No reason provided."}
+        </div>
+      </div>
+
+      {currentRequest.adminComment && (
         <div className="leave_details_section">
           <div className="leave_details_section_title">
-            <FaFileAlt />
-            <span>Leave Information</span>
+            <FaUser />
+            <span>Admin Comment</span>
           </div>
 
-          <div className="leave_details_grid">
-            <div className="leave_details_item">
-              <span className="leave_details_item_label">Leave Type</span>
-
-              <strong>{formatLeaveType(currentRequest.leaveType)}</strong>
-            </div>
-
-            <div className="leave_details_item">
-              <span className="leave_details_item_label">Total Days</span>
-
-              <strong>
-                {totalDays} {totalDays === 1 ? "Day" : "Days"}
-              </strong>
-            </div>
-
-            <div className="leave_details_item">
-              <span className="leave_details_item_label">Start Date</span>
-
-              <strong>
-                <FaCalendarAlt />
-                {formatDate(currentRequest.startDate)}
-              </strong>
-            </div>
-
-            <div className="leave_details_item">
-              <span className="leave_details_item_label">End Date</span>
-
-              <strong>
-                <FaCalendarAlt />
-                {formatDate(currentRequest.endDate)}
-              </strong>
-            </div>
-
-            <div className="leave_details_item">
-              <span className="leave_details_item_label">Applied On</span>
-
-              <strong>
-                <FaClock />
-                {formatDate(getAppliedDate(currentRequest))}
-              </strong>
-            </div>
+          <div className="leave_details_comment">
+            {currentRequest.adminComment}
           </div>
         </div>
+      )}
 
-        <div className="leave_details_section">
-          <div className="leave_details_section_title">
-            <FaFileAlt />
-            <span>Reason</span>
-          </div>
+      <div className="leave_details_footer">
+        <button
+          type="button"
+          className="leave_details_btn secondary"
+          onClick={onClose}
+        >
+          Close
+        </button>
 
-          <div className="leave_details_reason">
-            {currentRequest.reason || "No reason provided."}
-          </div>
-        </div>
+        {isPending && !loading && (
+          <div className="leave_details_actions">
+            <button
+              type="button"
+              className="leave_details_btn reject"
+              onClick={() => onReject?.(currentRequest)}
+            >
+              <FaBan />
+              Reject
+            </button>
 
-        {currentRequest.adminComment && (
-          <div className="leave_details_section">
-            <div className="leave_details_section_title">
-              <FaUser />
-              <span>Admin Comment</span>
-            </div>
-
-            <div className="leave_details_comment">
-              {currentRequest.adminComment}
-            </div>
+            <button
+              type="button"
+              className="leave_details_btn approve"
+              onClick={() => onApprove?.(currentRequest)}
+            >
+              <FaCheck />
+              Approve
+            </button>
           </div>
         )}
-
-        <div className="leave_details_footer">
-          <button
-            type="button"
-            className="leave_details_btn secondary"
-            onClick={onClose}
-          >
-            Close
-          </button>
-
-          {isPending && !loading && (
-            <div className="leave_details_actions">
-              <button
-                type="button"
-                className="leave_details_btn reject"
-                onClick={() => onReject?.(currentRequest)}
-              >
-                <FaBan />
-                Reject
-              </button>
-
-              <button
-                type="button"
-                className="leave_details_btn approve"
-                onClick={() => onApprove?.(currentRequest)}
-              >
-                <FaCheck />
-                Approve
-              </button>
-            </div>
-          )}
-        </div>
+      </div>
     </Modal>
   );
 }
