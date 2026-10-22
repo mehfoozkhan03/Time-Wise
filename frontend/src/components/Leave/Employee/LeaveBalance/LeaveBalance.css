@@ -32,10 +32,7 @@
 
 .leaveBalance-grid {
   display: grid;
-  grid-template-columns: repeat(
-    3,
-    minmax(0, 1fr)
-  );
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
 }
 
@@ -90,13 +87,12 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid
-    color-mix(
-      in srgb,
-      var(--primary) 25%,
-      var(--border)
-    );
-  border-radius: 8px;
+  border: 1px solid color-mix(
+    in srgb,
+    var(--primary) 25%,
+    var(--border)
+  );
+  border-radius: var(--radius_sm);
   background: color-mix(
     in srgb,
     var(--primary) 9%,
@@ -156,10 +152,7 @@
 
 .leaveBalance-details {
   display: grid;
-  grid-template-columns: repeat(
-    2,
-    minmax(0, 1fr)
-  );
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
   padding-top: 16px;
 }
@@ -188,6 +181,10 @@
   color: var(--primary);
 }
 
+/* ==========================================
+   TABLET / SMALL DESKTOP
+========================================== */
+
 @media (max-width: 1000px) {
   .leaveBalance {
     padding: 22px 24px;
@@ -205,6 +202,10 @@
     font-size: 28px;
   }
 }
+
+/* ==========================================
+   TABLET
+========================================== */
 
 @media (max-width: 720px) {
   .leaveBalance {
@@ -224,10 +225,7 @@
   }
 
   .leaveBalance-grid {
-    grid-template-columns: repeat(
-      2,
-      minmax(0, 1fr)
-    );
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 14px;
   }
 
@@ -266,6 +264,10 @@
   }
 }
 
+/* ==========================================
+   MOBILE
+========================================== */
+
 @media (max-width: 480px) {
   .leaveBalance {
     padding: 18px;
@@ -302,7 +304,6 @@
   .leaveBalance-icon {
     width: 31px;
     height: 31px;
-    border-radius: 7px;
     font-size: 16px;
   }
 
@@ -335,6 +336,10 @@
     font-size: 13px;
   }
 }
+
+/* ==========================================
+   EXTRA SMALL MOBILE
+========================================== */
 
 @media (max-width: 320px) {
   .leaveBalance {
@@ -406,6 +411,10 @@
     font-size: 12px;
   }
 }
+
+/* ==========================================
+   REDUCED MOTION
+========================================== */
 
 @media (prefers-reduced-motion: reduce) {
   .leaveBalance-card {

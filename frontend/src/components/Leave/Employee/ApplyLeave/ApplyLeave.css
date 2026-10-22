@@ -39,17 +39,9 @@
   align-items: center;
   justify-content: center;
   border: 1px solid
-    color-mix(
-      in srgb,
-      var(--primary) 28%,
-      var(--border)
-    );
-  border-radius: 9px;
-  background: color-mix(
-    in srgb,
-    var(--primary) 10%,
-    var(--surface)
-  );
+    color-mix(in srgb, var(--primary) 28%, var(--border));
+  border-radius: var(--radius_sm);
+  background: color-mix(in srgb, var(--primary) 10%, var(--surface));
   color: var(--primary);
   font-size: 20px;
 }
@@ -196,21 +188,13 @@
 .applyLeave-field input:focus,
 .applyLeave-field textarea:focus {
   border-color: var(--primary);
-  box-shadow:
-    0 0 0 3px
-    color-mix(
-      in srgb,
-      var(--primary) 12%,
-      transparent
-    );
+  box-shadow: 0 0 0 3px
+    color-mix(in srgb, var(--primary) 12%, transparent);
 }
 
-.applyLeave-field input:focus
-  + *,
-.applyLeave-input-wrapper:focus-within
-  > svg,
-.applyLeave-textarea-wrapper:focus-within
-  > svg {
+.applyLeave-field input:focus + *,
+.applyLeave-input-wrapper:focus-within > svg,
+.applyLeave-textarea-wrapper:focus-within > svg {
   color: var(--primary);
 }
 
@@ -222,19 +206,13 @@
 
 .applyLeave-date-grid {
   display: grid;
-  grid-template-columns: repeat(
-    2,
-    minmax(0, 1fr)
-  );
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
 }
 
 .applyLeave-info {
   display: grid;
-  grid-template-columns: repeat(
-    2,
-    minmax(0, 1fr)
-  );
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
 }
 
@@ -268,12 +246,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 7px;
-  background: color-mix(
-    in srgb,
-    var(--primary) 10%,
-    var(--surface)
-  );
+  border-radius: var(--radius_sm);
+  background: color-mix(in srgb, var(--primary) 10%, var(--surface));
   color: var(--primary);
   font-size: 16px;
 }
@@ -302,18 +276,10 @@
 .applyLeave-error {
   margin: -2px 0 0;
   padding: 10px 12px;
-  border: 1px solid
-    color-mix(
-      in srgb,
-      var(--error) 25%,
-      transparent
-    );
+  border: 1px solid var(--error);
+  border-color: color-mix(in srgb, var(--error) 25%, transparent);
   border-radius: var(--radius_sm);
-  background: color-mix(
-    in srgb,
-    var(--error) 8%,
-    transparent
-  );
+  background: color-mix(in srgb, var(--error) 8%, transparent);
   color: var(--error);
   font-size: 11px;
   line-height: 1.5;
@@ -370,28 +336,24 @@
   background: var(--primary);
   color: var(--text-inverse);
   box-shadow: 0 4px 12px
-    color-mix(
-      in srgb,
-      var(--primary) 18%,
-      transparent
-    );
+    color-mix(in srgb, var(--primary) 18%, transparent);
 }
 
 .applyLeave-submit:hover:not(:disabled) {
   background: var(--primary_hover);
   border-color: var(--primary_hover);
   box-shadow: 0 5px 15px
-    color-mix(
-      in srgb,
-      var(--primary) 25%,
-      transparent
-    );
+    color-mix(in srgb, var(--primary) 25%, transparent);
 }
 
 .applyLeave-actions button:disabled {
   cursor: not-allowed;
   opacity: 0.5;
 }
+
+/* ==========================================
+   ANIMATIONS
+========================================== */
 
 @keyframes applyLeaveOverlayIn {
   from {
@@ -414,6 +376,10 @@
     transform: translateY(0) scale(1);
   }
 }
+
+/* ==========================================
+   TABLET
+========================================== */
 
 @media (max-width: 720px) {
   .applyLeave-overlay {
@@ -438,6 +404,10 @@
   }
 }
 
+/* ==========================================
+   MOBILE
+========================================== */
+
 @media (max-width: 480px) {
   .applyLeave-overlay {
     align-items: flex-end;
@@ -447,11 +417,7 @@
   .applyLeave-modal {
     width: 100%;
     max-height: calc(100vh - 10px);
-    border-radius:
-      var(--radius_lg)
-      var(--radius_lg)
-      0
-      0;
+    border-radius: var(--radius_lg) var(--radius_lg) 0 0;
   }
 
   .applyLeave-header {
@@ -515,6 +481,10 @@
     min-height: 40px;
   }
 }
+
+/* ==========================================
+   SMALL MOBILE
+========================================== */
 
 @media (max-width: 320px) {
   .applyLeave-modal {
@@ -625,6 +595,10 @@
     font-size: 11px;
   }
 }
+
+/* ==========================================
+   REDUCED MOTION
+========================================== */
 
 @media (prefers-reduced-motion: reduce) {
   .applyLeave-overlay,
