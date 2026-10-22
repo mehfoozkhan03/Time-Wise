@@ -315,7 +315,7 @@
   font-weight: 700;
 }
 
-/* ==================== EDIT EMPLOYEE NAME======================= */
+/* ==================== EDIT EMPLOYEE NAME ======================= */
 .employee-edit-name {
   display: flex;
   align-items: center;
@@ -476,39 +476,28 @@
 .password-modal-overlay {
   position: fixed !important;
   inset: 0 !important;
-
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-
   padding: 20px;
-
   background: rgba(15, 23, 42, 0.68) !important;
   backdrop-filter: blur(7px);
-
   z-index: 99999 !important;
 }
 
 
 /* ---------- MODAL ---------- */
-
 .password-modal {
   position: relative;
-
   width: 440px;
   max-width: calc(100vw - 32px);
-
   padding: 32px;
-
   background: #ffffff !important;
-
   border: 1px solid #e2e8f0;
   border-radius: 20px;
-
   box-shadow:
     0 25px 60px rgba(0, 0, 0, 0.25),
     0 8px 25px rgba(0, 0, 0, 0.08);
-
   animation: passwordModalIn 0.25s ease;
 }
 
@@ -533,20 +522,14 @@
 .password-modal-icon {
   width: 58px;
   height: 58px;
-
   margin: 0 auto 18px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   border-radius: 16px;
-
   background: #fff7df;
   color: #f5b82e;
-
   font-size: 23px;
-
   box-shadow:
     0 5px 15px rgba(253, 203, 75, 0.15);
 }
@@ -556,14 +539,10 @@
 
 .password-modal h3 {
   margin: 0;
-
   text-align: center;
-
   color: #202733;
-
   font-size: 21px;
   font-weight: 700;
-
   letter-spacing: -0.3px;
 }
 
@@ -572,11 +551,8 @@
 
 .password-modal-user {
   margin: 8px 0 28px;
-
   text-align: center;
-
   color: #7a8494;
-
   font-size: 13px;
   line-height: 1.5;
 }
@@ -600,11 +576,8 @@
 
 .password-input-group label {
   display: block;
-
   margin-bottom: 8px;
-
   color: #3b4451;
-
   font-size: 13px;
   font-weight: 600;
 }
@@ -765,11 +738,27 @@
 
 
 /* Add Employee */
+.add-employee-modal{
+  position: relative;
+}
+
 .add-employee-scroll {
-  max-height: 80vh;
+  /* max-height: 80vh; */
   overflow-y: auto;
   overflow-x: hidden;
   padding-right: 8px;
+}
+
+.close-modal{
+  color: red;
+  position: absolute;
+  top: 10px;
+  right: 40px;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  padding: 7px;
+  border-radius: 50%;
+  z-index: 9999;
 }
 
 .add-employee-scroll::-webkit-scrollbar {
@@ -794,16 +783,12 @@
   position: fixed;
   inset: 0;
   z-index: 9999;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   padding: 30px;
-
   background: rgba(0, 0, 0, 0.55);
   backdrop-filter: blur(4px);
-
   overflow: hidden;
 }
 
@@ -841,16 +826,12 @@
 .employee-profile-overlay {
   position: fixed !important;
   inset: 0 !important;
-
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-
   padding: 25px !important;
-
   background: rgba(0, 0, 0, 0.62) !important;
   backdrop-filter: blur(5px) !important;
-
   z-index: 9999 !important;
 }
 /* =========================================================
@@ -864,11 +845,8 @@
 
 .password-input-group label {
   display: block;
-
   margin-bottom: 7px;
-
   color: #374151;
-
   font-size: 13px;
   font-weight: 600;
 }
@@ -880,7 +858,6 @@
 
 .password-field {
   position: relative;
-
   width: 100%;
 }
 
@@ -889,26 +866,17 @@
 
 .password-field input {
   display: block;
-
   width: 100% !important;
   height: 46px;
-
   box-sizing: border-box;
-
   padding: 0 44px 0 13px !important;
-
   border: 1px solid #d9dee7 !important;
   border-radius: 8px !important;
-
   outline: none;
-
   background: #f8fafc !important;
-
   color: #1f2937 !important;
   -webkit-text-fill-color: #1f2937 !important;
-
   font-size: 13px;
-
   transition: 0.2s ease;
 }
 
@@ -932,9 +900,7 @@
 
 .password-field input:focus {
   background: #fff !important;
-
   border-color: var(--primary) !important;
-
   box-shadow: 0 0 0 3px
     color-mix(
       in srgb,
@@ -950,30 +916,20 @@
 
 .password-eye {
   position: absolute;
-
   top: 50%;
   right: 10px;
-
   width: 30px;
   height: 30px;
-
   padding: 0;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   transform: translateY(-50%);
-
   border: none !important;
   background: transparent !important;
-
   color: #7b8794;
-
   font-size: 15px;
-
   cursor: pointer;
-
   z-index: 2;
 }
 
@@ -991,7 +947,7 @@
 }
 
 /* OUTER WRAPPER */
-.employee-profile-modal {
+/* .employee-profile-modal {
   position: relative !important;
 
   width: auto !important;
@@ -1009,7 +965,7 @@
   box-shadow: none !important;
 
   overflow: visible !important;
-}
+} */
 
 
 /* =========================================================
@@ -1018,61 +974,36 @@
 
 .add-employee-modal {
   position: relative !important;
-
   width: 520px !important;
   max-width: calc(100vw - 40px) !important;
-
   max-height: 88vh !important;
-
   background: #ffffff !important;
-
-  /* ⭐ VISIBLE MODAL BORDER */
-  border: 1px solid #cfd6df !important;
-
-  /* ⭐ CLEAN ROUNDED CORNERS */
+  border: 1px solid var(--border) !important;
   border-radius: 18px !important;
-
-  /* ⭐ PROFESSIONAL SHADOW */
   box-shadow:
     0 25px 60px rgba(0, 0, 0, 0.25),
     0 8px 20px rgba(0, 0, 0, 0.08) !important;
-
   overflow: hidden !important;
-
   z-index: 10000 !important;
 }
 
 
-/* =========================================================
-   FORM SCROLL AREA
-========================================================= */
-
+/* ========================= FORM SCROLL AREA ======================== */
 .add-employee-modal .add-employee-scroll {
   width: 100% !important;
-
   max-height: 88vh !important;
-
   box-sizing: border-box !important;
-
-  /* ⭐ SPACE FROM MODAL BORDER */
   padding: 28px !important;
-
   background: #ffffff !important;
-
   overflow-x: hidden !important;
   overflow-y: auto !important;
-
   scrollbar-width: thin;
-   border-radius:13px;
-  scrollbar-color:
-    var(--primary)
-    transparent;
+  border-radius: 13px;
+  scrollbar-color: var(--primary) transparent;
 }
 
 
-/* =========================================================
-   SCROLLBAR
-========================================================= */
+/* ======================== SCROLLBAR ======================= */
 
 .add-employee-modal .add-employee-scroll::-webkit-scrollbar {
   width: 5px !important;
@@ -1093,62 +1024,40 @@
 }
 
 
-/* =========================================================
-   FORM
-========================================================= */
+/* =========================== FORM ========================== */
 
 .add-employee-modal .form {
   width: 100% !important;
-
   margin: 0 !important;
   padding: 0 !important;
-
   background: #ffffff !important;
-
   border: none !important;
 }
 
 
-/* =========================================================
-   INPUT BOX
-========================================================= */
+/* ========================= INPUT BOX ========================== */
 
 .add-employee-modal .form .input-box {
   width: 100% !important;
-
   margin-bottom: 15px !important;
-
   box-sizing: border-box !important;
 }
 
 
-/* =========================================================
-   INPUT
-========================================================= */
+/* ========================== INPUT =========================== */
 
 .add-employee-modal .form .input-box input {
   width: 100% !important;
-
   height: 46px !important;
-
   box-sizing: border-box !important;
-
   padding: 0 14px !important;
-
   background: #ffffff !important;
-
   border: 1px solid #cfd6df !important;
-
   border-radius: 9px !important;
-
   color: #222831 !important;
-
   -webkit-text-fill-color: #222831 !important;
-
   font-size: 14px !important;
-
   outline: none !important;
-
   transition: all 0.2s ease !important;
 }
 
@@ -1170,7 +1079,6 @@ input:hover {
 .input-box
 input:focus {
   border-color: var(--primary) !important;
-
   box-shadow:
     0 0 0 3px
     color-mix(
@@ -1201,9 +1109,7 @@ input:focus {
 .form
 .password-box .eye-icon {
   color: #687386 !important;
-
   cursor: pointer !important;
-
   transition: color 0.2s ease;
 }
 
@@ -1222,11 +1128,8 @@ input:focus {
 .form
 .select-box {
   position: relative !important;
-
   width: 100% !important;
-
   margin-bottom: 15px !important;
-
   z-index: 1 !important;
 }
 
