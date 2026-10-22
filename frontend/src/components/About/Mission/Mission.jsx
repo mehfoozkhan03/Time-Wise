@@ -1,5 +1,69 @@
 
+import { useEffect, useState } from "react";
+import Skeleton from "../../../components/Skeleton/Skeleton";
+
 function Mission() {
+  const [showSkeleton, setShowSkeleton] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowSkeleton(false);
+    }, 1500);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (showSkeleton) {
+    return (
+      <section className="mission_section">
+        {/* Heading and subtitle */}
+        <div className="mission_card mission_skeleton_header">
+          <Skeleton width="480px" height="36px" />
+
+          <div className="mission_skeleton_subtitle">
+            <Skeleton width="390px" height="16px" />
+          </div>
+        </div>
+
+        {/* Two large cards */}
+        <div className="mission_card_hero">
+          {[1, 2].map((item) => (
+            <div className="mission_box mission_skeleton_box" key={item}>
+              {/* Icon placeholder */}
+              <Skeleton
+                width="60px"
+                height="60px"
+                radius="16px"
+              />
+
+              {/* Title placeholder */}
+              <div className="mission_skeleton_title">
+                <Skeleton width="290px" height="24px" />
+              </div>
+
+              {/* Description placeholders */}
+              <div className="mission_skeleton_description">
+                <Skeleton width="100%" height="16px" />
+
+                <div className="mission_skeleton_line">
+                  <Skeleton width="100%" height="16px" />
+                </div>
+
+                <div className="mission_skeleton_line">
+                  <Skeleton width="95%" height="16px" />
+                </div>
+
+                <div className="mission_skeleton_line">
+                  <Skeleton width="70%" height="16px" />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="mission_section">
       <div className="mission_card">
