@@ -231,6 +231,7 @@
   border: 1px solid var(--border);
   font-family: inherit;
   font-size: 11px;
+  cursor: pointer;
   outline: none;
   transition:
     background var(--transition),
@@ -247,8 +248,7 @@
 .leave_action_btn:focus-visible {
   outline: none;
   transform: translateY(-1px);
-  box-shadow: 0 0 0 3px
-    color-mix(in srgb, var(--primary) 12%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 12%, transparent);
 }
 
 .leave_action_btn.view {
