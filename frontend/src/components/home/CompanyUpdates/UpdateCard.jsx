@@ -1,8 +1,11 @@
 import './UpdateCard.css'
 
-export default function UpdateCard({ icon, title, description, time, color }) {
+export default function UpdateCard({ icon, title, description, time, color, onClick, }) {
   return (
-    <div className="update_card">
+    <div className="update_card" onClick={onClick}
+      style={{
+        cursor: onClick ? "pointer" : "default",
+      }}>
       <div className="update_icon" style={{ background: color }}>
         {icon}
       </div>
