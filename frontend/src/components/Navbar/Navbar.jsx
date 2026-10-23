@@ -31,8 +31,20 @@ export default function Navbar() {
 
       setNotificationOpen(false);
 
+      // if (notification.referenceModel === "Post" && notification.referenceId) {
+      //   navigate(`/community/post/${notification.referenceId}`);
+      // }
       if (notification.referenceModel === "Post" && notification.referenceId) {
         navigate(`/community/post/${notification.referenceId}`);
+      } else if (
+        notification.referenceModel === "Announcement" &&
+        notification.referenceId
+      ) {
+        navigate("/announcements", {
+          state: {
+            announcementId: notification.referenceId,
+          },
+        });
       }
     } catch (error) {
       console.error("Notification Click Error:", error);

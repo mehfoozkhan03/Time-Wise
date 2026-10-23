@@ -68,4 +68,9 @@ export const announcementService = {
   togglePinAnnouncement(id) {
     return api.patch(`/admin/announcements/${id}/pin`);
   },
+
+  //# This is for user 
+  getEmployeeAnnouncements() {
+    return api.get("/user/announcements");
+  },
 };

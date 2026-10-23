@@ -1,5 +1,8 @@
 import mongoose from "mongoose";
 import { annoucementModel } from "../../models/Announcement.model.js";
+import { createNotification } from "../../services/notification.service.js";
+import { getAnnouncementRecipients } from "../../utils/announcementRecipients.js";
+import { userModel } from "../../models/User.model.js";
 
 // ============================================================
 // CREATE ANNOUNCEMENT
@@ -139,6 +142,40 @@ export const createAnnouncement = async (req, res) => {
         "firstName lastName profileImage designation department",
       )
       .populate("updatedBy", "firstName lastName");
+
+      
+    console.log("Admin auth:", req.admin);
+    console.log("User auth:", req.user);
+    console.log("Announcement createdBy:", populatedAnnouncement.createdBy);
+    
+    if (populatedAnnouncement.status === "Published") {
+      const recipientIds = await getAnnouncementRecipients(
+        populatedAnnouncement,
+      );
+
+      if (recipientIds.length > 0) {
+        await createNotification({
+          sender: req.admin?.adminID || req.user?.userID,
+          senderModel: req.admin ? "Admin" : "User",
+          title: `New Announcement: ${populatedAnnouncement.title}`,
+          message: populatedAnnouncement.description,
+          type: "announcement",
+          referenceModel: "Announcement",
+          referenceId: populatedAnnouncement._id,
+          audienceType: {
+            Everyone: "all",
+            Department: "department",
+            Role: "designation",
+            "Specific Employees": "specific",
+          }[populatedAnnouncement.audience],
+          targetUsers: recipientIds,
+          targetDepartment: populatedAnnouncement.department,
+          targetDesignation: populatedAnnouncement.role,
+        });
+      }
+    }
+
+
     return res.status(201).json({
       success: true,
       message: "Announcement created successfully.",
@@ -775,6 +812,86 @@ export const togglePinAnnouncement = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Unable to update announcement pin.",
+      error: error.message,
+    });
+  }
+};
+
+
+//# Getiing employee announcement 
+
+export const getEmployeeAnnouncements = async (req, res) => {
+  try {
+    const userId = req.user?.userID;
+
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message: "User authentication required.",
+      });
+    }
+
+    // Fetch the employee's current details from MongoDB
+    const employee = await userModel
+      .findById(userId)
+      .select("_id department role")
+      .lean();
+
+    if (!employee) {
+      return res.status(404).json({
+        success: false,
+        message: "Employee not found.",
+      });
+    }
+
+    const now = new Date();
+
+    const announcements = await annoucementModel
+      .find({
+        status: "Published",
+        $and: [
+          {
+            $or: [
+              { expiryDate: null },
+              { expiryDate: { $gte: now } },
+            ],
+          },
+          {
+            $or: [
+              { audience: "Everyone" },
+              {
+                audience: "Department",
+                department: employee.department,
+              },
+              {
+                audience: "Role",
+                role: employee.role,
+              },
+              {
+                audience: "Specific Employees",
+                specificEmployees: employee._id,
+              },
+            ],
+          },
+        ],
+      })
+      .sort({
+        isPinned: -1,
+        publishedAt: -1,
+        createdAt: -1,
+      })
+      .lean();
+
+    return res.status(200).json({
+      success: true,
+      announcements,
+    });
+  } catch (error) {
+    console.error("Get Employee Announcements Error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Unable to fetch announcements.",
       error: error.message,
     });
   }
