@@ -17,6 +17,7 @@ import holidayRouter from "./routes/Holiday.routes.js";
 import { contactRoute } from "./routes/Contact.routes.js";
 import notificationRoute from "./routes/Notification.routes.js";
 import leaveRoutes from "./routes/Leave.routes.js";
+import adminLeaveRoutes from "./routes/AdminLeave.routes.js";
 import aiRoutes from "./routes/Ai.routes.js";
 
 import { adminRoutes } from "./routes/Admin.routes.js";
@@ -80,6 +81,7 @@ server.use("/api/contact", contactRoute);
 server.use("/notifications", notificationRoute);
 
 server.use("/leave", leaveRoutes);
+server.use("/admin/leave", adminLeaveRoutes);
 
 server.use("/ai", aiRoutes);
 
