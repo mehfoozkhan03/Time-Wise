@@ -15,27 +15,48 @@ const FeedbackModalController = ({ onReady }) => {
   const modalRef = React.useRef(modal);
   modalRef.current = modal;
 
-  const showModal = React.useCallback(
-    ({
-      variant,
-      title,
-      message,
+  // const showModal = React.useCallback(
+  //   ({
+  //     variant,
+  //     title,
+  //     message,
+  //     description = "",
+  //     reason = "",
+  //     onCloseCb = null,
+  //   }) => {
+  //     setModal({
+  //       open: true,
+  //       variant,
+  //       title,
+  //       message,
+  //       description,
+  //       reason,
+  //       onCloseCb,
+  //     });
+  //   },
+  //   [],
+  // );
+
+  const showModal = React.useCallback((options = {}) => {
+    const {
+      variant = "success",
+      title = "",
+      message = "",
       description = "",
       reason = "",
       onCloseCb = null,
-    }) => {
-      setModal({
-        open: true,
-        variant,
-        title,
-        message,
-        description,
-        reason,
-        onCloseCb,
-      });
-    },
-    [],
-  );
+    } = options || {};
+
+    setModal({
+      open: true,
+      variant,
+      title,
+      message,
+      description,
+      reason,
+      onCloseCb,
+    });
+  }, []);
 
   const closeModal = React.useCallback(() => {
     const onCloseCb = modalRef.current.onCloseCb;
@@ -68,9 +89,14 @@ const FeedbackModalController = ({ onReady }) => {
     return () => window.removeEventListener("keydown", handleKeyDown, true);
   }, [modal.open]);
 
+  // React.useEffect(() => {
+  //   onReady?.(showModal);
+  // }, [onReady, showModal]);
   React.useEffect(() => {
-    onReady?.(showModal);
-  }, [onReady, showModal]);
+  if (typeof onReady === "function") {
+    onReady(() => showModal);
+  }
+}, [onReady, showModal]);
 
   return createPortal(
     <Feedback

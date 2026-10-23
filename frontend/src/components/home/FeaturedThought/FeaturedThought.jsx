@@ -138,7 +138,7 @@ export default function FeaturedThought() {
 
   /* ========================== BACKEND LOADING SKELETON ======================== */
 
-  //# Decide which thought to show 
+  //# Decide which thought to show
   const thoughtToShow = featured;
 
   // ======================== No Thought ============================
@@ -168,10 +168,7 @@ export default function FeaturedThought() {
   // ===================== Render ==========================
 
   return (
-    <section
-      className="featured_thought_section"
-      id="tour-thought-card"
-    >
+    <section className="featured_thought_section" id="tour-thought-card">
       <h2>Featured Thought</h2>
 
       <Card className="featured_thought_card">
@@ -181,7 +178,7 @@ export default function FeaturedThought() {
           <Star />
 
           <span>
-            {thoughtToShow?.isPinned ? "Pinned Thought" : "Thought of the Day"}
+            {thoughtToShow?.isPinned ? 'Pinned Thought' : 'Thought of the Day'}
           </span>
         </div>
 
@@ -195,20 +192,96 @@ export default function FeaturedThought() {
               {author?.firstName} {author?.lastName}
             </h3>
 
-            <span>{author?.designation || "Employee"}</span>
+            <span>{author?.designation || 'Employee'}</span>
           </div>
         </div>
 
         {/* Content */}
 
-        <blockquote>"{thoughtToShow?.content}"</blockquote>
+        {thoughtToShow?.content?.trim() && (
+          <blockquote>{`"${thoughtToShow.content.trim()}"`}</blockquote>
+        )}
+
+        {/* Media Preview */}
+        {(() => {
+          const images =
+            thoughtToShow?.images?.length > 0
+              ? thoughtToShow.images
+              : thoughtToShow?.image
+                ? [{ url: thoughtToShow.image, alt: '' }]
+                : []
+
+          const attachments = thoughtToShow?.attachments || []
+
+          if (images.length === 0 && attachments.length === 0) {
+            return null
+          }
+
+          return (
+            <div className="featured_media">
+              {images.length > 0 && (
+                <div
+                  className={`featured_images ${
+                    images.length === 1 ? 'single_image' : ''
+                  }`}
+                >
+                  {images.map((image, index) => (
+                    <a
+                      key={image.publicId || image.url || index}
+                      href={image.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="featured_image_link"
+                      aria-label={`Open image ${index + 1}`}
+                    >
+                      <img
+                        src={image.url}
+                        alt={image.alt || `Post image ${index + 1}`}
+                        loading="lazy"
+                      />
+                    </a>
+                  ))}
+                </div>
+              )}
+
+              {attachments.length > 0 && (
+                <div className="featured_attachments">
+                  {attachments.map((file, index) => (
+                    <a
+                      key={file.publicId || file.url || index}
+                      href={file.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="featured_attachment"
+                    >
+                      <span className="featured_attachment_icon">
+                        <FaArrowRight />
+                      </span>
+
+                      <span className="featured_attachment_info">
+                        <strong>
+                          {file.originalName || 'Download attachment'}
+                        </strong>
+
+                        <small>
+                          {file.size
+                            ? `${(file.size / (1024 * 1024)).toFixed(2)} MB`
+                            : 'Attachment'}
+                        </small>
+                      </span>
+
+                      <span className="featured_attachment_action">Open</span>
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
+          )
+        })()}
 
         {/* Actions */}
 
-        <div
-          className="thought_actions"
-          id="tour-thought-actions"
-        >
+        <div className="thought_actions" id="tour-thought-actions">
           <div className="action_item">
             <FaHeart />
 
@@ -230,7 +303,7 @@ export default function FeaturedThought() {
 
         <button
           className="community_button"
-          onClick={() => navigate("/community")}
+          onClick={() => navigate('/community')}
         >
           <span>View Community</span>
 
@@ -238,5 +311,5 @@ export default function FeaturedThought() {
         </button>
       </Card>
     </section>
-  );
+  )
 }

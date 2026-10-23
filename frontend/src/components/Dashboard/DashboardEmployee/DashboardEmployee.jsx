@@ -1050,6 +1050,7 @@ export const DashboardEmployee = () => {
           className="add-employee-modal"
         >
           <div className="add-employee-scroll">
+            <div className="close-modal">X</div>
             <Form
               fields={forms.adminEmployee.fields}
               button={forms.adminEmployee.button}

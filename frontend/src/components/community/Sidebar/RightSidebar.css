@@ -9,7 +9,6 @@
   width: 100%;
 }
 
-
 /* ==========================================
    SIDEBAR CARD
 ========================================== */
@@ -18,8 +17,9 @@
   padding: 24px;
   border-radius: 18px;
   overflow: hidden;
+  min-width: 0;
+  box-sizing: border-box;
 }
-
 
 /* ==========================================
    SIDEBAR TITLE
@@ -44,7 +44,6 @@
   font-weight: 700;
 }
 
-
 /* ==========================================
    FEATURED THOUGHT
 ========================================== */
@@ -52,108 +51,90 @@
 .featured-thought-content {
   position: relative;
   width: 100%;
+  min-width: 0;
 }
 
-
-/* ==========================================
-   THOUGHT TEXT
-========================================== */
+/* Thought text */
 
 .featured-thought-text {
   position: relative;
-
   font-size: 15px;
   line-height: 1.65;
   font-weight: 600;
-
   color: var(--text-secondary);
-
   word-break: break-word;
   overflow-wrap: anywhere;
-
   transition:
     max-height 0.35s ease,
     opacity 0.25s ease;
 }
 
+/* Short thoughts: no clipping or fade */
 
-/* ==========================================
-   COLLAPSED THOUGHT
-========================================== */
+.featured-thought-text.short {
+  display: block;
+  max-height: none;
+  overflow: visible;
+}
+
+/* Long thoughts: six-line preview */
 
 .featured-thought-text.collapsed {
   display: -webkit-box;
-
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 6;
   line-clamp: 6;
-
   overflow: hidden;
 }
 
-
-/* ==========================================
-   FADE AT BOTTOM OF LONG THOUGHT
-========================================== */
+/* Fade only long, collapsed thoughts */
 
 .featured-thought-text.collapsed::after {
   content: "";
-
   position: absolute;
-
   left: 0;
   right: 0;
   bottom: 0;
-
-  height: 45px;
-
+  height: 1.65em;
   pointer-events: none;
-
   background: linear-gradient(
     to bottom,
-    transparent,
-    var(--card)
+    transparent 0%,
+    var(--card) 100%
   );
 }
 
-
-/* ==========================================
-   EXPANDED THOUGHT
-========================================== */
+/* Expanded thoughts */
 
 .featured-thought-text.expanded {
   display: block;
+  max-height: none;
   overflow: visible;
-
   -webkit-line-clamp: unset;
   line-clamp: unset;
 }
 
+.featured-thought-text.expanded::after,
+.featured-thought-text.short::after {
+  display: none;
+}
 
-/* ==========================================
-   LOAD MORE / SHOW LESS BUTTON
-========================================== */
+/* Load more / show less */
 
 .featured-thought-toggle {
   display: inline-flex;
   align-items: center;
   gap: 7px;
-
   margin-top: 12px;
   padding: 7px 12px;
-
   border: 1px solid var(--border);
   border-radius: 999px;
-
   background: transparent;
   color: var(--primary);
-
   font-family: inherit;
   font-size: 12px;
   font-weight: 700;
-
   cursor: pointer;
-
   transition:
     background 0.2s ease,
     color 0.2s ease,
@@ -165,7 +146,6 @@
   background: var(--primary);
   border-color: var(--primary);
   color: #ffffff;
-
   transform: translateY(-1px);
 }
 
@@ -177,63 +157,157 @@
   font-size: 9px;
 }
 
-
-/* ==========================================
-   FEATURED THOUGHT AUTHOR
-========================================== */
+/* Author */
 
 .featured-thought-author {
   display: block;
-
-  margin-top: 18px;
-
+  margin-top: 12px;
   color: var(--text-secondary);
-
   font-size: 13px;
   font-style: italic;
   font-weight: 600;
-
+  line-height: 1.5;
   text-align: right;
 }
 
-
-/* ==========================================
-   EMPTY FEATURED THOUGHT
-========================================== */
+/* Empty thought */
 
 .featured-thought-empty {
   margin: 0;
-
   color: var(--text-secondary);
-
   font-size: 14px;
   line-height: 1.6;
 }
 
+/* ==========================================
+   SIDEBAR IMAGE AND FILE PREVIEWS
+========================================== */
+
+.sidebar-media-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  min-width: 0;
+  margin-top: 14px;
+}
+
+/* Featured Thought image grid */
+
+.featured-thought-content > .sidebar-media-preview
+  .sidebar-image-preview {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+.featured-thought-content > .sidebar-media-preview
+  .sidebar-image-preview img {
+  display: block;
+  width: 100%;
+  height: 115px;
+  min-width: 0;
+  object-fit: cover;
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+/* Single image uses the full available width */
+
+.featured-thought-content
+  .sidebar-image-preview:has(img:only-child) {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.featured-thought-content
+  .sidebar-image-preview img:only-child {
+  height: 155px;
+  object-fit: contain;
+}
+
+/* Extra image count */
+
+.sidebar-image-preview {
+  position: relative;
+}
+
+.sidebar-media-count {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  padding: 5px 8px;
+  border-radius: 7px;
+  background: rgba(0, 0, 0, 0.75);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* File attachment card */
+
+.sidebar-file-preview {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 11px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--text-primary);
+}
+
+.sidebar-file-icon {
+  flex: 0 0 auto;
+  color: var(--primary);
+  font-size: 20px;
+}
+
+.sidebar-file-preview span {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  font-size: 12px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sidebar-file-clip {
+  flex: 0 0 auto;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.sidebar-extra-files {
+  color: var(--text-secondary);
+  font-size: 11px;
+}
 
 /* ==========================================
-   SIDEBAR LIST
+   TRENDING POSTS
 ========================================== */
 
 .right-sidebar-list {
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
-
-
-/* ==========================================
-   TRENDING ITEM
-========================================== */
 
 .trending-item {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
-
-  gap: 14px;
-
+  gap: 10px;
+  min-width: 0;
   padding: 13px 0;
-
   border-bottom: 1px solid var(--border);
 }
 
@@ -246,66 +320,128 @@
   border-bottom: none;
 }
 
+/* Main content column */
+
+.trending-item-main,
 .trending-item > div {
+  flex: 1;
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 5px;
 }
 
 .trending-item strong {
+  display: block;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
   font-size: 13px;
   font-weight: 700;
-
   white-space: nowrap;
-  overflow: hidden;
   text-overflow: ellipsis;
 }
+
+/* Post text: up to two lines */
 
 .trending-item small {
-  display: block;
-
-  max-width: 170px;
-
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
   color: var(--text-secondary);
-
   font-size: 12px;
   line-height: 1.4;
-
-  white-space: nowrap;
-  overflow: hidden;
+  overflow-wrap: anywhere;
   text-overflow: ellipsis;
 }
 
-.trending-item > span {
+/* Likes count stays on the right */
+
+.trending-item > span,
+.trending-likes {
   display: flex;
   align-items: center;
   gap: 5px;
-
-  flex-shrink: 0;
-
+  flex: 0 0 auto;
   color: #38bdf8;
-
   font-size: 12px;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 .trending-item > span svg {
   font-size: 11px;
 }
 
+/* Compact previews in trending posts */
+
+.sidebar-media-compact {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  min-width: 0;
+  margin-top: 5px;
+}
+
+.sidebar-media-compact .sidebar-image-preview {
+  position: relative;
+  display: block;
+  width: 100%;
+  max-width: 150px;
+  overflow: hidden;
+  border-radius: 7px;
+}
+
+.sidebar-media-compact .sidebar-image-preview img {
+  display: block;
+  width: 100%;
+  height: 72px;
+  object-fit: cover;
+  border-radius: 7px;
+  background: var(--surface);
+}
+
+.sidebar-media-compact .sidebar-media-count {
+  right: 5px;
+  bottom: 5px;
+  padding: 3px 6px;
+  font-size: 10px;
+}
+
+.sidebar-media-compact .sidebar-file-preview {
+  gap: 7px;
+  padding: 7px 8px;
+  border-radius: 8px;
+}
+
+.sidebar-media-compact .sidebar-file-icon {
+  font-size: 15px;
+}
+
+.sidebar-media-compact .sidebar-file-preview span {
+  font-size: 11px;
+}
+
+.sidebar-media-compact .sidebar-file-clip {
+  font-size: 10px;
+}
 
 /* ==========================================
-   CONTRIBUTORS
+   TOP CONTRIBUTORS
 ========================================== */
 
 .contributor-item {
   display: flex;
   align-items: center;
   gap: 12px;
-
+  min-width: 0;
   padding: 12px 0;
-
   border-bottom: 1px solid var(--border);
 }
 
@@ -318,62 +454,43 @@
   border-bottom: none;
 }
 
-
-/* ==========================================
-   CONTRIBUTOR AVATAR
-========================================== */
-
 .contributor-avatar {
   display: flex;
   align-items: center;
   justify-content: center;
-
   width: 38px;
   height: 38px;
-
   flex-shrink: 0;
-
   border-radius: 50%;
-
   background: var(--primary);
   color: #ffffff;
-
   font-size: 12px;
   font-weight: 700;
 }
 
-
-/* ==========================================
-   CONTRIBUTOR INFO
-========================================== */
-
 .contributor-info {
-  min-width: 0;
-
   display: flex;
+  flex: 1;
   flex-direction: column;
   gap: 3px;
+  min-width: 0;
 }
 
 .contributor-info strong {
+  overflow: hidden;
   font-size: 13px;
   font-weight: 700;
-
   white-space: nowrap;
-  overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .contributor-info small {
-  color: var(--text-secondary);
-
-  font-size: 11px;
-
-  white-space: nowrap;
   overflow: hidden;
+  color: var(--text-secondary);
+  font-size: 11px;
+  white-space: nowrap;
   text-overflow: ellipsis;
 }
-
 
 /* ==========================================
    RESPONSIVE
@@ -387,8 +504,17 @@
   .featured-thought-text {
     font-size: 14px;
   }
-}
 
+  .featured-thought-content > .sidebar-media-preview
+    .sidebar-image-preview img {
+    height: 105px;
+  }
+
+  .featured-thought-content
+    .sidebar-image-preview img:only-child {
+    height: 135px;
+  }
+}
 
 @media (max-width: 900px) {
   .right-sidebar {
@@ -400,7 +526,6 @@
   }
 }
 
-
 @media (max-width: 768px) {
   .right-sidebar {
     width: 100%;
@@ -410,11 +535,20 @@
     font-size: 15px;
   }
 
-  .trending-item small {
-    max-width: 220px;
+  .featured-thought-content > .sidebar-media-preview
+    .sidebar-image-preview img {
+    height: 140px;
+  }
+
+  .featured-thought-content
+    .sidebar-image-preview img:only-child {
+    height: 170px;
+  }
+
+  .sidebar-media-compact .sidebar-image-preview {
+    max-width: 180px;
   }
 }
-
 
 @media (max-width: 480px) {
   .right-sidebar-card {
@@ -436,12 +570,22 @@
   }
 
   .featured-thought-author {
-    margin-top: 15px;
+    margin-top: 12px;
     font-size: 12px;
   }
 
   .featured-thought-toggle {
-    font-size: 11px;
     padding: 6px 11px;
+    font-size: 11px;
+  }
+
+  .featured-thought-content > .sidebar-media-preview
+    .sidebar-image-preview img {
+    height: 105px;
+  }
+
+  .featured-thought-content
+    .sidebar-image-preview img:only-child {
+    height: 140px;
   }
 }

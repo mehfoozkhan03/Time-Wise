@@ -11,7 +11,6 @@ import {
   FaChartBar,
   FaGear,
 } from 'react-icons/fa6';
-import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io';
 import { AdminProfile } from '../components/Dashboard/Dropdowns/AdminProfileDropdown/AdminProfileDropdown';
 
 export default function AdminDashboard() {

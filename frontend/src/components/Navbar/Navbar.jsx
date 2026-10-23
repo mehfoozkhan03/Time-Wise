@@ -7,9 +7,9 @@ import { markNotificationAsRead } from "../../services/notificationServices";
 import "./Navbar.css";
 import { logout } from "../../store/authSlice";
 import { authService } from "../../services/authService";
-// import { useTheme } from "../../context/ThemeContext";
 import { fetchNotifications } from ".././../store/notificationSlice";
 import { Modal } from "../Modal/Modal";
+import { PulseDot } from "../PulseDot/pulseDot";
 
 export default function Navbar() {
   const { notifications, loading } = useSelector((state) => state.notification);
@@ -83,7 +83,8 @@ export default function Navbar() {
       setLogoutError(
         typeof error === "string"
           ? error
-          : error.response?.data?.message || "Unable to log out. Please try again.",
+          : error.response?.data?.message ||
+              "Unable to log out. Please try again.",
       );
     } finally {
       setLogoutLoading(false);
@@ -98,9 +99,10 @@ export default function Navbar() {
     const today = new Date().getDay();
     return {
       title: `Goodbye, ${firstName}! 👋`,
-      message: today >= 1 && today <= 4
-        ? "That's a wrap for today! Great work. Take some time to relax and recharge — we'll be ready for another productive day tomorrow."
-        : "You've wrapped up another productive week. Enjoy your weekend, relax, and come back refreshed. We'll see you on Monday!",
+      message:
+        today >= 1 && today <= 4
+          ? "That's a wrap for today! Great work. Take some time to relax and recharge — we'll be ready for another productive day tomorrow."
+          : "You've wrapped up another productive week. Enjoy your weekend, relax, and come back refreshed. We'll see you on Monday!",
       button: today >= 1 && today <= 4 ? "Logout & Relax" : "Start My Weekend",
     };
   };
@@ -263,7 +265,21 @@ export default function Navbar() {
                       }`}
                       onClick={() => handleNotificationClick(notification)}
                     >
-                      <strong>{notification.title}</strong>
+                      {/* <strong>{notification.title}</strong> */}
+
+                      <div className="notification_title_row">
+                        <strong>{notification.title}</strong>
+
+                        {!notification.read && (
+                          <PulseDot
+                            color="#29a3e0"
+                            size="6px"
+                            speed="2.5s"
+                            scale="3.1"
+                            className="notification_pulse_dot"
+                          />
+                        )}
+                      </div>
 
                       <p>{notification.message}</p>
                     </div>
@@ -365,7 +381,9 @@ export default function Navbar() {
         variant="logout"
         title={getLogoutContent().title}
         message={logoutError || getLogoutContent().message}
-        confirmText={logoutLoading ? "Logging out..." : getLogoutContent().button}
+        confirmText={
+          logoutLoading ? "Logging out..." : getLogoutContent().button
+        }
         cancelText="Stay Logged In"
         onClose={() => {
           if (!logoutLoading) {
@@ -375,7 +393,6 @@ export default function Navbar() {
         }}
         onConfirm={confirmLogout}
       />
-
     </>
   );
 }
