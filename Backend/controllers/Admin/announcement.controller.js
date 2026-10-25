@@ -142,11 +142,6 @@ export const createAnnouncement = async (req, res) => {
         "firstName lastName profileImage designation department",
       )
       .populate("updatedBy", "firstName lastName");
-
-      
-    console.log("Admin auth:", req.admin);
-    console.log("User auth:", req.user);
-    console.log("Announcement createdBy:", populatedAnnouncement.createdBy);
     
     if (populatedAnnouncement.status === "Published") {
       const recipientIds = await getAnnouncementRecipients(

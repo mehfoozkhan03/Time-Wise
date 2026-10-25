@@ -394,8 +394,8 @@ export const DashboardEmployee = () => {
 
       alert(
         error?.message ||
-          error ||
-          "Failed to update employee. Please try again.",
+        error ||
+        "Failed to update employee. Please try again.",
       );
     }
   };
@@ -627,11 +627,10 @@ export const DashboardEmployee = () => {
                 <span>{selectedDepartment}</span>
 
                 <span
-                  className={`customDropdown-arrow ${
-                    openDropdown === "department"
+                  className={`customDropdown-arrow ${openDropdown === "department"
                       ? "customDropdown-arrow-open"
                       : ""
-                  }`}
+                    }`}
                 >
                   <MdOutlineKeyboardArrowDown />
                 </span>
@@ -642,11 +641,10 @@ export const DashboardEmployee = () => {
                   {departments.map((department) => (
                     <div
                       key={department}
-                      className={`customDropdown-option ${
-                        selectedDepartment === department
+                      className={`customDropdown-option ${selectedDepartment === department
                           ? "customDropdown-option-active"
                           : ""
-                      }`}
+                        }`}
                       onClick={() => handleDepartmentSelect(department)}
                     >
                       {department}
@@ -672,9 +670,8 @@ export const DashboardEmployee = () => {
                 <span>{selectedStatus}</span>
 
                 <span
-                  className={`customDropdown-arrow ${
-                    openDropdown === "status" ? "customDropdown-arrow-open" : ""
-                  }`}
+                  className={`customDropdown-arrow ${openDropdown === "status" ? "customDropdown-arrow-open" : ""
+                    }`}
                 >
                   <MdOutlineKeyboardArrowDown />
                 </span>
@@ -685,11 +682,10 @@ export const DashboardEmployee = () => {
                   {statusOptions.map((status) => (
                     <div
                       key={status}
-                      className={`customDropdown-option ${
-                        selectedStatus === status
+                      className={`customDropdown-option ${selectedStatus === status
                           ? "customDropdown-option-active"
                           : ""
-                      }`}
+                        }`}
                       onClick={() => handleStatusSelect(status)}
                     >
                       {status}
@@ -729,9 +725,8 @@ export const DashboardEmployee = () => {
 
                 return (
                   <div
-                    className={`employee-users-container ${
-                      isEditing ? "employee-users-container-editing" : ""
-                    }`}
+                    className={`employee-users-container ${isEditing ? "employee-users-container-editing" : ""
+                      }`}
                     key={el._id}
                   >
                     {/* EMPLOYEE NAME */}
@@ -752,18 +747,16 @@ export const DashboardEmployee = () => {
                       {/* NAME */}
 
                       <div
-                        className={`dashboardEmployee-name ${
-                          isEditing ? "dashboardEmployee-name-editable" : ""
-                        }`}
+                        className={`dashboardEmployee-name ${isEditing ? "dashboardEmployee-name-editable" : ""
+                          }`}
                         onClick={isEditing ? handleNameClick : undefined}
                       >
                         <p>
                           {isEditing
                             ? `${editData.firstName} ${editData.lastName}`
-                            : `${el.firstName?.charAt(0).toUpperCase() + el.firstName?.slice(1)} ${
-                                el.lastName?.charAt(0).toUpperCase() +
-                                el.lastName?.slice(1)
-                              }`}
+                            : `${el.firstName?.charAt(0).toUpperCase() + el.firstName?.slice(1)} ${el.lastName?.charAt(0).toUpperCase() +
+                            el.lastName?.slice(1)
+                            }`}
                         </p>
                       </div>
                     </div>
@@ -1146,7 +1139,14 @@ export const DashboardEmployee = () => {
           className="add-employee-modal"
         >
           <div className="add-employee-scroll">
-            <div className="close-modal">X</div>
+            <button
+              type="button"
+              className="close-modal"
+              onClick={() => setShowAddEmployee(false)}
+              aria-label="Close Add Employee modal"
+            >
+              <IoClose />
+            </button>
             <Form
               fields={forms.adminEmployee.fields}
               button={forms.adminEmployee.button}

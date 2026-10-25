@@ -117,26 +117,23 @@
   --attendance-present-bg: #29a3e0;
   --attendance-present-text: #fff;
 
-  --attendance-absent-bg: #e05252;
+  --attendance-absent-bg: #f6443c;
   --attendance-absent-text: #fff;
 
-  --attendance-late-bg: #fef3c7;
-  --attendance-late-text: #92400e;
+  --attendance-late-bg: #f69d09;
+  --attendance-late-text: #78350f;
 
-  --attendance-leave-bg: #dbeafe;
-  --attendance-leave-text: #1e40af;
+  --attendance-leave-bg: #3B82F6;
+  --attendance-leave-text: #ffffff;
 
-  --attendance-neutral-bg: #f3f4f6;
-  --attendance-neutral-text: #4b5563;
+  --attendance-halfday-bg: #8f5bf7;
+  --attendance-halfday-text: #ffffff;
+
 
   --attendance-present-dot: #fff;
   --attendance-present-border: #86efac;
   --attendance-absent-dot: #fff;
   --attendance-absent-border: #fca5a5;
-
-  /* Half Day */
-  --attendance-halfday-bg: #fff;
-  --attendance-halfday-text: #92400e;
 
   /* ==========================
      ANNOUNCEMENT STATUS - LIGHT
@@ -275,22 +272,18 @@ html.dark {
   --attendance-absent-text: #fff;
 
   --attendance-late-bg: #78350f;
-  --attendance-late-text: #fcd34d;
+  --attendance-late-text: #fde68a;
 
   --attendance-leave-bg: #1e3a8a;
-  --attendance-leave-text: #93c5fd;
+  --attendance-leave-text: #bfdbfe;
 
-  --attendance-neutral-bg: #374151;
-  --attendance-neutral-text: #d1d5db;
+  --attendance-halfday-bg: #4c1d95;
+  --attendance-halfday-text: #ddd6fe;
 
   --attendance-present-dot: #fff;
   --attendance-present-border: #22c55e;
   --attendance-absent-dot: #fff;
   --attendance-absent-border: #ef4444;
-
-  /* Half Day */
-  --attendance-halfday-bg: #78350f;
-  --attendance-halfday-text: #fff;
 
   /* ==========================
      ANNOUNCEMENT STATUS - DARK
