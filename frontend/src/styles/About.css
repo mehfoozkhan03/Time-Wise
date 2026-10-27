@@ -267,7 +267,7 @@
 
 .mtm_cards {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   justify-content: center;
   gap: 24px;
   margin: 45px auto;
@@ -681,10 +681,10 @@
   margin-top: 12px;
 }
 
-/* Match screenshot's four-card layout */
+/* Team cards and skeletons: three columns on desktop */
 .mtm_cards {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 22px;
 }
 
