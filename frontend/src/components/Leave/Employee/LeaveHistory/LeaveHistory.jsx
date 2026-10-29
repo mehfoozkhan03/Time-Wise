@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -33,6 +34,13 @@ const filterOptions = [
     label: "Cancelled",
   },
 ];
+
+const leaveTypeLabels = {
+  annual: "Annual Leave",
+  sick: "Sick Leave",
+  casual: "Casual Leave",
+  emergency: "Emergency Leave",
+};
 
 const LeaveHistory = ({
   requests = [],
@@ -201,9 +209,19 @@ const LeaveHistory = ({
                     const status =
                       request.status || "Pending";
 
+                    const leaveType =
+                      request.leaveType || "";
+
+                    const normalizedLeaveType =
+                      leaveType.toLowerCase();
+
+                    const displayedLeaveType =
+                      leaveTypeLabels[normalizedLeaveType] ||
+                      leaveType;
+
                     return (
                       <tr key={request.id}>
-                        <td>{request.leaveType}</td>
+                        <td>{displayedLeaveType}</td>
 
                         <td>
                           {request.startDate} -{" "}
@@ -233,7 +251,7 @@ const LeaveHistory = ({
                             onClick={() =>
                               handleViewRequest(request)
                             }
-                            aria-label={`View ${request.leaveType} request`}
+                            aria-label={`View ${displayedLeaveType} request`}
                           >
                             <MdVisibility />
                           </button>
@@ -273,7 +291,7 @@ const LeaveHistory = ({
                         : "leaveHistory-page-number"
                     }
                   >
-                    1
+                    {currentPage}
                   </span>
 
                   <span className="leaveHistory-pagination-label">

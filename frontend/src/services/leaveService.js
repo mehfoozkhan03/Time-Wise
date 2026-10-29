@@ -50,6 +50,8 @@ export const cancelLeave = async (leaveID) => {
   return data.data;
 };
 
+// ================= Admin Leave Services =================
+
 export const getAdminLeaves = async ({
   page = 1,
   limit = 10,
@@ -69,7 +71,7 @@ export const getAdminLeaves = async ({
     params.search = search.trim();
   }
 
-  const { data } = await api.get("/leave/admin", {
+  const { data } = await api.get("/admin/leave", {
     params,
   });
 
@@ -81,7 +83,7 @@ export const getAdminLeaves = async ({
 
 export const getAdminLeaveById = async (leaveID) => {
   const { data } = await api.get(
-    `/leave/admin/${leaveID}`,
+    `/admin/leave/${leaveID}`,
   );
 
   return data.data;
@@ -89,7 +91,7 @@ export const getAdminLeaveById = async (leaveID) => {
 
 export const approveAdminLeave = async (leaveID) => {
   const { data } = await api.patch(
-    `/leave/admin/${leaveID}/approve`,
+    `/admin/leave/${leaveID}/approve`,
   );
 
   return data.data;
@@ -100,7 +102,7 @@ export const rejectAdminLeave = async (
   adminComment,
 ) => {
   const { data } = await api.patch(
-    `/leave/admin/${leaveID}/reject`,
+    `/admin/leave/${leaveID}/reject`,
     {
       adminComment,
     },
@@ -111,7 +113,7 @@ export const rejectAdminLeave = async (
 
 export const getAdminLeaveStatistics = async () => {
   const { data } = await api.get(
-    "/leave/admin/stats",
+    "/admin/leave/stats",
   );
 
   return data.data;

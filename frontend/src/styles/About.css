@@ -267,7 +267,7 @@
 
 .mtm_cards {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   justify-content: center;
   gap: 24px;
   margin: 45px auto;
@@ -610,10 +610,27 @@
   margin-top: 20px;
 }
 
+/* Centered heading skeleton */
+.mission_skeleton_header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 54px;
+}
+
+.mission_skeleton_subtitle {
+  margin-top: 20px;
+}
+
 /* Two-column card layout */
+.mission_card_hero {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 26px;
+}
 
-
-/* Match screenshot's large cards */
+/* Card skeleton matching screenshot */
 .mission_skeleton_box {
   min-width: 0;
   min-height: 316px;
@@ -621,133 +638,102 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  box-sizing: border-box;
   background: var(--surface, #161b22);
   border: 1px solid var(--border, #2c3745);
   border-radius: 24px;
-  box-sizing: border-box;
 }
 
-/* Title below icon */
+/* Title */
 .mission_skeleton_title {
-  margin-top: 24px;
-  width: 100%;
+  margin-top: 26px;
+  margin-bottom: 20px;
 }
 
 /* Description lines */
 .mission_skeleton_description {
-  width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-top: 20px;
+  width: 100%;
+  gap: 10px;
 }
 
 .mission_skeleton_line {
   width: 100%;
 }
 
-/* Keep the existing .transform gradient and dimensions */
-.cta_skeleton_content {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
+/* Skeleton circle border */
+.skeleton-circle {
+  border: 1px solid #1f242d !important;
+  outline: none;
+  box-shadow: none;
 }
 
-.cta_skeleton_heading {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  margin-top: 22px;
-}
-
-.cta_skeleton_description {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  margin-top: 22px;
-}
-
-.cta_skeleton_desc_line {
+/* Heading skeleton */
+.team_heading_skeleton {
   display: flex;
   justify-content: center;
 }
 
-.cta_skeleton_button {
+.team_subtitle_skeleton {
   display: flex;
   justify-content: center;
-  margin-top: 30px;
+  margin-top: 12px;
 }
 
-/* Light skeleton shades on the blue CTA */
-.cta_skeleton_content .skeleton {
-  background: rgba(255, 255, 255, 0.28);
+/* Team cards and skeletons: three columns on desktop */
+.mtm_cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
 }
 
-
-/* Skeleton heading */
-.core_values_skeleton_header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  margin-bottom: 48px;
-}
-
-.core_values_skeleton_subtitle {
-  margin-top: 16px;
-}
-
-/* Same four-column layout as screenshot */
-
-
-/* Skeleton card */
-.core_value_skeleton_card {
+/* Team skeleton card */
+.team_skeleton_card {
   min-width: 0;
-  min-height: 278px;
-  padding: 28px 18px;
+  min-height: 220px;
+  padding: 24px 18px;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
+  box-sizing: border-box;
+
   background: var(--surface, #161b22);
   border: 1px solid var(--border, #2c3745);
-  border-radius: 18px;
-  box-sizing: border-box;
+  border-radius: 20px;
 }
 
-/* Title */
-.core_value_skeleton_title {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  margin-top: 24px;
-}
-
-.core_value_skeleton_title_line {
+/* Name */
+.team_name_skeleton {
   display: flex;
   justify-content: center;
+  margin-top: 20px;
+}
+
+/* Role */
+.team_role_skeleton {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
 }
 
 /* Description */
-.core_value_skeleton_description {
+.team_description_skeleton {
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  margin-top: 24px;
+  margin-top: 8px;
 }
 
-.core_value_skeleton_description_line {
+.team_description_line {
+  width: 100%;
   display: flex;
   justify-content: center;
 }
-
-/* Skeleton heading */
+/* Heading */
 .testimonial_skeleton_header {
   display: flex;
   flex-direction: column;
@@ -760,24 +746,29 @@
   margin-top: 16px;
 }
 
-/* Keep cards in the same layout as the screenshot */
+/* Three-column layout */
+.user_say_content {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
 
-
-/* Individual skeleton card */
+/* Skeleton card matching actual UI */
 .testimonial_skeleton_card {
   min-width: 0;
-  min-height: 206px;
+  min-height: 207px;
   padding: 28px 24px 24px;
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
+
   background: var(--surface, #161b22);
   border: 1px solid var(--border, #2c3745);
   border-left: 4px solid var(--primary, #3eb5e8);
   border-radius: 18px;
-  box-sizing: border-box;
 }
 
-/* Stars */
+/* Rating stars */
 .testimonial_skeleton_stars {
   display: flex;
   align-items: center;
@@ -788,15 +779,15 @@
 .testimonial_skeleton_review {
   display: flex;
   flex-direction: column;
-  margin-top: 12px;
-  gap: 8px;
+  gap: 10px;
+  margin-top: 10px;
 }
 
 .testimonial_skeleton_line {
   width: 100%;
 }
 
-/* Horizontal divider */
+/* Divider */
 .testimonial_skeleton_divider {
   width: 100%;
   height: 1px;
@@ -804,7 +795,7 @@
   background: var(--border, #2c3745);
 }
 
-/* User details */
+/* User name and role */
 .testimonial_skeleton_user {
   display: flex;
   flex-direction: column;
@@ -815,7 +806,107 @@
 .testimonial_skeleton_role {
   margin-top: 6px;
 }
+/* Heading skeleton */
+.core_values_skeleton_header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 48px;
+}
 
+.core_values_skeleton_subtitle {
+  margin-top: 16px;
+}
+
+/* Keep four cards in one row */
+.core_values_wrapper {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 26px;
+}
+
+/* Skeleton card */
+.core_value_skeleton_card {
+  min-width: 0;
+  min-height: 278px;
+  padding: 28px 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-sizing: border-box;
+
+  background: var(--surface, #161b22);
+  border: 1px solid var(--border, #2c3745);
+  border-radius: 18px;
+}
+
+/* Title */
+.core_value_skeleton_title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+/* Description */
+.core_value_skeleton_description {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-top: 24px;
+}
+/* Dark CTA skeleton container */
+.cta_skeleton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  background: #0d1117 !important;
+  background-image: none !important;
+  border: 1px solid #202630;
+  border-radius: 24px;
+}
+
+/* Heading */
+.cta_skeleton_heading {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 20px;
+}
+
+/* Description */
+.cta_skeleton_description {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  margin-top: 24px;
+}
+
+.cta_skeleton_line {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+/* Button */
+.cta_skeleton_button {
+  margin-top: 28px;
+}
+
+/* Force all skeleton blocks to use dark shades */
+.cta_skeleton .skeleton {
+  background: #171c24 !important;
+  border: 1px solid #252c36 !important;
+  box-shadow: none !important;
+}
 
 /* ==========================================
    MOBILE

@@ -15,6 +15,10 @@ export const calculateLeaveDays = (startDate, endDate) => {
   const start = new Date(startDate);
   const end = new Date(endDate);
 
+  if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
+    throw new Error("Please provide valid leave dates.");
+  }
+
   start.setHours(0, 0, 0, 0);
   end.setHours(0, 0, 0, 0);
 
@@ -51,6 +55,37 @@ export const getAvailableBalance = (balance, leaveType) => {
   return balance[balanceKey].total - balance[balanceKey].used;
 };
 
+const getEmergencyLeaveMonthKey = (date) => {
+  const selectedDate = new Date(date);
+
+  if (Number.isNaN(selectedDate.getTime())) {
+    throw new Error("Please provide a valid Emergency Leave date.");
+  }
+
+  const year = selectedDate.getFullYear();
+  const month = String(selectedDate.getMonth() + 1).padStart(2, "0");
+
+  return `${year}-${month}`;
+};
+
+const validateEmergencyLeaveEligibility = async ({ userID, startDate }) => {
+  const emergencyLeaveMonth = getEmergencyLeaveMonthKey(startDate);
+
+  const existingEmergencyLeave = await leaveModel.findOne({
+    user: userID,
+    leaveType: "emergency",
+    emergencyLeaveMonth,
+  });
+
+  if (existingEmergencyLeave) {
+    throw new Error(
+      "You can apply for Emergency Leave only once per calendar month.",
+    );
+  }
+
+  return emergencyLeaveMonth;
+};
+
 export const createLeaveRequest = async ({
   userID,
   leaveType,
@@ -58,7 +93,9 @@ export const createLeaveRequest = async ({
   endDate,
   reason,
 }) => {
-  if (!leaveBalanceMap[leaveType]) {
+  const isEmergencyLeave = leaveType === "emergency";
+
+  if (!isEmergencyLeave && !leaveBalanceMap[leaveType]) {
     throw new Error("Invalid leave type.");
   }
 
@@ -68,12 +105,25 @@ export const createLeaveRequest = async ({
 
   const totalDays = calculateLeaveDays(startDate, endDate);
 
-  const balance = await getOrCreateLeaveBalance(userID);
+  if (isEmergencyLeave && totalDays !== 1) {
+    throw new Error("Emergency Leave can only be requested for one day.");
+  }
 
-  const availableBalance = getAvailableBalance(balance, leaveType);
+  let emergencyLeaveMonth;
 
-  if (totalDays > availableBalance) {
-    throw new Error("Requested days exceed available leave balance.");
+  if (isEmergencyLeave) {
+    emergencyLeaveMonth = await validateEmergencyLeaveEligibility({
+      userID,
+      startDate,
+    });
+  } else {
+    const balance = await getOrCreateLeaveBalance(userID);
+
+    const availableBalance = getAvailableBalance(balance, leaveType);
+
+    if (totalDays > availableBalance) {
+      throw new Error("Requested days exceed available leave balance.");
+    }
   }
 
   const overlappingLeave = await leaveModel.findOne({
@@ -93,15 +143,37 @@ export const createLeaveRequest = async ({
     throw new Error("You already have a leave request for these dates.");
   }
 
-  return await leaveModel.create({
-    user: userID,
-    leaveType,
-    startDate,
-    endDate,
-    totalDays,
-    reason: reason.trim(),
-    status: "Pending",
-  });
+  let leave;
+
+  try {
+    leave = await leaveModel.create({
+      user: userID,
+      leaveType,
+      startDate,
+      endDate,
+      totalDays,
+      reason: reason.trim(),
+      status: isEmergencyLeave ? "Approved" : "Pending",
+      ...(isEmergencyLeave && {
+        emergencyLeaveMonth,
+        approvedAt: new Date(),
+      }),
+    });
+  } catch (error) {
+    if (isEmergencyLeave && error?.code === 11000) {
+      throw new Error(
+        "You can apply for Emergency Leave only once per calendar month.",
+      );
+    }
+
+    throw error;
+  }
+
+  if (isEmergencyLeave) {
+    await createLeaveCalendarEvents(leave, userID, "User");
+  }
+
+  return leave;
 };
 
 export const getEmployeeLeaves = async ({
@@ -112,10 +184,7 @@ export const getEmployeeLeaves = async ({
 } = {}) => {
   const currentPage = Math.max(Number(page) || 1, 1);
 
-  const pageLimit = Math.min(
-    Math.max(Number(limit) || 10, 1),
-    100,
-  );
+  const pageLimit = Math.min(Math.max(Number(limit) || 10, 1), 100);
 
   const skip = (currentPage - 1) * pageLimit;
 
@@ -123,11 +192,7 @@ export const getEmployeeLeaves = async ({
     user: userID,
   };
 
-  if (
-    status &&
-    status !== "All" &&
-    leaveStatuses.includes(status)
-  ) {
+  if (status && status !== "All" && leaveStatuses.includes(status)) {
     filter.status = status;
   }
 
@@ -183,7 +248,11 @@ export const cancelLeaveRequest = async (leaveID, userID) => {
   return leave;
 };
 
-const createLeaveCalendarEvents = async (leave, adminID) => {
+const createLeaveCalendarEvents = async (
+  leave,
+  creatorID,
+  creatorModel = "Admin",
+) => {
   const employee = await userModel.findById(
     leave.user,
     "firstName lastName department designation",
@@ -204,7 +273,6 @@ const createLeaveCalendarEvents = async (leave, adminID) => {
   endDate.setHours(0, 0, 0, 0);
 
   const calendarEvents = [];
-
   const currentDate = new Date(startDate);
 
   while (currentDate <= endDate) {
@@ -225,8 +293,8 @@ const createLeaveCalendarEvents = async (leave, adminID) => {
       color: "",
       visibility: "PRIVATE",
       leaveId: leave._id,
-      createdBy: adminID,
-      createdByModel: "Admin",
+      createdBy: creatorID,
+      createdByModel: creatorModel,
       isActive: true,
     });
 
@@ -247,24 +315,27 @@ export const approveLeaveRequest = async (leaveID, adminID) => {
     throw new Error("Only pending leave requests can be approved.");
   }
 
-  const balance = await getOrCreateLeaveBalance(leave.user);
+  const isEmergencyLeave = leave.leaveType === "emergency";
 
-  const balanceKey = leaveBalanceMap[leave.leaveType];
+  if (!isEmergencyLeave) {
+    const balance = await getOrCreateLeaveBalance(leave.user);
+    const balanceKey = leaveBalanceMap[leave.leaveType];
 
-  if (!balanceKey || !balance[balanceKey]) {
-    throw new Error("Invalid leave type.");
+    if (!balanceKey || !balance[balanceKey]) {
+      throw new Error("Invalid leave type.");
+    }
+
+    const availableBalance =
+      balance[balanceKey].total - balance[balanceKey].used;
+
+    if (leave.totalDays > availableBalance) {
+      throw new Error("Insufficient leave balance.");
+    }
+
+    balance[balanceKey].used += leave.totalDays;
+
+    await balance.save();
   }
-
-  const availableBalance =
-    balance[balanceKey].total - balance[balanceKey].used;
-
-  if (leave.totalDays > availableBalance) {
-    throw new Error("Insufficient leave balance.");
-  }
-
-  balance[balanceKey].used += leave.totalDays;
-
-  await balance.save();
 
   leave.status = "Approved";
   leave.approvedBy = adminID;
@@ -272,7 +343,7 @@ export const approveLeaveRequest = async (leaveID, adminID) => {
 
   await leave.save();
 
-  await createLeaveCalendarEvents(leave, adminID);
+  await createLeaveCalendarEvents(leave, adminID, "Admin");
 
   return leave;
 };
@@ -309,22 +380,19 @@ export const getLeaveBalance = async (userID) => {
     annual: {
       total: balance.annual.total,
       used: balance.annual.used,
-      remaining:
-        balance.annual.total - balance.annual.used,
+      remaining: balance.annual.total - balance.annual.used,
     },
 
     sick: {
       total: balance.sick.total,
       used: balance.sick.used,
-      remaining:
-        balance.sick.total - balance.sick.used,
+      remaining: balance.sick.total - balance.sick.used,
     },
 
     casual: {
       total: balance.casual.total,
       used: balance.casual.used,
-      remaining:
-        balance.casual.total - balance.casual.used,
+      remaining: balance.casual.total - balance.casual.used,
     },
   };
 };
@@ -337,30 +405,20 @@ export const getAllLeaveRequests = async ({
 } = {}) => {
   const currentPage = Math.max(Number(page) || 1, 1);
 
-  const pageLimit = Math.min(
-    Math.max(Number(limit) || 10, 1),
-    100,
-  );
+  const pageLimit = Math.min(Math.max(Number(limit) || 10, 1), 100);
 
   const skip = (currentPage - 1) * pageLimit;
 
   const filter = {};
 
-  if (
-    status &&
-    status !== "All" &&
-    leaveStatuses.includes(status)
-  ) {
+  if (status && status !== "All" && leaveStatuses.includes(status)) {
     filter.status = status;
   }
 
   const currentSearch = search.trim();
 
   if (currentSearch) {
-    const escapedSearch = currentSearch.replace(
-      /[.*+?^${}()|[\]\\]/g,
-      "\\$&",
-    );
+    const escapedSearch = currentSearch.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
     const searchRegex = new RegExp(escapedSearch, "i");
 
@@ -389,9 +447,7 @@ export const getAllLeaveRequests = async ({
       },
     );
 
-    const matchingUserIDs = matchingUsers.map(
-      (user) => user._id,
-    );
+    const matchingUserIDs = matchingUsers.map((user) => user._id);
 
     filter.$or = [
       {
@@ -408,18 +464,9 @@ export const getAllLeaveRequests = async ({
   const [requests, total] = await Promise.all([
     leaveModel
       .find(filter)
-      .populate(
-        "user",
-        "firstName lastName email department designation",
-      )
-      .populate(
-        "approvedBy",
-        "firstName lastName email",
-      )
-      .populate(
-        "rejectedBy",
-        "firstName lastName email",
-      )
+      .populate("user", "firstName lastName email department designation")
+      .populate("approvedBy", "firstName lastName email")
+      .populate("rejectedBy", "firstName lastName email")
       .sort({
         createdAt: -1,
       })
@@ -443,28 +490,13 @@ export const getAllLeaveRequests = async ({
 export const getAdminLeaveById = async (leaveID) => {
   return await leaveModel
     .findById(leaveID)
-    .populate(
-      "user",
-      "firstName lastName email department designation",
-    )
-    .populate(
-      "approvedBy",
-      "firstName lastName email",
-    )
-    .populate(
-      "rejectedBy",
-      "firstName lastName email",
-    );
+    .populate("user", "firstName lastName email department designation")
+    .populate("approvedBy", "firstName lastName email")
+    .populate("rejectedBy", "firstName lastName email");
 };
 
 export const getLeaveStatistics = async () => {
-  const [
-    total,
-    pending,
-    approved,
-    rejected,
-    cancelled,
-  ] = await Promise.all([
+  const [total, pending, approved, rejected, cancelled] = await Promise.all([
     leaveModel.countDocuments(),
 
     leaveModel.countDocuments({

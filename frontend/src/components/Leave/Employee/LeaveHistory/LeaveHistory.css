@@ -1,3 +1,4 @@
+
 .leaveHistory {
   width: 100%;
   display: flex;
@@ -283,7 +284,7 @@
   justify-content: center;
   gap: 7px;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius_sm);
   background: var(--surface);
   color: var(--text_primary);
   font-size: 11px;
@@ -337,7 +338,7 @@
   justify-content: center;
   gap: 7px;
   border: 1px solid var(--border);
-  border-radius: 9px;
+  border-radius: var(--radius_sm);
   background: var(--surface);
   color: var(--text_secondary);
   font-size: 10px;
@@ -356,7 +357,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 7px;
+  border-radius: var(--radius_sm);
   background: transparent;
   color: var(--text_primary);
   font-size: 11px;
@@ -430,7 +431,7 @@
     font-size: 14px;
   }
 
-   .leaveHistory-pagination {
+  .leaveHistory-pagination {
     gap: 14px;
   }
 
@@ -484,7 +485,7 @@
   }
 
   .leaveHistory-table-wrapper {
-    border-radius: 7px;
+    border-radius: var(--radius_sm);
   }
 
   .leaveHistory-table {
@@ -625,7 +626,7 @@
     font-size: 12px;
   }
 
- .leaveHistory-pagination {
+  .leaveHistory-pagination {
     gap: 5px;
   }
 

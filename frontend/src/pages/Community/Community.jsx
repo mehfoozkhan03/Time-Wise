@@ -1,11 +1,6 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  useParams,
-  useLocation,
-  useNavigate,
-  useSearchParams,
-} from 'react-router-dom'
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 
 import './Community.css'
 
@@ -21,10 +16,16 @@ import Skeleton from '../../components/Skeleton/Skeleton'
 const VALID_TABS = ['feed', 'my-posts', 'liked', 'saved', 'trending']
 const VALID_SORTS = ['latest', 'oldest', 'likes', 'comments']
 
+const TAB_TITLES = {
+  feed: 'Community Feed',
+  'my-posts': 'My Posts',
+  liked: 'Liked Posts',
+  saved: 'Saved Posts',
+  trending: 'Trending Posts',
+}
+
 const Community = () => {
   const dispatch = useDispatch()
-
-  const { filter } = useParams()
   const location = useLocation()
   const navigate = useNavigate()
 
@@ -32,28 +33,32 @@ const Community = () => {
 
   const { loading } = useSelector((state) => state.post || {})
 
-  // Read the selected feed tab and sorting option from the URL.
+  // Read the selected tab and sorting option from the URL.
   const tabFromUrl = searchParams.get('tab')
   const sortFromUrl = searchParams.get('sort')
 
-  const tab = VALID_TABS.includes(tabFromUrl)
-    ? tabFromUrl
-    : VALID_TABS.includes(filter)
-      ? filter
-      : 'feed'
+  const tab = VALID_TABS.includes(tabFromUrl) ? tabFromUrl : 'feed'
 
   const sortBy = VALID_SORTS.includes(sortFromUrl) ? sortFromUrl : 'latest'
 
-  // Keep the URL synchronized with the current tab and sorting option.
+  // Keep the URL synchronized with the selected tab and sort order.
   useEffect(() => {
     const params = new URLSearchParams(searchParams)
+    let needsUpdate = false
 
-    params.set('tab', tab)
-    params.set('sort', sortBy)
+    if (!VALID_TABS.includes(params.get('tab'))) {
+      params.set('tab', 'feed')
+      needsUpdate = true
+    }
+
+    if (!VALID_SORTS.includes(params.get('sort'))) {
+      params.set('sort', 'latest')
+      needsUpdate = true
+    }
 
     const nextSearch = `?${params.toString()}`
 
-    if (location.pathname !== '/community' || location.search !== nextSearch) {
+    if (location.pathname !== '/community') {
       navigate(
         {
           pathname: '/community',
@@ -61,11 +66,24 @@ const Community = () => {
         },
         { replace: true },
       )
+      return
     }
-  }, [tab, sortBy, location.pathname, location.search, navigate, searchParams])
 
-  // Update sorting while preserving the other query parameters.
+    if (needsUpdate || location.search !== nextSearch) {
+      setSearchParams(params, { replace: true })
+    }
+  }, [
+    location.pathname,
+    location.search,
+    searchParams,
+    navigate,
+    setSearchParams,
+  ])
+
+  // Update sorting while preserving the selected tab and other parameters.
   const updateSort = (newSort) => {
+    if (!VALID_SORTS.includes(newSort)) return
+
     const params = new URLSearchParams(searchParams)
 
     params.set('tab', tab)
@@ -79,8 +97,6 @@ const Community = () => {
     dispatch(fetchPosts())
     dispatch(fetchFeaturedThought())
   }, [dispatch])
-
-  const getFeedType = () => tab
 
   // Community loading skeleton.
   if (loading) {
@@ -272,7 +288,7 @@ const Community = () => {
 
           <div className="community-toolbar">
             <div className="community-toolbar-heading">
-              <h2>Community Feed</h2>
+              <h2>{TAB_TITLES[tab]}</h2>
 
               <SharePageUrl label="Share" className="community-share-control" />
             </div>
@@ -282,6 +298,7 @@ const Community = () => {
                 type="button"
                 className={sortBy === 'latest' ? 'active' : ''}
                 onClick={() => updateSort('latest')}
+                aria-pressed={sortBy === 'latest'}
               >
                 Latest
               </button>
@@ -290,6 +307,7 @@ const Community = () => {
                 type="button"
                 className={sortBy === 'oldest' ? 'active' : ''}
                 onClick={() => updateSort('oldest')}
+                aria-pressed={sortBy === 'oldest'}
               >
                 Oldest
               </button>
@@ -298,6 +316,7 @@ const Community = () => {
                 type="button"
                 className={sortBy === 'likes' ? 'active' : ''}
                 onClick={() => updateSort('likes')}
+                aria-pressed={sortBy === 'likes'}
               >
                 Most Liked
               </button>
@@ -306,13 +325,14 @@ const Community = () => {
                 type="button"
                 className={sortBy === 'comments' ? 'active' : ''}
                 onClick={() => updateSort('comments')}
+                aria-pressed={sortBy === 'comments'}
               >
                 Most Commented
               </button>
             </div>
           </div>
 
-          <Feed type={getFeedType()} sortBy={sortBy} />
+          <Feed type={tab} sortBy={sortBy} />
         </main>
 
         <aside className="community-right">

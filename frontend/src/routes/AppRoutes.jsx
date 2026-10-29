@@ -1,62 +1,63 @@
-import { Route, Routes, Navigate } from 'react-router-dom';
+import { Route, Routes, Navigate } from "react-router-dom";
 
 import MainLayout from '../layouts/MainLayout';
 import Home from './../pages/Home';
 import AdminDashboard from './../pages/AdminDashboard';
 import Community from './../pages/Community/Community';
 import About from './../pages/About';
+import DevJournal from './../pages/DevJournal'
 import Contact from './../pages/Contact';
 // import SignUpPage from './../pages/Login';
 
-import ProgressBar from './../components/ProgressBar/progressBar';
-import { BubbleCursor } from './../components/BubbleArrow/bubbleArrow';
-import RouteLoader from './../components/RouteLoader';
+import ProgressBar from "./../components/ProgressBar/progressBar";
+import { BubbleCursor } from "./../components/BubbleArrow/bubbleArrow";
+import RouteLoader from "./../components/RouteLoader";
 
-import Calendar from './../components/Setting/Calendar/Calendar';
+import Calendar from "./../components/Setting/Calendar/Calendar";
 
-import EmployeeTable from '../pages/EmployeeTable';
-import EmployeeDetails from '../pages/EmployeeDetails';
-import EmployeeProfile from './../pages/EmployeeProfile/EmployeeProfile';
+import EmployeeTable from "../pages/EmployeeTable";
+import EmployeeDetails from "../pages/EmployeeDetails";
+import EmployeeProfile from "./../pages/EmployeeProfile/EmployeeProfile";
 
-import { Error } from '../components/Error/Error';
-import { PrivateRoutes } from '../components/PrivateRoutes';
+import { Error } from "../components/Error/Error";
+import { PrivateRoutes } from "../components/PrivateRoutes";
 
-import Attendance from '../pages/Attendance/Attendance';
-import { Reports } from './../pages/Reports/Reports';
+import Attendance from "../pages/Attendance/Attendance";
+import { Reports } from "./../pages/Reports/Reports";
 
-import { Settings } from '../pages/Settings';
-import { Profile } from './../components/Setting/Profile/Profile';
-import { SettingAttendance } from './../components/Setting/SettingAttendance/SettingAttendance';
+import { Settings } from "../pages/Settings";
+import { Profile } from "./../components/Setting/Profile/Profile";
+import { SettingAttendance } from "./../components/Setting/SettingAttendance/SettingAttendance";
 import Leave from "../components/Setting/Leave/Leave";
-import { Appearance } from './../components/Setting/Appearance/Appearance';
-import { Notification } from './../components/Setting/Notification/Notifications';
-import { Security } from './../components/Setting/Security/Security';
-import { DataExport } from './../components/Setting/DataExport/DataExport';
-import { HelpSupport } from './../components/Setting/HelpSupport/HelpSupport';
+import { Appearance } from "./../components/Setting/Appearance/Appearance";
+import { Notification } from "./../components/Setting/Notification/Notifications";
+import { Security } from "./../components/Setting/Security/Security";
+import { DataExport } from "./../components/Setting/DataExport/DataExport";
+import { HelpSupport } from "./../components/Setting/HelpSupport/HelpSupport";
 
-import { DashboardEmployee } from './../components/Dashboard/DashboardEmployee/DashboardEmployee';
-import { DashboardHome } from './../components/Dashboard/DashboardHome/DashboardHome';
-import { DashboardAttendance } from './../components/Dashboard/DashboardAttendance/DashboardAttendance';
-import { DashboardThuoght } from './../components/Dashboard/DashboardThought/DashboardThought';
-import { DashboardNotification } from './../components/Dashboard/DashboardNotification/DashboardNotification';
-import { DashboardAnnouncement } from './../components/Dashboard/DashboardAnnouncement/DashboardAnnouncement';
-import { DashboardReport } from './../components/Dashboard/DashboardReport/DashboardReport';
-import { DashboardSetting } from './../components/Dashboard/DashboardSetting/DashboardSetting';
+import { DashboardEmployee } from "./../components/Dashboard/DashboardEmployee/DashboardEmployee";
+import { DashboardHome } from "./../components/Dashboard/DashboardHome/DashboardHome";
+import { DashboardAttendance } from "./../components/Dashboard/DashboardAttendance/DashboardAttendance";
+import { DashboardThuoght } from "./../components/Dashboard/DashboardThought/DashboardThought";
+import { DashboardNotification } from "./../components/Dashboard/DashboardNotification/DashboardNotification";
+import { DashboardAnnouncement } from "./../components/Dashboard/DashboardAnnouncement/DashboardAnnouncement";
+import { DashboardReport } from "./../components/Dashboard/DashboardReport/DashboardReport";
+import { DashboardSetting } from "./../components/Dashboard/DashboardSetting/DashboardSetting";
 
-import { SinglePost } from '../pages/SinglePost/SinglePost';
-import { NotificationPage } from '../pages/NotificationPage/NotificationPage';
-import { AuthLayout } from '../layouts/AuthLayout';
-import { AdminLayout } from '../layouts/AdminLayout';
-import { CommunityProfile } from '../components/community/CommunityProfile/CommunityProfile';
-import { DashboardLeave } from '../components/Dashboard/DashboardLeave/DashboardLeave';
-import { AdminPrivateRoutes } from '../components/AdminPrivateRoutes';
-import DashboardCalendar from '../components/Dashboard/DashboardCalendar/DashboardCalendar';
-import { Signup } from '../pages/Signup';
-import {Login} from "../pages/Login";
-import {AdminLogin} from "../pages/AdminLogin";
-import { DashboardAppearance } from '../components/Dashboard/DashboardAppearance/DashboardAppearance';
+import { SinglePost } from "../pages/SinglePost/SinglePost";
+import { NotificationPage } from "../pages/NotificationPage/NotificationPage";
+import { AuthLayout } from "../layouts/AuthLayout";
+import { AdminLayout } from "../layouts/AdminLayout";
+import { CommunityProfile } from "../components/community/CommunityProfile/CommunityProfile";
+import { DashboardLeave } from "../components/Dashboard/DashboardLeave/DashboardLeave";
+import { AdminPrivateRoutes } from "../components/AdminPrivateRoutes";
+import DashboardCalendar from "../components/Dashboard/DashboardCalendar/DashboardCalendar";
+import { Signup } from "../pages/Signup";
+import { Login } from "../pages/Login";
+import { AdminLogin } from "../pages/AdminLogin";
+import { DashboardAppearance } from "../components/Dashboard/DashboardAppearance/DashboardAppearance";
+import { EmployeeAnnouncements } from "../pages/Announcement/EmployeeAnnouncements";
 // import {AdminLogin} from "../pages/AdminLogin";
-
 
 export const AppRoutes = () => {
   return (
@@ -111,6 +112,16 @@ export const AppRoutes = () => {
             }
           />
 
+          {/* ================= Employee ANnouncement ================ */}
+          <Route
+            path="/announcements"
+            element={
+              <PrivateRoutes>
+                <EmployeeAnnouncements />
+              </PrivateRoutes>
+            }
+          />
+
           {/* ================= PUBLIC PAGES ================= */}
 
           <Route
@@ -148,6 +159,7 @@ export const AppRoutes = () => {
             }
           />
           <Route path="/about" element={<About />} />
+          <Route path="/dev-journal" element={<DevJournal />} />
           <Route path="/contact" element={<Contact />} />
 
           <Route
@@ -161,12 +173,25 @@ export const AppRoutes = () => {
 
           {/* ================= EMPLOYEES ================= */}
 
-          <Route path="/employees" element={<EmployeeTable />} />
-          <Route path="/employee-details" element={<EmployeeDetails />} />
+          <Route
+            path="/employees"
+            element={<EmployeeTable />}
+          />
+          <Route
+            path="/employee-details"
+            element={<EmployeeDetails />}
+          />
 
           {/* ================= SETTINGS ================= */}
 
-          <Route path="/settings" element={<PrivateRoutes><Settings /></PrivateRoutes>}>
+          <Route
+            path="/settings"
+            element={
+              <PrivateRoutes>
+                <Settings />
+              </PrivateRoutes>
+            }
+          >
             <Route index element={<Navigate to="profile" replace />} />
             <Route path="profile" element={<Profile />} />
             <Route path="attendance" element={<SettingAttendance />} />
@@ -181,38 +206,95 @@ export const AppRoutes = () => {
 
           {/* ================= 404 ================= */}
 
-          <Route path="*" element={<Error />} />
+          <Route
+            path="*"
+            element={<Error />}
+          />
         </Route>
 
         {/* ================= Auth Layout ================= */}
         <Route element={<AuthLayout />}>
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route
+            path="/login"
+            element={<Login />}
+          />
+          <Route
+            path="/signup"
+            element={<Signup />}
+          />
+          <Route
+            path="/admin/login"
+            element={<AdminLogin />}
+          />
         </Route>
 
         {/* ================= Admin Layout ================= */}
         {/* <Route path="/admin/login" element={<SignUpPage />} /> */}
 
-        <Route element={<AdminPrivateRoutes><AdminLayout /></AdminPrivateRoutes>}>
-        <Route path="/admin/employee/:userId" element={<EmployeeProfile />}/>
+        <Route
+          element={
+            <AdminPrivateRoutes>
+              <AdminLayout />
+            </AdminPrivateRoutes>
+          }
+        >
+          <Route path="/admin/employee/:userId" element={<EmployeeProfile />} />
           {/* ================= ADMIN DASHBOARD ================= */}
-          <Route path="/adminDashboard" element={<AdminDashboard />}>
-            <Route index element={<DashboardHome />} />
-            <Route path="adminDashboard" element={<DashboardHome />} />
-            <Route path="employee" element={<DashboardEmployee />} />
-            <Route path="attendance" element={<DashboardAttendance />} />
-            <Route path="appearence" element={<DashboardAppearance />} />
-            <Route path="leave" element={<DashboardLeave />} />
-            <Route path="calendar" element={<DashboardCalendar />} />
-            <Route path="thought" element={<DashboardThuoght />} />
-            <Route path="notification" element={<DashboardNotification />} />
-            <Route path="announcement" element={<DashboardAnnouncement />} />
-            <Route path="report" element={<DashboardReport />} />
-            <Route path="setting" element={<DashboardSetting />} />
+          <Route
+            path="/adminDashboard"
+            element={<AdminDashboard />}
+          >
+            <Route
+              index
+              element={<DashboardHome />}
+            />
+            <Route
+              path="adminDashboard"
+              element={<DashboardHome />}
+            />
+            <Route
+              path="employee"
+              element={<DashboardEmployee />}
+            />
+            <Route
+              path="attendance"
+              element={<DashboardAttendance />}
+            />
+            <Route
+              path="appearence"
+              element={<DashboardAppearance />}
+            />
+            <Route
+              path="leave"
+              element={<DashboardLeave />}
+            />
+            <Route
+              path="calendar"
+              element={<DashboardCalendar />}
+            />
+            <Route
+              path="thought"
+              element={<DashboardThuoght />}
+            />
+            <Route
+              path="notification"
+              element={<DashboardNotification />}
+            />
+            <Route
+              path="announcement"
+              element={<DashboardAnnouncement />}
+            />
+            <Route
+              path="report"
+              element={<DashboardReport />}
+            />
+            <Route
+              path="setting"
+              element={<DashboardSetting />}
+            />
           </Route>
         </Route>
       </Routes>
     </>
-  );
+  )
 };

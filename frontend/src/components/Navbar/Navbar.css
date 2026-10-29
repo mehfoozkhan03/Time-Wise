@@ -276,10 +276,21 @@
   background: var(--surface_hover);
 }
 
-.notification_item.unread{
-    color: #2c2f3a;
-    background:#eef6ff;
+/* .notification_item.unread{
+    color: var(--text_primary);
     border-left:4px solid #3b82f6;
+} */
+
+.notification_title_row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.notification_pulse_dot {
+  flex-shrink: 0;
+  margin-right: 4px;
 }
 
 .view_all_btn {

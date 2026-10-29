@@ -10,6 +10,7 @@ const leaveTypeLabels = {
   annual: "Annual Leave",
   sick: "Sick Leave",
   casual: "Casual Leave",
+  emergency: "Emergency Leave",
 };
 
 const formatDate = (date) => {

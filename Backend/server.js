@@ -17,11 +17,14 @@ import holidayRouter from "./routes/Holiday.routes.js";
 import { contactRoute } from "./routes/Contact.routes.js";
 import notificationRoute from "./routes/Notification.routes.js";
 import leaveRoutes from "./routes/Leave.routes.js";
+import adminLeaveRoutes from "./routes/AdminLeave.routes.js";
 import aiRoutes from "./routes/Ai.routes.js";
 
 import { adminRoutes } from "./routes/Admin.routes.js";
 import { adminThoughtRoute } from "./routes/AdminThought.route.js";
 import { announcementRoutes } from "./routes/Announcement.route.js";
+import { adminNotificationRoutes } from "./routes/AdminNotification.routes.js";
+import { userAnnouncementRoutes } from "./routes/userAnnouncement.routes.js";
 
 dotenv.config();
 
@@ -59,6 +62,13 @@ server.use("/admin", announcementRoutes);
 //# Admin Calendar Route
 server.use("/admin/calendar", adminCalendarRoutes);
 
+//# Admin Notification Route
+server.use("/admin/notifications", adminNotificationRoutes);
+
+
+//# User Announcement
+server.use("/user", userAnnouncementRoutes);
+
 //# User Route
 server.use("/user", userRoutes);
 
@@ -76,6 +86,7 @@ server.use("/api/contact", contactRoute);
 server.use("/notifications", notificationRoute);
 
 server.use("/leave", leaveRoutes);
+server.use("/admin/leave", adminLeaveRoutes);
 
 server.use("/ai", aiRoutes);
 
