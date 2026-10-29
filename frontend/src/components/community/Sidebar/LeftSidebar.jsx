@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 
 import {
@@ -15,19 +15,48 @@ import { setSearchQuery } from '../../../store/postSlice'
 
 import './LeftSidebar.css'
 
+const sidebarItems = [
+  { id: 'feed', label: 'Feed', icon: FaHome },
+  { id: 'my-posts', label: 'My Posts', icon: FaRegNewspaper, count: 'myPosts' },
+  { id: 'liked', label: 'Liked Posts', icon: FaHeart, count: 'likedPosts' },
+  { id: 'saved', label: 'Saved Posts', icon: FaBookmark, count: 'savedPosts' },
+  { id: 'trending', label: 'Trending', icon: IoTrendingUp },
+]
+
 const LeftSidebar = () => {
   const dispatch = useDispatch()
+  const [searchParams] = useSearchParams()
 
-  const { posts, searchQuery } = useSelector((state) => state.post)
+  const { posts = [], searchQuery = '' } = useSelector((state) => state.post)
 
   const { user } = useSelector((state) => state.auth)
 
-  const myPostsCount =
-    posts?.filter((post) => post.createdBy?._id === user?._id).length || 0
+  const activeTab = searchParams.get('tab') || 'feed'
+  const sortBy = searchParams.get('sort') || 'latest'
 
-  const likedPostsCount = posts?.filter((post) => post.isLiked).length || 0
+  const myPostsCount = posts.filter((post) => {
+    const authorId = post.createdBy?._id || post.createdBy
+    return authorId?.toString() === user?._id?.toString()
+  }).length
+
+  const likedPostsCount = posts.filter((post) => post.isLiked).length
 
   const savedPostsCount = posts.filter((post) => post.isSaved).length
+
+  const counts = {
+    myPosts: myPostsCount,
+    likedPosts: likedPostsCount,
+    savedPosts: savedPostsCount,
+  }
+
+  const getTabUrl = (tab) => {
+    const params = new URLSearchParams(searchParams)
+
+    params.set('tab', tab)
+    params.set('sort', sortBy)
+
+    return `/community?${params.toString()}`
+  }
 
   return (
     <aside className="left-sidebar card">
@@ -43,67 +72,25 @@ const LeftSidebar = () => {
       </div>
 
       <nav className="left-sidebar-nav">
-        <NavLink
-          end
-          to="/community"
-          className={({ isActive }) =>
-            isActive ? 'left-sidebar-link active' : 'left-sidebar-link'
-          }
-        >
-          <FaHome />
+        {sidebarItems.map((item) => {
+          const Icon = item.icon
+          const isActive = activeTab === item.id
 
-          <span>Feed</span>
-        </NavLink>
+          return (
+            <Link
+              key={item.id}
+              to={getTabUrl(item.id)}
+              className={`left-sidebar-link${isActive ? ' active' : ''}`}
+              aria-current={isActive ? 'page' : undefined}
+            >
+              <Icon />
 
-        <NavLink
-          to="/community/my-posts"
-          className={({ isActive }) =>
-            isActive ? 'left-sidebar-link active' : 'left-sidebar-link'
-          }
-        >
-          <FaRegNewspaper />
+              <span>{item.label}</span>
 
-          <span>My Posts</span>
-
-          <small>{myPostsCount}</small>
-        </NavLink>
-
-        <NavLink
-          to="/community/liked"
-          className={({ isActive }) =>
-            isActive ? 'left-sidebar-link active' : 'left-sidebar-link'
-          }
-        >
-          <FaHeart />
-
-          <span>Liked Posts</span>
-
-          <small>{likedPostsCount}</small>
-        </NavLink>
-
-        <NavLink
-          to="/community/saved"
-          className={({ isActive }) =>
-            isActive ? 'left-sidebar-link active' : 'left-sidebar-link'
-          }
-        >
-          <FaBookmark />
-
-          <span>Saved Posts</span>
-
-          <small>{savedPostsCount}</small>
-        </NavLink>
-
-        <NavLink
-          to="/community/trending"
-          className={({ isActive }) =>
-            isActive ? 'left-sidebar-link active' : 'left-sidebar-link'
-          }
-        >
-          <IoTrendingUp />
-
-          <span>Trending</span>
-        </NavLink>
+              {item.count && <small>{counts[item.count]}</small>}
+            </Link>
+          )
+        })}
       </nav>
     </aside>
   )

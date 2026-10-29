@@ -1,11 +1,12 @@
 import { Route, Routes, Navigate } from "react-router-dom";
 
-import MainLayout from "../layouts/MainLayout";
-import Home from "./../pages/Home";
-import AdminDashboard from "./../pages/AdminDashboard";
-import Community from "./../pages/Community/Community";
-import About from "./../pages/About";
-import Contact from "./../pages/Contact";
+import MainLayout from '../layouts/MainLayout';
+import Home from './../pages/Home';
+import AdminDashboard from './../pages/AdminDashboard';
+import Community from './../pages/Community/Community';
+import About from './../pages/About';
+import DevJournal from './../pages/DevJournal'
+import Contact from './../pages/Contact';
 // import SignUpPage from './../pages/Login';
 
 import ProgressBar from "./../components/ProgressBar/progressBar";
@@ -157,14 +158,9 @@ export const AppRoutes = () => {
               </PrivateRoutes>
             }
           />
-          <Route
-            path="/about"
-            element={<About />}
-          />
-          <Route
-            path="/contact"
-            element={<Contact />}
-          />
+          <Route path="/about" element={<About />} />
+          <Route path="/dev-journal" element={<DevJournal />} />
+          <Route path="/contact" element={<Contact />} />
 
           <Route
             path="/notifications"
@@ -196,51 +192,16 @@ export const AppRoutes = () => {
               </PrivateRoutes>
             }
           >
-            <Route
-              index
-              element={
-                <Navigate
-                  to="profile"
-                  replace
-                />
-              }
-            />
-            <Route
-              path="profile"
-              element={<Profile />}
-            />
-            <Route
-              path="attendance"
-              element={<SettingAttendance />}
-            />
-            <Route
-              path="leave"
-              element={<Leave />}
-            />
-            <Route
-              path="calendar"
-              element={<Calendar />}
-            />
-            <Route
-              path="appearance"
-              element={<Appearance />}
-            />
-            <Route
-              path="notification"
-              element={<Notification />}
-            />
-            <Route
-              path="security"
-              element={<Security />}
-            />
-            <Route
-              path="data_export"
-              element={<DataExport />}
-            />
-            <Route
-              path="help_support"
-              element={<HelpSupport />}
-            />
+            <Route index element={<Navigate to="profile" replace />} />
+            <Route path="profile" element={<Profile />} />
+            <Route path="attendance" element={<SettingAttendance />} />
+            <Route path="leave" element={<Leave />} />
+            <Route path="calendar" element={<Calendar />} />
+            <Route path="appearance" element={<Appearance />} />
+            <Route path="notification" element={<Notification />} />
+            <Route path="security" element={<Security />} />
+            <Route path="data_export" element={<DataExport />} />
+            <Route path="help_support" element={<HelpSupport />} />
           </Route>
 
           {/* ================= 404 ================= */}
@@ -277,10 +238,7 @@ export const AppRoutes = () => {
             </AdminPrivateRoutes>
           }
         >
-          <Route
-            path="/admin/employee/:userId"
-            element={<EmployeeProfile />}
-          />
+          <Route path="/admin/employee/:userId" element={<EmployeeProfile />} />
           {/* ================= ADMIN DASHBOARD ================= */}
           <Route
             path="/adminDashboard"
@@ -338,5 +296,5 @@ export const AppRoutes = () => {
         </Route>
       </Routes>
     </>
-  );
+  )
 };
