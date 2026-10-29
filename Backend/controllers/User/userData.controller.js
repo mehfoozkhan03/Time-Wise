@@ -135,8 +135,6 @@ export const signup = async (req, res) => {
 export const login = async (req, res) => {
   try {
     if (!validateLogin(req.body)) {
-      console.log('[LOGIN] Controller reached')
-      console.log('[LOGIN] Email:', req.body?.email)
       return res.status(400).json({
         success: false,
         title: 'Login Failed',

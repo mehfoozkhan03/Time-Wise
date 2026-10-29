@@ -328,6 +328,57 @@
     height: 280px;
 }
 
+
+/* Notification Form Modal */
+.create-notification-modal__overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+}
+
+.create-notification-modal {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+.create-notification-modal__content {
+  padding: 24px;
+}
+
+.create-notification-modal__close {
+  position: absolute;
+  top: 12px;
+  right: 18px;
+  z-index: 2;
+  border: none;
+  background: transparent;
+  color: red;
+  font-size: 30px;
+  cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  .create-notification-modal__overlay {
+    padding: 12px;
+  }
+
+  .create-notification-modal__content {
+    padding: 20px 12px;
+  }
+}
+
 @media (max-width: 1000px) {
     .home-card-container {
         grid-template-columns: repeat(3, minmax(0, 1fr));

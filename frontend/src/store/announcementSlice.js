@@ -1,13 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { announcementService } from "../services/announcementService.js";
 
-// ============================================================
-// INITIAL STATE
-// ============================================================
-
+//# ======================= INITIAL STATE ==========================
 const initialState = {
   announcements: [],
   selectedAnnouncement: null,
+  
+  employeeAnnouncements: [],
 
   pagination: {
     currentPage: 1,
@@ -26,10 +25,7 @@ const initialState = {
   message: "",
 };
 
-// ============================================================
-// GET ALL ANNOUNCEMENTS
-// ============================================================
-
+//# ===================== GET ALL ANNOUNCEMENTS =============================
 export const fetchAnnouncements = createAsyncThunk(
   "announcement/fetchAnnouncements",
   async (params = {}, thunkAPI) => {
@@ -45,10 +41,24 @@ export const fetchAnnouncements = createAsyncThunk(
   },
 );
 
-// ============================================================
-// GET SINGLE ANNOUNCEMENT
-// ============================================================
+//# ============== Announcement for User =================
+export const fetchEmployeeAnnouncements = createAsyncThunk(
+  "announcement/fetchEmployeeAnnouncements",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await announcementService.getEmployeeAnnouncements();
 
+      return response.data.announcements;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message ||
+          "Failed to fetch employee announcements.",
+      );
+    }
+  },
+);
+
+//# ================== GET SINGLE ANNOUNCEMENT ==========================
 export const fetchAnnouncementById = createAsyncThunk(
   "announcement/fetchAnnouncementById",
   async (id, thunkAPI) => {
@@ -64,10 +74,7 @@ export const fetchAnnouncementById = createAsyncThunk(
   },
 );
 
-// ============================================================
-// CREATE ANNOUNCEMENT
-// ============================================================
-
+//# ====================== CREATE ANNOUNCEMENT =============================
 export const createAnnouncement = createAsyncThunk(
   "announcement/createAnnouncement",
   async (data, thunkAPI) => {
@@ -83,10 +90,7 @@ export const createAnnouncement = createAsyncThunk(
   },
 );
 
-// ============================================================
-// UPDATE ANNOUNCEMENT
-// ============================================================
-
+//# ======================== UPDATE ANNOUNCEMENT =============================
 export const updateAnnouncement = createAsyncThunk(
   "announcement/updateAnnouncement",
   async ({ id, data }, thunkAPI) => {
@@ -102,10 +106,7 @@ export const updateAnnouncement = createAsyncThunk(
   },
 );
 
-// ============================================================
-// DELETE ANNOUNCEMENT
-// ============================================================
-
+//# ====================== DELETE ANNOUNCEMENT ============================
 export const deleteAnnouncement = createAsyncThunk(
   "announcement/deleteAnnouncement",
   async (id, thunkAPI) => {
@@ -124,10 +125,7 @@ export const deleteAnnouncement = createAsyncThunk(
   },
 );
 
-// ============================================================
-// PUBLISH ANNOUNCEMENT
-// ============================================================
-
+//# ====================== PUBLISH ANNOUNCEMENT ============================
 export const publishAnnouncement = createAsyncThunk(
   "announcement/publishAnnouncement",
   async (id, thunkAPI) => {
@@ -143,10 +141,7 @@ export const publishAnnouncement = createAsyncThunk(
   },
 );
 
-// ============================================================
-// SCHEDULE ANNOUNCEMENT
-// ============================================================
-
+//# ========================= SCHEDULE ANNOUNCEMENT ===========================
 export const scheduleAnnouncement = createAsyncThunk(
   "announcement/scheduleAnnouncement",
   async ({ id, scheduledAt }, thunkAPI) => {
@@ -165,10 +160,7 @@ export const scheduleAnnouncement = createAsyncThunk(
   },
 );
 
-// ============================================================
-// PIN / UNPIN ANNOUNCEMENT
-// ============================================================
-
+//# ======================= PIN / UNPIN ANNOUNCEMENT ===============================
 export const togglePinAnnouncement = createAsyncThunk(
   "announcement/togglePinAnnouncement",
   async (id, thunkAPI) => {
@@ -184,10 +176,7 @@ export const togglePinAnnouncement = createAsyncThunk(
   },
 );
 
-// ============================================================
-// SLICE
-// ============================================================
-
+//# ======================= SLICE ==========================
 const announcementSlice = createSlice({
   name: "announcement",
 
@@ -213,10 +202,7 @@ const announcementSlice = createSlice({
   },
 
   extraReducers: (builder) => {
-    // ========================================================
-    // FETCH ALL
-    // ========================================================
-
+    //# ====================== FETCH ALL ===========================
     builder
       .addCase(fetchAnnouncements.pending, (state) => {
         state.loading = true;
@@ -236,10 +222,7 @@ const announcementSlice = createSlice({
         state.error = action.payload;
       });
 
-    // ========================================================
-    // FETCH SINGLE
-    // ========================================================
-
+    //# ======================== FETCH SINGLE ==========================
     builder
       .addCase(fetchAnnouncementById.pending, (state) => {
         state.loading = true;
@@ -257,9 +240,7 @@ const announcementSlice = createSlice({
         state.error = action.payload;
       });
 
-    // ========================================================
-    // CREATE
-    // ========================================================
+    //# ======================= CREATE =========================
 
     builder
       .addCase(createAnnouncement.pending, (state) => {
@@ -286,9 +267,7 @@ const announcementSlice = createSlice({
         state.success = false;
       });
 
-    // ========================================================
-    // UPDATE
-    // ========================================================
+    //# ====================== UPDATE =============================
 
     builder
       .addCase(updateAnnouncement.pending, (state) => {
@@ -327,9 +306,7 @@ const announcementSlice = createSlice({
         state.success = false;
       });
 
-    // ========================================================
-    // DELETE
-    // ========================================================
+    //# ======================= DELETE ===========================
 
     builder
       .addCase(deleteAnnouncement.pending, (state) => {
@@ -358,9 +335,7 @@ const announcementSlice = createSlice({
         state.error = action.payload;
       });
 
-    // ========================================================
-    // PUBLISH
-    // ========================================================
+    //# ======================== PUBLISH ==========================
 
     builder
       .addCase(publishAnnouncement.pending, (state) => {
@@ -393,9 +368,7 @@ const announcementSlice = createSlice({
         state.error = action.payload;
       });
 
-    // ========================================================
-    // SCHEDULE
-    // ========================================================
+    //# ========================== SCHEDULE ===========================
 
     builder
       .addCase(scheduleAnnouncement.pending, (state) => {
@@ -428,9 +401,7 @@ const announcementSlice = createSlice({
         state.error = action.payload;
       });
 
-    // ========================================================
-    // PIN / UNPIN
-    // ========================================================
+    //# ======================== PIN / UNPIN ===========================
 
     builder
       .addCase(togglePinAnnouncement.pending, (state) => {
@@ -476,13 +447,25 @@ const announcementSlice = createSlice({
       .addCase(togglePinAnnouncement.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+
+      //# ================= User Announcement ===================
+      .addCase(fetchEmployeeAnnouncements.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchEmployeeAnnouncements.fulfilled, (state, action) => {
+        state.loading = false;
+        state.employeeAnnouncements = action.payload;
+      })
+      .addCase(fetchEmployeeAnnouncements.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   },
 });
 
-// ============================================================
-// ACTIONS
-// ============================================================
+//# ======================== ACTIONS ===========================
 
 export const {
   clearAnnouncementError,
@@ -491,9 +474,7 @@ export const {
   resetAnnouncementState,
 } = announcementSlice.actions;
 
-// ============================================================
-// SELECTORS
-// ============================================================
+//# ======================= SELECTORS ============================
 
 export const selectAnnouncements = (state) => state.announcement.announcements;
 
@@ -506,8 +487,6 @@ export const selectAnnouncementError = (state) => state.announcement.error;
 
 export const selectAnnouncementSuccess = (state) => state.announcement.success;
 
-// ============================================================
-// REDUCER
-// ============================================================
+//# ========================= REDUCER ===========================
 
 export const announcementReducer = announcementSlice.reducer;

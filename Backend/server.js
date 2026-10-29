@@ -24,6 +24,7 @@ import { adminRoutes } from "./routes/Admin.routes.js";
 import { adminThoughtRoute } from "./routes/AdminThought.route.js";
 import { announcementRoutes } from "./routes/Announcement.route.js";
 import { adminNotificationRoutes } from "./routes/AdminNotification.routes.js";
+import { userAnnouncementRoutes } from "./routes/userAnnouncement.routes.js";
 
 dotenv.config();
 
@@ -62,7 +63,11 @@ server.use("/admin", announcementRoutes);
 server.use("/admin/calendar", adminCalendarRoutes);
 
 //# Admin Notification Route
-server.use("/admin/notifications", adminNotificationRoutes); 
+server.use("/admin/notifications", adminNotificationRoutes);
+
+
+//# User Announcement
+server.use("/user", userAnnouncementRoutes);
 
 //# User Route
 server.use("/user", userRoutes);

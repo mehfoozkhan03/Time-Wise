@@ -15,48 +15,48 @@ const FeedbackModalController = ({ onReady }) => {
   const modalRef = React.useRef(modal);
   modalRef.current = modal;
 
-  // const showModal = React.useCallback(
-  //   ({
-  //     variant,
-  //     title,
-  //     message,
-  //     description = "",
-  //     reason = "",
-  //     onCloseCb = null,
-  //   }) => {
-  //     setModal({
-  //       open: true,
-  //       variant,
-  //       title,
-  //       message,
-  //       description,
-  //       reason,
-  //       onCloseCb,
-  //     });
-  //   },
-  //   [],
-  // );
-
-  const showModal = React.useCallback((options = {}) => {
-    const {
-      variant = "success",
-      title = "",
-      message = "",
-      description = "",
-      reason = "",
-      onCloseCb = null,
-    } = options || {};
-
-    setModal({
-      open: true,
+  const showModal = React.useCallback(
+    ({
       variant,
       title,
       message,
-      description,
-      reason,
-      onCloseCb,
-    });
-  }, []);
+      description = "",
+      reason = "",
+      onCloseCb = null,
+    }) => {
+      setModal({
+        open: true,
+        variant,
+        title,
+        message,
+        description,
+        reason,
+        onCloseCb,
+      });
+    },
+    [],
+  );
+
+  // const showModal = React.useCallback((options = {}) => {
+  //   const {
+  //     variant = "success",
+  //     title = "",
+  //     message = "",
+  //     description = "",
+  //     reason = "",
+  //     onCloseCb = null,
+  //   } = options || {};
+
+  //   setModal({
+  //     open: true,
+  //     variant,
+  //     title,
+  //     message,
+  //     description,
+  //     reason,
+  //     onCloseCb,
+  //   });
+  // }, []);
 
   const closeModal = React.useCallback(() => {
     const onCloseCb = modalRef.current.onCloseCb;
@@ -93,10 +93,10 @@ const FeedbackModalController = ({ onReady }) => {
   //   onReady?.(showModal);
   // }, [onReady, showModal]);
   React.useEffect(() => {
-  if (typeof onReady === "function") {
-    onReady(() => showModal);
-  }
-}, [onReady, showModal]);
+    if (typeof onReady === "function") {
+      onReady(() => showModal);
+    }
+  }, [onReady, showModal]);
 
   return createPortal(
     <Feedback

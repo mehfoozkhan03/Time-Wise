@@ -19,6 +19,7 @@ import {
   Legend,
 } from "chart.js";
 import { fetchAdminDashboardHomeStats } from "../../../store/adminDashboardHomeSlice";
+import { NotificationForm } from "../DashboardNotification/NotificationForm";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
@@ -34,6 +35,9 @@ export const DashboardHome = () => {
   const { stats } = useSelector((state) => state.adminDashboardHome);
 
   const totalAbsentToday = (totalUsers || 0) - (stats?.totalPresentToday || 0);
+
+  //# ===================== Notification ===================
+  const [openNotification, setOpenNotification] = useState(false);
 
   //# ====================== Anouncement ===================
   const [openAnnouncement, setOpenAnnouncement] = useState(false);
@@ -257,13 +261,11 @@ export const DashboardHome = () => {
 
                 <span style={{ opacity: "0.6", fontSize: "14px" }}>
                   {featured
-                    ? `${featured.createdBy?.firstName || ""} ${
-                        featured.createdBy?.lastName || ""
-                      }${
-                        featured.createdBy?.designation
-                          ? ` - ${featured.createdBy.designation}`
-                          : ""
-                      }`
+                    ? `${featured.createdBy?.firstName || ""} ${featured.createdBy?.lastName || ""
+                    }${featured.createdBy?.designation
+                      ? ` - ${featured.createdBy.designation}`
+                      : ""
+                    }`
                     : "No author"}
                 </span>
               </div>
@@ -279,6 +281,10 @@ export const DashboardHome = () => {
                 className="add-employe"
                 key={id}
                 onClick={() => {
+                  if (el.title === "Send Notification") {
+                    setOpenNotification(true);
+                  }
+
                   if (el.title === "New Announcement") {
                     setOpenAnnouncement(true);
                   }
@@ -317,11 +323,10 @@ export const DashboardHome = () => {
                       </div>
                     </div>
                     <div
-                      className={`recent-dot-container ${
-                        el.attendanceStatus === "Present"
-                          ? "attendance-present"
-                          : "attendance-absent"
-                      }`}
+                      className={`recent-dot-container ${el.attendanceStatus === "Present"
+                        ? "attendance-present"
+                        : "attendance-absent"
+                        }`}
                     >
                       <PulseDot
                         color={
@@ -354,6 +359,35 @@ export const DashboardHome = () => {
           </div>
         </div>
       </div>
+
+
+      {openNotification && (
+        <div
+          className="create-notification-modal__overlay"
+          onClick={() => setOpenNotification(false)}
+        >
+          <div
+            className="create-notification-modal"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button
+              type="button"
+              className="create-notification-modal__close"
+              onClick={() => setOpenNotification(false)}
+              aria-label="Close notification form"
+            >
+              ×
+            </button>
+
+            <div className="create-notification-modal__content">
+              <NotificationForm
+                onClose={() => setOpenNotification(false)}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
 
       {openAnnouncement && (
         <AnnouncementForm onClose={() => setOpenAnnouncement(false)} />

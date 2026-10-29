@@ -276,6 +276,37 @@ export const DashboardEmployee = () => {
     });
   };
 
+  // ========================= OPEN NAME MODAL =========================
+  const handleNameClick = () => {
+    if (!editingUserId) return;
+
+    setShowNameModal(true);
+  };
+
+  // ========================= CLOSE NAME MODAL =========================
+  const handleCloseNameModal = () => {
+    setShowNameModal(false);
+  };
+
+  // ========================= SAVE NAME =========================
+  const handleSaveName = () => {
+    if (!editData.firstName.trim()) {
+      alert("First name is required.");
+      return;
+    }
+
+    if (!editData.lastName.trim()) {
+      alert("Last name is required.");
+      return;
+    }
+
+    setShowNameModal(false);
+  };
+
+  //# ========================= EDIT INPUT CHANGE =========================
+  // ========================= NAME EDIT MODAL =========================
+  const [showNameModal, setShowNameModal] = useState(false);
+
   //# ========================= EDIT INPUT CHANGE =========================
 
   const handleEditChange = (e) => {
@@ -363,8 +394,8 @@ export const DashboardEmployee = () => {
 
       alert(
         error?.message ||
-          error ||
-          "Failed to update employee. Please try again.",
+        error ||
+        "Failed to update employee. Please try again.",
       );
     }
   };
@@ -596,11 +627,10 @@ export const DashboardEmployee = () => {
                 <span>{selectedDepartment}</span>
 
                 <span
-                  className={`customDropdown-arrow ${
-                    openDropdown === "department"
+                  className={`customDropdown-arrow ${openDropdown === "department"
                       ? "customDropdown-arrow-open"
                       : ""
-                  }`}
+                    }`}
                 >
                   <MdOutlineKeyboardArrowDown />
                 </span>
@@ -611,11 +641,10 @@ export const DashboardEmployee = () => {
                   {departments.map((department) => (
                     <div
                       key={department}
-                      className={`customDropdown-option ${
-                        selectedDepartment === department
+                      className={`customDropdown-option ${selectedDepartment === department
                           ? "customDropdown-option-active"
                           : ""
-                      }`}
+                        }`}
                       onClick={() => handleDepartmentSelect(department)}
                     >
                       {department}
@@ -641,9 +670,8 @@ export const DashboardEmployee = () => {
                 <span>{selectedStatus}</span>
 
                 <span
-                  className={`customDropdown-arrow ${
-                    openDropdown === "status" ? "customDropdown-arrow-open" : ""
-                  }`}
+                  className={`customDropdown-arrow ${openDropdown === "status" ? "customDropdown-arrow-open" : ""
+                    }`}
                 >
                   <MdOutlineKeyboardArrowDown />
                 </span>
@@ -654,11 +682,10 @@ export const DashboardEmployee = () => {
                   {statusOptions.map((status) => (
                     <div
                       key={status}
-                      className={`customDropdown-option ${
-                        selectedStatus === status
+                      className={`customDropdown-option ${selectedStatus === status
                           ? "customDropdown-option-active"
                           : ""
-                      }`}
+                        }`}
                       onClick={() => handleStatusSelect(status)}
                     >
                       {status}
@@ -698,9 +725,8 @@ export const DashboardEmployee = () => {
 
                 return (
                   <div
-                    className={`employee-users-container ${
-                      isEditing ? "employee-users-container-editing" : ""
-                    }`}
+                    className={`employee-users-container ${isEditing ? "employee-users-container-editing" : ""
+                      }`}
                     key={el._id}
                   >
                     {/* EMPLOYEE NAME */}
@@ -720,25 +746,18 @@ export const DashboardEmployee = () => {
 
                       {/* NAME */}
 
-                      <div className="dashboardEmployee-name">
-                        {isEditing ? (
-                          <div className="employee-edit-name">
-                            <input
-                              type="text"
-                              name="firstName"
-                              value={`${editData.firstName} ${editData.lastName}`}
-                              onChange={handleEditChange}
-                              placeholder="First name"
-                            />
-                          </div>
-                        ) : (
-                          <p>
-                            {el.firstName?.charAt(0).toUpperCase() +
-                              el.firstName?.slice(1)}{" "}
-                            {el.lastName?.charAt(0).toUpperCase() +
-                              el.lastName?.slice(1)}
-                          </p>
-                        )}
+                      <div
+                        className={`dashboardEmployee-name ${isEditing ? "dashboardEmployee-name-editable" : ""
+                          }`}
+                        onClick={isEditing ? handleNameClick : undefined}
+                      >
+                        <p>
+                          {isEditing
+                            ? `${editData.firstName} ${editData.lastName}`
+                            : `${el.firstName?.charAt(0).toUpperCase() + el.firstName?.slice(1)} ${el.lastName?.charAt(0).toUpperCase() +
+                            el.lastName?.slice(1)
+                            }`}
+                        </p>
                       </div>
                     </div>
 
@@ -1022,6 +1041,76 @@ export const DashboardEmployee = () => {
           </div>
         </div>
 
+        {showNameModal && (
+          <Modal
+            isOpen={showNameModal}
+            onClose={handleCloseNameModal}
+            className="edit-name-modal"
+          >
+            <div className="edit-name-modal-content">
+              <div className="edit-name-modal-header">
+                <div>
+                  <h3>Edit Employee Name</h3>
+                  <p>Update the employee's first and last name.</p>
+                </div>
+
+                <button
+                  type="button"
+                  className="edit-name-modal-close"
+                  onClick={handleCloseNameModal}
+                >
+                  <IoClose />
+                </button>
+              </div>
+
+              <div className="edit-name-form">
+                <div className="edit-name-input-group">
+                  <label>First Name</label>
+
+                  <input
+                    type="text"
+                    name="firstName"
+                    value={editData.firstName}
+                    onChange={handleEditChange}
+                    placeholder="Enter first name"
+                    autoFocus
+                  />
+                </div>
+
+                <div className="edit-name-input-group">
+                  <label>Last Name</label>
+
+                  <input
+                    type="text"
+                    name="lastName"
+                    value={editData.lastName}
+                    onChange={handleEditChange}
+                    placeholder="Enter last name"
+                  />
+                </div>
+              </div>
+
+              <div className="edit-name-modal-actions">
+                <button
+                  type="button"
+                  className="edit-name-cancel"
+                  onClick={handleCloseNameModal}
+                >
+                  Cancel
+                </button>
+
+                <button
+                  type="button"
+                  className="edit-name-save"
+                  onClick={handleSaveName}
+                >
+                  Save Name
+                </button>
+              </div>
+            </div>
+          </Modal>
+        )}
+
         {/* LOAD MORE / LESS */}
 
         <div className="employeeDashboard-loadmore-btn">
@@ -1050,7 +1139,14 @@ export const DashboardEmployee = () => {
           className="add-employee-modal"
         >
           <div className="add-employee-scroll">
-            <div className="close-modal">X</div>
+            <button
+              type="button"
+              className="close-modal"
+              onClick={() => setShowAddEmployee(false)}
+              aria-label="Close Add Employee modal"
+            >
+              <IoClose />
+            </button>
             <Form
               fields={forms.adminEmployee.fields}
               button={forms.adminEmployee.button}
