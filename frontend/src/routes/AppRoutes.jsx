@@ -5,6 +5,7 @@ import Home from './../pages/Home';
 import AdminDashboard from './../pages/AdminDashboard';
 import Community from './../pages/Community/Community';
 import About from './../pages/About';
+import DevJournal from './../pages/DevJournal'
 import Contact from './../pages/Contact';
 // import SignUpPage from './../pages/Login';
 
@@ -148,6 +149,7 @@ export const AppRoutes = () => {
             }
           />
           <Route path="/about" element={<About />} />
+          <Route path="/dev-journal" element={<DevJournal />} />
           <Route path="/contact" element={<Contact />} />
 
           <Route
@@ -166,7 +168,14 @@ export const AppRoutes = () => {
 
           {/* ================= SETTINGS ================= */}
 
-          <Route path="/settings" element={<PrivateRoutes><Settings /></PrivateRoutes>}>
+          <Route
+            path="/settings"
+            element={
+              <PrivateRoutes>
+                <Settings />
+              </PrivateRoutes>
+            }
+          >
             <Route index element={<Navigate to="profile" replace />} />
             <Route path="profile" element={<Profile />} />
             <Route path="attendance" element={<SettingAttendance />} />
@@ -194,8 +203,14 @@ export const AppRoutes = () => {
         {/* ================= Admin Layout ================= */}
         {/* <Route path="/admin/login" element={<SignUpPage />} /> */}
 
-        <Route element={<AdminPrivateRoutes><AdminLayout /></AdminPrivateRoutes>}>
-        <Route path="/admin/employee/:userId" element={<EmployeeProfile />}/>
+        <Route
+          element={
+            <AdminPrivateRoutes>
+              <AdminLayout />
+            </AdminPrivateRoutes>
+          }
+        >
+          <Route path="/admin/employee/:userId" element={<EmployeeProfile />} />
           {/* ================= ADMIN DASHBOARD ================= */}
           <Route path="/adminDashboard" element={<AdminDashboard />}>
             <Route index element={<DashboardHome />} />
@@ -214,5 +229,5 @@ export const AppRoutes = () => {
         </Route>
       </Routes>
     </>
-  );
+  )
 };
