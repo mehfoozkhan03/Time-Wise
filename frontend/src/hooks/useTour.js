@@ -9,6 +9,29 @@ export function useTour(steps, onTourEnd) {
   const dispatch = useDispatch();
   const driverRef = useRef(null);
 
+  const getAvailableSteps = useCallback(() => {
+    const currentSteps = typeof steps === "function" ? steps() : steps;
+
+    return currentSteps.filter((step) => {
+      if (!step.element) return true;
+
+      try {
+        const target = document.querySelector(step.element);
+        if (!target) return false;
+
+        const style = window.getComputedStyle(target);
+        return (
+          style.display !== "none" &&
+          style.visibility !== "hidden" &&
+          target.getClientRects().length > 0
+        );
+      } catch {
+        // Ignore invalid selectors so one bad target cannot stop the tour.
+        return false;
+      }
+    });
+  }, [steps]);
+
   useEffect(() => {
     driverRef.current = driver({
       showProgress: true,
@@ -16,7 +39,7 @@ export function useTour(steps, onTourEnd) {
       overlayOpacity: 0.75,
       smoothScroll: true,
       allowClose: true, // ← must be true
-      steps,
+      steps: [],
       onHighlightStarted: (_el, step, { index }) => {
         dispatch(setCurrentStep(index));
       },
@@ -30,12 +53,16 @@ export function useTour(steps, onTourEnd) {
         onTourEnd?.();
       },
     });
-  }, [dispatch, onTourEnd, steps]);
+  }, [dispatch, onTourEnd]);
 
   const triggerTour = useCallback(() => {
+    const availableSteps = getAvailableSteps();
+    if (!availableSteps.length) return;
+
+    driverRef.current?.setSteps(availableSteps);
     dispatch(startTour());
     driverRef.current?.drive();
-  }, [dispatch]);
+  }, [dispatch, getAvailableSteps]);
 
   return { triggerTour, driverRef };
 }

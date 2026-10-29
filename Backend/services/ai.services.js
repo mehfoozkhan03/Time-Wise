@@ -1,5 +1,6 @@
 import Groq from "groq-sdk";
 import { TIMEWISE_KNOWLEDGE } from "../utils/aiKnowledge.js";
+import { TIMEWISE_PRODUCT_KNOWLEDGE, getTimeWiseOverviewReply } from "../utils/timeWiseOverview.js";
 import { getCalendarContext } from "./calendarContext.service.js";
 import { routeTimeWiseData } from "../services/aiDataRouter.services.js";
 import { understandIntentAndEntity } from "../services/aiIntentEntity.services.js";
@@ -19,6 +20,7 @@ export const askTimeWiseAI = async (
 
   const isHelpRequest = requestedContext?.isHelpRequest;
   const helpRequest = requestedContext?.helpRequest;
+  const isProductQuestion = requestedContext?.isProductQuestion;
 
   const workingHoursPeriod = requestedContext?.attendance?.workingHoursPeriod;
   const workingHours = requestedContext?.attendance?.workingHours;
@@ -84,6 +86,33 @@ Rules:
       helpResponse.choices?.[0]?.message?.content ||
       "You can check your attendance from the Attendance section in TimeWise."
     );
+  }
+
+  if (isProductQuestion) {
+    try {
+      const response = await groq.chat.completions.create({
+        model: "openai/gpt-oss-20b",
+        max_completion_tokens: 500,
+        messages: [
+          {
+            role: "system",
+            content: `You are WiseBot, the friendly TimeWise product guide. The user's role is ${requestedContext?.productRole === "admin" ? "administrator" : "employee"}. Answer the user's question about TimeWise and its features directly, with enough detail to answer exactly what they asked. Use only the product information below. Explain user-facing capabilities and navigation in ordinary language. Never provide source code, technical implementation, APIs, database details, or internal system information. Do not invent features, controls, permissions, or page behavior. If the information below does not specify an answer, say so plainly and suggest the relevant TimeWise page or administrator. Keep the answer concise but complete. You may use short bullets when they improve clarity.\n\n${TIMEWISE_PRODUCT_KNOWLEDGE}`,
+          },
+          ...(Array.isArray(conversation) ? conversation.slice(-6).map((item) => ({
+            role: item.role === "assistant" ? "assistant" : "user",
+            content: String(item.content || "").slice(0, 1200),
+          })) : []),
+          { role: "user", content: String(message || "").slice(0, 1200) },
+        ],
+      });
+      const answer = response.choices?.[0]?.message?.content?.trim();
+      if (answer) return answer;
+    } catch (error) {
+      console.error("WiseBot product question error:", error.message);
+    }
+
+    return getTimeWiseOverviewReply(message, requestedContext?.productRole) ||
+      "I can explain TimeWise features, but I don't have enough product information to answer that specific detail. Please check the relevant TimeWise page or ask your administrator.";
   }
 
   // ==================================================
