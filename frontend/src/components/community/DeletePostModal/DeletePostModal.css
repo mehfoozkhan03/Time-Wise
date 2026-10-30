@@ -16,7 +16,7 @@
 }
 
 .danger-btn {
-  background: #ef4444 !important;
+  background:var(--attendance-absent-bg)!important;
    width:60px;
   border-radius: 5px;
   height: 30px;
