@@ -182,166 +182,9 @@
 }
 
 /* ==========================================
-   TABLET / SMALL DESKTOP
+   320px - SMALL MOBILE DEVICES
 ========================================== */
-
-@media (max-width: 1000px) {
-  .leaveBalance {
-    padding: 22px 24px;
-  }
-
-  .leaveBalance-grid {
-    gap: 14px;
-  }
-
-  .leaveBalance-card {
-    padding: 18px;
-  }
-
-  .leaveBalance-total > span {
-    font-size: 28px;
-  }
-}
-
-/* ==========================================
-   TABLET
-========================================== */
-
-@media (max-width: 720px) {
-  .leaveBalance {
-    padding: 20px;
-  }
-
-  .leaveBalance-header {
-    margin-bottom: 18px;
-  }
-
-  .leaveBalance-header h2 {
-    font-size: 17px;
-  }
-
-  .leaveBalance-header p {
-    font-size: 11px;
-  }
-
-  .leaveBalance-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 14px;
-  }
-
-  .leaveBalance-card {
-    padding: 18px;
-  }
-
-  .leaveBalance-card-header {
-    margin-bottom: 16px;
-  }
-
-  .leaveBalance-icon {
-    width: 32px;
-    height: 32px;
-    font-size: 17px;
-  }
-
-  .leaveBalance-card h3 {
-    font-size: 13px;
-  }
-
-  .leaveBalance-total {
-    padding-bottom: 15px;
-  }
-
-  .leaveBalance-total > span {
-    font-size: 27px;
-  }
-
-  .leaveBalance-total strong {
-    font-size: 9px;
-  }
-
-  .leaveBalance-details {
-    padding-top: 14px;
-  }
-}
-
-/* ==========================================
-   MOBILE
-========================================== */
-
-@media (max-width: 480px) {
-  .leaveBalance {
-    padding: 18px;
-    border-radius: var(--radius_sm);
-  }
-
-  .leaveBalance-header {
-    margin-bottom: 16px;
-  }
-
-  .leaveBalance-header h2 {
-    font-size: 16px;
-  }
-
-  .leaveBalance-header p {
-    font-size: 10px;
-  }
-
-  .leaveBalance-grid {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-
-  .leaveBalance-card {
-    padding: 17px;
-    border-radius: var(--radius_sm);
-  }
-
-  .leaveBalance-card-header {
-    gap: 9px;
-    margin-bottom: 15px;
-  }
-
-  .leaveBalance-icon {
-    width: 31px;
-    height: 31px;
-    font-size: 16px;
-  }
-
-  .leaveBalance-card h3 {
-    font-size: 13px;
-  }
-
-  .leaveBalance-total > span {
-    font-size: 26px;
-  }
-
-  .leaveBalance-total small {
-    font-size: 9px;
-  }
-
-  .leaveBalance-total strong {
-    font-size: 9px;
-  }
-
-  .leaveBalance-details {
-    gap: 10px;
-    padding-top: 14px;
-  }
-
-  .leaveBalance-detail span {
-    font-size: 9px;
-  }
-
-  .leaveBalance-detail strong {
-    font-size: 13px;
-  }
-}
-
-/* ==========================================
-   EXTRA SMALL MOBILE
-========================================== */
-
-@media (max-width: 320px) {
+@media (min-width: 320px) and (max-width: 479px) {
   .leaveBalance {
     padding: 15px 14px;
   }
@@ -359,6 +202,7 @@
   }
 
   .leaveBalance-grid {
+    grid-template-columns: 1fr;
     gap: 10px;
   }
 
@@ -413,9 +257,188 @@
 }
 
 /* ==========================================
+   480px - MOBILE DEVICES
+========================================== */
+@media (min-width: 480px) and (max-width: 759px) {
+  .leaveBalance {
+    padding: 18px;
+    border-radius: var(--radius_sm);
+  }
+
+  .leaveBalance-header {
+    margin-bottom: 16px;
+  }
+
+  .leaveBalance-header h2 {
+    font-size: 16px;
+  }
+
+  .leaveBalance-header p {
+    font-size: 10px;
+  }
+
+  .leaveBalance-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .leaveBalance-card {
+    padding: 17px;
+    border-radius: var(--radius_sm);
+  }
+
+  .leaveBalance-card-header {
+    gap: 9px;
+    margin-bottom: 15px;
+  }
+
+  .leaveBalance-icon {
+    width: 31px;
+    height: 31px;
+    font-size: 16px;
+  }
+
+  .leaveBalance-card h3 {
+    font-size: 13px;
+  }
+
+  .leaveBalance-total {
+    gap: 8px;
+    padding-bottom: 15px;
+  }
+
+  .leaveBalance-total > span {
+    font-size: 26px;
+  }
+
+  .leaveBalance-total small {
+    font-size: 9px;
+  }
+
+  .leaveBalance-total strong {
+    font-size: 9px;
+  }
+
+  .leaveBalance-details {
+    gap: 10px;
+    padding-top: 14px;
+  }
+
+  .leaveBalance-detail span {
+    font-size: 9px;
+  }
+
+  .leaveBalance-detail strong {
+    font-size: 13px;
+  }
+}
+
+/* ==========================================
+   760px - TABLETS
+========================================== */
+@media (min-width: 760px) and (max-width: 1079px) {
+  .leaveBalance {
+    padding: 22px 24px;
+  }
+
+  .leaveBalance-grid {
+    gap: 14px;
+  }
+
+  .leaveBalance-card {
+    padding: 18px;
+  }
+
+  .leaveBalance-total > span {
+    font-size: 28px;
+  }
+
+  .leaveBalance-header {
+    margin-bottom: 18px;
+  }
+
+  .leaveBalance-header h2 {
+    font-size: 17px;
+  }
+
+  .leaveBalance-header p {
+    font-size: 11px;
+  }
+
+  .leaveBalance-card-header {
+    margin-bottom: 16px;
+  }
+
+  .leaveBalance-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 17px;
+  }
+
+  .leaveBalance-card h3 {
+    font-size: 13px;
+  }
+
+  .leaveBalance-total {
+    padding-bottom: 15px;
+  }
+
+  .leaveBalance-total strong {
+    font-size: 9px;
+  }
+
+  .leaveBalance-details {
+    padding-top: 14px;
+  }
+}
+
+/* ==========================================
+   1080px - SMALL DESKTOP / LAPTOP
+========================================== */
+@media (min-width: 1080px) and (max-width: 1439px) {
+  .leaveBalance {
+    padding: 24px 26px;
+  }
+
+  .leaveBalance-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .leaveBalance-card {
+    padding: 20px;
+  }
+
+  .leaveBalance-total > span {
+    font-size: 31px;
+  }
+}
+
+/* ==========================================
+   1440px - LARGE DESKTOP SCREENS
+========================================== */
+@media (min-width: 1440px) {
+  .leaveBalance {
+    padding: 24px 26px;
+  }
+
+  .leaveBalance-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .leaveBalance-card {
+    padding: 20px;
+  }
+
+  .leaveBalance-total > span {
+    font-size: 31px;
+  }
+}
+
+/* ==========================================
    REDUCED MOTION
 ========================================== */
-
 @media (prefers-reduced-motion: reduce) {
   .leaveBalance-card {
     transition: none;

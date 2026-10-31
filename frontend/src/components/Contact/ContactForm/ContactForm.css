@@ -174,10 +174,117 @@
   background: rgba(41, 163, 224, 0.12);
   color: var(--primary);
 }
-@media (max-width: 840px) {
-  .inputs {
+
+/* =========================================
+   320px - Small Mobile Devices
+========================================= */
+
+@media (min-width: 320px) and (max-width: 479px) {
+  .formPart {
+    padding: 16px;
+    max-width: 100%;
+  }
+
+  .inputs,
+  .contactFormSkeleton .inputs {
     flex-direction: column;
     gap: 0;
+  }
+
+  .formPart input,
+  .formPart select,
+  .formPart textarea {
+    padding: 12px 14px;
+    font-size: 14px;
+  }
+
+  .faqAnswer {
+    font-size: 13px;
+  }
+
+  .form_error {
+    font-size: 12px;
+  }
+
+  .formPart textarea {
+    min-height: 150px;
+  }
+
+  .formPart .btn {
+    width: 100%;
+    padding: 12px 18px;
+    font-size: 14px;
+  }
+
+  .contactFormSkeleton {
+    gap: 15px;
+  }
+}
+
+/* =========================================
+   480px - Mobile Devices
+========================================= */
+
+@media (min-width: 480px) and (max-width: 759px) {
+  .formPart {
+    padding: 20px;
+    max-width: 100%;
+  }
+
+  .inputs,
+  .contactFormSkeleton .inputs {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .formPart input,
+  .formPart select,
+  .formPart textarea {
+    padding: 13px 16px;
+    font-size: 15px;
+  }
+
+  .faqAnswer {
+    font-size: 14px;
+  }
+
+  .formPart textarea {
+    min-height: 160px;
+  }
+
+  .formPart .btn {
+    width: 100%;
+  }
+
+  .contactFormSkeleton {
+    gap: 18px;
+  }
+}
+
+/* =========================================
+   760px - Tablets
+========================================= */
+
+@media (min-width: 760px) and (max-width: 1079px) {
+  .formPart {
+    padding: 24px;
+    max-width: 100%;
+  }
+
+  .inputs,
+  .contactFormSkeleton .inputs {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .formPart input,
+  .formPart select,
+  .formPart textarea {
+    padding: 13px 16px;
+  }
+
+  .formPart textarea {
+    min-height: 170px;
   }
 
   .formPart .btn {
@@ -185,8 +292,57 @@
   }
 }
 
-@media (min-width: 430px) and (max-width: 840px) {
+/* =========================================
+   1080px - Small Desktop / Laptop
+========================================= */
+
+@media (min-width: 1080px) and (max-width: 1439px) {
   .formPart {
-    max-width: none;
+    padding: 26px;
+    max-width: 700px;
+  }
+
+  .inputs,
+  .contactFormSkeleton .inputs {
+    flex-direction: row;
+    gap: 16px;
+  }
+
+  .formPart input,
+  .formPart select,
+  .formPart textarea {
+    padding: 13px 16px;
+  }
+
+  .formPart .btn {
+    width: auto;
+  }
+}
+
+/* =========================================
+   1440px - Large Desktop Screens
+========================================= */
+
+@media (min-width: 1440px) {
+  .formPart {
+    padding: 28px;
+    max-width: 700px;
+  }
+
+  .inputs,
+  .contactFormSkeleton .inputs {
+    flex-direction: row;
+    gap: 16px;
+  }
+
+  .formPart input,
+  .formPart select,
+  .formPart textarea {
+    padding: 14px 18px;
+    font-size: 16px;
+  }
+
+  .formPart .btn {
+    width: auto;
   }
 }

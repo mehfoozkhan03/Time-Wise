@@ -1,125 +1,196 @@
-.deleteOverlay{
-    position:fixed;
-    inset:0;
-    z-index:9999;
+.deleteOverlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
 
-    display:flex;
-    justify-content:center;
-    align-items:center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-    padding:20px;
+    padding: 20px;
 
-    background:rgba(0,0,0,.45);
-    backdrop-filter:blur(5px);
+    background: rgba(0, 0, 0, .45);
+    backdrop-filter: blur(5px);
 }
 
-.deleteModal{
-    width:min(460px,100%);
+/* ==========================================
+   Delete Modal
+========================================== */
 
-    background:var(--card);
+.deleteModal {
+    width: min(460px, 100%);
 
-    border:1px solid var(--card-border);
+    background: var(--card);
 
-    border-radius:18px;
+    border: 1px solid var(--card-border);
 
-    box-shadow:var(--shadow_lg);
+    border-radius: 18px;
 
-    animation:fade_in .25s ease;
+    box-shadow: var(--shadow_lg);
+
+    animation: fade_in .25s ease;
 }
 
-.deleteHeader{
-    display:flex;
-    justify-content:space-between;
-    align-items:flex-start;
+/* ==========================================
+   Delete Header
+========================================== */
 
-    padding:22px;
+.deleteHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    padding: 22px;
 }
 
-.deleteIcon{
-    width:58px;
-    height:58px;
+/* ==========================================
+   Delete Icon
+========================================== */
 
-    display:grid;
-    place-items:center;
+.deleteIcon {
+    width: 58px;
+    height: 58px;
 
-    border-radius:16px;
+    display: grid;
+    place-items: center;
 
-    background:#ef4444;
+    border-radius: 16px;
 
-    color:#fff;
+    background: #ef4444;
 
-    font-size:1.5rem;
+    color: #fff;
+
+    font-size: 1.5rem;
 }
 
-.deleteBody{
-    padding:0 22px 22px;
+/* ==========================================
+   Delete Body
+========================================== */
+
+.deleteBody {
+    padding: 0 22px 22px;
 }
 
-.deleteBody h2{
-    margin-bottom:10px;
+.deleteBody h2 {
+    margin-bottom: 10px;
 }
 
-.deleteBody p{
-    line-height:1.6;
+.deleteBody p {
+    line-height: 1.6;
 }
 
-.deleteFooter{
-    display:flex;
-    justify-content:flex-end;
-    gap:12px;
+/* ==========================================
+   Delete Footer
+========================================== */
 
-    padding:20px 22px;
+.deleteFooter {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
 
-    border-top:1px solid var(--border);
+    padding: 20px 22px;
+
+    border-top: 1px solid var(--border);
 }
+
+/* ==========================================
+   Delete Buttons
+========================================== */
 
 .cancelBtn,
-.deleteBtn{
-    min-width:120px;
+.deleteBtn {
+    min-width: 120px;
 
-    padding:12px 18px;
+    padding: 12px 18px;
 
-    border-radius:12px;
+    border-radius: 12px;
 
-    font-weight:600;
+    font-weight: 600;
 }
 
-.cancelBtn{
-    background:transparent;
+.cancelBtn {
+    background: transparent;
 
-    border:1px solid var(--border);
+    border: 1px solid var(--border);
 
-    color:var(--text_primary);
+    color: var(--text_primary);
 }
 
-.cancelBtn:hover{
-    background:var(--surface_hover);
+.cancelBtn:hover {
+    background: var(--surface_hover);
 }
 
-.deleteBtn{
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    gap:8px;
+.deleteBtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
 
-    background:#ef4444;
+    background: #ef4444;
 
-    color:#fff;
+    color: #fff;
 }
 
-.deleteBtn:hover{
-    background:#dc2626;
+.deleteBtn:hover {
+    background: #dc2626;
 }
 
-@media(max-width:768px){
+/* ==========================================
+   Responsive - 320px to 479px
+========================================== */
 
-    .deleteFooter{
-        flex-direction:column-reverse;
+@media (min-width: 320px) and (max-width: 479px) {
+    .deleteOverlay {
+        padding: 12px;
+    }
+
+    .deleteHeader {
+        padding: 16px;
+    }
+
+    .deleteIcon {
+        width: 48px;
+        height: 48px;
+
+        font-size: 1.3rem;
+    }
+
+    .deleteBody {
+        padding: 0 16px 16px;
+    }
+
+    .deleteFooter {
+        flex-direction: column-reverse;
+
+        gap: 10px;
+
+        padding: 16px;
     }
 
     .cancelBtn,
-    .deleteBtn{
-        width:100%;
+    .deleteBtn {
+        width: 100%;
+        min-width: 0;
+
+        padding: 11px 16px;
+    }
+}
+
+/* ==========================================
+   Responsive - 480px to 759px
+========================================== */
+
+@media (min-width: 480px) and (max-width: 759px) {
+    .deleteOverlay {
+        padding: 16px;
     }
 
+    .deleteFooter {
+        flex-direction: column-reverse;
+    }
+
+    .cancelBtn,
+    .deleteBtn {
+        width: 100%;
+    }
 }

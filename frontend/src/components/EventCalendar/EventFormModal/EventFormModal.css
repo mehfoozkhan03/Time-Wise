@@ -1,7 +1,3 @@
-/* ==========================================
-   Overlay
-========================================== */
-
 .eventFormOverlay {
   position: fixed;
   inset: 0;
@@ -448,61 +444,94 @@
 }
 
 /* ==========================================
-   Responsive - Tablet
+   Responsive - 320px to 479px
 ========================================== */
 
-@media (max-width: 768px) {
+@media (min-width: 320px) and (max-width: 479px) {
   .eventFormOverlay {
-    padding: 16px;
+    padding: 10px;
 
     align-items: flex-end;
   }
 
   .eventFormModal {
-    width: 100%;
+    max-height: 96vh;
 
-    max-height: 95vh;
-
-    border-radius: var(--radius_lg) var(--radius_lg) 0 0;
+    border-radius: var(--radius_md) var(--radius_md) 0 0;
   }
 
   .eventFormHeader {
-    padding: 20px;
+    gap: 12px;
+
+    padding: 16px;
+  }
+
+  .eventFormTitle {
+    gap: 12px;
   }
 
   .eventFormIcon {
-    width: 50px;
-    height: 50px;
+    width: 42px;
+    height: 42px;
 
-    font-size: 1.1rem;
+    font-size: 0.95rem;
   }
 
   .eventFormTitle h2 {
-    font-size: 1.3rem;
+    font-size: 1.05rem;
   }
 
   .eventFormTitle span {
-    font-size: 0.88rem;
+    margin-top: 3px;
+
+    font-size: 0.78rem;
+  }
+
+  .closeBtn {
+    width: 34px;
+    height: 34px;
   }
 
   .eventFormBody {
-    padding: 20px;
+    padding: 16px;
   }
 
   .employeeDetailsOverlay {
-    padding: 20px;
+    padding: 10px;
   }
 
   .employeeDetailsModal {
-    width: min(460px, 100%);
+    max-height: 90vh;
+
+    border-radius: var(--radius_md);
+  }
+
+  .employeeDetailsHeader {
+    padding: 15px;
+  }
+
+  .employeeDetailsHeader h2 {
+    font-size: 1rem;
+  }
+
+  .employeeDetailsBody {
+    padding: 6px 15px;
+  }
+
+  .employeeDetailsField strong {
+    font-size: 0.9rem;
+  }
+
+  .employeeDetailsFooter {
+    padding: 12px 15px 15px;
   }
 }
 
 /* ==========================================
-   Responsive - Mobile
+   Responsive - 480px to 759px
 ========================================== */
 
-@media (max-width: 480px) {
+@media (min-width: 480px) and (max-width: 759px) {
   .eventFormOverlay {
     padding: 10px;
 
@@ -583,59 +612,52 @@
 }
 
 /* ==========================================
-   Responsive - Small Mobile
+   Responsive - 760px to 1079px
 ========================================== */
 
-@media (max-width: 320px) {
-  .eventFormHeader {
+@media (min-width: 760px) and (max-width: 1079px) {
+  .eventFormOverlay {
     padding: 16px;
+
+    align-items: flex-end;
+  }
+
+  .eventFormModal {
+    width: 100%;
+
+    max-height: 95vh;
+
+    border-radius: var(--radius_lg) var(--radius_lg) 0 0;
+  }
+
+  .eventFormHeader {
+    padding: 20px;
   }
 
   .eventFormIcon {
-    width: 42px;
-    height: 42px;
+    width: 50px;
+    height: 50px;
 
-    font-size: 0.95rem;
+    font-size: 1.1rem;
   }
 
   .eventFormTitle h2 {
-    font-size: 1.05rem;
+    font-size: 1.3rem;
   }
 
   .eventFormTitle span {
-    font-size: 0.78rem;
-  }
-
-  .closeBtn {
-    width: 34px;
-    height: 34px;
+    font-size: 0.88rem;
   }
 
   .eventFormBody {
-    padding: 16px;
+    padding: 20px;
   }
 
   .employeeDetailsOverlay {
-    padding: 10px;
+    padding: 20px;
   }
 
-  .employeeDetailsHeader {
-    padding: 15px;
-  }
-
-  .employeeDetailsHeader h2 {
-    font-size: 1rem;
-  }
-
-  .employeeDetailsBody {
-    padding: 6px 15px;
-  }
-
-  .employeeDetailsField strong {
-    font-size: 0.9rem;
-  }
-
-  .employeeDetailsFooter {
-    padding: 12px 15px 15px;
+  .employeeDetailsModal {
+    width: min(460px, 100%);
   }
 }

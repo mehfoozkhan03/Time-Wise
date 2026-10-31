@@ -125,41 +125,37 @@
 }
 
 /* ==========================================
-   Responsive
+   320px - Small Mobile Devices
 ========================================== */
 
-/* ==========================================
-   760px
-========================================== */
-
-@media (max-width: 760px) {
+@media (min-width: 320px) and (max-width: 479px) {
   .cardHeader {
-    padding: 14px 14px 0;
+    padding: 10px 10px 0;
 
-    gap: 10px;
+    gap: 6px;
   }
 
   .cardBody {
-    padding: 14px;
+    padding: 10px;
   }
 
   .cardHeader h3 {
-    font-size: 15px;
+    font-size: 13px;
   }
 
   .cardIcon {
-    width: 34px;
-    height: 34px;
+    width: 30px;
+    height: 30px;
 
-    font-size: 15px;
+    font-size: 13px;
   }
 }
 
 /* ==========================================
-   480px
+   480px - Mobile Devices
 ========================================== */
 
-@media (max-width: 480px) {
+@media (min-width: 480px) and (max-width: 759px) {
   .cardHeader {
     padding: 12px 12px 0;
 
@@ -183,28 +179,28 @@
 }
 
 /* ==========================================
-   320px
+   760px - Tablets
 ========================================== */
 
-@media (max-width: 320px) {
+@media (min-width: 760px) and (max-width: 1079px) {
   .cardHeader {
-    padding: 10px 10px 0;
+    padding: 14px 14px 0;
 
-    gap: 6px;
+    gap: 10px;
   }
 
   .cardBody {
-    padding: 10px;
+    padding: 14px;
   }
 
   .cardHeader h3 {
-    font-size: 13px;
+    font-size: 15px;
   }
 
   .cardIcon {
-    width: 30px;
-    height: 30px;
+    width: 34px;
+    height: 34px;
 
-    font-size: 13px;
+    font-size: 15px;
   }
 }

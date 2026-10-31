@@ -1,7 +1,3 @@
-/* ==========================================
-   Upcoming Events
-========================================== */
-
 .upcomingCard .cardHeader {
   display: flex;
   flex-direction: column;
@@ -154,66 +150,10 @@
 }
 
 /* ==========================================
-   760px
+   Responsive - 320px to 479px
 ========================================== */
 
-@media (max-width: 760px) {
-  .upcomingCard .cardBody {
-    gap: 10px;
-  }
-
-  .upcomingList {
-    gap: 6px;
-  }
-
-  .eventDate {
-    margin-left: 36px;
-
-    font-size: 9px;
-  }
-
-  .viewAllBtn {
-    height: 38px;
-
-    font-size: 12px;
-  }
-}
-
-/* ==========================================
-   480px
-========================================== */
-
-@media (max-width: 480px) {
-  .upcomingCard .cardHeader {
-    gap: 8px;
-  }
-
-  .upcomingCard .cardBody {
-    gap: 8px;
-  }
-
-  .upcomingList {
-    gap: 5px;
-  }
-
-  .eventDate {
-    margin-left: 32px;
-
-    font-size: 8px;
-  }
-
-  .viewAllBtn {
-    height: 36px;
-
-    font-size: 12px;
-  }
-}
-
-/* ==========================================
-   320px
-========================================== */
-
-@media (max-width: 320px) {
+@media (min-width: 320px) and (max-width: 479px) {
   .upcomingCard .cardHeader {
     gap: 6px;
   }
@@ -228,13 +168,63 @@
 
   .eventDate {
     margin-left: 28px;
-
     font-size: 8px;
   }
 
   .viewAllBtn {
     height: 34px;
-
     font-size: 11px;
+  }
+}
+
+/* ==========================================
+   Responsive - 480px to 759px
+========================================== */
+
+@media (min-width: 480px) and (max-width: 759px) {
+  .upcomingCard .cardHeader {
+    gap: 8px;
+  }
+
+  .upcomingCard .cardBody {
+    gap: 8px;
+  }
+
+  .upcomingList {
+    gap: 5px;
+  }
+
+  .eventDate {
+    margin-left: 32px;
+    font-size: 8px;
+  }
+
+  .viewAllBtn {
+    height: 36px;
+    font-size: 12px;
+  }
+}
+
+/* ==========================================
+   Responsive - 760px to 1079px
+========================================== */
+
+@media (min-width: 760px) and (max-width: 1079px) {
+  .upcomingCard .cardBody {
+    gap: 10px;
+  }
+
+  .upcomingList {
+    gap: 6px;
+  }
+
+  .eventDate {
+    margin-left: 36px;
+    font-size: 9px;
+  }
+
+  .viewAllBtn {
+    height: 38px;
+    font-size: 12px;
   }
 }

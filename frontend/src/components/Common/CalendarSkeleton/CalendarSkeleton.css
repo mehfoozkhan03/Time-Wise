@@ -1,54 +1,43 @@
 .calendarSkeleton {
   display: flex;
   flex-direction: column;
-
   gap: 18px;
 }
 
 .skeletonHeader {
   height: 62px;
-
   border-radius: var(--radius_md);
-
   background: var(--surface);
 }
 
 .skeletonSearch {
   height: 46px;
-
   border-radius: var(--radius_md);
-
   background: var(--surface);
 }
 
 .skeletonFilters {
   display: flex;
   flex-wrap: wrap;
-
   gap: 10px;
 }
 
 .skeletonFilter {
   width: 110px;
   height: 36px;
-
   border-radius: 999px;
-
   background: var(--surface);
 }
 
 .skeletonGrid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-
   gap: 12px;
 }
 
 .skeletonDay {
   height: 140px;
-
   border-radius: var(--radius_md);
-
   background: var(--surface);
 }
 
@@ -57,7 +46,6 @@
 .skeletonFilter,
 .skeletonDay {
   position: relative;
-
   overflow: hidden;
 }
 
@@ -66,19 +54,15 @@
 .skeletonFilter::after,
 .skeletonDay::after {
   content: "";
-
   position: absolute;
   inset: 0;
-
   transform: translateX(-100%);
-
   background: linear-gradient(
     90deg,
     transparent,
     rgba(255, 255, 255, 0.12),
     transparent
   );
-
   animation: skeletonLoading 1.2s infinite;
 }
 
@@ -101,59 +85,45 @@ html.dark .skeletonDay::after {
 }
 
 /* ==========================================
-   1024px
+   320px - Small Mobile Devices
 ========================================== */
 
-@media (max-width: 1024px) {
-  .skeletonGrid {
-    gap: 10px;
-  }
-
-  .skeletonDay {
-    height: 125px;
-  }
-}
-
-/* ==========================================
-   768px
-========================================== */
-
-@media (max-width: 768px) {
+@media (min-width: 320px) and (max-width: 479px) {
   .calendarSkeleton {
-    gap: 16px;
+    gap: 12px;
   }
 
   .skeletonHeader {
-    height: 56px;
+    height: 48px;
   }
 
   .skeletonSearch {
-    height: 42px;
+    height: 36px;
   }
 
   .skeletonFilters {
-    gap: 8px;
+    gap: 6px;
   }
 
   .skeletonFilter {
-    width: 96px;
-    height: 34px;
+    width: 72px;
+    height: 28px;
   }
 
   .skeletonGrid {
-    gap: 8px;
+    gap: 5px;
   }
 
   .skeletonDay {
-    height: 110px;
+    height: 72px;
   }
 }
 
 /* ==========================================
-   480px
+   480px - Mobile Devices
 ========================================== */
 
-@media (max-width: 480px) {
+@media (min-width: 480px) and (max-width: 759px) {
   .calendarSkeleton {
     gap: 14px;
   }
@@ -185,32 +155,106 @@ html.dark .skeletonDay::after {
 }
 
 /* ==========================================
-   320px
+   760px - Tablets
 ========================================== */
 
-@media (max-width: 320px) {
+@media (min-width: 760px) and (max-width: 1079px) {
   .calendarSkeleton {
-    gap: 12px;
+    gap: 16px;
   }
 
   .skeletonHeader {
-    height: 48px;
+    height: 56px;
   }
 
   .skeletonSearch {
-    height: 36px;
+    height: 42px;
+  }
+
+  .skeletonFilters {
+    gap: 8px;
   }
 
   .skeletonFilter {
-    width: 72px;
-    height: 28px;
+    width: 96px;
+    height: 34px;
   }
 
   .skeletonGrid {
-    gap: 5px;
+    gap: 10px;
   }
 
   .skeletonDay {
-    height: 72px;
+    height: 125px;
+  }
+}
+
+/* ==========================================
+   1080px - Small Desktops and Laptops
+========================================== */
+
+@media (min-width: 1080px) and (max-width: 1439px) {
+  .calendarSkeleton {
+    gap: 18px;
+  }
+
+  .skeletonHeader {
+    height: 62px;
+  }
+
+  .skeletonSearch {
+    height: 46px;
+  }
+
+  .skeletonFilters {
+    gap: 10px;
+  }
+
+  .skeletonFilter {
+    width: 110px;
+    height: 36px;
+  }
+
+  .skeletonGrid {
+    gap: 12px;
+  }
+
+  .skeletonDay {
+    height: 140px;
+  }
+}
+
+/* ==========================================
+   1440px - Large Desktops
+========================================== */
+
+@media (min-width: 1440px) {
+  .calendarSkeleton {
+    gap: 20px;
+  }
+
+  .skeletonHeader {
+    height: 66px;
+  }
+
+  .skeletonSearch {
+    height: 48px;
+  }
+
+  .skeletonFilters {
+    gap: 12px;
+  }
+
+  .skeletonFilter {
+    width: 116px;
+    height: 38px;
+  }
+
+  .skeletonGrid {
+    gap: 14px;
+  }
+
+  .skeletonDay {
+    height: 150px;
   }
 }

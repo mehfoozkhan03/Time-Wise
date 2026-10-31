@@ -1,7 +1,3 @@
-/* ==========================================
-   Event Form
-========================================== */
-
 .eventForm {
   display: flex;
   flex-direction: column;
@@ -414,10 +410,152 @@ html:not(.dark) .eventForm input[type="time"] {
 }
 
 /* ==========================================
-   Responsive - Tablet
+   Responsive - 320px to 479px
 ========================================== */
 
-@media (max-width: 768px) {
+@media (min-width: 320px) and (max-width: 479px) {
+  .eventForm {
+    gap: 18px;
+  }
+
+  .formRow {
+    grid-template-columns: 1fr;
+
+    gap: 14px;
+  }
+
+  .checkboxGroup {
+    justify-content: flex-start;
+
+    height: auto;
+
+    margin: 0;
+
+    gap: 9px;
+  }
+
+  .eventForm .formGroup input,
+  .eventForm .formGroup select,
+  .eventForm .formGroup textarea {
+    padding: 11px;
+
+    font-size: 0.9rem;
+  }
+
+  .formGroup label {
+    font-size: 0.85rem;
+  }
+
+  .formGroup textarea {
+    min-height: 100px;
+  }
+
+  .checkboxGroup input[type="checkbox"] {
+    width: 16px !important;
+    height: 16px !important;
+
+    min-width: 16px;
+    min-height: 16px;
+  }
+
+  .checkboxGroup span {
+    font-size: 0.9rem;
+  }
+
+  .formActions {
+    flex-direction: column-reverse;
+
+    gap: 10px;
+
+    padding-top: 16px;
+  }
+
+  .cancelBtn,
+  .saveBtn {
+    width: 100%;
+
+    height: 42px;
+
+    font-size: 0.85rem;
+  }
+}
+
+/* ==========================================
+   Responsive - 480px to 759px
+========================================== */
+
+@media (min-width: 480px) and (max-width: 759px) {
+  .eventForm {
+    gap: 20px;
+  }
+
+  .formRow {
+    grid-template-columns: 1fr;
+
+    gap: 16px;
+  }
+
+  .checkboxGroup {
+    justify-content: flex-start;
+
+    height: auto;
+
+    margin: 0;
+
+    gap: 9px;
+  }
+
+  .eventForm .formGroup input,
+  .eventForm .formGroup select,
+  .eventForm .formGroup textarea {
+    padding: 12px;
+
+    font-size: 0.9rem;
+  }
+
+  .formGroup label {
+    font-size: 0.85rem;
+  }
+
+  .formGroup textarea {
+    min-height: 110px;
+  }
+
+  .checkboxGroup input[type="checkbox"] {
+    width: 17px !important;
+    height: 17px !important;
+
+    min-width: 17px;
+    min-height: 17px;
+  }
+
+  .checkboxGroup span {
+    font-size: 0.9rem;
+  }
+
+  .formActions {
+    flex-direction: column-reverse;
+
+    gap: 10px;
+
+    padding-top: 16px;
+  }
+
+  .cancelBtn,
+  .saveBtn {
+    width: 100%;
+
+    height: 44px;
+
+    font-size: 0.9rem;
+  }
+}
+
+/* ==========================================
+   Responsive - 760px to 1079px
+========================================== */
+
+@media (min-width: 760px) and (max-width: 1079px) {
   .eventForm {
     gap: 24px;
   }
@@ -451,99 +589,5 @@ html:not(.dark) .eventForm input[type="time"] {
   .cancelBtn,
   .saveBtn {
     width: 100%;
-  }
-}
-
-/* ==========================================
-   Responsive - Mobile
-========================================== */
-
-@media (max-width: 480px) {
-  .eventForm {
-    gap: 20px;
-  }
-
-  .formRow {
-    gap: 16px;
-  }
-
-  .formGroup label {
-    font-size: 0.85rem;
-  }
-
-  .eventForm .formGroup input,
-  .eventForm .formGroup select,
-  .eventForm .formGroup textarea {
-    padding: 12px;
-
-    font-size: 0.9rem;
-  }
-
-  .formGroup textarea {
-    min-height: 110px;
-  }
-
-  .checkboxGroup {
-    gap: 9px;
-  }
-
-  .checkboxGroup input[type="checkbox"] {
-    width: 17px !important;
-    height: 17px !important;
-
-    min-width: 17px;
-    min-height: 17px;
-  }
-
-  .checkboxGroup span {
-    font-size: 0.9rem;
-  }
-
-  .cancelBtn,
-  .saveBtn {
-    width: 100%;
-
-    height: 44px;
-
-    font-size: 0.9rem;
-  }
-}
-
-/* ==========================================
-   Responsive - Small Mobile
-========================================== */
-
-@media (max-width: 320px) {
-  .eventForm {
-    gap: 18px;
-  }
-
-  .formRow {
-    gap: 14px;
-  }
-
-  .eventForm .formGroup input,
-  .eventForm .formGroup select,
-  .eventForm .formGroup textarea {
-    padding: 11px;
-  }
-
-  .formGroup textarea {
-    min-height: 100px;
-  }
-
-  .checkboxGroup input[type="checkbox"] {
-    width: 16px !important;
-    height: 16px !important;
-
-    min-width: 16px;
-    min-height: 16px;
-  }
-
-  .cancelBtn,
-  .saveBtn {
-    height: 42px;
-
-    font-size: 0.85rem;
   }
 }

@@ -378,37 +378,9 @@
 }
 
 /* ==========================================
-   TABLET
+   320px - SMALL MOBILE DEVICES
 ========================================== */
-
-@media (max-width: 720px) {
-  .applyLeave-overlay {
-    padding: 18px;
-  }
-
-  .applyLeave-modal {
-    width: min(510px, 100%);
-    max-height: calc(100vh - 36px);
-  }
-
-  .applyLeave-header {
-    padding: 20px 20px 17px;
-  }
-
-  .applyLeave-form {
-    padding: 20px;
-  }
-
-  .applyLeave-field input {
-    height: 43px;
-  }
-}
-
-/* ==========================================
-   MOBILE
-========================================== */
-
-@media (max-width: 480px) {
+@media (min-width: 320px) and (max-width: 479px) {
   .applyLeave-overlay {
     align-items: flex-end;
     padding: 0;
@@ -416,79 +388,8 @@
 
   .applyLeave-modal {
     width: 100%;
-    max-height: calc(100vh - 10px);
-    border-radius: var(--radius_lg) var(--radius_lg) 0 0;
-  }
-
-  .applyLeave-header {
-    padding: 18px 18px 16px;
-  }
-
-  .applyLeave-heading {
-    gap: 10px;
-  }
-
-  .applyLeave-heading-icon {
-    width: 35px;
-    height: 35px;
-    font-size: 18px;
-  }
-
-  .applyLeave-header h2 {
-    font-size: 18px;
-  }
-
-  .applyLeave-header p {
-    font-size: 11px;
-  }
-
-  .applyLeave-close {
-    width: 36px;
-    height: 36px;
-    min-width: 36px;
-  }
-
-  .applyLeave-form {
-    gap: 15px;
-    padding: 18px;
-  }
-
-  .applyLeave-date-grid {
-    grid-template-columns: 1fr;
-    gap: 14px;
-  }
-
-  .applyLeave-info {
-    gap: 10px;
-  }
-
-  .applyLeave-info-item {
-    padding: 11px 12px;
-  }
-
-  .applyLeave-field textarea {
-    min-height: 105px;
-  }
-
-  .applyLeave-actions {
-    flex-direction: column-reverse;
-    gap: 9px;
-    padding-top: 16px;
-  }
-
-  .applyLeave-actions button {
-    width: 100%;
-    min-height: 40px;
-  }
-}
-
-/* ==========================================
-   SMALL MOBILE
-========================================== */
-
-@media (max-width: 320px) {
-  .applyLeave-modal {
     max-height: calc(100vh - 6px);
+    border-radius: var(--radius_lg) var(--radius_lg) 0 0;
   }
 
   .applyLeave-header {
@@ -557,7 +458,13 @@
     font-size: 15px;
   }
 
+  .applyLeave-date-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
   .applyLeave-info {
+    grid-template-columns: 1fr;
     gap: 8px;
   }
 
@@ -586,20 +493,181 @@
   }
 
   .applyLeave-actions {
+    flex-direction: column-reverse;
     gap: 8px;
     padding-top: 14px;
   }
 
   .applyLeave-actions button {
+    width: 100%;
     min-height: 38px;
     font-size: 11px;
   }
 }
 
 /* ==========================================
+   480px - MOBILE DEVICES
+========================================== */
+@media (min-width: 480px) and (max-width: 759px) {
+  .applyLeave-overlay {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .applyLeave-modal {
+    width: 100%;
+    max-height: calc(100vh - 10px);
+    border-radius: var(--radius_lg) var(--radius_lg) 0 0;
+  }
+
+  .applyLeave-header {
+    padding: 18px 18px 16px;
+  }
+
+  .applyLeave-heading {
+    gap: 10px;
+  }
+
+  .applyLeave-heading-icon {
+    width: 35px;
+    height: 35px;
+    font-size: 18px;
+  }
+
+  .applyLeave-header h2 {
+    font-size: 18px;
+  }
+
+  .applyLeave-header p {
+    font-size: 11px;
+  }
+
+  .applyLeave-close {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+  }
+
+  .applyLeave-form {
+    gap: 15px;
+    padding: 18px;
+  }
+
+  .applyLeave-date-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .applyLeave-info {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .applyLeave-info-item {
+    padding: 11px 12px;
+  }
+
+  .applyLeave-field textarea {
+    min-height: 105px;
+  }
+
+  .applyLeave-actions {
+    flex-direction: column-reverse;
+    gap: 9px;
+    padding-top: 16px;
+  }
+
+  .applyLeave-actions button {
+    width: 100%;
+    min-height: 40px;
+  }
+}
+
+/* ==========================================
+   760px - TABLETS
+========================================== */
+@media (min-width: 760px) and (max-width: 1079px) {
+  .applyLeave-overlay {
+    padding: 18px;
+  }
+
+  .applyLeave-modal {
+    width: min(510px, 100%);
+    max-height: calc(100vh - 36px);
+  }
+
+  .applyLeave-header {
+    padding: 20px 20px 17px;
+  }
+
+  .applyLeave-form {
+    padding: 20px;
+  }
+
+  .applyLeave-field input {
+    height: 43px;
+  }
+
+  .applyLeave-date-grid {
+    gap: 12px;
+  }
+
+  .applyLeave-info {
+    gap: 10px;
+  }
+
+  .applyLeave-info-item {
+    padding: 12px;
+  }
+}
+
+/* ==========================================
+   1080px - SMALL DESKTOP / LAPTOP
+========================================== */
+@media (min-width: 1080px) and (max-width: 1439px) {
+  .applyLeave-overlay {
+    padding: 22px;
+  }
+
+  .applyLeave-modal {
+    width: min(530px, 100%);
+    max-height: calc(100vh - 44px);
+  }
+
+  .applyLeave-header {
+    padding: 21px 22px 18px;
+  }
+
+  .applyLeave-form {
+    padding: 21px 22px 22px;
+  }
+}
+
+/* ==========================================
+   1440px - LARGE DESKTOP SCREENS
+========================================== */
+@media (min-width: 1440px) {
+  .applyLeave-overlay {
+    padding: 24px;
+  }
+
+  .applyLeave-modal {
+    width: min(540px, 100%);
+    max-height: calc(100vh - 48px);
+  }
+
+  .applyLeave-header {
+    padding: 22px 24px 18px;
+  }
+
+  .applyLeave-form {
+    padding: 22px 24px 24px;
+  }
+}
+
+/* ==========================================
    REDUCED MOTION
 ========================================== */
-
 @media (prefers-reduced-motion: reduce) {
   .applyLeave-overlay,
   .applyLeave-modal {

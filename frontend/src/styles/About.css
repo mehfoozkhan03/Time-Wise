@@ -1,8 +1,6 @@
-
 /* ==========================================
    ABOUT HERO
 ========================================== */
-
 .about_header_section {
   display: flex;
   flex-direction: column;
@@ -44,7 +42,6 @@
 /* ==========================================
    CLOCK
 ========================================== */
-
 .clock_wrapper {
   width: 220px;
   height: 220px;
@@ -147,7 +144,6 @@
 /* ==========================================
    MISSION
 ========================================== */
-
 .mission_card {
   margin-top: 80px;
 }
@@ -229,7 +225,6 @@
 /* ==========================================
    TEAM
 ========================================== */
-
 .meet_the_team {
   margin-top: 70px;
   display: flex;
@@ -310,7 +305,6 @@
 /* ==========================================
    TESTIMONIALS
 ========================================== */
-
 .what_users_say {
   margin-top: 80px;
   width: 100%;
@@ -453,7 +447,6 @@
 /* ==========================================
    CORE VALUES
 ========================================== */
-
 .core_values {
   margin: 80px 0;
   text-align: center;
@@ -511,7 +504,6 @@
 /* ==========================================
    ICONS
 ========================================== */
-
 .heart,
 .eye,
 .growth,
@@ -548,7 +540,6 @@
 /* ==========================================
    CTA
 ========================================== */
-
 .transform {
   width: min(1000px, 92%);
   margin: 80px auto;
@@ -749,7 +740,6 @@
 /* ==========================================
    TESTIMONIAL SKELETON
 ========================================== */
-
 .testimonial_skeleton_header {
   display: flex;
   flex-direction: column;
@@ -912,10 +902,12 @@
 }
 
 /* ==========================================
-   MOBILE
+   SMALL MOBILE / MOBILE - 320px TO 479px
 ========================================== */
-
-@media (max-width: 430px) {
+@media (min-width: 320px) and (max-width: 479px) {
+  .about_header_section {
+    padding: 0 12px;
+  }
 
   .black_header,
   .blue_header,
@@ -923,37 +915,60 @@
   .header_mtm h1,
   .what_users_say h1,
   .core_values h1 {
-    font-size: 34px;
+    font-size: 32px;
   }
 
   .about_header_body {
     width: 100%;
-    padding: 0 18px;
-    font-size: 16px;
+    padding: 0 8px;
+    font-size: 15px;
   }
 
   .clock_wrapper {
-    width: 180px;
-    height: 180px;
+    width: 170px;
+    height: 170px;
+  }
+
+  .dot1 {
+    left: -24px;
+  }
+
+  .dot2 {
+    right: -24px;
   }
 
   .mission_card_hero,
   .user_say_content,
-  .mtm_cards {
-    grid-template-columns: 1fr;
+  .mtm_cards,
+  .core_values_wrapper {
     width: calc(100% - 30px);
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .mission_card_hero {
     margin: 35px auto;
   }
 
   .mission_box,
   .content,
-  .review {
-    padding: 24px;
+  .review,
+  .mission_skeleton_box,
+  .testimonial_skeleton_card {
+    padding: 22px;
+  }
+
+  .mission_box h2 {
+    font-size: 25px;
+  }
+
+  .mission_box p,
+  .mission_card > p,
+  .core_values > p {
+    font-size: 16px;
   }
 
   .core_values_wrapper {
-    grid-template-columns: 1fr;
-    width: calc(100% - 30px);
     margin: 35px auto;
   }
 
@@ -961,14 +976,18 @@
     width: 100%;
   }
 
+  .cards h3 {
+    font-size: 25px;
+  }
+
   .transform {
     width: calc(100% - 30px);
-    padding: 32px 20px;
+    padding: 30px 20px;
     margin: 40px auto;
   }
 
   .transform h2 {
-    font-size: 26px;
+    font-size: 25px;
   }
 
   .transform p {
@@ -976,66 +995,11 @@
     font-size: 16px;
   }
 
-  .dot1 {
-    left: -30px;
+  .start_today_btn {
+    max-width: 100%;
+    padding: 14px 26px;
   }
 
-  .dot2 {
-    right: -30px;
-  }
-}
-
-/* ==========================================
-   TABLET
-========================================== */
-
-@media (min-width:431px) and (max-width:840px) {
-
-  .about_header_body {
-    width: 90%;
-  }
-
-  .mission_card_hero {
-    grid-template-columns: 1fr;
-    width: 90%;
-  }
-
-  .user_say_content {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    width: 90%;
-    gap: 20px;
-    margin: 40px auto 60px;
-  }
-
-  .mtm_cards {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 20px;
-    width: 90%;
-    margin: 40px auto;
-  }
-
-  .core_values_wrapper {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    width: 90%;
-  }
-
-  .cards {
-    width: 100%;
-  }
-
-  .transform {
-    width: 90%;
-  }
-
-}
-
-/* ==========================================
-   TESTIMONIAL RESPONSIVE POLISH
-========================================== */
-
-@media (max-width: 430px) {
   .what_users_say {
     margin-top: 55px;
   }
@@ -1050,8 +1014,6 @@
   }
 
   .user_say_content {
-    grid-template-columns: 1fr;
-    width: calc(100% - 30px);
     gap: 18px;
     margin: 32px auto 50px;
   }
@@ -1068,21 +1030,274 @@
   .review hr {
     margin: 18px 0 16px;
   }
+
+  .mission_skeleton_box {
+    min-height: 0;
+  }
+
+  .team_skeleton_card,
+  .core_value_skeleton_card {
+    min-width: 0;
+  }
 }
 
-@media (min-width: 431px) and (max-width: 840px) {
-  .user_say_content {
+/* ==========================================
+   MOBILE / TABLET - 480px TO 759px
+========================================== */
+@media (min-width: 480px) and (max-width: 759px) {
+  .about_header_section {
+    padding: 0 20px;
+  }
+
+  .black_header,
+  .blue_header {
+    font-size: 38px;
+  }
+
+  .about_header_body {
+    width: 90%;
+    font-size: 17px;
+  }
+
+  .clock_wrapper {
+    width: 190px;
+    height: 190px;
+  }
+
+  .dot1 {
+    left: -35px;
+  }
+
+  .dot2 {
+    right: -40px;
+  }
+
+  .mission_card_hero {
+    grid-template-columns: 1fr;
+    width: 90%;
+    gap: 22px;
+    margin: 40px auto;
+  }
+
+  .mission_box {
+    padding: 30px;
+  }
+
+  .mission_card h1,
+  .header_mtm h1,
+  .what_users_say h1,
+  .core_values h1 {
+    font-size: 36px;
+  }
+
+  .mtm_cards,
+  .user_say_content,
+  .core_values_wrapper {
+    width: 90%;
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+  }
+
+  .mtm_cards {
+    margin: 40px auto;
+  }
+
+  .content,
+  .review {
+    padding: 22px;
+  }
+
+  .cards {
+    width: 100%;
+    padding: 28px 20px;
+  }
+
+  .cards h3 {
+    font-size: 25px;
+  }
+
+  .transform {
+    width: 90%;
+    padding: 38px 28px;
+    margin: 55px auto;
+  }
+
+  .transform h2 {
+    font-size: 29px;
+  }
+
+  .transform p {
+    font-size: 17px;
+  }
+
+  .user_say_content {
+    margin: 40px auto 60px;
   }
 
   .review {
     min-height: 250px;
-    padding: 24px;
+  }
+
+  .mission_skeleton_box {
+    min-height: 280px;
+    padding: 28px;
+  }
+
+  .team_skeleton_card,
+  .testimonial_skeleton_card,
+  .core_value_skeleton_card {
+    min-width: 0;
+    padding: 22px 16px;
+  }
+
+  .core_value_skeleton_card {
+    min-height: 250px;
   }
 }
 
-@media (min-width: 841px) {
+/* ==========================================
+   TABLET / SMALL LAPTOP - 760px TO 1079px
+========================================== */
+@media (min-width: 760px) and (max-width: 1079px) {
+  .about_header_section {
+    padding: 0 24px;
+  }
+
+  .black_header,
+  .blue_header {
+    font-size: 42px;
+  }
+
+  .about_header_body {
+    width: 85%;
+  }
+
+  .clock_wrapper {
+    width: 200px;
+    height: 200px;
+  }
+
+  .mission_card_hero {
+    width: 90%;
+    gap: 22px;
+  }
+
+  .mission_box {
+    padding: 28px;
+  }
+
+  .mission_box h2 {
+    font-size: 25px;
+  }
+
+  .mission_box p {
+    font-size: 16px;
+  }
+
+  .mtm_cards,
+  .user_say_content,
+  .core_values_wrapper {
+    width: 90%;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
+
+  .mtm_cards {
+    margin: 40px auto;
+  }
+
+  .content,
+  .review {
+    min-width: 0;
+    padding: 24px;
+  }
+
+  .cards {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .transform {
+    width: 90%;
+    padding: 42px 35px;
+  }
+
+  .mission_skeleton_box {
+    min-width: 0;
+    padding: 28px;
+  }
+
+  .team_skeleton_card,
+  .testimonial_skeleton_card,
+  .core_value_skeleton_card {
+    min-width: 0;
+    padding: 24px 18px;
+  }
+
+  .core_value_skeleton_card {
+    min-height: 260px;
+  }
+}
+
+/* ==========================================
+   LAPTOP / DESKTOP - 1080px TO 1439px
+========================================== */
+@media (min-width: 1080px) and (max-width: 1439px) {
+  .mission_card_hero {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 92%;
+    gap: 26px;
+  }
+
+  .mtm_cards,
   .user_say_content {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+    width: 92%;
+  }
+
+  .core_values_wrapper {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    width: 92%;
+  }
+
+  .cards {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .mission_box,
+  .content,
+  .review,
+  .mission_skeleton_box,
+  .team_skeleton_card,
+  .testimonial_skeleton_card,
+  .core_value_skeleton_card {
+    min-width: 0;
+  }
+
+  .transform {
+    width: min(1000px, 92%);
+  }
+}
+
+/* ==========================================
+   LARGE DESKTOP - 1440px AND ABOVE
+========================================== */
+@media (min-width: 1440px) {
+  .mission_card_hero {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .mtm_cards,
+  .user_say_content {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .core_values_wrapper {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .cards {
+    width: 280px;
   }
 }

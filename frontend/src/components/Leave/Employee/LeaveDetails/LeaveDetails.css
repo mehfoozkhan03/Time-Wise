@@ -573,7 +573,6 @@
 /* ==========================================
    ANIMATIONS
 ========================================== */
-
 @keyframes leaveDetailsOverlayIn {
   from {
     opacity: 0;
@@ -597,37 +596,9 @@
 }
 
 /* ==========================================
-   TABLET
+   320px - SMALL MOBILE DEVICES
 ========================================== */
-
-@media (max-width: 720px) {
-  .leaveDetails-overlay {
-    padding: 18px;
-  }
-
-  .leaveDetails-modal {
-    width: min(520px, 100%);
-    max-height: calc(100vh - 36px);
-  }
-
-  .leaveDetails-header {
-    padding: 19px 20px;
-  }
-
-  .leaveDetails-content {
-    padding: 19px 20px;
-  }
-
-  .leaveDetails-footer {
-    padding: 14px 20px;
-  }
-}
-
-/* ==========================================
-   MOBILE
-========================================== */
-
-@media (max-width: 480px) {
+@media (min-width: 320px) and (max-width: 479px) {
   .leaveDetails-overlay {
     align-items: flex-end;
     padding: 0;
@@ -635,8 +606,194 @@
 
   .leaveDetails-modal {
     width: 100%;
-    max-height: calc(100vh - 8px);
+    max-height: calc(100vh - 5px);
     border-radius: var(--radius_lg) var(--radius_lg) 0 0;
+  }
+
+  .leaveDetails-header {
+    gap: 10px;
+    padding: 14px;
+  }
+
+  .leaveDetails-title-row {
+    gap: 9px;
+  }
+
+  .leaveDetails-title-icon {
+    width: 31px;
+    height: 31px;
+    font-size: 15px;
+  }
+
+  .leaveDetails-heading h2 {
+    margin-bottom: 2px;
+    font-size: 15px;
+  }
+
+  .leaveDetails-heading p {
+    font-size: 8px;
+  }
+
+  .leaveDetails-close {
+    width: 30px;
+    height: 30px;
+    min-width: 30px;
+    font-size: 14px;
+  }
+
+  .leaveDetails-content {
+    padding: 14px;
+  }
+
+  .leaveDetails-status-row {
+    gap: 8px;
+    margin-bottom: 14px;
+    padding: 9px 10px;
+  }
+
+  .leaveDetails-status-heading {
+    gap: 6px;
+  }
+
+  .leaveDetails-status-heading svg {
+    font-size: 14px;
+  }
+
+  .leaveDetails-label {
+    font-size: 9px;
+  }
+
+  .leaveDetails-status {
+    gap: 4px;
+    padding: 4px 7px;
+    font-size: 8px;
+  }
+
+  .leaveDetails-status::before {
+    width: 4px;
+    height: 4px;
+  }
+
+  .leaveDetails-section-title {
+    gap: 7px;
+    margin-bottom: 7px;
+  }
+
+  .leaveDetails-section-title span {
+    font-size: 7px;
+  }
+
+  .leaveDetails-grid {
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+
+  .leaveDetails-item {
+    padding: 9px;
+  }
+
+  .leaveDetails-item > span {
+    margin-bottom: 3px;
+    font-size: 7px;
+  }
+
+  .leaveDetails-item strong {
+    gap: 4px;
+    font-size: 9px;
+  }
+
+  .leaveDetails-item strong svg {
+    font-size: 12px;
+  }
+
+  .leaveDetails-reason {
+    margin-bottom: 14px;
+    padding: 9px;
+  }
+
+  .leaveDetails-reason p {
+    font-size: 9px;
+    line-height: 1.5;
+  }
+
+  .leaveDetails-comment {
+    gap: 7px;
+    padding: 9px;
+  }
+
+  .leaveDetails-comment-icon,
+  .leaveDetails-confirmation-icon {
+    width: 24px;
+    height: 24px;
+    font-size: 13px;
+  }
+
+  .leaveDetails-comment > div:last-child > span {
+    margin-bottom: 3px;
+    font-size: 7px;
+  }
+
+  .leaveDetails-comment p {
+    font-size: 9px;
+    line-height: 1.5;
+  }
+
+  .leaveDetails-error {
+    padding: 8px 9px;
+    font-size: 8px;
+  }
+
+  .leaveDetails-footer {
+    padding: 11px 14px;
+  }
+
+  .leaveDetails-footer-actions {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .leaveDetails-cancel-btn,
+  .leaveDetails-close-btn,
+  .leaveDetails-keep-btn,
+  .leaveDetails-confirm-btn {
+    min-height: 36px;
+    padding: 0 9px;
+    font-size: 9px;
+  }
+
+  .leaveDetails-confirmation-message {
+    gap: 7px;
+    margin-bottom: 9px;
+    padding: 9px;
+  }
+
+  .leaveDetails-confirmation-message strong {
+    margin-bottom: 2px;
+    font-size: 9px;
+  }
+
+  .leaveDetails-confirmation-message p {
+    font-size: 8px;
+  }
+
+  .leaveDetails-confirmation-actions {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+}
+
+/* ==========================================
+   480px - MOBILE DEVICES
+========================================== */
+@media (min-width: 480px) and (max-width: 759px) {
+  .leaveDetails-overlay {
+    align-items: center;
+    padding: 18px;
+  }
+
+  .leaveDetails-modal {
+    width: min(520px, 100%);
+    max-height: calc(100vh - 36px);
   }
 
   .leaveDetails-header {
@@ -785,183 +942,52 @@
 }
 
 /* ==========================================
-   EXTRA SMALL MOBILE
+   760px - TABLETS
 ========================================== */
+@media (min-width: 760px) and (max-width: 1079px) {
+  .leaveDetails-overlay {
+    padding: 18px;
+  }
 
-@media (max-width: 320px) {
   .leaveDetails-modal {
-    max-height: calc(100vh - 5px);
+    width: min(520px, 100%);
+    max-height: calc(100vh - 36px);
   }
 
   .leaveDetails-header {
-    padding: 14px;
-  }
-
-  .leaveDetails-title-icon {
-    width: 31px;
-    height: 31px;
-    font-size: 15px;
-  }
-
-  .leaveDetails-heading h2 {
-    margin-bottom: 2px;
-    font-size: 15px;
-  }
-
-  .leaveDetails-heading p {
-    font-size: 8px;
-  }
-
-  .leaveDetails-close {
-    width: 30px;
-    height: 30px;
-    min-width: 30px;
-    font-size: 14px;
+    padding: 19px 20px;
   }
 
   .leaveDetails-content {
-    padding: 14px;
-  }
-
-  .leaveDetails-status-row {
-    gap: 8px;
-    margin-bottom: 14px;
-    padding: 9px 10px;
-  }
-
-  .leaveDetails-status-heading {
-    gap: 6px;
-  }
-
-  .leaveDetails-status-heading svg {
-    font-size: 14px;
-  }
-
-  .leaveDetails-label {
-    font-size: 9px;
-  }
-
-  .leaveDetails-status {
-    gap: 4px;
-    padding: 4px 7px;
-    font-size: 8px;
-  }
-
-  .leaveDetails-status::before {
-    width: 4px;
-    height: 4px;
-  }
-
-  .leaveDetails-section-title {
-    gap: 7px;
-    margin-bottom: 7px;
-  }
-
-  .leaveDetails-section-title span {
-    font-size: 7px;
-  }
-
-  .leaveDetails-grid {
-    gap: 6px;
-    margin-bottom: 14px;
-  }
-
-  .leaveDetails-item {
-    padding: 9px;
-  }
-
-  .leaveDetails-item > span {
-    margin-bottom: 3px;
-    font-size: 7px;
-  }
-
-  .leaveDetails-item strong {
-    gap: 4px;
-    font-size: 9px;
-  }
-
-  .leaveDetails-item strong svg {
-    font-size: 12px;
-  }
-
-  .leaveDetails-reason {
-    margin-bottom: 14px;
-    padding: 9px;
-  }
-
-  .leaveDetails-reason p {
-    font-size: 9px;
-    line-height: 1.5;
-  }
-
-  .leaveDetails-comment {
-    gap: 7px;
-    padding: 9px;
-  }
-
-  .leaveDetails-comment-icon,
-  .leaveDetails-confirmation-icon {
-    width: 24px;
-    height: 24px;
-    font-size: 13px;
-  }
-
-  .leaveDetails-comment > div:last-child > span {
-    margin-bottom: 3px;
-    font-size: 7px;
-  }
-
-  .leaveDetails-comment p {
-    font-size: 9px;
-    line-height: 1.5;
-  }
-
-  .leaveDetails-error {
-    padding: 8px 9px;
-    font-size: 8px;
+    padding: 19px 20px;
   }
 
   .leaveDetails-footer {
-    padding: 11px 14px;
+    padding: 14px 20px;
   }
+}
 
-  .leaveDetails-footer-actions {
-    gap: 6px;
+/* ==========================================
+   1080px - LAPTOP / DESKTOP
+========================================== */
+@media (min-width: 1080px) and (max-width: 1439px) {
+  .leaveDetails-modal {
+    width: min(540px, 100%);
   }
+}
 
-  .leaveDetails-cancel-btn,
-  .leaveDetails-close-btn,
-  .leaveDetails-keep-btn,
-  .leaveDetails-confirm-btn {
-    min-height: 36px;
-    padding: 0 9px;
-    font-size: 9px;
-  }
-
-  .leaveDetails-confirmation-message {
-    gap: 7px;
-    margin-bottom: 9px;
-    padding: 9px;
-  }
-
-  .leaveDetails-confirmation-message strong {
-    margin-bottom: 2px;
-    font-size: 9px;
-  }
-
-  .leaveDetails-confirmation-message p {
-    font-size: 8px;
-  }
-
-  .leaveDetails-confirmation-actions {
-    gap: 6px;
+/* ==========================================
+   1440px - LARGE DESKTOP
+========================================== */
+@media (min-width: 1440px) {
+  .leaveDetails-modal {
+    width: min(540px, 100%);
   }
 }
 
 /* ==========================================
    REDUCED MOTION
 ========================================== */
-
 @media (prefers-reduced-motion: reduce) {
   .leaveDetails-overlay,
   .leaveDetails-modal {

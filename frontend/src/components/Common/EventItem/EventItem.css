@@ -174,62 +174,64 @@
 }
 
 /* ==========================================
-   768px
+   320px - Small Mobile Devices
 ========================================== */
 
-@media (max-width: 768px) {
+@media (min-width: 320px) and (max-width: 479px) {
   .eventItem {
-    gap: 12px;
+    gap: 8px;
 
-    padding: 10px 12px;
+    padding: 8px;
   }
 
   .eventItemAvatar {
-    width: 36px;
-    height: 36px;
+    width: 30px;
+    height: 30px;
 
-    font-size: 12px;
+    font-size: 10px;
   }
 
   .eventItemContent h5 {
-    font-size: 13px;
+    font-size: 11px;
   }
 
   .eventItemMeta {
-    gap: 6px;
-
-    font-size: 11px;
-  }
-
-  .eventItemIcon {
-    font-size: 13px;
-  }
-
-  .eventItem.compact {
-    gap: 8px;
-
-    min-height: 44px;
-
-    padding: 7px 8px;
-  }
-
-  .eventItem.compact .eventItemAvatar {
-    width: 24px;
-    height: 24px;
-
     font-size: 9px;
   }
 
-  .eventItem.compact .eventItemContent h5 {
+  .eventItemIcon {
     font-size: 11px;
+  }
+
+  .eventItem.compact {
+    gap: 6px;
+
+    min-height: 36px;
+
+    padding: 5px 6px;
+  }
+
+  .eventItem.compact .eventItemAvatar {
+    width: 20px;
+    height: 20px;
+
+    font-size: 8px;
+  }
+
+  .eventItem.compact .eventItemContent h5 {
+    font-size: 9px;
+  }
+
+  .eventItem.compact .eventItemIcon {
+    font-size: 9px;
   }
 }
 
 /* ==========================================
-   480px
+   480px - Mobile Devices
 ========================================== */
 
-@media (max-width: 480px) {
+@media (min-width: 480px) and (max-width: 759px) {
   .eventItem {
     gap: 10px;
 
@@ -282,55 +284,123 @@
 }
 
 /* ==========================================
-   320px
+   760px - Tablets
 ========================================== */
 
-@media (max-width: 320px) {
+@media (min-width: 760px) and (max-width: 1079px) {
   .eventItem {
-    gap: 8px;
+    gap: 12px;
 
-    padding: 8px;
+    padding: 10px 12px;
   }
 
   .eventItemAvatar {
-    width: 30px;
-    height: 30px;
+    width: 36px;
+    height: 36px;
 
-    font-size: 10px;
+    font-size: 12px;
   }
 
   .eventItemContent h5 {
-    font-size: 11px;
+    font-size: 13px;
   }
 
   .eventItemMeta {
-    font-size: 9px;
-  }
+    gap: 6px;
 
-  .eventItemIcon {
     font-size: 11px;
   }
 
+  .eventItemIcon {
+    font-size: 13px;
+  }
+
   .eventItem.compact {
-    gap: 6px;
+    gap: 8px;
 
-    min-height: 36px;
+    min-height: 44px;
 
-    padding: 5px 6px;
+    padding: 7px 8px;
   }
 
   .eventItem.compact .eventItemAvatar {
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
 
-    font-size: 8px;
+    font-size: 9px;
   }
 
   .eventItem.compact .eventItemContent h5 {
-    font-size: 9px;
+    font-size: 11px;
+  }
+}
+
+/* ==========================================
+   1080px - Small Desktops and Laptops
+========================================== */
+
+@media (min-width: 1080px) and (max-width: 1439px) {
+  .eventItem {
+    gap: 14px;
+
+    padding: 12px 14px;
   }
 
-  .eventItem.compact .eventItemIcon {
-    font-size: 9px;
+  .eventItemAvatar {
+    width: 40px;
+    height: 40px;
+
+    font-size: 13px;
+  }
+
+  .eventItemContent h5 {
+    font-size: 14px;
+  }
+
+  .eventItemMeta {
+    gap: 8px;
+
+    font-size: 12px;
+  }
+
+  .eventItemIcon {
+    font-size: 14px;
+  }
+}
+
+/* ==========================================
+   1440px - Large Desktops
+========================================== */
+
+@media (min-width: 1440px) {
+  .eventItem {
+    gap: 16px;
+
+    padding: 14px 16px;
+  }
+
+  .eventItemAvatar {
+    width: 42px;
+    height: 42px;
+
+    font-size: 14px;
+  }
+
+  .eventItemContent h5 {
+    font-size: 15px;
+  }
+
+  .eventItemMeta {
+    gap: 10px;
+
+    font-size: 12px;
+  }
+
+  .eventItemIcon {
+    font-size: 15px;
+  }
+
+  .eventItem.compact {
+    gap: 10px;
   }
 }

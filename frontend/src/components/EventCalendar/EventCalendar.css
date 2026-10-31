@@ -5,7 +5,7 @@
     gap: 16px;
 
     align-items: stretch;
-
+    
     width: 100%;
     min-width: 0;
 }
@@ -168,23 +168,104 @@
 }
 
 /* ==========================================
-   1200px
+   Responsive - 320px to 479px
 ========================================== */
 
-@media (max-width: 1200px) {
+@media (min-width: 320px) and (max-width: 479px) {
     .calendarBody {
         grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .eventCalendar {
+        gap: 14px;
+    }
+
+    .calendarAccessRestricted {
+        min-height: 320px;
+        padding: 28px 14px;
+    }
+
+    .calendarAccessIcon {
+        width: 56px;
+        height: 56px;
+        margin-bottom: 16px;
+        font-size: 21px;
+    }
+
+    .calendarAccessRestricted h2 {
+        font-size: 18px;
+    }
+
+    .calendarAccessRestricted p {
+        font-size: 13px;
+    }
+
+    .calendarAccessRestricted p br {
+        display: none;
+    }
+
+    .calendarAccessBackBtn {
+        width: 100%;
+        max-width: 160px;
+        height: 40px;
+        font-size: 13px;
     }
 }
 
 /* ==========================================
-   760px
+   Responsive - 480px to 759px
 ========================================== */
 
-@media (max-width: 760px) {
+@media (min-width: 480px) and (max-width: 759px) {
     .calendarBody {
         grid-template-columns: 1fr;
+        gap: 12px;
+    }
 
+    .eventCalendar {
+        gap: 16px;
+    }
+
+    .calendarAccessRestricted {
+        min-height: 350px;
+        padding: 32px 18px;
+    }
+
+    .calendarAccessIcon {
+        width: 62px;
+        height: 62px;
+        margin-bottom: 18px;
+        font-size: 23px;
+    }
+
+    .calendarAccessRestricted h2 {
+        font-size: 20px;
+    }
+
+    .calendarAccessRestricted p {
+        max-width: 300px;
+        font-size: 14px;
+    }
+
+    .calendarAccessRestricted p br {
+        display: none;
+    }
+
+    .calendarAccessBackBtn {
+        width: 100%;
+        max-width: 180px;
+        height: 42px;
+    }
+}
+
+/* ==========================================
+   Responsive - 760px to 1079px
+========================================== */
+
+@media (min-width: 760px) and (max-width: 1079px) {
+    .calendarBody {
+        grid-template-columns: 1fr;
         gap: 14px;
     }
 
@@ -194,16 +275,13 @@
 
     .calendarAccessRestricted {
         min-height: 380px;
-
         padding: 36px 20px;
     }
 
     .calendarAccessIcon {
         width: 68px;
         height: 68px;
-
         margin-bottom: 20px;
-
         font-size: 26px;
     }
 
@@ -217,96 +295,11 @@
 }
 
 /* ==========================================
-   480px
+   Responsive - 1080px to 1439px
 ========================================== */
 
-@media (max-width: 480px) {
+@media (min-width: 1080px) and (max-width: 1439px) {
     .calendarBody {
-        gap: 12px;
-    }
-
-    .eventCalendar {
-        gap: 16px;
-    }
-
-    .calendarAccessRestricted {
-        min-height: 350px;
-
-        padding: 32px 18px;
-    }
-
-    .calendarAccessIcon {
-        width: 62px;
-        height: 62px;
-
-        margin-bottom: 18px;
-
-        font-size: 23px;
-    }
-
-    .calendarAccessRestricted h2 {
-        font-size: 20px;
-    }
-
-    .calendarAccessRestricted p {
-        max-width: 300px;
-
-        font-size: 14px;
-    }
-
-    .calendarAccessRestricted p br {
-        display: none;
-    }
-
-    .calendarAccessBackBtn {
-        width: 100%;
-        max-width: 180px;
-
-        height: 42px;
-    }
-}
-
-/* ==========================================
-   320px
-========================================== */
-
-@media (max-width: 320px) {
-    .calendarBody {
-        gap: 10px;
-    }
-
-    .eventCalendar {
-        gap: 14px;
-    }
-
-    .calendarAccessRestricted {
-        min-height: 320px;
-
-        padding: 28px 14px;
-    }
-
-    .calendarAccessIcon {
-        width: 56px;
-        height: 56px;
-
-        margin-bottom: 16px;
-
-        font-size: 21px;
-    }
-
-    .calendarAccessRestricted h2 {
-        font-size: 18px;
-    }
-
-    .calendarAccessRestricted p {
-        font-size: 13px;
-    }
-
-    .calendarAccessBackBtn {
-        max-width: 160px;
-
-        height: 40px;
-
-        font-size: 13px;
+        grid-template-columns: 1fr;
     }
 }

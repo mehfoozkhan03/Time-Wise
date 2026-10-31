@@ -26,32 +26,152 @@
   gap: 20px;
 }
 
-.faqSkeletonGrid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:20px;
+.faqSkeletonGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
 }
 
-
-.faqSkeletonGrid .faqColumn{
-  display:flex;
-  flex-direction:column;
-  gap:15px;
+.faqSkeletonGrid .faqColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
-@media (max-width: 768px) {
+/* ==========================================
+   320px - SMALL MOBILE
+========================================== */
+@media (min-width: 320px) and (max-width: 479px) {
   .faqContainer {
     width: 95%;
-    padding: 50px 0;
+    padding: 35px 0;
   }
-  .faqGrid {
+
+  .faqContainer h1 {
+    margin-bottom: 30px;
+  }
+
+  .faqGrid,
+  .faqSkeletonGrid {
     grid-template-columns: 1fr;
+    gap: 18px;
   }
+
+  .faqColumn {
+    gap: 15px;
+  }
+
+  .faqSkeletonGrid .faqColumn {
+    gap: 12px;
+  }
+
+  .question {
+    padding: 16px;
+    font-size: 14px;
+  }
+
+  .answer.show {
+    padding: 14px 16px;
+  }
+}
+
+/* ==========================================
+   480px - MOBILE
+========================================== */
+@media (min-width: 480px) and (max-width: 759px) {
+  .faqContainer {
+    width: 94%;
+    padding: 40px 0;
+  }
+
+  .faqContainer h1 {
+    margin-bottom: 35px;
+  }
+
+  .faqGrid,
+  .faqSkeletonGrid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .faqColumn {
+    gap: 18px;
+  }
+
+  .faqSkeletonGrid .faqColumn {
+    gap: 15px;
+  }
+
   .question {
     padding: 18px;
-    font-size: 16px;
+    font-size: 15px;
   }
+
   .answer.show {
     padding: 16px 18px;
+  }
+}
+
+/* ==========================================
+   760px - TABLET
+========================================== */
+@media (min-width: 760px) and (max-width: 1079px) {
+  .faqContainer {
+    width: 92%;
+    padding: 50px 0;
+  }
+
+  .faqGrid,
+  .faqSkeletonGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
+  }
+
+  .faqColumn {
+    gap: 18px;
+  }
+
+  .faqSkeletonGrid .faqColumn {
+    gap: 15px;
+  }
+
+  .question {
+    padding: 18px;
+  }
+
+  .answer.show {
+    padding: 16px 18px;
+  }
+}
+
+/* ==========================================
+   1080px - LAPTOP / DESKTOP
+========================================== */
+@media (min-width: 1080px) and (max-width: 1439px) {
+  .faqContainer {
+    width: 92%;
+    padding: 55px 0;
+  }
+
+  .faqGrid,
+  .faqSkeletonGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 25px;
+  }
+}
+
+/* ==========================================
+   1440px - LARGE DESKTOP
+========================================== */
+@media (min-width: 1440px) {
+  .faqContainer {
+    width: 90%;
+    padding: 60px 0;
+  }
+
+  .faqGrid,
+  .faqSkeletonGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 30px;
   }
 }
