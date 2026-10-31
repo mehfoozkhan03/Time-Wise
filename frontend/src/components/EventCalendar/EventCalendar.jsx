@@ -224,6 +224,7 @@ export default function EventCalendar({ isAdmin = false }) {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [selectedHoliday, setSelectedHoliday] = useState(null);
   const [dayEvents, setDayEvents] = useState([]);
+  const [dayEventsDate, setDayEventsDate] = useState(null);
   const [dayEventsModalOpen, setDayEventsModalOpen] = useState(false);
   const [formMode, setFormMode] = useState("CREATE");
   const [eventFormOpen, setEventFormOpen] = useState(false);
@@ -238,6 +239,7 @@ export default function EventCalendar({ isAdmin = false }) {
   ========================================= */
 
   const handleMoreEvents = useCallback((day, events) => {
+    setDayEventsDate(day);
     setDayEvents(events);
     setDayEventsModalOpen(true);
   }, []);
@@ -641,7 +643,7 @@ export default function EventCalendar({ isAdmin = false }) {
 
       {dayEventsModalOpen && (
         <DayEventsModal
-          date={selectedDate}
+          date={dayEventsDate}
           events={dayEvents}
           onClose={() => setDayEventsModalOpen(false)}
           onEventClick={handleEventClick}
