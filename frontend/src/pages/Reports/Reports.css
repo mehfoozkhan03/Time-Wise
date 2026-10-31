@@ -1,37 +1,8 @@
-/* @theme inline {
-  --color-background: #080c14;
-  --color-foreground: #e8edf5;
-  --color-card: #0d1322;
-  --color-card-border: rgba(255, 255, 255, 0.065);
-  --color-primary: #6366f1;
-  --color-primary-glow: rgba(99, 102, 241, 0.25);
-  --color-secondary: #22d3ee;
-  --color-muted: #1a2035;
-  --color-muted-foreground: #64748b;
-  --color-accent: #8b5cf6;
-  --color-success: #10b981;
-  --color-warning: #f59e0b;
-  --color-danger: #ef4444;
-  --font-display: 'Outfit', sans-serif;
-  --font-body: 'DM Sans', sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
-  --radius-card: 14px;
-}
- */
-
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
-
-/* .stagger,
-.stagger *,
-.glass-card,
-.glass-card * {
-  cursor: default !important;
-  user-select: none;
-} */
 
 .reportsDiv,
 .chartDiv {
@@ -44,12 +15,12 @@
 }
 
 .reportsDiv button {
-  background: var(--primary);
+  background: var(--button);
   color: #fff;
 }
 
 .reportsDiv button:hover {
-  background: var(--text_primary);
+  background: var(--buttonhover);
   color: var(--bg);
 }
 
@@ -70,6 +41,31 @@
   gap: 10px;
 }
 
+.reports_custom_range_reveal {
+  display: flex;
+  min-width: 0;
+  transform-origin: top center;
+}
+
+.reports_range_content {
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 0.24s ease,
+    transform 0.3s cubic-bezier(0.2, 0.75, 0.25, 1);
+  will-change: opacity, transform;
+}
+
+.reports_range_content.is-range-refreshing {
+  opacity: 0.76;
+  transform: translateY(3px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reports_range_content {
+    transition: none;
+  }
+}
 .reports_custom_range label {
   display: grid;
   gap: 5px;

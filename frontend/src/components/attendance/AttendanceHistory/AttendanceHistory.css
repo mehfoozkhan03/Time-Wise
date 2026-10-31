@@ -258,6 +258,28 @@
     background:#2e3442;
 }
 
+html.light .attendance_month_header {
+  background: var(--surface);
+  border-color: var(--border);
+  box-shadow: var(--shadow_sm);
+}
+
+html.light .month_title h2 {
+  color: var(--text_primary);
+}
+
+html.light .month_btn,
+html.light .today_btn {
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--text_primary);
+}
+
+html.light .month_btn:hover:not(:disabled),
+html.light .today_btn:hover {
+  background: var(--surface_hover);
+}
+
 /*  */
 
 /* ===========================

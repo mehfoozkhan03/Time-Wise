@@ -1,5 +1,6 @@
 
 import { useDispatch } from 'react-redux';
+import { AnimatePresence, motion } from 'framer-motion';
 import { setDateRange, setCustomDateRange } from '../../store/reportsSlice';
 import Skeleton from '../../components/Skeleton/Skeleton';
 
@@ -118,7 +119,9 @@ export function ReportsHeader({
             </p>
           </div>
 
-          <div
+          <motion.div
+            layout
+            transition={{ layout: { duration: 0.28, ease: 'easeInOut' } }}
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -126,7 +129,8 @@ export function ReportsHeader({
               flexWrap: 'wrap',
             }}
           >
-            <div
+            <motion.div
+              layout
               style={{
                 display: 'flex',
                 borderRadius: 10,
@@ -145,16 +149,26 @@ export function ReportsHeader({
                     cursor: 'pointer',
                     fontSize: 12.5,
                     fontWeight: 500,
-                    background: dateRange === r.id ? 'var(--primary)' : 'transparent',
+                    background: dateRange === r.id ? 'var(--button)' : 'transparent',
                     color: dateRange === r.id ? '#fff' : 'var(--text_primary)',
                   }}
                 >
                   {r.label}
                 </button>
               ))}
-            </div>
+            </motion.div>
 
-            {dateRange === 'custom' && (
+            <AnimatePresence initial={false}>
+              {dateRange === 'custom' && (
+              <motion.div
+                key="reports-custom-range"
+                className="reports_custom_range_reveal"
+                initial={{ opacity: 0, height: 0, y: -8 }}
+                animate={{ opacity: 1, height: 'auto', y: 0 }}
+                exit={{ opacity: 0, height: 0, y: -8 }}
+                transition={{ duration: 0.28, ease: 'easeInOut' }}
+                style={{ overflow: 'hidden' }}
+              >
               <div className="reports_custom_range">
                 <label>
                   From
@@ -185,9 +199,12 @@ export function ReportsHeader({
                   />
                 </label>
               </div>
-            )}
+              </motion.div>
+              )}
+            </AnimatePresence>
 
-            <button
+            <motion.button
+              layout
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -198,9 +215,10 @@ export function ReportsHeader({
               }}
             >
               📄 PDF
-            </button>
+            </motion.button>
 
-            <button
+            <motion.button
+              layout
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -211,8 +229,8 @@ export function ReportsHeader({
               }}
             >
               📊 Excel
-            </button>
-          </div>
+            </motion.button>
+          </motion.div>
         </>
       )}
     </div>

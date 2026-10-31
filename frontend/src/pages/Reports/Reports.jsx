@@ -39,14 +39,18 @@ export function Reports() {
 
   const [reportCalendar, setReportCalendar] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isRangeRefreshing, setIsRangeRefreshing] = useState(false);
   const [loadError, setLoadError] = useState("");
   const hasLoadedReports = useRef(false);
+  const hasCachedReportData = useRef(false);
+  hasCachedReportData.current = attendanceLog.length > 0;
 
   // console.log("Dashboard Stats:", dashboardStats);
 
   useEffect(() => {
     if (dateRange === "custom" && (!customStartDate || !customEndDate)) {
       setIsLoading(false);
+      setIsRangeRefreshing(false);
       return undefined;
     }
 
@@ -55,6 +59,9 @@ export function Reports() {
     // Loading is only for the first report fetch. Range changes keep the
     // current page visible while the next result is fetched.
     setLoadError("");
+    if (hasLoadedReports.current || hasCachedReportData.current) {
+      setIsRangeRefreshing(true);
+    }
 
     getAttendanceReport({
       range: dateRange,
@@ -76,6 +83,7 @@ export function Reports() {
         if (!cancelled) {
           hasLoadedReports.current = true;
           setIsLoading(false);
+          setIsRangeRefreshing(false);
         }
       });
 
@@ -428,6 +436,10 @@ export function Reports() {
           </p>
         )}
 
+        <div
+          className={`reports_range_content ${isRangeRefreshing ? "is-range-refreshing" : ""}`}
+          aria-busy={isRangeRefreshing}
+        >
         <KPISection
           sparklineData={sparklineData}
           dashboardStats={dashboardStats}
@@ -475,6 +487,7 @@ export function Reports() {
           onStatusChange={(value) => dispatch(setStatusFilter(value))}
           isLoading={showInitialSkeletons}
         />
+        </div>
       </div>
     </div>
   );

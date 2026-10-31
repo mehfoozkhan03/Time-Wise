@@ -94,7 +94,7 @@ const FeedbackModalController = ({ onReady }) => {
   // }, [onReady, showModal]);
   React.useEffect(() => {
     if (typeof onReady === "function") {
-      onReady(() => showModal);
+      onReady(showModal);
     }
   }, [onReady, showModal]);
 

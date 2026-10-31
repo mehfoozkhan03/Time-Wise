@@ -210,7 +210,19 @@ export const tourSteps = () => {
       },
     },
 
-    // ── 16. Done ───────────────────────────────────────────────────────────────
+    // ── 16. WiseBot ────────────────────────────────────────────────────────────
+    {
+      element: "#tour-ai-bot",
+      popover: {
+        title: "🤖 WiseBot Assistant",
+        description:
+          "Open WiseBot to ask about your TimeWise features, attendance, reports, working hours, leave, and calendar. Use the small minus button on the bot icon to minimize it; tap the compact restore button to bring it back.",
+        side: "top",
+        align: "end",
+      },
+    },
+
+    // ── 17. Done ───────────────────────────────────────────────────────────────
     {
       popover: {
         title: "You're all set! 🎉",
