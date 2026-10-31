@@ -10,6 +10,9 @@ export function ReportsHeader({
   isLoading = false,
   customStartDate = '',
   customEndDate = '',
+  onExportPDF = () => {},
+  onExportExcel = () => {},
+  exportDisabled = false,
 }) {
   const dispatch = useDispatch();
 
@@ -205,6 +208,10 @@ export function ReportsHeader({
 
             <motion.button
               layout
+              type="button"
+              onClick={onExportPDF}
+              disabled={exportDisabled}
+              aria-label="Export report as PDF"
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -212,6 +219,8 @@ export function ReportsHeader({
                 padding: '8px 14px',
                 borderRadius: 9,
                 border: '1px solid rgba(255,255,255,.08)',
+                cursor: exportDisabled ? 'not-allowed' : 'pointer',
+                opacity: exportDisabled ? 0.55 : 1,
               }}
             >
               📄 PDF
@@ -219,6 +228,10 @@ export function ReportsHeader({
 
             <motion.button
               layout
+              type="button"
+              onClick={onExportExcel}
+              disabled={exportDisabled}
+              aria-label="Export report as Excel workbook"
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -226,6 +239,8 @@ export function ReportsHeader({
                 padding: '8px 14px',
                 borderRadius: 9,
                 border: '1px solid rgba(16,185,129,.2)',
+                cursor: exportDisabled ? 'not-allowed' : 'pointer',
+                opacity: exportDisabled ? 0.55 : 1,
               }}
             >
               📊 Excel
