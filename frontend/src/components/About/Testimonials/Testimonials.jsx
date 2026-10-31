@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { testimonialData } from "../data/testimonialData";
 import TestimonialCard from "./TestimonialCard";
@@ -18,6 +19,7 @@ function Testimonials() {
     <section className="what_users_say">
       {showSkeleton ? (
         <>
+          {/* Skeleton Header */}
           <div className="testimonial_skeleton_header">
             <Skeleton width="370px" height="36px" />
 
@@ -26,6 +28,7 @@ function Testimonials() {
             </div>
           </div>
 
+          {/* Skeleton Cards */}
           <div className="user_say_content">
             {testimonialData.map((review) => (
               <div
@@ -44,7 +47,7 @@ function Testimonials() {
                   ))}
                 </div>
 
-                {/* Review text */}
+                {/* Review Text */}
                 <div className="testimonial_skeleton_review">
                   <Skeleton width="100%" height="14px" />
 
@@ -56,7 +59,7 @@ function Testimonials() {
                 {/* Divider */}
                 <div className="testimonial_skeleton_divider" />
 
-                {/* Name and role */}
+                {/* User Information */}
                 <div className="testimonial_skeleton_user">
                   <Skeleton width="145px" height="17px" />
 
@@ -70,9 +73,16 @@ function Testimonials() {
         </>
       ) : (
         <>
-          <h1>What Our Users Say</h1>
-          <p>Real feedback from teams using TimeWise every day.</p>
+          {/* Section Heading */}
+          <div className="testimonial_header">
+            <h1>What Our Users Say</h1>
 
+            <p>
+              Real feedback from teams using TimeWise every day.
+            </p>
+          </div>
+
+          {/* Testimonial Cards */}
           <div className="user_say_content">
             {testimonialData.map((review) => (
               <TestimonialCard
