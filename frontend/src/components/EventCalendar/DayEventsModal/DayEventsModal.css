@@ -1,7 +1,3 @@
-/* ==========================================
-   Day Events Overlay
-========================================== */
-
 .dayEventsOverlay {
   position: fixed;
   inset: 0;
@@ -185,10 +181,60 @@
 }
 
 /* ==========================================
-   Responsive - Tablet
+   Responsive - 320px to 479px
 ========================================== */
 
-@media (max-width: 760px) {
+@media (min-width: 320px) and (max-width: 479px) {
+  .dayEventsOverlay {
+    padding: 10px;
+
+    align-items: flex-end;
+  }
+
+  .dayEventsModal {
+    max-height: 90vh;
+
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  .dayEventsHeader {
+    padding: 12px;
+  }
+
+  .dayEventsBody {
+    padding: 12px;
+
+    gap: 10px;
+  }
+
+  .dayEventsTitle {
+    gap: 10px;
+  }
+
+  .dayEventsTitle svg {
+    font-size: 18px;
+  }
+
+  .dayEventsTitle h2 {
+    font-size: 15px;
+  }
+
+  .dayEventsTitle span {
+    font-size: 12px;
+  }
+
+  .dayEventsHeader .closeBtn {
+    width: 34px;
+    height: 34px;
+  }
+}
+
+/* ==========================================
+   Responsive - 480px to 759px
+========================================== */
+
+@media (min-width: 480px) and (max-width: 759px) {
   .dayEventsOverlay {
     padding: 16px;
   }
@@ -208,73 +254,5 @@
 
   .dayEventsTitle h2 {
     font-size: 17px;
-  }
-}
-
-/* ==========================================
-   Responsive - Mobile
-========================================== */
-
-@media (max-width: 480px) {
-  .dayEventsOverlay {
-    padding: 10px;
-
-    align-items: flex-end;
-  }
-
-  .dayEventsModal {
-    max-height: 90vh;
-
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-  }
-
-  .dayEventsHeader {
-    padding: 14px;
-  }
-
-  .dayEventsBody {
-    padding: 14px;
-
-    gap: 10px;
-  }
-
-  .dayEventsTitle {
-    gap: 10px;
-  }
-
-  .dayEventsTitle svg {
-    font-size: 18px;
-  }
-
-  .dayEventsTitle h2 {
-    font-size: 16px;
-  }
-
-  .dayEventsTitle span {
-    font-size: 12px;
-  }
-}
-
-/* ==========================================
-   Responsive - Small Mobile
-========================================== */
-
-@media (max-width: 320px) {
-  .dayEventsHeader {
-    padding: 12px;
-  }
-
-  .dayEventsBody {
-    padding: 12px;
-  }
-
-  .dayEventsTitle h2 {
-    font-size: 15px;
-  }
-
-  .dayEventsHeader .closeBtn {
-    width: 34px;
-    height: 34px;
   }
 }

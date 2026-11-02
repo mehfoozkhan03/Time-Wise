@@ -105,6 +105,30 @@ function EventFormModal({
     return "Not available";
   }, []);
 
+  // Formats the employee ID for UI display only.
+  // The original MongoDB ObjectId remains unchanged.
+  const formatEmployeeId = useCallback((employee) => {
+    const id = employee?._id;
+
+    if (!id) {
+      return "Not available";
+    }
+
+    const role = String(employee?.role || "")
+      .trim()
+      .toLowerCase();
+
+    const rolePrefixes = {
+      employee: "EMP",
+      manager: "MGR",
+    };
+
+    const prefix = rolePrefixes[role];
+    const shortId = String(id).slice(0, 8).toUpperCase();
+
+    return prefix ? `${prefix}-${shortId}` : shortId;
+  }, []);
+
   return (
     <>
       <Modal
@@ -161,6 +185,7 @@ function EventFormModal({
       {employeeDetails && (
         <div
           className="employeeDetailsOverlay"
+          onMouseDown={(event) => event.stopPropagation()}
           onClick={(event) => {
             if (event.target === event.currentTarget) {
               closeEmployeeDetails();
@@ -208,7 +233,7 @@ function EventFormModal({
               <div className="employeeDetailsField">
                 <span>User ID</span>
                 <strong className="employeeDetailsUserId">
-                  {getEmployeeValue(employeeDetails, ["_id"])}
+                  {formatEmployeeId(employeeDetails)}
                 </strong>
               </div>
 

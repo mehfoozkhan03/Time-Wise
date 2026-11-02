@@ -1,3 +1,7 @@
+/* ==========================================
+   Calendar Wrapper
+========================================== */
+
 .calendarWrapper {
   display: flex;
   flex-direction: column;
@@ -54,50 +58,40 @@
 }
 
 /* ==========================================
-   Responsive - Large Tablet
+   Responsive
 ========================================== */
-
-@media (max-width: 1200px) {
-  .calendarWrapper {
-    gap: 12px;
-  }
-
-  .weekHeader,
-  .calendarGrid {
-    gap: 8px;
-  }
-}
 
 /* ==========================================
-   Responsive - Tablet
+   320px - Small Mobile Devices
 ========================================== */
 
-@media (max-width: 760px) {
+@media (min-width: 320px) and (max-width: 479px) {
   .calendarWrapper {
-    gap: 10px;
+    gap: 8px;
   }
 
   .weekHeader,
   .calendarGrid {
-    gap: 6px;
+    gap: 3px;
   }
 
   .weekHeader div {
-    min-height: 34px;
+    min-height: 24px;
 
-    padding: 4px;
+    padding: 2px 0;
 
-    font-size: 11px;
+    font-size: 9px;
 
-    letter-spacing: 0.04em;
+    font-weight: 600;
+    letter-spacing: 0;
   }
 }
 
 /* ==========================================
-   Responsive - Mobile
+   480px - Mobile Devices
 ========================================== */
 
-@media (max-width: 480px) {
+@media (min-width: 480px) and (max-width: 759px) {
   .calendarWrapper {
     gap: 8px;
   }
@@ -119,22 +113,76 @@
 }
 
 /* ==========================================
-   Responsive - Small Mobile
+   760px - Tablets
 ========================================== */
 
-@media (max-width: 320px) {
+@media (min-width: 760px) and (max-width: 1079px) {
+  .calendarWrapper {
+    gap: 10px;
+  }
+
   .weekHeader,
   .calendarGrid {
-    gap: 3px;
+    gap: 6px;
   }
 
   .weekHeader div {
-    min-height: 24px;
+    min-height: 34px;
 
-    padding: 2px 0;
+    padding: 4px;
 
-    font-size: 9px;
+    font-size: 11px;
 
-    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+}
+
+/* ==========================================
+   1080px - Small Desktops and Laptops
+========================================== */
+
+@media (min-width: 1080px) and (max-width: 1439px) {
+  .calendarWrapper {
+    gap: 12px;
+  }
+
+  .weekHeader,
+  .calendarGrid {
+    gap: 8px;
+  }
+
+  .weekHeader div {
+    min-height: 42px;
+
+    padding: 8px;
+
+    font-size: 13px;
+
+    letter-spacing: 0.06em;
+  }
+}
+
+/* ==========================================
+   1440px - Large Desktops
+========================================== */
+
+@media (min-width: 1440px) {
+  .calendarWrapper {
+    gap: 16px;
+  }
+
+  .weekHeader,
+  .calendarGrid {
+    gap: 10px;
+  }
+
+  .weekHeader div {
+    min-height: 46px;
+
+    padding: 10px;
+
+    font-size: 14px;
+
+    letter-spacing: 0.06em;
   }
 }

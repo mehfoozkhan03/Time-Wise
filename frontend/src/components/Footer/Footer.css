@@ -1,6 +1,7 @@
 .footer {
   padding: 21px 51px;
   animation: fade_in 0.5s ease;
+  box-sizing: border-box;
 }
 
 .footer_top {
@@ -169,7 +170,37 @@
   transform: translateY(-3px);
 }
 
+/* ==========================================================
+   SMALL LAPTOPS / LARGE TABLETS - 1080px
+========================================================== */
+
+@media (max-width: 1080px) {
+
+  .footer {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+
+  .footer_top {
+    gap: 40px;
+  }
+
+  .footer_brand {
+    gap: 40px;
+  }
+
+  .footer_top_child {
+    gap: 40px;
+  }
+
+}
+
+/* ==========================================================
+   TABLETS / MOBILE LAYOUT - 840px
+========================================================== */
+
 @media (max-width: 840px) {
+
   .footer {
     padding: 0 15px;
     margin-bottom: 7px;
@@ -250,7 +281,175 @@
   .footer_contact {
     gap: 5px;
   }
+
 }
+
+/* ==========================================================
+   TABLETS - 760px
+========================================================== */
+
+@media (max-width: 760px) {
+
+  .footer_top {
+    gap: 27px;
+  }
+
+  .footer_top_child {
+    width: 100%;
+    justify-content: space-between;
+    gap: 30px;
+  }
+
+  .footer_brand {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .footer_brand p {
+    overflow-wrap: break-word;
+  }
+
+  .footer_bottom {
+    gap: 16px;
+  }
+
+  .footer_social {
+    flex-wrap: wrap;
+  }
+
+}
+
+/* ==========================================================
+   TABLET BRAND ALIGNMENT - 481px TO 840px
+========================================================== */
+
+@media (min-width: 481px) and (max-width: 840px) {
+
+  .footer_brand {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: clamp(20px, 6vw, 51px);
+    flex-wrap: wrap;
+  }
+
+  .footer_top_child {
+    gap: 41px;
+    margin: 0 auto;
+  }
+
+  .footer_bottom_text {
+    flex-direction: row;
+  }
+
+  .footer_bottom_text1 {
+    align-items: center;
+  }
+
+}
+
+/* ==========================================================
+   MOBILE DEVICES - 480px
+========================================================== */
+
+@media (max-width: 480px) {
+
+  .footer {
+    padding: 0 12px;
+  }
+
+  .footer_top {
+    padding: 25px 8px;
+    gap: 27px;
+  }
+
+  .footer_brand {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+  }
+
+  .footer_logo {
+    width: 100px;
+  }
+
+  .footer_brand h3 {
+    font-size: 23px;
+    max-width: 100%;
+  }
+
+  .footer_brand p {
+    font-size: 14px;
+    line-height: 1.8;
+  }
+
+  .footer_top_child {
+    width: 100%;
+    justify-content: space-between;
+    gap: 20px;
+  }
+
+  .footer_links,
+  .footer_contact {
+    min-width: 0;
+  }
+
+  .footer_links h3,
+  .footer_contact h3 {
+    font-size: 18px;
+  }
+
+  .footer_links a {
+    font-size: 14px;
+    overflow-wrap: anywhere;
+  }
+
+  .footer_contact p {
+    font-size: 14px;
+    gap: 7px;
+    flex-wrap: wrap;
+  }
+
+  .footer_contact p span {
+    overflow-wrap: anywhere;
+  }
+
+  .footer_bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+    padding: 15px 8px 0;
+  }
+
+  .footer_bottom p {
+    gap: 8px;
+    font-size: 13px;
+  }
+
+  .footer_bottom_text {
+    align-items: flex-start;
+  }
+
+  .footer_bottom_text1 {
+    align-items: baseline;
+    flex-wrap: wrap;
+  }
+
+  .footer_social {
+    gap: 10px;
+  }
+
+  .footer_social a {
+    width: 36px;
+    height: 36px;
+    font-size: 14px;
+  }
+
+}
+
+/* ==========================================================
+   SMALL MOBILE DEVICES - 385px
+========================================================== */
 
 @media (max-width: 385px) {
 
@@ -267,26 +466,96 @@
     font-size: x-small;
     letter-spacing: 0.3px;
   }
+
 }
 
-@media (min-width:431px) and (max-width:840px) {
-  .footer_brand {
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    gap: 51px;
+/* ==========================================================
+   EXTRA SMALL MOBILE DEVICES - 320px
+========================================================== */
+
+@media (max-width: 320px) {
+
+  .footer {
+    padding: 0 9px;
+  }
+
+  .footer_top {
+    padding: 22px 5px;
+    gap: 23px;
+  }
+
+  .footer_brand h3 {
+    font-size: 21px;
+  }
+
+  .footer_brand p {
+    font-size: 13px;
+    line-height: 1.7;
   }
 
   .footer_top_child {
-    gap: 71px;
-    margin: 0 auto;
+    gap: 13px;
+    justify-content: space-between;
   }
 
-  .footer_bottom_text {
-    flex-direction: row;
+  .footer_links,
+  .footer_contact {
+    min-width: 0;
+    max-width: 50%;
   }
 
-  .footer_bottom_text1 {
-    align-items: center;
+  .footer_links h3,
+  .footer_contact h3 {
+    font-size: 13px;
   }
+
+  .footer_links a {
+    font-size: 12px;
+  }
+
+  .footer_contact p {
+    font-size: 12px;
+    gap: 5px;
+  }
+
+  .footer_contact p span {
+    font-size: 11px;
+    letter-spacing: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .footer_bottom {
+    padding-left: 5px;
+    padding-right: 5px;
+    gap: 13px;
+  }
+
+  .footer_bottom p {
+    font-size: 12px;
+    gap: 7px;
+  }
+
+  .footer_social {
+    gap: 8px;
+  }
+
+  .footer_social a {
+    width: 33px;
+    height: 33px;
+    font-size: 13px;
+  }
+
+}
+
+/* ==========================================================
+   LARGE DESKTOP SCREENS - 1440px AND ABOVE
+   Preserve the original desktop spacing.
+========================================================== */
+
+@media (min-width: 1440px) {
+
+  .footer {
+    padding: 21px 51px;
+  }
+
 }

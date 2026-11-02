@@ -1,3 +1,7 @@
+/* ==========================================
+   Custom Select
+========================================== */
+
 .customSelect {
   position: relative;
   width: 100%;
@@ -40,7 +44,6 @@
 
 .customSelect.open .customSelectTrigger {
   border-color: var(--primary);
-
   box-shadow: 0 0 0 3px rgba(41, 163, 224, 0.15);
 }
 
@@ -67,7 +70,6 @@
 
 .customSelect.open .customSelectArrow {
   color: var(--primary);
-
   transform: rotate(180deg);
 }
 
@@ -470,8 +472,11 @@ html:not(.dark) .customSelectEmpty {
   }
 }
 
-/* Responsive */
-@media (max-width: 480px) {
+/* ==========================================
+   320px - Small Mobile Devices
+========================================== */
+
+@media (min-width: 320px) and (max-width: 479px) {
   .customSelectTrigger {
     min-height: 44px;
     padding: 0 12px;
@@ -502,5 +507,51 @@ html:not(.dark) .customSelectEmpty {
   .customSelectSearch input {
     height: 34px;
     font-size: 0.88rem;
+  }
+}
+
+/* ==========================================
+   480px - Mobile Devices
+========================================== */
+
+@media (min-width: 480px) and (max-width: 759px) {
+  .customSelectTrigger {
+    min-height: 46px;
+    padding: 0 15px;
+    font-size: 0.95rem;
+  }
+
+  .customSelectMenu {
+    max-height: 240px;
+  }
+}
+
+/* ==========================================
+   760px - Tablets
+========================================== */
+
+@media (min-width: 760px) and (max-width: 1079px) {
+  .customSelectMenu {
+    max-height: 250px;
+  }
+}
+
+/* ==========================================
+   1080px - Small Desktops and Laptops
+========================================== */
+
+@media (min-width: 1080px) and (max-width: 1439px) {
+  .customSelectMenu {
+    max-height: 260px;
+  }
+}
+
+/* ==========================================
+   1440px - Large Desktops
+========================================== */
+
+@media (min-width: 1440px) {
+  .customSelectMenu {
+    max-height: 280px;
   }
 }

@@ -69,3 +69,100 @@
   padding: 18px 24px;
   border-top: 1px solid var(--border);
 }
+
+/* ==========================================
+   320px - SMALL MOBILE
+========================================== */
+@media (min-width: 320px) and (max-width: 479px) {
+  .question {
+    gap: 12px;
+    padding: 16px;
+  }
+
+  .questionText {
+    font-size: 14px;
+  }
+
+  .icon {
+    width: 30px;
+    height: 30px;
+    font-size: 21px;
+  }
+
+  .answer {
+    padding: 0 16px;
+    font-size: 14px;
+  }
+
+  .answer.show {
+    padding: 14px 16px;
+  }
+}
+
+/* ==========================================
+   480px - MOBILE
+========================================== */
+@media (min-width: 480px) and (max-width: 759px) {
+  .question {
+    gap: 15px;
+    padding: 18px 20px;
+  }
+
+  .questionText {
+    font-size: 15px;
+  }
+
+  .icon {
+    width: 32px;
+    height: 32px;
+    font-size: 22px;
+  }
+
+  .answer {
+    padding: 0 20px;
+    font-size: 15px;
+  }
+
+  .answer.show {
+    padding: 16px 20px;
+  }
+}
+
+/* ==========================================
+   760px - TABLET
+========================================== */
+@media (min-width: 760px) and (max-width: 1079px) {
+  .question {
+    padding: 18px 22px;
+  }
+
+  .questionText {
+    font-size: 16px;
+  }
+
+  .answer {
+    padding: 0 22px;
+  }
+
+  .answer.show {
+    padding: 17px 22px;
+  }
+}
+
+/* ==========================================
+   1080px - LAPTOP / DESKTOP
+========================================== */
+@media (min-width: 1080px) and (max-width: 1439px) {
+  .question {
+    padding: 20px 22px;
+  }
+}
+
+/* ==========================================
+   1440px - LARGE DESKTOP
+========================================== */
+@media (min-width: 1440px) {
+  .question {
+    padding: 20px 24px;
+  }
+}

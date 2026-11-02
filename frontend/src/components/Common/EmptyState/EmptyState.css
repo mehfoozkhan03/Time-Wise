@@ -114,39 +114,43 @@
 }
 
 /* ==========================================
-   768px
+   320px - Small Mobile Devices
 ========================================== */
 
-@media (max-width: 768px) {
+@media (min-width: 320px) and (max-width: 479px) {
   .emptyState {
-    min-height: 120px;
+    min-height: 100px;
 
-    padding: 20px 16px;
+    padding: 16px 12px;
 
-    gap: 10px;
+    gap: 6px;
   }
 
   .emptyIcon {
-    width: 46px;
-    height: 46px;
+    width: 36px;
+    height: 36px;
 
-    font-size: 20px;
+    font-size: 16px;
   }
 
   .emptyState h3 {
-    font-size: 14px;
+    font-size: 12px;
   }
 
   .emptyState p {
-    font-size: 11px;
+    max-width: 170px;
+
+    font-size: 9px;
+
+    line-height: 1.5;
   }
 }
 
 /* ==========================================
-   480px
+   480px - Mobile Devices
 ========================================== */
 
-@media (max-width: 480px) {
+@media (min-width: 480px) and (max-width: 759px) {
   .emptyState {
     min-height: 110px;
 
@@ -174,34 +178,30 @@
 }
 
 /* ==========================================
-   320px
+   760px - Tablets
 ========================================== */
 
-@media (max-width: 320px) {
+@media (min-width: 760px) and (max-width: 1079px) {
   .emptyState {
-    min-height: 100px;
+    min-height: 120px;
 
-    padding: 16px 12px;
+    padding: 20px 16px;
 
-    gap: 6px;
+    gap: 10px;
   }
 
   .emptyIcon {
-    width: 36px;
-    height: 36px;
+    width: 46px;
+    height: 46px;
 
-    font-size: 16px;
+    font-size: 20px;
   }
 
   .emptyState h3 {
-    font-size: 12px;
+    font-size: 14px;
   }
 
   .emptyState p {
-    max-width: 170px;
-
-    font-size: 9px;
-
-    line-height: 1.5;
+    font-size: 11px;
   }
 }

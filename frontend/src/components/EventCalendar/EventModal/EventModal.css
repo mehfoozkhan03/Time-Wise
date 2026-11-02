@@ -1,7 +1,3 @@
-/* ==========================================
-   Event Modal Overlay
-========================================== */
-
 .eventModalOverlay {
   position: fixed;
   inset: 0;
@@ -462,10 +458,86 @@
 }
 
 /* ==========================================
-   Responsive - Tablet
+   Responsive - 320px to 479px
 ========================================== */
 
-@media (max-width: 760px) {
+@media (min-width: 320px) and (max-width: 479px) {
+  .eventModalOverlay {
+    padding: 10px;
+
+    align-items: flex-end;
+  }
+
+  .eventModal {
+    width: 100%;
+
+    max-height: 94vh;
+
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  .modalHeader {
+    padding: 14px;
+
+    gap: 12px;
+  }
+
+  .modalTitle {
+    gap: 12px;
+  }
+
+  .eventIcon {
+    width: 38px;
+    height: 38px;
+
+    font-size: 15px;
+  }
+
+  .modalTitle h2 {
+    font-size: 1rem;
+  }
+
+  .eventType {
+    padding: 4px 10px;
+
+    font-size: 10px;
+  }
+
+  .closeBtn {
+    width: 34px;
+    height: 34px;
+  }
+
+  .modalBody {
+    padding: 14px;
+
+    gap: 10px;
+  }
+
+  .descriptionCard {
+    padding: 12px;
+  }
+
+  .modalFooter {
+    padding: 14px;
+  }
+
+  .editBtn,
+  .deleteBtn {
+    width: 100%;
+
+    padding: 11px 16px;
+
+    font-size: 13px;
+  }
+}
+
+/* ==========================================
+   Responsive - 480px to 759px
+========================================== */
+
+@media (min-width: 480px) and (max-width: 759px) {
   .eventModalOverlay {
     padding: 18px;
   }
@@ -517,124 +589,8 @@
   .deleteBtn {
     width: 100%;
   }
-}
-
-/* ==========================================
-   Responsive - Mobile
-========================================== */
-
-@media (max-width: 480px) {
-  .eventModalOverlay {
-    padding: 10px;
-
-    align-items: flex-end;
-  }
-
-  .eventModal {
-    width: 100%;
-
-    max-height: 94vh;
-
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-  }
-
-  .modalHeader {
-    padding: 16px;
-
-    gap: 12px;
-  }
-
-  .modalTitle {
-    gap: 12px;
-  }
-
-  .eventIcon {
-    width: 42px;
-    height: 42px;
-
-    font-size: 17px;
-  }
-
-  .modalTitle h2 {
-    font-size: 1.1rem;
-  }
-
-  .eventType {
-    padding: 4px 10px;
-
-    font-size: 11px;
-  }
-
-  .closeBtn {
-    width: 38px;
-    height: 38px;
-  }
-
-  .modalBody {
-    padding: 16px;
-
-    gap: 10px;
-  }
-
-  .descriptionCard {
-    padding: 14px;
-  }
 
   .descriptionCard h3 {
     font-size: 16px;
-  }
-
-  .modalFooter {
-    padding: 16px;
-  }
-}
-
-/* ==========================================
-   Responsive - Small Mobile
-========================================== */
-
-@media (max-width: 320px) {
-  .modalHeader {
-    padding: 14px;
-  }
-
-  .eventIcon {
-    width: 38px;
-    height: 38px;
-
-    font-size: 15px;
-  }
-
-  .modalTitle h2 {
-    font-size: 1rem;
-  }
-
-  .eventType {
-    font-size: 10px;
-  }
-
-  .closeBtn {
-    width: 34px;
-    height: 34px;
-  }
-
-  .modalBody {
-    padding: 14px;
-  }
-
-  .descriptionCard {
-    padding: 12px;
-  }
-
-  .modalFooter {
-    padding: 14px;
-  }
-
-  .editBtn,
-  .deleteBtn {
-    padding: 11px 16px;
-
-    font-size: 13px;
   }
 }

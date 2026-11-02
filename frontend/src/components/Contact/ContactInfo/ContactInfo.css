@@ -30,65 +30,31 @@
   margin: 0;
 }
 
-/* detail always visible on desktop */
+/* Detail always visible on desktop */
 .infoItem_detail {
   display: block;
 }
 
 .infoItem .skeleton {
-  margin:10px 0px;
+  margin: 10px 0;
 }
+
 .contactInfo .head {
   display: flex;
   flex-direction: column;
-  align-items:start;
+  align-items: start;
   gap: 15px;
 }
-
 
 /* Skeleton spacing */
 .contactInfo .head .skeleton {
   margin: 0;
 }
-/* ── 431px – 840px: horizontal row of cards ────────────── */
-@media (min-width: 431px) and (max-width: 840px) {
-  .contactInfo {
-    width: 100%;
-  }
 
-  .head {
-    margin-bottom: 21px;
-  }
-
-  .info_parent {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 15px;
-  }
-
-  .infoItem {
-    flex-direction: column;
-    margin-bottom: 11px;
-    align-items: center;
-    text-align: center;
-  }
-
-  .infoItem div {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .infoItem div h2,
-  .infoItem div p {
-    font-size: medium;
-  }
-}
-
-/* ── ≤ 430px: 2×2 accordion grid ──────────────────────── */
-@media (max-width: 430px) {
+/* ==========================================
+   320px - SMALL MOBILE
+========================================== */
+@media (min-width: 320px) and (max-width: 479px) {
   .contactInfo {
     width: 100%;
   }
@@ -103,7 +69,7 @@
 
   .info_parent {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 10px;
     padding: 0;
   }
@@ -171,6 +137,117 @@
   }
 }
 
+/* ==========================================
+   480px - MOBILE
+========================================== */
+@media (min-width: 480px) and (max-width: 759px) {
+  .contactInfo {
+    width: 100%;
+  }
+
+  .head {
+    margin-bottom: 21px;
+  }
+
+  .info_parent {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 0 15px;
+  }
+
+  .infoItem {
+    flex-direction: column;
+    margin-bottom: 11px;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+  }
+
+  .infoItem div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .infoItem div h2,
+  .infoItem div p {
+    font-size: medium;
+  }
+}
+
+/* ==========================================
+   760px - TABLET
+========================================== */
+@media (min-width: 760px) and (max-width: 1079px) {
+  .contactInfo {
+    width: 100%;
+  }
+
+  .head {
+    margin-bottom: 21px;
+  }
+
+  .info_parent {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    padding: 0 15px;
+  }
+
+  .infoItem {
+    flex-direction: column;
+    margin-bottom: 11px;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+  }
+
+  .infoItem div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .infoItem div h2,
+  .infoItem div p {
+    font-size: medium;
+  }
+}
+
+/* ==========================================
+   1080px - LAPTOP / DESKTOP
+========================================== */
+@media (min-width: 1080px) and (max-width: 1439px) {
+  .contactInfo {
+    width: 50%;
+  }
+
+  .infoItem_detail {
+    display: block;
+  }
+}
+
+/* ==========================================
+   1440px - LARGE DESKTOP
+========================================== */
+@media (min-width: 1440px) {
+  .contactInfo {
+    width: 50%;
+  }
+
+  .infoItem_detail {
+    display: block;
+  }
+}
+
+/* ==========================================
+   EXPAND ANIMATION
+========================================== */
 @keyframes expand_in {
   from {
     opacity: 0;

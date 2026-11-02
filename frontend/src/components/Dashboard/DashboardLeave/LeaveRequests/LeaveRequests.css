@@ -282,38 +282,47 @@
   white-space: nowrap;
 }
 
-@media (max-width: 1000px) {
-  .leave_requests_controls {
-    flex-wrap: wrap;
-  }
+/* ==========================================
+   320px - SMALL MOBILE DEVICES
+========================================== */
 
-  .leave_search {
-    flex: 1 1 280px;
-    min-width: 240px;
-  }
-
-  .leave_filter_label {
-    margin-left: 0;
-  }
-
-  .leave_status_filters {
-    max-width: 100%;
-  }
-}
-
-@media (max-width: 720px) {
+@media (min-width: 320px) and (max-width: 479px) {
   .leave_requests {
-    width: calc(100% - 48px);
-    margin: 0 24px;
+    width: calc(100% - 24px);
+    margin: 0 12px;
   }
 
   .leave_requests_header {
-    align-items: flex-start;
-    padding: 20px;
+    flex-direction: column;
+    padding: 16px 12px;
+    gap: 12px;
+  }
+
+  .leave_requests_heading h2 {
+    font-size: 17px;
+  }
+
+  .leave_requests_heading p {
+    font-size: 11px;
+  }
+
+  .leave_requests_count {
+    align-self: flex-start;
+    padding: 7px 11px;
+  }
+
+  .leave_requests_count span {
+    font-size: 13px;
+  }
+
+  .leave_requests_count small {
+    font-size: 11px;
   }
 
   .leave_requests_controls {
-    padding: 16px 20px;
+    flex-wrap: wrap;
+    padding: 12px;
+    gap: 10px;
   }
 
   .leave_search {
@@ -322,27 +331,58 @@
     min-width: 0;
   }
 
+  .leave_search input {
+    height: 36px;
+    padding-left: 34px;
+    font-size: 12px;
+  }
+
+  .leave_search_icon {
+    left: 11px;
+    font-size: 12px;
+  }
+
   .leave_filter_label {
     width: 100%;
+    margin-left: 0;
+    font-size: 12px;
   }
 
   .leave_status_filters {
     width: 100%;
     max-width: none;
-    overflow-x: auto;
-    scrollbar-width: thin;
+    gap: 3px;
   }
 
   .leave_filter_btn {
-    flex-shrink: 0;
+    min-height: 28px;
+    padding: 6px 9px;
+    font-size: 10px;
   }
 
   .leave_pagination {
-    padding: 14px 20px;
+    gap: 6px;
+    padding: 12px;
+  }
+
+  .leave_pagination_btn {
+    min-width: 62px;
+    min-height: 32px;
+    padding: 0 7px;
+    font-size: 10px;
+  }
+
+  .leave_pagination_info {
+    min-width: auto;
+    font-size: 10px;
   }
 }
 
-@media (max-width: 480px) {
+/* ==========================================
+   480px - MOBILE DEVICES
+========================================== */
+
+@media (min-width: 480px) and (max-width: 759px) {
   .leave_requests {
     width: calc(100% - 32px);
     margin: 0 16px;
@@ -368,8 +408,15 @@
   }
 
   .leave_requests_controls {
+    flex-wrap: wrap;
     gap: 12px;
     padding: 14px 16px;
+  }
+
+  .leave_search {
+    width: 100%;
+    flex: 1 1 100%;
+    min-width: 0;
   }
 
   .leave_search input {
@@ -377,7 +424,14 @@
     font-size: 12px;
   }
 
+  .leave_filter_label {
+    width: 100%;
+    margin-left: 0;
+  }
+
   .leave_status_filters {
+    width: 100%;
+    max-width: none;
     gap: 4px;
     padding: 3px;
   }
@@ -406,83 +460,81 @@
   }
 }
 
-@media (max-width: 320px) {
+/* ==========================================
+   760px - TABLETS
+========================================== */
+
+@media (min-width: 760px) and (max-width: 1079px) {
   .leave_requests {
-    width: calc(100% - 24px);
-    margin: 0 12px;
+    width: calc(100% - 48px);
+    margin: 0 24px;
   }
 
   .leave_requests_header {
-    padding: 16px 12px;
-    gap: 12px;
-  }
-
-  .leave_requests_heading h2 {
-    font-size: 17px;
-  }
-
-  .leave_requests_heading p {
-    font-size: 11px;
-  }
-
-  .leave_requests_count {
-    padding: 7px 11px;
-  }
-
-  .leave_requests_count span {
-    font-size: 13px;
-  }
-
-  .leave_requests_count small {
-    font-size: 11px;
+    align-items: flex-start;
+    padding: 20px;
   }
 
   .leave_requests_controls {
-    padding: 12px;
-    gap: 10px;
+    flex-wrap: wrap;
+    padding: 16px 20px;
   }
 
-  .leave_search input {
-    height: 36px;
-    padding-left: 34px;
-    font-size: 12px;
-  }
-
-  .leave_search_icon {
-    left: 11px;
-    font-size: 12px;
+  .leave_search {
+    flex: 1 1 280px;
+    min-width: 240px;
   }
 
   .leave_filter_label {
-    font-size: 12px;
+    margin-left: 0;
   }
 
   .leave_status_filters {
-    gap: 3px;
-  }
-
-  .leave_filter_btn {
-    min-height: 28px;
-    padding: 6px 9px;
-    font-size: 10px;
+    max-width: 100%;
   }
 
   .leave_pagination {
-    gap: 6px;
-    padding: 12px;
-  }
-
-  .leave_pagination_btn {
-    min-width: 62px;
-    min-height: 32px;
-    padding: 0 7px;
-    font-size: 10px;
-  }
-
-  .leave_pagination_info {
-    font-size: 10px;
+    padding: 14px 20px;
   }
 }
+
+/* ==========================================
+   1080px - LAPTOP / DESKTOP
+========================================== */
+
+@media (min-width: 1080px) and (max-width: 1439px) {
+  .leave_requests_controls {
+    flex-wrap: wrap;
+  }
+
+  .leave_search {
+    flex: 1 1 280px;
+    min-width: 240px;
+  }
+
+  .leave_filter_label {
+    margin-left: 0;
+  }
+
+  .leave_status_filters {
+    max-width: 100%;
+  }
+}
+
+/* ==========================================
+   1440px - LARGE DESKTOP
+========================================== */
+
+@media (min-width: 1440px) {
+  .leave_requests {
+    width: calc(100% - 60px);
+    margin: 0 30px;
+  }
+}
+
+/* ==========================================
+   REDUCED MOTION
+========================================== */
 
 @media (prefers-reduced-motion: reduce) {
   .leave_search input,

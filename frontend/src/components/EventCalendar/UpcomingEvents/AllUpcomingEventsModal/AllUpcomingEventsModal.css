@@ -1,7 +1,3 @@
-/* ==========================================================
-   OVERLAY
-========================================================== */
-
 .allUpcomingOverlay {
   position: fixed;
   inset: 0;
@@ -268,21 +264,90 @@
 }
 
 /* ==========================================================
-   768px
+   RESPONSIVE - 320px to 479px
 ========================================================== */
 
-@media (max-width: 768px) {
+@media (min-width: 320px) and (max-width: 479px) {
   .allUpcomingOverlay {
-    padding: 16px;
+    padding: 10px;
+    align-items: flex-end;
   }
 
   .allUpcomingModal {
+    width: 100%;
     max-height: 92vh;
+
+    border-radius:
+      var(--radius_lg)
+      var(--radius_lg)
+      0
+      0;
+  }
+
+  .allUpcomingHeader {
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .allUpcomingTitle {
+    gap: 8px;
+  }
+
+  .allUpcomingIcon {
+    width: 34px;
+    height: 34px;
+    font-size: 15px;
+  }
+
+  .allUpcomingHeading h2 {
+    font-size: 0.95rem;
+  }
+
+  .allUpcomingCount {
+    font-size: 0.75rem;
+  }
+
+  .closeBtn {
+    width: 34px;
+    height: 34px;
+  }
+
+  .allUpcomingBody {
+    padding: 12px;
+  }
+
+  .allUpcomingList {
+    gap: 8px;
+  }
+
+  .allUpcomingItem {
+    padding: 9px;
+  }
+}
+
+/* ==========================================================
+   RESPONSIVE - 480px to 759px
+========================================================== */
+
+@media (min-width: 480px) and (max-width: 759px) {
+  .allUpcomingOverlay {
+    padding: 16px;
+    align-items: flex-end;
+  }
+
+  .allUpcomingModal {
+    width: 100%;
+    max-height: 92vh;
+
+    border-radius:
+      var(--radius_lg)
+      var(--radius_lg)
+      0
+      0;
   }
 
   .allUpcomingHeader {
     padding: 16px 18px;
-
     gap: 14px;
   }
 
@@ -293,7 +358,6 @@
   .allUpcomingIcon {
     width: 40px;
     height: 40px;
-
     font-size: 17px;
   }
 
@@ -319,59 +383,43 @@
 }
 
 /* ==========================================================
-   480px
+   RESPONSIVE - 760px to 1079px
 ========================================================== */
 
-@media (max-width: 480px) {
+@media (min-width: 760px) and (max-width: 1079px) {
   .allUpcomingOverlay {
-    padding: 10px;
-
-    align-items: flex-end;
+    padding: 16px;
   }
 
   .allUpcomingModal {
-    width: 100%;
     max-height: 92vh;
-
-    border-radius:
-      var(--radius_lg)
-      var(--radius_lg)
-      0
-      0;
   }
 
   .allUpcomingHeader {
-    padding: 14px 16px;
-
-    gap: 12px;
+    padding: 16px 18px;
+    gap: 14px;
   }
 
   .allUpcomingTitle {
-    gap: 8px;
+    gap: 10px;
   }
 
   .allUpcomingIcon {
-    width: 36px;
-    height: 36px;
-
-    font-size: 16px;
+    width: 40px;
+    height: 40px;
+    font-size: 17px;
   }
 
   .allUpcomingHeading h2 {
-    font-size: 1rem;
+    font-size: 1.05rem;
   }
 
   .allUpcomingCount {
-    font-size: 0.78rem;
-  }
-
-  .closeBtn {
-    width: 38px;
-    height: 38px;
+    font-size: 0.8rem;
   }
 
   .allUpcomingBody {
-    padding: 14px;
+    padding: 18px;
   }
 
   .allUpcomingList {
@@ -380,43 +428,5 @@
 
   .allUpcomingItem {
     padding: 10px;
-  }
-}
-
-/* ==========================================================
-   320px
-========================================================== */
-
-@media (max-width: 320px) {
-  .allUpcomingHeader {
-    padding: 12px;
-  }
-
-  .allUpcomingIcon {
-    width: 34px;
-    height: 34px;
-
-    font-size: 15px;
-  }
-
-  .allUpcomingHeading h2 {
-    font-size: 0.95rem;
-  }
-
-  .allUpcomingCount {
-    font-size: 0.75rem;
-  }
-
-  .closeBtn {
-    width: 34px;
-    height: 34px;
-  }
-
-  .allUpcomingBody {
-    padding: 12px;
-  }
-
-  .allUpcomingItem {
-    padding: 9px;
   }
 }

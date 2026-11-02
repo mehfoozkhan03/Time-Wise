@@ -443,33 +443,8 @@
   }
 }
 
-@media (max-width: 720px) {
-  .leave_details_overlay {
-    padding: 18px;
-  }
-
-  .leave_details_modal {
-    width: min(600px, 100%);
-    max-height: calc(100vh - 36px);
-  }
-
-  .leave_details_header {
-    padding: 20px;
-  }
-
-  .leave_details_employee,
-  .leave_details_status_row,
-  .leave_details_section {
-    margin-left: 20px;
-    margin-right: 20px;
-  }
-
-  .leave_details_footer {
-    padding: 18px 20px;
-  }
-}
-
-@media (max-width: 480px) {
+/* 320px - Small Mobile Devices */
+@media (min-width: 320px) and (max-width: 479px) {
   .leave_details_overlay {
     padding: 0;
     align-items: flex-end;
@@ -477,12 +452,12 @@
 
   .leave_details_modal {
     width: 100%;
-    max-height: calc(100vh - 16px);
+    max-height: calc(100vh - 10px);
     border-radius: var(--radius_lg) var(--radius_lg) 0 0;
   }
 
   .leave_details_header {
-    padding: 18px;
+    padding: 16px 14px;
   }
 
   .leave_details_eyebrow {
@@ -490,7 +465,7 @@
   }
 
   .leave_details_header h2 {
-    font-size: 18px;
+    font-size: 17px;
   }
 
   .leave_details_close {
@@ -500,103 +475,9 @@
   }
 
   .leave_details_employee {
-    margin: 16px 18px 0;
-    padding: 14px;
-    gap: 11px;
-  }
-
-  .leave_details_avatar {
-    width: 44px;
-    height: 44px;
-    min-width: 44px;
-    font-size: 12px;
-  }
-
-  .leave_details_employee_info h3 {
-    font-size: 14px;
-  }
-
-  .leave_details_employee_info span {
-    font-size: 11px;
-  }
-
-  .leave_details_employee_meta {
-    gap: 5px 12px;
-  }
-
-  .leave_details_employee_meta span {
-    font-size: 10px;
-  }
-
-  .leave_details_status_row {
-    margin: 14px 18px 0;
-  }
-
-  .leave_details_section {
-    margin: 18px 18px 0;
-  }
-
-  .leave_details_grid {
-    grid-template-columns: 1fr;
-  }
-
-  .leave_details_item {
-    min-height: 64px;
-  }
-
-  .leave_details_item:nth-child(odd) {
-    border-right: none;
-  }
-
-  .leave_details_item:nth-child(-n + 4) {
-    border-bottom: none;
-  }
-
-  .leave_details_item:not(:last-child) {
-    border-bottom: 1px solid var(--border);
-  }
-
-  .leave_details_footer {
-    align-items: stretch;
-    flex-direction: column-reverse;
-    gap: 10px;
-    margin-top: 18px;
-    padding: 16px 18px;
-  }
-
-  .leave_details_actions {
-    width: 100%;
-  }
-
-  .leave_details_actions .leave_details_btn {
-    flex: 1;
-  }
-
-  .leave_details_footer > .secondary {
-    width: 100%;
-  }
-
-  .leave_details_btn {
-    min-height: 40px;
-  }
-}
-
-@media (max-width: 320px) {
-  .leave_details_modal {
-    max-height: calc(100vh - 10px);
-  }
-
-  .leave_details_header {
-    padding: 16px 14px;
-  }
-
-  .leave_details_header h2 {
-    font-size: 17px;
-  }
-
-  .leave_details_employee {
     margin: 14px 14px 0;
     padding: 12px;
+    gap: 11px;
   }
 
   .leave_details_avatar {
@@ -652,9 +533,25 @@
     font-size: 12px;
   }
 
+  .leave_details_grid {
+    grid-template-columns: 1fr;
+  }
+
   .leave_details_item {
     min-height: 60px;
     padding: 11px 12px;
+  }
+
+  .leave_details_item:nth-child(odd) {
+    border-right: none;
+  }
+
+  .leave_details_item:nth-child(-n + 4) {
+    border-bottom: none;
+  }
+
+  .leave_details_item:not(:last-child) {
+    border-bottom: 1px solid var(--border);
   }
 
   .leave_details_item_label {
@@ -672,7 +569,23 @@
   }
 
   .leave_details_footer {
+    align-items: stretch;
+    flex-direction: column-reverse;
+    gap: 10px;
+    margin-top: 18px;
     padding: 14px;
+  }
+
+  .leave_details_actions {
+    width: 100%;
+  }
+
+  .leave_details_actions .leave_details_btn {
+    flex: 1;
+  }
+
+  .leave_details_footer > .secondary {
+    width: 100%;
   }
 
   .leave_details_btn {
@@ -682,6 +595,46 @@
   }
 }
 
+/* 480px - Mobile Devices */
+@media (min-width: 480px) and (max-width: 759px) {
+  .leave_details_overlay {
+    padding: 18px;
+  }
+
+  .leave_details_modal {
+    width: min(600px, 100%);
+    max-height: calc(100vh - 36px);
+  }
+
+  .leave_details_header {
+    padding: 20px;
+  }
+
+  .leave_details_employee,
+  .leave_details_status_row,
+  .leave_details_section {
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+
+  .leave_details_footer {
+    padding: 18px 20px;
+  }
+}
+
+/* 760px - Tablets */
+@media (min-width: 760px) and (max-width: 1079px) {
+}
+
+/* 1080px - Small Desktops and Laptops */
+@media (min-width: 1080px) and (max-width: 1439px) {
+}
+
+/* 1440px - Large Desktops */
+@media (min-width: 1440px) {
+}
+
+/* Accessibility: Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
   .leave_details_overlay,
   .leave_details_modal {

@@ -1,4 +1,14 @@
+/* ==========================================================
+   LOADER CONTAINER
+========================================================== */
+
 .loader-container {
+  --loader-bg: #f9fbfc;
+  --loader-surface: #eef3f7;
+  --loader-border: #d6dde3;
+  --loader-primary: #29a3e0;
+  --loader-text: #2c2f3a;
+
   position: fixed;
   inset: 0;
   display: flex;
@@ -6,17 +16,37 @@
   align-items: center;
   flex-direction: column;
   gap: 28px;
-  background: var(--bg);
+
+  background: var(--loader-bg);
+  color: var(--loader-text);
+
   z-index: 999999;
-  transition: background var(--transition);
+  transition: background var(--transition), color var(--transition);
 }
+
+/* ==========================================================
+   DARK THEME
+========================================================== */
+
+html.dark .loader-container {
+  --loader-bg: #0d1117;
+  --loader-surface: #161b22;
+  --loader-border: #2b3442;
+  --loader-primary: #3db7f3;
+  --loader-text: #eef3f8;
+}
+
+/* ==========================================================
+   LOADER CIRCLE
+========================================================== */
 
 .loader-circle {
   position: relative;
   width: 110px;
   height: 110px;
   border-radius: 50%;
-  border: 8px solid var(--border);
+
+  border: 8px solid var(--loader-border);
   box-shadow: var(--shadow_md);
 }
 
@@ -25,9 +55,11 @@
   position: absolute;
   inset: -8px;
   border-radius: 50%;
+
   border: 8px solid transparent;
-  border-top-color: var(--primary);
-  border-right-color: var(--primary);
+  border-top-color: var(--loader-primary);
+  border-right-color: var(--loader-primary);
+
   animation: loaderSpin 0.9s linear infinite;
 }
 
@@ -36,36 +68,44 @@
   position: absolute;
   inset: 16px;
   border-radius: 50%;
-  background: var(--surface);
+
+  background: var(--loader-surface);
   box-shadow:
     inset 0 2px 8px rgba(0, 0, 0, 0.05),
     var(--shadow_sm);
 }
 
+/* ==========================================================
+   LOADER INNER
+========================================================== */
+
 .loader-inner {
   display: none;
 }
 
+/* ==========================================================
+   LOADER LOGO
+========================================================== */
+
 .loader-logo {
+  font-family: "Poppins", sans-serif;
   font-size: 2rem;
   font-weight: 700;
-  font-family: "Poppins", sans-serif;
   letter-spacing: 2px;
-  color: var(--text_primary);
+
+  color: var(--loader-text);
+
   animation: loaderPulse 1.8s ease-in-out infinite;
   user-select: none;
 }
 
 .loader-logo span {
-  color: var(--primary);
+  color: var(--loader-primary);
 }
 
-.loader-container p {
-  font-size: 0.95rem;
-  color: var(--text_secondary);
-  letter-spacing: 0.4px;
-  animation: loaderFade 1.5s ease-in-out infinite;
-}
+/* ==========================================================
+   ANIMATIONS
+========================================================== */
 
 @keyframes loaderSpin {
   from {
@@ -78,8 +118,7 @@
 }
 
 @keyframes loaderPulse {
-  0%,
-  100% {
+  0%, 100% {
     transform: scale(1);
     opacity: 1;
   }
@@ -90,18 +129,26 @@
   }
 }
 
-@keyframes loaderFade {
-  0%,
-  100% {
-    opacity: 0.45;
-  }
+/* ==========================================================
+   ACCESSIBILITY
+========================================================== */
 
-  50% {
-    opacity: 1;
+@media (prefers-reduced-motion: reduce) {
+  .loader-circle::before,
+  .loader-logo {
+    animation: none;
   }
 }
 
+/* ==========================================================
+   RESPONSIVE
+========================================================== */
+
 @media (max-width: 480px) {
+  .loader-container {
+    gap: 22px;
+  }
+
   .loader-circle {
     width: 90px;
     height: 90px;
@@ -119,9 +166,5 @@
 
   .loader-logo {
     font-size: 1.6rem;
-  }
-
-  .loader-container p {
-    font-size: 0.85rem;
   }
 }
