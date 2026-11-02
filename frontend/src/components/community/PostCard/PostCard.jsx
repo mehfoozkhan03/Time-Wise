@@ -376,26 +376,26 @@ const PostCard = ({ post }) => {
         ================================================== */}
 
         <div className="post-actions">
-          <button onClick={handleLike} disabled={likeLoading}>
+          <button onClick={handleLike} disabled={likeLoading} aria-label={`${liked ? 'Unlike' : 'Like'} post, ${likeCount} likes`}>
             {liked ? <HiHeart /> : <HiOutlineHeart />}
-            Like
-            {likeCount > 0 && <span>{likeCount}</span>}
+            <span className="post-action-label">Like</span>
+            <span className="post-action-count">{likeCount}</span>
           </button>
 
-          <button onClick={() => setShowComments((prev) => !prev)}>
+          <button onClick={() => setShowComments((prev) => !prev)} aria-label={`${showComments ? 'Hide' : 'Show'} comments, ${commentCount} comments`}>
             <HiOutlineChatBubbleLeft />
-            Comment
-            {commentCount > 0 && <span>{commentCount}</span>}
+            <span className="post-action-label">Comment</span>
+            <span className="post-action-count">{commentCount}</span>
           </button>
 
-          <button onClick={handleSave} disabled={saveLoading}>
+          <button onClick={handleSave} disabled={saveLoading} aria-label={saved ? 'Remove saved post' : 'Save post'}>
             {saved ? <HiBookmark /> : <HiOutlineBookmark />}
-            Save
+            <span className="post-action-label">Save</span>
           </button>
 
-          <button onClick={handleShare}>
+          <button onClick={handleShare} aria-label="Share post">
             <HiOutlineShare />
-            Share
+            <span className="post-action-label">Share</span>
           </button>
         </div>
 

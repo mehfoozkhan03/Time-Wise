@@ -178,14 +178,16 @@ display:none;
 @media (max-width:850px){
 
 .community-layout{
-
-grid-template-columns:1fr;
+grid-template-columns:64px minmax(0, 1fr);
+gap:14px;
 
 }
 
 .community-left{
 
-display:none;
+display:block;
+position:sticky;
+top:calc(var(--navbar_height) + 12px);
 
 }
 
@@ -194,6 +196,18 @@ display:none;
 padding:16px;
 
 }
+
+}
+
+@media (max-width: 520px) {
+  .community-layout {
+    grid-template-columns: 46px minmax(0, 1fr);
+    gap: 8px;
+  }
+
+  .community-page {
+    padding: 10px;
+  }
 
 }
 

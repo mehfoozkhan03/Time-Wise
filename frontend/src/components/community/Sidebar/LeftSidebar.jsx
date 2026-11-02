@@ -66,6 +66,7 @@ const LeftSidebar = () => {
         <input
           type="text"
           placeholder="Search posts..."
+          aria-label="Search posts"
           value={searchQuery}
           onChange={(e) => dispatch(setSearchQuery(e.target.value))}
         />
@@ -82,6 +83,8 @@ const LeftSidebar = () => {
               to={getTabUrl(item.id)}
               className={`left-sidebar-link${isActive ? ' active' : ''}`}
               aria-current={isActive ? 'page' : undefined}
+              title={item.label}
+              aria-label={item.label}
             >
               <Icon />
 

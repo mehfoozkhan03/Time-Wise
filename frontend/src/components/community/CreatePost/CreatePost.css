@@ -498,7 +498,39 @@
 
 .create_post_footer{
     flex-direction:column;
-    align-items:flex-start;
+    align-items:stretch;
+    gap: 12px;
+}
+
+.create_post_tools {
+    width: 100%;
+    min-width: 0;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    gap: 5px;
+}
+
+.create_post_tools > button,
+.create_post_tools .emoji_picker_wrapper > button {
+    min-width: 0;
+    flex: 1 1 0;
+    justify-content: center;
+    gap: 4px;
+    padding: 8px 5px;
+    font-size: clamp(0.62rem, 2.1vw, 0.85rem);
+    white-space: nowrap;
+}
+
+.create_post_tool_label {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.create_post_tools .emoji_picker_wrapper {
+    display: flex;
+    flex: 1 1 0;
+    min-width: 0;
 }
 
 .create_post_actions{

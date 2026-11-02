@@ -547,11 +547,14 @@ const CreatePost = () => {
             type="button"
             onClick={() => fileInputRef.current?.click()}
             disabled={posting || selectedImages.length >= MAX_IMAGES}
+            aria-label={`Add image${selectedImages.length ? ` (${selectedImages.length} of ${MAX_IMAGES})` : ''}`}
+            title="Add image"
           >
             <HiOutlinePhoto />
-            Image
-            {selectedImages.length > 0 &&
-              ` (${selectedImages.length}/${MAX_IMAGES})`}
+            <span className="create_post_tool_label">
+              Image{selectedImages.length > 0 &&
+                ` (${selectedImages.length}/${MAX_IMAGES})`}
+            </span>
           </button>
 
           {/* ================= EMOJI ================= */}
@@ -561,9 +564,11 @@ const CreatePost = () => {
               type="button"
               onClick={handleEmojiToggle}
               disabled={posting}
+              aria-label="Add emoji"
+              title="Add emoji"
             >
               <HiOutlineFaceSmile />
-              Emoji
+              <span className="create_post_tool_label">Emoji</span>
             </button>
 
             {showEmojiPicker && (
@@ -588,11 +593,14 @@ const CreatePost = () => {
             type="button"
             onClick={() => attachmentInputRef.current?.click()}
             disabled={posting || selectedAttachments.length >= MAX_ATTACHMENTS}
+            aria-label={`Add attachment${selectedAttachments.length ? ` (${selectedAttachments.length} of ${MAX_ATTACHMENTS})` : ''}`}
+            title="Add attachment"
           >
             <HiOutlinePaperClip />
-            Attachment
-            {selectedAttachments.length > 0 &&
-              ` (${selectedAttachments.length}/${MAX_ATTACHMENTS})`}
+            <span className="create_post_tool_label">
+              Attachment{selectedAttachments.length > 0 &&
+                ` (${selectedAttachments.length}/${MAX_ATTACHMENTS})`}
+            </span>
           </button>
         </div>
 

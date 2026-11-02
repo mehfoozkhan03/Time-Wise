@@ -485,7 +485,7 @@ html.light .today_btn:hover {
     height:36px;
 
     border:none;
-    border-radius:50%;
+    border-radius:8px;
 
     background:#2b3648;
     color:#fff;
@@ -499,6 +499,48 @@ html.light .today_btn:hover {
 
 .close_modal_btn:hover{
     background:#ef4444;
+}
+
+html.light .month_modal {
+  background: var(--card);
+  color: var(--text_primary);
+  border-color: var(--border);
+  box-shadow: var(--shadow_lg, 0 20px 50px rgba(15, 23, 42, 0.18));
+}
+
+html.light .month_modal h3 {
+  color: var(--text_primary);
+}
+
+html.light .month_grid button {
+  background: var(--surface);
+  border-color: var(--border);
+  color: var(--text_primary);
+}
+
+html.light .month_grid button:hover {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+}
+
+html.light .month_grid button.active_month {
+  background: var(--primary) !important;
+  border-color: var(--primary) !important;
+  color: #fff;
+}
+
+html.light .close_modal_btn {
+  background: var(--surface);
+  color: var(--text_primary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+html.light .close_modal_btn:hover {
+  background: #ef4444;
+  border-color: #ef4444;
+  color: #fff;
 }
 /* sleketon */
 .attendance_history_skeleton {
