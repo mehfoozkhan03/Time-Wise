@@ -1,19 +1,13 @@
 import multer from 'multer'
 import { CloudinaryStorage } from 'multer-storage-cloudinary'
-import cloudinary from '../config/cloudinary.js'
+import { randomUUID } from 'crypto'
+import { extname } from 'path'
 
-// =======================================================
-// CLOUDINARY STORAGE
-// =======================================================
+import cloudinary from '../config/cloudinary.js'
 
 const storage = new CloudinaryStorage({
   cloudinary,
-
   params: async (req, file) => {
-    // ===================================================
-    // IMAGES
-    // ===================================================
-
     if (file.fieldname === 'images') {
       return {
         folder: 'timewise/posts/images',
@@ -22,26 +16,21 @@ const storage = new CloudinaryStorage({
       }
     }
 
-    // ===================================================
-    // ATTACHMENTS
-    // ===================================================
+    if (file.fieldname === 'attachments') {
+      const extension = extname(file.originalname).toLowerCase()
 
-    return {
-      folder: 'timewise/posts/attachments',
-      resource_type: 'raw',
+      return {
+        folder: 'timewise/posts/attachments',
+        resource_type: 'raw',
+        public_id: `${randomUUID()}${extension}`,
+      }
     }
+
+    throw new Error('Invalid upload field.')
   },
 })
 
-// =======================================================
-// FILE FILTER
-// =======================================================
-
 const fileFilter = (req, file, cb) => {
-  // =====================================================
-  // IMAGE VALIDATION
-  // =====================================================
-
   if (file.fieldname === 'images') {
     const allowedImageTypes = [
       'image/jpeg',
@@ -59,23 +48,15 @@ const fileFilter = (req, file, cb) => {
     return
   }
 
-  // =====================================================
-  // ATTACHMENT VALIDATION
-  // =====================================================
-
   if (file.fieldname === 'attachments') {
     const allowedAttachmentTypes = [
       'application/pdf',
-
       'application/msword',
       'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-
       'application/vnd.ms-excel',
       'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-
       'application/vnd.ms-powerpoint',
       'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-
       'text/plain',
     ]
 
@@ -93,21 +74,12 @@ const fileFilter = (req, file, cb) => {
     return
   }
 
-  // =====================================================
-  // UNKNOWN FIELD
-  // =====================================================
-
   cb(new Error('Invalid upload field.'), false)
 }
-
-// =======================================================
-// COMBINED POST UPLOAD
-// =======================================================
 
 export const uploadPostFiles = multer({
   storage,
   fileFilter,
-
   limits: {
     fileSize: 10 * 1024 * 1024,
   },

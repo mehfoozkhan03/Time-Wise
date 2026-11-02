@@ -8,6 +8,7 @@ import {
   getPost,
   getPostsByUser,
   updatePost,
+  downloadPostAttachment,
 } from '../controllers/User/post.controller.js'
 
 import {
@@ -40,6 +41,11 @@ router.use(auth)
 // =======================================================
 // Posts
 // =======================================================
+
+router.get(
+  '/:postId/attachments/:attachmentId/download',
+  downloadPostAttachment,
+)
 
 router.post(
   '/',
