@@ -108,16 +108,33 @@
     color: #16a34a;
 }
 
+/* Present */
+.attendance_status.present {
+    background: var(--attendance-present-bg);
+    color: var(--attendance-present-text);
+}
 /* Half Day */
 .attendance_status.half_day {
-    background: rgba(139, 92, 246, 0.12);
-    color: rgb(139, 92, 246);
+    background: var(--attendance-halfday-bg);
+    color: var(--attendance-halfday-text);
 }
 
 /* Absent */
 .attendance_status.absent {
-    background: rgba(239, 68, 68, 0.12);
-    color: rgb(239, 68, 68);
+    background: var(--attendance-absent-bg);
+    color: var(--attendance-absent-text);
+}
+
+/* Late */
+.attendance_status.late {
+    background: var(--attendance-late-bg);
+    color: var(--attendance-late-text);
+}
+
+/* Leave */
+.attendance_status.leave {
+    background: var(--attendance-leave-bg);
+    color: var(--attendance-leave-text);
 }
 
 .attendance_history_empty {

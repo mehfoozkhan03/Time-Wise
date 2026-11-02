@@ -8,8 +8,32 @@ import Skeleton from "../../../components/Skeleton/Skeleton";
 
 import { MdOutlineLightMode, MdOutlineDarkMode } from "react-icons/md";
 import { CiLaptop } from "react-icons/ci";
+import { SettingCustomDropdown } from "../SettingCustomDropdown/SettingCustomDropdown";
+
+const densityOpt = [
+  { label: "Compact", value: "compact" },
+  { label: "Comfortable", value: "comfortable" },
+  { label: "Spacious", value: "spacious" }
+]
+
+const languageOpt = [
+  {label: "English", value: "english"},
+  {label: "French", value: "french"},
+  {label: "German", value: "german"},
+]
+const dateFormatOpt = [
+  {label: "MM/DD/YYYY", value: "mm/dd/yyyy"},
+  {label: "DD/MM/YYYY", value: "dd/mm/yyyy"},
+  {label: "YYYY-MM-DD", value: "yyyy/mm/dd"},
+]
 
 export const Appearance = () => {
+
+  //# Dropdown 
+  const [density, setDensity] = useState("comfortable");
+  const [language, setLanguage] = useState("english");
+  const [dateFormat, setDateFormat] = useState("mm/dd/yyyy");
+
   const dispatch = useDispatch();
 
   const {
@@ -115,9 +139,8 @@ export const Appearance = () => {
 
         <div className="theme-mode">
           <div
-            className={`light-mode ${
-              currentTheme === "light" ? "active-theme" : ""
-            }`}
+            className={`light-mode ${currentTheme === "light" ? "active-theme" : ""
+              }`}
             onClick={() => changeTheme("light")}
           >
             <MdOutlineLightMode className="mode-icon" />
@@ -125,9 +148,8 @@ export const Appearance = () => {
           </div>
 
           <div
-            className={`dark-mode ${
-              currentTheme === "dark" ? "active-theme" : ""
-            }`}
+            className={`dark-mode ${currentTheme === "dark" ? "active-theme" : ""
+              }`}
             onClick={() => changeTheme("dark")}
           >
             <MdOutlineDarkMode className="mode-icon" />
@@ -135,9 +157,8 @@ export const Appearance = () => {
           </div>
 
           <div
-            className={`system-mode ${
-              currentTheme === "system" ? "active-theme" : ""
-            }`}
+            className={`system-mode ${currentTheme === "system" ? "active-theme" : ""
+              }`}
             onClick={() => changeTheme("system")}
           >
             <CiLaptop className="mode-icon" />
@@ -170,11 +191,9 @@ export const Appearance = () => {
             </div>
 
             <div className="layout-select">
-              <select defaultValue="comfortable">
-                <option value="compact">Compact</option>
-                <option value="comfortable">Comfortable</option>
-                <option value="spacious">Spacious</option>
-              </select>
+              <SettingCustomDropdown value={density}
+                onChange={setDensity}
+                placeholder="Select density" options={densityOpt} />
             </div>
           </div>
 
@@ -186,11 +205,9 @@ export const Appearance = () => {
             </div>
 
             <div className="layout-select">
-              <select defaultValue="english">
-                <option value="english">English (US)</option>
-                <option value="french">French</option>
-                <option value="german">German</option>
-              </select>
+              <SettingCustomDropdown value={language}
+                onChange={setLanguage}
+                placeholder="Select Language" options={languageOpt} />
             </div>
           </div>
 
@@ -202,11 +219,9 @@ export const Appearance = () => {
             </div>
 
             <div className="layout-select">
-              <select defaultValue="MM/DD/YYYY">
-                <option value="MM/DD/YYYY">MM/DD/YYYY</option>
-                <option value="DD/MM/YYYY">DD/MM/YYYY</option>
-                <option value="YYYY-MM-DD">YYYY-MM-DD</option>
-              </select>
+              <SettingCustomDropdown value={dateFormat}
+                onChange={setDateFormat}
+                placeholder="Select date format" options={dateFormatOpt} />
             </div>
           </div>
 
