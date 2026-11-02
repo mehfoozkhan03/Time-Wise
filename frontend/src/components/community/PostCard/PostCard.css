@@ -543,6 +543,13 @@
     transform: translateY(2px);
 }
 
+.post-attachment {
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+}
+
 
 /* ======================================================
    MOBILE ATTACHMENTS

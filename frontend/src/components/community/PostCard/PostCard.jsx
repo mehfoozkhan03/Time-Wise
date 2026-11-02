@@ -1,6 +1,9 @@
 import { useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { formatDistanceToNow } from 'date-fns'
+import { NavLink } from 'react-router-dom'
+
+import api from '../../../services/api'
 
 import {
   HiOutlineHeart,
@@ -23,8 +26,6 @@ import DeletePostModal from '../DeletePostModal/DeletePostModal'
 import { Modal } from '../../Modal/Modal'
 
 import './PostCard.css'
-
-import { NavLink } from 'react-router-dom'
 
 const PostCard = ({ post }) => {
   const dispatch = useDispatch()
@@ -97,7 +98,6 @@ const PostCard = ({ post }) => {
 
     try {
       setLikeLoading(true)
-
       await dispatch(toggleLikePost(post._id)).unwrap()
     } catch (error) {
       console.error('Like post error:', error)
@@ -115,7 +115,6 @@ const PostCard = ({ post }) => {
 
     try {
       setSaveLoading(true)
-
       await dispatch(toggleSavePost(post._id)).unwrap()
     } catch (error) {
       console.error('Save post error:', error)
@@ -137,6 +136,44 @@ const PostCard = ({ post }) => {
       alert('Link copied to clipboard!')
     } catch (error) {
       console.error('Share error:', error)
+    }
+  }
+
+  // ======================================================
+  // HANDLE ATTACHMENT DOWNLOAD
+  // ======================================================
+
+  const handleDownloadAttachment = async (attachment) => {
+    try {
+      const response = await api.get(
+        `/posts/${post._id}/attachments/${attachment._id}/download`,
+        {
+          responseType: 'blob',
+        },
+      )
+
+      const blob = new Blob([response.data], {
+        type: attachment.mimetype || 'application/octet-stream',
+      })
+
+      const downloadUrl = window.URL.createObjectURL(blob)
+
+      const link = document.createElement('a')
+      link.href = downloadUrl
+      link.download = attachment.originalName || 'attachment'
+
+      document.body.appendChild(link)
+      link.click()
+      link.remove()
+
+      // Allow the browser to begin processing the download.
+      setTimeout(() => {
+        window.URL.revokeObjectURL(downloadUrl)
+      }, 1000)
+    } catch (error) {
+      console.error('Attachment download error:', error)
+
+      alert('Unable to download attachment. Please try again.')
     }
   }
 
@@ -304,11 +341,10 @@ const PostCard = ({ post }) => {
           {attachments.length > 0 && (
             <div className="post-attachments">
               {attachments.map((attachment, index) => (
-                <a
+                <button
                   key={attachment.publicId || attachment.url || index}
-                  href={attachment.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  type="button"
+                  onClick={() => handleDownloadAttachment(attachment)}
                   className="post-attachment"
                 >
                   <div className="post-attachment-icon">
@@ -322,7 +358,6 @@ const PostCard = ({ post }) => {
 
                     <span className="post-attachment-meta">
                       {getFileExtension(attachment.originalName)}
-
                       {attachment.size
                         ? ` • ${formatFileSize(attachment.size)}`
                         : ''}
@@ -330,7 +365,7 @@ const PostCard = ({ post }) => {
                   </div>
 
                   <HiOutlineArrowDownTray className="post-attachment-download" />
-                </a>
+                </button>
               ))}
             </div>
           )}
@@ -383,50 +418,46 @@ const PostCard = ({ post }) => {
           onOverlayClick={() => setSelectedImageIndex(null)}
           onContentClick={(event) => event.stopPropagation()}
         >
-            <button
-              type="button"
-              className="post-image-modal-close"
-              onClick={() => setSelectedImageIndex(null)}
-              aria-label="Close image"
-            >
-              ×
-            </button>
+          <button
+            type="button"
+            className="post-image-modal-close"
+            onClick={() => setSelectedImageIndex(null)}
+            aria-label="Close image"
+          >
+            ×
+          </button>
 
-            <img
-              src={postImages[selectedImageIndex]?.url}
-              alt={
-                postImages[selectedImageIndex]?.alt ||
-                `Post image ${selectedImageIndex + 1}`
-              }
-            />
+          <img
+            src={postImages[selectedImageIndex]?.url}
+            alt={
+              postImages[selectedImageIndex]?.alt ||
+              `Post image ${selectedImageIndex + 1}`
+            }
+          />
 
-            {postImages.length > 1 && (
-              <div className="post-image-modal-controls">
-                <button
-                  type="button"
-                  disabled={selectedImageIndex === 0}
-                  onClick={() =>
-                    setSelectedImageIndex((current) => current - 1)
-                  }
-                >
-                  ←
-                </button>
+          {postImages.length > 1 && (
+            <div className="post-image-modal-controls">
+              <button
+                type="button"
+                disabled={selectedImageIndex === 0}
+                onClick={() => setSelectedImageIndex((current) => current - 1)}
+              >
+                ←
+              </button>
 
-                <span>
-                  {selectedImageIndex + 1} / {postImages.length}
-                </span>
+              <span>
+                {selectedImageIndex + 1} / {postImages.length}
+              </span>
 
-                <button
-                  type="button"
-                  disabled={selectedImageIndex === postImages.length - 1}
-                  onClick={() =>
-                    setSelectedImageIndex((current) => current + 1)
-                  }
-                >
-                  →
-                </button>
-              </div>
-            )}
+              <button
+                type="button"
+                disabled={selectedImageIndex === postImages.length - 1}
+                onClick={() => setSelectedImageIndex((current) => current + 1)}
+              >
+                →
+              </button>
+            </div>
+          )}
         </Modal>
       )}
 
