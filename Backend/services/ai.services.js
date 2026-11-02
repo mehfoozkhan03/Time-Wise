@@ -1,6 +1,6 @@
 import Groq from "groq-sdk";
 import { TIMEWISE_KNOWLEDGE } from "../utils/aiKnowledge.js";
-import { TIMEWISE_PRODUCT_KNOWLEDGE, getTimeWiseOverviewReply } from "../utils/timeWiseOverview.js";
+import { TIMEWISE_PRODUCT_KNOWLEDGE, getTimeWiseOverviewReply, isTimeWiseOverviewQuestion } from "../utils/timeWiseOverview.js";
 import { getCalendarContext } from "./calendarContext.service.js";
 import { routeTimeWiseData } from "../services/aiDataRouter.services.js";
 import { understandIntentAndEntity } from "../services/aiIntentEntity.services.js";
@@ -89,6 +89,10 @@ Rules:
   }
 
   if (isProductQuestion) {
+    if (isTimeWiseOverviewQuestion(message)) {
+      return getTimeWiseOverviewReply(message, requestedContext?.productRole);
+    }
+
     try {
       const response = await groq.chat.completions.create({
         model: "openai/gpt-oss-20b",
@@ -96,7 +100,18 @@ Rules:
         messages: [
           {
             role: "system",
-            content: `You are WiseBot, the friendly TimeWise product guide. The user's role is ${requestedContext?.productRole === "admin" ? "administrator" : "employee"}. Answer the user's question about TimeWise and its features directly, with enough detail to answer exactly what they asked. Use only the product information below. Explain user-facing capabilities and navigation in ordinary language. Never provide source code, technical implementation, APIs, database details, or internal system information. Do not invent features, controls, permissions, or page behavior. If the information below does not specify an answer, say so plainly and suggest the relevant TimeWise page or administrator. Keep the answer concise but complete. You may use short bullets when they improve clarity.\n\n${TIMEWISE_PRODUCT_KNOWLEDGE}`,
+            content: `You are WiseBot, the friendly TimeWise product guide. The user's role is ${requestedContext?.productRole === "admin" ? "administrator" : "employee"}. Answer the user's question about TimeWise directly, using only the product information below. Explain user-facing capabilities and navigation in ordinary language. Never provide source code, technical implementation, APIs, database details, or internal system information. Do not invent features, controls, permissions, or page behavior. If the information below does not specify an answer, say so plainly and suggest the relevant TimeWise page or administrator.
+
+RESPONSE STYLE:
+- Write in plain, natural text that is easy to scan.
+- Do not use tables, Markdown headings, horizontal rules, bold/italic formatting, HTML, or <br> tags.
+- Normally answer in one short paragraph. Use simple dash bullets only if the user explicitly asks for a list.
+- Keep general website/feature answers under 120 words and focused feature answers under 80 words.
+- Answer only the question asked; do not repeat the full feature catalogue for a focused question.
+- Do not end with claims like "These are all the complete features" unless explicitly verified.
+
+PRODUCT INFORMATION:
+${TIMEWISE_PRODUCT_KNOWLEDGE}`,
           },
           ...(Array.isArray(conversation) ? conversation.slice(-6).map((item) => ({
             role: item.role === "assistant" ? "assistant" : "user",

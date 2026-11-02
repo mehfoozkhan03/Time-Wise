@@ -36,7 +36,11 @@ export const Form = ({
     }, {}),
   )
 
-  const { isLoading } = useSelector((state) => state.auth)
+  const authLoading = useSelector((state) => state.auth.isLoading)
+  const adminLoading = useSelector((state) => state.adminAuth.isLoading)
+  const isLoading = endpoint === '/admin/login' || endpoint === '/admin/employees'
+    ? adminLoading
+    : authLoading
   const [showPassword, setShowPassword] = React.useState({})
   const [openSelect, setOpenSelect] = React.useState(null)
   const [errors, setErrors] = React.useState({})
@@ -69,7 +73,9 @@ export const Form = ({
   }
 
   const showError = (response, fallbackTitle) => {
-    const errorData = response?.payload || {}
+    const errorData = typeof response?.payload === 'string'
+      ? { message: response.payload }
+      : response?.payload || {}
 
     showModalRef.current?.({
       variant: 'error',
@@ -161,8 +167,7 @@ export const Form = ({
         return
       }
 
-      // Login succeeded. Navigate immediately rather than relying on
-      // the modal's onCloseCb callback.
+      // Keep the user on the auth page until they dismiss the success modal.
       if (
         endpoint === '/user/login' ||
         endpoint === '/admin/login'
@@ -170,9 +175,6 @@ export const Form = ({
         const destination =
           endpoint === '/admin/login' ? '/adminDashboard' : '/'
 
-        console.info('[LOGIN] Authentication succeeded; navigating.')
-
-        // Show feedback if the modal is available.
         showModalRef.current?.({
           variant: 'success',
           title: response.payload?.title || 'Login Successful',
@@ -183,10 +185,11 @@ export const Form = ({
             endpoint === '/admin/login'
               ? 'Welcome back to the Admin Dashboard!'
               : 'Welcome back to TimeWise!',
+          onCloseCb: () => {
+            resetForm()
+            navigate(destination, { replace: true })
+          },
         })
-
-        resetForm()
-        navigate(destination, { replace: true })
         return
       }
     } catch (error) {

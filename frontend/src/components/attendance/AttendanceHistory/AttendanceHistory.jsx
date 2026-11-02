@@ -381,6 +381,7 @@ import {
 
 import Skeleton from "../../../components/Skeleton/Skeleton";
 import useAttendance from "../../../hooks/useAttendance";
+import { StatusPill } from "../../Reports/statusPill";
 
 export default function AttendanceHistory() {
   const {
@@ -785,18 +786,7 @@ export default function AttendanceHistory() {
                         </td>
 
                         <td>
-                          <span
-                            className={`attendance_status ${
-                              record.status
-                                ?.toLowerCase()
-                                .replace(
-                                  /\s+/g,
-                                  "_"
-                                ) || ""
-                            }`}
-                          >
-                            {record.status || "--"}
-                          </span>
+                          <StatusPill status={record.status || "--"} />
                         </td>
 
                       </tr>

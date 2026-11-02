@@ -29,6 +29,7 @@ ADMINISTRATOR EXPERIENCE
 WISEBOT
 - Employee WiseBot answers questions about the employee's attendance, working hours, overtime, productivity, leave information, calendar events, holidays, and how to use TimeWise pages.
 - Admin WiseBot answers organisation-level employee counts and attendance questions, individual employee metrics, leave requests, calendar events, upcoming holidays, and TimeWise feature questions.
+- The floating WiseBot launcher can be minimized with its small minus control and restored with the compact maximize control.
 - WiseBot answers from the signed-in user's available TimeWise information and does not provide source code or internal implementation details.
 
 PUBLIC INFORMATION
@@ -38,6 +39,16 @@ Do not claim a feature beyond these documented capabilities. If a question asks 
 `;
 
 const messageTokens = (message) => String(message || "").toLowerCase();
+
+export const isTimeWiseOverviewQuestion = (message) => {
+  const text = messageTokens(message);
+  const asksOverview = /\b(tell me about|explain|give me an overview|overview of|describe)\b/.test(text);
+  const namesWebsite = /\b(website|site|time[ -]?wise|platform|app)\b/.test(text);
+  const asksFeatures = /\b(features?|capabilit(?:y|ies))\b/.test(text) &&
+    namesWebsite && /\b(tell me about|explain|give me an overview|overview|describe|what are|list)\b/.test(text);
+  const asksProductDefinition = /\bwhat is (?:time[ -]?wise|this website|the website|this app|the app)\b/.test(text);
+  return (namesWebsite && asksOverview) || asksFeatures || asksProductDefinition;
+};
 
 export const isTimeWiseImplementationQuestion = (message) =>
   /\b(source code|show me (?:the )?code|give me (?:the )?code|write (?:the )?code|codebase|programming language|tech(?:nology)? stack|api endpoint|database schema|internal (?:system|implementation|architecture)|backend architecture|frontend architecture|how (?:was|is) (?:the )?(?:website|app|bot) built|what (?:is|was) (?:the )?(?:website|app|bot) built with|implementation details)\b/i.test(String(message || ""));
@@ -64,23 +75,15 @@ export const isTimeWiseProductQuestion = (message) => {
 
 export const getTimeWiseOverviewReply = (message, role = "employee") => {
   if (!isTimeWiseProductQuestion(message)) return null;
-  const asksForProductOverview = /\b(website|site|time[ -]?wise|platform|app|features?|capabilit(?:y|ies))\b/i.test(message) &&
-    /\b(tell me about|explain|describe|what is|what does|what can|what features|overview|features of|feature list|capabilities)\b/i.test(message);
-
-  const employeeFeatures =
-    "TimeWise helps employees manage their workday: check in and out, record breaks, review attendance and working hours, see reports and productivity information, request and track leave, use the calendar, and manage profile and settings. It also includes notifications, announcements, and a community area.";
-  const adminFeatures =
-    "Administrators can manage employee records, monitor organisation attendance, review reports and leave requests, manage calendar events and holidays, manage announcements and notifications, and control employee access to WiseBot.";
-
-  if (asksForProductOverview) {
-    return role === "admin" ? `${employeeFeatures} ${adminFeatures}` : employeeFeatures;
+  if (isTimeWiseOverviewQuestion(message)) {
+    return "TimeWise is a work-time and employee-management website. Employees can record attendance and breaks, review work hours and reports, request leave, view calendar events, and manage their profile and settings. Administrators can manage employee records, review organization attendance and reports, handle leave requests, manage calendar events and announcements, and configure organization settings. Both experiences include WiseBot for role-appropriate questions about TimeWise. You can minimize the floating WiseBot icon with its small minus button and restore it with the compact maximize button.";
   }
 
   const text = String(message || "").toLowerCase();
   if (/\b(wisebot|bot)\b/.test(text)) {
     return role === "admin"
-      ? "Admin WiseBot can answer organisation employee-count and attendance questions, provide an employee's attendance and work-time metrics, find leave request information, list calendar events and upcoming holidays, and explain TimeWise features."
-      : "WiseBot can answer questions about your attendance, working hours, overtime, productivity, leave information, calendar events, and holidays. It can also explain how to use TimeWise pages and features.";
+      ? "Admin WiseBot can answer organisation employee-count and attendance questions, provide an employee's attendance and work-time metrics, find leave request information, list calendar events and upcoming holidays, and explain TimeWise features. Its floating launcher can be minimized with the small minus button and restored with the compact maximize button."
+      : "WiseBot can answer questions about your attendance, working hours, overtime, productivity, leave information, calendar events, and holidays. It can also explain how to use TimeWise pages and features. Its floating launcher can be minimized with the small minus button and restored with the compact maximize button.";
   }
   if (/\b(attendance|check[ -]?in|check[ -]?out|breaks?)\b/.test(text)) {
     return role === "admin"

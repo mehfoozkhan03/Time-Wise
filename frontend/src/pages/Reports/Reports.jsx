@@ -20,6 +20,11 @@ import { ReportsHeader } from "../../components/Reports/reportsHeader";
 import { KPISection } from "../../components/Reports/kpiSection";
 import { getAttendanceReport } from "../../services/reportsService";
 import { roundHours } from "../../components/Reports/formatHours";
+import {
+  buildReportExportData,
+  exportReportExcel,
+  exportReportPDF,
+} from "../../components/Reports/reportExport";
 
 // Main App
 
@@ -39,14 +44,18 @@ export function Reports() {
 
   const [reportCalendar, setReportCalendar] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isRangeRefreshing, setIsRangeRefreshing] = useState(false);
   const [loadError, setLoadError] = useState("");
   const hasLoadedReports = useRef(false);
+  const hasCachedReportData = useRef(false);
+  hasCachedReportData.current = attendanceLog.length > 0;
 
   // console.log("Dashboard Stats:", dashboardStats);
 
   useEffect(() => {
     if (dateRange === "custom" && (!customStartDate || !customEndDate)) {
       setIsLoading(false);
+      setIsRangeRefreshing(false);
       return undefined;
     }
 
@@ -55,6 +64,9 @@ export function Reports() {
     // Loading is only for the first report fetch. Range changes keep the
     // current page visible while the next result is fetched.
     setLoadError("");
+    if (hasLoadedReports.current || hasCachedReportData.current) {
+      setIsRangeRefreshing(true);
+    }
 
     getAttendanceReport({
       range: dateRange,
@@ -76,6 +88,7 @@ export function Reports() {
         if (!cancelled) {
           hasLoadedReports.current = true;
           setIsLoading(false);
+          setIsRangeRefreshing(false);
         }
       });
 
@@ -331,6 +344,37 @@ export function Reports() {
   }, [attendanceLog, dashboardStats]);
 
   const rangeLabel = ranges.find((range) => range.id === dateRange)?.label || "Selected range";
+  const exportDisabled =
+    isLoading ||
+    isRangeRefreshing ||
+    (dateRange === "custom" && (!customStartDate || !customEndDate || customStartDate > customEndDate));
+
+  const handleExport = (format) => {
+    if (exportDisabled) return;
+    const filteredAttendance = attendanceLog.filter((record) => {
+      const date = formatDate(record.dateKey || record.date).toLowerCase();
+      const matchesSearch = date.includes(searchLog.toLowerCase()) ||
+        String(record.notes || "").toLowerCase().includes(searchLog.toLowerCase());
+      const matchesStatus = statusFilter === "all" ||
+        String(record.status || "").toLowerCase() === statusFilter.toLowerCase();
+      return matchesSearch && matchesStatus;
+    });
+    const report = buildReportExportData({
+      rangeLabel,
+      customStartDate,
+      customEndDate,
+      stats: dashboardStats,
+      attendance: attendanceLog,
+      calendar: reportCalendar,
+      filteredAttendance,
+    });
+    try {
+      if (format === "pdf") exportReportPDF(report);
+      else exportReportExcel(report);
+    } catch (error) {
+      setLoadError(error.message || "Unable to export this report.");
+    }
+  };
 
   const dynamicInsights = [
     {
@@ -420,6 +464,9 @@ export function Reports() {
           isLoading={showInitialSkeletons}
           customStartDate={customStartDate}
           customEndDate={customEndDate}
+          onExportPDF={() => handleExport("pdf")}
+          onExportExcel={() => handleExport("excel")}
+          exportDisabled={exportDisabled}
         />
 
         {loadError && (
@@ -428,6 +475,10 @@ export function Reports() {
           </p>
         )}
 
+        <div
+          className={`reports_range_content ${isRangeRefreshing ? "is-range-refreshing" : ""}`}
+          aria-busy={isRangeRefreshing}
+        >
         <KPISection
           sparklineData={sparklineData}
           dashboardStats={dashboardStats}
@@ -475,6 +526,7 @@ export function Reports() {
           onStatusChange={(value) => dispatch(setStatusFilter(value))}
           isLoading={showInitialSkeletons}
         />
+        </div>
       </div>
     </div>
   );

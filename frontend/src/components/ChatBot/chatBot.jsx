@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Bot, X, Send, Sparkles, Trash2 } from "lucide-react";
+import { Bot, X, Send, Sparkles, Trash2, Minus, Maximize2 } from "lucide-react";
 
 import api from "../../services/api";
 import { aiBotAccessService } from "../../services/aiBotAccessService";
@@ -9,6 +9,7 @@ import { useFloatingControls } from "../../context/FloatingControlsContext";
 
 export function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isMinimized, setIsMinimized] = useState(false);
   const [message, setMessage] = useState("");
   const [showClearModal, setShowClearModal] = useState(false);
   const [isClearing, setIsClearing] = useState(false);
@@ -170,7 +171,7 @@ export function Chatbot() {
 
   return (
     <>
-      <div className={`ai_assistant ${isOpen ? "open" : ""}`}>
+      <div className={`ai_assistant ${isOpen ? "open" : ""} ${isMinimized ? "is-minimized" : ""}`}>
         {/* Chat Panel */}
         <div className="ai_chat_panel">
           {/* Header */}
@@ -312,7 +313,7 @@ export function Chatbot() {
         </div>
 
         {/* Welcome Tooltip */}
-        {showWelcomeTooltip && !isOpen && !hideOnIdle && (
+        {showWelcomeTooltip && !isOpen && !isMinimized && !hideOnIdle && (
           <div className="ai_welcome_tooltip">
             <div className="ai_welcome_tooltip_content">
               <span className="ai_welcome_tooltip_icon">👋</span>
@@ -327,27 +328,50 @@ export function Chatbot() {
           </div>
         )}
 
-        {/* Floating AI Button */}
-        <button
-          type="button"
-          className={`ai_assistant_btn ${hideOnIdle && !isOpen ? "idle_hidden" : ""}`}
-          onClick={() => {
-            setShowWelcomeTooltip(false);
-            setIsOpen((prev) => !prev);
-          }}
-          aria-label={
-            isOpen ? "Close TimeWise Assistant" : "Open TimeWise Assistant"
-          }
-          aria-expanded={isOpen}
-        >
-          <span className="ai_btn_glow"></span>
-
-          {isOpen ? (
-            <X size={25} strokeWidth={2.1} />
-          ) : (
-            <Bot size={25} strokeWidth={2.1} />
+        {/* Floating AI launcher and its own minimize/restore controls */}
+        <div className="ai_launcher_controls" id="tour-ai-bot">
+          {!isOpen && !isMinimized && !hideOnIdle && (
+            <button
+              type="button"
+              className="ai_minimize_btn"
+              onClick={() => {
+                setShowWelcomeTooltip(false);
+                setIsMinimized(true);
+              }}
+              aria-label="Minimize WiseBot button"
+              title="Minimize WiseBot"
+            >
+              <Minus size={13} strokeWidth={2.5} />
+            </button>
           )}
-        </button>
+
+          <button
+            type="button"
+            className={`ai_assistant_btn ${hideOnIdle && !isOpen && !isMinimized ? "idle_hidden" : ""}`}
+            onClick={() => {
+              setShowWelcomeTooltip(false);
+              setIsOpen((prev) => !prev);
+            }}
+            aria-label={isOpen ? "Close TimeWise Assistant" : "Open TimeWise Assistant"}
+            aria-expanded={isOpen}
+            tabIndex={isMinimized ? -1 : 0}
+          >
+            <span className="ai_btn_glow"></span>
+            {isOpen ? <X size={25} strokeWidth={2.1} /> : <Bot size={25} strokeWidth={2.1} />}
+          </button>
+
+          {isMinimized && (
+            <button
+              type="button"
+              className="ai_restore_btn"
+              onClick={() => setIsMinimized(false)}
+              aria-label="Restore WiseBot button"
+              title="Restore WiseBot"
+            >
+              <Maximize2 size={13} strokeWidth={2.4} />
+            </button>
+          )}
+        </div>
       </div>
 
       <Modal

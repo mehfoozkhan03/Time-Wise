@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Bot, Send, Trash2, X } from "lucide-react";
+import { Bot, Send, Trash2, X, Minus, Maximize2 } from "lucide-react";
 import api from "../../services/api";
 import "../ChatBot/chatBot.css";
 import { useFloatingControls } from "../../context/FloatingControlsContext";
@@ -15,6 +15,7 @@ const initialMessages = [
 
 export function AdminChatBot() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isMinimized, setIsMinimized] = useState(false);
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isConversationLoading, setIsConversationLoading] = useState(true);
@@ -95,7 +96,7 @@ export function AdminChatBot() {
 
   return (
     <>
-    <div className={`ai_assistant ${isOpen ? "open" : ""}`}>
+    <div className={`ai_assistant ${isOpen ? "open" : ""} ${isMinimized ? "is-minimized" : ""}`}>
       {isOpen && (
         <section className="ai_chat_panel">
           <header className="ai_chat_header">
@@ -155,14 +156,42 @@ export function AdminChatBot() {
           </div>
         </section>
       )}
-      <button
-        type="button"
-        className={`ai_assistant_btn ${hideOnIdle && !isOpen ? "idle_hidden" : ""}`}
-        onClick={() => setIsOpen((current) => !current)}
-        aria-label="Open Admin WiseBot"
-      >
-        {isOpen ? <X size={23} /> : <Bot size={23} />}
-      </button>
+      <div className="ai_launcher_controls" id="tour-ai-bot">
+        {!isOpen && !isMinimized && !hideOnIdle && (
+          <button
+            type="button"
+            className="ai_minimize_btn"
+            onClick={() => setIsMinimized(true)}
+            aria-label="Minimize Admin WiseBot button"
+            title="Minimize Admin WiseBot"
+          >
+            <Minus size={13} strokeWidth={2.5} />
+          </button>
+        )}
+
+        <button
+          type="button"
+          className={`ai_assistant_btn ${hideOnIdle && !isOpen && !isMinimized ? "idle_hidden" : ""}`}
+          onClick={() => setIsOpen((current) => !current)}
+          aria-label={isOpen ? "Close Admin WiseBot" : "Open Admin WiseBot"}
+          aria-expanded={isOpen}
+          tabIndex={isMinimized ? -1 : 0}
+        >
+          {isOpen ? <X size={23} /> : <Bot size={23} />}
+        </button>
+
+        {isMinimized && (
+          <button
+            type="button"
+            className="ai_restore_btn"
+            onClick={() => setIsMinimized(false)}
+            aria-label="Restore Admin WiseBot button"
+            title="Restore Admin WiseBot"
+          >
+            <Maximize2 size={13} strokeWidth={2.4} />
+          </button>
+        )}
+      </div>
     </div>
 
       <Modal

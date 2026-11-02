@@ -1,0 +1,29 @@
+.status_pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-height: 23px;
+  padding: 2px 8px;
+  border: 1px solid
+    color-mix(in srgb, var(--status-pill-color) 24%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--status-pill-color) 12%, transparent);
+  color: color-mix(in srgb, var(--status-pill-color) 78%, #172033);
+  font-size: 11.5px;
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.status_pill_label {
+  display: block;
+  text-align: center;
+}
+
+html.dark .status_pill {
+  border-color: color-mix(in srgb, var(--status-pill-color) 32%, transparent);
+  background: color-mix(in srgb, var(--status-pill-color) 20%, transparent);
+  color: color-mix(in srgb, var(--status-pill-color) 68%, #fff);
+}
