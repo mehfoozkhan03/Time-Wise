@@ -29,9 +29,10 @@ const dateFormatOpt = [
 
 export const Appearance = () => {
 
+  //# Dropdown 
   const [density, setDensity] = useState("comfortable");
-  const [language, setLanguage] = useState("English");
-  const [dateFormat, setDateFormat] = useState("MM/DD/YYYY");
+  const [language, setLanguage] = useState("english");
+  const [dateFormat, setDateFormat] = useState("mm/dd/yyyy");
 
   const dispatch = useDispatch();
 
@@ -220,7 +221,7 @@ export const Appearance = () => {
             <div className="layout-select">
               <SettingCustomDropdown value={dateFormat}
                 onChange={setDateFormat}
-                placeholder="Select Language" options={dateFormatOpt} />
+                placeholder="Select date format" options={dateFormatOpt} />
             </div>
           </div>
 
