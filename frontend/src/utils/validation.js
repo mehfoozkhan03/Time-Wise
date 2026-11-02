@@ -1,6 +1,6 @@
 // utils/validation.js
 
-export const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+export const emailRegex = /^[^\s@]+@[^\s@]+\timewise\.[^\s@]+$/;
 
 export const nameRegex = /^[A-Za-z]{2,50}$/;
 
