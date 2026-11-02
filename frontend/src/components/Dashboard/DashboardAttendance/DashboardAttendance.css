@@ -97,7 +97,7 @@
     align-items: center;
     justify-content: center;
     text-transform: uppercase;
-    color: var(--text_primary);
+    color: #fff;
     background: var(--primary);
     font-weight: 700;
 }
@@ -115,6 +115,12 @@
 .dashboardAttendance-status>span{
     font-size: 12px;
     font-weight: 600;
+}
+
+.attendanceDot{
+  height: 0px;
+  size: 5px;
+  scale: 0.7;
 }
 
 /* ================= PRESENT ================= */

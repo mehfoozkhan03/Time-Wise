@@ -369,6 +369,29 @@
   cursor: pointer;
 }
 
+.create-notification-modal {
+  max-height: 90vh;
+  overflow-y: auto;
+
+  scrollbar-width: thin;
+  scrollbar-color: var(--surface) transparent;
+}
+
+/* Chrome, Edge, Safari */
+.create-notification-modal::-webkit-scrollbar {
+  width: 7px;
+}
+
+.create-notification-modal::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.create-notification-modal::-webkit-scrollbar-thumb {
+  background: var(--surface);
+  border-radius: 10px;
+}
+
+
 @media (max-width: 600px) {
   .create-notification-modal__overlay {
     padding: 12px;

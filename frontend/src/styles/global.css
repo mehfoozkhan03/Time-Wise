@@ -120,8 +120,8 @@
   --attendance-absent-bg: #f6443c;
   --attendance-absent-text: #fff;
 
-  --attendance-late-bg: #f69d09;
-  --attendance-late-text: #78350f;
+  --attendance-late-bg: #f0a00a;
+  --attendance-late-text: #fff;
 
   --attendance-leave-bg: #3B82F6;
   --attendance-leave-text: #ffffff;
@@ -271,8 +271,8 @@ html.dark {
   --attendance-absent-bg: #7f1d1d;
   --attendance-absent-text: #fff;
 
-  --attendance-late-bg: #78350f;
-  --attendance-late-text: #fde68a;
+  --attendance-late-bg: #f0a00a;
+  --attendance-late-text: #fff;
 
   --attendance-leave-bg: #1e3a8a;
   --attendance-leave-text: #bfdbfe;

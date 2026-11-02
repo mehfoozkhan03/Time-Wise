@@ -125,18 +125,18 @@ export const DashboardAttendance = () => {
                   <div
                     className={`dashboardAttendance-status ${el.status?.toLowerCase().replace(/\s+/g, "-")}`}
                   >
-                    <PulseDot
+                    <PulseDot className="attendanceDot"
                       color={
                         el.status?.toLowerCase() === "present"
                           ? "#fff"
                           : el.status?.toLowerCase() === "absent"
-                            ? "#f6443c"
+                            ? "#fff"
                             : el.status?.toLowerCase() === "late"
-                              ? "#f69d09"
+                              ? "#fff"
                               : el.status?.toLowerCase() === "half day"
-                                ? "#8f5bf7"
+                                ? "#fff"
                                 : el.status?.toLowerCase() === "leave"
-                                  ? "#3B82F6"
+                                  ? "#fff"
                                   : "#6B7280"
                       }
                     />
