@@ -1,122 +1,133 @@
 import { useSelector } from "react-redux";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import { SwitchBtn } from "../../SwichBtn/SwitchBtn";
 import "./Notification.css"
 import Skeleton from "../../../components/Skeleton/Skeleton";
+import { SettingCustomDropdown } from "../SettingCustomDropdown/SettingCustomDropdown";
+
+const frequencyFormatOpt = [
+  { label: "Immidiately", value: "immidiately" },
+  { label: "Hourly digest", value: "hourly digest" },
+  { label: "Daily digest", value: "daily digest" }
+]
+
 export const Notification = () => {
 
-   const { user, isLoading } = useSelector((state) => state.auth);
-   const [showSkeleton, setShowSkeleton] = useState(true);
-    
-   
-useEffect(() => {
-  const timer = setTimeout(() => {
-    setShowSkeleton(false);
-  }, 1500);
+    //# Dropdown 
+    const [frequencyFormat, setFrequencyFormat] = useState("immidiately");
 
-  return () => clearTimeout(timer);
-}, []);
-
-   if (showSkeleton) {
-  return (
-    <div className="notification-container">
-
-      {/* Heading Skeleton */}
-      <div className="notification-heading">
-        <Skeleton width="180px" height="32px" />
-
-        <div style={{ marginTop: "10px" }}>
-          <Skeleton width="400px" height="18px" />
-        </div>
-      </div>
+    const { user, isLoading } = useSelector((state) => state.auth);
+    const [showSkeleton, setShowSkeleton] = useState(true);
 
 
-      {/* Delivery Channels Skeleton */}
-      <div className="delivery-channels">
-        <Skeleton width="180px" height="25px" />
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setShowSkeleton(false);
+        }, 1500);
 
-        <div className="delivery-content">
-          {[1, 2, 3].map((item) => (
-            <div
-              key={item}
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                padding: "15px 0",
-              }}
-            >
-              <div>
-                <Skeleton width="180px" height="20px" />
+        return () => clearTimeout(timer);
+    }, []);
 
-                <div style={{ marginTop: "8px" }}>
-                  <Skeleton width="250px" height="15px" />
+    if (showSkeleton) {
+        return (
+            <div className="notification-container">
+
+                {/* Heading Skeleton */}
+                <div className="notification-heading">
+                    <Skeleton width="180px" height="32px" />
+
+                    <div style={{ marginTop: "10px" }}>
+                        <Skeleton width="400px" height="18px" />
+                    </div>
                 </div>
-              </div>
-
-              <Skeleton width="45px" height="25px" radius="20px" />
-            </div>
-          ))}
-        </div>
-      </div>
 
 
-      {/* Notification Types Skeleton */}
-      <div className="notification-type-container">
-        <Skeleton width="200px" height="28px" />
+                {/* Delivery Channels Skeleton */}
+                <div className="delivery-channels">
+                    <Skeleton width="180px" height="25px" />
 
-        <div className="type-detail">
-          {[1, 2, 3, 4, 5, 6].map((item) => (
-            <div
-              key={item}
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                padding: "15px 0",
-              }}
-            >
-              <div>
-                <Skeleton width="200px" height="20px" />
+                    <div className="delivery-content">
+                        {[1, 2, 3].map((item) => (
+                            <div
+                                key={item}
+                                style={{
+                                    display: "flex",
+                                    justifyContent: "space-between",
+                                    alignItems: "center",
+                                    padding: "15px 0",
+                                }}
+                            >
+                                <div>
+                                    <Skeleton width="180px" height="20px" />
 
-                <div style={{ marginTop: "8px" }}>
-                  <Skeleton width="320px" height="15px" />
+                                    <div style={{ marginTop: "8px" }}>
+                                        <Skeleton width="250px" height="15px" />
+                                    </div>
+                                </div>
+
+                                <Skeleton width="45px" height="25px" radius="20px" />
+                            </div>
+                        ))}
+                    </div>
                 </div>
-              </div>
 
-              <Skeleton width="45px" height="25px" radius="20px" />
+
+                {/* Notification Types Skeleton */}
+                <div className="notification-type-container">
+                    <Skeleton width="200px" height="28px" />
+
+                    <div className="type-detail">
+                        {[1, 2, 3, 4, 5, 6].map((item) => (
+                            <div
+                                key={item}
+                                style={{
+                                    display: "flex",
+                                    justifyContent: "space-between",
+                                    alignItems: "center",
+                                    padding: "15px 0",
+                                }}
+                            >
+                                <div>
+                                    <Skeleton width="200px" height="20px" />
+
+                                    <div style={{ marginTop: "8px" }}>
+                                        <Skeleton width="320px" height="15px" />
+                                    </div>
+                                </div>
+
+                                <Skeleton width="45px" height="25px" radius="20px" />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+
+                {/* Frequency Skeleton */}
+                <div className="frequency">
+                    <Skeleton width="120px" height="28px" />
+
+                    <div
+                        style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            marginTop: "20px",
+                        }}
+                    >
+                        <div>
+                            <Skeleton width="160px" height="20px" />
+
+                            <div style={{ marginTop: "8px" }}>
+                                <Skeleton width="250px" height="15px" />
+                            </div>
+                        </div>
+
+                        <Skeleton width="150px" height="40px" radius="8px" />
+                    </div>
+                </div>
+
             </div>
-          ))}
-        </div>
-      </div>
-
-
-      {/* Frequency Skeleton */}
-      <div className="frequency">
-        <Skeleton width="120px" height="28px" />
-
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            marginTop: "20px",
-          }}
-        >
-          <div>
-            <Skeleton width="160px" height="20px" />
-
-            <div style={{ marginTop: "8px" }}>
-              <Skeleton width="250px" height="15px" />
-            </div>
-          </div>
-
-          <Skeleton width="150px" height="40px" radius="8px" />
-        </div>
-      </div>
-
-    </div>
-  );
-}
+        );
+    }
 
     return (
         <>
@@ -237,11 +248,9 @@ useEffect(() => {
                             <p>How quickly notifications are delivered</p>
                         </div>
                         <div className="frequency-time">
-                            <select>
-                                <option value="Immediately">Immediately</option>
-                                <option value="Hourly digest">Hourly digest</option>
-                                <option value="Daily digest">Daily digest</option>
-                            </select>
+                            <SettingCustomDropdown value={frequencyFormat}
+                                onChange={setFrequencyFormat}
+                                placeholder="Select frequency" options={frequencyFormatOpt} />
                         </div>
                     </div>
                 </div>
@@ -258,7 +267,7 @@ useEffect(() => {
                         Save changes
                     </button>
                 </div>
-                
+
             </div>
         </>
     )
