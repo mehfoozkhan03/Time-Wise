@@ -1,5 +1,5 @@
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { AnimatePresence, motion } from 'framer-motion';
 import { setDateRange, setCustomDateRange } from '../../store/reportsSlice';
 import Skeleton from '../../components/Skeleton/Skeleton';
@@ -15,6 +15,16 @@ export function ReportsHeader({
   exportDisabled = false,
 }) {
   const dispatch = useDispatch();
+  const theme = useSelector((state) => state.theme.theme);
+  const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches ?? false;
+  const isDarkMode = theme === 'dark' || (theme === 'system' && prefersDark);
+  const dateInputTheme = {
+    backgroundColor: isDarkMode ? '#111318' : 'var(--card)',
+    color: isDarkMode ? '#f5f7fa' : 'var(--text_primary)',
+    borderColor: 'var(--border)',
+    colorScheme: isDarkMode ? 'dark' : 'light',
+    accentColor: 'var(--primary)',
+  };
 
   return (
     <div
@@ -177,6 +187,7 @@ export function ReportsHeader({
                   From
                   <input
                     type="date"
+                    style={dateInputTheme}
                     value={customStartDate}
                     max={customEndDate || undefined}
                     onChange={(event) =>
@@ -191,6 +202,7 @@ export function ReportsHeader({
                   To
                   <input
                     type="date"
+                    style={dateInputTheme}
                     value={customEndDate}
                     min={customStartDate || undefined}
                     onChange={(event) =>
