@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 
 import "./SettingSidebar.css";
 import { FaRegUser } from "react-icons/fa";
+import { FaUser } from "react-icons/fa";
 import { MdOutlineWatchLater } from "react-icons/md";
 import { MdNotifications } from "react-icons/md";
 import { FaLock } from "react-icons/fa";
@@ -26,14 +27,14 @@ export const SettingSidebar = () => {
                 to="profile"
                 className="settingSidebar-profile settingSidebar-link"
               >
-                <FaRegUser className="settingSidebar-icon" />
+                <FaUser style={{ color: "#583790" }} className="settingSidebar-icon" />
                 <span>Profile</span>
               </NavLink>
               <NavLink
                 to="attendance"
                 className="attendance settingSidebar-link"
               >
-                <MdOutlineWatchLater className="settingSidebar-icon" />
+                <MdOutlineWatchLater className="settingSidebar-icon" style={{ color: "#60A5FA"}} />
                 <span>Attendance</span>
               </NavLink>
 
@@ -41,7 +42,7 @@ export const SettingSidebar = () => {
                 to="appearance"
                 className="appearance settingSidebar-link"
               >
-                <TbColorFilter className="settingSidebar-icon" />
+                <TbColorFilter className="settingSidebar-icon" style={{ color: "#60A5FA"}} />
                 <span>Appearance</span>
               </NavLink>
 
@@ -100,11 +101,10 @@ export const SettingSidebar = () => {
               <p>
                 {user
                   ? `${user.firstName
-                      ?.charAt(0)
-                      .toUpperCase()}${user.firstName?.slice(1)} ${
-                      user.lastName?.charAt(0).toUpperCase() +
-                      user.lastName?.slice(1)
-                    }`
+                    ?.charAt(0)
+                    .toUpperCase()}${user.firstName?.slice(1)} ${user.lastName?.charAt(0).toUpperCase() +
+                  user.lastName?.slice(1)
+                  }`
                   : "User"}
               </p>
               <p>{user?.email ?? "No email available"}</p>

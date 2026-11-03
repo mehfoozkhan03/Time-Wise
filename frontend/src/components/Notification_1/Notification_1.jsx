@@ -15,7 +15,7 @@ import {
   FaCog,
 } from "react-icons/fa";
 
-import "./Notifications.css";
+// import "./Notification_1";
 
 const notificationsData = [
   {

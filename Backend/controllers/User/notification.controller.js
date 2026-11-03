@@ -39,140 +39,24 @@ const getEmployeeNotificationFilter = (userId, department) => ({
   ],
 });
 
-// =================== Get Notifications=======================
-// export const getNotifications = async (req, res) => {
-//   const page = Number(req.query.page) || 1;
-//   const limit = Number(req.query.limit) || 10;
-
-//   const skip = (page - 1) * limit;
-//   try {
-//     const notifications = await notificationModel
-//       .find({
-//         isArchived: false,
-
-//         sender: {
-//           $ne: req.user.userID,
-//         },
-
-//         $or: [
-//           {
-//             audienceType: "all",
-//           },
-
-//           {
-//             audienceType: "specific",
-//             targetUsers: req.user.userID,
-//           },
-//         ],
-//       })
-//       .populate("sender", "firstName lastName profileImage")
-//       .sort({
-//         createdAt: -1,
-//       })
-//       .skip(skip)
-//       .limit(limit);
-
-//     const statuses = await notificationStatusModel.find({
-//       userId: req.user.userID,
-//     });
-
-//     const totalNotifications = await notificationModel.countDocuments({
-//       isArchived: false,
-
-//       sender: {
-//         $ne: req.user.userID,
-//       },
-
-//       $or: [
-//         {
-//           audienceType: "all",
-//         },
-//         {
-//           audienceType: "specific",
-//           targetUsers: req.user.userID,
-//         },
-//       ],
-//     });
-
-//     const statusMap = new Map();
-
-//     statuses.forEach((status) => {
-//       statusMap.set(status.notificationId.toString(), status);
-//     });
-
-//     const finalNotifications = [];
-
-//     for (const notification of notifications) {
-//       const status = statusMap.get(notification._id.toString());
-
-//       if (status?.deleted) {
-//         continue;
-//       }
-
-//       finalNotifications.push({
-//         ...notification.toObject(),
-
-//         read: status ? status.read : false,
-//       });
-//     }
-
-//     return res.status(200).json({
-//       success: true,
-
-//       notifications: finalNotifications,
-
-//       page,
-
-//       limit,
-
-//       totalNotifications,
-
-//       totalPages: Math.ceil(totalNotifications / limit),
-
-//       hasMore: skip + finalNotifications.length < totalNotifications,
-//     });
-//   } catch (error) {
-//     console.error("Get Notifications Error:", error);
-
-//     return res.status(500).json({
-//       success: false,
-//       message: "Internal Server Error.",
-//     });
-//   }
-// };
-
+//# =================== Get Notifications=======================
 export const getNotifications = async (req, res) => {
   try {
     const userId = req.user.userID;
     const department = req.user.department;
 
-    const page = Math.max(Number.parseInt(req.query.page, 10) || 1, 1);
-
-    const limit = Math.min(
-      Math.max(Number.parseInt(req.query.limit, 10) || 10, 1),
-      100,
-    );
-
-    const skip = (page - 1) * limit;
-
     // Notifications visible to the logged-in employee.
     const filter = getEmployeeNotificationFilter(userId, department);
 
-    const [notifications, total] = await Promise.all([
-      notificationModel
-        .find(filter)
-        .populate("sender", "firstName lastName profileImage email")
-        .sort({ createdAt: -1 })
-        .skip(skip)
-        .limit(limit)
-        .lean(),
-
-      notificationModel.countDocuments(filter),
-    ]);
+    const notifications = await notificationModel
+      .find(filter)
+      .populate("sender", "firstName lastName profileImage email")
+      .sort({ createdAt: -1 })
+      .lean();
 
     // Load this employee's individual notification statuses.
     const notificationIds = notifications.map(
-      (notification) => notification._id,
+      (notification) => notification._id
     );
 
     const statuses = await notificationStatusModel
@@ -183,14 +67,16 @@ export const getNotifications = async (req, res) => {
       .lean();
 
     const statusMap = new Map(
-      statuses.map((status) => [status.notificationId.toString(), status]),
+      statuses.map((status) => [
+        status.notificationId.toString(),
+        status,
+      ])
     );
 
     // Exclude notifications deleted by this employee.
     const visibleNotifications = notifications
       .filter((notification) => {
         const status = statusMap.get(notification._id.toString());
-
         return !status?.deleted;
       })
       .map((notification) => {
@@ -203,15 +89,14 @@ export const getNotifications = async (req, res) => {
         };
       });
 
+    const total = visibleNotifications.length;
+
     return res.status(200).json({
       success: true,
       notifications: visibleNotifications,
-      page,
-      limit,
       total,
-      totalPages: Math.ceil(total / limit),
-      hasMore: page < Math.ceil(total / limit),
     });
+
   } catch (error) {
     console.error("getNotifications error:", error);
 
@@ -222,10 +107,7 @@ export const getNotifications = async (req, res) => {
   }
 };
 
-// ======================================================
-// Mark Notification As Read
-// ======================================================
-
+//# ================ Mark Notification As Read =====================
 export const markNotificationAsRead = async (req, res) => {
   try {
     const { id } = req.params;
@@ -406,6 +288,58 @@ export const getUnreadNotificationCount = async (req, res) => {
     });
   } catch (error) {
     console.error("Unread Notification Count Error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error.",
+    });
+  }
+};
+
+
+//# =============== Mark all notification as read ================ 
+export const markAllNotificationsAsRead = async (req, res) => {
+  try {
+    const userId = req.user.userID;
+    const department = req.user.department;
+
+    const filter = getEmployeeNotificationFilter(userId, department);
+
+    const notifications = await notificationModel
+      .find(filter)
+      .select("_id")
+      .lean();
+
+    const notificationIds = notifications.map(
+      (notification) => notification._id
+    );
+
+    if (notificationIds.length === 0) {
+      return res.status(200).json({
+        success: true,
+        message: "No notifications to mark as read.",
+      });
+    }
+
+    await notificationStatusModel.bulkWrite(
+      notificationIds.map((notificationId) => ({
+        updateOne: {
+          filter: { userId, notificationId },
+          update: {
+            $set: { read: true },
+            $setOnInsert: { userId, notificationId },
+          },
+          upsert: true,
+        },
+      }))
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: "All notifications marked as read.",
+    });
+  } catch (error) {
+    console.error("Mark All Notifications Error:", error);
 
     return res.status(500).json({
       success: false,
