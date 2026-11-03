@@ -1,6 +1,7 @@
 // utils/validation.js
 
-export const emailRegex = /^[^\s@]+@[^\s@]+\timewise\.[^\s@]+$/;
+export const emailRegex = /^[^\s@]+@timewise\.org$/i;
+// export const emailRegex = /^[^\s@]+@[^\s@]+\timewise\.[^\s@]+$/;
 
 export const nameRegex = /^[A-Za-z]{2,50}$/;
 
@@ -16,11 +17,12 @@ export const validateForm = (form, fields) => {
 
   fields.forEach((field) => {
     const value = form[field.name];
+    console.log("🚀 ~ validateForm ~ value:", value)
 
     // Required validation
     if (field.required) {
       const isEmpty =
-        value === undefined || value === null || String(value).trim() === '';
+        value === undefined || value === null || String(value).trim() === "";
 
       if (isEmpty) {
         errors[field.name] =
@@ -55,18 +57,18 @@ export const validateForm = (form, fields) => {
 // Validation helpers
 // --------------------------------------------------
 
-export const required = (message = 'This field is required') => ({
+export const required = (message = "This field is required") => ({
   required: true,
   requiredMessage: message,
 });
 
 export const emailValidation = {
   required: true,
-  requiredMessage: 'Email is required',
+  requiredMessage: "Email is required",
 
   pattern: emailRegex,
 
-  patternMessage: 'Invalid email',
+  patternMessage: "Email must use the @timewise.org domain",
 };
 
 export const nameValidation = (fieldName) => ({
@@ -82,12 +84,12 @@ export const nameValidation = (fieldName) => ({
 export const passwordValidation = {
   required: true,
 
-  requiredMessage: 'Password is required',
+  requiredMessage: "Password is required",
 
   pattern: passwordRegex,
 
   patternMessage:
-    'Password must be 8+ characters with uppercase, lowercase, number & special character',
+    "Password must be 8+ characters with uppercase, lowercase, number & special character",
 };
 
 /* 

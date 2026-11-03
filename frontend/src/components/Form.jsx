@@ -247,6 +247,7 @@ export const Form = ({
       >
         {fields.map((el, index) => {
           const fieldError = errors?.[el.name]
+          console.log("🚀 ~ Form ~ fieldError:", fieldError)
 
           // Custom select
           if (el.type === 'select') {
