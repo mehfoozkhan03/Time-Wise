@@ -196,6 +196,109 @@
   flex-direction: column;
   gap: 10px;
 }
+/* =====================================
+   APPEARANCE SKELETON UI
+===================================== */
+
+.appearance-skeleton {
+  width: 100%;
+  min-height: 100%;
+}
+
+/* Heading */
+
+.appearance-skeleton .appearance-heading {
+  margin-bottom: 22px;
+}
+
+.appearance-skeleton .appearance-skeleton-subtitle {
+  margin-top: 7px;
+}
+
+/* Theme Section */
+
+.appearance-skeleton .theme-container {
+  margin-bottom: 22px;
+}
+
+.appearance-skeleton .theme-heading {
+  margin-bottom: 22px;
+}
+
+/* Three horizontal theme cards */
+
+.appearance-skeleton .theme-mode {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 17px;
+}
+
+.appearance-skeleton .appearance-skeleton-theme {
+  min-width: 0;
+  height: 96px;
+  border: 1px solid var(--border-color, #303946);
+  border-radius: 13px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Layout & Localization */
+
+.appearance-skeleton .layout-localization {
+  margin-bottom: 22px;
+}
+
+.appearance-skeleton .layout-heading {
+  margin-bottom: 16px;
+}
+
+.appearance-skeleton .layout {
+  width: 100%;
+}
+
+/* Individual rows */
+
+.appearance-skeleton .appearance-skeleton-row {
+  min-height: 66px;
+  padding: 14px 0;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+
+  border-bottom: 1px solid var(--border-color, #303946);
+}
+
+.appearance-skeleton .appearance-skeleton-row:last-child {
+  border-bottom: none;
+}
+
+.appearance-skeleton .appearance-skeleton-text {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+/* Dropdown Skeleton */
+
+.appearance-skeleton .appearance-skeleton-row > div:last-child {
+  flex-shrink: 0;
+}
+
+/* Save Changes */
+
+.appearance-skeleton .save_changes {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  margin-top: 20px;
+}
 
 
 @media (max-width: 430px) {
