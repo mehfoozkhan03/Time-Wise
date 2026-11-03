@@ -1,15 +1,13 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getNotifications } from "../services/notificationServices";
+import { deleteNotification, getNotifications, markAllNotificationsAsRead, markNotificationAsRead } from "../services/notificationServices";
 
-// ======================================================
-// THUNK
-// ======================================================
+// ==================== THUNK ========================
 
 export const fetchNotifications = createAsyncThunk(
   "notification/fetchNotifications",
-  async ({ page = 1, limit = 10 } = {}, thunkAPI) => {
+  async (_, thunkAPI) => {
     try {
-      const { data } = await getNotifications(page, limit);
+      const { data } = await getNotifications();
 
       return data;
     } catch (error) {
@@ -20,25 +18,66 @@ export const fetchNotifications = createAsyncThunk(
   },
 );
 
-// ======================================================
-// INITIAL STATE
-// ======================================================
+//# ================ Mark as Read ================== 
+export const markAsRead = createAsyncThunk(
+  "notification/markAsRead",
+  async (id, thunkAPI) => {
+    try {
+      await markNotificationAsRead(id);
+      return id;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Unable to mark notification as read"
+      );
+    }
+  }
+);
+
+
+//# ========================= Delete Notification =====================
+export const removeNotification = createAsyncThunk(
+  "notification/deleteNotification",
+  async (id, thunkAPI) => {
+    try {
+      await deleteNotification(id);
+      return id;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Unable to delete notification"
+      );
+    }
+  }
+);
+
+//# ============== Mark all notification as Read =============== 
+export const markAllAsRead = createAsyncThunk(
+  "notification/markAllAsRead",
+  async (_, thunkAPI) => {
+    try {
+      await markAllNotificationsAsRead();
+      return true;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message ||
+        "Unable to mark all notifications as read"
+      );
+    }
+  }
+);
+
+
+
+// ================== INITIAL STATE ======================
 
 const initialState = {
   notifications: [],
-
-  page: 1,
-  totalPages: 1,
-  hasMore: true,
 
   loading: false,
   isError: false,
   errorMessage: "",
 };
 
-// ======================================================
-// SLICE
-// ======================================================
+// =============== SLICE ========================
 
 const notificationSlice = createSlice({
   name: "notification",
@@ -48,20 +87,12 @@ const notificationSlice = createSlice({
   reducers: {
     addNotification: (state, action) => {
       state.notifications.unshift(action.payload);
-
-      // Dropdown me sirf latest 10 notifications rakho
-      if (state.notifications.length > 10) {
-        state.notifications.pop();
-      }
     },
   },
 
   extraReducers: (builder) => {
     builder
-      // ======================================================
-      // Fetch Notifications
-      // ======================================================
-
+      //# ================= Fetch Notifications ================
       .addCase(fetchNotifications.pending, (state) => {
         state.loading = true;
         state.isError = false;
@@ -69,21 +100,43 @@ const notificationSlice = createSlice({
 
       .addCase(fetchNotifications.fulfilled, (state, action) => {
         state.loading = false;
-
         state.notifications = action.payload.notifications;
-
-        state.page = action.payload.page;
-
-        state.totalPages = action.payload.totalPages;
-
-        state.hasMore = action.payload.hasMore;
       })
 
       .addCase(fetchNotifications.rejected, (state, action) => {
         state.loading = false;
         state.isError = true;
         state.errorMessage = action.payload;
-      });
+      })
+
+
+      //# ===================== Mark as Read ================= 
+      .addCase(markAsRead.fulfilled, (state, action) => {
+        const notification = state.notifications.find(
+          (item) => item._id === action.payload
+        );
+
+        if (notification) {
+          notification.read = true;
+        }
+      })
+
+      //# ================ Delete Notification ================= 
+      .addCase(removeNotification.fulfilled, (state, action) => {
+        state.notifications = state.notifications.filter(
+          (item) => item._id !== action.payload
+        );
+      })
+
+
+      //# =============== Mark all notification as read =============
+      .addCase(markAllAsRead.fulfilled, (state) => {
+        state.notifications.forEach((notification) => {
+          notification.read = true;
+        });
+      })
+
+
   },
 });
 

@@ -1,30 +1,25 @@
 import api from "./api";
 
-// ======================================================
-// Get All Notifications
-// ======================================================
+// ================== Get All Notifications ===================
 
-export const getNotifications = (page = 1, limit = 5) => {
-  return api.get("/notifications", {
-    params: {
-      page,
-      limit,
-    },
-  });
+export const getNotifications = () => {
+  return api.get("/notifications");
 };
 
-// ======================================================
-// Mark Notification As Read
-// ======================================================
+// ==================== Mark Notification As Read ====================
 
 export const markNotificationAsRead = (id) => {
   return api.patch(`/notifications/${id}/read`);
 };
 
-// ======================================================
-// Delete Notification
-// ======================================================
+// ===================== Delete Notification =======================
 
 export const deleteNotification = (id) => {
   return api.delete(`/notifications/${id}`);
+};
+
+
+// ================= Mark All Notifications As Read =================
+export const markAllNotificationsAsRead = () => {
+  return api.patch("/notifications/read-all");
 };

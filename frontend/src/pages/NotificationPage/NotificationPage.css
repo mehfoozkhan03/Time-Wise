@@ -26,13 +26,13 @@
   gap: 15px;
 }
 
-.notifications-title {
+.notifications-title>div {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-.notifications-title > svg {
+.notifications-title > div > svg {
   font-size: 21px;
   color: var(--primary, #08a5ff);
 }
