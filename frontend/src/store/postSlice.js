@@ -211,7 +211,7 @@ export const updateExistingComment = createAsyncThunk(
 
       return thunkAPI.rejectWithValue(
         error.response?.data?.message ||
-          `Unable to update comment (${error.response?.status || "unknown error"})`,
+        `Unable to update comment (${error.response?.status || "unknown error"})`,
       );
     }
   },
@@ -706,14 +706,53 @@ const postSlice = createSlice({
       })
 
       //# ================== Admin : Pin thought ================
+      // .addCase(togglePinThoughtbyAdmin.fulfilled, (state, action) => {
+      //   const { postId, isPinned, pinnedAt } = action.payload;
+
+      //   const post = state.posts.find((post) => post._id === postId);
+
+      //   if (post) {
+      //     post.isPinned = isPinned;
+      //     post.pinnedAt = pinnedAt;
+      //   }
+      // })
       .addCase(togglePinThoughtbyAdmin.fulfilled, (state, action) => {
         const { postId, isPinned, pinnedAt } = action.payload;
 
-        const post = state.posts.find((post) => post._id === postId);
+        // Update all posts
+        state.posts.forEach((post) => {
+          if (isPinned) {
+            post.isPinned = post._id === postId;
+            post.pinnedAt = post._id === postId ? pinnedAt : null;
+          } else if (post._id === postId) {
+            post.isPinned = false;
+            post.pinnedAt = null;
+          }
+        });
 
-        if (post) {
-          post.isPinned = isPinned;
-          post.pinnedAt = pinnedAt;
+        // Update user profile posts
+        state.userPosts.forEach((post) => {
+          if (isPinned) {
+            post.isPinned = post._id === postId;
+            post.pinnedAt = post._id === postId ? pinnedAt : null;
+          } else if (post._id === postId) {
+            post.isPinned = false;
+            post.pinnedAt = null;
+          }
+        });
+
+        // Update selected post
+        if (state.selectedPost) {
+          if (isPinned) {
+            state.selectedPost.isPinned =
+              state.selectedPost._id === postId;
+
+            state.selectedPost.pinnedAt =
+              state.selectedPost._id === postId ? pinnedAt : null;
+          } else if (state.selectedPost._id === postId) {
+            state.selectedPost.isPinned = false;
+            state.selectedPost.pinnedAt = null;
+          }
         }
       })
 
@@ -724,68 +763,68 @@ const postSlice = createSlice({
         state.errorMessage = null;
       })
 
-      .addCase(deleteThoughtbyAdmin.fulfilled, (state, action) => {
-        state.loading = false;
+    .addCase(deleteThoughtbyAdmin.fulfilled, (state, action) => {
+      state.loading = false;
 
-        const deletedPostId = action.payload.postId;
+      const deletedPostId = action.payload.postId;
 
-        state.posts = state.posts.filter((post) => post._id !== deletedPostId);
-      })
+      state.posts = state.posts.filter((post) => post._id !== deletedPostId);
+    })
 
-      .addCase(deleteThoughtbyAdmin.rejected, (state, action) => {
-        state.loading = false;
-        state.isError = true;
-        state.errorMessage = action.payload;
-      })
+    .addCase(deleteThoughtbyAdmin.rejected, (state, action) => {
+      state.loading = false;
+      state.isError = true;
+      state.errorMessage = action.payload;
+    })
 
-      //# ================== Get featured thought for Admin Home Page ================
-      .addCase(fetchFeaturedThoughtForAdmin.fulfilled, (state, action) => {
-        state.featured = action.payload;
-      })
+    //# ================== Get featured thought for Admin Home Page ================
+    .addCase(fetchFeaturedThoughtForAdmin.fulfilled, (state, action) => {
+      state.featured = action.payload;
+    })
 
-      //# Community Profile Post Filter
-      .addCase(fetchUserPosts.pending, (state) => {
-        state.userPostsLoading = true;
-        state.userPostsError = false;
-      })
+    //# Community Profile Post Filter
+    .addCase(fetchUserPosts.pending, (state) => {
+      state.userPostsLoading = true;
+      state.userPostsError = false;
+    })
 
-      .addCase(fetchUserPosts.fulfilled, (state, action) => {
-        state.userPostsLoading = false;
+    .addCase(fetchUserPosts.fulfilled, (state, action) => {
+      state.userPostsLoading = false;
 
-        const {
-          page,
-          posts,
-          totalPosts,
-          totalLikesReceived,
-          totalComments,
-          monthlyActivity,
-          totalPages,
-          hasMore,
-        } = action.payload;
+      const {
+        page,
+        posts,
+        totalPosts,
+        totalLikesReceived,
+        totalComments,
+        monthlyActivity,
+        totalPages,
+        hasMore,
+      } = action.payload;
 
-        if (page === 1) {
-          state.userPosts = posts;
-        } else {
-          state.userPosts.push(...posts);
-        }
+      if (page === 1) {
+        state.userPosts = posts;
+      } else {
+        state.userPosts.push(...posts);
+      }
 
-        // Total profile statistics
-        state.userPostsTotal = totalPosts;
-        state.userPostsTotalLikes = totalLikesReceived;
-        state.userPostsTotalComments = totalComments;
-        state.monthlyActivity = monthlyActivity || [];
+      // Total profile statistics
+      state.userPostsTotal = totalPosts;
+      state.userPostsTotalLikes = totalLikesReceived;
+      state.userPostsTotalComments = totalComments;
+      state.monthlyActivity = monthlyActivity || [];
 
-        // Pagination
-        state.userPostsPage = page;
-        state.userPostsTotalPages = totalPages;
-        state.userPostsHasMore = hasMore;
-      })
+      // Pagination
+      state.userPostsPage = page;
+      state.userPostsTotalPages = totalPages;
+      state.userPostsHasMore = hasMore;
+    })
 
-      .addCase(fetchUserPosts.rejected, (state, action) => {
-        state.userPostsLoading = false;
-        state.userPostsError = true;
-      });
-  },
+    .addCase(fetchUserPosts.rejected, (state, action) => {
+      state.userPostsLoading = false;
+      state.userPostsError = true;
+    });
+},
 });
 
 export const { clearPosts, clearSelectedPost, setSearchQuery } =

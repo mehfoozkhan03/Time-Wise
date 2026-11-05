@@ -1,0 +1,529 @@
+.create_post_card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+
+  padding: 1.5rem;
+
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  transition: 0.25s;
+}
+
+.create_post_card:hover {
+  border-color: var(--primary);
+}
+
+.create_post_header {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.create_post_avatar {
+  width: 56px;
+  height: 56px;
+
+  border-radius: 50%;
+
+  background: var(--primary);
+  color: white;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-weight: 700;
+  font-size: 1.15rem;
+
+  flex-shrink: 0;
+}
+
+.create_post_header h3 {
+  color: var(--text_primary);
+  font-size: 1.05rem;
+  margin-bottom: 0.3rem;
+}
+
+.create_post_header p {
+  color: var(--text_secondary);
+  font-size: 0.9rem;
+}
+
+.create_post_card textarea {
+  min-height: 140px;
+
+  resize: none;
+
+  border: 1px solid var(--border);
+
+  border-radius: 18px;
+
+  background: var(--bg);
+
+  padding: 1rem;
+
+  font-family: inherit;
+  font-size: 0.97rem;
+  line-height: 1.8;
+
+  color: var(--text_primary);
+
+  transition: 0.2s;
+}
+
+.create_post_card textarea:focus {
+  outline: none;
+
+  border-color: var(--primary);
+}
+
+.create_post_footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  flex-wrap: wrap;
+
+  gap: 1rem;
+}
+
+.tools-action-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.create_post_tools {
+  display: flex;
+  gap: 0.75rem;
+
+  flex-wrap: wrap;
+}
+
+.create_post_tools button {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+
+  padding: 0.7rem 1rem;
+
+  border: 1px solid var(--border);
+
+  border-radius: 12px;
+
+  background: transparent;
+
+  color: var(--text_secondary);
+
+  cursor: pointer;
+
+  transition: 0.2s;
+
+  font-size: 0.9rem;
+}
+
+.create_post_tools button:hover {
+  background: var(--surface_hover);
+
+  color: var(--primary);
+}
+
+.create_post_tools svg {
+  font-size: 1.1rem;
+}
+
+.create_post_actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.create_post_actions span {
+  color: var(--text_secondary);
+  font-size: 0.9rem;
+}
+
+.publish_btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  border: none;
+
+  border-radius: 12px;
+
+  padding: 0.8rem 1.5rem;
+
+  background: var(--primary);
+
+  color: white;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.publish_btn:disabled {
+  opacity: 0.55;
+
+  cursor: not-allowed;
+
+  transform: none;
+}
+
+.publish_btn:hover {
+  background: var(--primary_hover);
+}
+
+.publish_btn svg {
+  font-size: 1rem;
+}
+
+/* ======================================================
+   IMAGE PREVIEW GRID
+====================================================== */
+
+.post_image_preview_grid {
+  display: grid;
+
+  width: 100%;
+
+  overflow: hidden;
+
+  border-radius: 14px;
+
+  gap: 6px;
+
+  max-height: 420px;
+}
+
+/* ======================================================
+   ONE IMAGE
+====================================================== */
+
+.image_count_1 {
+  grid-template-columns: 1fr;
+}
+
+/* ======================================================
+   TWO IMAGES
+====================================================== */
+
+.image_count_2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+/* ======================================================
+   THREE IMAGES
+====================================================== */
+
+.image_count_3 {
+  grid-template-columns: 1fr 1fr;
+}
+
+.image_count_3 .post_image_preview:first-child {
+  grid-column: span 2;
+}
+
+/* ======================================================
+   FOUR IMAGES
+====================================================== */
+
+.image_count_4 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+/* ======================================================
+   INDIVIDUAL IMAGE
+====================================================== */
+
+.post_image_preview {
+  position: relative;
+
+  min-height: 180px;
+
+  overflow: hidden;
+
+  background: var(--bg);
+}
+
+.post_image_preview img {
+  display: block;
+
+  width: 100%;
+
+  height: 100%;
+
+  min-height: 180px;
+
+  max-height: 300px;
+
+  object-fit: cover;
+
+  cursor: pointer;
+
+  transition: transform 0.25s ease;
+}
+
+.post_image_preview:hover img {
+  transform: scale(1.03);
+}
+
+/* ======================================================
+   REMOVE IMAGE BUTTON
+====================================================== */
+
+.remove_image_btn {
+  position: absolute;
+
+  top: 10px;
+
+  right: 10px;
+
+  width: 34px;
+
+  height: 34px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border: none;
+
+  border-radius: 50%;
+
+  background: rgba(0, 0, 0, 0.72);
+
+  color: white;
+
+  cursor: pointer;
+
+  z-index: 2;
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease;
+}
+
+.remove_image_btn:hover {
+  transform: scale(1.08);
+
+  background: rgba(0, 0, 0, 0.92);
+}
+
+.remove_image_btn svg {
+  font-size: 20px;
+}
+
+/* ======================================================
+   ATTACHMENT PREVIEW
+====================================================== */
+
+.post_attachment_preview {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  width: 100%;
+}
+
+.post_attachment_item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+
+  padding: 0.85rem 1rem;
+
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+
+  transition: 0.2s ease;
+}
+
+.post_attachment_item:hover {
+  border-color: var(--primary);
+  background: var(--surface_hover);
+}
+
+.post_attachment_info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  min-width: 0;
+  flex: 1;
+}
+
+.post_attachment_info svg {
+  flex-shrink: 0;
+  font-size: 1.25rem;
+  color: var(--primary);
+}
+
+.post_attachment_info span {
+  color: var(--text_primary);
+  font-size: 0.9rem;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.remove_attachment_btn {
+  width: 34px;
+  height: 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border: none;
+  border-radius: 50%;
+
+  background: transparent;
+  color: var(--text_secondary);
+
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.remove_attachment_btn:hover {
+  background: rgba(220, 38, 38, 0.12);
+  color: #dc2626;
+  transform: scale(1.08);
+}
+
+.remove_attachment_btn svg {
+  font-size: 1.25rem;
+}
+
+/* ======================================================
+   EMOJI PICKER
+====================================================== */
+
+.emoji_picker_wrapper {
+  position: relative;
+}
+
+.emoji_picker_container {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 0;
+  z-index: 1000;
+  filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.35));
+}
+
+.emoji_picker_container .EmojiPickerReact {
+  --epr-bg-color: var(--card);
+  --epr-category-label-bg-color: var(--surface);
+  --epr-text-color: var(--text_primary);
+  --epr-search-input-bg-color: var(--bg);
+  --epr-hover-bg-color: var(--surface_hover);
+  --epr-focus-bg-color: var(--surface_hover);
+  border: 1px solid var(--border) !important;
+  border-radius: 16px !important;
+}
+
+@media (max-width: 600px) {
+  .emoji_picker_container {
+    left: auto;
+    right: 0;
+  }
+
+  .emoji_picker_container .EmojiPickerReact {
+    width: min(350px, calc(100vw - 40px)) !important;
+  }
+}
+
+/* ======================================================
+   MOBILE
+====================================================== */
+
+@media (max-width: 768px) {
+  .post_image_preview_grid {
+    max-height: 360px;
+  }
+
+  .post_image_preview,
+  .post_image_preview img {
+    min-height: 140px;
+  }
+}
+
+/* ======================================================
+   RESPONSIVE IMAGE GRID
+====================================================== */
+
+@media (max-width: 600px) {
+  .post_images_preview {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .create_post_footer {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .create_post_tools {
+    width: 100%;
+    min-width: 0;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    gap: 5px;
+  }
+
+  .create_post_tools > button,
+  .create_post_tools .emoji_picker_wrapper > button {
+    min-width: 0;
+    flex: 1 1 0;
+    justify-content: center;
+    gap: 4px;
+    padding: 8px 5px;
+    font-size: clamp(0.62rem, 2.1vw, 0.85rem);
+    white-space: nowrap;
+  }
+
+  .create_post_tool_label {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .create_post_tools .emoji_picker_wrapper {
+    display: flex;
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .create_post_actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+
+
+.create-notification-modal__content .create_post_card {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  transition: none;
+}
+
+.create-notification-modal__content .create_post_card:hover {
+  border-color: transparent;
+}

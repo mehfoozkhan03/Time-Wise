@@ -18,6 +18,7 @@ import { themeReducer } from "./themeSlice";
 import adminDashboardHomeSlice from "./adminDashboardHomeSlice";
 import { adminThemeReducer } from "./adminThemeSlice";
 import adminReportReducer from "./adminReportSlice";
+import adminThoughtReducer from "./adminThoughtSlice";
 
 const store = configureStore({
   reducer: {
@@ -54,6 +55,8 @@ const store = configureStore({
     adminDashboardHome: adminDashboardHomeSlice,
 
     adminTheme: adminThemeReducer,
+
+    adminThought: adminThoughtReducer,
 
     adminReport: adminReportReducer,
   },

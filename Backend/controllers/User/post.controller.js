@@ -180,11 +180,31 @@ export const getAllPosts = async (req, res) => {
     const savedSet = new Set(savedPosts.map((saved) => saved.post.toString()))
     const likedSet = new Set(likedPosts.map((like) => like.targetId.toString()))
 
-    const formattedPosts = posts.map((post) => ({
-      ...post.toObject(),
-      isLiked: likedSet.has(post._id.toString()),
-      isSaved: savedSet.has(post._id.toString()),
-    }))
+    // const formattedPosts = posts.map((post) => ({
+    //   ...post.toObject(),
+    //   isLiked: likedSet.has(post._id.toString()),
+    //   isSaved: savedSet.has(post._id.toString()),
+    // }))
+
+    const formattedPosts = posts.map((post) => {
+      const postData = post.toObject();
+
+      if (post.authorType === "Admin") {
+        postData.createdBy = {
+          _id: post.createdBy?._id,
+          firstName: "Admin",
+          lastName: "",
+          designation: "Administrator",
+          profileImage: null,
+        };
+      }
+
+      return {
+        ...postData,
+        isLiked: likedSet.has(post._id.toString()),
+        isSaved: savedSet.has(post._id.toString()),
+      };
+    });
 
     return res.status(200).json({
       success: true,
@@ -247,25 +267,58 @@ export const getAllPostsForAdmin = async (req, res) => {
       isDeleted: false,
     })
 
+    // const posts = await postModel
+    //   .find({
+    //     isDeleted: false,
+    //   })
+    //   .populate(
+    //     'createdBy',
+    //     'firstName lastName profileImage designation department',
+    //   )
+    //   .sort(sortOption)
+    //   .skip(skip)
+    //   .limit(limit)
+
     const posts = await postModel
       .find({
         isDeleted: false,
       })
-      .populate(
-        'createdBy',
-        'firstName lastName profileImage designation department',
-      )
+      .populate({
+        path: "createdBy",
+        select: "firstName lastName profileImage designation department email",
+      })
       .sort(sortOption)
       .skip(skip)
-      .limit(limit)
+      .limit(limit);
 
-    const formattedPosts = posts.map((post) => ({
-      ...post.toObject(),
+    // const formattedPosts = posts.map((post) => ({
+    //   ...post.toObject(),
 
-      // Admin doesn't need user-specific like/save status
-      isLiked: false,
-      isSaved: false,
-    }))
+    //   // Admin doesn't need user-specific like/save status
+    //   isLiked: false,
+    //   isSaved: false,
+    // }))
+
+
+    const formattedPosts = posts.map((post) => {
+      const postData = post.toObject();
+
+      if (post.authorType === "Admin") {
+        postData.createdBy = {
+          _id: post.createdBy?._id,
+          firstName: "Admin",
+          lastName: "",
+          designation: "Administrator",
+          profileImage: null,
+        };
+      }
+
+      return {
+        ...postData,
+        isLiked: false,
+        isSaved: false,
+      };
+    });
 
     return res.status(200).json({
       success: true,
@@ -322,14 +375,36 @@ export const getPost = async (req, res) => {
       post: id,
     })
 
+    // return res.status(200).json({
+    //   success: true,
+    //   post: {
+    //     ...post.toObject(),
+    //     isLiked: !!liked,
+    //     isSaved: !!saved,
+    //   },
+    // })
+
+
+    const postData = post.toObject();
+
+    if (post.authorType === "Admin") {
+      postData.createdBy = {
+        _id: post.createdBy?._id,
+        firstName: "Admin",
+        lastName: "",
+        designation: "Administrator",
+        profileImage: null,
+      };
+    }
+
     return res.status(200).json({
       success: true,
       post: {
-        ...post.toObject(),
+        ...postData,
         isLiked: !!liked,
         isSaved: !!saved,
       },
-    })
+    });
   } catch (error) {
     console.error('Get Post Error:', error)
 
@@ -552,14 +627,26 @@ export const getFeaturedThought = async (req, res) => {
       post: featuredPost._id,
     })
 
+    const postData = featuredPost.toObject();
+
+    if (featuredPost.authorType === "Admin") {
+      postData.createdBy = {
+        _id: featuredPost.createdBy?._id,
+        firstName: "Admin",
+        lastName: "",
+        designation: "Administrator",
+        profileImage: null,
+      };
+    }
+
     return res.status(200).json({
       success: true,
       featuredThought: {
-        ...featuredPost.toObject(),
+        ...postData,
         isLiked: !!liked,
         isSaved: !!saved,
       },
-    })
+    });
   } catch (error) {
     console.error('Featured Thought Error:', error)
 

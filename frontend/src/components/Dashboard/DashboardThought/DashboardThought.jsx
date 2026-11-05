@@ -10,6 +10,7 @@ import {
   togglePinThoughtbyAdmin,
 } from "../../../store/postSlice";
 import { fetchAllUser } from "../../../store/adminAuthSlice";
+import AdminCreateThought from "./AdminCreateThought";
 
 export const DashboardThuoght = () => {
   const dispatch = useDispatch();
@@ -133,6 +134,12 @@ export const DashboardThuoght = () => {
           <h3>Thoughts Management</h3>
           <span>Review, pin and delete employee thoughts</span>
         </div>
+
+        <AdminCreateThought
+          onThoughtCreated={() => {
+            dispatch(fetchAdminThoughts({ page: 1, limit: 10 }));
+          }}
+        />
 
         {/* thought management content */}
         <div className="dashboardThoughtManagement-content-container">
