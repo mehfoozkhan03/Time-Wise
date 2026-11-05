@@ -4,6 +4,7 @@ import { Bot, X, Send, Sparkles, Trash2, Minus, Maximize2 } from "lucide-react";
 import api from "../../services/api";
 import { aiBotAccessService } from "../../services/aiBotAccessService";
 import "./chatBot.css";
+import { addAiContinuationPrompt } from "../../utils/aiContinuation";
 import { Modal } from "../Modal/Modal";
 import { useFloatingControls } from "../../context/FloatingControlsContext";
 
@@ -237,7 +238,7 @@ export function Chatbot() {
                 )}
 
                 <div className="ai_message_content">
-                  <p>{chatMessage.text}</p>
+                  <p>{chatMessage.type === "bot" && chatMessage.id !== "welcome" ? addAiContinuationPrompt(chatMessage.text) : chatMessage.text}</p>
                 </div>
               </div>
             ))}

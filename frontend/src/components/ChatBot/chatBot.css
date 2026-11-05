@@ -438,6 +438,9 @@
     margin: 0;
     white-space: pre-wrap;
     color: var(--text-primary);
+    font-size: inherit;
+    font-weight: 400;
+    line-height: inherit;
 }
 
 .ai_message_content p+p {

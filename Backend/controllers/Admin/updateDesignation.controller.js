@@ -26,7 +26,7 @@ export const updateUserDesignation = async (req, res) => {
     const user = await userModel.findByIdAndUpdate(
       userId,
       { designation },
-      { new: true }
+      { returnDocument: "after" }
     );
 
     if (!user) {

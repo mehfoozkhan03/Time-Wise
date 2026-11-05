@@ -22,6 +22,26 @@ export const askTimeWiseAI = async (
   const helpRequest = requestedContext?.helpRequest;
   const isProductQuestion = requestedContext?.isProductQuestion;
 
+  if (requestedContext?.continuation) {
+    const { previousQuestion, previousAnswer, role = "employee" } = requestedContext.continuation;
+    const response = await groq.chat.completions.create({
+      model: "openai/gpt-oss-20b",
+      max_completion_tokens: 350,
+      messages: [
+        {
+          role: "system",
+          content: `You are TimeWise ${role === "admin" ? "Admin WiseBot" : "WiseBot"}. The user accepted an offer to hear more about the previous answer. Give one useful, concise follow-up that directly adds detail. Use only the previous question and answer plus known TimeWise features. Do not invent employee data or repeat the answer word for word. Do not reveal code or implementation details. Use plain text, consistent tone, and no Markdown. End with one specific related question only if it helps continue the conversation.`,
+        },
+        {
+          role: "user",
+          content: `Previous question: ${previousQuestion}\nPrevious answer: ${previousAnswer}\nThe user said yes. Give the useful follow-up now.`,
+        },
+      ],
+    });
+    return response.choices?.[0]?.message?.content?.trim() ||
+      "Sure. I can give more detail about the previous answer—what part would you like to explore?";
+  }
+
   const workingHoursPeriod = requestedContext?.attendance?.workingHoursPeriod;
   const workingHours = requestedContext?.attendance?.workingHours;
 
@@ -296,7 +316,7 @@ IMPORTANT:
   console.log("========================================");
 
   const response = await groq.chat.completions.create({
-    model: "groq/compound",
+    model: "openai/gpt-oss-20b",
     max_completion_tokens: 300,
 
     messages: [

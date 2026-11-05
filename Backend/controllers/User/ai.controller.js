@@ -105,6 +105,11 @@ const detectPeriod = (rawMessage) => {
   return best.period;
 };
 
+const isPeriodReply = (value) => /^(today|this day|this week|week|weekly|this month|month|monthly|last month|this year|year|total|overall|all|in total)$/i.test(String(value || "").trim());
+
+const getPreviousQuestionForContinuation = (messages = []) =>
+  [...messages].reverse().find((item) => item.role === "user" && !isPeriodReply(item.content))?.content;
+
 // ==================================================
 // DETERMINISTIC HOURS ANSWER
 // Working-hours and overtime answers are plain numbers, so we
@@ -344,13 +349,27 @@ const getFollowUpQuestion = (requests) => {
 
     const uniqueMetrics = [...new Set(metrics)].join(" & ");
 
-    return `What period for ${uniqueMetrics}? (today, week, month, or total)`;
+    const overtimeOnly = hoursRequests.every((request) => request.intent === "overtime" || ["overtime_hours", "monthly_overtime", "total_overtime"].includes(request.entity));
+    return overtimeOnly
+      ? "Would you like your overtime for today, this week, this month, or overall?"
+      : `Would you like your ${uniqueMetrics} for today, this week, this month, or overall?`;
   }
 
   // For non-hours metrics that might need period
   if (otherRequests.length > 0) {
+    const followUpByIntent = {
+      attendance: "Would you like your attendance for today, this week, this month, or overall?",
+      productivity: "Would you like your productivity for this week, this month, or overall?",
+      leaves: "Would you like your leave information for this month or overall?",
+      punctuality: "Would you like your punctuality for this week, this month, or overall?",
+      average_daily_hours: "Would you like your average daily hours for this week, this month, or overall?",
+      average_checkin: "Would you like your average check-in time for this week, this month, or overall?",
+    };
+    if (otherRequests.length === 1 && followUpByIntent[otherRequests[0].intent]) {
+      return followUpByIntent[otherRequests[0].intent];
+    }
     const entities = otherRequests.map((r) => r.entity).join(" & ");
-    return `What period for ${entities}?`;
+    return `Would you like a breakdown for today, this week, this month, or overall for ${entities}?`;
   }
 
   return null;
@@ -377,6 +396,33 @@ export const askAI = async (req, res) => {
       });
     }
 
+    if (/^(yes|yeah|yep|sure|okay|ok|please do|tell me more|go ahead)[.! ]*$/i.test(message.trim()) && (await loadPending(userID)).length === 0) {
+      const conversation = await getConversation(userID);
+      const previousAnswer = [...conversation.messages].reverse().find((item) => item.role === "assistant")?.content;
+      const previousQuestion = getPreviousQuestionForContinuation(conversation.messages);
+      if (previousQuestion && previousAnswer && !previousAnswer.trim().endsWith("?")) {
+        const userContext = await getAIUserContext(userID);
+        const answer = await askTimeWiseAI("Yes, tell me more.", {
+          user: userContext,
+          continuation: { previousQuestion, previousAnswer, role: "employee" },
+        }, conversation.messages);
+        await addConversationMessage(userID, "user", message.trim());
+        await addConversationMessage(userID, "assistant", answer);
+        return res.status(200).json({ success: true, answer });
+      }
+    }
+
+    if (/\b(what did i just ask|what was my last question|what did i ask before|repeat my last question)\b/i.test(message)) {
+      const conversation = await getConversation(userID);
+      const previousQuestion = [...conversation.messages].reverse().find((item) => item.role === "user")?.content;
+      const answer = previousQuestion
+        ? `Your previous question was: “${previousQuestion}”`
+        : "This is the first question in our current chat.";
+      await addConversationMessage(userID, "user", message.trim());
+      await addConversationMessage(userID, "assistant", answer);
+      return res.status(200).json({ success: true, answer });
+    }
+
     if (/\b(password|passcode|authentication token|access token|secret|credential)\b/i.test(message)) {
       const answer = "For your security, WiseBot can't show passwords or authentication secrets. You can manage or reset your password from Settings > Security.";
       await addConversationMessage(userID, "user", message.trim());
@@ -391,17 +437,18 @@ export const askAI = async (req, res) => {
       return res.status(200).json({ success: true, answer });
     }
 
-    const asksForLeaveBalance = /\b(leave|annual|sick|casual)\b/i.test(message) &&
-      /\b(balance|remaining|left|available)\b/i.test(message) &&
+    const asksForLeaveBalance = /\b(leave|annual|sick|casual|emergency)\b/i.test(message) &&
+      /\b(balances?|remaining|left|available)\b/i.test(message) &&
       !/\b(how does|how do|how can|how to|explain|describe|feature|policy work)\b/i.test(message);
     if (asksForLeaveBalance) {
       const balance = await getLeaveBalance(userID);
-      const types = ["annual", "sick", "casual"].filter((type) =>
+      const types = ["annual", "sick", "casual", "emergency"].filter((type) =>
         new RegExp(`\\b${type}\\b`, "i").test(message),
       );
-      const selectedTypes = types.length ? types : ["annual", "sick", "casual"];
+      const selectedTypes = types.length ? types : ["annual", "sick", "casual", "emergency"];
       const answer = selectedTypes.map((type) => {
         const item = balance?.[type] || { total: 0, used: 0 };
+        if (type === "emergency") return `Emergency leave: one request per month; ${item.used ? "used this month" : "available this month"}.`;
         const available = Number(item.total || 0) - Number(item.used || 0);
         return `${type[0].toUpperCase()}${type.slice(1)} leave: ${available} day${available === 1 ? "" : "s"} available (${item.used || 0} used of ${item.total || 0}).`;
       }).join(" ");
@@ -720,6 +767,8 @@ export const askAI = async (req, res) => {
         await clearPending(userID);
         await savePending({ userID, requests: incompleteRequests });
         const question = getFollowUpQuestion(incompleteRequests);
+        await addConversationMessage(userID, "user", message.trim());
+        await addConversationMessage(userID, "assistant", question || "What period would you like to check?");
         return res.status(200).json({
           success: true,
           answer: question || "What period would you like to check?",
@@ -877,6 +926,8 @@ export const askAI = async (req, res) => {
       await savePending({ userID, requests: allPending });
 
       const question = getFollowUpQuestion(allPending);
+      await addConversationMessage(userID, "user", message.trim());
+      await addConversationMessage(userID, "assistant", question || "What period would you like to check?");
 
       return res.status(200).json({
         success: true,

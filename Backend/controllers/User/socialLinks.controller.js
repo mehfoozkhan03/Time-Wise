@@ -23,7 +23,7 @@ export const updateSocialLinks = async (req, res) => {
         },
       },
       {
-        new: true,
+        returnDocument: "after",
         runValidators: true,
       }
     ).select("-password");

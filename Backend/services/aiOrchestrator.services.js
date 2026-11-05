@@ -13,7 +13,7 @@ const FOLLOW_UP_RULES = {
     field: "period",
 
     question:
-      "Would you like to know your overtime for this month or your total overtime?",
+      "Would you like to know your overtime for today, this week, this month, or overall?",
 
     requiresPeriod: true,
   },
@@ -24,6 +24,42 @@ const FOLLOW_UP_RULES = {
     question:
       "Would you like to know your working hours for today, this week, this month, or your total working hours?",
 
+    requiresPeriod: true,
+  },
+
+  attendance: {
+    field: "period",
+    question: "Would you like your attendance for today, this week, this month, or overall?",
+    requiresPeriod: true,
+  },
+
+  productivity: {
+    field: "period",
+    question: "Would you like your productivity for this week, this month, or overall?",
+    requiresPeriod: true,
+  },
+
+  leaves: {
+    field: "period",
+    question: "Would you like your leave information for this month or overall?",
+    requiresPeriod: true,
+  },
+
+  punctuality: {
+    field: "period",
+    question: "Would you like your punctuality for this week, this month, or overall?",
+    requiresPeriod: true,
+  },
+
+  average_daily_hours: {
+    field: "period",
+    question: "Would you like your average daily hours for this week, this month, or overall?",
+    requiresPeriod: true,
+  },
+
+  average_checkin: {
+    field: "period",
+    question: "Would you like your average check-in time for this week, this month, or overall?",
     requiresPeriod: true,
   },
 

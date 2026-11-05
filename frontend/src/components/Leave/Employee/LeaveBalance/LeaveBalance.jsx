@@ -2,6 +2,7 @@ import {
   MdBeachAccess,
   MdLocalHospital,
   MdOutlineEventAvailable,
+  MdEmergency,
 } from "react-icons/md";
 
 import "./LeaveBalance.css";
@@ -29,6 +30,12 @@ const LeaveBalance = ({ balance }) => {
       key: "casual",
       icon: <MdBeachAccess />,
       ...balance.casual,
+    },
+    {
+      type: "Emergency Leave",
+      key: "emergency",
+      icon: <MdEmergency />,
+      ...balance.emergency,
     },
   ];
 
@@ -59,9 +66,9 @@ const LeaveBalance = ({ balance }) => {
               <span>{leave.total}</span>
 
               <div>
-                <small>Total Days</small>
+                <small>{leave.key === "emergency" ? "Monthly Requests" : "Total Days"}</small>
                 <strong>
-                  {leave.total === 1
+                  {leave.key === "emergency" ? "request per month" : leave.total === 1
                     ? "day available"
                     : "days available"}
                 </strong>

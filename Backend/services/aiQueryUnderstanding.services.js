@@ -381,9 +381,10 @@ ${safeMessage}
 
   try {
     const response = await groq.chat.completions.create({
-      model: "groq/compound",
+      model: "openai/gpt-oss-20b",
       temperature: 0,
-      max_tokens: 200,
+      max_completion_tokens: 200,
+      response_format: { type: "json_object" },
 
       messages: [
         {

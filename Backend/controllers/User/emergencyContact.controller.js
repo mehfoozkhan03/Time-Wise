@@ -28,7 +28,7 @@ export const updateEmergencyContact = async (req, res) => {
           },
         },
         {
-          new: true,
+          returnDocument: "after",
           runValidators: true,
         }
       )

@@ -23,7 +23,7 @@ export const updateUserDepartment = async (req, res) => {
     const user = await userModel.findByIdAndUpdate(
       userId,
       { department },
-      { new: true }
+      { returnDocument: "after" }
     );
 
     if (!user) {

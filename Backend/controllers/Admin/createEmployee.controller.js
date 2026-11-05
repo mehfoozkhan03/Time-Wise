@@ -61,6 +61,7 @@ export const createEmployee = async (req, res) => {
       role: role || "Employee",
       department: department || null,
       designation: designation || null,
+      adminID: req.admin.adminID,
 
       theme: "system",
     });

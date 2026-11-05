@@ -9,7 +9,10 @@ const groq = new Groq({
 // not recognise. mixtral-8x7b-32768 and every llama-3.x model
 // are DECOMMISSIONED - if GROQ_MODEL in .env.production still
 // names one, the call returns 400 model_decommissioned.
-const GROQ_MODEL = process.env.GROQ_MODEL || "openai/gpt-oss-20b";
+const configuredGroqModel = process.env.GROQ_MODEL || "openai/gpt-oss-20b";
+const GROQ_MODEL = /groq\/compound|mixtral|llama-3(?:\.|$)/i.test(configuredGroqModel)
+  ? "openai/gpt-oss-20b"
+  : configuredGroqModel;
 
 // ==================================================
 // SAFE JSON PARSER
