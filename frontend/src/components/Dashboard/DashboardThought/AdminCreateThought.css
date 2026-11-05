@@ -2,13 +2,10 @@
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 22px;
-
   padding: 1.5rem;
-
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-
   transition: 0.25s;
 }
 
@@ -99,7 +96,6 @@
 .create_post_tools {
   display: flex;
   gap: 0.75rem;
-
   flex-wrap: wrap;
 }
 
@@ -107,27 +103,18 @@
   display: flex;
   align-items: center;
   gap: 0.45rem;
-
   padding: 0.7rem 1rem;
-
   border: 1px solid var(--border);
-
   border-radius: 12px;
-
   background: transparent;
-
   color: var(--text_secondary);
-
   cursor: pointer;
-
   transition: 0.2s;
-
   font-size: 0.9rem;
 }
 
 .create_post_tools button:hover {
   background: var(--surface_hover);
-
   color: var(--primary);
 }
 
@@ -512,18 +499,4 @@
     width: 100%;
     justify-content: space-between;
   }
-}
-
-
-
-.create-notification-modal__content .create_post_card {
-  background: transparent;
-  border: none;
-  border-radius: 0;
-  padding: 0;
-  transition: none;
-}
-
-.create-notification-modal__content .create_post_card:hover {
-  border-color: transparent;
 }

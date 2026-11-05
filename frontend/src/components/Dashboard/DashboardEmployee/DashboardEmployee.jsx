@@ -13,12 +13,16 @@ import {
 import { IoClose } from "react-icons/io5";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { FaKey } from "react-icons/fa";
+import { FaUser } from "react-icons/fa";
+import { FaUsers } from "react-icons/fa";
 
 import { useDispatch, useSelector } from "react-redux";
 
 import {
   deleteUser,
+  fetchActiveUsers,
   fetchAllUser,
+  fetchInactiveUsers,
   loadLessUsers,
   updateUser,
   updateUserRole,
@@ -70,9 +74,18 @@ const employeeRoles = ["Admin", "Manager", "Employee"];
 export const DashboardEmployee = () => {
   const dispatch = useDispatch();
 
-  const { users, totalUsers, isLoading, search, currentPage } = useSelector(
-    (state) => state.adminAuth,
-  );
+  const { users, totalUsers, activeTotal,
+    inactiveTotal, isLoading, search, currentPage } = useSelector(
+      (state) => state.adminAuth,
+    );
+
+
+  //# Employee Stats
+  const employeeStats = [
+    { icon: <FaUsers style={{ color: "#4a87f5" }} />, title: "Total Eployees", count: totalUsers, color: "#20376f" },
+    { icon: <FaUser style={{ color: "#45e19d" }} />, title: "Active Employees", count: activeTotal, color: "#203a3d" },
+    { icon: <FaUser style={{ color: "#fb6465" }} />, title: "Inactive Employees", count: inactiveTotal, color: "#432130" },
+  ]
 
   //# Admin can create employee
   const [showAddEmployee, setShowAddEmployee] = useState(false);
@@ -124,17 +137,34 @@ export const DashboardEmployee = () => {
   };
 
   //# ============= Admin: Create Employee ===============
+  // const handleEmployeeCreated = async () => {
+  //   setShowAddEmployee(false);
+
+  //   await dispatch(
+  //     fetchAllUser({
+  //       page: 1,
+  //       department: selectedDepartment,
+  //       status: selectedStatus,
+  //       search: searchInput.trim(),
+  //     }),
+  //   );
+  // };
+
   const handleEmployeeCreated = async () => {
     setShowAddEmployee(false);
 
-    await dispatch(
-      fetchAllUser({
-        page: 1,
-        department: selectedDepartment,
-        status: selectedStatus,
-        search: searchInput.trim(),
-      }),
-    );
+    await Promise.all([
+      dispatch(
+        fetchAllUser({
+          page: 1,
+          department: selectedDepartment,
+          status: selectedStatus,
+          search: searchInput.trim(),
+        }),
+      ),
+      dispatch(fetchActiveUsers({ page: 1 })),
+      dispatch(fetchInactiveUsers({ page: 1 })),
+    ]);
   };
 
   //# ========================= LOAD MORE =========================
@@ -242,6 +272,8 @@ export const DashboardEmployee = () => {
         search: "",
       }),
     );
+    dispatch(fetchActiveUsers({ page: 1 }));
+    dispatch(fetchInactiveUsers({ page: 1 }));
   }, [dispatch]);
 
   //# ========================= OUTSIDE CLICK =========================
@@ -404,6 +436,7 @@ export const DashboardEmployee = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteUserId, setDeleteUserId] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
+
   const handleDeleteUser = async () => {
     if (!deleteUserId) return;
 
@@ -415,14 +448,19 @@ export const DashboardEmployee = () => {
       setShowDeleteModal(false);
       setDeleteUserId(null);
 
-      dispatch(
-        fetchAllUser({
-          page: 1,
-          department: selectedDepartment,
-          status: selectedStatus,
-          search,
-        }),
-      );
+      await Promise.all([
+        dispatch(
+          fetchAllUser({
+            page: 1,
+            department: selectedDepartment,
+            status: selectedStatus,
+            search,
+          }),
+        ),
+
+        dispatch(fetchActiveUsers({ page: 1 })),
+        dispatch(fetchInactiveUsers({ page: 1 })),
+      ]);
 
       showModalRef.current({
         variant: "success",
@@ -581,9 +619,25 @@ export const DashboardEmployee = () => {
           </div>
         </div>
 
-        {/* ========================= */}
-        {/* EMPLOYEE FILTER */}
-        {/* ========================= */}
+
+        {/* Employee Stats */}
+        <div className="dashboardEmployee-stats">
+          {
+            employeeStats && employeeStats.map((el) => (
+              <div key={el._id} className="dashboardEmployee-stats-details">
+                <div className="employee-stats-icon" style={{ background: el.color }}>
+                  {el.icon}
+                </div>
+                <div className="employee-stats-desc">
+                  <p>{el.title}</p>
+                  <span>{el.count}</span>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+
+        {/* ============== EMPLOYEE FILTER ============== */}
 
         <div
           ref={dropdownRef}
@@ -628,8 +682,8 @@ export const DashboardEmployee = () => {
 
                 <span
                   className={`customDropdown-arrow ${openDropdown === "department"
-                      ? "customDropdown-arrow-open"
-                      : ""
+                    ? "customDropdown-arrow-open"
+                    : ""
                     }`}
                 >
                   <MdOutlineKeyboardArrowDown />
@@ -642,8 +696,8 @@ export const DashboardEmployee = () => {
                     <div
                       key={department}
                       className={`customDropdown-option ${selectedDepartment === department
-                          ? "customDropdown-option-active"
-                          : ""
+                        ? "customDropdown-option-active"
+                        : ""
                         }`}
                       onClick={() => handleDepartmentSelect(department)}
                     >
@@ -683,8 +737,8 @@ export const DashboardEmployee = () => {
                     <div
                       key={status}
                       className={`customDropdown-option ${selectedStatus === status
-                          ? "customDropdown-option-active"
-                          : ""
+                        ? "customDropdown-option-active"
+                        : ""
                         }`}
                       onClick={() => handleStatusSelect(status)}
                     >
@@ -1111,24 +1165,27 @@ export const DashboardEmployee = () => {
           </Modal>
         )}
 
-        {/* LOAD MORE / LESS */}
+        {/* Pagination */}
+        <div className="employee-pagination">
+          <span className="pagination-info">
+            Showing 1 - {users.length} of {totalUsers} records
+          </span>
 
-        <div className="employeeDashboard-loadmore-btn">
-          <button
-            onClick={handleLoadLess}
-            disabled={isLoading || currentPage <= 1}
-          >
-            Load Less
-          </button>
+          <div className="pagination-actions">
+            <button
+              onClick={handleLoadLess}
+              disabled={isLoading || currentPage <= 1}
+            >
+              ← Prev
+            </button>
 
-          {users.length < totalUsers && (
             <button
               onClick={handleLoadMore}
-              disabled={isLoading}
+              disabled={isLoading || users.length >= totalUsers}
             >
-              {isLoading ? "Loading..." : "Load More"}
+              {isLoading ? "Loading..." : "Next →"}
             </button>
-          )}
+          </div>
         </div>
       </div>
 

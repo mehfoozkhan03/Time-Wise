@@ -192,9 +192,6 @@ export const login = async (req, res) => {
     const user = userData.toObject()
     delete user.password
 
-    console.log('[LOGIN] Authentication successful')
-    console.log('[LOGIN] Sending HTTP 200 response')
-
     return res.status(200).json({
       success: true,
       title: 'Welcome Back!',

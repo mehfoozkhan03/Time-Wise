@@ -181,11 +181,22 @@ export const getAllUser = async (req, res) => {
     }
 
     if (status === "Inactive") {
-      filter.$or = [...(filter.$or || [])];
+      const searchConditions = filter.$or;
+      delete filter.$or;
 
-      filter.lastActiveAt = {
-        $lt: new Date(Date.now() - ACTIVE_TIME),
-      };
+      filter.$and = [
+        ...(searchConditions ? [{ $or: searchConditions }] : []),
+        {
+          $or: [
+            {
+              lastActiveAt: {
+                $lt: new Date(Date.now() - ACTIVE_TIME),
+              },
+            },
+            { lastActiveAt: null },
+          ],
+        },
+      ];
     }
 
     const users = await userModel

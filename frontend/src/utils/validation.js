@@ -17,7 +17,6 @@ export const validateForm = (form, fields) => {
 
   fields.forEach((field) => {
     const value = form[field.name];
-    console.log("🚀 ~ validateForm ~ value:", value)
 
     // Required validation
     if (field.required) {
