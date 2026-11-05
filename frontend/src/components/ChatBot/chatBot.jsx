@@ -19,6 +19,7 @@ export function Chatbot() {
   const { hideOnIdle } = useFloatingControls();
 
   const chatBodyRef = useRef(null);
+  const chatInputRef = useRef(null);
 
   const initialMessages = [
     {
@@ -36,6 +37,16 @@ export function Chatbot() {
   const [messages, setMessages] = useState(initialMessages);
 
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (!isOpen || isMinimized || isBlocked) return undefined;
+
+    // Wait until the panel's opening animation has made the input visible.
+    const focusTimer = window.setTimeout(() => {
+      chatInputRef.current?.focus({ preventScroll: true });
+    }, 380);
+    return () => window.clearTimeout(focusTimer);
+  }, [isOpen, isMinimized, isBlocked]);
 
   const suggestedQuestions = [
     "How do I check my attendance?",
@@ -174,7 +185,14 @@ export function Chatbot() {
     <>
       <div className={`ai_assistant ${isOpen ? "open" : ""} ${isMinimized ? "is-minimized" : ""}`}>
         {/* Chat Panel */}
-        <div className="ai_chat_panel">
+        <div
+          className="ai_chat_panel"
+          onTransitionEnd={(event) => {
+            if (event.target === event.currentTarget && isOpen && !isMinimized && !isBlocked) {
+              chatInputRef.current?.focus({ preventScroll: true });
+            }
+          }}
+        >
           {/* Header */}
           <div className="ai_chat_header">
             <div className="ai_chat_title">
@@ -284,6 +302,7 @@ export function Chatbot() {
           {/* Input */}
           {!isBlocked ? <div className="ai_chat_input_area">
             <input
+              ref={chatInputRef}
               type="text"
               value={message}
               onChange={(e) => setMessage(e.target.value)}

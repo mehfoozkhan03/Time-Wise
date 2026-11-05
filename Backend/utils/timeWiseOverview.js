@@ -12,6 +12,7 @@ EMPLOYEE EXPERIENCE
 - Community: browse the community, create or view posts, and visit community profiles.
 - Notifications and announcements: view updates and organisation announcements.
 - Profile and Settings: manage profile details, attendance preferences where available, leave, calendar, appearance, notifications, security, data export, and help/support.
+- Live Chat: open Settings → Help & Support and choose Start chat to ask questions. WiseBot provides an immediate assistant reply; email support remains available for contacting the support team.
 - Profile information can include name, work email, role, department, designation, phone, address, date of birth, gender, bio, social links, and emergency contact information when those fields are provided on the account.
 
 ADMINISTRATOR EXPERIENCE
@@ -24,6 +25,7 @@ ADMINISTRATOR EXPERIENCE
 - Calendar: manage organisation calendar events and holidays.
 - Announcements and Notifications: create/manage organisation announcements and review notifications.
 - Settings: manage available organisation settings, including employee access to WiseBot.
+- Live Chat: open Settings → Help & Support and choose Start chat to ask TimeWise questions. WiseBot provides an immediate assistant reply; email support remains available for contacting the support team.
 - Admin WiseBot: ask about employee counts, organisation attendance, employee attendance and work-time metrics, leave requests, calendar events, and upcoming holidays.
 
 WISEBOT
@@ -55,10 +57,10 @@ export const isTimeWiseImplementationQuestion = (message) =>
 
 export const isTimeWiseProductQuestion = (message) => {
   const text = messageTokens(message);
-  const productMention = /\b(website|site|time[ -]?wise|wisebot|bot|platform|app|page|pages|feature|features|capabilit(?:y|ies)|dashboard|attendance|check[ -]?in|check[ -]?out|reports?|leave|calendar|holiday|community|announcement|notification|settings|profile|employee management|contact form|about page)\b/.test(text);
+  const productMention = /\b(website|site|time[ -]?wise|wisebot|bot|platform|app|page|pages|feature|features|capabilit(?:y|ies)|dashboard|attendance|check[ -]?in|check[ -]?out|reports?|leave|calendar|holiday|community|announcement|notification|settings|profile|employee management|contact form|about page|live chat|support)\b/.test(text);
   const broadQuestion = /\b(tell me about|explain|describe|overview|what is|what are|what does|what do|what can|what features|what pages|which pages|feature list|capabilities|how does|how do|how can|how to|do you have|can i|where can i|where do i|does time[ -]?wise|does this website|does the website)\b/.test(text);
   const featureQuestion = /\b(how does|how do|how can|where do|where can|where is|how to|can i|do i|explain|describe|tell me about|what does|what can|what is)\b/.test(text) &&
-    /\b(attendance|check[ -]?in|check[ -]?out|breaks?|working hours?|overtime|reports?|dashboard|leave|calendar|holidays?|community|announcements?|notifications?|profile|settings|security|data export|help|support|employee management|admin|about page|contact page|contact form|phone|email|address|gender|bio|designation|department)\b/.test(text);
+    /\b(attendance|check[ -]?in|check[ -]?out|breaks?|working hours?|overtime|reports?|dashboard|leave|calendar|holidays?|community|announcements?|notifications?|profile|settings|security|data export|help|support|live chat|employee management|admin|about page|contact page|contact form|phone|email|address|gender|bio|designation|department)\b/.test(text);
 
   const explanatoryQuestion = /\b(how does|how do|how can|how to|explain|describe|tell me about)\b/.test(text);
   const metricQuestion = !explanatoryQuestion && /\b(attendance|present|absent|working hours?|overtime|productivity|leave balance|streak)\b/.test(text) &&
@@ -76,7 +78,7 @@ export const isTimeWiseProductQuestion = (message) => {
 export const getTimeWiseOverviewReply = (message, role = "employee") => {
   if (!isTimeWiseProductQuestion(message)) return null;
   if (isTimeWiseOverviewQuestion(message)) {
-    return "TimeWise is a work-time and employee-management website. Employees can record attendance and breaks, review work hours and reports, request leave, view calendar events, and manage their profile and settings. Administrators can manage employee records, review organization attendance and reports, handle leave requests, manage calendar events and announcements, and configure organization settings. Both experiences include WiseBot for role-appropriate questions about TimeWise. You can minimize the floating WiseBot icon with its small minus button and restore it with the compact maximize button.";
+    return "TimeWise is a work-time and employee-management website. Employees can record attendance and breaks, review work hours and reports, request leave, view calendar events, and manage their profile and settings. Administrators can manage employee records, review organization attendance and reports, handle leave requests, manage calendar events and announcements, and configure organization settings. Both experiences include WiseBot for role-appropriate questions about TimeWise, and Live Chat is available from Settings → Help & Support. You can minimize the floating WiseBot icon with its small minus button and restore it with the compact maximize button.";
   }
 
   const text = String(message || "").toLowerCase();
@@ -115,6 +117,9 @@ export const getTimeWiseOverviewReply = (message, role = "employee") => {
     return role === "admin"
       ? "Administrators can manage company announcements and review notification tools from the admin dashboard. Employees can read organisation updates in their announcements and notifications areas."
       : "Use Notifications to review updates, and check announcements for organisation-wide news.";
+  }
+  if (/\b(live chat|support chat|start chat)\b/.test(text)) {
+    return "Open Settings → Help & Support and select Start chat to ask a question about TimeWise. The chat gives an immediate reply from WiseBot. Use Email Support on the same page if you need to contact the support team.";
   }
   if (/\b(profile|settings|appearance|security|export|support)\b/.test(text)) {
     return "Settings contains profile and personal information, attendance, leave, calendar, appearance, notification, security, data export, and help/support areas. Profile details can include contact and employment information when those fields are filled in. The options shown can depend on your account role.";

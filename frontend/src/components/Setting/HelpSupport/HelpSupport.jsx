@@ -130,6 +130,7 @@ import { useState, useEffect } from "react";
 
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { IoIosArrowRoundForward } from "react-icons/io";
+import { Link } from "react-router-dom";
 
 import Skeleton from "../../../components/Skeleton/Skeleton";
 
@@ -308,7 +309,7 @@ export const HelpSupport = () => {
             </div>
 
             {/* Live Chat */}
-            <div>
+            <Link to="/settings/help_support/live-chat" className="helpSupport-live-chat-link" aria-label="Start a live chat with support">
               <div className="helpSupport-contact-title">
                 <p>Live Chat</p>
                 <span>Available Mon-Fri, 9am-6pm PT</span>
@@ -320,7 +321,7 @@ export const HelpSupport = () => {
                   style={{ color: "#3eb5e8" }}
                 />
               </div>
-            </div>
+            </Link>
 
             {/* Help Center */}
             <div>
