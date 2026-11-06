@@ -12,6 +12,31 @@
   margin: 0 auto;
 }
 
+.development-history-skeleton .development-history-heading {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.development-history-skeleton .development-skeleton-title {
+  margin: 2px 0;
+}
+
+.development-skeleton-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 27px;
+}
+
+.development-history-skeleton .development-history-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
 /* Heading */
 
 .development-history-heading {

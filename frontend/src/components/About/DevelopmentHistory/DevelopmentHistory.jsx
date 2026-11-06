@@ -1,4 +1,6 @@
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import Skeleton from '../../Skeleton/Skeleton'
 import './DevelopmentHistory.css'
 
 const milestones = [
@@ -33,6 +35,48 @@ const milestones = [
 ]
 
 function DevelopmentHistory() {
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => setIsLoading(false), 900)
+    return () => window.clearTimeout(timer)
+  }, [])
+
+  if (isLoading) {
+    return (
+      <section className="development-history-section" aria-label="Loading development history" aria-busy="true">
+        <div className="development-history-container development-history-skeleton">
+          <div className="development-history-heading">
+            <Skeleton width="150px" height="13px" />
+            <Skeleton className="development-skeleton-title" width="min(600px, 90%)" height="48px" />
+            <Skeleton width="min(560px, 90%)" height="18px" />
+            <Skeleton width="min(420px, 75%)" height="18px" />
+          </div>
+          <div className="development-history-grid">
+            {milestones.map((milestone) => (
+              <div className="development-history-card" key={milestone.number}>
+                <div className="development-skeleton-card-top">
+                  <Skeleton width="46px" height="46px" radius="14px" />
+                  <Skeleton width="130px" height="28px" radius="999px" />
+                </div>
+                <Skeleton width="72%" height="23px" />
+                <Skeleton width="100%" height="14px" />
+                <Skeleton width="86%" height="14px" />
+              </div>
+            ))}
+          </div>
+          <div className="development-history-footer">
+            <div className="development-history-footer-copy">
+              <Skeleton width="min(380px, 90%)" height="24px" />
+              <Skeleton width="min(520px, 100%)" height="15px" />
+            </div>
+            <Skeleton width="190px" height="48px" radius="12px" />
+          </div>
+        </div>
+      </section>
+    )
+  }
+
   return (
     <section
       className="development-history-section"

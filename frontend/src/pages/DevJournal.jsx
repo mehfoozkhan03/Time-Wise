@@ -1,4 +1,6 @@
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import Skeleton from '../components/Skeleton/Skeleton'
 import '../styles/DevJournal.css'
 
 const milestones = [
@@ -77,6 +79,66 @@ const milestones = [
 ]
 
 function DevJournal() {
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => setIsLoading(false), 900)
+    return () => window.clearTimeout(timer)
+  }, [])
+
+  if (isLoading) {
+    return (
+      <main className="dev-journal-page dev-journal-skeleton" aria-label="Loading Dev Journal" aria-busy="true">
+        <section className="dev-journal-hero">
+          <div className="dev-journal-container">
+            <Skeleton width="120px" height="16px" />
+            <div className="dev-journal-hero-content">
+              <Skeleton width="160px" height="13px" />
+              <Skeleton width="min(600px, 90%)" height="58px" />
+              <Skeleton width="min(620px, 90%)" height="18px" />
+              <Skeleton width="min(480px, 78%)" height="18px" />
+              <Skeleton width="240px" height="16px" />
+            </div>
+            <div className="dev-journal-overview">
+              {[1, 2, 3].map((item) => (
+                <div className="dev-journal-overview-card" key={item}>
+                  <Skeleton width="55px" height="38px" />
+                  <Skeleton width="130px" height="14px" />
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+        <section className="dev-journal-timeline-section">
+          <div className="dev-journal-container">
+            <div className="dev-journal-section-heading">
+              <Skeleton width="160px" height="13px" />
+              <Skeleton width="min(440px, 90%)" height="36px" />
+              <Skeleton width="min(570px, 90%)" height="16px" />
+            </div>
+            <div className="dev-journal-timeline">
+              {milestones.map((milestone) => (
+                <article className="dev-journal-entry" key={milestone.id}>
+                  <div className="dev-journal-timeline-marker"><Skeleton width="42px" height="42px" radius="50%" /></div>
+                  <div className="dev-journal-entry-card dev-journal-skeleton-card">
+                    <div className="dev-journal-entry-top">
+                      <Skeleton width="140px" height="14px" />
+                      <Skeleton width="110px" height="25px" radius="999px" />
+                    </div>
+                    <Skeleton width="min(450px, 90%)" height="23px" />
+                    <Skeleton width="100%" height="14px" />
+                    <Skeleton width="82%" height="14px" />
+                    <Skeleton width="72%" height="14px" />
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+      </main>
+    )
+  }
+
   return (
     <main className="dev-journal-page">
       <section className="dev-journal-hero">

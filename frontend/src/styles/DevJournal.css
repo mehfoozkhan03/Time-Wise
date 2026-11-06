@@ -10,6 +10,27 @@
   margin: 0 auto;
 }
 
+.dev-journal-skeleton .dev-journal-hero-content,
+.dev-journal-skeleton .dev-journal-section-heading {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 13px;
+}
+
+.dev-journal-skeleton .dev-journal-overview-card {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dev-journal-skeleton-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
 /* Hero */
 
 .dev-journal-hero {
