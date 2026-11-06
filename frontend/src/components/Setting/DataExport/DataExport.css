@@ -54,6 +54,43 @@
     border-radius: 10px;
     background-color: transparent;
     color: var(--text_primary);
+    border: 1px solid var(--border);
+}
+.data-range-selection .customSelect,
+.file-format .customSelect {
+    width: 200px;
+}
+.dataexport-custom-range {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.dataexport-custom-range label {
+    display: grid;
+    gap: 6px;
+    color: var(--text_secondary);
+    font-size: 12px;
+    font-weight: 600;
+}
+.dataexport-custom-range input {
+    min-height: 39px;
+    padding: 7px 10px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    background: var(--surface_secondary, var(--surface));
+    color: var(--text_primary);
+    color-scheme: dark;
+    font: inherit;
+}
+html.light .dataexport-container .dataexport-custom-range input {
+    background: var(--surface);
+    color: var(--text_primary);
+    color-scheme: light;
+}
+.dataexport-custom-range input:focus-visible,
+.attendance-range-format select:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
 }
 .download-attendance {
     display: flex;
@@ -74,6 +111,12 @@
     font-weight: 600;
     font-size: 15px;
 }
+.download-attendance:has(button:disabled) { opacity: .65; }
+.download-attendance>button:disabled { cursor: wait; }
+.dataexport-feedback { margin: 12px 0 0; font-size: 13px; }
+.dataexport-error { color: #e0525d; }
+.dataexport-success { color: #168b62; }
+.dataexport-empty-history { margin: 0; color: var(--text_secondary); font-size: 13px; }
 
 /* Recent export */
 .recent-export {
@@ -177,6 +220,11 @@
 
     .date-range {
         gap: 15px;
+    }
+
+    .data-range-selection .customSelect,
+    .file-format .customSelect {
+        width: min(100%, 260px);
     }
 }
 
