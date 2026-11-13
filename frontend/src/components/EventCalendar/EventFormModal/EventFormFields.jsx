@@ -32,6 +32,7 @@ const GENERAL_EVENT_TYPES = [
   EVENT_TYPES.SPECIAL_EVENT,
   EVENT_TYPES.WORK_EVENT,
   EVENT_TYPES.BIRTHDAY,
+  EVENT_TYPES.PERSONAL,
 ];
 
 const requiresEmployee = (type, isAdmin) => {
