@@ -1,3 +1,4 @@
+
 import mongoose from "mongoose";
 
 import { calendarModel } from "../../models/Calendar.model.js";
@@ -21,6 +22,7 @@ const ADMIN_EVENT_TYPES = [
   "TRAINING",
   "MEETING",
   "PERSONAL",
+  "BIRTHDAY",
 ];
 
 const GENERAL_EVENT_TYPES = [
@@ -69,6 +71,13 @@ const getEmployeeName = (employee) => {
   }
 
   return `${employee.firstName || ""} ${employee.lastName || ""}`.trim();
+};
+
+const assignEmployee = (event, employee) => {
+  event.employeeId = employee?._id || null;
+  event.employeeName = employee ? getEmployeeName(employee) : "";
+  event.department = employee?.department || null;
+  event.designation = employee?.designation || null;
 };
 
 // ============================================================
@@ -185,7 +194,11 @@ export const createEvent = async (req, res) => {
 
     let employee = null;
 
-    if (requiresEmployee(type)) {
+    const shouldAssignEmployee =
+      requiresEmployee(type) ||
+      (type === "BIRTHDAY" && employeeId);
+
+    if (shouldAssignEmployee) {
       if (!employeeId) {
         return res.status(400).json({
           success: false,
@@ -333,15 +346,35 @@ export const updateEvent = async (req, res) => {
         });
       }
 
-      event.employeeId = employee._id;
-      event.employeeName = getEmployeeName(employee);
-      event.department = employee.department || null;
-      event.designation = employee.designation || null;
+      assignEmployee(event, employee);
+    } else if (newType === "BIRTHDAY") {
+      // If employeeId is supplied, assign the birthday to that employee.
+      if (req.body.employeeId) {
+        if (!mongoose.Types.ObjectId.isValid(req.body.employeeId)) {
+          return res.status(400).json({
+            success: false,
+            message: "Invalid employee ID.",
+          });
+        }
+
+        const employee = await userModel.findById(req.body.employeeId);
+
+        if (!employee) {
+          return res.status(404).json({
+            success: false,
+            message: "Employee not found.",
+          });
+        }
+
+        assignEmployee(event, employee);
+      } else if (
+        Object.prototype.hasOwnProperty.call(req.body, "employeeId")
+      ) {
+        // Empty employeeId means this is the Admin's own birthday.
+        assignEmployee(event, null);
+      }
     } else {
-      event.employeeId = null;
-      event.employeeName = "";
-      event.department = null;
-      event.designation = null;
+      assignEmployee(event, null);
     }
 
     // ----------------------------------------------------------

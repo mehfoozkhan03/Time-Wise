@@ -64,13 +64,20 @@ function EventFormFields({
       employee,
     }));
 
-  const showEmployeeField = requiresEmployee(formData.type, isAdmin);
+  const isBirthday = formData.type === EVENT_TYPES.BIRTHDAY;
+
+  const showEmployeeField =
+    isAdmin && (requiresEmployee(formData.type, isAdmin) || isBirthday);
+
+  const isEmployeeRequired = requiresEmployee(formData.type, isAdmin);
 
   return (
     <>
       {showEmployeeField && (
         <div className="formGroup">
-          <label htmlFor="employeeId">Assign Employee *</label>
+          <label htmlFor="employeeId">
+            Assign Employee {isEmployeeRequired ? "*" : "(Optional)"}
+          </label>
 
           <CustomSelect
             id="employeeId"
@@ -84,7 +91,11 @@ function EventFormFields({
             showOptionDetails
             onOptionDetails={(option) => onEmployeeDetails?.(option.employee)}
             placeholder={
-              employeeOptions.length ? "Select Employee" : "No Employees Found"
+              employeeOptions.length
+                ? isBirthday
+                  ? "Select Employee (Optional)"
+                  : "Select Employee"
+                : "No Employees Found"
             }
           />
 

@@ -80,6 +80,10 @@ function EventForm({
           ? initialData.employeeId?._id || ""
           : initialData.employeeId || "";
 
+      const shouldKeepEmployee =
+        requiresEmployee(initialType, isAdmin) ||
+        (isAdmin && initialType === EVENT_TYPES.BIRTHDAY);
+
       setFormData({
         ...INITIAL_FORM,
 
@@ -104,9 +108,7 @@ function EventForm({
 
         priority: initialData.priority || "MEDIUM",
 
-        employeeId: requiresEmployee(initialType, isAdmin)
-          ? initialEmployeeId
-          : "",
+        employeeId: shouldKeepEmployee ? initialEmployeeId : "",
       });
     } else {
       setFormData(INITIAL_FORM);
@@ -201,7 +203,9 @@ function EventForm({
         ...formData,
       };
 
-      if (!requiresEmployee(payload.type, isAdmin)) {
+      const isAdminBirthday = isAdmin && payload.type === EVENT_TYPES.BIRTHDAY;
+
+      if (!requiresEmployee(payload.type, isAdmin) && !isAdminBirthday) {
         payload.employeeId = "";
       }
 

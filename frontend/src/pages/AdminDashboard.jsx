@@ -1,7 +1,17 @@
-import '../styles/AdminDashboard.css';
-import { Outlet, useLocation } from 'react-router-dom';
-import { DashboardSidebar } from '../components/Dashboard/DashboardSidebar/DashboardSidebar';
-import { MdEventAvailable, MdOutlineSpaceDashboard, MdOutlineWatchLater } from 'react-icons/md';
+import "../styles/AdminDashboard.css";
+import { Outlet, useLocation } from "react-router-dom";
+
+import { DashboardSidebar } from "../components/Dashboard/DashboardSidebar/DashboardSidebar";
+import { AdminProfile } from "../components/Dashboard/Dropdowns/AdminProfileDropdown/AdminProfileDropdown";
+
+import BirthdayCelebration from "../components/EventCalendar/BirthdayCelebration/BirthdayCelebration";
+
+import {
+  MdEventAvailable,
+  MdOutlineSpaceDashboard,
+  MdOutlineWatchLater,
+} from "react-icons/md";
+
 import {
   FaUsers,
   FaCalendarDays,
@@ -10,94 +20,100 @@ import {
   FaBullhorn,
   FaChartBar,
   FaGear,
-} from 'react-icons/fa6';
-import { AdminProfile } from '../components/Dashboard/Dropdowns/AdminProfileDropdown/AdminProfileDropdown';
+} from "react-icons/fa6";
 
 export default function AdminDashboard() {
   const location = useLocation();
 
   const headerData = {
-    '/adminDashboard/home': {
-      title: 'Dashboard',
+    "/adminDashboard/home": {
+      title: "Dashboard",
       icon: <MdOutlineSpaceDashboard />,
-      color: '#fff',
+      color: "#fff",
     },
-    '/adminDashboard/employee': {
-      title: 'Employees',
+    "/adminDashboard/employee": {
+      title: "Employees",
       icon: <FaUsers />,
-      color: '#583790',
+      color: "#583790",
     },
-    '/adminDashboard/attendance': {
-      title: 'Attendance',
+    "/adminDashboard/attendance": {
+      title: "Attendance",
       icon: <MdOutlineWatchLater />,
-      color: '#60A5FA',
+      color: "#60A5FA",
     },
-    '/adminDashboard/appearence': {
-      title: 'Appearance',
+    "/adminDashboard/appearence": {
+      title: "Appearance",
       icon: <MdOutlineWatchLater />,
-      color: '#60A5FA',
+      color: "#60A5FA",
     },
-    '/adminDashboard/leave': {
-      title: 'Leave',
+    "/adminDashboard/leave": {
+      title: "Leave",
       icon: <MdEventAvailable />,
-      color: '#FB7185',
+      color: "#FB7185",
     },
-    '/adminDashboard/calendar': {
-      title: 'Calendar',
+    "/adminDashboard/calendar": {
+      title: "Calendar",
       icon: <FaCalendarDays />,
-      color: '#38BDF8',
+      color: "#38BDF8",
     },
-    '/adminDashboard/thought': {
-      title: 'Thoughts',
+    "/adminDashboard/thought": {
+      title: "Thoughts",
       icon: <FaLightbulb />,
-      color: '#ffc844',
+      color: "#ffc844",
     },
-    '/adminDashboard/notification': {
-      title: 'Notifications',
+    "/adminDashboard/notification": {
+      title: "Notifications",
       icon: <FaBell />,
-      color: '#FFF',
+      color: "#FFF",
     },
-    '/adminDashboard/announcement': {
-      title: 'Announcements',
+    "/adminDashboard/announcement": {
+      title: "Announcements",
       icon: <FaBullhorn />,
-      color: '#d13673',
+      color: "#d13673",
     },
-    '/adminDashboard/report': {
-      title: 'Reports & Analytics',
+    "/adminDashboard/report": {
+      title: "Reports & Analytics",
       icon: <FaChartBar />,
-      color: '#c9d7ba',
+      color: "#c9d7ba",
     },
-    '/adminDashboard/setting': {
-      title: 'Settings',
+    "/adminDashboard/setting": {
+      title: "Settings",
       icon: <FaGear />,
-      color: '#fff',
+      color: "#fff",
     },
   };
 
   const currentPage =
-    headerData[location.pathname] || headerData['/adminDashboard/home'];
+    headerData[location.pathname] || headerData["/adminDashboard/home"];
 
   return (
     <>
+      <BirthdayCelebration isAdmin={true} />
+
       <div className="dashboard-container">
         <DashboardSidebar />
+
         <div className="dashboard-content">
           <div className="dashboard-header">
             <div className="dashboard-heading">
               <span style={{ color: currentPage.color }}>
                 {currentPage.icon}
               </span>
+
               <span>{currentPage.title}</span>
             </div>
+
             <div className="header-right">
               <div className="notificaton-div">
-                <FaBell style={{ fontSize: '18px' }} />
+                <FaBell style={{ fontSize: "18px" }} />
               </div>
+
               <div className="admin-profile">
                 <AdminProfile />
               </div>
             </div>
           </div>
+
           <Outlet />
         </div>
       </div>
