@@ -250,6 +250,25 @@
 
 import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
+import { SwitchBtn } from "../../SwichBtn/SwitchBtn";
+import "./Notification.css"
+import Skeleton from "../../../components/Skeleton/Skeleton";
+import { SettingCustomDropdown } from "../SettingCustomDropdown/SettingCustomDropdown";
+import React, { useMemo } from "react";
+import {
+  FaBell,
+  FaUsers,
+  FaCheckCircle,
+  FaCalendarAlt,
+  FaEllipsisH,
+  FaClock,
+  FaFileAlt,
+  FaBullhorn,
+  FaUser,
+  FaCalendarCheck,
+  FaTrash,
+  FaCheck,
+} from "react-icons/fa";
 
 import {
     FaBell,
@@ -285,10 +304,105 @@ export const Notification = () => {
         return () => clearTimeout(timer);
     }, []);
 
-    // =========================
-    // SKELETON UI
-    // =========================
+    const [activeFilter, setActiveFilter] = useState("all");
+const [activeMenu, setActiveMenu] = useState(null);
 
+// Existing API notifications array
+const notificationList = Array.isArray(notifications)
+  ? notifications
+  : [];
+
+const visibleNotifications = notificationList.filter(
+  (item) => !item.deleted && !item.isArchived
+);
+
+const unreadCount = visibleNotifications.filter(
+  (item) => !item.read
+).length;
+
+const readCount = visibleNotifications.filter(
+  (item) => item.read
+).length;
+
+const todayCount = visibleNotifications.filter((item) => {
+  if (!item.createdAt) return false;
+
+  const date = new Date(item.createdAt);
+  const today = new Date();
+
+  return date.toDateString() === today.toDateString();
+}).length;
+
+const filteredNotifications = visibleNotifications.filter((item) => {
+  if (activeFilter === "read") return item.read;
+  if (activeFilter === "unread") return !item.read;
+
+  if (activeFilter === "today") {
+    if (!item.createdAt) return false;
+
+    return (
+      new Date(item.createdAt).toDateString() ===
+      new Date().toDateString()
+    );
+  }
+
+  return true;
+});
+
+// Date formatting
+const formatNotificationDate = (date) => {
+  if (!date) return "Date unavailable";
+
+  const parsedDate = new Date(date);
+
+  if (Number.isNaN(parsedDate.getTime())) {
+    return "Date unavailable";
+  }
+
+  return parsedDate.toLocaleString("en-IN", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  });
+};
+
+// Sender name
+const getSenderName = (sender) => {
+  if (!sender) return "Unknown User";
+
+  const name = [
+    sender.firstName,
+    sender.lastName,
+  ].filter(Boolean).join(" ");
+
+  return name || "Unknown User";
+};
+
+// Notification icon
+const getNotificationIcon = (type) => {
+  switch (type?.toLowerCase()) {
+    case "post":
+      return <FaFileAlt />;
+
+    case "announcement":
+      return <FaBullhorn />;
+
+    case "leave":
+      return <FaCalendarAlt />;
+
+    case "attendance":
+      return <FaCalendarCheck />;
+
+    case "user":
+      return <FaUser />;
+
+    default:
+      return <FaBell />;
+  }
+};
     if (showSkeleton) {
         return (
             <div className="notification-container notification-skeleton">
@@ -352,258 +466,242 @@ export const Notification = () => {
     // =========================
 
     return (
-        <div className="notification-container">
-
-            {/* HEADER */}
-
-            <div className="notification-heading">
-
-                <div className="notification-title-icon">
-                    <FaBell />
-                </div>
-
-                <div>
-                    <h2>Notifications</h2>
-                    <p>
-                        Choose what you're notified about and how you receive alerts.
-                    </p>
-                </div>
-
-            </div>
-
-            {/* DELIVERY CHANNELS */}
-
-            <div className="delivery-channels">
-
-                <div className="delivery-heading">
-
-                    <div className="notification-section-icon">
-                        <FaLayerGroup />
-                    </div>
-
-                    <div>
-                        <h3>Delivery channels</h3>
-                        <p>Choose how you want to receive notifications.</p>
-                    </div>
-
-                </div>
-
-                <div className="delivery-content">
-
-                    <div className="notification-setting-row email-notification">
-
-                        <div className="notification-row-icon">
-                            <FaEnvelope />
-                        </div>
-
-                        <div className="notification-row-content">
-                            <h3>Email notifications</h3>
-                            <p>Sent to {user?.email ?? "No Email"}</p>
-                        </div>
-
-                        <SwitchBtn />
-
-                    </div>
-
-                    <div className="notification-setting-row push-notification">
-
-                        <div className="notification-row-icon">
-                            <FaMobileAlt />
-                        </div>
-
-                        <div className="notification-row-content">
-                            <h3>Push notifications</h3>
-                            <p>Browser and mobile app alerts</p>
-                        </div>
-
-                        <SwitchBtn />
-
-                    </div>
-
-                    <div className="notification-setting-row sms-alert">
-
-                        <div className="notification-row-icon">
-                            <FaCommentDots />
-                        </div>
-
-                        <div className="notification-row-content">
-                            <h3>SMS alerts</h3>
-                            <p>Text messages to {user?.phone ?? "No phone number"}</p>
-                        </div>
-
-                        <SwitchBtn />
-
-                    </div>
-
-                </div>
-            </div>
-
-            {/* NOTIFICATION TYPES */}
-
-            <div className="notification-type-container">
-
-                <div className="type-heading">
-
-                    <div className="notification-section-icon">
-                        <FaBell />
-                    </div>
-
-                    <div>
-                        <h2>Notification types</h2>
-                        <p>Manage the updates and reminders you receive.</p>
-                    </div>
-
-                </div>
-
-                <div className="type-detail">
-
-                    {/* ATTENDANCE */}
-
-                    <div className="notification-category">
-
-                        <div className="notification-category-heading">
-                            <FaCalendarAlt />
-                            <div>
-                                <h3>Attendance</h3>
-                                <p>Stay updated with your daily attendance.</p>
-                            </div>
-                        </div>
-
-                        <div className="notification-setting-row checkin-reminder">
-                            <div className="notification-row-icon">
-                                <FaClock />
-                            </div>
-
-                            <div className="notification-row-content">
-                                <h3>Check-in reminder</h3>
-                                <p>5-minute reminder before your scheduled check-in</p>
-                            </div>
-
-                            <SwitchBtn />
-                        </div>
-
-                        <div className="notification-setting-row checkout-reminder">
-                            <div className="notification-row-icon">
-                                <FaSignOutAlt />
-                            </div>
-
-                            <div className="notification-row-content">
-                                <h3>Check-out reminder</h3>
-                                <p>Alert when your scheduled check-out time approaches</p>
-                            </div>
-
-                            <SwitchBtn />
-                        </div>
-
-                    </div>
-
-                    {/* LEAVE AND PAYROLL */}
-
-                    <div className="notification-category">
-
-                        <div className="notification-category-heading">
-                            <FaFileInvoice />
-                            <div>
-                                <h3>Leave & Payroll</h3>
-                                <p>Updates about leave requests and payslips.</p>
-                            </div>
-                        </div>
-
-                        <div className="notification-setting-row leave-approval">
-                            <div className="notification-row-icon">
-                                <FaCalendarAlt />
-                            </div>
-
-                            <div className="notification-row-content">
-                                <h3>Leave approval updates</h3>
-                                <p>When your leave requests are approved or declined</p>
-                            </div>
-
-                            <SwitchBtn />
-                        </div>
-
-                        <div className="notification-setting-row payslip-available">
-                            <div className="notification-row-icon">
-                                <FaFileInvoice />
-                            </div>
-
-                            <div className="notification-row-content">
-                                <h3>Payslip available</h3>
-                                <p>When a new payslip is generated for your account</p>
-                            </div>
-
-                            <SwitchBtn />
-                        </div>
-
-                    </div>
-
-                    {/* TEAM UPDATES */}
-
-                    <div className="notification-category">
-
-                        <div className="notification-category-heading">
-                            <FaUsers />
-                            <div>
-                                <h3>Team updates</h3>
-                                <p>Stay connected with your team activities.</p>
-                            </div>
-                        </div>
-
-                        <div className="notification-setting-row team-update">
-                            <div className="notification-row-icon">
-                                <FaUsers />
-                            </div>
-
-                            <div className="notification-row-content">
-                                <h3>Team updates</h3>
-                                <p>When teammates change schedules or submit leave requests</p>
-                            </div>
-
-                            <SwitchBtn />
-                        </div>
-
-                        <div className="notification-setting-row weekly-digest">
-                            <div className="notification-row-icon">
-                                <FaChartBar />
-                            </div>
-
-                            <div className="notification-row-content">
-                                <h3>Weekly digest</h3>
-                                <p>Summary of your hours and attendance every Monday</p>
-                            </div>
-
-                            <SwitchBtn />
-                        </div>
-
-                    </div>
-
-                </div>
-            </div>
-
-            {/* SAVE CHANGES */}
-
-            <div className="save_changes">
-
-                <div className="notification-save-status">
-
-                    <div className="notification-save-icon">
-                        <FaCheck />
-                    </div>
-
-                    <div>
-                        <h3>All changes saved</h3>
-                        <p>Your notification preferences are up to date.</p>
-                    </div>
-
-                </div>
-
-                <button type="button" className="change-btn">
-                    <FaCheck />
-                    Save Changes
-                </button>
-
-            </div>
-
+  <div className="notifications-page">
+
+    {/* HEADER */}
+    <div className="notifications-header">
+      <div className="notifications-title">
+        <FaBell />
+        <div>
+          <h2>Notifications</h2>
+          <p>Stay updated with your latest activities</p>
         </div>
-    );
-};
+      </div>
+
+      <button className="notification-settings-btn">
+        <FaEllipsisH />
+      </button>
+    </div>
+
+    {/* SUMMARY CARDS */}
+    <div className="notification-stats">
+
+      <div
+        className={`notification-stat-card all ${
+          activeFilter === "all" ? "stat-active" : ""
+        }`}
+        onClick={() => setActiveFilter("all")}
+      >
+        <div className="stat-icon">
+          <FaUsers />
+        </div>
+
+        <div className="stat-content">
+          <h3>{visibleNotifications.length}</h3>
+          <p>All Notifications</p>
+          <span>{unreadCount} unread</span>
+        </div>
+
+        <b>›</b>
+      </div>
+
+      <div
+        className={`notification-stat-card read ${
+          activeFilter === "read" ? "stat-active" : ""
+        }`}
+        onClick={() => setActiveFilter("read")}
+      >
+        <div className="stat-icon">
+          <FaCheckCircle />
+        </div>
+
+        <div className="stat-content">
+          <h3>{readCount}</h3>
+          <p>Read Notifications</p>
+          <span>
+            {visibleNotifications.length
+              ? ((readCount / visibleNotifications.length) * 100).toFixed(1)
+              : 0}
+            % of total
+          </span>
+        </div>
+
+        <b>›</b>
+      </div>
+
+      <div
+        className={`notification-stat-card today ${
+          activeFilter === "today" ? "stat-active" : ""
+        }`}
+        onClick={() => setActiveFilter("today")}
+      >
+        <div className="stat-icon">
+          <FaCalendarAlt />
+        </div>
+
+        <div className="stat-content">
+          <h3>{todayCount}</h3>
+          <p>Today Notifications</p>
+          <span>Recent activities today</span>
+        </div>
+
+        <b>›</b>
+      </div>
+
+    </div>
+
+    {/* LIST HEADER */}
+    <div className="notification-list-heading">
+
+      <div>
+        <h3>Recent Notifications</h3>
+        <p>{filteredNotifications.length} notifications found</p>
+      </div>
+
+      <div className="notification-tabs">
+
+        <button
+          className={activeFilter === "all" ? "active" : ""}
+          onClick={() => setActiveFilter("all")}
+        >
+          All
+        </button>
+
+        <button
+          className={activeFilter === "unread" ? "active" : ""}
+          onClick={() => setActiveFilter("unread")}
+        >
+          Unread
+          {unreadCount > 0 && <span>{unreadCount}</span>}
+        </button>
+
+        <button
+          className={activeFilter === "read" ? "active" : ""}
+          onClick={() => setActiveFilter("read")}
+        >
+          Read
+        </button>
+
+      </div>
+    </div>
+
+    {/* NOTIFICATION LIST */}
+    <div className="notification-list">
+
+      {filteredNotifications.length > 0 ? (
+
+        filteredNotifications.map((item) => (
+
+          <div
+            className={`notification-item ${
+              !item.read ? "unread-item" : ""
+            }`}
+            key={item._id}
+          >
+
+            {/* ICON */}
+            <div className={`notification-icon ${
+              item.type?.toLowerCase() || "default"
+            }`}>
+              {getNotificationIcon(item.type)}
+            </div>
+
+            {/* DETAILS */}
+            <div className="notification-details">
+
+              <h4>
+                {item.title || "Notification"}
+              </h4>
+
+              <p>
+                {item.message}
+              </p>
+
+              <div className="notification-meta">
+
+                <span className="notification-sender">
+                  <FaUser />
+                  {getSenderName(item.sender)}
+                </span>
+
+                <span className="notification-time">
+                  <FaClock />
+                  {formatNotificationDate(item.createdAt)}
+                </span>
+
+              </div>
+
+            </div>
+
+            {/* STATUS AND MENU */}
+            <div className="notification-actions">
+
+              {!item.read && (
+                <span
+                  className="unread-dot"
+                  title="Unread notification"
+                />
+              )}
+
+              <button
+                className="more-btn"
+                onClick={() =>
+                  setActiveMenu(
+                    activeMenu === item._id ? null : item._id
+                  )
+                }
+              >
+                <FaEllipsisH />
+              </button>
+
+              {activeMenu === item._id && (
+                <div className="notification-dropdown">
+
+                  <div className="notification-menu-info">
+                    <span>Status</span>
+                    <strong>
+                      {item.read ? "Read" : "Unread"}
+                    </strong>
+                  </div>
+
+                  <div className="notification-menu-info">
+                    <span>Type</span>
+                    <strong>{item.type || "General"}</strong>
+                  </div>
+
+                  <div className="notification-menu-info">
+                    <span>Reference</span>
+                    <strong>{item.referenceModel || "N/A"}</strong>
+                  </div>
+
+                  <button
+                    onClick={() => setActiveMenu(null)}
+                  >
+                    <FaCheck />
+                    Close
+                  </button>
+
+                </div>
+              )}
+
+            </div>
+
+          </div>
+
+        ))
+
+      ) : (
+
+        <div className="notification-empty">
+          <FaBell />
+          <h3>No notifications found</h3>
+          <p>You're all caught up!</p>
+        </div>
+
+      )}
+
+    </div>
+
+  </div>
+);
+}

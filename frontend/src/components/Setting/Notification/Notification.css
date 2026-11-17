@@ -380,3 +380,61 @@
         width: 100%;
     }
 }
+
+/* Sender and Date */
+
+.notification-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 5px;
+}
+
+.notification-sender,
+.notification-time {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  color: var(--text_secondary);
+}
+
+.notification-icon.post {
+  background: #087fff;
+}
+
+.notification-icon.leave {
+  background: #00b987;
+}
+
+.notification-icon.announcement {
+  background: #8d42ed;
+}
+
+.notification-icon.attendance {
+  background: #f5a000;
+}
+
+.notification-icon.default {
+  background: #64748b;
+}
+
+.notification-menu-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.notification-menu-info span {
+  font-size: 10px;
+  color: var(--text_secondary);
+}
+
+.notification-menu-info strong {
+  font-size: 11px;
+  color: var(--text_primary);
+  text-transform: capitalize;
+}
