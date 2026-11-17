@@ -17,7 +17,7 @@ export const updateRole = async (req, res) => {
         role,
       },
       {
-        new: true,
+        returnDocument: "after",
         runValidators: true,
       }
     );

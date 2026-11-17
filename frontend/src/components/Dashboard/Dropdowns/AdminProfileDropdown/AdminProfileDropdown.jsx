@@ -13,21 +13,29 @@ import { adminAuthService } from "../../../../services/adminAuthService";
 import { adminLogout } from "../../../../store/adminAuthSlice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { createPortal } from "react-dom";
 import { Modal } from "../../../Modal/Modal";
 
 export const AdminProfile = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [logoutError, setLogoutError] = useState("");
 
   const handleLogout = async () => {
+    if (isLoggingOut) return;
+    setIsLoggingOut(true);
+    setLogoutError("");
     try {
       await adminAuthService.logout();
-
       dispatch(adminLogout());
-
       navigate("/admin/login");
     } catch (error) {
       console.error("Admin Logout Error:", error);
+      setLogoutError(error.response?.data?.message || "Could not log out. Please try again.");
+    } finally {
+      setIsLoggingOut(false);
     }
   };
 
@@ -196,7 +204,11 @@ export const AdminProfile = () => {
 
           <button
             className="admin-dropdown-item logout"
-            onClick={handleLogout}
+            onClick={() => {
+              setLogoutError("");
+              setShowLogoutModal(true);
+              setIsOpen(false);
+            }}
           >
             <FiLogOut />
             <span>Logout</span>
@@ -278,6 +290,27 @@ export const AdminProfile = () => {
               </button>
             </div>
         </Modal>
+      )}
+      {showLogoutModal && createPortal(
+        <Modal
+          isOpen
+          overlayClassName="admin-logout-overlay"
+          className="admin-logout-modal"
+          ariaLabelledBy="admin-logout-title"
+          ariaDescribedBy="admin-logout-description"
+          onOverlayClick={isLoggingOut ? undefined : () => setShowLogoutModal(false)}
+          onContentClick={(event) => event.stopPropagation()}
+        >
+          <div className="admin-logout-icon"><FiLogOut aria-hidden="true" /></div>
+          <h2 id="admin-logout-title">Log out of the admin account?</h2>
+          <p id="admin-logout-description">You’ll be signed out of the TimeWise admin dashboard on this device.</p>
+          {logoutError && <div className="admin-logout-error" role="alert">{logoutError}</div>}
+          <div className="admin-logout-actions">
+            <button type="button" className="admin-logout-cancel" onClick={() => setShowLogoutModal(false)} disabled={isLoggingOut}>Stay logged in</button>
+            <button type="button" className="admin-logout-confirm" onClick={handleLogout} disabled={isLoggingOut}>{isLoggingOut ? "Logging out…" : "Log out"}</button>
+          </div>
+        </Modal>,
+        document.body,
       )}
     </div>
   );

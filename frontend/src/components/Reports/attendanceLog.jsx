@@ -3,6 +3,7 @@ import { StatusPill } from "./statusPill";
 import { useState } from "react";
 import Skeleton from "../../components/Skeleton/Skeleton";
 import { formatHours } from "./formatHours";
+import CustomSelect from "../../components/Common/CustomSelect/CustomSelect";
 
 export function AttendanceLog({
   filteredLog,
@@ -14,7 +15,7 @@ export function AttendanceLog({
 }) {
   const recordsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(1);
-  
+
   const totalPages = Math.ceil(filteredLog.length / recordsPerPage);
 
   const startIndex = (currentPage - 1) * recordsPerPage;
@@ -22,81 +23,80 @@ export function AttendanceLog({
 
   const currentRecords = filteredLog.slice(startIndex, endIndex);
 
-    if (isLoading) {
-  return (
-    <div className="glass-card" style={{ padding: 24 }}>
+  if (isLoading) {
+    return (
+      <div className="glass-card" style={{ padding: 24 }}>
+        {/* Header */}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            marginBottom: 20,
+            flexWrap: "wrap",
+            gap: 12,
+          }}
+        >
+          <Skeleton width="180px" height="30px" />
 
-      {/* Header */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          marginBottom: 20,
-          flexWrap: "wrap",
-          gap: 12,
-        }}
-      >
-        <Skeleton width="180px" height="30px" />
-
-        <div style={{ display: "flex", gap: 10 }}>
-          <Skeleton width="220px" height="40px" />
-          <Skeleton width="150px" height="40px" />
+          <div style={{ display: "flex", gap: 10 }}>
+            <Skeleton width="220px" height="40px" />
+            <Skeleton width="150px" height="40px" />
+          </div>
         </div>
-      </div>
 
-      {/* Table */}
-      <table
-        style={{
-          width: "100%",
-          borderCollapse: "collapse",
-        }}
-      >
-        <thead>
-          <tr>
-            {[...Array(8)].map((_, i) => (
-              <th key={i} style={{ padding: "10px" }}>
-                <Skeleton height="18px" />
-              </th>
-            ))}
-          </tr>
-        </thead>
-
-        <tbody>
-          {[...Array(5)].map((_, row) => (
-            <tr key={row}>
-              {[...Array(8)].map((_, col) => (
-                <td key={col} style={{ padding: "12px" }}>
+        {/* Table */}
+        <table
+          style={{
+            width: "100%",
+            borderCollapse: "collapse",
+          }}
+        >
+          <thead>
+            <tr>
+              {[...Array(8)].map((_, i) => (
+                <th key={i} style={{ padding: "10px" }}>
                   <Skeleton height="18px" />
-                </td>
+                </th>
               ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
 
-      {/* Footer */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          marginTop: 20,
-          alignItems: "center",
-        }}
-      >
-        <Skeleton width="180px" height="18px" />
+          <tbody>
+            {[...Array(5)].map((_, row) => (
+              <tr key={row}>
+                {[...Array(8)].map((_, col) => (
+                  <td key={col} style={{ padding: "12px" }}>
+                    <Skeleton height="18px" />
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
 
-        <div style={{ display: "flex", gap: 15 }}>
-          <Skeleton width="90px" height="35px" />
-          <Skeleton width="90px" height="35px" />
+        {/* Footer */}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            marginTop: 20,
+            alignItems: "center",
+          }}
+        >
+          <Skeleton width="180px" height="18px" />
+
+          <div style={{ display: "flex", gap: 15 }}>
+            <Skeleton width="90px" height="35px" />
+            <Skeleton width="90px" height="35px" />
+          </div>
         </div>
       </div>
-
-    </div>
-  );
-}
+    );
+  }
   return (
     <div className="glass-card" style={{ padding: 24 }}>
       <div
+        className="reports-attendance-header"
         style={{
           display: "flex",
           alignItems: "center",
@@ -107,58 +107,39 @@ export function AttendanceLog({
         }}
       >
         <SectionLabel>Attendance Log</SectionLabel>
-        <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+        <div
+          className="reports-attendance-controls"
+          style={{ display: "flex", gap: 10, flexWrap: "wrap" }}
+        >
           {/* Search */}
-          <div style={{ position: "relative" }}>
-            <span
-              style={{
-                position: "absolute",
-                left: 10,
-                top: "50%",
-                transform: "translateY(-50%)",
-                fontSize: 13,
-                color: "#475569",
-              }}
-            >
+          <div className="reports-search-wrapper">
+            <span className="reports-search-icon" aria-hidden="true">
               🔍
             </span>
             <input
+              className="reports-search-input"
               value={searchLog}
               onChange={(e) => onSearchChange(e.target.value)}
-              placeholder="Search dates or notes..."
-              style={{
-                background: "rgba(255,255,255,0.04)",
-                border: "1px solid var(--border)",
-                borderRadius: 9,
-                padding: "7px 12px 7px 30px",
-                color: "#e8edf5",
-                fontSize: 13,
-                outline: "none",
-                width: 200,
-              }}
+              placeholder="Search date, status, time, or notes..."
+              aria-label="Search attendance records by date, status, time, hours, break, overtime, or notes"
             />
           </div>
           {/* Status filter */}
-          <select
-            value={statusFilter}
-            onChange={(e) => onStatusChange(e.target.value)}
-            style={{
-              background: "var(--primary)",
-              border: "1px solid rgba(255,255,255,0.08)",
-              borderRadius: 9,
-              padding: "7px 12px",
-              color: "#fff",
-              fontSize: 13,
-              cursor: "pointer",
-              outline: "none",
-            }}
-          >
-            <option value="all">All Statuses</option>
-            <option value="present">Present</option>
-            <option value="late">Late</option>
-            <option value="absent">Absent</option>
-            <option value="leave">Leave</option>
-          </select>
+          <div className="reports-status-select">
+            <CustomSelect
+              id="reports-attendance-status-filter"
+              name="attendance-status"
+              value={statusFilter}
+              onChange={(event) => onStatusChange(event.target.value)}
+              options={[
+                { value: "all", label: "All Statuses" },
+                { value: "present", label: "Present" },
+                { value: "late", label: "Late" },
+                { value: "absent", label: "Absent" },
+                { value: "leave", label: "Leave" },
+              ]}
+            />
+          </div>
         </div>
       </div>
       <div style={{ overflowX: "scroll", scrollbarWidth: "none" }}>

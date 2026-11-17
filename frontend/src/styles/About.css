@@ -901,6 +901,28 @@
   box-shadow: none !important;
 }
 
+/* Use the light palette for the CTA skeleton when the site is in light mode. */
+html.light .cta_skeleton {
+  background: linear-gradient(135deg, #eaf8ff, #d5effb) !important;
+  border-color: #c3e5f4;
+  box-shadow: 0 16px 36px rgba(41, 163, 224, .14);
+}
+
+html.light .cta_skeleton .skeleton {
+  background: #b9e7f8 !important;
+  border-color: #9edcf3 !important;
+  box-shadow: none !important;
+}
+
+html.light .cta_skeleton .skeleton::after {
+  background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(255, 255, 255, .2) 45%,
+      rgba(255, 255, 255, .7) 50%,
+      rgba(255, 255, 255, .2) 55%,
+      transparent 100%);
+}
+
 /* ==========================================
    SMALL MOBILE / MOBILE - 320px TO 479px
 ========================================== */

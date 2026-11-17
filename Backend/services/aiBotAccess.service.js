@@ -5,7 +5,7 @@ export const getAccessSettings = async (adminID) =>
   AIBotAccessModel.findOneAndUpdate(
     { adminID },
     { $setOnInsert: { adminID } },
-    { new: true, upsert: true, setDefaultsOnInsert: true },
+    { returnDocument: "after", upsert: true, setDefaultsOnInsert: true },
   );
 
 export const getUserAIBotAccess = async (userID) => {

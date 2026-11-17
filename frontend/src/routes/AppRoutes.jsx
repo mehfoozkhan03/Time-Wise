@@ -34,6 +34,7 @@ import { Notification } from "./../components/Setting/Notification/Notifications
 import { Security } from "./../components/Setting/Security/Security";
 import { DataExport } from "./../components/Setting/DataExport/DataExport";
 import { HelpSupport } from "./../components/Setting/HelpSupport/HelpSupport";
+import { LiveChat } from "./../components/Setting/HelpSupport/LiveChat/LiveChat";
 
 import { DashboardEmployee } from "./../components/Dashboard/DashboardEmployee/DashboardEmployee";
 import { DashboardHome } from "./../components/Dashboard/DashboardHome/DashboardHome";
@@ -202,6 +203,7 @@ export const AppRoutes = () => {
             <Route path="security" element={<Security />} />
             <Route path="data_export" element={<DataExport />} />
             <Route path="help_support" element={<HelpSupport />} />
+            <Route path="help_support/live-chat" element={<LiveChat />} />
           </Route>
 
           {/* ================= 404 ================= */}

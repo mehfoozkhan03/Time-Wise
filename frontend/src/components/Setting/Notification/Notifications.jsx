@@ -270,23 +270,23 @@ import {
   FaCheck,
 } from "react-icons/fa";
 
-import {
-    FaBell,
-    FaLayerGroup,
-    FaEnvelope,
-    FaMobileAlt,
-    FaCommentDots,
-    FaCalendarAlt,
-    FaClock,
-    FaSignOutAlt,
-    FaFileInvoice,
-    FaUsers,
-    FaChartBar,
-    FaCheck,
-} from "react-icons/fa";
+// import {
+//     FaBell,
+//     FaLayerGroup,
+//     FaEnvelope,
+//     FaMobileAlt,
+//     FaCommentDots,
+//     FaCalendarAlt,
+//     FaClock,
+//     FaSignOutAlt,
+//     FaFileInvoice,
+//     FaUsers,
+//     FaChartBar,
+//     FaCheck,
+// } from "react-icons/fa";
 
-import { SwitchBtn } from "../../SwichBtn/SwitchBtn";
-import Skeleton from "../../../components/Skeleton/Skeleton";
+// import { SwitchBtn } from "../../SwichBtn/SwitchBtn";
+// import Skeleton from "../../../components/Skeleton/Skeleton";
 
 import "./Notification.css";
 

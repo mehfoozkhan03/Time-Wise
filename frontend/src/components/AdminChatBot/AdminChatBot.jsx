@@ -4,6 +4,7 @@ import api from "../../services/api";
 import "../ChatBot/chatBot.css";
 import { useFloatingControls } from "../../context/FloatingControlsContext";
 import { Modal } from "../Modal/Modal";
+import { addAiContinuationPrompt } from "../../utils/aiContinuation";
 
 const initialMessages = [
   {
@@ -129,7 +130,7 @@ export function AdminChatBot() {
             {messages.map((item) => (
               <div key={item.id} className={`ai_message ${item.type === "user" ? "ai_user_message" : "ai_bot_message"}`}>
                 {item.type === "bot" && <div className="ai_message_icon"><Bot size={17} /></div>}
-                <div className="ai_message_content"><p>{item.text}</p></div>
+                <div className="ai_message_content"><p>{item.type === "bot" && item.id !== "welcome" ? addAiContinuationPrompt(item.text) : item.text}</p></div>
               </div>
             ))}
             {isLoading && <div className="ai_message ai_bot_message"><div className="ai_message_icon"><Bot size={17} /></div><div className="ai_message_content"><p>Thinking...</p></div></div>}

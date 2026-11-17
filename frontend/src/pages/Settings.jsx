@@ -159,6 +159,11 @@ export const Settings = () => {
       title: "Help & Support",
       icon: <MdOutlineContactSupport />,
     },
+
+    "/settings/help_support/live-chat": {
+      title: "Live Chat",
+      icon: <MdOutlineContactSupport />,
+    },
   };
 
   const currentPage =

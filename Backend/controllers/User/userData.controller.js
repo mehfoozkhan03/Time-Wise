@@ -347,7 +347,7 @@ export const updateProfile = async (req, res) => {
           bio: bio?.trim() || '',
         },
         {
-          new: true,
+          returnDocument: "after",
           runValidators: true,
         },
       )
