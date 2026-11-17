@@ -1,0 +1,350 @@
+
+/* =========================================
+   BIRTHDAY OVERLAY
+========================================= */
+
+.birthdayOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(7px);
+
+  animation: birthdayFadeIn 0.3s ease;
+}
+
+/* =========================================
+   BIRTHDAY MODAL
+========================================= */
+
+.birthdayModal {
+  position: relative;
+
+  width: 100%;
+  max-width: 440px;
+
+  padding: 42px 32px 34px;
+
+  overflow: hidden;
+
+  text-align: center;
+
+  background: var(--surface, #161b22);
+  color: var(--text_primary, #eef3f8);
+
+  border: 1px solid var(--border, #2b3440);
+  border-radius: 20px;
+
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+
+  animation: birthdayModalEnter 0.45s ease;
+}
+
+.birthdayModal::before {
+  content: "";
+
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 5px;
+
+  background: linear-gradient(
+    90deg,
+    #3db7f3,
+    #a78bfa,
+    #f472b6,
+    #fbbf24
+  );
+}
+
+/* =========================================
+   CLOSE BUTTON
+========================================= */
+
+.birthdayClose {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+
+  width: 34px;
+  height: 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  color: var(--text_secondary, #9ca8b7);
+  background: transparent;
+
+  border: none;
+  border-radius: 50%;
+
+  font-size: 27px;
+  line-height: 1;
+
+  cursor: pointer;
+
+  transition:
+    color 0.2s ease,
+    background 0.2s ease;
+}
+
+.birthdayClose:hover {
+  color: var(--text_primary, #eef3f8);
+  background: var(--hover, #1d2430);
+}
+
+/* =========================================
+   BIRTHDAY ICON
+========================================= */
+
+.birthdayIcon {
+  width: 100px;
+  height: 100px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin: 0 auto 18px;
+
+  background: rgba(61, 183, 243, 0.1);
+  border: 1px solid rgba(61, 183, 243, 0.2);
+  border-radius: 50%;
+
+  font-size: 54px;
+
+  animation: birthdayBounce 2s ease-in-out infinite;
+}
+
+/* =========================================
+   CONFETTI DECORATION
+========================================= */
+
+.birthdayConfetti {
+  margin-bottom: 14px;
+
+  font-size: 25px;
+  letter-spacing: 9px;
+
+  animation: birthdayFloat 2.5s ease-in-out infinite;
+}
+
+/* =========================================
+   BIRTHDAY CONTENT
+========================================= */
+
+.birthdayModal h2 {
+  margin: 0 0 14px;
+
+  font-size: 32px;
+  font-weight: 750;
+  line-height: 1.3;
+
+  background: linear-gradient(
+    90deg,
+    #3db7f3,
+    #a78bfa,
+    #f472b6
+  );
+
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.birthdayModal p {
+  max-width: 340px;
+
+  margin: 0 auto;
+
+  color: var(--text_secondary, #9ca8b7);
+
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+/* =========================================
+   BIRTHDAY FOOTER
+========================================= */
+
+.birthdayFooter {
+  margin-top: 22px;
+  padding-top: 18px;
+
+  border-top: 1px solid var(--border, #2b3440);
+}
+
+.birthdayFooter span {
+  color: var(--text_primary, #eef3f8);
+
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* =========================================
+   CELEBRATE BUTTON
+========================================= */
+
+.birthdayCelebrateBtn {
+  width: 100%;
+  max-width: 190px;
+
+  margin-top: 24px;
+  padding: 12px 24px;
+
+  color: #ffffff;
+  background: var(--primary, #3db7f3);
+
+  border: none;
+  border-radius: 9px;
+
+  font-size: 14px;
+  font-weight: 650;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.birthdayCelebrateBtn:hover {
+  background: var(--primary_hover, #63c8ff);
+
+  transform: translateY(-2px);
+
+  box-shadow: 0 7px 20px rgba(61, 183, 243, 0.2);
+}
+
+.birthdayCelebrateBtn:active {
+  transform: translateY(0);
+}
+
+/* =========================================
+   ANIMATIONS
+========================================= */
+
+@keyframes birthdayFadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes birthdayModalEnter {
+  from {
+    opacity: 0;
+    transform: translateY(25px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes birthdayBounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-9px);
+  }
+}
+
+@keyframes birthdayFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 480px) {
+  .birthdayOverlay {
+    padding: 16px;
+  }
+
+  .birthdayModal {
+    max-width: 100%;
+    padding: 38px 22px 28px;
+    border-radius: 16px;
+  }
+
+  .birthdayIcon {
+    width: 84px;
+    height: 84px;
+
+    font-size: 46px;
+  }
+
+  .birthdayConfetti {
+    font-size: 21px;
+    letter-spacing: 6px;
+  }
+
+  .birthdayModal h2 {
+    font-size: 27px;
+  }
+
+  .birthdayModal p {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 320px) {
+  .birthdayModal {
+    padding: 36px 16px 24px;
+  }
+
+  .birthdayModal h2 {
+    font-size: 24px;
+  }
+
+  .birthdayCelebrateBtn {
+    max-width: 100%;
+  }
+}
+
+/* =========================================
+   REDUCED MOTION
+========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .birthdayOverlay,
+  .birthdayModal,
+  .birthdayIcon,
+  .birthdayConfetti {
+    animation: none;
+  }
+
+  .birthdayClose,
+  .birthdayCelebrateBtn {
+    transition: none;
+  }
+}
