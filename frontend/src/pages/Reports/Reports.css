@@ -155,7 +155,7 @@ page's general button gradient. */
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 10px;
+  gap: 6px;
 }
 
 .reports_custom_range_reveal {
@@ -185,20 +185,22 @@ page's general button gradient. */
 }
 .reports_custom_range label {
   display: grid;
-  gap: 5px;
+  gap: 3px;
   color: var(--text_secondary);
   font-size: 12px;
   font-weight: 600;
 }
 
 .reports_custom_range input[type="date"] {
-  min-height: 38px;
-  padding: 7px 10px;
+  width: 122px;
+  min-height: 34px;
+  padding: 4px 6px;
   border: 1px solid var(--border);
   border-radius: var(--radius_sm);
   background: #111318;
   color: #f5f7fa;
   font: inherit;
+  font-size: 12px;
   color-scheme: dark;
   transition: border-color var(--transition), box-shadow var(--transition);
 }

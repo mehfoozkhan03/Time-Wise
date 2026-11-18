@@ -32,7 +32,7 @@ export function ReportsHeader({
         padding: '36px 15px 28px',
         display: 'flex',
         flexWrap: 'wrap',
-        gap: 20,
+        gap: 12,
         alignItems: 'flex-start',
         justifyContent: 'space-between',
       }}
@@ -138,7 +138,7 @@ export function ReportsHeader({
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: 10,
+              gap: 6,
               flexWrap: 'wrap',
             }}
           >
@@ -148,7 +148,7 @@ export function ReportsHeader({
                 display: 'flex',
                 borderRadius: 10,
                 padding: 3,
-                gap: 5,
+                gap: 4,
               }}
             >
               {ranges.map((r) => (
@@ -156,7 +156,7 @@ export function ReportsHeader({
                   key={r.id}
                   onClick={() => dispatch(setDateRange(r.id))}
                   style={{
-                    padding: '6px 12px',
+                    padding: '6px 9px',
                     borderRadius: 7,
                     border: 'none',
                     cursor: 'pointer',
@@ -227,8 +227,8 @@ export function ReportsHeader({
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: 6,
-                padding: '8px 14px',
+                gap: 4,
+                padding: '7px 11px',
                 borderRadius: 9,
                 border: '1px solid rgba(255,255,255,.08)',
                 cursor: exportDisabled ? 'not-allowed' : 'pointer',
@@ -247,8 +247,8 @@ export function ReportsHeader({
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: 6,
-                padding: '8px 14px',
+                gap: 4,
+                padding: '7px 11px',
                 borderRadius: 9,
                 border: '1px solid rgba(16,185,129,.2)',
                 cursor: exportDisabled ? 'not-allowed' : 'pointer',

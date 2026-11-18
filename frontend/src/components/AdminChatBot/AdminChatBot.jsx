@@ -16,7 +16,13 @@ const initialMessages = [
 
 export function AdminChatBot() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isMinimized, setIsMinimized] = useState(false);
+  const [isMinimized, setIsMinimized] = useState(() => {
+    try {
+      return localStorage.getItem("timewise-admin-wisebot-minimized") === "true";
+    } catch {
+      return false;
+    }
+  });
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isConversationLoading, setIsConversationLoading] = useState(true);
@@ -25,6 +31,14 @@ export function AdminChatBot() {
   const chatBodyRef = useRef(null);
   const [messages, setMessages] = useState(initialMessages);
   const { hideOnIdle } = useFloatingControls();
+
+  useEffect(() => {
+    try {
+      localStorage.setItem("timewise-admin-wisebot-minimized", String(isMinimized));
+    } catch {
+      // Keep the bot usable when browser storage is unavailable.
+    }
+  }, [isMinimized]);
 
   useEffect(() => {
     const chatBody = chatBodyRef.current;
