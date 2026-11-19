@@ -8,6 +8,7 @@ import {
   updateExistingComment,
   toggleLikeComment,
 } from '../../../store/postSlice'
+import ProfileAvatar from '../../Common/ProfileAvatar/ProfileAvatar'
 
 import './CommentSection.css'
 
@@ -212,11 +213,6 @@ const CommentSection = ({ postId }) => {
               comment.createdBy?.lastName ?? ''
             }`.trim() || 'Unknown User'
 
-          const initials =
-            `${comment.createdBy?.firstName?.[0] ?? ''}${
-              comment.createdBy?.lastName?.[0] ?? ''
-            }`.toUpperCase() || 'U'
-
           const isOwner = comment.createdBy?._id === user?._id
 
           const isEditing = editingCommentId === comment._id
@@ -235,7 +231,11 @@ const CommentSection = ({ postId }) => {
                     gap: '10px',
                   }}
                 >
-                  <div className="post-avatar">{initials}</div>
+                  <ProfileAvatar
+                    user={comment.createdBy}
+                    size={48}
+                    className="post-avatar"
+                  />
 
                   <div>
                     <strong>{author}</strong>

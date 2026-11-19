@@ -3,6 +3,7 @@ import "./CommunityProfileCard.css";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import ProfileAvatar from "../../../Common/ProfileAvatar/ProfileAvatar";
 
 import {
   HiOutlineChatBubbleLeft,
@@ -76,10 +77,6 @@ export const CommunityProfileCard = () => {
 
   // ================= User Data =================
 
-  const initials = `${profile.firstName?.[0] || ""}${
-    profile.lastName?.[0] || ""
-  }`.toUpperCase();
-
   const fullName =
     `${profile.firstName || ""} ${profile.lastName || ""}`.trim();
 
@@ -138,16 +135,12 @@ export const CommunityProfileCard = () => {
 
         <div className="community-profile-content">
           {/* Avatar */}
-          <div className="community-profile-avatar">
-            {profile.profileImage ? (
-              <img
-                src={profile.profileImage}
-                alt={fullName}
-              />
-            ) : (
-              initials || "U"
-            )}
-          </div>
+          <ProfileAvatar
+            user={profile}
+            size={90}
+            alt={fullName || "User avatar"}
+            className="community-profile-avatar"
+          />
 
           <div className="community-profile-main">
             {/* ================= User Details ================= */}

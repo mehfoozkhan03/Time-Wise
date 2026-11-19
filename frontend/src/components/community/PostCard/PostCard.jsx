@@ -18,6 +18,7 @@ import {
 } from 'react-icons/hi2'
 
 import { toggleLikePost, toggleSavePost } from '../../../store/postSlice'
+import ProfileAvatar from '../../Common/ProfileAvatar/ProfileAvatar'
 
 import CommentSection from '../CommentSection/CommentSection'
 import PostMenu from '../PostMenu/PostMenu'
@@ -71,10 +72,6 @@ const PostCard = ({ post }) => {
 
   const likeCount = post.likesCount || 0
   const commentCount = post.commentsCount || 0
-
-  const initials = `${post.createdBy?.firstName?.[0] || ''}${
-    post.createdBy?.lastName?.[0] || ''
-  }`.toUpperCase()
 
   const authorName =
     `${post.createdBy?.firstName || ''} ${
@@ -249,7 +246,11 @@ const PostCard = ({ post }) => {
               to={`/community/profile/${post.createdBy?._id}`}
               className="post-avatar-link"
             >
-              <div className="post-avatar">{initials || 'U'}</div>
+              <ProfileAvatar
+                user={post.createdBy}
+                size={56}
+                className="post-avatar"
+              />
             </NavLink>
 
             <div className="post-user-info">

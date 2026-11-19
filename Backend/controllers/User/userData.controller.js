@@ -5,6 +5,42 @@ dotenv.config()
 
 import { userModel } from '../../models/User.model.js'
 import { AdminModel } from '../../models/Admin.model.js'
+import cloudinary from '../../config/cloudinary.js'
+
+const getStoredCloudinaryImagePublicId = (user) => {
+  if (user.profileImagePublicId) return user.profileImagePublicId
+  if (!user.profileImage) return null
+
+  try {
+    const imageUrl = new URL(user.profileImage)
+    const cloudName = cloudinary.config().cloud_name
+    const uploadPath = `/${cloudName}/image/upload/`
+
+    if (
+      imageUrl.protocol !== 'https:' ||
+      imageUrl.hostname !== 'res.cloudinary.com' ||
+      !cloudName ||
+      !imageUrl.pathname.startsWith(uploadPath)
+    ) {
+      return null
+    }
+
+    const segments = imageUrl.pathname.slice(uploadPath.length).split('/')
+    const versionIndex = segments.findIndex((segment) => /^v\d+$/.test(segment))
+
+    if (versionIndex === -1) return null
+
+    const publicIdSegments = segments.slice(versionIndex + 1)
+    const lastSegmentIndex = publicIdSegments.length - 1
+    publicIdSegments[lastSegmentIndex] = publicIdSegments[lastSegmentIndex]
+      ?.replace(/\.[a-z0-9]+$/i, '')
+
+    const publicId = publicIdSegments.join('/')
+    return publicId || null
+  } catch {
+    return null
+  }
+}
 
 // ================= Validation ===============
 
@@ -291,61 +327,66 @@ export const getCurrentUser = async (req, res) => {
 //# ================= Update User Profile =================
 
 export const updateProfile = async (req, res) => {
+  let keepUploadedImage = false
+
   try {
     const userId = req.user.userID
 
-    const { firstName, lastName, email, phone, address, bio } = req.body
+    const currentUser = await userModel
+      .findById(userId)
+      .select('profileImage profileImagePublicId firstName lastName email phone address bio')
 
-    // ================= Validation =================
-
-    if (!firstName?.trim()) {
-      return res.status(400).json({
+    if (!currentUser) {
+      return res.status(404).json({
         success: false,
-        message: 'First name is required.',
+        message: 'User not found.',
       })
     }
 
-    if (!lastName?.trim()) {
-      return res.status(400).json({
-        success: false,
-        message: 'Last name is required.',
-      })
+    // Only update fields included in the request. This lets photo-only saves
+    // keep the existing account details without resending them from the UI.
+    const body = req.body || {}
+    const update = {}
+    for (const field of ['firstName', 'lastName', 'email']) {
+      if (!Object.prototype.hasOwnProperty.call(body, field)) continue
+
+      const value = body[field]?.trim() || ''
+      // Empty name/email fields from an image-only form are treated as omitted;
+      // never replace the already registered value with an empty string.
+      if (!value) continue
+
+      update[field] = field === 'email' ? value.toLowerCase() : value
     }
 
-    if (!email?.trim()) {
-      return res.status(400).json({
-        success: false,
-        message: 'Email is required.',
-      })
+    for (const field of ['phone', 'address', 'bio']) {
+      if (Object.prototype.hasOwnProperty.call(body, field)) {
+        update[field] = body[field]?.trim() || ''
+      }
     }
 
-    // ================= Check Email =================
-
-    const existingUser = await userModel.findOne({
-      email: email.trim().toLowerCase(),
-      _id: { $ne: userId },
-    })
-
-    if (existingUser) {
-      return res.status(409).json({
-        success: false,
-        message: 'This email is already being used by another account.',
+    if (update.email && update.email !== currentUser.email) {
+      const existingUser = await userModel.findOne({
+        email: update.email,
+        _id: { $ne: userId },
       })
+
+      if (existingUser) {
+        return res.status(409).json({
+          success: false,
+          message: 'This email is already being used by another account.',
+        })
+      }
     }
 
-    // ================= Update =================
+    if (req.file) {
+      update.profileImage = req.file.path
+      update.profileImagePublicId = req.file.filename
+    }
 
     const updatedUser = await userModel
       .findByIdAndUpdate(
         userId,
-        {
-          firstName: firstName.trim(),
-          lastName: lastName.trim(),
-          email: email.trim().toLowerCase(),
-          phone: phone?.trim() || '',
-          address: address?.trim() || '',
-          bio: bio?.trim() || '',
-        },
+        update,
         {
           returnDocument: "after",
           runValidators: true,
@@ -358,6 +399,21 @@ export const updateProfile = async (req, res) => {
         success: false,
         message: 'User not found.',
       })
+    }
+
+    keepUploadedImage = true
+
+    const previousImagePublicId = getStoredCloudinaryImagePublicId(currentUser)
+
+    if (req.file && previousImagePublicId) {
+      try {
+        await cloudinary.uploader.destroy(previousImagePublicId, {
+          resource_type: 'image',
+          invalidate: true,
+        })
+      } catch (deleteError) {
+        console.error('Previous profile image cleanup failed:', deleteError.message)
+      }
     }
 
     return res.status(200).json({
@@ -393,6 +449,17 @@ export const updateProfile = async (req, res) => {
           ? error.message
           : 'Please try again later.',
     })
+  } finally {
+    if (!keepUploadedImage && req.file?.filename) {
+      try {
+        await cloudinary.uploader.destroy(req.file.filename, {
+          resource_type: 'image',
+          invalidate: true,
+        })
+      } catch (cleanupError) {
+        console.error('Uncommitted profile image cleanup failed:', cleanupError.message)
+      }
+    }
   }
 }
 

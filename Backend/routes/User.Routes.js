@@ -14,6 +14,7 @@ import {
 import { getTheme, updateTheme } from "./../controllers/User/theme.controller.js";
 import { updateSocialLinks } from "../controllers/User/socialLinks.controller.js";
 import { updateEmergencyContact } from "../controllers/User/emergencyContact.controller.js";
+import { uploadProfileImage } from "../middleware/profileUpload.middleware.js";
 
 const userRoutes = express.Router();
 
@@ -31,7 +32,7 @@ userRoutes.post("/logout", logout);
 
 userRoutes.get("/me", auth, authorize("user", "admin"), getCurrentUser);
 
-userRoutes.patch("/profile", auth, authorize("user"), updateProfile);
+userRoutes.patch("/profile", auth, authorize("user"), uploadProfileImage, updateProfile);
 
 userRoutes.get("/profile/:userId", auth, getUserProfile);
 

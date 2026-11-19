@@ -1,38 +1,41 @@
-import api from "./api";
+import api from './api'
 
 export const authService = {
   signup(data) {
-    return api.post("/user/signup", data);
+    return api.post('/user/signup', data)
   },
 
   login(data) {
-    return api.post("/user/login", data);
+    return api.post('/user/login', data)
   },
 
   logout() {
-    return api.post("/user/logout");
+    return api.post('/user/logout')
   },
 
   getCurrentUser() {
-    return api.get("/user/me");
+    return api.get('/user/me')
   },
 
-  //# Update profile from setting 
+  // Update profile, including an optional profile image
   updateProfile(data) {
-    return api.patch("/user/profile", data);
+    return api.patch('/user/profile', data)
   },
 
-  getUserProfile: (userId) => api.get(`/user/profile/${userId}`),
+  // Fetch another user's profile, including their profile image
+  getUserProfile(userId) {
+    return api.get(`/user/profile/${userId}`)
+  },
 
   updateActivity() {
-    return api.patch("/user/activity");
+    return api.patch('/user/activity')
   },
 
   updateSocialLinks(socialLinks) {
-    return api.patch("/user/social-links", socialLinks);
+    return api.patch('/user/social-links', socialLinks)
   },
 
   updateEmergencyContact(emergencyContact) {
-    return api.patch("/user/emergency-contact", emergencyContact);
+    return api.patch('/user/emergency-contact', emergencyContact)
   },
-};
+}

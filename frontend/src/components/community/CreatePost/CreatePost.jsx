@@ -1,8 +1,9 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { useDispatch, useSelector } from 'react-redux'
 
 import { createNewPost } from '../../../store/postSlice'
+import ProfileAvatar from '../../Common/ProfileAvatar/ProfileAvatar'
 
 import EmojiPicker from "emoji-picker-react"
 
@@ -87,18 +88,6 @@ const CreatePost = () => {
 
     return () => clearInterval(interval)
   }, [])
-
-  // ======================================================
-  // USER INITIALS
-  // ======================================================
-
-  const initials = useMemo(() => {
-    if (!user) return 'U'
-
-    return `${user.firstName?.[0] ?? ''}${
-      user.lastName?.[0] ?? ''
-    }`.toUpperCase()
-  }, [user])
 
   // ======================================================
   // CLOSE EMOJI PICKER WHEN CLICKING OUTSIDE
@@ -427,7 +416,7 @@ const CreatePost = () => {
       {/* ================================================= */}
 
       <div className="create_post_header">
-        <div className="create_post_avatar">{initials}</div>
+        <ProfileAvatar user={user} size={56} className="create_post_avatar" />
 
         <div>
           <h3>

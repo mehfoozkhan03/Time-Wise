@@ -12,6 +12,7 @@ import { IoTrendingUp } from 'react-icons/io5'
 import { useEffect, useRef, useState } from 'react'
 
 import './RightSidebar.css'
+import ProfileAvatar from '../../Common/ProfileAvatar/ProfileAvatar'
 
 // Get images from both the current images array and legacy image field.
 const getPostImages = (post) => {
@@ -266,11 +267,7 @@ const RightSidebar = () => {
           ) : (
             contributors.map((person) => (
               <div key={person._id} className="contributor-item">
-                <div className="contributor-avatar">
-                  {`${person.firstName?.[0] || ''}${
-                    person.lastName?.[0] || ''
-                  }`.toUpperCase()}
-                </div>
+                <ProfileAvatar user={person} size={38} className="contributor-avatar" />
 
                 <div className="contributor-info">
                   <strong>

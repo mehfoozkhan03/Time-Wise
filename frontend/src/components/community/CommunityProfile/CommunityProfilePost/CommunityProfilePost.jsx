@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { formatDistanceToNow } from "date-fns";
+import ProfileAvatar from "../../../Common/ProfileAvatar/ProfileAvatar";
 
 import "./CommunityProfilePost.css";
 
@@ -165,18 +166,11 @@ export const CommunityProfilePosts = () => {
 
               <div className="community-post-header">
                 <div className="community-post-author">
-                  <div className="community-post-avatar">
-                    {post.createdBy?.profileImage ? (
-                      <img
-                        src={post.createdBy.profileImage}
-                        alt={`${post.createdBy.firstName} ${post.createdBy.lastName}`}
-                      />
-                    ) : (
-                      `${post.createdBy?.firstName?.[0] || ""}${
-                        post.createdBy?.lastName?.[0] || ""
-                      }`.toUpperCase()
-                    )}
-                  </div>
+                  <ProfileAvatar
+                    user={post.createdBy}
+                    size={52}
+                    className="community-post-avatar"
+                  />
 
                   <div className="community-post-author-info">
                     <h3>
