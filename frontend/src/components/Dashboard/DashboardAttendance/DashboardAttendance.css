@@ -188,29 +188,174 @@
   font-size: 14px;
 }
 
-@media (max-width: 840px) {
-  .dashboardAttendance-container {
-    padding: 22px;
-  }
+/* =========================================
+   RESPONSIVE DESIGN
+========================================= */
 
-  .dashboarAttendance-details {
-    overflow-x: auto;
-  }
+/* 1440px */
+@media screen and (max-width: 1440px) {
+    .dashboardAttendance-container {
+        gap: 26px;
+        padding: 26px;
+    }
 
-  .dashboardAttendance-details-head,
-  .dashboardAttendance-users > div:not(.no-attendance) {
-    min-width: 760px;
-  }
+    .dashboardAttendance-details-head,
+    .dashboardAttendance-users > div {
+        padding: 18px;
+    }
 }
 
-@media (max-width: 430px) {
-  .dashboardAttendance-container {
-    padding: 14px;
-    gap: 20px;
-  }
+/* 1080px */
+@media screen and (max-width: 1080px) {
+    .dashboardAttendance-container {
+        gap: 24px;
+        padding: 22px;
+    }
 
-  .dashboardAttendance-details-head,
-  .dashboardAttendance-users > div:not(.no-attendance) {
-    padding: 14px;
-  }
+    .dashboardAttendance-details-head,
+    .dashboardAttendance-users > div {
+        padding: 16px;
+    }
+
+    .dashboardAttendance-userName {
+        font-size: 13px;
+    }
+
+    .dashboardAttendance-checkIn,
+    .dashboardAttendance-breakTime,
+    .dashboardAttendance-checkoutTime,
+    .dashboardAttendance-workingHrs {
+        font-size: 13px;
+    }
+}
+
+/* 760px */
+@media screen and (max-width: 760px) {
+    .dashboardAttendance-container {
+        gap: 20px;
+        padding: 18px;
+    }
+
+    .dashboarAttendance-details {
+        border-radius: 15px;
+    }
+
+    .dashboardAttendance-details-head,
+    .dashboardAttendance-users > div {
+        min-width: 680px;
+        padding: 15px;
+    }
+
+    .dashboardAttendance-avatar {
+        width: 35px;
+        height: 35px;
+    }
+
+    .dashboardAttendance-users > div > div:nth-child(1) {
+        gap: 8px;
+    }
+}
+
+/* 480px */
+@media screen and (max-width: 480px) {
+    .dashboardAttendance-container {
+        gap: 18px;
+        padding: 14px;
+    }
+
+    .dashboardAttendence-header > h3 {
+        font-size: 17px;
+    }
+
+    .dashboardAttendence-header > span {
+        font-size: 11px;
+    }
+
+    .dashboardAttendance-details-head,
+    .dashboardAttendance-users > div {
+        min-width: 650px;
+        padding: 13px;
+    }
+
+    .dashboardAttendance-details-head > div {
+        font-size: 11px;
+    }
+
+    .dashboardAttendance-userName {
+        font-size: 12px;
+    }
+
+    .dashboardAttendance-department {
+        font-size: 10px;
+    }
+
+    .dashboardAttendance-checkIn,
+    .dashboardAttendance-breakTime,
+    .dashboardAttendance-checkoutTime,
+    .dashboardAttendance-workingHrs {
+        font-size: 12px;
+    }
+
+    .dashboardAttendance-avatar {
+        width: 32px;
+        height: 32px;
+    }
+
+    .dashboardAttendance-status {
+        width: 90px;
+        height: 23px;
+        gap: 7px;
+    }
+
+    .dashboardAttendance-status > span {
+        font-size: 11px;
+    }
+
+    .dashboardAttendance-users > .no-attendance {
+        min-width: 0;
+        padding: 25px 12px;
+        font-size: 12px;
+    }
+}
+
+/* 320px */
+@media screen and (max-width: 320px) {
+    .dashboardAttendance-container {
+        gap: 15px;
+        padding: 10px;
+    }
+
+    .dashboardAttendence-header > h3 {
+        font-size: 16px;
+    }
+
+    .dashboardAttendance-details-head,
+    .dashboardAttendance-users > div {
+        min-width: 620px;
+        padding: 11px;
+    }
+
+    .dashboardAttendance-users > div > div:nth-child(1) {
+        gap: 6px;
+    }
+
+    .dashboardAttendance-avatar {
+        width: 29px;
+        height: 29px;
+    }
+
+    .dashboardAttendance-status {
+        width: 85px;
+        height: 22px;
+        gap: 5px;
+    }
+
+    .dashboardAttendance-status > span {
+        font-size: 10px;
+    }
+
+    .dashboardAttendance-users > .no-attendance {
+        padding: 20px 10px;
+        font-size: 11px;
+    }
 }

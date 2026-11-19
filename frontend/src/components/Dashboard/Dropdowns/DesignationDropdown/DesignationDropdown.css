@@ -48,3 +48,91 @@
   transform: rotate(180deg);
   transition: transform 0.2s ease;
 }
+
+/* ======================================================
+   RESPONSIVE DESIGN - 1440px
+====================================================== */
+
+@media (max-width: 1440px) {
+    .employeeDesignationDropdown {
+        padding: 10px 14px;
+    }
+}
+
+/* ======================================================
+   RESPONSIVE DESIGN - 1080px
+====================================================== */
+
+@media (max-width: 1080px) {
+    .employeeDesignationDropdown {
+        padding: 9px 13px;
+    }
+
+    .employeeDesignationDropdown-option {
+        padding: 10px 16px;
+    }
+}
+
+/* ======================================================
+   RESPONSIVE DESIGN - 760px
+====================================================== */
+
+@media (max-width: 760px) {
+    .employeeDesignationDropdown {
+        width: 100%;
+        padding: 9px 12px;
+    }
+
+    .employeeDesignationDropdown-menu {
+        top: calc(100% + 4px);
+    }
+
+    .employeeDesignationDropdown-option {
+        padding: 10px 14px;
+    }
+}
+
+/* ======================================================
+   RESPONSIVE DESIGN - 480px
+====================================================== */
+
+@media (max-width: 480px) {
+    .employeeDesignationDropdown {
+        padding: 8px 11px;
+        border-radius: 7px;
+    }
+
+    .employeeDesignationDropdown-button {
+        font-size: 11px;
+    }
+
+    .employeeDesignationDropdown-menu {
+        font-size: 11px;
+    }
+
+    .employeeDesignationDropdown-option {
+        padding: 9px 12px;
+    }
+}
+
+/* ======================================================
+   RESPONSIVE DESIGN - 320px
+====================================================== */
+
+@media (max-width: 320px) {
+    .employeeDesignationDropdown {
+        padding: 7px 9px;
+    }
+
+    .employeeDesignationDropdown-button {
+        font-size: 10px;
+    }
+
+    .employeeDesignationDropdown-menu {
+        font-size: 10px;
+    }
+
+    .employeeDesignationDropdown-option {
+        padding: 8px 10px;
+    }
+}

@@ -133,40 +133,267 @@
     height: 250px;
 }
 
-@media (max-width: 840px) {
-    .dashboardReport-container {
-        padding: 22px;
-    }
 
-    .dashboardReport-grid-content {
-        grid-template-columns: 1fr;
-    }
+/* ==========================================================
+   RESPONSIVE DESIGN
+========================================================== */
 
-    .dashboardDepartment-chart-content {
-        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-        gap: 18px;
-    }
+/* 1440px */
+@media (max-width: 1440px) {
+  .dashboardReport-container {
+    padding: 28px;
+    gap: 26px;
+  }
+
+  .dashboardReport-grid-content {
+    gap: 18px;
+  }
+
+  .dashboardReport-department-chart {
+    padding: 20px 24px;
+  }
+
+  .dashboardReport-attendance-trend {
+    padding: 26px;
+  }
 }
 
-@media (max-width: 430px) {
-    .dashboardReport-container {
-        padding: 14px;
-        gap: 20px;
-    }
+/* 1080px */
+@media (max-width: 1080px) {
+  .dashboardReport-container {
+    padding: 24px;
+    gap: 24px;
+  }
 
-    .dashboardReport-attendance-chart,
-    .dashboardReport-department-chart,
-    .dashboardReport-attendance-trend {
-        padding: 16px;
-        border-radius: 14px;
-    }
+  .dashboardReport-grid-content {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
 
-    .dashboardDepartment-chart-content {
-        grid-template-columns: 1fr;
-        justify-items: center;
-    }
+  .dashboardReport-department-chart {
+    padding: 20px;
+    gap: 22px;
+  }
 
-    .department-chart-details {
-        width: 100%;
-    }
+  .dashboardDepartment-chart-content {
+    gap: 24px;
+  }
+
+  .dashboardReport-attendance-trend {
+    padding: 24px;
+    gap: 24px;
+  }
+
+  .dashboardAttendance-chart-content {
+    padding-left: 20px;
+  }
+}
+
+/* 760px */
+@media (max-width: 760px) {
+  .dashboardReport-container {
+    padding: 20px;
+    gap: 20px;
+  }
+
+  .dashboardReport-header > h3 {
+    font-size: 18px;
+  }
+
+  .dashboardReport-grid-container {
+    gap: 16px;
+  }
+
+  .dashboardReport-grid-content {
+    gap: 16px;
+  }
+
+  .dashboardReport-attendance-chart {
+    padding: 16px;
+    gap: 16px;
+    border-radius: 16px;
+  }
+
+  .dashboardReport-department-chart {
+    padding: 18px;
+    gap: 20px;
+    border-radius: 16px;
+  }
+
+  .dashboardDepartment-chart-content {
+    gap: 18px;
+  }
+
+  .department-chart {
+    width: 180px;
+    height: 180px;
+  }
+
+  .dashboardReport-attendance-trend {
+    padding: 20px;
+    gap: 20px;
+    border-radius: 16px;
+  }
+
+  .attendance-trend-chart {
+    height: 230px;
+  }
+
+  .dashboardAttendance-chart-content {
+    padding-left: 12px;
+  }
+}
+
+/* 480px */
+@media (max-width: 480px) {
+  .dashboardReport-container {
+    padding: 15px;
+    gap: 18px;
+  }
+
+  .dashboardReport-header > h3 {
+    font-size: 17px;
+  }
+
+  .dashboardReport-header > span {
+    font-size: 11px;
+  }
+
+  .dashboardReport-grid-container,
+  .dashboardReport-grid-content {
+    gap: 14px;
+  }
+
+  .dashboardReport-attendance-chart {
+    padding: 14px;
+    gap: 14px;
+    border-radius: 14px;
+  }
+
+  .attendance-chart-heading > h3,
+  .department-chart-heading > h3,
+  .attendance-trend-heading > h3 {
+    font-size: 13px;
+  }
+
+  .dashboardAttendance-chart-content {
+    padding-left: 0;
+  }
+
+  .dashboardReport-department-chart {
+    padding: 15px;
+    gap: 16px;
+    border-radius: 14px;
+  }
+
+  .dashboardDepartment-chart-content {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    gap: 18px;
+  }
+
+  .department-chart {
+    width: 170px;
+    height: 170px;
+  }
+
+  .department-chart-details {
+    width: 100%;
+    gap: 9px;
+  }
+
+  .department-chart-details > div > div > div:nth-child(2),
+  .department-chart-details > div > span {
+    font-size: 11px;
+  }
+
+  .dashboardReport-attendance-trend {
+    padding: 16px;
+    gap: 16px;
+    border-radius: 14px;
+  }
+
+  .attendance-trend-chart {
+    height: 210px;
+  }
+
+  .attendance-trend-heading {
+    gap: 8px;
+  }
+}
+
+/* 320px */
+@media (max-width: 320px) {
+  .dashboardReport-container {
+    padding: 10px;
+    gap: 15px;
+  }
+
+  .dashboardReport-header > h3 {
+    font-size: 16px;
+  }
+
+  .dashboardReport-grid-container,
+  .dashboardReport-grid-content {
+    gap: 12px;
+  }
+
+  .dashboardReport-attendance-chart {
+    padding: 11px;
+    gap: 12px;
+    border-radius: 12px;
+  }
+
+  .dashboardReport-department-chart {
+    padding: 12px;
+    gap: 14px;
+    border-radius: 12px;
+  }
+
+  .dashboardDepartment-chart-content {
+    gap: 14px;
+  }
+
+  .department-chart {
+    width: 150px;
+    height: 150px;
+  }
+
+  .department-chart-details {
+    gap: 8px;
+  }
+
+  .department-chart-details > div {
+    gap: 5px;
+  }
+
+  .department-chart-details > div > div {
+    gap: 4px;
+  }
+
+  .department-chart-box {
+    height: 10px;
+    width: 10px;
+  }
+
+  .department-chart-details > div > div > div:nth-child(2),
+  .department-chart-details > div > span {
+    font-size: 10px;
+  }
+
+  .dashboardReport-attendance-trend {
+    padding: 12px;
+    gap: 14px;
+    border-radius: 12px;
+  }
+
+  .attendance-trend-chart {
+    height: 190px;
+  }
+
+  .attendance-chart-heading > h3,
+  .department-chart-heading > h3,
+  .attendance-trend-heading > h3 {
+    font-size: 12px;
+  }
 }

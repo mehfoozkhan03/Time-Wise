@@ -43,3 +43,91 @@
 .employeeDepartmentDropdown-option.active{
     background-color: var(--primary);
 }
+
+/* ======================================================
+   RESPONSIVE DESIGN - 1440px
+====================================================== */
+
+@media (max-width: 1440px) {
+    .employeeDepartmentDropdown {
+        padding: 10px 14px;
+    }
+}
+
+/* ======================================================
+   RESPONSIVE DESIGN - 1080px
+====================================================== */
+
+@media (max-width: 1080px) {
+    .employeeDepartmentDropdown {
+        padding: 9px 13px;
+    }
+
+    .employeeDepartmentDropdown-option {
+        padding: 10px 16px;
+    }
+}
+
+/* ======================================================
+   RESPONSIVE DESIGN - 760px
+====================================================== */
+
+@media (max-width: 760px) {
+    .employeeDepartmentDropdown {
+        width: 100%;
+        padding: 9px 12px;
+    }
+
+    .employeeDepartmentDropdown-menu {
+        top: calc(100% + 4px);
+    }
+
+    .employeeDepartmentDropdown-option {
+        padding: 10px 14px;
+    }
+}
+
+/* ======================================================
+   RESPONSIVE DESIGN - 480px
+====================================================== */
+
+@media (max-width: 480px) {
+    .employeeDepartmentDropdown {
+        padding: 8px 11px;
+        border-radius: 7px;
+    }
+
+    .employeeDepartmentDropdown-button {
+        font-size: 11px;
+    }
+
+    .employeeDepartmentDropdown-menu {
+        font-size: 11px;
+    }
+
+    .employeeDepartmentDropdown-option {
+        padding: 9px 12px;
+    }
+}
+
+/* ======================================================
+   RESPONSIVE DESIGN - 320px
+====================================================== */
+
+@media (max-width: 320px) {
+    .employeeDepartmentDropdown {
+        padding: 7px 9px;
+    }
+
+    .employeeDepartmentDropdown-button {
+        font-size: 10px;
+    }
+
+    .employeeDepartmentDropdown-menu {
+        font-size: 10px;
+    }
+
+    .employeeDepartmentDropdown-option {
+        padding: 8px 10px;
+    }
+}

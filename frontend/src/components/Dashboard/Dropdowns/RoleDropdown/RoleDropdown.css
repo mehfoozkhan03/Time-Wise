@@ -58,3 +58,92 @@
 .employeeRoleDropdown-option:hover {
   background: var(--primary);
 }
+
+/* ======================================================
+   RESPONSIVE DESIGN
+====================================================== */
+
+
+/* Large screens - 1440px */
+@media screen and (max-width: 1440px) {
+  .employeeRoleDropdown-option {
+    padding: 11px 10px;
+  }
+}
+
+/* Laptops - 1080px */
+@media screen and (max-width: 1080px) {
+  .employeeRoleDropdown-button {
+    padding: 8px 9px;
+  }
+
+  .employeeRoleDropdown-option {
+    padding: 10px 9px;
+  }
+}
+
+/* Tablets - 760px */
+@media screen and (max-width: 760px) {
+  .employeeRoleDropdown-button {
+    gap: 7px;
+    padding: 8px;
+    font-size: 11px;
+  }
+
+  .employeeRoleDropdown-button svg {
+    font-size: 16px;
+  }
+
+  .employeeRoleDropdown-menu {
+    top: 38px;
+  }
+
+  .employeeRoleDropdown-option {
+    padding: 10px 8px;
+    font-size: 11px;
+  }
+}
+
+/* Mobile - 480px */
+@media screen and (max-width: 480px) {
+  .employeeRoleDropdown-button {
+    gap: 6px;
+    padding: 7px 8px;
+    font-size: 11px;
+  }
+
+  .employeeRoleDropdown-button svg {
+    font-size: 15px;
+  }
+
+  .employeeRoleDropdown-menu {
+    top: 36px;
+  }
+
+  .employeeRoleDropdown-option {
+    padding: 9px 8px;
+    font-size: 11px;
+  }
+}
+
+/* Small mobile - 320px */
+@media screen and (max-width: 320px) {
+  .employeeRoleDropdown-button {
+    gap: 5px;
+    padding: 6px 7px;
+    font-size: 10px;
+  }
+
+  .employeeRoleDropdown-button svg {
+    font-size: 14px;
+  }
+
+  .employeeRoleDropdown-menu {
+    top: 34px;
+  }
+
+  .employeeRoleDropdown-option {
+    padding: 8px 7px;
+    font-size: 10px;
+  }
+}

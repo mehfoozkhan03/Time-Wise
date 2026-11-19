@@ -622,18 +622,6 @@
   }
 }
 
-/* 760px - Tablets */
-@media (min-width: 760px) and (max-width: 1079px) {
-}
-
-/* 1080px - Small Desktops and Laptops */
-@media (min-width: 1080px) and (max-width: 1439px) {
-}
-
-/* 1440px - Large Desktops */
-@media (min-width: 1440px) {
-}
-
 /* Accessibility: Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
   .leave_details_overlay,

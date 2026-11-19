@@ -1,9 +1,13 @@
+
 .custom_dropdown {
   position: relative;
+  width: 100%;
+  min-width: 0;
 }
 
 .dropdown_trigger {
   width: 100%;
+  min-width: 0;
   padding: 15px 16px;
   border: 1px solid var(--border);
   border-radius: 12px;
@@ -11,9 +15,11 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 10px;
   font-size: 14px;
   color: var(--text_primary);
   cursor: pointer;
+  box-sizing: border-box;
 }
 
 .dropdown_trigger:hover {
@@ -26,6 +32,7 @@
 }
 
 .dropdown_trigger svg {
+  flex-shrink: 0;
   font-size: 12px;
   color: var(--text_primary);
   transition: transform 0.2s ease;
@@ -40,12 +47,15 @@
   top: calc(100% + 6px);
   left: 0;
   width: 100%;
+  max-width: 100%;
   max-height: 300px;
   overflow-y: auto;
+  overflow-x: hidden;
   background: var(--surface);
   border: 1px solid var(--border);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
   z-index: 1000;
+  box-sizing: border-box;
 }
 
 .dropdown_option {
@@ -53,6 +63,7 @@
   font-size: 16px;
   color: var(--text_primary);
   cursor: pointer;
+  overflow-wrap: anywhere;
 }
 
 .dropdown_option:hover {
@@ -63,4 +74,85 @@
 .dropdown_option.selected {
   background: var(--primary);
   color: #ffffff;
+}
+
+/* ==========================================================
+   LARGE DESKTOP - 1440px
+========================================================== */
+
+@media screen and (min-width: 1440px) {
+  .custom_dropdown {
+    max-width: 100%;
+  }
+}
+
+/* ==========================================================
+   SMALL LAPTOPS - 1080px
+========================================================== */
+
+@media screen and (max-width: 1080px) {
+  .dropdown_menu {
+    max-height: 280px;
+  }
+}
+
+/* ==========================================================
+   TABLETS - 760px
+========================================================== */
+
+@media screen and (max-width: 760px) {
+  .dropdown_trigger {
+    padding: 13px 14px;
+  }
+
+  .dropdown_option {
+    padding: 10px 14px;
+    font-size: 15px;
+  }
+
+  .dropdown_menu {
+    max-height: 260px;
+  }
+}
+
+/* ==========================================================
+   MOBILE DEVICES - 480px
+========================================================== */
+
+@media screen and (max-width: 480px) {
+  .dropdown_trigger {
+    padding: 12px;
+    font-size: 14px;
+    gap: 8px;
+  }
+
+  .dropdown_option {
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+
+  .dropdown_menu {
+    max-height: 240px;
+  }
+}
+
+/* ==========================================================
+   SMALL MOBILE DEVICES - 320px
+========================================================== */
+
+@media screen and (max-width: 320px) {
+  .dropdown_trigger {
+    padding: 10px;
+    font-size: 13px;
+    gap: 6px;
+  }
+
+  .dropdown_option {
+    padding: 9px 10px;
+    font-size: 13px;
+  }
+
+  .dropdown_menu {
+    max-height: 220px;
+  }
 }

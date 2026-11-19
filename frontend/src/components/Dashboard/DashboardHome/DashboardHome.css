@@ -433,62 +433,334 @@
   cursor: pointer;
 }
 
+/* ==========================================================
+   RESPONSIVE DESIGN
+========================================================== */
 
-@media (max-width: 600px) {
-  .create-notification-modal__overlay {
-    padding: 12px;
+/* 1440px */
+@media (max-width: 1440px) {
+  .dashboardHome-container {
+    padding: 28px;
+  }
+
+  .home-card-container {
+    gap: 13px;
+  }
+
+  .dashboard-overview {
+    gap: 20px;
+  }
+}
+
+/* 1080px */
+@media (max-width: 1080px) {
+  .dashboardHome-container {
+    padding: 24px;
+    gap: 18px;
+  }
+
+  .home-card-container {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+  }
+
+  .home-card,
+  .home-thought {
+    padding: 18px;
+  }
+
+  .home-thought {
+    width: 100%;
+    max-width: 420px;
+  }
+
+  .dashboard-overview {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+  }
+
+  .recent-employee-content {
+    padding: 8px 14px;
+    gap: 10px;
+  }
+
+  .employe-left {
+    gap: 10px;
+    min-width: 0;
+  }
+
+  .employe-left p {
+    font-size: 14px;
+  }
+
+  .attendance-chart-container {
+    padding: 16px;
+  }
+}
+
+/* 760px */
+@media (max-width: 760px) {
+  .dashboardHome-container {
+    padding: 20px;
+    gap: 18px;
+  }
+
+  .home-card-container {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .home-card,
+  .home-thought {
+    padding: 16px;
+    gap: 15px;
+  }
+
+  .home-thought {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .dashboard-overview {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+
+  .recent-employee-content {
+    padding: 10px 14px;
+  }
+
+  .attendance-chart-container {
+    height: 260px;
+    padding: 14px;
+  }
+
+  .create-notification-modal__overlay,
+  .publish-thought-modal__overlay {
+    padding: 18px;
+  }
+
+  .create-notification-modal,
+  .publish-thought-modal {
+    max-height: 88vh;
   }
 
   .create-notification-modal__content {
-    padding: 20px 12px;
+    padding: 20px;
   }
 }
 
-@media (max-width: 1000px) {
-    .home-card-container {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
+/* 480px */
+@media (max-width: 480px) {
+  .dashboardHome-container {
+    padding: 15px;
+    gap: 16px;
+  }
 
-    .dashboard-overview {
-        grid-template-columns: 1fr;
-    }
+  .card-thought-container {
+    gap: 15px;
+  }
 
-    .home-thought {
-        width: 100%;
-    }
+  .home-card-container {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .home-card,
+  .home-thought {
+    padding: 16px;
+    gap: 14px;
+    border-radius: 16px;
+  }
+
+  .home-thought > p {
+    font-size: 13px;
+  }
+
+  .home-thought-heading {
+    gap: 8px;
+  }
+
+  .quick-actions {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .add-employe {
+    padding: 9px 14px;
+    gap: 8px;
+  }
+
+  .dashboard-overview {
+    padding-top: 10px;
+    gap: 20px;
+  }
+
+  .recent-employe-heading > h3,
+  .attendance-title {
+    font-size: 16px;
+  }
+
+  .recent-employee-content {
+    padding: 10px;
+    gap: 8px;
+    border-radius: 14px;
+  }
+
+  .employe-left {
+    gap: 8px;
+  }
+
+  .employe-left p {
+    font-size: 13px;
+  }
+
+  .employe-left span {
+    font-size: 11px;
+  }
+
+  .recent-employee-avatar {
+    height: 35px;
+    width: 35px;
+    flex-shrink: 0;
+  }
+
+  .recent-dot-container {
+    padding: 5px 7px;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+
+  .recent-dot-container > span {
+    font-size: 10px;
+  }
+
+  .attendance-chart-container {
+    height: 230px;
+    padding: 10px;
+    border-radius: 15px;
+  }
+
+  .create-notification-modal__overlay,
+  .publish-thought-modal__overlay {
+    padding: 12px;
+  }
+
+  .create-notification-modal,
+  .publish-thought-modal {
+    max-height: 90vh;
+    border-radius: 15px;
+  }
+
+  .create-notification-modal__content {
+    padding: 18px 15px;
+  }
+
+  .create-notification-modal__close,
+  .publish-thought-modal__close {
+    top: 8px;
+    right: 12px;
+    font-size: 26px;
+  }
 }
 
-@media (max-width: 600px) {
-    .home-card-container {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 10px;
-    }
+/* 320px */
+@media (max-width: 320px) {
+  .dashboardHome-container {
+    padding: 10px;
+    gap: 14px;
+  }
 
-    .home-card {
-        min-width: 0;
-        height: auto;
-        min-height: 150px;
-        padding: 14px;
-        gap: 14px;
-    }
+  .home-card-container {
+    gap: 10px;
+  }
 
-    .quick-actions {
-        align-items: stretch;
-        flex-direction: column;
-    }
+  .home-card,
+  .home-thought {
+    padding: 13px;
+    gap: 12px;
+    border-radius: 14px;
+  }
 
-    .quick-actions > div {
-        justify-content: center;
-    }
+  .home-thought > p {
+    font-size: 12px;
+  }
 
-    .recent-employee-content {
-        padding: 10px 12px;
-        gap: 10px;
-    }
-}
+  .home-thought-heading > span {
+    font-size: 12px;
+  }
 
-@media (max-width: 360px) {
-    .home-card-container {
-        grid-template-columns: 1fr;
-    }
+  .thought-avatar-container {
+    gap: 7px;
+  }
+
+  .thought-avatar {
+    height: 27px;
+    width: 27px;
+    font-size: 11px;
+    flex-shrink: 0;
+  }
+
+  .thought-avatar-container > span {
+    font-size: 12px;
+  }
+
+  .add-employe {
+    padding: 8px 10px;
+    gap: 6px;
+  }
+
+  .add-employe > span {
+    font-size: 11px;
+  }
+
+  .recent-employee-content {
+    padding: 8px;
+    gap: 6px;
+  }
+
+  .employe-left {
+    gap: 6px;
+  }
+
+  .employe-left p {
+    font-size: 12px;
+  }
+
+  .employe-left span {
+    font-size: 10px;
+  }
+
+  .recent-employee-avatar {
+    height: 30px;
+    width: 30px;
+    font-size: 12px;
+  }
+
+  .recent-dot-container {
+    padding: 4px 5px;
+  }
+
+  .recent-dot-container > span {
+    font-size: 9px;
+  }
+
+  .attendance-chart-container {
+    height: 210px;
+    padding: 8px;
+  }
+
+  .create-notification-modal__overlay,
+  .publish-thought-modal__overlay {
+    padding: 8px;
+  }
+
+  .create-notification-modal,
+  .publish-thought-modal {
+    border-radius: 12px;
+  }
+
+  .create-notification-modal__content {
+    padding: 15px 12px;
+  }
 }
