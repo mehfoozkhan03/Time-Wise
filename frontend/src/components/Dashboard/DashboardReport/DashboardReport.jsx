@@ -1,4 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
+import Skeleton from "../../Skeleton/Skeleton";
 
 import {
   fetchAdminAttendanceTrend,
@@ -209,10 +210,14 @@ export const DashboardReport = () => {
                 <h3>Weekly Attendance Breakdown</h3>
               </div>
               <div className="dashboardAttendance-chart-content">
-                <Bar
-                  data={data}
-                  options={options}
-                />
+                {loading && weeklyAttendance.length === 0 ? (
+                  <Skeleton width="100%" height="240px" radius="10px" />
+                ) : (
+                  <Bar
+                    data={data}
+                    options={options}
+                  />
+                )}
               </div>
             </div>
             {/* Department chart */}
@@ -222,38 +227,54 @@ export const DashboardReport = () => {
                 <h3>Department Headcount</h3>
               </div>
               <div className="dashboardDepartment-chart-content">
-                <div className="department-chart-container">
-                  <Doughnut
-                    className="department-chart"
-                    data={data1}
-                    options={options1}
-                  />
-                </div>
-                <div className="department-chart-details">
-                  {departments.map((item, index) => (
-                    <div key={item.department}>
-                      <div>
-                        <div
-                          className="department-chart-box"
-                          style={{
-                            backgroundColor: [
-                              "#3FB690",
-                              "#8B7CF3",
-                              "#36A2EB",
-                              "#FFCD56",
-                              "#FF6384",
-                              "#339adc",
-                            ][index % 5],
-                          }}
-                        ></div>
-
-                        <div>{item.department}</div>
-                      </div>
-
-                      <span>{item.percentage}%</span>
+                {loading && departments.length === 0 ? (
+                  <div style={{ display: "flex", flexDirection: "column", gap: 16, width: "100%", padding: 12 }}>
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "160px" }}>
+                      <Skeleton width="130px" height="130px" radius="50%" />
                     </div>
-                  ))}
-                </div>
+                    {[1, 2, 3].map((i) => (
+                      <div key={i} style={{ display: "flex", justifyContent: "space-between" }}>
+                        <Skeleton width="80px" height="14px" radius="4px" />
+                        <Skeleton width="35px" height="14px" radius="4px" />
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <>
+                    <div className="department-chart-container">
+                      <Doughnut
+                        className="department-chart"
+                        data={data1}
+                        options={options1}
+                      />
+                    </div>
+                    <div className="department-chart-details">
+                      {departments.map((item, index) => (
+                        <div key={item.department}>
+                          <div>
+                            <div
+                              className="department-chart-box"
+                              style={{
+                                backgroundColor: [
+                                  "#3FB690",
+                                  "#8B7CF3",
+                                  "#36A2EB",
+                                  "#FFCD56",
+                                  "#FF6384",
+                                  "#339adc",
+                                ][index % 5],
+                              }}
+                            ></div>
+
+                            <div>{item.department}</div>
+                          </div>
+
+                          <span>{item.percentage}%</span>
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -266,10 +287,14 @@ export const DashboardReport = () => {
               <h3>8-Week Attendance Rate Trend</h3>
             </div>
             <div className="attendance-trend-chart">
-              <Line
-                data={data2}
-                options={options2}
-              />
+              {loading && attendanceTrend.length === 0 ? (
+                <Skeleton width="100%" height="240px" radius="10px" />
+              ) : (
+                <Line
+                  data={data2}
+                  options={options2}
+                />
+              )}
             </div>
           </div>
         </div>

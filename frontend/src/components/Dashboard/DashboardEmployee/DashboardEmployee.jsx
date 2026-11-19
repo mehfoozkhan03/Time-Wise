@@ -40,6 +40,7 @@ import { PulseDot } from "../../PulseDot/pulseDot";
 import { Form } from "../../Form";
 import { forms } from "../../../data/form";
 import EmployeeProfile from "../../../pages/EmployeeProfile/EmployeeProfile";
+import Skeleton from "../../Skeleton/Skeleton";
 
 const departments = [
   "All",
@@ -772,7 +773,25 @@ export const DashboardEmployee = () => {
           {/* USERS */}
 
           <div className="dashboardEmployee-users">
-            {users &&
+            {isLoading && (!users || users.length === 0) ? (
+              [1, 2, 3, 4, 5, 6, 7].map((i) => (
+                <div key={i} className="employee-users-container" style={{ padding: "14px 18px", display: "flex", alignItems: "center", gap: 14 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, width: "22%" }}>
+                    <Skeleton width="34px" height="34px" radius="50%" />
+                    <Skeleton width="70%" height="16px" radius="4px" />
+                  </div>
+                  <div style={{ width: "16%" }}><Skeleton width="90px" height="15px" radius="4px" /></div>
+                  <div style={{ width: "18%" }}><Skeleton width="110px" height="15px" radius="4px" /></div>
+                  <div style={{ width: "14%" }}><Skeleton width="75px" height="22px" radius="10px" /></div>
+                  <div style={{ width: "12%" }}><Skeleton width="70px" height="22px" radius="10px" /></div>
+                  <div style={{ width: "14%", display: "flex", gap: 8 }}>
+                    <Skeleton width="28px" height="28px" radius="6px" />
+                    <Skeleton width="28px" height="28px" radius="6px" />
+                    <Skeleton width="28px" height="28px" radius="6px" />
+                  </div>
+                </div>
+              ))
+            ) : users &&
               users.map((el) => {
                 // Check if this row is being edited
                 const isEditing = editingUserId === el._id;

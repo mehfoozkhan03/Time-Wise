@@ -6,6 +6,7 @@ import { AnnouncementFilter } from "./AnnouncementFilter/AnnouncementFilter";
 import { AnnouncementCard } from "./AnnouncementList/AnnouncementCard/AnnouncementCard";
 import { AnnouncementForm } from "./AnnouncementForm/AnnouncementForm";
 import { useState } from "react";
+import Skeleton from "../../Skeleton/Skeleton";
 import { fetchAnnouncements } from "../../../store/announcementSlice";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -133,7 +134,23 @@ export const DashboardAnnouncement = () => {
         {/* ================= ANNOUNCEMENTS ================= */}
 
         {loading ? (
-          <div className="announcement-loading">Loading announcements...</div>
+          <div className="announcement-cards-container" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: 16 }}>
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <div key={i} style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 14, padding: 18, display: "flex", flexDirection: "column", gap: 12 }}>
+                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                  <Skeleton width="85px" height="22px" radius="10px" />
+                  <Skeleton width="60px" height="22px" radius="10px" />
+                </div>
+                <Skeleton width="80%" height="22px" radius="6px" />
+                <Skeleton width="50%" height="14px" radius="4px" />
+                <Skeleton width="100%" height="55px" radius="6px" />
+                <div style={{ display: "flex", gap: 8, marginTop: 4 }}>
+                  <Skeleton width="70px" height="30px" radius="6px" />
+                  <Skeleton width="70px" height="30px" radius="6px" />
+                </div>
+              </div>
+            ))}
+          </div>
         ) : error ? (
           <div className="announcement-error">{error}</div>
         ) : announcements.length === 0 ? (

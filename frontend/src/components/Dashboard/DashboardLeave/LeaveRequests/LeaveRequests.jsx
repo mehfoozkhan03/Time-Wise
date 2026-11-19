@@ -6,6 +6,7 @@ import { FaSearch, FaSlidersH } from "react-icons/fa";
 import "./LeaveRequests.css";
 
 import LeaveRequestTable from "../LeaveRequestTable/LeaveRequestTable";
+import Skeleton from "../../../Skeleton/Skeleton";
 
 import { fetchAdminLeaves } from "../../../../store/leaveSlice";
 
@@ -134,7 +135,19 @@ export default function LeaveRequests({ onView, onApprove, onReject }) {
       </div>
 
       {loading && formattedRequests.length === 0 ? (
-        <div className="leave_requests_loading">Loading leave requests...</div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 10, padding: "14px 0" }}>
+          {[1, 2, 3, 4, 5].map((i) => (
+            <div key={i} style={{ display: "flex", alignItems: "center", gap: 14, padding: "12px 14px", background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 10 }}>
+              <Skeleton width="34px" height="34px" radius="50%" />
+              <Skeleton width="20%" height="16px" radius="4px" />
+              <Skeleton width="14%" height="22px" radius="10px" />
+              <Skeleton width="16%" height="15px" radius="4px" />
+              <Skeleton width="24%" height="15px" radius="4px" />
+              <Skeleton width="12%" height="22px" radius="10px" />
+              <Skeleton width="10%" height="28px" radius="6px" />
+            </div>
+          ))}
+        </div>
       ) : (
         <>
           <LeaveRequestTable

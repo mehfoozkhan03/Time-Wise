@@ -1,375 +1,3 @@
-// import { useDispatch, useSelector } from "react-redux";
-// import { useEffect, useState } from "react";
-
-// import { CiUser } from "react-icons/ci";
-// import { MdOutlineEmail, MdLocationOn } from "react-icons/md";
-// import { FaPhoneAlt } from "react-icons/fa";
-
-// import Skeleton from "../../../components/Skeleton/Skeleton";
-// import { updateProfile } from "../../../store/authSlice";
-
-// import "./Profile.css";
-
-// export const Profile = () => {
-//   const dispatch = useDispatch();
-
-//   const { user, isLoading, errorMessage } = useSelector(
-//     (state) => state.auth
-//   );
-
-//   const [showSkeleton, setShowSkeleton] = useState(true);
-
-//   const [formData, setFormData] = useState({
-//     firstName: "",
-//     lastName: "",
-//     email: "",
-//     phone: "",
-//     address: "",
-//     bio: "",
-//   });
-
-//   const [isDirty, setIsDirty] = useState(false);
-
-//   // Skeleton timer
-//   useEffect(() => {
-//     const timer = setTimeout(() => {
-//       setShowSkeleton(false);
-//     }, 1500);
-
-//     return () => clearTimeout(timer);
-//   }, []);
-
-//   // Populate profile form
-//   useEffect(() => {
-//     if (user) {
-//       setFormData({
-//         firstName: user.firstName || "",
-//         lastName: user.lastName || "",
-//         email: user.email || "",
-//         phone: user.phone || "",
-//         address: user.address || "",
-//         bio: user.bio || "",
-//       });
-
-//       setIsDirty(false);
-//     }
-//   }, [user]);
-
-//   const handleChange = (event) => {
-//     const { name, value } = event.target;
-
-//     setFormData((prev) => ({
-//       ...prev,
-//       [name]: value,
-//     }));
-
-//     setIsDirty(true);
-//   };
-
-//   const handleSubmit = async (event) => {
-//     event.preventDefault();
-
-//     const result = await dispatch(updateProfile(formData));
-
-//     if (updateProfile.fulfilled.match(result)) {
-//       setIsDirty(false);
-//     }
-//   };
-
-//   // =========================
-//   // SKELETON UI
-//   // =========================
-//   if (showSkeleton || (!user && isLoading)) {
-//     return (
-//       <div className="setting-profile-container profile-skeleton">
-
-//         {/* Profile Heading */}
-//         <div className="setting-profile_heading profile-skeleton-header">
-//           <Skeleton width="100px" height="28px" />
-
-//           <div className="profile-skeleton-subtitle">
-//             <Skeleton width="350px" height="16px" />
-//           </div>
-//         </div>
-
-//         {/* Avatar Section */}
-//         <div className="setting-avtar-main-container">
-//           <div className="setting-avatar-heading">
-//             <Skeleton width="80px" height="24px" />
-//           </div>
-
-//           <div className="setting-profile-card">
-//             <div className="setting-avatar-container">
-//               <Skeleton
-//                 width="90px"
-//                 height="90px"
-//                 radius="50%"
-//               />
-//             </div>
-
-//             <div className="setting-profile-info">
-//               <Skeleton width="180px" height="24px" />
-
-//               <div className="profile-skeleton-gap">
-//                 <Skeleton width="180px" height="14px" />
-//               </div>
-
-//               <div className="profile-skeleton-upload">
-//                 <Skeleton width="100px" height="16px" />
-//               </div>
-//             </div>
-//           </div>
-//         </div>
-
-//         {/* Personal Information */}
-//         <div className="personal-information-container">
-//           <div className="personal-information-heading">
-//             <Skeleton width="190px" height="24px" />
-//           </div>
-
-//           <div className="personal-information-form">
-//             <div className="top-data">
-//               {[1, 2, 3, 4].map((item) => (
-//                 <div className="profile-skeleton-field" key={item}>
-//                   <Skeleton width="110px" height="16px" />
-
-//                   <div className="profile-skeleton-input">
-//                     <Skeleton
-//                       width="20px"
-//                       height="20px"
-//                       radius="50%"
-//                     />
-
-//                     <Skeleton
-//                       width="100%"
-//                       height="42px"
-//                       radius="6px"
-//                     />
-//                   </div>
-//                 </div>
-//               ))}
-//             </div>
-
-//             {/* Bio */}
-//             <div className="bio">
-//               <Skeleton width="40px" height="16px" />
-
-//               <div className="profile-skeleton-bio">
-//                 <Skeleton
-//                   width="100%"
-//                   height="90px"
-//                   radius="6px"
-//                 />
-//               </div>
-//             </div>
-//           </div>
-//         </div>
-
-//         {/* Save Changes */}
-//         <div className="save_changes profile-skeleton-save">
-//           <Skeleton width="130px" height="16px" />
-
-//           <Skeleton
-//             width="130px"
-//             height="40px"
-//             radius="8px"
-//           />
-//         </div>
-//       </div>
-//     );
-//   }
-
-//   // =========================
-//   // USER DATA
-//   // =========================
-//   const fullName = `${user?.firstName || ""} ${
-//     user?.lastName || ""
-//   }`.trim();
-
-//   const initials = `${user?.firstName?.[0] || ""}${
-//     user?.lastName?.[0] || ""
-//   }`.toUpperCase();
-
-//   return (
-//     <div className="setting-profile-container">
-
-//       {/* Profile Heading */}
-//       <div className="setting-profile_heading">
-//         <h3>Profile</h3>
-//         <p>Manage your personal information and public profile.</p>
-//       </div>
-
-//       {/* Avatar */}
-//       <div className="setting-avtar-main-container">
-//         <div className="setting-avatar-heading">
-//           <h2>Avatar</h2>
-//         </div>
-
-//         <div className="setting-profile-card">
-//           <div className="setting-avatar-container">
-//             <div className="setting-avatar">
-//               {initials || "U"}
-//             </div>
-
-//             <label
-//               htmlFor="photo"
-//               className="setting-camera-btn"
-//             >
-//               📷
-//             </label>
-
-//             <input
-//               type="file"
-//               id="photo"
-//               accept="image/*"
-//               hidden
-//             />
-//           </div>
-
-//           <div className="setting-profile-info">
-//             <h2>{fullName || "User"}</h2>
-
-//             <p>JPG, PNG or WebP · Max 5 MB</p>
-
-//             <label
-//               htmlFor="photo"
-//               className="setting-upload-link"
-//             >
-//               Upload photo
-//             </label>
-//           </div>
-//         </div>
-//       </div>
-
-//       {/* Personal Information */}
-//       <div className="personal-information-container">
-//         <div className="personal-information-heading">
-//           <h2>Personal Information</h2>
-//         </div>
-
-//         <form
-//           id="profile-form"
-//           className="personal-information-form"
-//           onSubmit={handleSubmit}
-//         >
-//           <div className="top-data">
-
-//             {/* Full Name */}
-//             <div>
-//               <label htmlFor="name">Full name</label>
-
-//               <div>
-//                 <CiUser />
-
-//                 <input
-//                   id="name"
-//                   type="text"
-//                   placeholder="Your full name"
-//                   value={fullName || "User"}
-//                   readOnly
-//                 />
-//               </div>
-//             </div>
-
-//             {/* Work Email */}
-//             <div>
-//               <label htmlFor="email">Work email</label>
-
-//               <div>
-//                 <MdOutlineEmail />
-
-//                 <input
-//                   id="email"
-//                   type="email"
-//                   name="email"
-//                   placeholder="Your work email"
-//                   value={formData.email}
-//                   onChange={handleChange}
-//                 />
-//               </div>
-//             </div>
-
-//             {/* Phone */}
-//             <div>
-//               <label htmlFor="phone">Phone Number</label>
-
-//               <div>
-//                 <FaPhoneAlt />
-
-//                 <input
-//                   id="phone"
-//                   type="tel"
-//                   name="phone"
-//                   placeholder="Your phone number"
-//                   value={formData.phone}
-//                   onChange={handleChange}
-//                 />
-//               </div>
-//             </div>
-
-//             {/* Address */}
-//             <div>
-//               <label htmlFor="address">Address</label>
-
-//               <div>
-//                 <MdLocationOn />
-
-//                 <input
-//                   id="address"
-//                   type="text"
-//                   name="address"
-//                   placeholder="City, Country"
-//                   value={formData.address}
-//                   onChange={handleChange}
-//                 />
-//               </div>
-//             </div>
-
-//           </div>
-
-//           {/* Bio */}
-//           <div className="bio">
-//             <label htmlFor="bio">Bio</label>
-
-//             <textarea
-//               id="bio"
-//               name="bio"
-//               rows={3}
-//               placeholder="Tell us a little about yourself..."
-//               value={formData.bio}
-//               onChange={handleChange}
-//             />
-//           </div>
-//         </form>
-//       </div>
-
-//       {/* Save Changes */}
-//       <div className="save_changes">
-//         <div>
-//           <p>
-//             {isDirty ? "Unsaved changes" : "All changes saved"}
-//           </p>
-//         </div>
-
-//         <button
-//           type="submit"
-//           form="profile-form"
-//           className="change-btn"
-//           disabled={isLoading || !isDirty}
-//         >
-//           {isLoading ? "Saving..." : "Save Changes"}
-//         </button>
-//       </div>
-
-//       {errorMessage && (
-//         <p className="profile-error">{errorMessage}</p>
-//       )}
-//     </div>
-//   );
-// };
-
-
-
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 
@@ -569,43 +197,97 @@ export const Profile = () => {
   if (showSkeleton || (!user && isLoading)) {
     return (
       <div className="profile-settings-page profile-skeleton">
-
+        {/* HEADER SKELETON */}
         <div className="profile-page-header">
-          <Skeleton width="180px" height="28px" />
-          <Skeleton width="120px" height="40px" />
+          <div className="profile-page-heading">
+            <Skeleton width="48px" height="48px" radius="12px" />
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "6px",
+              }}
+            >
+              <Skeleton width="180px" height="24px" />
+              <Skeleton width="300px" height="14px" />
+            </div>
+          </div>
         </div>
 
+        {/* SUMMARY CARD SKELETON */}
         <div className="profile-summary-card">
           <div className="profile-summary-left">
-            <Skeleton
-              width="110px"
-              height="110px"
-              radius="50%"
-            />
+            <div className="profile-avatar-wrapper">
+              <Skeleton
+                width="115px"
+                height="115px"
+                radius="50%"
+              />
+            </div>
 
-            <div>
+            <div className="profile-summary-info">
               <Skeleton width="180px" height="24px" />
-              <Skeleton width="150px" height="16px" />
+              <div style={{ margin: "8px 0" }}>
+                <Skeleton width="130px" height="15px" />
+              </div>
+              <div className="profile-contact-info">
+                <Skeleton width="140px" height="15px" />
+                <span className="profile-contact-divider"></span>
+                <Skeleton width="180px" height="15px" />
+              </div>
+              <div style={{ marginTop: "10px" }}>
+                <Skeleton width="100px" height="14px" />
+              </div>
             </div>
           </div>
 
           <div className="profile-completion">
-            <Skeleton width="160px" height="20px" />
-            <Skeleton width="100%" height="12px" />
-            <Skeleton width="180px" height="16px" />
+            <div className="completion-heading">
+              <Skeleton width="140px" height="18px" />
+              <Skeleton width="40px" height="18px" />
+            </div>
+
+            <div
+              className="completion-progress"
+              style={{ background: "transparent" }}
+            >
+              <Skeleton width="100%" height="8px" radius="20px" />
+            </div>
+
+            <div className="completion-checklist">
+              {[1, 2, 3, 4].map((item) => (
+                <div className="completion-item" key={item}>
+                  <Skeleton width="17px" height="17px" radius="50%" />
+                  <Skeleton width="120px" height="14px" />
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
+        {/* PERSONAL INFORMATION SKELETON */}
         <div className="profile-section-card">
-          <Skeleton width="200px" height="25px" />
+          <div className="profile-section-heading">
+            <Skeleton width="43px" height="43px" radius="10px" />
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "6px",
+              }}
+            >
+              <Skeleton width="180px" height="18px" />
+              <Skeleton width="280px" height="13px" />
+            </div>
+          </div>
 
           <div className="profile-form-grid">
             {[1, 2, 3, 4].map((item) => (
-              <div key={item}>
-                <Skeleton width="110px" height="16px" />
+              <div key={item} className="profile-form-group">
+                <Skeleton width="90px" height="15px" />
                 <Skeleton
                   width="100%"
-                  height="44px"
+                  height="46px"
                   radius="10px"
                 />
               </div>
@@ -613,16 +295,50 @@ export const Profile = () => {
           </div>
         </div>
 
-        <div className="profile-section-card">
-          <Skeleton width="150px" height="25px" />
-          <Skeleton width="100%" height="100px" />
+        {/* ABOUT ME SKELETON */}
+        <div className="profile-section-card profile-bio-card">
+          <div className="profile-section-heading">
+            <Skeleton width="43px" height="43px" radius="10px" />
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "6px",
+              }}
+            >
+              <Skeleton width="120px" height="18px" />
+              <Skeleton width="200px" height="13px" />
+            </div>
+          </div>
+
+          <div className="profile-form-group">
+            <Skeleton width="40px" height="15px" />
+            <Skeleton width="100%" height="100px" radius="10px" />
+          </div>
         </div>
 
+        {/* BOTTOM SAVE BAR SKELETON */}
         <div className="profile-bottom-bar">
-          <Skeleton width="150px" height="20px" />
-          <Skeleton width="140px" height="42px" />
-        </div>
+          <div className="profile-save-status">
+            <Skeleton width="38px" height="38px" radius="50%" />
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "6px",
+              }}
+            >
+              <Skeleton width="130px" height="16px" />
+              <Skeleton width="220px" height="13px" />
+            </div>
+          </div>
 
+          <div className="profile-bottom-actions">
+            <Skeleton width="130px" height="42px" radius="9px" />
+            <span className="profile-action-divider"></span>
+            <Skeleton width="130px" height="42px" radius="9px" />
+          </div>
+        </div>
       </div>
     );
   }
@@ -633,13 +349,10 @@ export const Profile = () => {
 
   return (
     <div className="profile-settings-page">
-
       {/* ================= HEADER ================= */}
 
       <div className="profile-page-header">
-
         <div className="profile-page-heading">
-
           <div className="profile-heading-icon">
             <FaUser />
           </div>
@@ -650,27 +363,20 @@ export const Profile = () => {
               Manage your personal information and public profile.
             </p>
           </div>
-
         </div>
-
       </div>
 
       {/* ================= PROFILE SUMMARY ================= */}
 
       <div className="profile-summary-card">
-
         <div className="profile-summary-left">
-
           <div className="profile-avatar-wrapper">
-
             <div className="profile-avatar">
-
               {profileImage ? (
                 <img src={profileImage} alt="Profile" />
               ) : (
                 <span>{initials || "U"}</span>
               )}
-
             </div>
 
             <label
@@ -688,11 +394,9 @@ export const Profile = () => {
               hidden
               onChange={handleImageChange}
             />
-
           </div>
 
           <div className="profile-summary-info">
-
             <h2>{fullName || "User"}</h2>
 
             <p className="profile-designation">
@@ -700,7 +404,6 @@ export const Profile = () => {
             </p>
 
             <div className="profile-contact-info">
-
               <span>
                 <MdLocationOn />
                 {formData.address || "Add your location"}
@@ -712,7 +415,6 @@ export const Profile = () => {
                 <MdOutlineEmail />
                 {formData.email || "Add your email"}
               </span>
-
             </div>
 
             <label
@@ -725,15 +427,12 @@ export const Profile = () => {
             <p className="profile-image-hint">
               JPG, PNG or WebP · Max 5 MB
             </p>
-
           </div>
-
         </div>
 
         {/* PROFILE COMPLETION */}
 
         <div className="profile-completion">
-
           <div className="completion-heading">
             <h3>Profile Completion</h3>
             <span>{completionPercentage}%</span>
@@ -749,13 +448,11 @@ export const Profile = () => {
           </div>
 
           <div className="completion-checklist">
-
             {completionItems.map((item, index) => (
               <div
                 className="completion-item"
                 key={index}
               >
-
                 <span
                   className={`completion-check ${
                     item.completed ? "completed" : ""
@@ -765,22 +462,16 @@ export const Profile = () => {
                 </span>
 
                 <span>{item.label}</span>
-
               </div>
             ))}
-
           </div>
-
         </div>
-
       </div>
 
       {/* ================= PERSONAL INFORMATION ================= */}
 
       <div className="profile-section-card">
-
         <div className="profile-section-heading">
-
           <div className="profile-section-icon">
             <FaUser />
           </div>
@@ -791,20 +482,16 @@ export const Profile = () => {
               Update your basic details and contact information.
             </p>
           </div>
-
         </div>
 
         <form
           id="profile-form"
           onSubmit={handleSubmit}
         >
-
           <div className="profile-form-grid">
-
             {/* FULL NAME */}
 
             <div className="profile-form-group">
-
               <label htmlFor="fullname">
                 Full name
               </label>
@@ -820,13 +507,11 @@ export const Profile = () => {
                   readOnly
                 />
               </div>
-
             </div>
 
             {/* EMAIL */}
 
             <div className="profile-form-group">
-
               <label htmlFor="email">
                 Work email
               </label>
@@ -843,13 +528,11 @@ export const Profile = () => {
                   onChange={handleChange}
                 />
               </div>
-
             </div>
 
             {/* PHONE */}
 
             <div className="profile-form-group">
-
               <label htmlFor="phone">
                 Phone Number
               </label>
@@ -866,13 +549,11 @@ export const Profile = () => {
                   onChange={handleChange}
                 />
               </div>
-
             </div>
 
             {/* ADDRESS */}
 
             <div className="profile-form-group">
-
               <label htmlFor="address">
                 Address
               </label>
@@ -889,21 +570,15 @@ export const Profile = () => {
                   onChange={handleChange}
                 />
               </div>
-
             </div>
-
           </div>
-
         </form>
-
       </div>
 
       {/* ================= ABOUT ME ================= */}
 
       <div className="profile-section-card profile-bio-card">
-
         <div className="profile-section-heading">
-
           <div className="profile-section-icon">
             <FaPencilAlt />
           </div>
@@ -914,11 +589,9 @@ export const Profile = () => {
               Tell us a little about yourself.
             </p>
           </div>
-
         </div>
 
         <div className="profile-form-group">
-
           <label htmlFor="bio">
             Bio
           </label>
@@ -936,17 +609,13 @@ export const Profile = () => {
           <div className="profile-bio-counter">
             {formData.bio.length}/500
           </div>
-
         </div>
-
       </div>
 
       {/* ================= BOTTOM SAVE BAR ================= */}
 
       <div className="profile-bottom-bar">
-
         <div className="profile-save-status">
-
           <div className="profile-status-icon">
             <FaCheck />
           </div>
@@ -962,11 +631,9 @@ export const Profile = () => {
                 : "Your profile information is up to date."}
             </p>
           </div>
-
         </div>
 
         <div className="profile-bottom-actions">
-
           <button
             type="button"
             className="profile-reset-btn"
@@ -989,9 +656,7 @@ export const Profile = () => {
 
             {isLoading ? "Saving..." : "Save Changes"}
           </button>
-
         </div>
-
       </div>
 
       {/* ================= ERROR ================= */}
@@ -1001,7 +666,6 @@ export const Profile = () => {
           {errorMessage}
         </p>
       )}
-
     </div>
   );
 };

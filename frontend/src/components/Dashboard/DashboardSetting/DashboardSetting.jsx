@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import "./DashboardSetting.css"
 import { SwitchBtn } from '../../SwichBtn/SwitchBtn';
 import { aiBotAccessService } from "../../../services/aiBotAccessService";
+import Skeleton from "../../Skeleton/Skeleton";
 
 
 export const DashboardSetting = () => {
@@ -92,7 +93,16 @@ export const DashboardSetting = () => {
                     </div>
                     <div className="dashboard-ai-access">
                         <h3>WiseBot Access</h3>
-                        {!botAccess ? <p>Loading WiseBot access...</p> : <>
+                        {!botAccess ? (
+                            <div style={{ display: "flex", flexDirection: "column", gap: 14, padding: "12px 0" }}>
+                                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                                    <Skeleton width="130px" height="18px" radius="4px" />
+                                    <Skeleton width="50px" height="26px" radius="14px" />
+                                </div>
+                                <Skeleton width="75%" height="14px" radius="4px" />
+                                <Skeleton width="150px" height="38px" radius="8px" />
+                            </div>
+                        ) : <>
                             <div className="ai-access-row">
                                 <span>Enable WiseBot</span>
                                 <div className="ai-access-switch">
