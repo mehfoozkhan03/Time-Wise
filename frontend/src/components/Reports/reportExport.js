@@ -184,7 +184,7 @@ export function exportReportCSV(report) {
     if (/^[\s]*[=+@\-\t\r]/.test(text)) text = `'${text}`;
     return `"${text.replaceAll('"', '""')}"`;
   };
-  const rows = report.attendance.map((item) => [
+  const rows = (report.attendance || []).map((item) => [
     item.date,
     item.checkIn,
     item.checkOut,
@@ -199,9 +199,11 @@ export function exportReportCSV(report) {
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
+  link.style.display = "none";
   link.download = `TimeWise-Attendance-${report.period.replace(/[^a-z0-9]+/gi, "-").replace(/^-|-$/g, "")}.csv`;
   document.body.append(link);
   link.click();
   link.remove();
-  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+  // Keep the object URL alive long enough for browsers to begin the download.
+  window.setTimeout(() => URL.revokeObjectURL(url), 60_000);
 }

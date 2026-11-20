@@ -10,7 +10,13 @@ import { useFloatingControls } from "../../context/FloatingControlsContext";
 
 export function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isMinimized, setIsMinimized] = useState(false);
+  const [isMinimized, setIsMinimized] = useState(() => {
+    try {
+      return localStorage.getItem("timewise-employee-wisebot-minimized") === "true";
+    } catch {
+      return false;
+    }
+  });
   const [message, setMessage] = useState("");
   const [showClearModal, setShowClearModal] = useState(false);
   const [isClearing, setIsClearing] = useState(false);
@@ -20,6 +26,14 @@ export function Chatbot() {
 
   const chatBodyRef = useRef(null);
   const chatInputRef = useRef(null);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem("timewise-employee-wisebot-minimized", String(isMinimized));
+    } catch {
+      // Keep the bot usable when browser storage is unavailable.
+    }
+  }, [isMinimized]);
 
   const initialMessages = [
     {

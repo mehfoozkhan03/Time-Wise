@@ -3,6 +3,7 @@ import { getDashboardStats } from "./../../../store/dashboardSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { PulseDot } from "./../../PulseDot/pulseDot";
+import Skeleton from "../../Skeleton/Skeleton";
 import {
   fetchAllUser,
   fetchTodayAttendance,
@@ -18,7 +19,7 @@ export const DashboardAttendance = () => {
 
   const dispatch = useDispatch();
 
-  const { todayAttendance } = useSelector((state) => state.adminAuth);
+  const { todayAttendance, isLoading } = useSelector((state) => state.adminAuth);
 
   useEffect(() => {
     dispatch(getDashboardStats());
@@ -95,7 +96,24 @@ export const DashboardAttendance = () => {
             <div>STATUS</div>
           </div>
           <div className="dashboardAttendance-users">
-            {userAttendance.length > 0 ? (
+            {isLoading && (!todayAttendance || todayAttendance.length === 0) ? (
+              [1, 2, 3, 4, 5, 6, 7].map((i) => (
+                <div key={i} style={{ display: "flex", alignItems: "center", gap: 16, padding: "14px 16px" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, width: "24%" }}>
+                    <Skeleton width="36px" height="36px" radius="50%" />
+                    <div style={{ display: "flex", flexDirection: "column", gap: 5, flex: 1 }}>
+                      <Skeleton width="80%" height="15px" radius="4px" />
+                      <Skeleton width="50%" height="12px" radius="4px" />
+                    </div>
+                  </div>
+                  <div style={{ width: "15%" }}><Skeleton width="60px" height="16px" radius="4px" /></div>
+                  <div style={{ width: "15%" }}><Skeleton width="50px" height="16px" radius="4px" /></div>
+                  <div style={{ width: "15%" }}><Skeleton width="60px" height="16px" radius="4px" /></div>
+                  <div style={{ width: "15%" }}><Skeleton width="50px" height="16px" radius="4px" /></div>
+                  <div style={{ width: "16%" }}><Skeleton width="80px" height="26px" radius="12px" /></div>
+                </div>
+              ))
+            ) : userAttendance.length > 0 ? (
               userAttendance.map((el, id) => (
                 <div key={id}>
                   <div>

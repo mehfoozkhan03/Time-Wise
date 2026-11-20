@@ -4,6 +4,7 @@ import { TiPin } from "react-icons/ti";
 import { MdDelete } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
+import Skeleton from "../../Skeleton/Skeleton";
 import {
   deleteThoughtbyAdmin,
   fetchAdminThoughts,
@@ -202,6 +203,23 @@ export const DashboardThuoght = () => {
                     />
                   )}
                 </div>
+              </div>
+            ))
+          ) : isLoading ? (
+            [1, 2, 3].map((i) => (
+              <div key={i} className="dashboardThought-container" style={{ padding: 18, display: "flex", flexDirection: "column", gap: 14 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                    <Skeleton width="44px" height="44px" radius="50%" />
+                    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                      <Skeleton width="140px" height="16px" radius="4px" />
+                      <Skeleton width="180px" height="12px" radius="4px" />
+                    </div>
+                  </div>
+                  <Skeleton width="60px" height="26px" radius="8px" />
+                </div>
+                <Skeleton width="90%" height="15px" radius="4px" />
+                <Skeleton width="75%" height="15px" radius="4px" />
               </div>
             ))
           ) : (

@@ -721,7 +721,14 @@
   gap: 8px;
 }
 
-.helpSupport-contact-content
-  .help-skeleton-contact:last-child {
-  border-bottom: none;
+.helpSupport-contact-card.skeleton-card {
+  cursor: default;
+  pointer-events: none;
 }
+
+.helpSupport-contact-card.skeleton-card:hover {
+  transform: none;
+  box-shadow: none;
+  border-color: var(--border);
+}
+
