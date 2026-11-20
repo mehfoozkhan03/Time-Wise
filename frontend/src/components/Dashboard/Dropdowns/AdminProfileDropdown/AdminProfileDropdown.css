@@ -266,3 +266,273 @@
   opacity: 0.6;
   cursor: not-allowed;
 }
+
+/* ======================================================
+   RESPONSIVE DESIGN - 1440px
+====================================================== */
+
+@media (max-width: 1440px) {
+  .admin-profile-btn {
+    gap: 9px;
+  }
+}
+
+/* ======================================================
+   RESPONSIVE DESIGN - 1080px
+====================================================== */
+
+@media (max-width: 1080px) {
+  .admin-profile-btn {
+    min-width: 165px;
+    padding: 7px 9px;
+  }
+
+  .admin-profile-info strong {
+    font-size: 15px;
+  }
+
+  .admin-profile-dropdown {
+    width: 230px;
+  }
+}
+
+/* ======================================================
+   RESPONSIVE DESIGN - 760px
+====================================================== */
+
+@media (max-width: 760px) {
+  .admin-profile-btn {
+    min-width: 150px;
+    gap: 8px;
+  }
+
+  .admin-avatar {
+    width: 34px;
+    height: 34px;
+    font-size: 15px;
+  }
+
+  .admin-avatar.large {
+    width: 40px;
+    height: 40px;
+  }
+
+  .admin-profile-info strong {
+    font-size: 14px;
+  }
+
+  .admin-profile-info span {
+    font-size: 11px;
+  }
+
+  .admin-profile-dropdown {
+    width: 220px;
+  }
+
+  .admin-password-modal {
+    padding: 25px;
+  }
+
+  .admin-password-modal h3 {
+    font-size: 19px;
+  }
+}
+
+/* ======================================================
+   RESPONSIVE DESIGN - 480px
+====================================================== */
+
+@media (max-width: 480px) {
+  .admin-profile-btn {
+    min-width: 0;
+    gap: 7px;
+    padding: 6px 8px;
+  }
+
+  .admin-avatar {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+
+  .admin-avatar.large {
+    width: 38px;
+    height: 38px;
+  }
+
+  .admin-profile-info strong {
+    font-size: 13px;
+  }
+
+  .admin-profile-info span {
+    font-size: 10px;
+  }
+
+  .admin-profile-dropdown {
+    width: min(220px, calc(100vw - 30px));
+  }
+
+  .admin-dropdown-header {
+    gap: 8px;
+    padding: 8px;
+  }
+
+  .admin-dropdown-header strong {
+    font-size: 13px;
+  }
+
+  .admin-dropdown-header span {
+    font-size: 11px;
+  }
+
+  .admin-dropdown-item {
+    gap: 10px;
+    padding: 9px;
+    font-size: 13px;
+  }
+
+  .admin-password-modal-overlay {
+    padding: 15px;
+  }
+
+  .admin-password-modal {
+    max-width: 100%;
+    padding: 22px 18px;
+    border-radius: 12px;
+  }
+
+  .admin-password-icon {
+    width: 48px;
+    height: 48px;
+    font-size: 21px;
+  }
+
+  .admin-password-modal h3 {
+    font-size: 18px;
+  }
+
+  .admin-password-description {
+    margin: 10px 0 20px;
+    font-size: 13px;
+  }
+
+  .admin-password-modal-actions {
+    gap: 8px;
+    margin-top: 20px;
+  }
+
+  .admin-password-modal-actions button {
+    min-width: 95px;
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+}
+
+/* ======================================================
+   RESPONSIVE DESIGN - 320px
+====================================================== */
+
+@media (max-width: 320px) {
+  .admin-profile-btn {
+    gap: 6px;
+    padding: 5px 6px;
+  }
+
+  .admin-avatar {
+    width: 29px;
+    height: 29px;
+    font-size: 13px;
+  }
+
+  .admin-avatar.large {
+    width: 35px;
+    height: 35px;
+  }
+
+  .admin-profile-info strong {
+    font-size: 12px;
+  }
+
+  .admin-profile-info span {
+    font-size: 9px;
+  }
+
+  .admin-chevron {
+    width: 14px;
+    height: 14px;
+  }
+
+  .admin-profile-dropdown {
+    width: min(200px, calc(100vw - 20px));
+    padding: 6px;
+  }
+
+  .admin-dropdown-header {
+    gap: 7px;
+    padding: 7px;
+  }
+
+  .admin-dropdown-header strong {
+    font-size: 12px;
+  }
+
+  .admin-dropdown-header span {
+    font-size: 10px;
+  }
+
+  .admin-dropdown-item {
+    gap: 8px;
+    padding: 8px;
+    font-size: 12px;
+  }
+
+  .admin-dropdown-item svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .admin-password-modal {
+    padding: 18px 14px;
+  }
+
+  .admin-password-icon {
+    width: 44px;
+    height: 44px;
+    font-size: 19px;
+  }
+
+  .admin-password-modal h3 {
+    font-size: 16px;
+  }
+
+  .admin-password-description {
+    margin: 8px 0 17px;
+    font-size: 12px;
+  }
+
+  .admin-password-input-group {
+    margin-bottom: 14px;
+  }
+
+  .admin-password-input-group label {
+    font-size: 12px;
+  }
+
+  .admin-password-input-group input {
+    padding: 10px;
+    font-size: 13px;
+  }
+
+  .admin-password-modal-actions {
+    flex-direction: column-reverse;
+    gap: 8px;
+    margin-top: 18px;
+  }
+
+  .admin-password-modal-actions button {
+    width: 100%;
+    min-width: 0;
+    padding: 10px;
+    font-size: 13px;
+  }
+}

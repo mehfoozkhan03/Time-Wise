@@ -122,3 +122,195 @@
 .admin-notification-form__field textarea {
   resize: vertical;
 }
+
+
+/* ==========================================================
+   RESPONSIVE DESIGN
+========================================================== */
+
+/* 1440px */
+@media (max-width: 1440px) {
+  .dashboard-create-notification {
+    gap: 26px;
+  }
+
+  .create-notification-content {
+    padding: 26px;
+    gap: 22px;
+  }
+}
+
+/* 1080px */
+@media (max-width: 1080px) {
+  .dashboard-create-notification {
+    gap: 22px;
+  }
+
+  .create-notification-content {
+    padding: 24px;
+    gap: 20px;
+  }
+
+  .create-notification-title > input,
+  .audience-selection {
+    padding: 11px 16px;
+  }
+
+  .create-notification-msg > textarea {
+    padding: 13px 16px;
+  }
+}
+
+/* 760px */
+@media (max-width: 760px) {
+  .dashboard-create-notification {
+    gap: 20px;
+  }
+
+  .create-notification-header > h3 {
+    font-size: 18px;
+  }
+
+  .create-notification-content {
+    padding: 20px;
+    gap: 18px;
+    border-radius: 16px;
+  }
+
+  .create-notification-title > input,
+  .audience-selection {
+    padding: 11px 14px;
+  }
+
+  .create-notification-msg > textarea {
+    padding: 12px 14px;
+  }
+
+  .admin-notification-form__field {
+    margin-bottom: 16px;
+  }
+}
+
+/* 480px */
+@media (max-width: 480px) {
+  .dashboard-create-notification {
+    gap: 16px;
+  }
+
+  .create-notification-header {
+    gap: 4px;
+  }
+
+  .create-notification-header > h3 {
+    font-size: 17px;
+  }
+
+  .create-notification-header > span {
+    font-size: 11px;
+  }
+
+  .create-notification-content {
+    padding: 16px;
+    gap: 16px;
+    border-radius: 14px;
+  }
+
+  .create-notification-content > div {
+    gap: 6px;
+  }
+
+  .create-notification-content > div > label {
+    font-size: 12px;
+  }
+
+  .create-notification-title > input,
+  .audience-selection {
+    padding: 10px 12px;
+    border-radius: 8px;
+  }
+
+  .create-notification-msg > textarea {
+    padding: 11px 12px;
+    border-radius: 8px;
+  }
+
+  .create-notification-btn {
+    padding: 11px;
+    gap: 8px !important;
+  }
+
+  .create-notification-btn > span {
+    font-size: 13px;
+  }
+
+  .admin-notification-form__field {
+    gap: 7px;
+    margin-bottom: 14px;
+  }
+
+  .admin-notification-form__field label {
+    font-size: 13px;
+  }
+
+  .admin-notification-form__field input,
+  .admin-notification-form__field textarea,
+  .admin-notification-form__field select {
+    padding: 10px;
+    font-size: 13px;
+  }
+}
+
+/* 320px */
+@media (max-width: 320px) {
+  .dashboard-create-notification {
+    gap: 14px;
+  }
+
+  .create-notification-header > h3 {
+    font-size: 16px;
+  }
+
+  .create-notification-content {
+    padding: 12px;
+    gap: 14px;
+    border-radius: 12px;
+  }
+
+  .create-notification-content > div > label {
+    font-size: 11px;
+  }
+
+  .create-notification-title > input,
+  .audience-selection {
+    padding: 9px 10px;
+  }
+
+  .create-notification-msg > textarea {
+    padding: 10px;
+  }
+
+  .create-notification-btn {
+    padding: 10px;
+    gap: 7px !important;
+  }
+
+  .create-notification-btn > span {
+    font-size: 12px;
+  }
+
+  .admin-notification-form__field {
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+
+  .admin-notification-form__field label {
+    font-size: 12px;
+  }
+
+  .admin-notification-form__field input,
+  .admin-notification-form__field textarea,
+  .admin-notification-form__field select {
+    padding: 9px;
+    font-size: 12px;
+  }
+}

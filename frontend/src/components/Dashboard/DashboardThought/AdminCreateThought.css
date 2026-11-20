@@ -421,82 +421,309 @@
   border-radius: 16px !important;
 }
 
-@media (max-width: 600px) {
-  .emoji_picker_container {
-    left: auto;
-    right: 0;
-  }
-
-  .emoji_picker_container .EmojiPickerReact {
-    width: min(350px, calc(100vw - 40px)) !important;
+/* ======================================================
+   RESPONSIVE DESIGN
+====================================================== */
+/* 1440px */
+@media (max-width: 1440px) {
+  .create_post_card {
+    gap: 1.35rem;
   }
 }
 
-/* ======================================================
-   MOBILE
-====================================================== */
+/* 1080px */
+@media (max-width: 1080px) {
+  .create_post_card {
+    padding: 1.3rem;
+    gap: 1.25rem;
+  }
 
-@media (max-width: 768px) {
+  .create_post_footer {
+    gap: 1rem;
+  }
+
+  .tools-action-container {
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
   .post_image_preview_grid {
-    max-height: 360px;
-  }
-
-  .post_image_preview,
-  .post_image_preview img {
-    min-height: 140px;
+    max-height: 380px;
   }
 }
 
-/* ======================================================
-   RESPONSIVE IMAGE GRID
-====================================================== */
-
-@media (max-width: 600px) {
-  .post_images_preview {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+/* 760px */
+@media (max-width: 760px) {
+  .create_post_card {
+    padding: 1.2rem;
+    border-radius: 18px;
+    gap: 1.2rem;
   }
-}
 
-@media (max-width: 768px) {
+  .create_post_header {
+    gap: 0.85rem;
+  }
+
+  .create_post_avatar {
+    width: 50px;
+    height: 50px;
+    font-size: 1.05rem;
+  }
+
+  .create_post_header h3 {
+    font-size: 1rem;
+  }
+
+  .create_post_header p {
+    font-size: 0.85rem;
+  }
+
+  .create_post_card textarea {
+    min-height: 130px;
+    padding: 0.9rem;
+    font-size: 0.93rem;
+    line-height: 1.7;
+  }
+
   .create_post_footer {
     flex-direction: column;
     align-items: stretch;
-    gap: 12px;
+  }
+
+  .tools-action-container {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
   }
 
   .create_post_tools {
-    width: 100%;
-    min-width: 0;
-    flex-wrap: nowrap;
-    justify-content: space-between;
-    gap: 5px;
-  }
-
-  .create_post_tools > button,
-  .create_post_tools .emoji_picker_wrapper > button {
-    min-width: 0;
-    flex: 1 1 0;
-    justify-content: center;
-    gap: 4px;
-    padding: 8px 5px;
-    font-size: clamp(0.62rem, 2.1vw, 0.85rem);
-    white-space: nowrap;
-  }
-
-  .create_post_tool_label {
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .create_post_tools .emoji_picker_wrapper {
-    display: flex;
-    flex: 1 1 0;
-    min-width: 0;
+    gap: 0.6rem;
   }
 
   .create_post_actions {
-    width: 100%;
     justify-content: space-between;
+  }
+
+  .post_image_preview {
+    min-height: 150px;
+  }
+
+  .post_image_preview img {
+    min-height: 150px;
+  }
+
+  .post_image_preview_grid {
+    max-height: 350px;
+  }
+
+  .emoji_picker_container {
+    max-width: calc(100vw - 40px);
+  }
+
+  .emoji_picker_container .EmojiPickerReact {
+    max-width: 100%;
+  }
+}
+
+/* 480px */
+@media (max-width: 480px) {
+  .create_post_card {
+    padding: 1rem;
+    border-radius: 16px;
+    gap: 1rem;
+  }
+
+  .create_post_header {
+    gap: 0.7rem;
+  }
+
+  .create_post_avatar {
+    width: 44px;
+    height: 44px;
+    font-size: 0.95rem;
+  }
+
+  .create_post_header h3 {
+    font-size: 0.95rem;
+  }
+
+  .create_post_header p {
+    font-size: 0.8rem;
+  }
+
+  .create_post_card textarea {
+    min-height: 120px;
+    padding: 0.8rem;
+    border-radius: 14px;
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  .create_post_tools {
+    gap: 0.5rem;
+  }
+
+  .create_post_tools button {
+    padding: 0.6rem 0.75rem;
+    gap: 0.35rem;
+    font-size: 0.82rem;
+  }
+
+  .create_post_tools svg {
+    font-size: 1rem;
+  }
+
+  .create_post_actions {
+    gap: 0.7rem;
+  }
+
+  .create_post_actions span {
+    font-size: 0.8rem;
+  }
+
+  .publish_btn {
+    padding: 0.7rem 1rem;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+  }
+
+  .post_image_preview_grid {
+    gap: 5px;
+    max-height: 300px;
+  }
+
+  .post_image_preview {
+    min-height: 130px;
+  }
+
+  .post_image_preview img {
+    min-height: 130px;
+    max-height: 250px;
+  }
+
+  .remove_image_btn {
+    top: 7px;
+    right: 7px;
+    width: 30px;
+    height: 30px;
+  }
+
+  .remove_image_btn svg {
+    font-size: 17px;
+  }
+
+  .post_attachment_item {
+    gap: 0.7rem;
+    padding: 0.7rem 0.8rem;
+  }
+
+  .post_attachment_info {
+    gap: 0.55rem;
+  }
+
+  .post_attachment_info span {
+    font-size: 0.82rem;
+  }
+
+  .post_attachment_info svg {
+    font-size: 1.1rem;
+  }
+
+  .remove_attachment_btn {
+    width: 30px;
+    height: 30px;
+  }
+
+  .emoji_picker_container {
+    max-width: calc(100vw - 32px);
+  }
+}
+
+/* 320px */
+
+@media (max-width: 320px) {
+  .create_post_card {
+    padding: 0.8rem;
+    gap: 0.9rem;
+    border-radius: 14px;
+  }
+
+  .create_post_header {
+    gap: 0.6rem;
+  }
+
+  .create_post_avatar {
+    width: 40px;
+    height: 40px;
+    font-size: 0.85rem;
+  }
+
+  .create_post_header h3 {
+    font-size: 0.88rem;
+  }
+
+  .create_post_header p {
+    font-size: 0.75rem;
+  }
+
+  .create_post_card textarea {
+    min-height: 110px;
+    padding: 0.7rem;
+    font-size: 0.85rem;
+  }
+
+  .create_post_tools {
+    gap: 0.4rem;
+  }
+
+  .create_post_tools button {
+    padding: 0.55rem 0.65rem;
+    font-size: 0.76rem;
+  }
+
+  .create_post_actions {
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+
+  .create_post_actions span {
+    font-size: 0.75rem;
+  }
+
+  .publish_btn {
+    padding: 0.65rem 0.8rem;
+    font-size: 0.8rem;
+  }
+
+  .post_image_preview_grid {
+    gap: 4px;
+    max-height: 250px;
+  }
+
+  .post_image_preview {
+    min-height: 110px;
+  }
+
+  .post_image_preview img {
+    min-height: 110px;
+    max-height: 200px;
+  }
+
+  .post_attachment_item {
+    padding: 0.65rem;
+    gap: 0.5rem;
+  }
+
+  .post_attachment_info {
+    gap: 0.45rem;
+  }
+
+  .post_attachment_info span {
+    font-size: 0.75rem;
+  }
+
+  .remove_attachment_btn {
+    width: 28px;
+    height: 28px;
   }
 }

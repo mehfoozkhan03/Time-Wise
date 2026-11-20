@@ -5,30 +5,6 @@
   gap: 30px;
 }
 
-@media (max-width: 840px) {
-  .dashboardNotification-container {
-    grid-template-columns: 1fr;
-    padding: 22px;
-    gap: 24px;
-  }
-}
-
-@media (max-width: 430px) {
-  .dashboardNotification-container {
-    padding: 14px;
-    gap: 20px;
-  }
-
-  .create-notification-content,
-  .recent-notification-content {
-    padding: 16px;
-  }
-
-  .recent-notification-content {
-    gap: 10px;
-  }
-}
-
 /* Recent Notification */
 .dashboard-recent-notification {
   display: flex;
@@ -94,4 +70,148 @@
   height: 6px;
   width: 6px;
   border-radius: 50%;
+}
+
+/* ==========================================================
+   RESPONSIVE DESIGN
+========================================================== */
+
+/* 1440px */
+@media (max-width: 1440px) {
+  .dashboardNotification-container {
+    padding: 28px;
+    gap: 25px;
+  }
+
+  .dashboard-recent-notification {
+    gap: 25px;
+  }
+
+  .recent-notification-content {
+    padding: 18px;
+  }
+}
+
+/* 1080px */
+@media (max-width: 1080px) {
+  .dashboardNotification-container {
+    padding: 24px;
+    gap: 20px;
+  }
+
+  .dashboard-recent-notification {
+    gap: 20px;
+  }
+
+  .recent-notification-content {
+    padding: 16px;
+  }
+
+  .recent-notification-header > h3 {
+    font-size: 18px;
+  }
+}
+
+/* 760px */
+@media (max-width: 760px) {
+  .dashboardNotification-container {
+    grid-template-columns: 1fr;
+    gap: 25px;
+    padding: 20px;
+  }
+
+  .dashboard-recent-notification {
+    gap: 18px;
+  }
+
+  .recent-notification-content {
+    padding: 16px;
+  }
+}
+
+/* 480px */
+@media (max-width: 480px) {
+  .dashboardNotification-container {
+    padding: 15px;
+    gap: 20px;
+  }
+
+  .dashboard-recent-notification {
+    gap: 15px;
+  }
+
+  .recent-notification-header > h3 {
+    font-size: 17px;
+  }
+
+  .recent-notification-header > span {
+    font-size: 11px;
+  }
+
+  .recent-notification-content-container {
+    gap: 8px;
+  }
+
+  .recent-notification-content {
+    padding: 13px;
+    gap: 10px;
+    border-radius: 12px;
+  }
+
+  .recent-notification-type {
+    gap: 8px;
+  }
+
+  .recent-notification-icon {
+    padding: 8px;
+  }
+
+  .recent-notification-msg {
+    gap: 4px;
+  }
+
+  .recent-notification-msg > p {
+    font-size: 12px;
+  }
+
+  .recent-notification-msg > span {
+    font-size: 10px;
+  }
+}
+
+/* 320px */
+@media (max-width: 320px) {
+  .dashboardNotification-container {
+    padding: 10px;
+    gap: 18px;
+  }
+
+  .dashboard-recent-notification {
+    gap: 12px;
+  }
+
+  .recent-notification-header > h3 {
+    font-size: 16px;
+  }
+
+  .recent-notification-content {
+    padding: 10px;
+    gap: 8px;
+  }
+
+  .recent-notification-type {
+    gap: 7px;
+  }
+
+  .recent-notification-icon {
+    padding: 7px;
+  }
+
+  .recent-notification-msg > p {
+    font-size: 11px;
+  }
+
+  .recent-notification-msg > span {
+    font-size: 9px;
+  }
 }

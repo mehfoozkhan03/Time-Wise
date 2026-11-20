@@ -123,32 +123,250 @@
 .dashboard-ai-access>button:disabled{opacity:.6;cursor:not-allowed;}
 .ai-access-message{color:#15803d!important;}
 
-@media (max-width: 840px) {
-    .dashboardSetting-container {
-        padding: 22px;
-    }
 
-    .dashboardSetting-content {
-        grid-template-columns: 1fr;
-        gap: 20px;
-    }
+/* ==========================================================
+   RESPONSIVE DESIGN
+========================================================== */
+
+/* 1440px */
+@media (max-width: 1440px) {
+  .dashboardSetting-container {
+    padding: 28px;
+    gap: 26px;
+  }
+
+  .dashboardSetting-content {
+    gap: 25px;
+  }
+
+  .dashboard-company-setting,
+  .dashboard-notification-preference,
+  .dashboard-ai-access {
+    padding: 26px;
+  }
 }
 
-@media (max-width: 430px) {
-    .dashboardSetting-container {
-        padding: 14px;
-        gap: 20px;
-    }
+/* 1080px */
+@media (max-width: 1080px) {
+  .dashboardSetting-container {
+    padding: 24px;
+    gap: 24px;
+  }
 
-    .dashboard-company-setting,
-    .dashboard-notification-preference,
-    .dashboard-ai-access {
-        padding: 18px;
-        border-radius: 14px;
-    }
+  .dashboardSetting-content {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
 
-    .ai-access-row {
-        align-items: flex-start;
-        gap: 10px;
-    }
+  .dashboard-company-setting,
+  .dashboard-notification-preference,
+  .dashboard-ai-access {
+    padding: 24px;
+  }
+}
+
+/* 760px */
+@media (max-width: 760px) {
+  .dashboardSetting-container {
+    padding: 20px;
+    gap: 20px;
+  }
+
+  .dashboardSetting-header > h3 {
+    font-size: 17px;
+  }
+
+  .dashboardSetting-content {
+    gap: 16px;
+  }
+
+  .dashboard-company-setting,
+  .dashboard-notification-preference,
+  .dashboard-ai-access {
+    padding: 20px;
+    gap: 18px;
+    border-radius: 16px;
+  }
+
+  .notification-preference-content {
+    gap: 16px;
+  }
+
+  .notification-preference-content > div > p {
+    font-size: 13px;
+  }
+
+  .ai-access-row {
+    font-size: 13px;
+  }
+}
+
+/* 480px */
+@media (max-width: 480px) {
+  .dashboardSetting-container {
+    padding: 15px;
+    gap: 18px;
+  }
+
+  .dashboardSetting-header > h3 {
+    font-size: 16px;
+  }
+
+  .dashboardSetting-header > span {
+    font-size: 11px;
+  }
+
+  .dashboardSetting-content {
+    gap: 14px;
+  }
+
+  .dashboard-company-setting,
+  .dashboard-notification-preference,
+  .dashboard-ai-access {
+    padding: 16px;
+    gap: 16px;
+    border-radius: 14px;
+  }
+
+  .dashboard-company-setting > h3,
+  .dashboard-notification-preference > h3,
+  .dashboard-ai-access h3 {
+    font-size: 15px;
+  }
+
+  .dashboard-company-setting > div {
+    gap: 9px;
+  }
+
+  .dashboard-company-setting > div > div {
+    gap: 6px;
+  }
+
+  .dashboard-company-setting > div > div > input {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+
+  .dashboard-company-setting > button,
+  .dashboard-ai-access > button {
+    padding: 11px 12px;
+    font-size: 13px;
+  }
+
+  .notification-preference-content {
+    gap: 14px;
+  }
+
+  .notification-preference-content > div {
+    padding-bottom: 9px;
+    gap: 8px;
+  }
+
+  .notification-preference-content > div > p {
+    font-size: 12px;
+  }
+
+  .ai-access-row {
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 12px;
+  }
+
+  .ai-access-switch {
+    gap: 6px;
+    font-size: 11px;
+  }
+
+  .ai-access-options > label {
+    font-size: 12px;
+  }
+
+  .ai-email-fields input {
+    padding: 10px;
+    font-size: 13px;
+  }
+}
+
+/* 320px */
+@media (max-width: 320px) {
+  .dashboardSetting-container {
+    padding: 10px;
+    gap: 15px;
+  }
+
+  .dashboardSetting-header > h3 {
+    font-size: 15px;
+  }
+
+  .dashboardSetting-content {
+    gap: 12px;
+  }
+
+  .dashboard-company-setting,
+  .dashboard-notification-preference,
+  .dashboard-ai-access {
+    padding: 13px;
+    gap: 14px;
+    border-radius: 12px;
+  }
+
+  .dashboard-company-setting > h3,
+  .dashboard-notification-preference > h3,
+  .dashboard-ai-access h3 {
+    font-size: 14px;
+  }
+
+  .dashboard-company-setting > div > div > input {
+    padding: 9px 10px;
+    font-size: 12px;
+  }
+
+  .dashboard-company-setting > button,
+  .dashboard-ai-access > button {
+    padding: 10px;
+    font-size: 12px;
+  }
+
+  .notification-preference-content {
+    gap: 12px;
+  }
+
+  .notification-preference-content > div {
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .notification-preference-content > div > p {
+    font-size: 11px;
+  }
+
+  .ai-access-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 9px;
+    font-size: 12px;
+  }
+
+  .ai-access-switch {
+    font-size: 11px;
+  }
+
+  .dashboard-ai-access > p,
+  .ai-access-options > p,
+  .ai-email-fields > p {
+    font-size: 11px;
+  }
+
+  .ai-access-options > label {
+    font-size: 11px;
+  }
+
+  .ai-email-fields label {
+    font-size: 10px;
+  }
+
+  .ai-email-fields input {
+    padding: 9px;
+    font-size: 12px;
+  }
 }

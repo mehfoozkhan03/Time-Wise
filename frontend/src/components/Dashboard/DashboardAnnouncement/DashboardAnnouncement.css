@@ -114,17 +114,63 @@
   text-align: center;
 }
 
+/* =========================================
+   RESPONSIVE DESIGN
+========================================= */
+/* 1440px */
 
+@media screen and (max-width: 1440px) {
+    .dashboardAnnouncement-container {
+        padding: 26px;
+    }
 
-@media (max-width: 1000px) {
     .dashboardAnnouncement-content {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+    }
+
+    .dashboardAnnouncement-content-card {
+        padding: 18px;
     }
 }
 
-@media (max-width: 600px) {
+/* 1080px */
+@media screen and (max-width: 1080px) {
     .dashboardAnnouncement-container {
-        padding: 18px;
+        padding: 24px;
+    }
+
+    .dashboardAnnouncement-content {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+    }
+}
+
+/* 760px */
+@media screen and (max-width: 760px) {
+    .dashboardAnnouncement-container {
+        padding: 20px;
+        gap: 18px;
+    }
+
+    .dashboardAnnouncement-content {
+        gap: 14px;
+    }
+
+    .dashboardAnnouncement-content-card {
+        padding: 16px;
+        border-radius: 16px;
+    }
+
+    .dashboardAnnouncement-actions {
+        gap: 10px;
+    }
+}
+
+/* 480px */
+@media screen and (max-width: 480px) {
+    .dashboardAnnouncement-container {
+        padding: 16px;
+        gap: 16px;
     }
 
     .dashboardAnnouncement-header {
@@ -133,7 +179,92 @@
         gap: 14px;
     }
 
+    .dashboardAnnouncement-heading > h3 {
+        font-size: 18px;
+    }
+
+    .dashboardAnnouncement-new {
+        padding: 9px 16px;
+    }
+
     .dashboardAnnouncement-content {
         grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .dashboardAnnouncement-content-card {
+        padding: 16px;
+        gap: 9px;
+    }
+
+    .dashboardAnnouncement-category,
+    .dashboardAnnouncement-date {
+        font-size: 10px;
+    }
+
+    .dashboardAnnouncement-empty {
+        padding: 20px;
+    }
+
+    .announcement-empty {
+        min-height: 150px;
+        padding: 20px;
+        font-size: 14px;
+    }
+}
+
+/* 320px */
+@media screen and (max-width: 320px) {
+    .dashboardAnnouncement-container {
+        padding: 12px;
+        gap: 14px;
+    }
+
+    .dashboardAnnouncement-heading > h3 {
+        font-size: 17px;
+    }
+
+    .dashboardAnnouncement-heading > span {
+        font-size: 12px;
+    }
+
+    .dashboardAnnouncement-new {
+        padding: 8px 12px;
+    }
+
+    .dashboardAnnouncement-new > span {
+        font-size: 12px;
+    }
+
+    .dashboardAnnouncement-content {
+        gap: 10px;
+    }
+
+    .dashboardAnnouncement-content-card {
+        padding: 13px;
+        border-radius: 14px;
+        gap: 8px;
+    }
+
+    .dashboardAnnouncement-title > h3 {
+        font-size: 13px;
+    }
+
+    .dashboardAnnouncement-description > p {
+        font-size: 11px;
+    }
+
+    .dashboardAnnouncement-actions {
+        gap: 8px;
+    }
+
+    .announcement-edit {
+        padding: 6px 10px;
+    }
+
+    .announcement-empty {
+        min-height: 130px;
+        padding: 14px;
+        font-size: 13px;
     }
 }

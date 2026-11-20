@@ -1390,27 +1390,62 @@ input:focus {
   -webkit-text-fill-color: #000000 !important;
 }
 
+/* ==========================================================
+   RESPONSIVE STYLES
+========================================================== */
 
+/* 1440px */
+@media screen and (max-width: 1440px) {
+  .dashboardEmployee-container {
+    padding: 26px;
+  }
 
-/* Resonsive */
-@media (max-width: 1000px) {
+  .dashboardEmployee-stats {
+    gap: 18px;
+  }
+
+  .dashboardEmployee-stats-details {
+    padding: 10px 16px;
+    gap: 12px;
+  }
+
+  .employee-users-container,
+  .dashboardEmployee-header {
+    padding: 18px;
+  }
+}
+
+/* 1080px */
+@media screen and (max-width: 1080px) {
+  .dashboardEmployee-container {
+    padding: 22px;
+  }
+
   .employee-management-header {
     align-items: flex-start;
     flex-direction: column;
     gap: 14px;
   }
 
+  .dashboardEmployee-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+
   .employe-search-filter {
     flex-wrap: wrap;
+    gap: 12px;
   }
 
   .dashboardEmployee-searchbar {
     width: 100%;
+    box-sizing: border-box;
   }
 
   .dashboardEmployee-department,
   .dashboardEmployee-filter {
-    width: calc(50% - 8px);
+    width: calc(50% - 6px);
+    box-sizing: border-box;
   }
 
   .dahboardEmployee-details {
@@ -1421,16 +1456,172 @@ input:focus {
   .employee-users-container {
     min-width: 900px;
   }
+
+  .employee-pagination {
+    flex-wrap: wrap;
+  }
+
+  .employee-profile-overlay {
+    padding: 20px;
+  }
+
+  .employee-profile-modal {
+    width: 95vw;
+  }
 }
 
-@media (max-width: 600px) {
+/* 760px */
+@media screen and (max-width: 760px) {
   .dashboardEmployee-container {
+    padding: 18px;
+    gap: 18px;
+  }
+
+  .dashboardEmployee-stats {
+    gap: 14px;
+  }
+
+  .dashboardEmployee-stats-details {
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .employee-stats-desc > p {
+    font-size: 12px;
+  }
+
+  .employee-stats-desc > span {
+    font-size: 18px;
+  }
+
+  .employee-management-right {
+    padding: 10px 14px;
+  }
+
+  .dashboardEmployee-header,
+  .employee-users-container {
+    min-width: 850px;
     padding: 16px;
+  }
+
+  .employee-pagination {
+    padding: 15px;
+    gap: 12px;
+  }
+
+  .pagination-info {
+    font-size: 13px;
+  }
+
+  .pagination-actions {
+    gap: 8px;
+  }
+
+  .pagination-actions button {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+
+  .edit-name-modal-content {
+    padding: 20px;
+  }
+
+  .password-modal {
+    padding: 26px;
+  }
+
+  .add-employee-modal {
+    max-width: calc(100vw - 32px) !important;
+  }
+
+  .add-employee-modal .add-employee-scroll {
+    padding: 55px 22px 22px !important;
+  }
+
+  .employee-profile-overlay {
+    padding: 16px;
+  }
+
+  .employee-profile-modal {
+    width: 100%;
+    max-height: 94vh;
+  }
+}
+
+/* 480px */
+@media screen and (max-width: 480px) {
+  .dashboardEmployee-container {
+    padding: 14px;
+    gap: 16px;
+  }
+
+  .employee-management-heading > h3 {
+    font-size: 17px;
+  }
+
+  .employee-management-heading > span {
+    font-size: 12px;
   }
 
   .employee-management-right {
     width: 100%;
     justify-content: center;
+    box-sizing: border-box;
+  }
+
+  .employee-management-right > span {
+    font-size: 13px;
+  }
+
+  .dashboardEmployee-stats {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .dashboardEmployee-stats-details {
+    padding: 12px 16px;
+  }
+
+  .employee-stats-icon {
+    padding: 7px;
+  }
+
+  .employee-stats-icon > svg {
+    font-size: 18px;
+  }
+
+  .employee-stats-desc > span {
+    font-size: 19px;
+  }
+
+  .employe-search-filter {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .dashboardEmployee-searchbar {
+    width: 100%;
+    padding: 0 10px;
+  }
+
+  .dashboardEmployee-input-container {
+    width: 90%;
+    gap: 8px;
+  }
+
+  .dashboardEmployee-input-container > input {
+    min-width: 0;
+    font-size: 13px;
+  }
+
+  .employee-searchBtn {
+    width: 10%;
+    padding: 10px 5px;
+  }
+
+  .employee-searchBtn > button {
+    font-size: 14px;
   }
 
   .dashboardEmployee-department,
@@ -1438,8 +1629,473 @@ input:focus {
     width: 100%;
   }
 
+  .customDropdown-button {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+
+  .customDropdown-option {
+    font-size: 13px;
+  }
+
+  .dahboardEmployee-details {
+    overflow-x: auto;
+    border-radius: 14px;
+  }
+
+  .dashboardEmployee-header,
+  .employee-users-container {
+    min-width: 800px;
+    padding: 14px;
+  }
+
+  .dashboardEmployee-header > div {
+    font-size: 12px;
+  }
+
+  .dashboardEmployee-name > p {
+    font-size: 13px;
+  }
+
+  .dashboardEmployee-name > span {
+    font-size: 11px;
+  }
+
+  .dashboardEmployee-department-name,
+  .dashboardEmployee-designation,
+  .dashboardEmployee-role {
+    font-size: 12px;
+  }
+
+  .dashboardEmploye-avatar {
+    height: 38px;
+  }
+
+  .dashboardEmployee-status {
+    padding: 3px 10px;
+    gap: 7px;
+  }
+
+  .dashboardEmployee-status > span {
+    font-size: 10px;
+  }
+
+  .dashboardEmployee-actions {
+    gap: 8px;
+  }
+
+  .employee-pagination {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 14px;
+  }
+
+  .pagination-info {
+    font-size: 12px;
+    text-align: center;
+  }
+
+  .pagination-actions {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .pagination-actions button {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+
+  .employee-save-action,
+  .employee-cancel-action {
+    padding: 7px 10px;
+  }
+
+  .employee-save-action > span,
+  .employee-cancel-action > span {
+    font-size: 12px;
+  }
+
   .employeeDashboard-loadmore-btn > button {
     width: 100%;
     padding: 12px 18px;
+  }
+
+  /* Edit Name Modal */
+  .edit-name-modal {
+    width: 100%;
+    max-width: calc(100vw - 24px);
+  }
+
+  .edit-name-modal-content {
+    padding: 18px;
+  }
+
+  .edit-name-modal-header {
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+
+  .edit-name-modal-header h3 {
+    font-size: 18px;
+  }
+
+  .edit-name-modal-actions {
+    gap: 8px;
+    margin-top: 20px;
+  }
+
+  .edit-name-cancel,
+  .edit-name-save {
+    padding: 9px 13px;
+  }
+
+  /* Password Modal */
+  .password-modal-overlay {
+    padding: 12px;
+  }
+
+  .password-modal {
+    width: 100%;
+    max-width: calc(100vw - 24px);
+    padding: 22px 18px;
+    border-radius: 15px;
+  }
+
+  .password-modal-icon {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 14px;
+  }
+
+  .password-modal h3 {
+    font-size: 19px;
+  }
+
+  .password-modal-user {
+    margin-bottom: 22px;
+  }
+
+  .password-modal-actions {
+    gap: 8px;
+    margin-top: 22px;
+  }
+
+  .password-modal-actions button {
+    padding: 0 12px;
+  }
+
+  .password-modal-cancel {
+    min-width: 80px;
+  }
+
+  .password-modal-confirm {
+    min-width: 125px;
+  }
+
+  /* Add Employee Modal */
+  .add-employee-modal {
+    width: calc(100vw - 24px) !important;
+    max-width: calc(100vw - 24px) !important;
+    max-height: 90vh !important;
+  }
+
+  .add-employee-modal .add-employee-scroll {
+    max-height: 90vh;
+    padding: 55px 16px 20px !important;
+  }
+
+  .add-employee-modal .close-modal {
+    width: 32px;
+    height: 32px;
+    font-size: 18px;
+  }
+
+  /* Employee Profile Modal */
+  .employee-profile-overlay {
+    padding: 10px;
+  }
+
+  .employee-profile-modal {
+    width: 100%;
+    max-height: 96vh;
+    border-radius: 14px;
+  }
+}
+
+/* 320px */
+@media screen and (max-width: 320px) {
+  .dashboardEmployee-container {
+    padding: 10px;
+    gap: 14px;
+  }
+
+  .employee-management-heading > h3 {
+    font-size: 16px;
+  }
+
+  .employee-management-heading > span {
+    font-size: 11px;
+  }
+
+  .employee-management-right {
+    padding: 9px 10px;
+  }
+
+  .employee-management-right > span {
+    font-size: 12px;
+  }
+
+  .dashboardEmployee-stats {
+    gap: 10px;
+  }
+
+  .dashboardEmployee-stats-details {
+    padding: 10px;
+    gap: 9px;
+  }
+
+  .employee-stats-desc > p {
+    font-size: 11px;
+  }
+
+  .employee-stats-desc > span {
+    font-size: 17px;
+  }
+
+  .employee-stats-icon > svg {
+    font-size: 17px;
+  }
+
+  .dashboardEmployee-searchbar {
+    padding: 0 8px;
+  }
+
+  .dashboardEmployee-input-container {
+    gap: 5px;
+  }
+
+  .dashboardEmployee-input-container > input {
+    padding: 6px;
+    font-size: 12px;
+  }
+
+  .employee-searchBtn {
+    padding: 9px 3px;
+  }
+
+  .employee-searchBtn > button {
+    font-size: 12px;
+  }
+
+  .customDropdown-button {
+    padding: 9px 10px;
+    font-size: 12px;
+  }
+
+  .customDropdown-arrow {
+    font-size: 16px;
+  }
+
+  .customDropdown-option {
+    padding: 8px;
+    font-size: 12px;
+  }
+
+  .dashboardEmployee-header,
+  .employee-users-container {
+    min-width: 760px;
+    padding: 12px;
+  }
+
+  .dashboardEmployee-header > div {
+    font-size: 11px;
+  }
+
+  .dashboardEmployee-name > p {
+    font-size: 12px;
+  }
+
+  .dashboardEmployee-name > span {
+    font-size: 10px;
+  }
+
+  .dashboardEmploye-avatar {
+    height: 34px;
+  }
+
+  .dashboardEmployee-status {
+    padding: 3px 8px;
+    gap: 5px;
+  }
+
+  .dashboardEmployee-status > span {
+    font-size: 9px;
+  }
+
+  .employee-pagination {
+    padding: 12px 8px;
+    gap: 10px;
+  }
+
+  .pagination-info {
+    font-size: 11px;
+  }
+
+  .pagination-actions {
+    gap: 6px;
+  }
+
+  .pagination-actions button {
+    padding: 7px 9px;
+    font-size: 11px;
+  }
+
+  .employee-save-action,
+  .employee-cancel-action {
+    padding: 6px 8px;
+  }
+
+  .employee-save-action > span,
+  .employee-cancel-action > span {
+    font-size: 11px;
+  }
+
+  /* Edit Name Modal */
+  .edit-name-modal {
+    max-width: calc(100vw - 16px);
+  }
+
+  .edit-name-modal-content {
+    padding: 14px;
+  }
+
+  .edit-name-modal-header h3 {
+    font-size: 16px;
+  }
+
+  .edit-name-modal-header p {
+    font-size: 11px;
+  }
+
+  .edit-name-input-group label {
+    font-size: 12px;
+  }
+
+  .edit-name-input-group input {
+    padding: 9px 10px;
+    font-size: 12px;
+  }
+
+  .edit-name-modal-actions {
+    flex-wrap: wrap;
+  }
+
+  .edit-name-cancel,
+  .edit-name-save {
+    padding: 8px 11px;
+    font-size: 12px;
+  }
+
+  /* Password Modal */
+  .password-modal-overlay {
+    padding: 8px;
+  }
+
+  .password-modal {
+    max-width: calc(100vw - 16px);
+    padding: 18px 13px;
+    border-radius: 12px;
+  }
+
+  .password-modal-icon {
+    width: 44px;
+    height: 44px;
+    font-size: 20px;
+  }
+
+  .password-modal h3 {
+    font-size: 17px;
+  }
+
+  .password-modal-user {
+    font-size: 11px;
+    margin-bottom: 18px;
+  }
+
+  .password-input-group label {
+    font-size: 12px;
+  }
+
+  .password-input-group input,
+  .password-field input {
+    height: 42px;
+    font-size: 12px;
+  }
+
+  .password-modal-actions {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 7px;
+  }
+
+  .password-modal-actions button {
+    height: 39px;
+    padding: 0 10px;
+    font-size: 11px;
+  }
+
+  .password-modal-cancel {
+    min-width: 75px;
+  }
+
+  .password-modal-confirm {
+    min-width: 115px;
+  }
+
+  /* Add Employee Modal */
+  .add-employee-modal {
+    width: calc(100vw - 16px) !important;
+    max-width: calc(100vw - 16px) !important;
+    max-height: 92vh !important;
+    border-radius: 13px !important;
+  }
+
+  .add-employee-modal .add-employee-scroll {
+    max-height: 92vh;
+    padding: 50px 12px 16px !important;
+  }
+
+  .add-employee-modal .close-modal {
+    top: 9px;
+    right: 9px;
+    width: 30px;
+    height: 30px;
+    font-size: 16px;
+  }
+
+  .add-employee-modal .form .input-box input,
+  .add-employee-modal .form .select-trigger {
+    height: 42px !important;
+    font-size: 12px !important;
+  }
+
+  .add-employee-modal .form .select-option {
+    padding: 9px 10px !important;
+    font-size: 12px;
+  }
+
+  .add-employee-modal .form .loginsumit {
+    height: 42px;
+    font-size: 12px;
+  }
+
+  /* Employee Profile Modal */
+  .employee-profile-overlay {
+    padding: 6px;
+  }
+
+  .employee-profile-modal {
+    max-height: 97vh;
+    border-radius: 12px;
   }
 }

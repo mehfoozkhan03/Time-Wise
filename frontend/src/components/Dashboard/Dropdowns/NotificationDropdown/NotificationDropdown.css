@@ -1,4 +1,3 @@
-
 .custom-dropdown {
   position: relative;
   width: 100%;
@@ -142,5 +141,120 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/* ======================================================
+   RESPONSIVE DESIGN
+====================================================== */
+/* Large screens - 1440px */
+@media screen and (max-width: 1440px) {
+  .custom-dropdown__menu {
+    max-height: 230px;
+  }
+}
+
+/* Laptops - 1080px */
+@media screen and (max-width: 1080px) {
+  .custom-dropdown__trigger {
+    gap: 10px;
+    padding: 9px 11px;
+  }
+
+  .custom-dropdown__selected,
+  .custom-dropdown__option-content {
+    gap: 8px;
+  }
+
+  .custom-dropdown__option {
+    padding: 9px;
+  }
+}
+
+/* Tablets - 760px */
+@media screen and (max-width: 760px) {
+  .custom-dropdown__label {
+    margin-bottom: 7px;
+    font-size: 12px;
+  }
+
+  .custom-dropdown__trigger {
+    min-height: 42px;
+    padding: 9px 10px;
+  }
+
+  .custom-dropdown__menu {
+    max-height: 220px;
+  }
+
+  .custom-dropdown__option {
+    gap: 10px;
+    font-size: 13px;
+  }
+
+  .custom-dropdown__empty {
+    font-size: 12px;
+  }
+}
+
+/* Mobile - 480px */
+@media screen and (max-width: 480px) {
+  .custom-dropdown__trigger {
+    min-height: 40px;
+    gap: 8px;
+    padding: 8px 9px;
+  }
+
+  .custom-dropdown__selected,
+  .custom-dropdown__option-content {
+    gap: 7px;
+  }
+
+  .custom-dropdown__option {
+    gap: 8px;
+    padding: 8px;
+    font-size: 12px;
+  }
+
+  .custom-dropdown__menu {
+    max-height: 200px;
+    padding: 4px;
+  }
+
+  .custom-dropdown__empty {
+    padding: 12px 8px;
+  }
+}
+
+/* Small mobile - 320px */
+@media screen and (max-width: 320px) {
+  .custom-dropdown__label {
+    font-size: 11px;
+  }
+
+  .custom-dropdown__trigger {
+    min-height: 38px;
+    gap: 6px;
+    padding: 7px 8px;
+  }
+
+  .custom-dropdown__selected,
+  .custom-dropdown__option-content {
+    gap: 6px;
+  }
+
+  .custom-dropdown__option {
+    gap: 6px;
+    padding: 7px;
+    font-size: 11px;
+  }
+
+  .custom-dropdown__menu {
+    max-height: 180px;
+  }
+
+  .custom-dropdown__empty {
+    padding: 10px 7px;
+    font-size: 11px;
   }
 }
