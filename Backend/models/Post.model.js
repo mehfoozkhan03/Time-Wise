@@ -2,11 +2,26 @@ import mongoose from "mongoose";
 
 const postSchema = new mongoose.Schema(
   {
+    // // ================= Author =================
+
+    // createdBy: {
+    //   type: mongoose.Schema.Types.ObjectId,
+    //   ref: "User",
+    //   required: true,
+    //   index: true,
+    // },
+
     // ================= Author =================
+    authorType: {
+      type: String,
+      enum: ["User", "Admin"],
+      default: "User",
+      required: true,
+    },
 
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      refPath: "authorType",
       required: true,
       index: true,
     },

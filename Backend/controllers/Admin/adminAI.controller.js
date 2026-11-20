@@ -200,7 +200,7 @@ const formatDateKey = (dateKey) => new Date(`${dateKey}T12:00:00Z`).toLocaleDate
   year: "numeric",
 });
 
-const getOrganizationAttendanceSummary = async (employees, period) => {
+const getOrganizationAttendanceSummary = async (employees, period, adminID) => {
   const employeeIds = employees.map((employee) => employee._id);
   const emptySummary = {
     startKey: getIndiaDateKey(),
@@ -253,12 +253,8 @@ const getOrganizationAttendanceSummary = async (employees, period) => {
       .sort({ date: 1 })
       .lean(),
     holidayModel
-      .find({
-        isActive: true,
-        type: { $in: ATTENDANCE_BLOCKING_HOLIDAY_TYPES },
-        date: { $gte: startAt, $lte: endAt },
-      })
-      .select("date")
+      .find({ isActive: true, createdBy: adminID, date: { $gte: startAt, $lte: endAt } })
+      .select("date title type")
       .lean(),
     leaveModel
       .find({
@@ -271,7 +267,9 @@ const getOrganizationAttendanceSummary = async (employees, period) => {
       .lean(),
   ]);
 
-  const holidayKeys = new Set(holidays.map((holiday) => getIndiaDateKey(holiday.date)));
+  const holidayKeys = new Set(holidays
+    .filter((holiday) => ATTENDANCE_BLOCKING_HOLIDAY_TYPES.includes(holiday.type))
+    .map((holiday) => getIndiaDateKey(holiday.date)));
   const leaveDaysByEmployee = new Map();
   for (const leave of approvedLeaves) {
     const employeeKey = String(leave.user);
@@ -351,6 +349,7 @@ const getOrganizationAttendanceSummary = async (employees, period) => {
     absentEmployeeIds,
     validRecords,
     records,
+    holidays,
     missingToday: Math.max(employees.length - todayRecordIds.size, 0),
     allTime,
   };
@@ -391,7 +390,7 @@ const replyWithSavedConversation = async (req, res, question, answer) => {
         },
       },
     },
-    { upsert: true, new: true, setDefaultsOnInsert: true },
+    { upsert: true, returnDocument: "after", setDefaultsOnInsert: true },
   );
 
   return res.status(200).json({ success: true, answer });
@@ -444,11 +443,17 @@ const resolveEmployee = (employees, question) => {
   if (emailMatches.length > 1) return null;
 
   const fullNameMatches = employees.filter((employee) => {
-    const fullName = employeeName(employee).toLowerCase();
-    const nameParts = fullName.split(/[^a-z0-9]+/).filter(Boolean);
+    const nameAliases = [employeeName(employee), employee?.name]
+      .map((name) => String(name || "").toLowerCase().trim())
+      .filter(Boolean);
     const questionParts = new Set(lowerQuestion.split(/[^a-z0-9]+/).filter(Boolean));
-    const allNamePartsPresent = nameParts.length >= 2 && nameParts.every((part) => questionParts.has(part));
-    return fullName && (lowerQuestion.includes(fullName) || allNamePartsPresent);
+    return nameAliases.some((fullName) => {
+      const nameParts = fullName.split(/[^a-z0-9]+/).filter(Boolean);
+      const matchedNameParts = nameParts.filter((part) => questionParts.has(part));
+      return lowerQuestion.includes(fullName) ||
+        (nameParts.length >= 2 && nameParts.every((part) => questionParts.has(part))) ||
+        (nameParts.length > 2 && matchedNameParts.length >= 2);
+    });
   });
   if (fullNameMatches.length === 1) return fullNameMatches[0];
   if (fullNameMatches.length > 1) return null;
@@ -491,6 +496,25 @@ export const askAdminAI = async (req, res) => {
     if (!question) return res.status(400).json({ success: false, message: "Please enter a question." });
 
     const lowerQuestion = question.toLowerCase();
+    if (/^(yes|yeah|yep|sure|okay|ok|please do|tell me more|go ahead)[.! ]*$/i.test(question)) {
+      const conversation = await AdminAIConversation.findOne({ adminID: req.admin.adminID }).select("messages").lean();
+      const previousAnswer = [...(conversation?.messages || [])].reverse().find((item) => item.role === "assistant")?.content;
+      const previousQuestion = [...(conversation?.messages || [])].reverse().find((item) => item.role === "user")?.content;
+      if (previousQuestion && previousAnswer && !previousAnswer.trim().endsWith("?")) {
+        const answer = await askTimeWiseAI("Yes, tell me more.", {
+          continuation: { previousQuestion, previousAnswer, role: "admin" },
+        }, conversation.messages);
+        return replyWithSavedConversation(req, res, question, answer);
+      }
+    }
+    if (/\b(what did i just ask|what was my last question|what did i ask before|repeat my last question)\b/i.test(question)) {
+      const conversation = await AdminAIConversation.findOne({ adminID: req.admin.adminID }).select("messages").lean();
+      const previousQuestion = [...(conversation?.messages || [])].reverse().find((item) => item.role === "user")?.content;
+      const answer = previousQuestion
+        ? `Your previous question was: “${previousQuestion}”`
+        : "This is the first question in our current chat.";
+      return replyWithSavedConversation(req, res, question, answer);
+    }
     if (/(stock|share price|market price|share market)/.test(lowerQuestion)) {
       return replyWithSavedConversation(req, res, question, "I can't provide stock prices. I can help with employees, attendance, working hours, overtime, productivity, leave requests, calendar events, and upcoming holidays.");
     }
@@ -507,34 +531,48 @@ export const askAdminAI = async (req, res) => {
       (lowerQuestion.includes("how many") || lowerQuestion.includes("count") || lowerQuestion.includes("number of")) &&
       (lowerQuestion.includes("employee") || lowerQuestion.includes("staff"));
     const asksAboutEmployeeRecords =
-      /(attendance|\bpresent(?:ed)?\b|\babsent\b|\blate\b|check.?in|\bleaves?\b)/.test(lowerQuestion);
+      /(attendance|\bpresent(?:ed)?\b|\babsent\b|\blate\b|half[ -]?day|check.?in|\bleaves?\b)/.test(lowerQuestion);
 
     if (asksForEmployeeCount && !asksAboutEmployeeRecords) {
-      const employeeCount = await userModel.countDocuments({ adminID: req.admin.adminID });
+      // The Admin employee-management page currently lists all user accounts,
+      // so WiseBot must use the same scope for employee counts and lookups.
+      const employeeCount = await userModel.countDocuments({});
       return replyWithSavedConversation(req, res, question, `There are ${employeeCount} employees in your organisation.`);
     }
 
     const employees = await userModel
-      .find({ adminID: req.admin.adminID })
+      .find({})
       .select("firstName lastName name email department designation createdAt")
       .lean();
-    const employeeIds = employees.map((employee) => employee._id);
-    const employee = resolveEmployee(employees, question);
+    const requestedEmail = question.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/i)?.[0]?.toLowerCase();
+    const employee = requestedEmail
+      ? await userModel.findOne({ email: requestedEmail })
+        .select("firstName lastName name email department designation createdAt")
+        .lean()
+      : resolveEmployee(employees, question);
+    const employeeIds = employees.map((item) => item._id);
 
-    const asksForLeaveBalance = /\b(leave|annual|sick|casual)\b/i.test(question) &&
-      /\b(balance|remaining|left|available)\b/i.test(question) &&
+    const asksForIndividualStats = /\b(attendance|present|absent|late|overtime|working hours?|productivity|punctuality|leave balance)\b/i.test(question);
+    const namesEmployeeAfterPreposition = /\b(?:of|about)\s+(?!today\b|yesterday\b|this\b|last\b|overall\b|all\b)[a-z][a-z'-]+(?:\s+[a-z][a-z'-]+){1,2}\b/i.test(question);
+    if (!employee && asksForIndividualStats && (/@/.test(question) || namesEmployeeAfterPreposition)) {
+      return replyWithSavedConversation(req, res, question, "I couldn't find that employee in this organisation. Check the registered email or ask an admin to add the employee to this organisation.");
+    }
+
+    const asksForLeaveBalance = /\b(leave|annual|sick|casual|emergency)\b/i.test(question) &&
+      /\b(balances?|remaining|left|available)\b/i.test(question) &&
       !/\b(how does|how do|how can|how to|explain|describe|feature|policy work)\b/i.test(question);
     if (asksForLeaveBalance) {
       if (!employee) {
         return replyWithSavedConversation(req, res, question, "Please include the employee's full name or registered email so I can check their leave balance in your organisation.");
       }
       const balance = await getLeaveBalance(employee._id);
-      const types = ["annual", "sick", "casual"].filter((type) =>
+      const types = ["annual", "sick", "casual", "emergency"].filter((type) =>
         new RegExp(`\\b${type}\\b`, "i").test(question),
       );
-      const selectedTypes = types.length ? types : ["annual", "sick", "casual"];
+      const selectedTypes = types.length ? types : ["annual", "sick", "casual", "emergency"];
       const answer = selectedTypes.map((type) => {
         const item = balance?.[type] || { total: 0, used: 0 };
+        if (type === "emergency") return `${employeeName(employee)} — Emergency leave: one request per month; ${item.used ? "used this month" : "available this month"}.`;
         const available = Number(item.total || 0) - Number(item.used || 0);
         return `${employeeName(employee)} — ${type} leave: ${available} day${available === 1 ? "" : "s"} available (${item.used || 0} used of ${item.total || 0}).`;
       }).join(" ");
@@ -547,9 +585,15 @@ export const askAdminAI = async (req, res) => {
     const asksForEmployeeProfile = isProfileDetailsQuestion(question) || asksAboutOneEmployee;
     if (asksForEmployeeProfile) {
       if (!employee) {
-        return replyWithSavedConversation(req, res, question, "Please include the employee's full name or registered email so I can find the profile in your organisation.");
+        const requestedEmail = question.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/i)?.[0];
+        const requestedName = question.match(/\b(?:of|about)\s+([a-z][a-z'-]+(?:\s+[a-z][a-z'-]+){1,2})/i)?.[1]?.replace(/[?.,!]+$/, "");
+        const reference = requestedEmail || requestedName;
+        const answer = reference
+          ? `I couldn't find a registered employee record matching “${reference}” in the employee directory. If the account appears in Admin > Employees, ask using the exact registered email shown there.`
+          : "I couldn't find a matching employee record in the employee directory. Please use the employee's exact registered email.";
+        return replyWithSavedConversation(req, res, question, answer);
       }
-      const profile = await userModel.findOne({ _id: employee._id, adminID: req.admin.adminID })
+      const profile = await userModel.findById(employee._id)
         .select("firstName lastName name email role department designation dob gender phone address bio socialLinks emergencyContact createdAt")
         .lean();
       const fullProfile = /\b(profile|personal details|personal information|employee details|employee information|employee profile|contact information|contact details|details of|details for|information about|information on|all (?:my |employee )?details|full details|complete details|tell me about|who is)\b/i.test(question);
@@ -579,11 +623,11 @@ export const askAdminAI = async (req, res) => {
 
     const asksAboutLateEmployees = hasWordWithCommonTypos(lowerQuestion, "late");
     const asksOrganizationAttendance = !employee &&
-      /\b(attendance|present(?:ed)?|absent|absence|late|check.?in|check.?out|punctuality)\b/.test(lowerQuestion);
+      /\b(attendance|present(?:ed)?|absent|absence|late|half[ -]?day|check.?in|check.?out|punctuality)\b/.test(lowerQuestion);
     if (asksOrganizationAttendance) {
       const period = resolveAttendancePeriod(lowerQuestion);
       if (period?.range === "invalid") {
-        return replyWithSavedConversation(req, res, question, "I couldn't read that date range. Please use a date like 2026-10-14 or 14/10/2026, or write ‘from 2026-10-01 to 2026-10-14’.");
+        return replyWithSavedConversation(req, res, question, "That date is not valid on the calendar. Please use a real date, such as 2026-10-14, or a range such as ‘from 2026-10-01 to 2026-10-14’.");
       }
       const effectivePeriod = period || { range: "custom", from: getIndiaDateKey(), to: getIndiaDateKey() };
       if (effectivePeriod.range === "custom" && effectivePeriod.to > getIndiaDateKey()) {
@@ -592,7 +636,7 @@ export const askAdminAI = async (req, res) => {
         }
         effectivePeriod.to = getIndiaDateKey();
       }
-      const summary = await getOrganizationAttendanceSummary(employees, effectivePeriod);
+      const summary = await getOrganizationAttendanceSummary(employees, effectivePeriod, req.admin.adminID);
       if (summary.future) return replyWithSavedConversation(req, res, question, "Attendance data isn't available for future dates.");
       if (summary.invalidRange) return replyWithSavedConversation(req, res, question, "Please request a date range of one year or less.");
 
@@ -600,10 +644,17 @@ export const askAdminAI = async (req, res) => {
       const asksForNames = /\b(who|names?|list|which)\b/.test(lowerQuestion);
       const asksForAbsentees = /\b(absent|absence)\b/.test(lowerQuestion);
       const asksForLate = asksAboutLateEmployees || /\blate\b/.test(lowerQuestion);
+      const asksForHalfDay = /\b(half[ -]?day|half day)\b/.test(lowerQuestion);
       const asksForRate = /\b(rate|percentage|percent|overall attendance)\b/.test(lowerQuestion);
       const selectedDate = summary.startKey === summary.endKey;
       const selectedDateKey = summary.endKey;
       const selectedDayRecords = summary.records.filter((record) => getIndiaDateKey(record.date) === selectedDateKey);
+      const selectedHoliday = selectedDate
+        ? summary.holidays?.find((holiday) => getIndiaDateKey(holiday.date) === selectedDateKey)
+        : null;
+      if (selectedHoliday && ATTENDANCE_BLOCKING_HOLIDAY_TYPES.includes(selectedHoliday.type) && (asksForAbsentees || asksForLate || asksForHalfDay)) {
+        return replyWithSavedConversation(req, res, question, `${selectedHoliday.title} (${selectedHoliday.type.replaceAll("_", " ")}) was observed on ${periodLabel}. Attendance was not expected that day, so absent, late, and half-day counts do not apply.`);
+      }
       const presentRecords = selectedDate
         ? selectedDayRecords.filter((record) => record.checkInTime && ["Present", "Late", "Half Day"].includes(record.status))
         : summary.validRecords.filter((record) => ["Present", "Late", "Half Day"].includes(record.status));
@@ -616,6 +667,16 @@ export const askAdminAI = async (req, res) => {
       const presentIds = selectedDate ? new Set(presentRecords.map((record) => String(record.user?._id || record.user))) : summary.presentEmployeeIds;
       const lateIds = selectedDate ? new Set(lateRecords.map((record) => String(record.user?._id || record.user))) : summary.lateEmployeeIds;
       const absentIds = new Set(absentRecords.map((record) => String(record.user?._id || record.user)));
+      const halfDayRecords = (selectedDate ? selectedDayRecords : summary.validRecords).filter((record) => record.status === "Half Day");
+      if (selectedHoliday && (asksForAbsentees || asksForLate || asksForHalfDay)) {
+        const holidayNote = `${selectedHoliday.title} (${selectedHoliday.type.replaceAll("_", " ")}) was observed that day; attendance was still expected.`;
+        if (asksForHalfDay) return replyWithSavedConversation(req, res, question, `${halfDayRecords.length} employees were marked half-day ${periodLabel}.${halfDayRecords.length ? ` Employees: ${formatEmployeeNames(new Set(halfDayRecords.map((record) => String(record.user?._id || record.user))), employees, halfDayRecords)}.` : ""} ${holidayNote}`);
+        if (asksForAbsentees) return replyWithSavedConversation(req, res, question, `${absentIds.size} employees were marked absent ${periodLabel}. ${holidayNote}`);
+        if (asksForLate) return replyWithSavedConversation(req, res, question, `${lateIds.size} employees were marked late ${periodLabel}${lateIds.size ? `: ${formatEmployeeNames(lateIds, employees, selectedDayRecords)}` : ""}. ${holidayNote}`);
+      }
+      if (asksForHalfDay) {
+        return replyWithSavedConversation(req, res, question, `${halfDayRecords.length} employees were marked half-day ${periodLabel}${halfDayRecords.length ? `: ${formatEmployeeNames(new Set(halfDayRecords.map((record) => String(record.user?._id || record.user))), employees, halfDayRecords)}` : ""}.`);
+      }
       if (asksForNames) {
         const ids = asksForAbsentees ? absentIds : asksForLate ? lateIds : presentIds;
         const label = asksForAbsentees ? "marked absent" : asksForLate ? "marked late" : "present";
@@ -749,13 +810,13 @@ export const askAdminAI = async (req, res) => {
     if (employee) {
       const name = employeeName(employee) || employee.email;
       const asksAttendance = /\b(attendance|present(?:ed)?|absent|absence|late|check.?in|check.?out)\b/.test(lowerQuestion);
-      const asksHours = /\bworking hours?\b/.test(lowerQuestion);
+      const asksHours = /\bworking hours?\b|\bhow many hours?\b|\btotal hours?\b|\bhours? (?:did|has|have|was|were)\b|\bworked? (?:for )?\d*\s*hours?\b/.test(lowerQuestion);
       const asksOvertime = /\bovertime\b/.test(lowerQuestion);
       const asksProductivity = /\bproductivity\b/.test(lowerQuestion);
       if (asksAttendance || asksHours || asksOvertime || asksProductivity) {
         const period = resolveAttendancePeriod(lowerQuestion);
         if (period?.range === "invalid") {
-          return replyWithSavedConversation(req, res, question, "I couldn't read that date. Please use a date like 2026-10-14 or a range such as ‘from 2026-10-01 to 2026-10-14’.");
+          return replyWithSavedConversation(req, res, question, "That date is not valid on the calendar. Please use a real date, such as 2026-10-14, or a range such as ‘from 2026-10-01 to 2026-10-14’.");
         }
         const bounds = getPeriodDateKeys(period);
         if (bounds && (Date.parse(`${bounds.end}T00:00:00Z`) - Date.parse(`${bounds.start}T00:00:00Z`)) / 86400000 > 365) {

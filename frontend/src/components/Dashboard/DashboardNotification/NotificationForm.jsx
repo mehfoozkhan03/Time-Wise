@@ -160,7 +160,9 @@ export const NotificationForm = ({ onClose }) => {
                 </div>
 
                 {/* Feedback Modal */}
-                <Modal onReady={setShowFeedbackModal} />
+                <Modal
+                    onReady={(showModal) => setShowFeedbackModal(() => showModal)}
+                />
 
                 <form onSubmit={handleSubmit}>
                     <div className="create-notification-content">

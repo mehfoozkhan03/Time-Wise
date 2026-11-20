@@ -5,6 +5,7 @@ import Footer from "../components/Footer/Footer";
 import AdminFooter from "../components/AdminFooter/AdminFooter";
 
 import { ActivityTracker } from "../hooks/ActivityTracker";
+import BirthdayCelebration from "../components/EventCalendar/BirthdayCelebration/BirthdayCelebration";
 import { ThemeApplier } from "../ThemeApplier/ThemeApplier";
 
 export default function MainLayout() {
@@ -16,8 +17,14 @@ export default function MainLayout() {
     <>
       <ThemeApplier />
       <Navbar />
-      {!isAdminPage && <ActivityTracker />}
 
+      {/* {!isAdminPage && <ActivityTracker />} */}
+      {!isAdminPage && (
+        <>
+          <ActivityTracker />
+          <BirthdayCelebration />
+        </>
+      )}
       <main className="main_layout">
         <Outlet />
       </main>

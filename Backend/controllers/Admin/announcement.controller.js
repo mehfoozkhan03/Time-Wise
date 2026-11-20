@@ -538,7 +538,7 @@ export const updateAnnouncement = async (req, res) => {
 
     const updatedAnnouncement = await annoucementModel
       .findByIdAndUpdate(id, updateData, {
-        new: true,
+        returnDocument: "after",
         runValidators: true,
       })
       .populate(

@@ -31,6 +31,45 @@
   font-weight: 600;
 }
 
+
+/* Employee Stats */
+.dashboardEmployee-stats{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.dashboardEmployee-stats-details{
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.employee-stats-icon{
+  border: 1px solid var(--border);
+  padding: 7px 8px;
+  border-radius: 10px;
+}
+
+.employee-stats-icon>svg{
+  font-size: 20px;
+}
+
+.employee-stats-desc>p{
+  font-size: 13px;
+  margin-bottom: 5px;
+  color: var(--text_secondary);
+}
+
+.employee-stats-desc>span{
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text_primary);
+}
+
 /* Employee filter */
 
 .employe-search-filter {
@@ -260,23 +299,42 @@
   gap: 5px;
 }
 
-/* employeeDashboard-loadmore-btn */
-.employeeDashboard-loadmore-btn {
+/* Pagination */
+.employee-pagination {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 10px;
-}
-.employeeDashboard-loadmore-btn > button {
-  padding: 14px 50px;
-  border-radius: 10px;
-  font-size: 16px;
-  background: var(--button);
-  color: #fff;
+  justify-content: space-between;
+  padding: 18px 20px;
+  border-top: 1px solid var(--border);
+  gap: 15px;
 }
 
-.employeeDashboard-loadmore-btn > button:hover {
-  background: var(--buttonhover);
+.pagination-info {
+  font-size: 15px;
+  color: var(--text_primary);
+  font-weight: 700;
+}
+
+.pagination-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.pagination-actions button {
+  padding: 9px 16px;
+  border: none;
+  border-radius: 7px;
+  background: var(--primary);
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.pagination-actions button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 /* dashboardEmployee-edit */

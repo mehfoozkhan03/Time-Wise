@@ -147,9 +147,20 @@ export function Reports() {
         };
       })
       .filter((e) => {
-        const matchSearch =
-          e.date.toLowerCase().includes(searchLog.toLowerCase()) ||
-          String(e.notes || "").toLowerCase().includes(searchLog.toLowerCase());
+        const searchTerm = String(searchLog || "").trim().toLowerCase();
+        const searchableValues = [
+          e.date,
+          e.checkin,
+          e.checkout,
+          e.hours,
+          e.breakDuration,
+          e.overtime,
+          e.status,
+          e.notes,
+        ];
+        const matchSearch = !searchTerm || searchableValues.some((value) =>
+          String(value ?? "").toLowerCase().includes(searchTerm),
+        );
 
         const matchStatus =
           statusFilter === "all" ||

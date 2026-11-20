@@ -13,6 +13,7 @@ const GENERAL_EVENT_TYPES = [
   EVENT_TYPES.SPECIAL_EVENT,
   EVENT_TYPES.WORK_EVENT,
   EVENT_TYPES.BIRTHDAY,
+  EVENT_TYPES.PERSONAL,
 ];
 
 const INITIAL_FORM = {
@@ -72,13 +73,16 @@ function EventForm({
 
   useEffect(() => {
     if (mode === "EDIT" && initialData) {
-      const initialType =
-        initialData.type || EVENT_TYPES.WORK_EVENT;
+      const initialType = initialData.type || EVENT_TYPES.WORK_EVENT;
 
       const initialEmployeeId =
         typeof initialData.employeeId === "object"
           ? initialData.employeeId?._id || ""
           : initialData.employeeId || "";
+
+      const shouldKeepEmployee =
+        requiresEmployee(initialType, isAdmin) ||
+        (isAdmin && initialType === EVENT_TYPES.BIRTHDAY);
 
       setFormData({
         ...INITIAL_FORM,
@@ -104,9 +108,7 @@ function EventForm({
 
         priority: initialData.priority || "MEDIUM",
 
-        employeeId: requiresEmployee(initialType, isAdmin)
-          ? initialEmployeeId
-          : "",
+        employeeId: shouldKeepEmployee ? initialEmployeeId : "",
       });
     } else {
       setFormData(INITIAL_FORM);
@@ -177,8 +179,7 @@ function EventForm({
       formData.endTime &&
       formData.endTime <= formData.startTime
     ) {
-      validationErrors.endTime =
-        "End time must be later than start time.";
+      validationErrors.endTime = "End time must be later than start time.";
     }
 
     setErrors(validationErrors);
@@ -202,7 +203,9 @@ function EventForm({
         ...formData,
       };
 
-      if (!requiresEmployee(payload.type, isAdmin)) {
+      const isAdminBirthday = isAdmin && payload.type === EVENT_TYPES.BIRTHDAY;
+
+      if (!requiresEmployee(payload.type, isAdmin) && !isAdminBirthday) {
         payload.employeeId = "";
       }
 
@@ -213,13 +216,7 @@ function EventForm({
 
       onSubmit?.(payload);
     },
-    [
-      formData,
-      isAdmin,
-      isSubmitting,
-      onSubmit,
-      validateForm,
-    ],
+    [formData, isAdmin, isSubmitting, onSubmit, validateForm],
   );
 
   const handleCancel = useCallback(() => {
@@ -250,11 +247,7 @@ function EventForm({
           Cancel
         </button>
 
-        <button
-          type="submit"
-          className="saveBtn"
-          disabled={isSubmitting}
-        >
+        <button type="submit" className="saveBtn" disabled={isSubmitting}>
           {isSubmitting
             ? mode === "EDIT"
               ? "Updating..."

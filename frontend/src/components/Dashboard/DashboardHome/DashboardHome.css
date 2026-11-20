@@ -392,6 +392,48 @@
 }
 
 
+
+/* Publish Thought */
+.publish-thought-modal__overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+}
+
+.publish-thought-modal {
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+.create-notification-modal__content {
+  padding: 24px;
+}
+
+.publish-thought-modal__close {
+  position: absolute;
+  top: 12px;
+  right: 18px;
+  z-index: 2;
+  border: none;
+  background: transparent;
+  color: red;
+  font-size: 30px;
+  cursor: pointer;
+}
+
+
 @media (max-width: 600px) {
   .create-notification-modal__overlay {
     padding: 12px;

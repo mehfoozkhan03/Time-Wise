@@ -2,7 +2,6 @@ import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 
 import "./SettingSidebar.css";
-import { FaRegUser } from "react-icons/fa";
 import { FaUser } from "react-icons/fa";
 import { MdOutlineWatchLater } from "react-icons/md";
 import { MdNotifications } from "react-icons/md";
@@ -50,7 +49,7 @@ export const SettingSidebar = () => {
                 to="leave"
                 className="settingSidebar-link"
               >
-                <MdEventAvailable className="settingSidebar-icon" />
+                <MdEventAvailable className="settingSidebar-icon" style={{ color: "#FB7185" }} />
                 <span>Leave</span>
               </NavLink>
 
@@ -58,35 +57,35 @@ export const SettingSidebar = () => {
                 to="calendar"
                 className="settingSidebar-link"
               >
-                <FaCalendarAlt className="settingSidebar-icon" />
+                <FaCalendarAlt className="settingSidebar-icon" style={{ color: "#38BDF8" }} />
                 <span>Calendar</span>
               </NavLink>
               <NavLink
                 to="notification"
                 className="notifications settingSidebar-link"
               >
-                <MdNotifications className="settingSidebar-icon" />
+                <MdNotifications className="settingSidebar-icon" style={{ color: "#ef9b52", fontSize: "19px" }} />
                 <span>Notifications</span>
               </NavLink>
               <NavLink
                 to="security"
                 className="security settingSidebar-link"
               >
-                <FaLock className="settingSidebar-icon" />
+                <FaLock className="settingSidebar-icon" style={{ color: "#60A5FA" }} />
                 <span>Security</span>
               </NavLink>
               <NavLink
                 to="data_export"
                 className="dataExport settingSidebar-link"
               >
-                <GoDatabase className="settingSidebar-icon" />
+                <GoDatabase className="settingSidebar-icon" style={{ color: "#c9d7ba" }} />
                 <span>Data & Exoport</span>
               </NavLink>
               <NavLink
                 to="help_support"
                 className="helpSupport settingSidebar-link"
               >
-                <MdOutlineContactSupport className="settingSidebar-icon" />
+                <MdOutlineContactSupport className="settingSidebar-icon" style={{ color: "#38BDF8" }} />
                 <span>Help & Support</span>
               </NavLink>
             </div>

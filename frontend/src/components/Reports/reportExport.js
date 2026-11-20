@@ -127,8 +127,8 @@ const makeTable = (headers, rows) => `
   <table><thead><tr>${headers.map((item) => `<th>${escapeXml(item)}</th>`).join("")}</tr></thead>
   <tbody>${rows.length ? rows.map((row) => `<tr>${row.map((cell) => `<td>${escapeXml(cell)}</td>`).join("")}</tr>`).join("") : `<tr><td colspan="${headers.length}">No data for this period</td></tr>`}</tbody></table>`;
 
-export function exportReportPDF(report) {
-  const printWindow = window.open("", "_blank", "width=1000,height=800");
+export function exportReportPDF(report, targetWindow = null) {
+  const printWindow = targetWindow || window.open("", "_blank", "width=1000,height=800");
   if (!printWindow) throw new Error("Allow pop-ups to print or save this report as PDF.");
 
   const sections = [
@@ -170,6 +170,36 @@ export function exportReportExcel(report) {
   const link = document.createElement("a");
   link.href = url;
   link.download = `TimeWise-Report-${report.period.replace(/[^a-z0-9]+/gi, "-").replace(/^-|-$/g, "")}.xls`;
+  document.body.append(link);
+  link.click();
+  link.remove();
+  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+export function exportReportCSV(report) {
+  const headers = ["Date", "Check-in", "Check-out", "Hours Worked", "Break", "Overtime", "Status", "Notes"];
+  const csvCell = (value) => {
+    let text = String(value ?? "");
+    // Keep user-entered notes from being interpreted as spreadsheet formulas.
+    if (/^[\s]*[=+@\-\t\r]/.test(text)) text = `'${text}`;
+    return `"${text.replaceAll('"', '""')}"`;
+  };
+  const rows = report.attendance.map((item) => [
+    item.date,
+    item.checkIn,
+    item.checkOut,
+    item.hours,
+    item.break,
+    item.overtime,
+    item.status,
+    item.notes,
+  ]);
+  const contents = [headers, ...rows].map((row) => row.map(csvCell).join(",")).join("\r\n");
+  const blob = new Blob(["\uFEFF", contents], { type: "text/csv;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `TimeWise-Attendance-${report.period.replace(/[^a-z0-9]+/gi, "-").replace(/^-|-$/g, "")}.csv`;
   document.body.append(link);
   link.click();
   link.remove();

@@ -375,6 +375,12 @@ export const rejectLeaveRequest = async (
 
 export const getLeaveBalance = async (userID) => {
   const balance = await getOrCreateLeaveBalance(userID);
+  const emergencyLeaveMonth = getEmergencyLeaveMonthKey(new Date());
+  const emergencyLeaveUsed = Boolean(await leaveModel.exists({
+    user: userID,
+    leaveType: "emergency",
+    emergencyLeaveMonth,
+  }));
 
   return {
     annual: {
@@ -393,6 +399,13 @@ export const getLeaveBalance = async (userID) => {
       total: balance.casual.total,
       used: balance.casual.used,
       remaining: balance.casual.total - balance.casual.used,
+    },
+    emergency: {
+      total: 1,
+      used: emergencyLeaveUsed ? 1 : 0,
+      remaining: emergencyLeaveUsed ? 0 : 1,
+      unit: "request",
+      period: "month",
     },
   };
 };

@@ -6,6 +6,7 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import { attendanceModel } from "../../models/Attendance.model.js";
 import { getTodayRange } from "../../utils/attendanceHelper.js";
+import { AdminAIConversation } from "../../models/AdminAIConversation.model.js";
 
 dotenv.config();
 
@@ -109,6 +110,7 @@ export const admin_login = async (req, res) => {
 
 export const adminLogout = async (req, res) => {
   try {
+    await AdminAIConversation.deleteOne({ adminID: req.admin.adminID });
     res.clearCookie("adminToken", {
       httpOnly: false,
       secure: false,
@@ -181,11 +183,22 @@ export const getAllUser = async (req, res) => {
     }
 
     if (status === "Inactive") {
-      filter.$or = [...(filter.$or || [])];
+      const searchConditions = filter.$or;
+      delete filter.$or;
 
-      filter.lastActiveAt = {
-        $lt: new Date(Date.now() - ACTIVE_TIME),
-      };
+      filter.$and = [
+        ...(searchConditions ? [{ $or: searchConditions }] : []),
+        {
+          $or: [
+            {
+              lastActiveAt: {
+                $lt: new Date(Date.now() - ACTIVE_TIME),
+              },
+            },
+            { lastActiveAt: null },
+          ],
+        },
+      ];
     }
 
     const users = await userModel

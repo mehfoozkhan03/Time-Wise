@@ -245,8 +245,8 @@ export const updateUser = createAsyncThunk(
     } catch (error) {
       return thunkAPI.rejectWithValue(
         error?.response?.data?.message ||
-          error?.message ||
-          "Failed to update user",
+        error?.message ||
+        "Failed to update user",
       );
     }
   },
@@ -349,7 +349,11 @@ const adminAuthSlice = createSlice({
     },
     loadLessUsers(state) {
       if (state.currentPage > 1) {
-        state.users.splice(state.users.length - state.limit);
+        const lastPageCount =
+          state.users.length % state.limit || state.limit;
+
+        state.users.splice(state.users.length - lastPageCount);
+
         state.currentPage -= 1;
       }
     },

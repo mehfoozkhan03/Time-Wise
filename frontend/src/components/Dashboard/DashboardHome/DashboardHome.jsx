@@ -20,6 +20,7 @@ import {
 } from "chart.js";
 import { fetchAdminDashboardHomeStats } from "../../../store/adminDashboardHomeSlice";
 import { NotificationForm } from "../DashboardNotification/NotificationForm";
+import AdminCreateThought from './../DashboardThought/AdminCreateThought';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
@@ -38,6 +39,9 @@ export const DashboardHome = () => {
 
   //# ===================== Notification ===================
   const [openNotification, setOpenNotification] = useState(false);
+
+  //# ==================== Publish Thought ================
+  const [openThought, setOpenThought] = useState(false);
 
   //# ====================== Anouncement ===================
   const [openAnnouncement, setOpenAnnouncement] = useState(false);
@@ -123,10 +127,10 @@ export const DashboardHome = () => {
       icon: <FaBullhorn />,
       title: "New Announcement",
     },
-    {
-      icon: <FaChartBar />,
-      title: "Generate Report",
-    },
+    // {
+    //   icon: <FaChartBar />,
+    //   title: "Generate Report",
+    // },
   ];
 
   //# attendance chart
@@ -285,6 +289,10 @@ export const DashboardHome = () => {
                     setOpenNotification(true);
                   }
 
+                  if (el.title === "Publish Thought") {
+                    setOpenThought(true);
+                  }
+
                   if (el.title === "New Announcement") {
                     setOpenAnnouncement(true);
                   }
@@ -384,6 +392,35 @@ export const DashboardHome = () => {
                 onClose={() => setOpenNotification(false)}
               />
             </div>
+          </div>
+        </div>
+      )}
+
+      {openThought && (
+        <div
+          className="publish-thought-modal__overlay"
+          onClick={() => setOpenThought(false)}
+        >
+          <div
+            className="publish-thought-modal"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button
+              type="button"
+              className="publish-thought-modal__close"
+              onClick={() => setOpenThought(false)}
+              aria-label="Close thought form"
+            >
+              ×
+            </button>
+
+            
+              <AdminCreateThought
+                onThoughtCreated={() => {
+                  setOpenThought(false);
+                  dispatch(fetchFeaturedThoughtForAdmin());
+                }}
+              />
           </div>
         </div>
       )}

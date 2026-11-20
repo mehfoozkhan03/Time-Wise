@@ -44,24 +44,33 @@
   cursor: pointer;
 }
 
+.settingSidebar-link>span{
+  font-size: 14px;
+  color: var(--text_secondary);
+}
+
+.settingSidebar-link.active>span{
+  color: var(--primary);
+}
+
 .settingSidebar-link:hover {
   background-color: var(--surface_hover);
 }
 
 .settingSidebar-link.active {
-  background-color: var(--primary);
-  color: #fff;
+  background-color: rgba(41, 163, 224, 0.12);
+  border: 1px solid var(--primary);
   font-weight: 600;
 }
 
 .settingSidebar-link.active .settingSidebar-icon {
-  color: #fff;
+  font-size: 14px;
 }
 
 .settingSidebar-content {
   position: sticky;
   top: 0;
-  background-color: var(--surface);
+  background-color: var(--bg);
   transition: all .3s ease-in-out;
 }
 
