@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { CiUser } from "react-icons/ci";
 import {
@@ -18,19 +18,23 @@ import {
 
 import Skeleton from "../../../components/Skeleton/Skeleton";
 import { updateProfile } from "../../../store/authSlice";
+import ProfileAvatar from "../../../components/Common/ProfileAvatar/ProfileAvatar";
 
 import "./Profile.css";
 
 export const Profile = () => {
   const dispatch = useDispatch();
 
-  const { user, isLoading, errorMessage } = useSelector(
+  const { user, isLoading, isUpdatingProfile, errorMessage } = useSelector(
     (state) => state.auth
   );
 
   const [showSkeleton, setShowSkeleton] = useState(true);
   const [isDirty, setIsDirty] = useState(false);
-  const [profileImage, setProfileImage] = useState(null);
+  const [profilePreview, setProfilePreview] = useState(null);
+  const [profileFile, setProfileFile] = useState(null);
+  const imageInputRef = useRef(null);
+  const isSaving = isLoading || isUpdatingProfile;
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -68,20 +72,21 @@ export const Profile = () => {
         bio: user.bio || "",
       });
 
-      setProfileImage(user.profileImage || null);
+      setProfilePreview(user.profileImage || null);
+      setProfileFile(null);
       setIsDirty(false);
     }
   }, [user]);
+
+  useEffect(() => () => {
+    if (profilePreview?.startsWith("blob:")) URL.revokeObjectURL(profilePreview);
+  }, [profilePreview]);
 
   // =========================
   // USER DATA
   // =========================
 
   const fullName = `${formData.firstName} ${formData.lastName}`.trim();
-
-  const initials = `${formData.firstName?.[0] || ""}${
-    formData.lastName?.[0] || ""
-  }`.toUpperCase();
 
   // =========================
   // PROFILE COMPLETION
@@ -102,7 +107,7 @@ export const Profile = () => {
     },
     {
       label: "Profile Photo",
-      completed: Boolean(profileImage),
+      completed: Boolean(profilePreview),
     },
   ];
 
@@ -150,10 +155,10 @@ export const Profile = () => {
       return;
     }
 
-    const imageUrl = URL.createObjectURL(file);
-
-    setProfileImage(imageUrl);
+    setProfileFile(file);
+    setProfilePreview(URL.createObjectURL(file));
     setIsDirty(true);
+    event.target.value = "";
   };
 
   // =========================
@@ -172,7 +177,9 @@ export const Profile = () => {
       bio: user.bio || "",
     });
 
-    setProfileImage(user.profileImage || null);
+    setProfilePreview(user.profileImage || null);
+    setProfileFile(null);
+    if (imageInputRef.current) imageInputRef.current.value = "";
     setIsDirty(false);
   };
 
@@ -183,7 +190,13 @@ export const Profile = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const result = await dispatch(updateProfile(formData));
+    const profilePayload = new FormData();
+    Object.entries(formData).forEach(([key, value]) => {
+      profilePayload.append(key, value);
+    });
+    if (profileFile) profilePayload.append("profileImage", profileFile);
+
+    const result = await dispatch(updateProfile(profilePayload));
 
     if (updateProfile.fulfilled.match(result)) {
       setIsDirty(false);
@@ -371,13 +384,12 @@ export const Profile = () => {
       <div className="profile-summary-card">
         <div className="profile-summary-left">
           <div className="profile-avatar-wrapper">
-            <div className="profile-avatar">
-              {profileImage ? (
-                <img src={profileImage} alt="Profile" />
-              ) : (
-                <span>{initials || "U"}</span>
-              )}
-            </div>
+
+            <ProfileAvatar
+              user={{ ...user, ...formData, profileImage: profilePreview }}
+              size={115}
+              className="profile-settings-avatar"
+            />
 
             <label
               htmlFor="profile-image"
@@ -392,6 +404,7 @@ export const Profile = () => {
               id="profile-image"
               accept="image/png, image/jpeg, image/webp"
               hidden
+              ref={imageInputRef}
               onChange={handleImageChange}
             />
           </div>
@@ -638,7 +651,7 @@ export const Profile = () => {
             type="button"
             className="profile-reset-btn"
             onClick={handleReset}
-            disabled={!isDirty || isLoading}
+            disabled={!isDirty || isSaving}
           >
             <FaRedo />
             Reset Changes
@@ -650,11 +663,11 @@ export const Profile = () => {
             type="submit"
             form="profile-form"
             className="profile-save-btn"
-            disabled={!isDirty || isLoading}
+            disabled={!isDirty || isSaving}
           >
             <FaCheck />
 
-            {isLoading ? "Saving..." : "Save Changes"}
+            {isSaving ? "Saving..." : "Save Changes"}
           </button>
         </div>
       </div>
