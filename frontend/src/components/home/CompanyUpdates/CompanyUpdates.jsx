@@ -1,3 +1,4 @@
+
 import "./CompanyUpdates.css";
 
 import Card from "../../Card/Card";
@@ -17,7 +18,10 @@ import {
 } from "react-icons/fa";
 
 import { fetchEmployeeAnnouncements } from "../../../store/announcementSlice";
-import { fetchEvents } from "../../../store/calendarSlice";
+import {
+  fetchEvents,
+  fetchBirthdayAnnouncements,
+} from "../../../store/calendarSlice";
 import { fetchHolidays } from "../../../store/holidaySlice";
 
 import { mapHolidayList } from "../../../utils/holidayMapper";
@@ -44,22 +48,21 @@ export default function CompanyUpdates() {
     (state) => state.dashboard || {},
   );
 
-  const {
-    employeeAnnouncements = [],
-    loading: announcementLoading,
-  } = useSelector((state) => state.announcement || {});
+  const { employeeAnnouncements = [], loading: announcementLoading } =
+    useSelector((state) => state.announcement || {});
 
-  const { events = [], loading: calendarLoading } = useSelector(
-    (state) => state.calendar || {},
-  );
+  const {
+    events = [],
+    loading: calendarLoading,
+    birthdayAnnouncements = [],
+    birthdayAnnouncementsLoading = false,
+  } = useSelector((state) => state.calendar || {});
 
   const { holidays = [], status: holidayStatus } = useSelector(
     (state) => state.holiday || {},
   );
 
-  const isAdmin = useSelector(
-    (state) => state.adminAuth?.isAuthenticated,
-  );
+  const isAdmin = useSelector((state) => state.adminAuth?.isAuthenticated);
 
   // ==========================================
   // FETCH DATA
@@ -69,6 +72,10 @@ export default function CompanyUpdates() {
     dispatch(fetchEmployeeAnnouncements());
     dispatch(fetchEvents({ authType: isAdmin ? "admin" : "user" }));
     dispatch(fetchHolidays());
+
+    if (!isAdmin) {
+      dispatch(fetchBirthdayAnnouncements());
+    }
   }, [dispatch, isAdmin]);
 
   // ==========================================
@@ -96,34 +103,39 @@ export default function CompanyUpdates() {
   // EMPLOYEE BIRTHDAYS
   // ==========================================
 
-  const currentMonth = dayjs().month();
-  const currentYear = dayjs().year();
+  const birthdaySource = isAdmin ? events : birthdayAnnouncements;
 
-  const birthdayEvents = allEvents.filter((event) => {
-    if (event.type?.toUpperCase() !== "BIRTHDAY" || !event.date) {
+  const today = dayjs();
+
+  const birthdayEvents = birthdaySource.filter((event) => {
+    if (event.type && event.type.toUpperCase() !== "BIRTHDAY") {
       return false;
     }
 
-    const date = dayjs(event.date);
+    if (!event.date) {
+      return false;
+    }
+
+    const birthdayDate = dayjs(event.date);
 
     return (
-      date.isValid() &&
-      date.month() === currentMonth &&
-      date.year() === currentYear
+      birthdayDate.isValid() &&
+      birthdayDate.date() === today.date() &&
+      birthdayDate.month() === today.month() &&
+      birthdayDate.year() === today.year()
     );
   });
 
   const birthdayNames = birthdayEvents
-    .map((event) => event.title)
+    .map((event) => event.employeeName || event.title)
     .filter(Boolean);
 
   const birthdayUpdate = (() => {
     if (birthdayEvents.length === 0) {
       return {
         title: "Employee Birthdays",
-        description:
-          "No birthdays this month. Stay tuned for upcoming celebrations!",
-        time: "This month",
+        description: "No employee birthdays today. Stay tuned for upcoming celebrations!",
+        time: "Today",
       };
     }
 
@@ -133,7 +145,7 @@ export default function CompanyUpdates() {
       return {
         title: `${name}'s Birthday`,
         description: `Join us in wishing ${name} a wonderful birthday! 🎂`,
-        time: dayjs(birthdayEvents[0].date).format("DD MMM"),
+        time: "Today",
       };
     }
 
@@ -142,8 +154,8 @@ export default function CompanyUpdates() {
       description:
         birthdayNames.length > 0
           ? `Let's celebrate ${birthdayNames.join(", ")} and make their birthdays special! 🎂`
-          : "Let's celebrate our colleagues' birthdays this month! 🎂",
-      time: "This month",
+          : "Let's celebrate our colleagues' birthdays today! 🎂",
+      time: "Today",
     };
   })();
 
@@ -151,7 +163,7 @@ export default function CompanyUpdates() {
   // UPCOMING EVENTS
   // ==========================================
 
-  const today = dayjs().startOf("day");
+  const upcomingToday = dayjs().startOf("day");
 
   const upcomingEvent = allEvents
     .filter((event) => {
@@ -159,8 +171,10 @@ export default function CompanyUpdates() {
         return false;
       }
 
-      return dayjs(event.date).isValid() &&
-        !dayjs(event.date).isBefore(today, "day");
+      return (
+        dayjs(event.date).isValid() &&
+        !dayjs(event.date).isBefore(upcomingToday, "day")
+      );
     })
     .sort((a, b) => new Date(a.date) - new Date(b.date))[0];
 
@@ -168,8 +182,7 @@ export default function CompanyUpdates() {
     ? {
         title: upcomingEvent.title || "Upcoming Event",
         description:
-          upcomingEvent.description ||
-          "An upcoming company event or holiday.",
+          upcomingEvent.description || "An upcoming company event or holiday.",
         time: dayjs(upcomingEvent.date).format("DD MMM"),
       }
     : {
@@ -194,8 +207,7 @@ export default function CompanyUpdates() {
         latestAnnouncement?.description || "No announcements available.",
       time: latestAnnouncement
         ? dayjs(
-            latestAnnouncement.publishedAt ||
-              latestAnnouncement.createdAt,
+            latestAnnouncement.publishedAt || latestAnnouncement.createdAt,
           ).fromNow()
         : "No announcements yet",
       icon: <FaBullhorn />,
@@ -204,8 +216,7 @@ export default function CompanyUpdates() {
     },
     {
       title: "Hackathon Winners",
-      description:
-        "Team Alpha secured first place in the internal hackathon.",
+      description: "Team Alpha secured first place in the internal hackathon.",
       time: "Yesterday",
       icon: <FaTrophy />,
       color: "#22c55e",
@@ -225,6 +236,7 @@ export default function CompanyUpdates() {
     dashboardLoading ||
     announcementLoading ||
     calendarLoading ||
+    (!isAdmin && birthdayAnnouncementsLoading) ||
     holidayStatus === "loading";
 
   if (isLoading) {
@@ -246,17 +258,10 @@ export default function CompanyUpdates() {
                 alignItems: "center",
                 gap: "15px",
                 padding: "16px 0",
-                borderBottom:
-                  item !== 4
-                    ? "1px solid var(--border)"
-                    : "none",
+                borderBottom: item !== 4 ? "1px solid var(--border)" : "none",
               }}
             >
-              <Skeleton
-                width="50px"
-                height="50px"
-                radius="50%"
-              />
+              <Skeleton width="50px" height="50px" radius="50%" />
 
               <div style={{ flex: 1 }}>
                 <Skeleton width="180px" height="18px" />
@@ -276,12 +281,8 @@ export default function CompanyUpdates() {
     );
   }
 
-
   return (
-    <section
-      className="company_updates"
-      id="tour-company-updates"
-    >
+    <section className="company_updates" id="tour-company-updates">
       <h2>Company Updates</h2>
 
       <Card>
