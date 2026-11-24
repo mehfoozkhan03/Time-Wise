@@ -259,18 +259,22 @@ select:is(:-webkit-autofill, :autofill) {
   color: var(--primary);
 }
 
+/* Password Input */
 .password-box {
   position: relative;
+  width: 100%;
 }
 
 .password-box input {
+  width: 100%;
   padding-right: 50px;
 }
 
-.eye-icon {
+/* Password Eye Icon */
+.password-box .eye-icon {
   position: absolute;
 
-  top: 50%;
+  top: 25px;
   right: 14px;
 
   width: 24px;
@@ -286,17 +290,13 @@ select:is(:-webkit-autofill, :autofill) {
   font-size: 17px;
 
   cursor: pointer;
-
   z-index: 5;
 }
 
-.eye-icon:hover {
+.password-box .eye-icon:hover {
   color: var(--primary);
-
-  /* position bilkul same rahegi */
   transform: translateY(-50%) !important;
 }
-
 
 
 

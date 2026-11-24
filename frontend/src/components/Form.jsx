@@ -91,12 +91,13 @@ export const Form = ({
   }
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+     e.preventDefault();
 
-    const validationErrors = validateForm(form, fields)
-    setErrors(validationErrors)
+  const validationErrors = validateForm(form, endpoint);
 
-    if (Object.keys(validationErrors).length > 0) return
+  setErrors(validationErrors);
+
+  if (Object.keys(validationErrors).length > 0) return;
 
     try {
       let response
