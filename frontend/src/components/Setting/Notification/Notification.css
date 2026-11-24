@@ -383,7 +383,7 @@
 
 /* Sender and Date */
 
-.notification-meta {
+/* .notification-meta {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
@@ -437,4 +437,4 @@
   font-size: 11px;
   color: var(--text_primary);
   text-transform: capitalize;
-}
+} */

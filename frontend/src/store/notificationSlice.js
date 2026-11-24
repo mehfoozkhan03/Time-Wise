@@ -5,9 +5,9 @@ import { deleteNotification, getNotifications, markAllNotificationsAsRead, markN
 
 export const fetchNotifications = createAsyncThunk(
   "notification/fetchNotifications",
-  async (_, thunkAPI) => {
+  async (params, thunkAPI) => {
     try {
-      const { data } = await getNotifications();
+      const { data } = await getNotifications(params);
 
       return data;
     } catch (error) {
@@ -101,6 +101,8 @@ const notificationSlice = createSlice({
       .addCase(fetchNotifications.fulfilled, (state, action) => {
         state.loading = false;
         state.notifications = action.payload.notifications;
+        state.isError = false;
+        state.errorMessage = "";
       })
 
       .addCase(fetchNotifications.rejected, (state, action) => {

@@ -2,8 +2,8 @@ import api from "./api";
 
 // ================== Get All Notifications ===================
 
-export const getNotifications = () => {
-  return api.get("/notifications");
+export const getNotifications = (params) => {
+  return api.get("/notifications", { params });
 };
 
 // ==================== Mark Notification As Read ====================
