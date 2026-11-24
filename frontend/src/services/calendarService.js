@@ -42,6 +42,14 @@ export const calendarService = {
   },
 
   /* =========================================
+       Get Birthday Announcements
+    ========================================= */
+
+  getBirthdayAnnouncements: () => {
+    return API.get(`${BASE_URL}/birthdays`);
+  },
+
+  /* =========================================
        Get Single Event
     ========================================= */
 

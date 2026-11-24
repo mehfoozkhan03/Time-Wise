@@ -1,3 +1,4 @@
+
 import { calendarModel } from "../../models/Calendar.model.js";
 import { userModel } from "../../models/User.model.js";
 
@@ -14,7 +15,6 @@ const PUBLIC_EVENT_TYPES = [
   "SPECIAL_EVENT",
   "MEETING",
   "WORK_EVENT",
-  "BIRTHDAY",
 ];
 
 // ============================================================
@@ -63,20 +63,6 @@ export const getAllEvents = async (req, res) => {
       });
     }
 
-    // ----------------------------------------------------------
-    // EMPLOYEE EVENT VISIBILITY
-    // ----------------------------------------------------------
-    //
-    // Employees can see:
-    //
-    // 1. Their own events
-    // 2. Public events created by an Admin
-    //
-    // We intentionally check createdByModel === "Admin".
-    // This prevents another employee's PUBLIC event from
-    // appearing in the current employee's calendar.
-    // ----------------------------------------------------------
-
     const events = await calendarModel
       .find({
         isActive: true,
@@ -111,6 +97,52 @@ export const getAllEvents = async (req, res) => {
 };
 
 // ============================================================
+// GET BIRTHDAY ANNOUNCEMENTS
+// ============================================================
+
+export const getBirthdayAnnouncements = async (req, res) => {
+  try {
+    if (!req.user?.userID) {
+      return res.status(404).json({
+        success: false,
+        message: "Account not found.",
+      });
+    }
+
+    const employee = await userModel.findById(req.user.userID);
+
+    if (!employee) {
+      return res.status(404).json({
+        success: false,
+        message: "Account not found.",
+      });
+    }
+
+    const birthdays = await calendarModel
+      .find({
+        isActive: true,
+        type: "BIRTHDAY",
+      })
+      .select("employeeName title date")
+      .sort({ date: 1 })
+      .lean();
+
+    return res.status(200).json({
+      success: true,
+      count: birthdays.length,
+      data: birthdays,
+    });
+  } catch (error) {
+    console.error("Get Birthday Announcements Error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch birthday announcements.",
+    });
+  }
+};
+
+// ============================================================
 // GET EVENT BY ID
 // ============================================================
 
@@ -140,18 +172,6 @@ export const getEventById = async (req, res) => {
         message: "Event not found.",
       });
     }
-
-    // ----------------------------------------------------------
-    // EMPLOYEE ACCESS CONTROL
-    // ----------------------------------------------------------
-    //
-    // Employee can access:
-    //
-    // - Their own event
-    // - An Admin-created PUBLIC event
-    //
-    // Employee cannot access another employee's event.
-    // ----------------------------------------------------------
 
     const isOwnEvent =
       event.employeeId &&
@@ -218,24 +238,12 @@ export const createEvent = async (req, res) => {
       isAllDay,
     } = req.body;
 
-    // ----------------------------------------------------------
-    // VALIDATE EMPLOYEE EVENT TYPE
-    // ----------------------------------------------------------
-
     if (!EMPLOYEE_EVENT_TYPES.includes(type)) {
       return res.status(403).json({
         success: false,
         message: "You cannot create this type of event.",
       });
     }
-
-    // ----------------------------------------------------------
-    // CREATE EMPLOYEE EVENT
-    // ----------------------------------------------------------
-    //
-    // employeeId is ALWAYS taken from the authenticated user.
-    // The client cannot create an event for another employee.
-    // ----------------------------------------------------------
 
     const event = await calendarModel.create({
       title,
@@ -307,10 +315,6 @@ export const updateEvent = async (req, res) => {
       });
     }
 
-    // ----------------------------------------------------------
-    // OWN EVENT CHECK
-    // ----------------------------------------------------------
-
     if (
       !event.employeeId ||
       event.employeeId.toString() !== employee._id.toString()
@@ -321,20 +325,12 @@ export const updateEvent = async (req, res) => {
       });
     }
 
-    // ----------------------------------------------------------
-    // EVENT TYPE CHECK
-    // ----------------------------------------------------------
-
     if (!EMPLOYEE_EVENT_TYPES.includes(event.type)) {
       return res.status(403).json({
         success: false,
         message: "You cannot update this event.",
       });
     }
-
-    // ----------------------------------------------------------
-    // UPDATE EVENT DATA
-    // ----------------------------------------------------------
 
     event.title = req.body.title ?? event.title;
     event.description = req.body.description ?? event.description;
@@ -345,10 +341,6 @@ export const updateEvent = async (req, res) => {
     event.priority = req.body.priority ?? event.priority;
     event.color = req.body.color ?? event.color;
     event.isAllDay = req.body.isAllDay ?? event.isAllDay;
-
-    // ----------------------------------------------------------
-    // OPTIONAL EVENT TYPE UPDATE
-    // ----------------------------------------------------------
 
     if (req.body.type) {
       if (!EMPLOYEE_EVENT_TYPES.includes(req.body.type)) {
@@ -361,10 +353,6 @@ export const updateEvent = async (req, res) => {
       event.type = req.body.type;
       event.visibility = getVisibility(req.body.type);
     }
-
-    // ----------------------------------------------------------
-    // UPDATED BY EMPLOYEE
-    // ----------------------------------------------------------
 
     event.updatedBy = employee._id;
     event.updatedByModel = "User";
@@ -417,10 +405,6 @@ export const deleteEvent = async (req, res) => {
       });
     }
 
-    // ----------------------------------------------------------
-    // OWN EVENT CHECK
-    // ----------------------------------------------------------
-
     if (
       !event.employeeId ||
       event.employeeId.toString() !== employee._id.toString()
@@ -431,20 +415,12 @@ export const deleteEvent = async (req, res) => {
       });
     }
 
-    // ----------------------------------------------------------
-    // EVENT TYPE CHECK
-    // ----------------------------------------------------------
-
     if (!EMPLOYEE_EVENT_TYPES.includes(event.type)) {
       return res.status(403).json({
         success: false,
         message: "You cannot delete this event.",
       });
     }
-
-    // ----------------------------------------------------------
-    // SOFT DELETE
-    // ----------------------------------------------------------
 
     event.isActive = false;
     event.updatedBy = employee._id;

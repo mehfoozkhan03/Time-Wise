@@ -1,9 +1,11 @@
+
 import express from "express";
 
 import { auth } from "../middleware/AuthMiddleware.js";
 
 import {
   getAllEvents,
+  getBirthdayAnnouncements,
   getEventById,
   createEvent,
   updateEvent,
@@ -21,6 +23,9 @@ router.use(auth);
 // ============================================================
 // EMPLOYEE / USER CALENDAR ROUTES
 // ============================================================
+
+// Get birthday announcements
+router.get("/birthdays", getBirthdayAnnouncements);
 
 // Get all calendar events
 router.get("/", getAllEvents);

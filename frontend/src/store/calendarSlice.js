@@ -1,3 +1,4 @@
+
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { calendarService } from "../services/calendarService";
 
@@ -31,6 +32,26 @@ export const fetchEvents = createAsyncThunk(
     } catch (error) {
       return thunkAPI.rejectWithValue(
         error.response?.data?.message || "Failed to fetch events.",
+      );
+    }
+  },
+);
+
+/* =========================================
+   GET BIRTHDAY ANNOUNCEMENTS
+========================================= */
+
+export const fetchBirthdayAnnouncements = createAsyncThunk(
+  "calendar/fetchBirthdayAnnouncements",
+  async (_, thunkAPI) => {
+    try {
+      const response = await calendarService.getBirthdayAnnouncements();
+
+      return response.data.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message ||
+          "Failed to fetch birthday announcements.",
       );
     }
   },
@@ -106,6 +127,9 @@ export const deleteEvent = createAsyncThunk(
 
 const initialState = {
   events: [],
+  birthdayAnnouncements: [],
+  birthdayAnnouncementsLoading: false,
+  birthdayAnnouncementsError: null,
   loading: false,
   error: null,
   success: false,
@@ -156,6 +180,26 @@ const calendarSlice = createSlice({
         state.loading = false;
         state.success = false;
         state.error = action.payload;
+      })
+
+      /* =========================================
+         FETCH BIRTHDAY ANNOUNCEMENTS
+      ========================================= */
+
+      .addCase(fetchBirthdayAnnouncements.pending, (state) => {
+        state.birthdayAnnouncementsLoading = true;
+        state.birthdayAnnouncementsError = null;
+      })
+
+      .addCase(fetchBirthdayAnnouncements.fulfilled, (state, action) => {
+        state.birthdayAnnouncementsLoading = false;
+        state.birthdayAnnouncementsError = null;
+        state.birthdayAnnouncements = action.payload;
+      })
+
+      .addCase(fetchBirthdayAnnouncements.rejected, (state, action) => {
+        state.birthdayAnnouncementsLoading = false;
+        state.birthdayAnnouncementsError = action.payload;
       })
 
       /* =========================================
