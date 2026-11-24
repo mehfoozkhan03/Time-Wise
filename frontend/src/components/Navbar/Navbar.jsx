@@ -13,6 +13,10 @@ import { PulseDot } from "../PulseDot/pulseDot";
 
 export default function Navbar() {
   const { notifications, loading } = useSelector((state) => state.notification);
+
+// Sirf latest 5 dropdown ke liye
+const latestNotifications = notifications.slice(0, 5);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -183,10 +187,7 @@ export default function Navbar() {
   // Notification
   useEffect(() => {
     dispatch(
-      fetchNotifications({
-        page: 1,
-        limit: 5,
-      }),
+      fetchNotifications(),
     );
   }, [dispatch]);
 
@@ -266,7 +267,7 @@ export default function Navbar() {
                     No notifications found.
                   </div>
                 ) : (
-                  notifications.map((notification) => (
+                  latestNotifications.map((notification) => (
                     <div
                       key={notification._id}
                       className={`notification_item ${

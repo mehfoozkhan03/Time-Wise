@@ -318,8 +318,8 @@
   gap: 9px;
   border: 1px solid rgba(128, 116, 205, 0.28);
   border-radius: 16px;
-  background: rgba(63, 58, 113, 0.35);
-  color: var(--text_secondary);
+  background: var(--bg);
+  color: var(--text_primary);
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
@@ -330,7 +330,7 @@
 
 .work-day-btn.selected {
   border-color: transparent;
-  background: linear-gradient(145deg, #9948f5, #6822d2);
+  background: var(--primary);
   color: #fff;
   box-shadow: 0 5px 16px rgba(125, 54, 235, 0.22);
 }
