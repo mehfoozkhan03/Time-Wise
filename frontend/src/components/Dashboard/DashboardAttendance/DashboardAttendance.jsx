@@ -98,7 +98,16 @@ export const DashboardAttendance = () => {
           <div className="dashboardAttendance-users">
             {isLoading && (!todayAttendance || todayAttendance.length === 0) ? (
               [1, 2, 3, 4, 5, 6, 7].map((i) => (
-                <div key={i} style={{ display: "flex", alignItems: "center", gap: 16, padding: "14px 16px" }}>
+                <div
+                  key={i}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 16,
+                    padding: "14px 16px",
+                    borderBottom: i < 7 ? "1px solid var(--border)" : "none",
+                  }}
+                >
                   <div style={{ display: "flex", alignItems: "center", gap: 10, width: "24%" }}>
                     <Skeleton width="36px" height="36px" radius="50%" />
                     <div style={{ display: "flex", flexDirection: "column", gap: 5, flex: 1 }}>
