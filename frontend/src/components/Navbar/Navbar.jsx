@@ -10,6 +10,7 @@ import { authService } from "../../services/authService";
 import { fetchNotifications } from ".././../store/notificationSlice";
 import { Modal } from "../Modal/Modal";
 import { PulseDot } from "../PulseDot/pulseDot";
+import ProfileAvatar from "../../components/Common/ProfileAvatar/ProfileAvatar";
 
 export default function Navbar() {
   const { notifications, loading } = useSelector((state) => state.notification);
@@ -323,11 +324,12 @@ const latestNotifications = notifications.slice(0, 5);
                 setProfileOpen((prev) => !prev);
               }}
             >
-              <div className="avatar">
+              {/* <div className="avatar">
                 {user
                   ? `${user.firstName?.[0] ?? ""}${user.lastName?.[0] ?? ""}`.toUpperCase()
                   : "U"}
-              </div>
+              </div> */}
+              <ProfileAvatar user={user} size={52} className="avatar" />
 
               <div className="profile_info">
                 <h4>
