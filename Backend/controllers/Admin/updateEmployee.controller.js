@@ -1,4 +1,5 @@
 import { userModel } from "../../models/User.model.js";
+import { createNotification } from "../../services/notification.service.js";
 
 export const updateUser = async (req, res) => {
   try {
@@ -42,6 +43,17 @@ export const updateUser = async (req, res) => {
         message: "User not found",
       });
     }
+
+    await createNotification({
+      sender: req.admin.adminID,
+      senderModel: "Admin",
+      title: "Profile updated by your administrator",
+      message: "Your employee profile details were updated by an administrator.",
+      type: "system",
+      preferenceKey: "profileChanges",
+      audienceType: "specific",
+      targetUsers: [updatedUser._id],
+    });
 
     return res.status(200).json(updatedUser);
   } catch (error) {

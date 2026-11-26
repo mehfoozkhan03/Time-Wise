@@ -131,6 +131,26 @@ const notificationSchema = new mongoose.Schema(
       required: true,
     },
 
+    preferenceKey: {
+      type: String,
+      default: null,
+    },
+
+    critical: {
+      type: Boolean,
+      default: false,
+    },
+
+    allowSelf: {
+      type: Boolean,
+      default: false,
+    },
+
+    deduplicationKey: {
+      type: String,
+      default: null,
+    },
+
     referenceModel: {
       type: String,
       enum: ["Post", "Attendance", "Leave", "Announcement"],
@@ -180,6 +200,10 @@ const notificationSchema = new mongoose.Schema(
 
 notificationSchema.index({ createdAt: -1 });
 notificationSchema.index({ targetUsers: 1, createdAt: -1 });
+notificationSchema.index(
+  { deduplicationKey: 1 },
+  { unique: true, partialFilterExpression: { deduplicationKey: { $type: "string" } } },
+);
 
 export const notificationModel = mongoose.model(
   "Notification",

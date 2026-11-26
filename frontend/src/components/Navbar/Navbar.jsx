@@ -10,6 +10,7 @@ import { authService } from "../../services/authService";
 import { fetchNotifications } from ".././../store/notificationSlice";
 import { Modal } from "../Modal/Modal";
 import { PulseDot } from "../PulseDot/pulseDot";
+import { getCachedNotificationPreferences } from "../../utils/notificationPreferences";
 
 export default function Navbar() {
   const { notifications, loading } = useSelector((state) => state.notification);
@@ -58,6 +59,20 @@ const latestNotifications = notifications.slice(0, 5);
 
   const location = useLocation();
   const { user } = useSelector((state) => state.auth);
+  const [notificationPreferences, setNotificationPreferences] = useState(() =>
+    getCachedNotificationPreferences(user?._id),
+  );
+
+  useEffect(() => {
+    setNotificationPreferences(getCachedNotificationPreferences(user?._id));
+    const handlePreferenceUpdate = (event) => {
+      if (event.detail?.userId === user?._id) {
+        setNotificationPreferences(event.detail.preferences);
+      }
+    };
+    window.addEventListener("notification-preferences-updated", handlePreferenceUpdate);
+    return () => window.removeEventListener("notification-preferences-updated", handlePreferenceUpdate);
+  }, [user?._id]);
 
   //# Theme
   const currentTheme = useSelector((state) => state.theme.theme);
@@ -251,7 +266,7 @@ const latestNotifications = notifications.slice(0, 5);
             >
               <FaBell />
 
-              {unreadCount > 0 && (
+              {notificationPreferences.inAppAlerts && notificationPreferences.inAppBadge && unreadCount > 0 && (
                 <span className="notification_count">{unreadCount}</span>
               )}
             </button>

@@ -25,6 +25,7 @@ import { adminThoughtRoute } from "./routes/AdminThought.route.js";
 import { announcementRoutes } from "./routes/Announcement.route.js";
 import { adminNotificationRoutes } from "./routes/AdminNotification.routes.js";
 import { userAnnouncementRoutes } from "./routes/userAnnouncement.routes.js";
+import { startNotificationScheduler } from "./services/notificationScheduler.service.js";
 
 dotenv.config();
 
@@ -96,6 +97,7 @@ httpServer.listen(process.env.Port, async () => {
   try {
     await Connection();
     console.log("DB Connected successfully ✅");
+    startNotificationScheduler();
   } catch (error) {
     console.log(error);
     console.log("DB Crashed! Something went wrong ❌");

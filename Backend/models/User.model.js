@@ -101,6 +101,26 @@ const userSchema = new mongoose.Schema(
       default: "system",
     },
 
+    notificationPreferences: {
+      type: mongoose.Schema.Types.Mixed,
+      default: () => ({}),
+    },
+
+    notificationDigestLastSentAt: {
+      type: Date,
+      default: null,
+    },
+
+    pendingNotificationEmails: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Notification",
+    }],
+
+    lastLoginFingerprint: {
+      type: String,
+      default: "",
+    },
+
     // ================= Relations =================
 
     adminID: {

@@ -1,4 +1,5 @@
 import { userModel } from '../../models/User.model.js'
+import { createNotification } from '../../services/notification.service.js'
 
 export const updateUserDepartment = async (req, res) => {
   try {
@@ -32,6 +33,17 @@ export const updateUserDepartment = async (req, res) => {
         message: "User not found",
       });
     }
+
+    await createNotification({
+      sender: req.admin.adminID,
+      senderModel: "Admin",
+      title: "Department updated",
+      message: `Your department was changed to ${department}.`,
+      type: "system",
+      preferenceKey: "profileChanges",
+      audienceType: "specific",
+      targetUsers: [user._id],
+    });
 
     return res.status(200).json({
       success: true,

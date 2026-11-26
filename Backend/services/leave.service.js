@@ -2,6 +2,7 @@ import { leaveModel } from "../models/Leave.model.js";
 import { leaveBalanceModel } from "../models/LeaveBalance.model.js";
 import { userModel } from "../models/User.model.js";
 import { calendarModel } from "../models/Calendar.model.js";
+import { createNotification } from "./notification.service.js";
 
 const leaveBalanceMap = {
   annual: "annual",
@@ -343,6 +344,19 @@ export const approveLeaveRequest = async (leaveID, adminID) => {
 
   await leave.save();
 
+  await createNotification({
+    sender: adminID,
+    senderModel: "Admin",
+    title: "Leave request approved",
+    message: `Your ${leave.leaveType} leave request from ${new Date(leave.startDate).toLocaleDateString("en-IN")} to ${new Date(leave.endDate).toLocaleDateString("en-IN")} was approved.`,
+    type: "leave",
+    preferenceKey: "leaveStatusUpdates",
+    audienceType: "specific",
+    targetUsers: [leave.user],
+    referenceModel: "Leave",
+    referenceId: leave._id,
+  });
+
   await createLeaveCalendarEvents(leave, adminID, "Admin");
 
   return leave;
@@ -369,6 +383,19 @@ export const rejectLeaveRequest = async (
   leave.adminComment = adminComment.trim();
 
   await leave.save();
+
+  await createNotification({
+    sender: adminID,
+    senderModel: "Admin",
+    title: "Leave request rejected",
+    message: `Your ${leave.leaveType} leave request from ${new Date(leave.startDate).toLocaleDateString("en-IN")} to ${new Date(leave.endDate).toLocaleDateString("en-IN")} was rejected.${leave.adminComment ? ` Note: ${leave.adminComment}` : ""}`,
+    type: "leave",
+    preferenceKey: "leaveStatusUpdates",
+    audienceType: "specific",
+    targetUsers: [leave.user],
+    referenceModel: "Leave",
+    referenceId: leave._id,
+  });
 
   return leave;
 };
