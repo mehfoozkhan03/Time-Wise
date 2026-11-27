@@ -44,7 +44,7 @@ server.use(
       "http://localhost:8000",
       "http://localhost:5173",
       "http://localhost:5174",
-      "https://your-frontend-domain.com",
+      "https://time-wise-7hx3.onrender.com",
     ],
     credentials: true,
   }),
