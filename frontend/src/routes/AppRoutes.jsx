@@ -7,7 +7,7 @@ import Community from './../pages/Community/Community';
 import About from './../pages/About';
 import DevJournal from './../pages/DevJournal'
 import Contact from './../pages/Contact';
-// import SignUpPage from './../pages/Login';
+// import SignUpPage from './../pages/Login'; 
 
 import ProgressBar from "./../components/ProgressBar/progressBar";
 import { BubbleCursor } from "./../components/BubbleArrow/bubbleArrow";
