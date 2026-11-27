@@ -159,3 +159,201 @@
         padding: 3px 4px;
     }
 }
+
+/* ===================================================
+   ADMIN DASHBOARD SKELETON LOADERS
+   =================================================== */
+
+.admin-page-loading-wrapper {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.admin-page-loading {
+  width: 100%;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  box-sizing: border-box;
+}
+
+/* Page titles */
+.admin-page-loading-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+/* Cards grids */
+.admin-page-loading-home-stats {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 16px;
+  width: 100%;
+}
+
+.admin-page-loading-cards {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  width: 100%;
+}
+
+/* Card */
+.admin-page-loading-card {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  border-radius: 16px;
+  background-color: var(--surface, #1e293b);
+  border: 1px solid var(--border);
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+/* Home main (chart + employee list) */
+.admin-page-loading-home-main {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+  width: 100%;
+}
+
+/* Panels */
+.admin-page-loading-panel {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  border-radius: 16px;
+  background-color: var(--surface, #1e293b);
+  border: 1px solid var(--border);
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+/* Home quick actions */
+.admin-page-loading-home-actions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+/* Toolbar */
+.admin-page-loading-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+/* Tables */
+.admin-page-loading-table {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.admin-page-loading-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  box-sizing: border-box;
+}
+
+.admin-page-loading-row:last-child {
+  border-bottom: none;
+}
+
+/* Two column layout (Notifications, Settings) */
+.admin-page-loading-two-col,
+.admin-page-loading-settings {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  width: 100%;
+}
+
+/* Appearance themes */
+.admin-page-loading-themes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  width: 100%;
+}
+
+/* Announcements grid */
+.admin-page-loading-announcements {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 18px;
+  width: 100%;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1280px) {
+  .admin-page-loading-home-stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 1080px) {
+  .admin-page-loading {
+    padding: 24px;
+    gap: 20px;
+  }
+
+  .admin-page-loading-home-main,
+  .admin-page-loading-two-col,
+  .admin-page-loading-settings {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-page-loading-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-page-loading {
+    padding: 18px;
+    gap: 18px;
+  }
+
+  .admin-page-loading-home-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .admin-page-loading-themes {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-page-loading {
+    padding: 14px;
+    gap: 14px;
+  }
+
+  .admin-page-loading-home-stats,
+  .admin-page-loading-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-page-loading-panel {
+    padding: 16px;
+    gap: 14px;
+  }
+}

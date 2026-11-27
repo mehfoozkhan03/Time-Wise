@@ -1,5 +1,6 @@
 import { userModel } from './../../models/User.model.js';
 import bcrypt from 'bcrypt';
+import { createNotification } from '../../services/notification.service.js';
 
 
 export const changeUserPassword = async (req, res) => {
@@ -38,6 +39,18 @@ export const changeUserPassword = async (req, res) => {
     user.password = hashedPassword;
 
     await user.save();
+
+    await createNotification({
+      sender: req.admin.adminID,
+      senderModel: "Admin",
+      title: "Password changed",
+      message: "An administrator changed your TimeWise account password. If you did not expect this, contact your administrator.",
+      type: "system",
+      preferenceKey: "profileChanges",
+      audienceType: "specific",
+      targetUsers: [user._id],
+      critical: true,
+    });
 
     return res.status(200).json({
       success: true,

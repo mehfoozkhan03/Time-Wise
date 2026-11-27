@@ -1,5 +1,7 @@
 import { notificationModel } from "../../models/Notification.model.js";
 import { notificationStatusModel } from "../../models/NotificationStatus.model.js";
+import { userModel } from "../../models/User.model.js";
+import { mergeNotificationPreferences } from "../../config/notificationPreferences.js";
 
 const getEmployeeNotificationFilter = (userId, department) => ({
   isArchived: false,
@@ -7,8 +9,10 @@ const getEmployeeNotificationFilter = (userId, department) => ({
   $and: [
     {
       $or: [
-        { audienceType: "all" },
         { targetUsers: userId },
+        // Older global notices may not have a recipient snapshot.
+        { audienceType: "all", targetUsers: { $exists: false } },
+        { audienceType: "all", targetUsers: { $size: 0 } },
         // Backward compatibility for older department notifications.
         ...(department
           ? [
@@ -29,6 +33,7 @@ const getEmployeeNotificationFilter = (userId, department) => ({
           senderModel: "User",
           sender: { $ne: userId },
         },
+        { senderModel: "User", sender: userId, allowSelf: true },
         // Older documents may not contain senderModel.
         {
           senderModel: { $exists: false },
@@ -44,6 +49,10 @@ export const getNotifications = async (req, res) => {
   try {
     const userId = req.user.userID;
     const department = req.user.department;
+    const user = await userModel.findById(userId).select("notificationPreferences").lean();
+    if (!mergeNotificationPreferences(user?.notificationPreferences).inAppAlerts) {
+      return res.status(200).json({ success: true, notifications: [], total: 0 });
+    }
 
     // Notifications visible to the logged-in employee.
     const filter = getEmployeeNotificationFilter(userId, department);
@@ -234,6 +243,11 @@ export const getUnreadNotificationCount = async (req, res) => {
   try {
     const userId = req.user.userID;
     const department = req.user.department;
+    const user = await userModel.findById(userId).select("notificationPreferences").lean();
+    const preferences = mergeNotificationPreferences(user?.notificationPreferences);
+    if (!preferences.inAppAlerts || !preferences.inAppBadge) {
+      return res.status(200).json({ success: true, unreadCount: 0 });
+    }
 
     // Fetch all active notifications visible to this employee.
     const filter = getEmployeeNotificationFilter(
@@ -302,6 +316,10 @@ export const markAllNotificationsAsRead = async (req, res) => {
   try {
     const userId = req.user.userID;
     const department = req.user.department;
+    const user = await userModel.findById(userId).select("notificationPreferences").lean();
+    if (!mergeNotificationPreferences(user?.notificationPreferences).inAppAlerts) {
+      return res.status(200).json({ success: true, message: "In-app notifications are disabled." });
+    }
 
     const filter = getEmployeeNotificationFilter(userId, department);
 

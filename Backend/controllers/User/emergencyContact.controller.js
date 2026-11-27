@@ -1,4 +1,5 @@
 import { userModel } from "../../models/User.model.js";
+import { createNotification } from "../../services/notification.service.js";
 
 
 export const updateEmergencyContact = async (req, res) => {
@@ -43,6 +44,18 @@ export const updateEmergencyContact = async (req, res) => {
         reason: "The account may have been deleted or is inaccessible.",
       });
     }
+
+    await createNotification({
+      sender: updatedUser.adminID || updatedUser._id,
+      senderModel: updatedUser.adminID ? "Admin" : "User",
+      title: "Profile updated",
+      message: "Your emergency contact details were updated successfully.",
+      type: "system",
+      preferenceKey: "profileChanges",
+      audienceType: "specific",
+      targetUsers: [updatedUser._id],
+      allowSelf: true,
+    });
 
     return res.status(200).json({
       success: true,

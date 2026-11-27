@@ -24,6 +24,15 @@ import { getTimeWiseOverviewReply, isTimeWiseImplementationQuestion, isTimeWiseP
 import { userModel } from "../../models/User.model.js";
 import { getLeaveBalance } from "../../services/leave.service.js";
 import { formatEmployeeProfileAnswer, isProfileDetailsQuestion, isSelfProfileQuestion } from "../../utils/aiProfile.js";
+import {
+  isAffirmativeSlang,
+  isNegativeSlang,
+  isCasualGreeting,
+  isReactionSlang,
+  getNegativeSlangReply,
+  getCasualGreetingReply,
+  getReactionSlangReply,
+} from "../../utils/aiSlang.js";
 
 const editDistance = (a, b) => {
   const rows = a.length + 1;
@@ -176,13 +185,19 @@ const formatHoursAnswer = ({
 const SIMPLE_METRIC_MAP = {
   attendance_percentage: { label: "attendance percentage", suffix: "%" },
   attendance: { label: "attendance", suffix: "%" },
+  attendance_rate: { label: "attendance rate", suffix: "%" },
   productivity_score: { label: "productivity score", suffix: "%" },
-  leaves_taken: { label: "leaves taken", suffix: "" },
-  leave: { label: "leaves taken", suffix: "" },
+  leaves_taken: { label: "leaves taken", suffix: " days" },
+  leave: { label: "leaves taken", suffix: " days" },
   current_streak: { label: "current streak", suffix: " days" },
   longest_streak: { label: "longest streak", suffix: " days" },
+  best_streak: { label: "best streak", suffix: " days" },
   punctuality_score: { label: "punctuality score", suffix: "%" },
+  punctuality: { label: "punctuality score", suffix: "%" },
   average_checkin_time: { label: "average check-in time", suffix: "" },
+  average_daily_hours: { label: "average daily hours", suffix: "h/day" },
+  average_break: { label: "average break duration", suffix: " mins" },
+  average_break_duration: { label: "average break duration", suffix: " mins" },
 };
 
 const isSimpleMetric = (request) =>
@@ -198,6 +213,9 @@ const formatSimpleAnswer = ({ entity = "", value }) => {
 
   // Special case: time format (HH:MM)
   if (entity === "average_checkin_time") {
+    if (!value || value === "--:--") {
+      return "Your average check-in time has not been recorded yet.";
+    }
     return `Your ${config.label} is ${value}.`;
   }
 
@@ -294,10 +312,27 @@ const getDynamicSimpleQuery = (message) => {
   const period = detectPeriod(message) || "none";
   const base = { action: "get", dateReference: "none", search: "none", confidence: 0.95 };
 
+  if (hasSimilarWord(tokens, ["daily"]) && hasSimilarWord(tokens, ["hour", "hours"])) {
+    return { ...base, intent: "average_daily_hours", entity: "average_daily_hours", period };
+  }
+  if (hasSimilarWord(tokens, ["break"])) {
+    return { ...base, intent: "average_break", entity: "average_break_duration", period };
+  }
+  if (hasSimilarWord(tokens, ["punctual", "punctuality"])) {
+    return { ...base, intent: "productivity", entity: "punctuality_score", period };
+  }
+  if (hasSimilarWord(tokens, ["checkin"]) || (hasSimilarWord(tokens, ["check"]) && hasSimilarWord(tokens, ["in"]))) {
+    return { ...base, intent: "average_checkin", entity: "average_checkin_time", period };
+  }
   if (hasSimilarWord(tokens, ["attendance"])) return { ...base, intent: "attendance", entity: "attendance_percentage", period };
   if (hasSimilarWord(tokens, ["overtime"])) return { ...base, intent: "overtime", entity: "overtime_hours", period };
   if (hasSimilarWord(tokens, ["productivity"])) return { ...base, intent: "productivity", entity: "productivity_score", period };
-  if (hasSimilarWord(tokens, ["streak"])) return { ...base, intent: "streak", entity: "current_streak", period };
+  if (hasSimilarWord(tokens, ["streak"])) {
+    if (hasSimilarWord(tokens, ["best", "longest", "highest", "max"])) {
+      return { ...base, intent: "streak", entity: "longest_streak", period };
+    }
+    return { ...base, intent: "streak", entity: "current_streak", period };
+  }
   if (hasSimilarWord(tokens, ["leave", "leaves"])) return { ...base, intent: "leaves", entity: "leaves_taken", period };
   if (hasSimilarWord(tokens, ["work", "working"]) && hasSimilarWord(tokens, ["hour", "hours"])) {
     return { ...base, intent: "working_hours", entity: "working_hours", period };
@@ -396,11 +431,35 @@ export const askAI = async (req, res) => {
       });
     }
 
-    if (/^(yes|yeah|yep|sure|okay|ok|please do|tell me more|go ahead)[.! ]*$/i.test(message.trim()) && (await loadPending(userID)).length === 0) {
+    if (isCasualGreeting(message)) {
+      const answer = getCasualGreetingReply("employee");
+      await addConversationMessage(userID, "user", message.trim());
+      await addConversationMessage(userID, "assistant", answer);
+      return res.status(200).json({ success: true, answer });
+    }
+
+    if (isReactionSlang(message)) {
+      const answer = getReactionSlangReply("employee");
+      await addConversationMessage(userID, "user", message.trim());
+      await addConversationMessage(userID, "assistant", answer);
+      return res.status(200).json({ success: true, answer });
+    }
+
+    if (isNegativeSlang(message)) {
+      const answer = getNegativeSlangReply("employee");
+      await addConversationMessage(userID, "user", message.trim());
+      await addConversationMessage(userID, "assistant", answer);
+      return res.status(200).json({ success: true, answer });
+    }
+
+    if (isAffirmativeSlang(message) && (await loadPending(userID)).length === 0) {
       const conversation = await getConversation(userID);
       const previousAnswer = [...conversation.messages].reverse().find((item) => item.role === "assistant")?.content;
       const previousQuestion = getPreviousQuestionForContinuation(conversation.messages);
-      if (previousQuestion && previousAnswer && !previousAnswer.trim().endsWith("?")) {
+      const isPeriodClarification = previousAnswer && previousAnswer.trim().endsWith("?") &&
+        /\b(today|this week|this month|overall|which period|what period)\b/i.test(previousAnswer);
+
+      if (previousQuestion && previousAnswer && !isPeriodClarification) {
         const userContext = await getAIUserContext(userID);
         const answer = await askTimeWiseAI("Yes, tell me more.", {
           user: userContext,
@@ -410,6 +469,11 @@ export const askAI = async (req, res) => {
         await addConversationMessage(userID, "assistant", answer);
         return res.status(200).json({ success: true, answer });
       }
+
+      const answer = "I'm ready! What would you like to check? You can ask about your attendance, working hours, leaves, reports, or settings.";
+      await addConversationMessage(userID, "user", message.trim());
+      await addConversationMessage(userID, "assistant", answer);
+      return res.status(200).json({ success: true, answer });
     }
 
     if (/\b(what did i just ask|what was my last question|what did i ask before|repeat my last question)\b/i.test(message)) {
@@ -594,6 +658,26 @@ export const askAI = async (req, res) => {
         confidence: 1,
       },
 
+      "attendance rate": {
+        intent: "attendance",
+        action: "get",
+        entity: "attendance_percentage",
+        period: "none",
+        dateReference: "none",
+        search: "none",
+        confidence: 1,
+      },
+
+      "attendance percentage": {
+        intent: "attendance",
+        action: "get",
+        entity: "attendance_percentage",
+        period: "none",
+        dateReference: "none",
+        search: "none",
+        confidence: 1,
+      },
+
       overtime: {
         intent: "overtime",
         action: "get",
@@ -658,6 +742,106 @@ export const askAI = async (req, res) => {
         intent: "streak",
         action: "get",
         entity: "current_streak",
+        period: "none",
+        dateReference: "none",
+        search: "none",
+        confidence: 1,
+      },
+
+      "best streak": {
+        intent: "streak",
+        action: "get",
+        entity: "longest_streak",
+        period: "none",
+        dateReference: "none",
+        search: "none",
+        confidence: 1,
+      },
+
+      "longest streak": {
+        intent: "streak",
+        action: "get",
+        entity: "longest_streak",
+        period: "none",
+        dateReference: "none",
+        search: "none",
+        confidence: 1,
+      },
+
+      "average daily hours": {
+        intent: "average_daily_hours",
+        action: "get",
+        entity: "average_daily_hours",
+        period: "none",
+        dateReference: "none",
+        search: "none",
+        confidence: 1,
+      },
+
+      "avg daily hours": {
+        intent: "average_daily_hours",
+        action: "get",
+        entity: "average_daily_hours",
+        period: "none",
+        dateReference: "none",
+        search: "none",
+        confidence: 1,
+      },
+
+      "daily hours": {
+        intent: "average_daily_hours",
+        action: "get",
+        entity: "average_daily_hours",
+        period: "none",
+        dateReference: "none",
+        search: "none",
+        confidence: 1,
+      },
+
+      punctuality: {
+        intent: "productivity",
+        action: "get",
+        entity: "punctuality_score",
+        period: "none",
+        dateReference: "none",
+        search: "none",
+        confidence: 1,
+      },
+
+      "punctuality score": {
+        intent: "productivity",
+        action: "get",
+        entity: "punctuality_score",
+        period: "none",
+        dateReference: "none",
+        search: "none",
+        confidence: 1,
+      },
+
+      "average break": {
+        intent: "average_break",
+        action: "get",
+        entity: "average_break_duration",
+        period: "none",
+        dateReference: "none",
+        search: "none",
+        confidence: 1,
+      },
+
+      "avg break": {
+        intent: "average_break",
+        action: "get",
+        entity: "average_break_duration",
+        period: "none",
+        dateReference: "none",
+        search: "none",
+        confidence: 1,
+      },
+
+      "break duration": {
+        intent: "average_break",
+        action: "get",
+        entity: "average_break_duration",
         period: "none",
         dateReference: "none",
         search: "none",

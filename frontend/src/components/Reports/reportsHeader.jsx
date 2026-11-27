@@ -29,12 +29,12 @@ export function ReportsHeader({
   return (
     <div
       style={{
-        padding: '36px 15px 28px',
-        display: 'flex',
-        flexWrap: 'wrap',
+        padding: "36px 15px 28px",
+        display: "flex",
+        flexWrap: "wrap",
         gap: 12,
-        alignItems: 'flex-start',
-        justifyContent: 'space-between',
+        alignItems: "flex-start",
+        justifyContent: "space-between",
       }}
     >
       {isLoading ? (
@@ -43,8 +43,8 @@ export function ReportsHeader({
           <div>
             <div
               style={{
-                display: 'flex',
-                alignItems: 'center',
+                display: "flex",
+                alignItems: "center",
                 gap: 10,
                 marginBottom: 10,
               }}
@@ -64,10 +64,10 @@ export function ReportsHeader({
           {/* Right */}
           <div
             style={{
-              display: 'flex',
-              alignItems: 'center',
+              display: "flex",
+              alignItems: "center",
               gap: 10,
-              flexWrap: 'wrap',
+              flexWrap: "wrap",
             }}
           >
             {[...Array(4)].map((_, i) => (
@@ -86,8 +86,8 @@ export function ReportsHeader({
           <div>
             <div
               style={{
-                display: 'flex',
-                alignItems: 'center',
+                display: "flex",
+                alignItems: "center",
                 gap: 10,
                 marginBottom: 6,
               }}
@@ -97,12 +97,12 @@ export function ReportsHeader({
                   width: 34,
                   height: 34,
                   borderRadius: 9,
-                  background: 'linear-gradient(135deg,#6366f1,#8b5cf6)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
+                  background: "linear-gradient(135deg,#6366f1,#8b5cf6)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
                   fontSize: 16,
-                  boxShadow: '0 4px 14px rgba(99,102,241,.4)',
+                  boxShadow: "0 4px 14px rgba(99,102,241,.4)",
                 }}
               >
                 📊
@@ -113,7 +113,7 @@ export function ReportsHeader({
                   margin: 0,
                   fontSize: 26,
                   fontWeight: 700,
-                  letterSpacing: '-0.02em',
+                  letterSpacing: "-0.02em",
                 }}
               >
                 My Reports
@@ -134,18 +134,18 @@ export function ReportsHeader({
 
           <motion.div
             layout
-            transition={{ layout: { duration: 0.28, ease: 'easeInOut' } }}
+            transition={{ layout: { duration: 0.28, ease: "easeInOut" } }}
             style={{
-              display: 'flex',
-              alignItems: 'center',
+              display: "flex",
+              alignItems: "end",
               gap: 6,
-              flexWrap: 'wrap',
+              flexWrap: "wrap",
             }}
           >
             <motion.div
               layout
               style={{
-                display: 'flex',
+                display: "flex",
                 borderRadius: 10,
                 padding: 3,
                 gap: 4,
@@ -156,14 +156,15 @@ export function ReportsHeader({
                   key={r.id}
                   onClick={() => dispatch(setDateRange(r.id))}
                   style={{
-                    padding: '6px 9px',
+                    padding: "6px 9px",
                     borderRadius: 7,
-                    border: 'none',
-                    cursor: 'pointer',
+                    border: "none",
+                    cursor: "pointer",
                     fontSize: 12.5,
                     fontWeight: 500,
-                    background: dateRange === r.id ? 'var(--button)' : 'transparent',
-                    color: dateRange === r.id ? '#fff' : 'var(--text_primary)',
+                    background:
+                      dateRange === r.id ? "var(--button)" : "transparent",
+                    color: dateRange === r.id ? "#fff" : "var(--text_primary)",
                   }}
                 >
                   {r.label}
@@ -172,49 +173,53 @@ export function ReportsHeader({
             </motion.div>
 
             <AnimatePresence initial={false}>
-              {dateRange === 'custom' && (
-              <motion.div
-                key="reports-custom-range"
-                className="reports_custom_range_reveal"
-                initial={{ opacity: 0, height: 0, y: -8 }}
-                animate={{ opacity: 1, height: 'auto', y: 0 }}
-                exit={{ opacity: 0, height: 0, y: -8 }}
-                transition={{ duration: 0.28, ease: 'easeInOut' }}
-                style={{ overflow: 'hidden' }}
-              >
-              <div className="reports_custom_range">
-                <label>
-                  From
-                  <input
-                    type="date"
-                    style={dateInputTheme}
-                    value={customStartDate}
-                    max={customEndDate || undefined}
-                    onChange={(event) =>
-                      dispatch(setCustomDateRange({
-                        startDate: event.target.value,
-                        endDate: customEndDate,
-                      }))
-                    }
-                  />
-                </label>
-                <label>
-                  To
-                  <input
-                    type="date"
-                    style={dateInputTheme}
-                    value={customEndDate}
-                    min={customStartDate || undefined}
-                    onChange={(event) =>
-                      dispatch(setCustomDateRange({
-                        startDate: customStartDate,
-                        endDate: event.target.value,
-                      }))
-                    }
-                  />
-                </label>
-              </div>
-              </motion.div>
+              {dateRange === "custom" && (
+                <motion.div
+                  key="reports-custom-range"
+                  className="reports_custom_range_reveal"
+                  initial={{ opacity: 0, height: 0, y: -8 }}
+                  animate={{ opacity: 1, height: "auto", y: 0 }}
+                  exit={{ opacity: 0, height: 0, y: -8 }}
+                  transition={{ duration: 0.28, ease: "easeInOut" }}
+                  style={{ overflow: "hidden" }}
+                >
+                  <div className="reports_custom_range">
+                    <label>
+                      From
+                      <input
+                        type="date"
+                        style={dateInputTheme}
+                        value={customStartDate}
+                        max={customEndDate || undefined}
+                        onChange={(event) =>
+                          dispatch(
+                            setCustomDateRange({
+                              startDate: event.target.value,
+                              endDate: customEndDate,
+                            }),
+                          )
+                        }
+                      />
+                    </label>
+                    <label>
+                      To
+                      <input
+                        type="date"
+                        style={dateInputTheme}
+                        value={customEndDate}
+                        min={customStartDate || undefined}
+                        onChange={(event) =>
+                          dispatch(
+                            setCustomDateRange({
+                              startDate: customStartDate,
+                              endDate: event.target.value,
+                            }),
+                          )
+                        }
+                      />
+                    </label>
+                  </div>
+                </motion.div>
               )}
             </AnimatePresence>
 
@@ -225,13 +230,13 @@ export function ReportsHeader({
               disabled={exportDisabled}
               aria-label="Export report as PDF"
               style={{
-                display: 'flex',
-                alignItems: 'center',
+                display: "flex",
+                alignItems: "center",
                 gap: 4,
-                padding: '7px 11px',
+                padding: "7px 11px",
                 borderRadius: 9,
-                border: '1px solid rgba(255,255,255,.08)',
-                cursor: exportDisabled ? 'not-allowed' : 'pointer',
+                border: "1px solid rgba(255,255,255,.08)",
+                cursor: exportDisabled ? "not-allowed" : "pointer",
                 opacity: exportDisabled ? 0.55 : 1,
               }}
             >
@@ -245,13 +250,13 @@ export function ReportsHeader({
               disabled={exportDisabled}
               aria-label="Export report as Excel workbook"
               style={{
-                display: 'flex',
-                alignItems: 'center',
+                display: "flex",
+                alignItems: "center",
                 gap: 4,
-                padding: '7px 11px',
+                padding: "7px 11px",
                 borderRadius: 9,
-                border: '1px solid rgba(16,185,129,.2)',
-                cursor: exportDisabled ? 'not-allowed' : 'pointer',
+                border: "1px solid rgba(16,185,129,.2)",
+                cursor: exportDisabled ? "not-allowed" : "pointer",
                 opacity: exportDisabled ? 0.55 : 1,
               }}
             >

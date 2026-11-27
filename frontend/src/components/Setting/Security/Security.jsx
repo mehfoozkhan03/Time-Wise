@@ -1,13 +1,12 @@
 import { IoMdEye } from "react-icons/io";
 import { IoMdEyeOff } from "react-icons/io";
-import { IoToggleOutline } from "react-icons/io5";
-import { IoToggle } from "react-icons/io5";
 import { useState, useEffect } from "react";
 import Skeleton from "../../../components/Skeleton/Skeleton";
 
 import "./Security.css";
 import { SwitchBtn } from "../../SwichBtn/SwitchBtn";
 import { SettingCustomDropdown } from "../SettingCustomDropdown/SettingCustomDropdown";
+import { changeOwnPassword } from "../../../services/userSecurityService";
 
 const timeSelectionOpt = [
   { label: "15 Min", value: "15 min" },
@@ -21,6 +20,12 @@ export const Security = () => {
 
   //# Dropdown 
   const [timeSelection, setTimeSelection] = useState("15 min");
+  const [passwordForm, setPasswordForm] = useState({
+    currentPassword: "",
+    newPassword: "",
+    confirmNewPassword: "",
+  });
+  const [isSavingPassword, setIsSavingPassword] = useState(false);
 
   const [showPassword, setShowPassword] = useState({
     current: false,
@@ -33,6 +38,28 @@ export const Security = () => {
       ...prev,
       [field]: !prev[field],
     }));
+  };
+
+  const handleChangePassword = async () => {
+    const { currentPassword, newPassword, confirmNewPassword } = passwordForm;
+    if (!currentPassword || !newPassword || !confirmNewPassword) {
+      window.alert("Fill in all three password fields before saving.");
+      return;
+    }
+    if (newPassword !== confirmNewPassword) {
+      window.alert("The new password and confirmation do not match.");
+      return;
+    }
+    setIsSavingPassword(true);
+    try {
+      const { data } = await changeOwnPassword(currentPassword, newPassword);
+      window.alert(data.message || "Password changed successfully.");
+      setPasswordForm({ currentPassword: "", newPassword: "", confirmNewPassword: "" });
+    } catch (error) {
+      window.alert(error.response?.data?.message || "Unable to change your password.");
+    } finally {
+      setIsSavingPassword(false);
+    }
   };
 
   const [showSkeleton, setShowSkeleton] = useState(true);
@@ -162,8 +189,11 @@ export const Security = () => {
               <label htmlFor="currentpassword">Current password</label>
               <div>
                 <input
+                  id="currentpassword"
                   type={showPassword.current ? "text" : "password"}
                   placeholder="Enter current password"
+                  value={passwordForm.currentPassword}
+                  onChange={(event) => setPasswordForm((current) => ({ ...current, currentPassword: event.target.value }))}
                 />
 
                 {showPassword.current ? (
@@ -183,8 +213,11 @@ export const Security = () => {
               <label htmlFor="newpassword">New password</label>
               <div>
                 <input
+                  id="newpassword"
                   type={showPassword.new ? "text" : "password"}
                   placeholder="Enter new password"
+                  value={passwordForm.newPassword}
+                  onChange={(event) => setPasswordForm((current) => ({ ...current, newPassword: event.target.value }))}
                 />
 
                 {showPassword.new ? (
@@ -201,11 +234,14 @@ export const Security = () => {
               </div>
             </div>
             <div className="confirm-new-password">
-              <label htmlFor="currentpassword">Confirm new password</label>
+              <label htmlFor="confirmnewpassword">Confirm new password</label>
               <div>
                 <input
+                  id="confirmnewpassword"
                   type={showPassword.confirm ? "text" : "password"}
                   placeholder="Repeat new password"
+                  value={passwordForm.confirmNewPassword}
+                  onChange={(event) => setPasswordForm((current) => ({ ...current, confirmNewPassword: event.target.value }))}
                 />
 
                 {showPassword.confirm ? (
@@ -222,6 +258,14 @@ export const Security = () => {
               </div>
             </div>
           </div>
+          <button
+            type="button"
+            className="change-btn"
+            onClick={handleChangePassword}
+            disabled={isSavingPassword}
+          >
+            {isSavingPassword ? "Saving..." : "Change password"}
+          </button>
         </div>
 
         {/* Two factor authentication */}

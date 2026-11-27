@@ -6,6 +6,8 @@ dotenv.config()
 import { userModel } from '../../models/User.model.js'
 import { AdminModel } from '../../models/Admin.model.js'
 import cloudinary from '../../config/cloudinary.js'
+import { createHash } from 'node:crypto'
+import { createNotification } from '../../services/notification.service.js'
 
 const getStoredCloudinaryImagePublicId = (user) => {
   if (user.profileImagePublicId) return user.profileImagePublicId
@@ -203,8 +205,28 @@ export const login = async (req, res) => {
       })
     }
 
+    const loginFingerprint = createHash('sha256')
+      .update(`${req.get('user-agent') || ''}|${req.ip || ''}`)
+      .digest('hex')
+    const isNewDevice = !userData.lastLoginFingerprint || userData.lastLoginFingerprint !== loginFingerprint
     userData.lastActiveAt = new Date()
+    userData.lastLoginFingerprint = loginFingerprint
     await userData.save()
+
+    if (isNewDevice) {
+      await createNotification({
+        sender: userData.adminID || userData._id,
+        senderModel: userData.adminID ? 'Admin' : 'User',
+        title: 'New device sign-in',
+        message: `Your TimeWise account was accessed from a new browser or network on ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}. If this was not you, change your password.`,
+        type: 'system',
+        preferenceKey: 'securityLogins',
+        audienceType: 'specific',
+        targetUsers: [userData._id],
+        allowSelf: true,
+        critical: true,
+      })
+    }
 
     const token = jwt.sign(
       {
@@ -274,6 +296,50 @@ export const login = async (req, res) => {
   }
 }
 
+export const changeOwnPassword = async (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body || {};
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({ success: false, message: "Enter your current password and a new password." });
+    }
+    if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/.test(newPassword)) {
+      return res.status(400).json({
+        success: false,
+        message: "Password must be 8+ characters with uppercase, lowercase, number & special character.",
+      });
+    }
+
+    const user = await userModel.findById(req.user.userID);
+    if (!user) return res.status(404).json({ success: false, message: "Employee account not found." });
+    if (!(await bcrypt.compare(currentPassword, user.password))) {
+      return res.status(400).json({ success: false, message: "Current password is incorrect." });
+    }
+    if (await bcrypt.compare(newPassword, user.password)) {
+      return res.status(400).json({ success: false, message: "Choose a password you have not used before." });
+    }
+
+    user.password = await bcrypt.hash(newPassword, 10);
+    await user.save();
+    await createNotification({
+      sender: user.adminID || user._id,
+      senderModel: user.adminID ? "Admin" : "User",
+      title: "Password changed",
+      message: "Your TimeWise account password was changed successfully.",
+      type: "system",
+      preferenceKey: "profileChanges",
+      audienceType: "specific",
+      targetUsers: [user._id],
+      allowSelf: true,
+      critical: true,
+    });
+
+    return res.status(200).json({ success: true, message: "Password changed successfully." });
+  } catch (error) {
+    console.error("Change Employee Password Error:", error);
+    return res.status(500).json({ success: false, message: "Unable to change your password right now." });
+  }
+};
+
 // ================= Current User ===============
 
 export const getCurrentUser = async (req, res) => {
@@ -334,7 +400,7 @@ export const updateProfile = async (req, res) => {
 
     const currentUser = await userModel
       .findById(userId)
-      .select('profileImage profileImagePublicId firstName lastName email phone address bio')
+      .select('profileImage profileImagePublicId firstName lastName email phone address bio adminID')
 
     if (!currentUser) {
       return res.status(404).json({
@@ -402,6 +468,20 @@ export const updateProfile = async (req, res) => {
     }
 
     keepUploadedImage = true
+
+    if (Object.keys(update).length > 0) {
+      await createNotification({
+        sender: currentUser.adminID || currentUser._id,
+        senderModel: currentUser.adminID ? 'Admin' : 'User',
+        title: 'Profile updated',
+        message: 'Your TimeWise profile information was updated successfully.',
+        type: 'system',
+        preferenceKey: 'profileChanges',
+        audienceType: 'specific',
+        targetUsers: [currentUser._id],
+        allowSelf: true,
+      })
+    }
 
     const previousImagePublicId = getStoredCloudinaryImagePublicId(currentUser)
 

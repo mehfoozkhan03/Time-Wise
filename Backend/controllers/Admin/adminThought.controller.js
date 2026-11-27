@@ -60,6 +60,7 @@ export const createAdminThought = async (req, res) => {
       title: "New Thought Published",
       message: "Admin has shared a new thought.",
       type: "post",
+      preferenceKey: "dailyThoughts",
       referenceModel: "Post",
       referenceId: post._id,
       audienceType: "all",

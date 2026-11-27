@@ -792,6 +792,18 @@ const retrieveUserContextData = (userContext, route) => {
   // Working hours
   // ----------------------------------------------------------
 
+  if (route.entity === "average_daily_hours") {
+    const avgVal = getNestedValue(userContext, route.field) ?? userContext?.attendance?.averageDailyHours;
+    return {
+      success: true,
+      source: "userContext",
+      entity: route.entity,
+      operation: route.operation,
+      period: route.period,
+      value: hasValue(avgVal) ? avgVal : 0,
+    };
+  }
+
   if (route.dataType === "hours") {
     return {
       success: true,
