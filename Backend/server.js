@@ -6,7 +6,7 @@ import http from "http";
 import { initializeSocket } from "./socket/socket.js";
 
 import { Connection } from "./config/db.js";
-import { userRoutes } from "./routes/User.routes.js";
+import { userRoutes } from "./routes/User.Routes.js";
 import postRoutes from "./routes/Post.routes.js";
 import { attendanceRouter } from "./routes/Attendance.routes.js";
 
