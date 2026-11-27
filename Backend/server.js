@@ -54,6 +54,10 @@ server.use(express.json(), express.text(), cookieParser());
 
 // ================= Routes =================
 
+server.get("/", (req, res) => {
+  res.send("working fine welcome to time-wise");
+});
+
 //# Admin Route
 server.use("/admin", adminRoutes);
 
