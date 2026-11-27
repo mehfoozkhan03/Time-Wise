@@ -101,7 +101,7 @@ httpServer.listen(process.env.Port, "0.0.0.0", async () => {
   try {
     await Connection();
     console.log("DB Connected successfully ✅");
-    // startNotificationScheduler();
+    startNotificationScheduler();
   } catch (error) {
     console.log(error);
     console.log("DB Crashed! Something went wrong ❌");
