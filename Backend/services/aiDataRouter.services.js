@@ -213,13 +213,13 @@ const ENTITY_MAP = {
 
   average_daily_hours: {
     source: "userContext",
-    field: "averageDailyHours",
+    field: "attendance.averageDailyHours",
     operation: "get",
     dataType: "hours",
   },
 
   // ----------------------------------------------------------
-  // AVERAGE CHECK-IN
+  // AVERAGE CHECK-IN & BREAK
   // ----------------------------------------------------------
 
   average_checkin_time: {
@@ -227,6 +227,27 @@ const ENTITY_MAP = {
     field: "work.averageCheckIn",
     operation: "get",
     dataType: "time",
+  },
+
+  average_break: {
+    source: "userContext",
+    field: "work.averageBreakDuration",
+    operation: "get",
+    dataType: "minutes",
+  },
+
+  average_break_duration: {
+    source: "userContext",
+    field: "work.averageBreakDuration",
+    operation: "get",
+    dataType: "minutes",
+  },
+
+  best_streak: {
+    source: "userContext",
+    field: "streak.longest",
+    operation: "get",
+    dataType: "days",
   },
 
   // ----------------------------------------------------------

@@ -13,6 +13,15 @@ import { askTimeWiseAI } from "../../services/ai.services.js";
 import { getTimeWiseOverviewReply, isTimeWiseImplementationQuestion, isTimeWiseProductQuestion } from "../../utils/timeWiseOverview.js";
 import { formatEmployeeProfileAnswer, isProfileDetailsQuestion } from "../../utils/aiProfile.js";
 import { getLeaveBalance } from "../../services/leave.service.js";
+import {
+  isAffirmativeSlang,
+  isNegativeSlang,
+  isCasualGreeting,
+  isReactionSlang,
+  getNegativeSlangReply,
+  getCasualGreetingReply,
+  getReactionSlangReply,
+} from "../../utils/aiSlang.js";
 
 const employeeName = (employee) =>
   `${employee?.firstName || ""} ${employee?.lastName || ""}`.trim() ||
@@ -496,16 +505,33 @@ export const askAdminAI = async (req, res) => {
     if (!question) return res.status(400).json({ success: false, message: "Please enter a question." });
 
     const lowerQuestion = question.toLowerCase();
-    if (/^(yes|yeah|yep|sure|okay|ok|please do|tell me more|go ahead)[.! ]*$/i.test(question)) {
+
+    if (isCasualGreeting(question)) {
+      return replyWithSavedConversation(req, res, question, getCasualGreetingReply("admin"));
+    }
+
+    if (isReactionSlang(question)) {
+      return replyWithSavedConversation(req, res, question, getReactionSlangReply("admin"));
+    }
+
+    if (isNegativeSlang(question)) {
+      return replyWithSavedConversation(req, res, question, getNegativeSlangReply("admin"));
+    }
+
+    if (isAffirmativeSlang(question)) {
       const conversation = await AdminAIConversation.findOne({ adminID: req.admin.adminID }).select("messages").lean();
       const previousAnswer = [...(conversation?.messages || [])].reverse().find((item) => item.role === "assistant")?.content;
       const previousQuestion = [...(conversation?.messages || [])].reverse().find((item) => item.role === "user")?.content;
-      if (previousQuestion && previousAnswer && !previousAnswer.trim().endsWith("?")) {
+      const isPeriodClarification = previousAnswer && previousAnswer.trim().endsWith("?") &&
+        /\b(today|this week|this month|overall|which period|what period)\b/i.test(previousAnswer);
+
+      if (previousQuestion && previousAnswer && !isPeriodClarification) {
         const answer = await askTimeWiseAI("Yes, tell me more.", {
           continuation: { previousQuestion, previousAnswer, role: "admin" },
-        }, conversation.messages);
+        }, conversation?.messages || []);
         return replyWithSavedConversation(req, res, question, answer);
       }
+      return replyWithSavedConversation(req, res, question, "I'm ready! Ask me about employees, attendance, working hours, overtime, leaves, calendar, or upcoming holidays.");
     }
     if (/\b(what did i just ask|what was my last question|what did i ask before|repeat my last question)\b/i.test(question)) {
       const conversation = await AdminAIConversation.findOne({ adminID: req.admin.adminID }).select("messages").lean();
@@ -552,7 +578,7 @@ export const askAdminAI = async (req, res) => {
       : resolveEmployee(employees, question);
     const employeeIds = employees.map((item) => item._id);
 
-    const asksForIndividualStats = /\b(attendance|present|absent|late|overtime|working hours?|productivity|punctuality|leave balance)\b/i.test(question);
+    const asksForIndividualStats = /\b(attendance|present|absent|late|overtime|working hours?|productivity|punctuality|leave balance|streak|daily hours|check.?in|break)\b/i.test(question);
     const namesEmployeeAfterPreposition = /\b(?:of|about)\s+(?!today\b|yesterday\b|this\b|last\b|overall\b|all\b)[a-z][a-z'-]+(?:\s+[a-z][a-z'-]+){1,2}\b/i.test(question);
     if (!employee && asksForIndividualStats && (/@/.test(question) || namesEmployeeAfterPreposition)) {
       return replyWithSavedConversation(req, res, question, "I couldn't find that employee in this organisation. Check the registered email or ask an admin to add the employee to this organisation.");
@@ -809,10 +835,48 @@ export const askAdminAI = async (req, res) => {
 
     if (employee) {
       const name = employeeName(employee) || employee.email;
+      const asksStreak = /\b(streak|day streak|best streak|longest streak)\b/.test(lowerQuestion);
+      const asksDailyHours = /\b(average daily hours|avg daily hours|daily working hours|daily hours)\b/.test(lowerQuestion);
+      const asksCheckIn = /\b(average check.?in|check.?in time)\b/.test(lowerQuestion);
+      const asksBreak = /\b(average break|break duration|break time)\b/.test(lowerQuestion);
+      const asksPunctuality = /\b(punctuality|punctuality score)\b/.test(lowerQuestion);
+      const asksLeavesTaken = /\b(leaves? taken|how many leaves|total leaves)\b/.test(lowerQuestion);
+
       const asksAttendance = /\b(attendance|present(?:ed)?|absent|absence|late|check.?in|check.?out)\b/.test(lowerQuestion);
       const asksHours = /\bworking hours?\b|\bhow many hours?\b|\btotal hours?\b|\bhours? (?:did|has|have|was|were)\b|\bworked? (?:for )?\d*\s*hours?\b/.test(lowerQuestion);
       const asksOvertime = /\bovertime\b/.test(lowerQuestion);
       const asksProductivity = /\bproductivity\b/.test(lowerQuestion);
+
+      if (asksStreak) {
+        const stats = await getAttendanceStats(employee._id);
+        return replyWithSavedConversation(req, res, question, `${name}'s current streak is ${stats.dayStreak || 0} days (best: ${stats.longestStreak || 0} days).`);
+      }
+
+      if (asksDailyHours) {
+        const stats = await getAttendanceStats(employee._id);
+        return replyWithSavedConversation(req, res, question, `${name}'s average daily working hours is ${formatHours(stats.averageDailyHours)} h/day.`);
+      }
+
+      if (asksCheckIn) {
+        const stats = await getAttendanceStats(employee._id);
+        return replyWithSavedConversation(req, res, question, `${name}'s average check-in time is ${stats.averageCheckIn || "--:--"}.`);
+      }
+
+      if (asksBreak) {
+        const stats = await getAttendanceStats(employee._id);
+        return replyWithSavedConversation(req, res, question, `${name}'s average break duration is ${stats.averageBreakDuration || 0} mins.`);
+      }
+
+      if (asksPunctuality) {
+        const stats = await getAttendanceStats(employee._id);
+        return replyWithSavedConversation(req, res, question, `${name}'s punctuality score is ${stats.punctuality ?? 100}%.`);
+      }
+
+      if (asksLeavesTaken) {
+        const stats = await getAttendanceStats(employee._id);
+        return replyWithSavedConversation(req, res, question, `${name} has taken ${stats.leavesTaken || 0} days of leave.`);
+      }
+
       if (asksAttendance || asksHours || asksOvertime || asksProductivity) {
         const period = resolveAttendancePeriod(lowerQuestion);
         if (period?.range === "invalid") {
@@ -845,7 +909,7 @@ export const askAdminAI = async (req, res) => {
       }
     }
 
-    if (/(overtime|attendance|working hours?|productivity)/.test(lowerQuestion)) {
+    if (/(overtime|attendance|working hours?|productivity|streak|daily hours|check.?in|break|punctuality)/.test(lowerQuestion)) {
       return replyWithSavedConversation(req, res, question, "I couldn't identify that employee. Please use their full name or registered email address.");
     }
 
