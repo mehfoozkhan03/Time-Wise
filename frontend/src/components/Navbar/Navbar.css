@@ -200,7 +200,7 @@
   fill: var(--text_primary);
 }
 
-.avatar {
+/* .avatar {
   width: 46px;
   height: 46px;
   border-radius: 50%;
@@ -210,6 +210,31 @@
   align-items: center;
   color: white;
   font-weight: 700;
+} */
+
+/* Profile Avatar */
+.avatar {
+  width: 52px !important;
+  height: 52px !important;
+  min-width: 52px;
+  min-height: 52px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Avatar Image */
+.avatar img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 50%;
+  display: block;
+  image-rendering: auto;
 }
 
 .profile_info {
