@@ -1,6 +1,6 @@
 import express from 'express';
 import { auth } from '../middleware/AuthMiddleware.js';
-import { authorize } from '../middleware/Allowrole.middleware.js';
+import { authorize } from '../middleware/AllowRole.middleware.js';
 import {
   checkIn,
   startBreak,

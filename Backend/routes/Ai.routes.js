@@ -6,7 +6,7 @@ import {
   getAIBotAccess,
 } from "../controllers/User/ai.controller.js";
 import { auth } from "../middleware/AuthMiddleware.js";
-import { authorize } from "../middleware/Allowrole.middleware.js";
+import { authorize } from "../middleware/AllowRole.middleware.js";
 
 const aiRouter = express.Router();
 
