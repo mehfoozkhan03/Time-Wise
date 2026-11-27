@@ -162,7 +162,10 @@ export const Form = ({
             response.payload?.message ||
             'Account created successfully.',
           description: 'Please log in with your credentials.',
-          onCloseCb: resetForm,
+           onCloseCb: () => {
+            resetForm()
+            navigate('/login', { replace: true })
+          },
         })
 
         return
