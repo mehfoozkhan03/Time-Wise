@@ -44,6 +44,7 @@ server.use(
       "http://localhost:8000",
       "http://localhost:5173",
       "http://localhost:5174",
+      "https://your-frontend-domain.com",
     ],
     credentials: true,
   }),
@@ -65,7 +66,6 @@ server.use("/admin/calendar", adminCalendarRoutes);
 
 //# Admin Notification Route
 server.use("/admin/notifications", adminNotificationRoutes);
-
 
 //# User Announcement
 server.use("/user", userAnnouncementRoutes);
@@ -93,7 +93,7 @@ server.use("/ai", aiRoutes);
 
 // ================= Server =================
 
-httpServer.listen(process.env.Port, async () => {
+httpServer.listen(process.env.Port, "0.0.0.0", async () => {
   try {
     await Connection();
     console.log("DB Connected successfully ✅");
